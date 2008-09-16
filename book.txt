@@ -3,71 +3,194 @@
 Pick an application to build from scratch.
 Should we compare and contrast with other frameworks? I don't know many others
 
+Ideas:
+1. Include a "Lift quick reference card": all of the lift template tags, brief overview of the render flow (with cross-refs)
 
---------------------
-IMHO we should start with an introduction that gives a brief overview of what Lift is trying to solve, how it works and why it does it well. The first half would explain some basics about it (built on Scala, incredible template support, clean separation of V and C), and then the second half would walk the user through running the HelloLift example just to get something going out of the box. From my understanding at this point that would involve just three things: installing Java (if required), installing Maven2, and then downloading and running the HelloLift project zip. Of those three, I think installing Maven is probably the most complex 
-- Derek
+-------------------- 
+IMHO we should start with an introduction that gives a brief overview
+of what Lift is trying to solve, how it works and why it does it
+well. The first half would explain some basics about it (built on
+Scala, incredible template support, clean separation of V and C), and
+then the second half would walk the user through running the HelloLift
+example just to get something going out of the box. From my
+understanding at this point that would involve just three things:
+installing Java (if required), installing Maven2, and then downloading
+and running the HelloLift project zip. Of those three, I think
+installing Maven is probably the most complex  - Derek
 
 So you see 2 distinct Sections: Generalized info and intro, and getting into and building an app?  Sounds good to me.  -Tyler
 --------------------
-X. Introduction
 
-* Welcome to lift
-* What is lift?
-* Why another framework
-* 
-1. Installing Lift - java, maven, scala, [ wiki page ] what about Tim's installers? 
+====== Intro Section ======
 
-   * Prerequisites
-      * Java 1.5 or newer
+1. Introduction
+  * Welcome to lift
+  * What is lift?
+    * Fast, flexible template-based web framework built on Scala
+      * Full-featured template system
+      * Clean separation of M,V and C
+      * Powerful Web 2.0 (AJAX, COMET) support baked in
+      * Thriving community of developers
+    * Brief overview of Scala
+      * OO/FP Hybird
+      * Compiles to JVM Bytecode
+      * Made by the good people who brought us generics
+      * You get a new powerful language with access to all of Java's libs
+  * Why another framework?
+    * Too much boilerplate in other frameworks (Struts, we're talking about you)
+    * Exposure of programming logic in templates makes things difficult (JSP, etc)
+    * Scala has higher efficiency in terms of LoC per function point
+    * Powerful AJAX, COMET and JS support
+  * Let's try out HelloLift
+    * Prerequisites
+      * Java 1.5 or newer (Scala is not required directly since Maven will pull it down)
       * Maven 2 - include a very brief synopsis on Maven. Anything more detailed should point to the Maven site or go in an appendix
+      * Some sort of programming editor is recommended: mention emacs, Eclipse, NetBeans, JEdit, etc. 
+    * Download the HelloLift project and unzip it
+    * "mvn jetty:run"
+    * Profit!
+    * Cursory examination of:
+      * Index template (shows surround and snippet)
+      * Default template
+      * Hello snippet
 
-2. Compiling/Running the examples - command line OSX, Linux, Windows [wiki page] 
-3. Creating a project using maven - command line OSX, Linux, Windows [wiki page]
-4. Directory layout (IBM article did this, license for using this content?) - part of this is really Maven info, part is how Lift resolves classes. I think we should clearly differentiate that so that people understand where to put source and how to manage LiftRules.addToPackages.
-5. Lift Architecture in general (dpp) 
-- Filter
-- Rendering Pipeline
-- Lift View First 
+2. Getting to know Maven and Project layout (based on HelloLift example)
 
-6. What is snippet/webapp/toserve/model for?
+- I think this should be a small, but self-contained section with
+  enough info so that someone who wanted to do "standard" things with
+  Maven wouldn't need to go digging around on the site. In other
+  words, enough info on maven in this book to handle all of the
+  examples we use in the book.
 
-         * how should I architect my components? 
-            * Snippets
-            * Views
+  * What is maven
+    * Comprehensive project and build management
+    * Structured project layout (conventions)
+    * Dependency management
+    * Automated testing and packaging
+    * Automated reporting
+  * Archetypes: project "templates"
+  * Directory layout
+    * Scala-specific stuff
+    * web content
+    * resources
+  * Introducing the POM
+    * Project info (author, date, version, etc)
+    * Repo definitions
+    * Dependencies
+    * Special build targets
+    
+====== General Topics ======
 
-            * What are the use cases for snippets vs. views?
-            * How to deal with state in snippets
-               * RequestVars
-               * SessionVars
-               * StatefulSnippets
-            * Dispatching to views
-               * Path-based (i.e. /view/myView)
-               * via LiftRules.addDispatch(Before|After)
+3. Lift Architecture in general (need info from dpp and marius)
+  * Everything handled by LiftFilter
+    * Show example config in web.xml
+    * Handling in LiftFilter allows fall-through to default handlers for things that Lift doesn't handle (Static content, primarily)
+  * Rendering pipeline (This can be high-level right now, with links to detailed info in the advanced section - Derek)
+    * Dispatch to proper code
+      * dispatch methods in effect?
+      * rewrite methods in effect?
+      * SiteMap matching and access control
+      * template or view matched?
+        * recursive processing of template and any snippets contained therein
+	* direct processing of view
+      * Error handling
+    * List of tags that are handled by Lift (stolen from http://liftweb.net/index.php/LiftTags, not sure how up-to-date this is)
+      * surround
+      * embed
+      * comet
+      * ignore
+      * snippet (and, the alternative lift:<class>.<method>)
+      * additional attribute handling in tags (via S.attr)
 
+4. A detailed look at lift user components
+  * SiteMap
+    * Performs two primary duties: generates the menu for your site (customizable) and performs per-page access control
+    * Cover Menu, Loc objects to define paths and superpaths (my term for paths that match anything under them)
+    * Additional attributes
+      * If
+      * Unless
+      * etc
+  * Templates
+    * Static xml that may embed or surround other templates, and may embed snippets (reference tag list)
+    * well-formed XML
+    * Special template-hidden directory not directly accessible
+    * Use of prefixed elements to assist with binding in snippets
+    * Re-cover how templates are located/dispatched
+  * Snippets
+    * Chunks of code that generate pieces of a final output page. May themselves generate template code that is interpreted
+    * Generic Scala classes (stateless)
+    * How to deal with state in snippets
+      * RequestVars
+      * SessionVars
+      * StatefulSnippets
+    * Using Helpers.bind. In particular, cover view vs. forms usage
+    * Using Helpers.chooseTemplate for nested templates
+  * Views
+    * Chunks of code intended to generate a complete page
+    * Can be shoehorned to process template code via processSurroundAndInclude
+    * Re-cover how views are located/dispatched
+      * Path-based (/my/view)
+      * addDispatchBefore/After
+  * What are the use cases for snippets vs. views?
 
-7. URL Rewriting 
-- why and how?
-- ex User Friendly URLs 
+5. Intro to the Mapper package
+...
 
-8. JsCommands and AJAX (dpp or Marius) 
-                  * Built-in AJAX (ex. pull from the Example App)
-                  * JsCommands
-                  * Low-Level JSON info
+6. AJAX and COMET
+...
 
-9. Comet
-- what, why and how?
-- ex. HelloLift BlogWatchers
+7. Deployment
+...
 
-10. SiteMap and Menu
-11. Sending Email
+====== Advanced Topics ======
 
+8. Detailed request/response handling info
+...
 
+9. URL Rewriting
+  * Why and how?
+  * Example: user-friendly URLs
 
+10. JSON handling
+...
 
-Appendix: Recipes, HowTos, Resources
+11. JsCommands
+  * Integrated javascript handling without hard-coding it in templates
+  * jQuery intro
+    * Utility library that makes IE6 less ugly ;)
+    * Powerful support for dynamic attributing of elements
+    * Based on CSS selectors
 
+12. AJAX and COMET in depth
 
+13. JPA Integration
 
+14. Using Scala Actors
 
+====== Advanced Examples ======
+
+15. OpenID Integration
+
+16. Lucene/Compass Integration
+
+17. Tagging support
+
+====== Appendices ======
+
+A. Lift message handling
+
+B. Helpers methods, in particular Can/Empty/Full
+
+C. I18N and L10N
+  * S.?(String)
+  * lift:loc tag
+  * Proper placment of language resources
+
+D. Logging
+  * Configuring built-in log4j
+  * Using slf4j instead
+
+E. Mailer
+  * Configuring the mailer lib
+  * Sending email
 
