@@ -1,0 +1,73 @@
+ Table of Contents: 
+
+Pick an application to build from scratch.
+Should we compare and contrast with other frameworks? I don't know many others
+
+
+--------------------
+IMHO we should start with an introduction that gives a brief overview of what Lift is trying to solve, how it works and why it does it well. The first half would explain some basics about it (built on Scala, incredible template support, clean separation of V and C), and then the second half would walk the user through running the HelloLift example just to get something going out of the box. From my understanding at this point that would involve just three things: installing Java (if required), installing Maven2, and then downloading and running the HelloLift project zip. Of those three, I think installing Maven is probably the most complex 
+- Derek
+
+So you see 2 distinct Sections: Generalized info and intro, and getting into and building an app?  Sounds good to me.  -Tyler
+--------------------
+X. Introduction
+
+* Welcome to lift
+* What is lift?
+* Why another framework
+* 
+1. Installing Lift - java, maven, scala, [ wiki page ] what about Tim's installers? 
+
+   * Prerequisites
+      * Java 1.5 or newer
+      * Maven 2 - include a very brief synopsis on Maven. Anything more detailed should point to the Maven site or go in an appendix
+
+2. Compiling/Running the examples - command line OSX, Linux, Windows [wiki page] 
+3. Creating a project using maven - command line OSX, Linux, Windows [wiki page]
+4. Directory layout (IBM article did this, license for using this content?) - part of this is really Maven info, part is how Lift resolves classes. I think we should clearly differentiate that so that people understand where to put source and how to manage LiftRules.addToPackages.
+5. Lift Architecture in general (dpp) 
+- Filter
+- Rendering Pipeline
+- Lift View First 
+
+6. What is snippet/webapp/toserve/model for?
+
+         * how should I architect my components? 
+            * Snippets
+            * Views
+
+            * What are the use cases for snippets vs. views?
+            * How to deal with state in snippets
+               * RequestVars
+               * SessionVars
+               * StatefulSnippets
+            * Dispatching to views
+               * Path-based (i.e. /view/myView)
+               * via LiftRules.addDispatch(Before|After)
+
+
+7. URL Rewriting 
+- why and how?
+- ex User Friendly URLs 
+
+8. JsCommands and AJAX (dpp or Marius) 
+                  * Built-in AJAX (ex. pull from the Example App)
+                  * JsCommands
+                  * Low-Level JSON info
+
+9. Comet
+- what, why and how?
+- ex. HelloLift BlogWatchers
+
+10. SiteMap and Menu
+11. Sending Email
+
+
+
+
+Appendix: Recipes, HowTos, Resources
+
+
+
+
+
