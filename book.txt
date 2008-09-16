@@ -45,7 +45,7 @@ So you see 2 distinct Sections: Generalized info and intro, and getting into and
     * Prerequisites
       * Java 1.5 or newer (Scala is not required directly since Maven will pull it down)
       * Maven 2 - include a very brief synopsis on Maven. Anything more detailed should point to the Maven site or go in an appendix
-      * Some sort of programming editor is recommended: mention emacs, Eclipse, NetBeans, JEdit, etc. 
+      * Some sort of programming editor is recommended: mention emacs, Eclipse, NetBeans, JEdit, etc.
     * Download the HelloLift project and unzip it
     * "mvn jetty:run"
     * Profit!
@@ -78,7 +78,7 @@ So you see 2 distinct Sections: Generalized info and intro, and getting into and
     * Repo definitions
     * Dependencies
     * Special build targets
-    
+
 ====== General Topics ======
 
 3. Lift Architecture in general (need info from dpp and marius)
