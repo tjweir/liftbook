@@ -134,25 +134,28 @@ So you see 2 distinct Sections: Generalized info and intro, and getting into and
   * What are the use cases for snippets vs. views?
 
 5. Intro to the Mapper package
-...
+... This may be Mapper, or it may be Record
 
 6. AJAX and COMET
-...
+- The Spreadsheet example is good, but potentially too complex for an illustrative example
+- The Clock is nice and nice, so maybe the Clock and the simple Chat service
 
 7. Deployment
-...
+- Ask the list what they are deploying with
+  - Jetty, resin, tomcat, whatever
+
 
 ====== Advanced Topics ======
 
 8. Detailed request/response handling info
-...
+  - Track a request lifecycle
 
 9. URL Rewriting
   * Why and how?
   * Example: user-friendly URLs
 
 10. JSON handling
-...
+  * this is getting used more often so this is important
 
 11. JsCommands
   * Integrated javascript handling without hard-coding it in templates
@@ -160,12 +163,18 @@ So you see 2 distinct Sections: Generalized info and intro, and getting into and
     * Utility library that makes IE6 less ugly ;)
     * Powerful support for dynamic attributing of elements
     * Based on CSS selectors
+  * Talk about Marius JS abstraction
 
 12. AJAX and COMET in depth
+- this is probably the place for the Spreadsheet example
+- talk about design "patterns" ex. the proper TagCloud example
 
 13. JPA Integration
+- [I know nothing about this -Tyler]
 
 14. Using Scala Actors
+- this is a broad topic, ask the committor list for opinions
+
 
 ====== Advanced Examples ======
 
@@ -178,17 +187,21 @@ So you see 2 distinct Sections: Generalized info and intro, and getting into and
 ====== Appendices ======
 
 A. Lift message handling
+- What happens now
+- How to Fade them web2.0 stylee!
 
 B. Helpers methods, in particular Can/Empty/Full
+- Can is super important, as it's everywhere
 
 C. I18N and L10N
   * S.?(String)
   * lift:loc tag
-  * Proper placment of language resources
+  * Proper placement of language resources
 
 D. Logging
   * Configuring built-in log4j
   * Using slf4j instead
+  
 
 E. Mailer
   * Configuring the mailer lib
