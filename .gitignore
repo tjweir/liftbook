@@ -1,0 +1,6 @@
+target/
+*.*~
+*.swp
+*.class
+.svn/
+*~
