@@ -1,7 +1,7 @@
- Table of Contents: 
+ Table of Contents:
 
-Pick an application to build from scratch.
-Should we compare and contrast with other frameworks? I don't know many others
+Pick an application to build from scratch.
+Should we compare and contrast with other frameworks? I don't know many others --Tyler
 
 Ideas:
 1. Include a "Lift quick reference card": all of the lift template tags, brief overview of the render flow (with cross-refs)
@@ -16,9 +16,9 @@ example just to get something going out of the box. From my
 understanding at this point that would involve just three things:
 installing Java (if required), installing Maven2, and then downloading
 and running the HelloLift project zip. Of those three, I think
-installing Maven is probably the most complex  - Derek
+installing Maven is probably the most complex - Derek
 
-So you see 2 distinct Sections: Generalized info and intro, and getting into and building an app?  Sounds good to me.  -Tyler
+So you see 2 distinct Sections: Generalized info and intro, and getting into and building an app? Sounds good to me. -Tyler
 --------------------
 
 ====== Intro Section ======
