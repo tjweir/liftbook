@@ -72,11 +72,12 @@ BOOK
       * Some sort of programming editor is recommended: mention emacs, Eclipse, NetBeans, JEdit, etc.
     * Download the HelloLift project and unzip it
     * "mvn jetty:run"
-    * Profit!
+    * Profit! - let's hope :)
     * Cursory examination of:
       * Index template (shows surround and snippet)
       * Default template
       * Hello snippet
+    * Optionally install the JavaRebel Scala plugin from zeroturnaround
 
 2. Getting to know Maven and Project layout (based on HelloLift example)
 
@@ -105,7 +106,7 @@ BOOK
 
 ====== General Topics ======
 
-3. Lift Architecture in general (need info from dpp and marius)
+3. Lift Architecture in general
   * Everything handled by LiftFilter
     * Show example config in web.xml
     * Handling in LiftFilter allows fall-through to default handlers for things that Lift doesn't handle (Static content, primarily)
@@ -165,7 +166,9 @@ BOOK
 
 6. AJAX and COMET
   * What is COMET? 
-    * Why is Comet Awesome?
+    * Why is Comet Awesome? [example]
+      * Push to the browser
+        * Example following a LiveBlog of a keynote presentation, elememts are pushed to your browser
     * Method for async updates pushed *from server to client*
     * Connection is kept open
       * Streaming
@@ -176,7 +179,7 @@ BOOK
       * Mine Jorge's blog post: http://scala-blogs.org/2007/12/dynamic-web-applications-with-lift-and.html
     * Go through Dynamic chat room example
   * What is AJAX?
-    * why is AJAX awesome?
+    * why is AJAX awesome? [example]
     * Method for async updates pulled from the client without a full page reload
     * Relies heavily on javascript and XML
     * Javascript client-side events (button push, timer, etc) trigger requests "behind the scenes" 
@@ -186,11 +189,11 @@ BOOK
     * Go through example HelloDarwin AJAX example
 
 7. Deployment
-
   - Ask the list what they are deploying with. Generally it shouldn't
     be an issue where they deploy since Lift is essentially
     self-contained. We can go into specifics for special cases, I
     suppose
+    -!! jetty is required for continuations
 
   * Basic deployment via Jetty
     * Brief overview of Jetty
@@ -204,6 +207,7 @@ BOOK
     * Packaging options (pom dependency scope)
   * Deployment in JBoss
   * Deployment in GlassFish
+  * putting nginx out front???
 
 ====== Advanced Topics ======
 
@@ -237,6 +241,7 @@ BOOK
 
 10. JSON handling
   * What is JSON?
+    * Why is JSON awesome?  [example]
     * Technically, just a data format for Javascript (http://www.json.org/)
     * Used as an RPC transfer format
     * Well-suited to AJAX because it's essentially javascript
@@ -296,6 +301,7 @@ D. Logging
 E. Mailer
   * Configuring the mailer lib
   * Sending email
+  * System.properties
 
 
 
