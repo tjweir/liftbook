@@ -1,16 +1,24 @@
 We chose a license: http://creativecommons.org/license/results-one?license_code=by-nd
 License:
-This work is licensed under the Creative Commons Attribution-No Derivative Works 3.0 Unported License. To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/ or send a letter to Creative Commons, 171 Second Street, Suite 300, San Francisco, California, 94105, USA.
+This work is licensed under the Creative Commons Attribution-No Derivative Works 3.0 Unported License. 
+To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/ or send a letter to 
+Creative Commons, 171 Second Street, Suite 300, San Francisco, California, 94105, USA.
 
 
 
- Table of Contents:
+[Decision] Pick an application to build from scratch.
+Here are a few ideas
+- blogging tool (rebuild and extend HelloLift) Super obvious :)
+- ToDo tracker (extend to group todo tracker)
+- build PocketChangeApp (my simple expense tracker)
+- Build LuxTape, a lift implementation of OpenTape
 
-Pick an application to build from scratch.
-Should we compare and contrast with other frameworks? I don't know many others --Tyler
 
-Ideas:
-1. Include a "Lift quick reference card": all of the lift template tags, brief overview of the render flow (with cross-refs)
+[Decision] Should we compare and contrast with other frameworks? I don't know many others --Tyler
+
+[Ideas]
+1. Include a "Lift quick reference card": all of the lift template tags, brief overview of the render flow (with cross-refs) (love this idea -Ty)
+
 
 -------------------- 
 IMHO we should start with an introduction that gives a brief overview
@@ -29,7 +37,13 @@ getting into and building an app? Sounds good to me. -Tyler
 
 Next question is how much should assume about Scala knowledge? - Derek
 
+I think if we assume none, we'll never finish the book.  I would prefer to target
+those that are comfortable with Scala.  -Ty
 --------------------
+
+===============================
+BOOK
+===============================
 
 ====== Intro Section ======
 
@@ -145,10 +159,13 @@ Next question is how much should assume about Scala knowledge? - Derek
   * What are the use cases for snippets vs. views?
 
 5. Intro to the Mapper package
-... This may be Mapper, or it may be Record
+  * This may be Mapper, or it may be Record depending on whether Record makes the 1.0 cut
+  * If it's Mapper, then blurb about all the Mapped* fields
+
 
 6. AJAX and COMET
-  * What is COMET?
+  * What is COMET? 
+    * Why is Comet Awesome?
     * Method for async updates pushed *from server to client*
     * Connection is kept open
       * Streaming
@@ -159,6 +176,7 @@ Next question is how much should assume about Scala knowledge? - Derek
       * Mine Jorge's blog post: http://scala-blogs.org/2007/12/dynamic-web-applications-with-lift-and.html
     * Go through Dynamic chat room example
   * What is AJAX?
+    * why is AJAX awesome?
     * Method for async updates pulled from the client without a full page reload
     * Relies heavily on javascript and XML
     * Javascript client-side events (button push, timer, etc) trigger requests "behind the scenes" 
@@ -272,9 +290,12 @@ C. I18N and L10N
 D. Logging
   * Configuring built-in log4j
   * Using slf4j instead
-  
+  * Query Logger
+  * Maybe some recommendations?
 
 E. Mailer
   * Configuring the mailer lib
   * Sending email
+
+
 
