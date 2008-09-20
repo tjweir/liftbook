@@ -6,7 +6,7 @@ Creative Commons, 171 Second Street, Suite 300, San Francisco, California, 94105
 
 
 
-[Decision] Pick an application to build from scratch.
+[Decision] Pick an application to build from scratch. (I like the latter 3. First one is already heavily covered on the Wiki)
 Here are a few ideas
 - blogging tool (rebuild and extend HelloLift) Super obvious :)
 - ToDo tracker (extend to group todo tracker)
@@ -49,6 +49,12 @@ BOOK
 
 1. Introduction
   * Welcome to lift
+    * What we'd like you to get out of this book
+    * What we expect you to already know
+      * Scala
+      * HTTP protocol
+      * HTML
+      * Javascript 
   * What is lift?
     * Fast, flexible template-based web framework built on Scala
       * Full-featured template system
@@ -264,7 +270,30 @@ BOOK
 - talk about design "patterns" ex. the proper TagCloud example
 
 13. JPA Integration
-- [I know nothing about this -Tyler]
+  * What is JPA?
+    * Part of EJB3 spec
+    * Evolution of container-managed persistence
+    * Simplified model (a lot less XML)
+    * Heavy use of annotations, although you can define/override via XML descriptors if you want
+    * Available in container and outside of container (Hibernate EM, JPOX, etc)
+  * Why use JPA when we have mapper?
+    * Usable outside of Lift
+    * Easily accessible from Java and Scala
+    * Legacy models
+    * More flexibility w/large schemas
+    * Performance/Caching
+  * Intro to JPA
+    * JPA archetype in Maven
+    * Annotations on Scala classes
+    * Using orm.xml to override and define
+  * Getting a per-session entity manager
+    * RequestVar lifecycle
+    * In a container (JTA)
+    * User-managed transactions
+  * ScalaEntityManager and ScalaQuery
+    * Provide Scala-esque access to all EM methods (List vs java.util.List,etc)
+    * Implicit defs for conversion from java.util.{Set,List} to Scala counterparts
+  * Example app (Library catalog)
 
 14. Using Scala Actors
 - this is a broad topic, ask the committor list for opinions
