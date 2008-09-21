@@ -360,6 +360,7 @@ Lift is a fast, flexible template-based web framework built on Scala.  Some of i
 From Scala-lang.org: http://www.scala-lang.org/node/25
 [quote]Scala is a general purpose programming language designed to express common programming patterns in a concise, elegant, and type-safe way. It smoothly integrates features of object-oriented and functional languages. It is also fully interoperable with Java.[/quote]
  Scala code Compiles to JVM Bytecode so you get a new powerful language with access to all of Java's libraries.
+ [todo] discuss some of the Scala features we use, pattern matching and traits, actors
  
 
 
