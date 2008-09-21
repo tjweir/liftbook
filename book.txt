@@ -50,11 +50,13 @@ BOOK
 1. Introduction
   * Welcome to lift
     * What we'd like you to get out of this book
+      * By the end of the book you should be able to create and extend any web application you can think of
     * What we expect you to already know
       * Scala
       * HTTP protocol
       * HTML
       * Javascript 
+      * CSS
   * What is lift?
     * Fast, flexible template-based web framework built on Scala
       * Full-featured template system
@@ -174,7 +176,8 @@ BOOK
   * What is COMET? 
     * Why is Comet Awesome? [example]
       * Push to the browser
-        * Example following a LiveBlog of a keynote presentation, elememts are pushed to your browser
+        * [Example] following a LiveBlog of a keynote presentation, elememts are pushed to your browser
+    * Here's a super simple example - http://wiki.liftweb.net/index.php/CometActor
     * Method for async updates pushed *from server to client*
     * Connection is kept open
       * Streaming
@@ -331,6 +334,33 @@ E. Mailer
   * Configuring the mailer lib
   * Sending email
   * System.properties
+
+
+
+
+
+Chapter 1: Introduction
+
+* Welcome to Lift!
+We've created this book to educate you about Lift, which we think is a great framework for building compelling web applications.
+Our goal for this book is that by the end, you'll be able to create and extend any web application you can think of.
+
+* Expections for the reader
+We are going to focus on Lift in the book, so we expect that you're comfortable with:
+- Scala - http://www.scala-lang.org
+- The HTTP Protocol - http://www.ietf.org/rfc/rfc2616.txt
+- HTML - http://www.w3.org/MarkUp/Guide/
+- JavaScript - http://en.wikipedia.org/wiki/JavaScript, and 
+- CSS - http://en.wikipedia.org/wiki/Cascading_Style_Sheets
+
+* What is Lift?
+Lift is a fast, flexible template-based web framework built on Scala.  Some of it's notable features are a full-featured template system, a clean separation of Model, View and Controller, powerful AJAX and COMET support baked in and there is also a thriving community of developers.
+
+* Brief overview of Scala
+From Scala-lang.org: http://www.scala-lang.org/node/25
+[quote]Scala is a general purpose programming language designed to express common programming patterns in a concise, elegant, and type-safe way. It smoothly integrates features of object-oriented and functional languages. It is also fully interoperable with Java.[/quote]
+ Scala code Compiles to JVM Bytecode so you get a new powerful language with access to all of Java's libraries.
+ 
 
 
 
