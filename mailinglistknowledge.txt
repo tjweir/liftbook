@@ -13,9 +13,9 @@ S: Start of centralized User input validation
 T: validation
 
 ------------------------------------------------------
-L:
-S:
-T:
+L: http://groups.google.com/group/liftweb/browse_thread/thread/79b49fa0c11db336
+S: CometActors pushing parts
+T: javascript, comet, 
 
 ------------------------------------------------------
 L:
