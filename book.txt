@@ -16,6 +16,9 @@ Here are a few ideas
 
 [Decision] Should we compare and contrast with other frameworks? I don't know many others --Tyler
 
+[Decision] Should we include a section of HowTos? 
+* may be easier to get a lot content across in a short period of time
+
 [Ideas]
 1. Include a "Lift quick reference card": all of the lift template tags, brief overview of the render flow (with cross-refs) (love this idea -Ty)
 
