@@ -6,12 +6,32 @@ Creative Commons, 171 Second Street, Suite 300, San Francisco, California, 94105
 
 
 
-[Decision] Pick an application to build from scratch. (I like the latter 3. First one is already heavily covered on the Wiki)
+[Decision] Pick an application to build from scratch. 
+(I like the latter 3. First one is already heavily covered on the Wiki -Derek)
+(Let's see if we can extend these hit all of the sections -Ty)
 Here are a few ideas
-- blogging tool (rebuild and extend HelloLift) Super obvious :)
-- ToDo tracker (extend to group todo tracker)
-- build PocketChangeApp (my simple expense tracker)
-- Build LuxTape, a lift implementation of OpenTape
+- No! - blogging tool (rebuild and extend HelloLift) Super obvious :)
+
+- Maybe - ToDo tracker (extend to group todo tracker) 
+  - Add an API
+  - Comet feature, add group editing?
+  - AJAX - Fades!!! Moar FAdez!!
+  - OpenID works
+  - search works
+  - tags work
+
+- Maybe - build PocketChangeApp (my simple expense tracker, we can build this and put it up as pocketchangeapp.com, nice -Ty)
+  - API would actually be awesome for this
+  - Comet would be hard unless you could have like a joint account - this would be awesometown
+  - Search works
+  - OpenID works
+  - tags work
+
+- Maybe - Build LuxTape, a lift implementation of OpenTape
+  - trendy!
+  - legal issues?
+  - comet would make sense
+  - 
 
 
 [Decision] Should we compare and contrast with other frameworks? I don't know many others --Tyler
@@ -174,7 +194,6 @@ BOOK
   * This may be Mapper, or it may be Record depending on whether Record makes the 1.0 cut
   * If it's Mapper, then blurb about all the Mapped* fields
 
-
 6. AJAX and COMET
   * What is COMET? 
     * Why is Comet Awesome? [example]
@@ -312,6 +331,7 @@ BOOK
 16. Lucene/Compass Integration
 
 17. Tagging support
+- I have lots of sample code for this
 
 ====== Appendices ======
 
@@ -338,6 +358,10 @@ E. Mailer
   * Sending email
   * System.properties
 
+F. Dev tips
+  * .props for Dev and Prod
+  * JavaRebel
+  
 
 
 
