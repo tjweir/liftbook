@@ -18,19 +18,19 @@ S: CometActors pushing parts
 T: javascript, comet, 
 
 ------------------------------------------------------
-L:
-S:
-T:
+L: http://groups.google.com/group/liftweb/browse_thread/thread/35742baff99d6da6
+S: details about S.addHighLevelSessionDispatcher, example of a PayPal session with payment awareness
+T: session, hidden, paypal, example
 
 ------------------------------------------------------
-L:
-S:
-T:
+L: http://groups.google.com/group/liftweb/browse_thread/thread/5d5cd9a1927097f8
+S: Finding out the current location for the Menu, RequestState.location: Can[Loc]
+T: requeststate, location
 
 ------------------------------------------------------
-L:
-S:
-T:
+L: http://groups.google.com/group/liftweb/t/ac35fcd0ff130ce3
+S: The start of the Record Stuff
+T: record, 
 
 ------------------------------------------------------
 L:
