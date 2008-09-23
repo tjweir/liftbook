@@ -7,11 +7,8 @@ Creative Commons, 171 Second Street, Suite 300, San Francisco, California, 94105
 
 
 [Decision] Pick an application to build from scratch. 
-(I like the latter 3. First one is already heavily covered on the Wiki -Derek)
 (Let's see if we can extend these hit all of the sections -Ty)
 Here are a few ideas
-- No! - blogging tool (rebuild and extend HelloLift) Super obvious :)
-
 - Maybe - ToDo tracker (extend to group todo tracker) 
   - Add an API
   - Comet feature, add group editing?
@@ -36,11 +33,12 @@ Here are a few ideas
 
 [Decision] Should we compare and contrast with other frameworks? I don't know many others --Tyler
 
-[Decision] Should we include a section of HowTos? 
-* may be easier to get a lot content across in a short period of time
+- Not sure on this. I've done a lot of Struts 1 and some Tapestry in
+  the past, but it's getting a little rusty and both frameworks have
+  recently added and refined a lot. I have a feeling that comparisons
+  are better left to the bloggers...
 
-[Ideas]
-1. Include a "Lift quick reference card": all of the lift template tags, brief overview of the render flow (with cross-refs) (love this idea -Ty)
+1. Include a "Lift quick reference card":  (love this idea -Ty)
 
 
 -------------------- 
@@ -74,6 +72,11 @@ BOOK
   * Welcome to lift
     * What we'd like you to get out of this book
       * By the end of the book you should be able to create and extend any web application you can think of
+    * Why another framework?
+      * Too much boilerplate in other frameworks (Struts, we're talking about you)
+      * Exposure of programming logic in templates makes things difficult (JSP, etc)
+      * Scala has higher efficiency in terms of LoC per function point
+      * Powerful AJAX, COMET and JS support
     * What we expect you to already know
       * Scala
       * HTTP protocol
@@ -91,11 +94,6 @@ BOOK
       * Compiles to JVM Bytecode
       * Made by the good people who brought us generics
       * You get a new powerful language with access to all of Java's libs
-  * Why another framework?
-    * Too much boilerplate in other frameworks (Struts, we're talking about you)
-    * Exposure of programming logic in templates makes things difficult (JSP, etc)
-    * Scala has higher efficiency in terms of LoC per function point
-    * Powerful AJAX, COMET and JS support
   * Let's try out HelloLift
     * Prerequisites
       * Java 1.5 or newer (Scala is not required directly since Maven will pull it down)
@@ -162,11 +160,17 @@ BOOK
   * SiteMap
     * Performs two primary duties: generates the menu for your site (customizable) and performs per-page access control
     * Cover Menu, Loc objects to define paths and superpaths (my term for paths that match anything under them)
+    * Support for grouping via LocGroup object
+    * <lift:Menu> snippets:
+      * <lift:Menu.group group="...">content</...> (http://groups.google.com/group/liftweb/browse_thread/thread/5f18df13cd735c51?hl=en#)
+      * <lift:Menu.item name="..."> binding to Loc("...",) (http://groups.google.com/group/liftweb/browse_thread/thread/dbdf6a17b9704c99/30f5168e87161f74?hl=en&lnk=gst&q=new+sitemap%2Fmenu+features)
+      * Customizing content and attributes on menus
     * Additional attributes
       * If
       * Unless
       * Test
       * Title
+    * Finding the current Loc for a page (RequestState.location)
   * Templates
     * Static xml that may embed or surround other templates, and may embed snippets (reference tag list)
     * well-formed XML
@@ -324,7 +328,7 @@ BOOK
 - this is a broad topic, ask the committor list for opinions
 
 
-====== Advanced Examples ======
+====== Advanced Examples and HOWTOs ======
 
 15. OpenID Integration
 
@@ -340,7 +344,21 @@ A. Lift message handling
 - How to Fade them web2.0 stylee!
 
 B. Helpers methods, in particular Can/Empty/Full
-- Can is super important, as it's everywhere
+  * Can/Empty/Full/Failure
+    * Richer alternative to Scala's Option/None/Some
+    * openOr examples
+    * map examples
+    * pass - function with side effects
+    * run - function with default
+    * Using and/or chaining Failure objects
+  * Time/date formatting
+  * String formatting and utilities
+  * Encryption and hashing
+  * List helpers
+  * Binding
+  * URL modification
+  * IO Helpers
+  * tryo wrappers
 
 C. I18N and L10N
   * S.?(String)
@@ -362,15 +380,71 @@ F. Dev tips
   * .props for Dev and Prod
   * JavaRebel
   
+XX. Lift Quick Reference card (inside of back cover and facing page)
+  * All of the lift template tags
+  * Brief overview of the render flow (with cross-refs)
 
 
 
+====== Attempts at content ======
 
 Chapter 1: Introduction
 
 * Welcome to Lift!
-We've created this book to educate you about Lift, which we think is a great framework for building compelling web applications.
-Our goal for this book is that by the end, you'll be able to create and extend any web application you can think of.
+
+Welcome to <title>. We've created this book to educate you about Lift,
+which we think is a great framework for building compelling web
+applications. Lift is designed to make powerful techniques easily
+accessible, while keeping the overall framework simple and flexible.
+Our goal for this book is that by the end, you'll be able to create
+and extend any web application you can think of.
+
+For those of you have experience with other web frameworks such as
+Struts, Tapestry, Rails or PHP, you must be asking yourself "Why
+another framework? Does Lift really solve problems any differently or
+more effectively than the ones I've used before?" Based on our
+experience (and of others in the Lift community), the answer is an
+emphatic "Yes!" Lift has cherry-picked the best ideas from a number of
+other frameworks, while creating some novel ideas of its own. It's
+this combination of solid foundation and new techniques that makes
+Lift so powerful.
+
+A key aspect of Lift's development is that it's been able to avoid the
+mistakes made in the past by other frameworks. A growing trend in web
+(and other) frameworks is to reduce or eliminate boilerplate
+configuration and code. Lift has sensible defaults for everything,
+while making it easy to customize precisely what you need to; no more
+and no less. Gone are the days of XML file after XML file providing
+*basic configuration* for your application. Instead, a basic Lift app
+only requires that you add the LiftFilter to your web.xml and add one
+or more lines telling Lift what package your classes sit in []. Lift is
+intended to work out of the box, and to make you as efficient and
+productive as possible.
+
+One of the key strengths of Lift (IOHO) is the clean separation of
+content and logic, based on the bedrock concept of the
+Model-View-Controller pattern []. One of the original Java web
+application technologies (still used today) is JSP, or Java Server
+Pages []. JSP allows you to mix HTML and Java code directly within the
+page. While this may have seemed like a good idea at the start, it has
+proven to be painful in practice. Putting code in your presentation
+layer makes it more difficult to debug and understand what is going on
+within a page, and makes it more difficult for the people writing the
+HTML portion because the contents aren't valid HTML. While many modern
+programming and HTML editors have been modified to accomodate this
+mess, proper syntax highlighting and validation don't make up for the
+fact that you still have to switch back and forth between one or more
+files to follow the page flow. Lift takes the approach that there
+should be no code in the presentation layer, but that the presentation
+layer has to be flexible enough to accomodate any conceivable uses. To
+that end, Lift uses a powerful templating system, a la Wicket[], to
+bind user-generated data into the presentation layer. Lift's
+templating is built on the XML processing capabilities of the Scala
+Language (which we'll cover in more detail later), and allows things
+such as nested templates, simple injection of user-generated content,
+and advanced data binding capabilities. For those coming from JSP,
+Lift's advanced template and XML processing allows you to essentially
+write custom tag libraries at a fraction of the cost in time and effort.
 
 * Expections for the reader
 We are going to focus on Lift in the book, so we expect that you're comfortable with:
@@ -389,6 +463,3 @@ From Scala-lang.org: http://www.scala-lang.org/node/25
  Scala code Compiles to JVM Bytecode so you get a new powerful language with access to all of Java's libraries.
  [todo] discuss some of the Scala features we use, pattern matching and traits, actors
  
-
-
-
