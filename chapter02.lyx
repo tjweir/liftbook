@@ -104,7 +104,24 @@ The current configuration requires Maven 2.0.7.
 \end_layout
 
 \begin_layout Standard
-Talk about what happens when you type: mvn -U clean jetty:run
+Talk about what happens when you type: 
+\family typewriter
+mvn -U clean jetty:run
+\end_layout
+
+\begin_layout Standard
+If you issue 
+\family typewriter
+mvn -U clean jetty:run
+\family default
+ from the root of your application directory, maven will look for updates
+ to the JARs that the application depends on, clean the compiled classes,
+ compile the source (this is a prerequisite for 
+\family typewriter
+jetty:run
+\family default
+), start Jetty as a web container and deploy your application.
+ 
 \end_layout
 
 \begin_layout Standard
@@ -122,7 +139,7 @@ pache.org
 \begin_inset Float figure
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Standard
 
@@ -155,7 +172,7 @@ status open
 \end_layout
 
 \begin_layout Standard
-The layout of a Lift project is not complicated.
+The layout of a Lift project is not complicated, please see [Figure 1] .
  The directory /src/main will contain your scala files.
  This will follow the traditional Java packaging style.
  The directory /src/main/webapp will contain all of the static web files,
