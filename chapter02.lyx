@@ -75,16 +75,6 @@ Getting to know Maven and Project Layout
 
 \begin_layout List
 \labelwidthstring 00.00.0000
-* Repo definitions 
-\end_layout
-
-\begin_layout List
-\labelwidthstring 00.00.0000
-* Dependencies 
-\end_layout
-
-\begin_layout List
-\labelwidthstring 00.00.0000
 * Special build targets
 \end_layout
 
@@ -129,7 +119,39 @@ pache.org
 \end_layout
 
 \begin_layout Standard
-[Include picture of an expanded directory]
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Caption
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename dirlayout.png
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -138,7 +160,8 @@ The layout of a Lift project is not complicated.
  This will follow the traditional Java packaging style.
  The directory /src/main/webapp will contain all of the static web files,
  such as JavaScript, XHTML, CSS and images.
- 
+ In /src/main/webapp/templates-hidden you will find a file named default.html.
+ This is the default template that other XHTML fragments will be embedded.
 \end_layout
 
 \end_body
