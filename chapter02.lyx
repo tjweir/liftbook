@@ -79,14 +79,14 @@ Getting to know Maven and Project Layout
 \end_layout
 
 \begin_layout Standard
-Lift uses 
+A great web framework deserves a great build system, so Lift uses 
 \begin_inset LatexCommand htmlurl
 name "Maven"
 target "http://maven.apache.org/"
 
 \end_inset
 
- as it's build system.
+.
  Maven is a project management tool that is developed under the 
 \begin_inset LatexCommand htmlurl
 name "Apache Software Foundation."
@@ -97,31 +97,56 @@ target "http://www.apache.org"
  Maven's concept of a single config file, pom file, that controls the project's
  build, dependencies, reporting and documentation generation was a desirable
  feature for the Lift project.
+ Lift requires at least version 2.0.7 or Maven.
+ 
 \end_layout
 
 \begin_layout Standard
-The current configuration requires Maven 2.0.7.
-\end_layout
-
-\begin_layout Standard
-Talk about what happens when you type: 
-\family typewriter
-mvn -U clean jetty:run
-\end_layout
-
-\begin_layout Standard
-If you issue 
+At the beginning of your development your interaction with Maven will be
+ sparse.
+ You'll probably issue 
 \family typewriter
 mvn -U clean jetty:run
 \family default
- from the root of your application directory, maven will look for updates
- to the JARs that the application depends on, clean the compiled classes,
- compile the source (this is a prerequisite for 
+ repeatedly.
+ When you issue 
+\family typewriter
+mvn -U clean jetty:run
+\family default
+ from the root of your application directory, the 
+\family typewriter
+-U
+\family default
+ switch will tell Maven to look for updates to the JARs that the application
+ depends on, 
+\family typewriter
+clean
+\family default
+ wil clean the compiled classes, and 
 \family typewriter
 jetty:run
 \family default
-), start Jetty as a web container and deploy your application.
+ will compile your source, start Jetty as a web container and deploy your
+ application to 
+\family typewriter
+http://localhost:8080/
+\family default
+.
+ As your project matures and features you add start to require additional
+ JARs, you'll have to spend a bit of time in the 
+\family typewriter
+pom.xml
+\family default
+ file.
+ We'll get into that later in the book [WHEN?].
+ If you'd like more information about the details of Maven, please check
  
+\family typewriter
+http://maven.apache.org.
+\end_layout
+
+\begin_layout Standard
+[This should go later, new people won't care about .m2 for a while]
 \end_layout
 
 \begin_layout Standard
@@ -131,8 +156,7 @@ Maven will look in (or create) ~/.m2 and find the required dependencies.
 \end_layout
 
 \begin_layout Standard
-For more information about the details of maven, please look here: http://maven.a
-pache.org
+[This should go later, new people won't care about .m2 for a while]
 \end_layout
 
 \begin_layout Standard
