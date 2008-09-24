@@ -48,7 +48,11 @@ AJAX and COMET in Lift
 \end_layout
 
 \begin_layout Standard
-* What is AJAX? http://en.wikipedia.org/wiki/Ajax_(programming)
+* 
+\series bold
+What is AJAX?
+\series default
+ http://en.wikipedia.org/wiki/Ajax_(programming)
 \end_layout
 
 \begin_layout Standard
@@ -56,7 +60,7 @@ AJAX (asynchronous JavaScript and XML) is a group of techniques that allow
  for interactive web applications.
  Using AJAX applications can talk to the server asynchronously and therefore
  not disrupt the display of the client.
- (this is awkward)
+ (this is awkwardly worded)
 \end_layout
 
 \begin_layout Standard
@@ -64,10 +68,12 @@ AJAX (asynchronous JavaScript and XML) is a group of techniques that allow
 \end_layout
 
 \begin_layout Standard
-Ajax allows for a much richer interface for a web application, and example
+Ajax allows for a much richer interface for a web application, an example
  is Google Suggest.
  When you start typing your search term, the word fragment is sent to the
- server and common completions of your term are sent back.
+ server and common completions of your term are sent back, you see an instant
+ response.
+ 
 \end_layout
 
 \begin_layout Standard
@@ -85,10 +91,6 @@ Ajax allows for a much richer interface for a web application, and example
 \end_layout
 
 \begin_layout Standard
-* Web 2.0 built on this 
-\end_layout
-
-\begin_layout Standard
 * Using AJAX in Lift 
 \end_layout
 
@@ -102,7 +104,11 @@ Ajax allows for a much richer interface for a web application, and example
 \end_layout
 
 \begin_layout Standard
-* What is COMET? http://en.wikipedia.org/wiki/Comet_(programming)
+* 
+\series bold
+What is COMET?
+\series default
+ http://en.wikipedia.org/wiki/Comet_(programming)
 \end_layout
 
 \begin_layout Standard
@@ -155,7 +161,7 @@ Comet is a method that uses long-polling to keep a connection between a
 \end_layout
 
 \begin_layout Standard
-* Using COMET in Lift 
+* Using COMET in Lift
 \end_layout
 
 \begin_layout Standard

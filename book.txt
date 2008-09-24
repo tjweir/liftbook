@@ -337,6 +337,9 @@ BOOK
 17. Tagging support
 - I have lots of sample code for this
 
+18. Lift Widgets
+- let's build one together, Marius' Sparklines
+
 ====== Appendices ======
 
 A. Lift message handling
