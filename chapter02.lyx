@@ -79,21 +79,29 @@ Getting to know Maven and Project Layout
 \end_layout
 
 \begin_layout Standard
-A great web framework deserves a great build system, so Lift uses 
-\begin_inset LatexCommand htmlurl
-name "Maven"
-target "http://maven.apache.org/"
+A great web framework deserves a great build system, so Lift uses Maven
+\begin_inset Foot
+status collapsed
+
+\begin_layout Standard
+http://maven.apache.org/
+\end_layout
 
 \end_inset
 
 .
- Maven is a project management tool that is developed under the 
-\begin_inset LatexCommand htmlurl
-name "Apache Software Foundation."
-target "http://www.apache.org"
+ Maven is a project management tool that is developed under the Apache Software
+ Foundation
+\begin_inset Foot
+status collapsed
+
+\begin_layout Standard
+http://www.apache.org
+\end_layout
 
 \end_inset
 
+.
  Maven's concept of a single config file, pom file, that controls the project's
  build, dependencies, reporting and documentation generation was a desirable
  feature for the Lift project.
@@ -171,8 +179,21 @@ status open
 \begin_layout Standard
 \begin_inset Graphics
 	filename dirlayout.png
-	lyxscale 75
-	scale 75
+	lyxscale 80
+	scale 80
+	subcaption
+	subcaptionText "A typical application layout."
+
+\end_inset
+
+
+\begin_inset LatexCommand label
+name "fig:dirlayout"
+
+\end_inset
+
+
+\end_layout
 
 \end_inset
 
@@ -185,16 +206,13 @@ status open
 \end_layout
 
 \begin_layout Standard
-
-\end_layout
+The layout of a Lift project is not complicated, please see figure 
+\begin_inset LatexCommand ref
+reference "fig:dirlayout"
 
 \end_inset
 
-
-\end_layout
-
-\begin_layout Standard
-The layout of a Lift project is not complicated, please see [Figure 1] .
+.
  The directory /src/main will contain your scala files.
  This will follow the traditional Java packaging style.
  The directory /src/main/webapp will contain all of the static web files,

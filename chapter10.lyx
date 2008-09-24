@@ -86,5 +86,119 @@ JSON Handling
  Maybe it would be best to make it an extension of one of the other examples?
 \end_layout
 
+\begin_layout Standard
+JavaScript Object Notation, or JSON, was designed to be a simple data format.
+ Simple for both humans and computers.
+ 
+\end_layout
+
+\begin_layout Standard
+A quick overview of JSON from http://www.json.org
+\end_layout
+
+\begin_layout Standard
+Here's the RFC: http://tools.ietf.org/html/rfc4627
+\end_layout
+
+\begin_layout Standard
+JSON is built on two structures:
+\end_layout
+
+\begin_layout Standard
+* A collection of name/value pairs.
+ In various languages, this is realized as an object, record, struct, dictionary
+, hash table, keyed list, or associative array.
+ 
+\end_layout
+
+\begin_layout Standard
+* An ordered list of values.
+ In most languages, this is realized as an array, vector, list, or sequence.
+\end_layout
+
+\begin_layout Standard
+These are universal data structures.
+ Virtually all modern programming languages support them in one form or
+ another.
+ It makes sense that a data format that is interchangable with programming
+ languages also be based on these structures.
+\end_layout
+
+\begin_layout Standard
+In JSON, they take on these forms:
+\end_layout
+
+\begin_layout Standard
+An object is an unordered set of name/value pairs.
+ An object begins with { (left brace) and ends with } (right brace).
+ Each name is followed by : (colon) and the name/value pairs are separated
+ by , (comma).
+\end_layout
+
+\begin_layout Standard
+Below is a JSON representation of an address book entry, note it's simplicity.
+\end_layout
+
+\begin_layout LyX-Code
+{ 
+\end_layout
+
+\begin_layout LyX-Code
+"firstName": "John", 
+\end_layout
+
+\begin_layout LyX-Code
+"lastName": "Smith", 
+\end_layout
+
+\begin_layout LyX-Code
+"address": { 
+\end_layout
+
+\begin_layout LyX-Code
+  "streetAddress": "21 2nd Street", 
+\end_layout
+
+\begin_layout LyX-Code
+  "city": "New York", 
+\end_layout
+
+\begin_layout LyX-Code
+  "state": "NY", 
+\end_layout
+
+\begin_layout LyX-Code
+  "postalCode": 10021 
+\end_layout
+
+\begin_layout LyX-Code
+  }, 
+\end_layout
+
+\begin_layout LyX-Code
+"phoneNumbers": [ "212 555-1234", "646 555-4567" ] 
+\end_layout
+
+\begin_layout LyX-Code
+} 
+\end_layout
+
+\begin_layout Standard
+Lift has extensive support for JSON that is made available by the JSON parser
+ in Scala (scala.util.parsing.json)
+\end_layout
+
+\begin_layout Standard
+JSONResponse
+\end_layout
+
+\begin_layout Standard
+toJSON
+\end_layout
+
+\begin_layout Standard
+JSONForms
+\end_layout
+
 \end_body
 \end_document

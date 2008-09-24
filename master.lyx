@@ -42,10 +42,7 @@
 \begin_body
 
 \begin_layout Title
-
-\series bold
-\size huge
-We Need a Title
+Exploring Lift
 \end_layout
 
 \begin_layout Author
@@ -143,6 +140,15 @@ preview false
 
 \begin_layout Standard
 \begin_inset Include \include{chapter10.lyx}
+preview false
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Include \include{chapter11.lyx}
 preview false
 
 \end_inset
