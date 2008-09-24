@@ -1,4 +1,4 @@
-#LyX 1.5.3 created this file. For more info see http://www.lyx.org/
+#LyX 1.5.6 created this file. For more info see http://www.lyx.org/
 \lyxformat 276
 \begin_document
 \begin_header
@@ -40,314 +40,172 @@
 \begin_body
 
 \begin_layout Chapter
-Welcome to Lift!
+A Detailed Look at Lift User Components
 \end_layout
 
 \begin_layout Standard
-Welcome to 
-\emph on
-We Need a Title
-\emph default
-
-\begin_inset Note Note
-status collapsed
-
-\begin_layout Standard
-Yes, but this makes a good working title :)
-\end_layout
-
-\end_inset
-
-.
- We've created this book to educate you about Lift, which we think is a
- great framework for building compelling web applications.
- Lift is designed to make powerful techniques easily accessible, while keeping
- the overall framework simple and flexible.
- Our goal for this book is that by the end, you'll be able to create and
- extend any web application you can think of.
+* SiteMap 
 \end_layout
 
 \begin_layout Standard
-For those of you have experience with other web frameworks such as Struts,
- Tapestry, Rails, et cetera, you must be asking yourself "Why another framework?
- Does Lift really solve problems any differently or more effectively than
- the ones I've used before?" Based on our experience (and of others in the
- growing Lift community), the answer is an emphatic "Yes!" Lift has cherry-picke
-d the best ideas from a number of other frameworks, while creating some
- novel ideas of its own.
- It's this combination of solid foundation and new techniques that makes
- Lift so powerful.
- At the same time, Lift has been able to avoid the mistakes made in the
- past by other frameworks.
- In the spirit of 
-\begin_inset Quotes eld
-\end_inset
-
-configuration by convention
-\begin_inset Quotes erd
-\end_inset
-
-, Lift has sensible defaults for everything, while making it easy to customize
- precisely what you need to; no more and no less.
- Gone are the days of XML file after XML file providing 
-\emph on
-basic configuration
-\emph default
- for your application.
- Instead, a basic Lift app only requires that you add the LiftFilter to
- your web.xml and add one or more lines telling Lift what package your classes
- sit in 
-\begin_inset Note Note
-status collapsed
-
-\begin_layout Standard
-Should add a cross-reference here to the later section
-\end_layout
-
-\end_inset
-
-.
- The methods you code aren't required to implement a specific interface
- (called a trait), although there are support traits that make things that
- much simpler.
- In short, you don't need to write anything that isn't explicitly necessary
- for the task at hand; Lift is intended to work out of the box, and to make
- you as efficient and productive as possible.
+* Performs two primary duties: generates the menu for your site (customizable)
+ and performs per-page access control 
 \end_layout
 
 \begin_layout Standard
-One of the key strengths of Lift is the clean separation of presentation
- content and logic, based on the bedrock concept of the Model-View-Controller
- pattern
-\begin_inset Foot
-status collapsed
-
-\begin_layout Standard
-More on MVC can be found at 
-\begin_inset LatexCommand htmlurl
-target "http://en.wikipedia.org/wiki/Model-view-controller"
-
-\end_inset
-
-
-\begin_inset Note Note
-status collapsed
-
-\begin_layout Standard
-Is there a better link than Wikipedia?
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-.
- One of the original Java web application technologies that's still in use
- today is JSP, or Java Server Pages
-\begin_inset Foot
-status collapsed
-
-\begin_layout Standard
-The Java Server Pages home page is at 
-\begin_inset LatexCommand htmlurl
-target "http://java.sun.com/products/jsp/"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-.
- JSP allows you to mix HTML and Java code directly within the page.
- While this may have seemed like a good idea at the start, it has proven
- to be painful in practice.
- Putting code in your presentation layer makes it more difficult to debug
- and understand what is going on within a page, and makes it more difficult
- for the people writing the HTML portion because the contents aren't valid
- HTML.
- While many modern programming and HTML editors have been modified to accomodate
- this mess, proper syntax highlighting and validation don't make up for
- the fact that you still have to switch back and forth between one or more
- files to follow the page flow.
- Lift takes the approach that there should be no code in the presentation
- layer, but that the presentation layer has to be flexible enough to accomodate
- any conceivable uses.
- To that end, Lift uses a powerful templating system, a la Wicket
-\begin_inset Foot
-status collapsed
-
-\begin_layout Standard
-Wicket is an interesting web framework that inspired Lift's avoidance of
- special HTML for templating.
- More info can be found on the Wicket home page: 
-\begin_inset LatexCommand htmlurl
-target "http://wicket.apache.org/"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-, to bind user-generated data into the presentation layer.
- Lift's templating is built on the XML processing capabilities of the Scala
- Language
-\begin_inset Foot
-status collapsed
-
-\begin_layout Standard
-Not only does Scala have some extensive library support for XML, but XML
- syntax is actually part of the language.
- We'll cover this in more detail as we go through the book
-\end_layout
-
-\end_inset
-
-, and allows things such as nested templates, simple injection of user-generated
- content, and advanced data binding capabilities.
- For those coming from JSP, Lift's advanced template and XML processing
- allows you to essentially write custom tag libraries at a fraction of the
- cost in time and effort.
+* Cover Menu, Loc objects to define paths and superpaths (my term for paths
+ that match anything under them) 
 \end_layout
 
 \begin_layout Standard
-Lift has another advantage that no other web framework currently shares:
- the Scala programming language.
- Scala is a relatively new language developed by Martin Odersky
-\begin_inset Foot
-status collapsed
-
-\begin_layout Standard
-Martin wrote the original 
-\family typewriter
-javac
-\family default
- compiler for Sun, and more recently led the Pizza and GJ projects that
- eventually became Java Generics.
- His home page is at 
-\begin_inset LatexCommand htmlurl
-target "http://lamp.epfl.ch/~odersky/"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
- and his group of fearless rogues at EPFL Switzerland.
- It compiles to Java bytecode and runs on the JVM, which means that you
- can leverage the vast ecosystem of Java libraries just as you would with
- any other java web framework.
- At the same time, Scala introduces some very powerful features designed
- to make you, the developer, more productive.
- Among these features are an extremely rich type system along with powerful
- type inference, native XML processing, full support for closures and functions
- as objects, and an extensive high-level library.
- The power of the type system along with its type inferencing has led people
- to call it 
-\begin_inset Quotes eld
-\end_inset
-
-the statically typed dynamic language
-\begin_inset Quotes erd
-\end_inset
-
-
-\begin_inset Foot
-status collapsed
-
-\begin_layout Standard
-\begin_inset LatexCommand htmlurl
-target "http://scala-blogs.org/2007/12/scala-statically-typed-dynamic-language.html"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-.
- That means you can write code as quickly as you could with dynamically
- typed languages (Python, Ruby, etc.), but you have the compile-time type
- safety of a statically typed language like Java.
- Scala is also a hybrid functional and Object-oriented language, which means
- you can get the power of the higher-level functional (or FP) languages
- (such as Haskell, Scheme, etc) while retaining the modularity and reusability
- of OO components.
- In particular, the FP concept of immutability is well represented in Scala,
- and is one of the simplest means to high throughput scalability.
- The hybrid model also means that if you haven't touched FP before, you
- can gradually ease into it.
- In our experience, Scala allows you to do more in Lift with less lines
- of code; remember, Lift is all about making you more productive!
+* Support for grouping via LocGroup object 
 \end_layout
 
 \begin_layout Standard
-Lift strives to encompass advanced features in a very concise and straightforwar
-d manner.
- Lift's powerful support for AJAX and COMET allow you to use Web 2.0 features
- with very little effort.
- Lift leverages Scala's Actor library to provide a message-driven framework
- for COMET updates.
- In most cases, adding COMET support to a page just involves extending a
- trait
-\begin_inset Foot
-status collapsed
 
-\begin_layout Standard
-A trait is a Scala construct that's essentially like a Java interface.
- The main difference is that traits are allowed to provide method bodies
- and may have variables.
-\end_layout
-
-\end_inset
-
- to define the rendering method of your page and adding an extra function
- call to your links to dispatch the update message; Lift handles all of
- the backend and page-side coding to effect the COMET polling.
- AJAX support includes special handlers for doing AJAX form submission via
- JSON, and almost any link function can easily be turned into an AJAX version
- with a few keystrokes.
- In order to preform all of this client-side goodness, Lift has a class
- hierarchy for encapsulating Javascript calls via direct Javascript, jQuery
- and now YUI.
- The nice part is that you, too, can utilize these support classes so that
- you can generate the code and don't have to put Javascript (i.e.
- logic) into your templates.
+\series bold
+* <lift:Menu> snippets: 
 \end_layout
 
 \begin_layout Standard
-One final point to note is the breadth and depth of the Lift community.
- Since its inception in 2007 the list has grown to hundreds of members from
- all over the world.
- The project's leader, David Pollak
-\begin_inset Foot
-status open
-
-\begin_layout Standard
-\begin_inset LatexCommand htmlurl
-target "http://blog.lostlake.org/"
-
-\end_inset
-
-
+* <lift:Menu.group group="...">content</...> (http://groups.google.com/group/liftweb/brow
+se_thread/thread/5f18df13cd735c51?hl=en#) 
 \end_layout
 
-\end_inset
+\begin_layout Standard
+*<lift:Menu.itemname="...">binding to Loc("...",) (http://groups.google.com/group/liftweb
+/browse_thread/thread/dbdf6a17b9704c99/30f5168e87161f74?hl=en&lnk=gst&q=new+site
+map%2Fmenu+features) 
+\end_layout
 
-is constantly attending to the mailing list, answering questions and taking
- feature requests.
- There is a core group of developers who work on the project, but submissions
- are taken from anyone who makes a good case and can turn in good code.
+\begin_layout Standard
+* Customizing content and attributes on menus 
+\end_layout
+
+\begin_layout Standard
+* 
+\series bold
+Additional attributes 
+\end_layout
+
+\begin_layout Standard
+* If 
+\end_layout
+
+\begin_layout Standard
+* Unless 
+\end_layout
+
+\begin_layout Standard
+* Test 
+\end_layout
+
+\begin_layout Standard
+* Title 
+\end_layout
+
+\begin_layout Standard
+* Finding the current Loc for a page (RequestState.location) 
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+* Templates 
+\end_layout
+
+\begin_layout Standard
+* Static xml that may embed or surround other templates, and may embed snippets
+ (reference tag list) 
+\end_layout
+
+\begin_layout Standard
+* well-formed XML 
+\end_layout
+
+\begin_layout Standard
+* Special template-hidden directory not directly accessible 
+\end_layout
+
+\begin_layout Standard
+* Use of prefixed elements to assist with binding in snippets 
+\end_layout
+
+\begin_layout Standard
+* Re-cover how templates are located/dispatched 
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+* Snippets 
+\end_layout
+
+\begin_layout Standard
+* Chunks of code that generate pieces of a final output page.
+ May themselves generate template code that is interpreted 
+\end_layout
+
+\begin_layout Standard
+* Generic Scala classes (stateless) 
+\end_layout
+
+\begin_layout Standard
+* How to deal with state in snippets 
+\end_layout
+
+\begin_layout Standard
+* RequestVars 
+\end_layout
+
+\begin_layout Standard
+* SessionVars 
+\end_layout
+
+\begin_layout Standard
+* StatefulSnippets 
+\end_layout
+
+\begin_layout Standard
+* Using Helpers.bind.
+ In particular, cover view vs.
+ forms usage 
+\end_layout
+
+\begin_layout Standard
+* Using Helpers.chooseTemplate for nested templates 
+\end_layout
+
+\begin_layout Standard
+* 
+\series bold
+Views 
+\end_layout
+
+\begin_layout Standard
+* Chunks of code intended to generate a complete page 
+\end_layout
+
+\begin_layout Standard
+* Can be shoehorned to process template code via processSurroundAndInclude
  
+\end_layout
+
+\begin_layout Standard
+* Re-cover how views are located/dispatched 
+\end_layout
+
+\begin_layout Standard
+* Path-based (/my/view) 
+\end_layout
+
+\begin_layout Standard
+* addDispatchBefore/After 
+\end_layout
+
+\begin_layout Standard
+* What are the use cases for snippets vs.
+ views?
 \end_layout
 
 \end_body

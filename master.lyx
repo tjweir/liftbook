@@ -61,25 +61,52 @@ Derek Chen-Becker and Tyler Weir
 \end_layout
 
 \begin_layout Standard
-\begin_inset Include \include{/home/software/liftbook/chapter01.lyx}
+\begin_inset Include \include{chapter01.lyx}
 preview false
 
 \end_inset
 
 
-\series bold
-\size huge
+\end_layout
 
+\begin_layout Standard
+\begin_inset Include \include{chapter02.lyx}
+preview false
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 \begin_inset Include \include{chapter03.lyx}
 preview false
 
 \end_inset
 
 
-\series default
-\size default
+\end_layout
 
-\begin_inset Include \include{chapter02.lyx}
+\begin_layout Standard
+\begin_inset Include \include{chapter04.lyx}
+preview false
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Include \include{chapter05.lyx}
+preview false
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Include \include{chapter06.lyx}
 preview false
 
 \end_inset

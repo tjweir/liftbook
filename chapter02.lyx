@@ -163,11 +163,7 @@ Maven will look in (or create) ~/.m2 and find the required dependencies.
 \begin_inset Float figure
 wide false
 sideways false
-status collapsed
-
-\begin_layout Standard
-
-\end_layout
+status open
 
 \begin_layout Standard
 \begin_inset Caption
@@ -175,6 +171,8 @@ status collapsed
 \begin_layout Standard
 \begin_inset Graphics
 	filename dirlayout.png
+	lyxscale 75
+	scale 75
 
 \end_inset
 
