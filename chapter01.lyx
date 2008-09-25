@@ -46,18 +46,8 @@ Welcome to Lift!
 \begin_layout Standard
 Welcome to 
 \emph on
-We Need a Title
+Exploring Lift
 \emph default
-
-\begin_inset Note Note
-status collapsed
-
-\begin_layout Standard
-Yes, but this makes a good working title :)
-\end_layout
-
-\end_inset
-
 .
  We've created this book to educate you about Lift, which we think is a
  great framework for building compelling web applications.

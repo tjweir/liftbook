@@ -1,4 +1,4 @@
-#LyX 1.5.6 created this file. For more info see http://www.lyx.org/
+#LyX 1.5.3 created this file. For more info see http://www.lyx.org/
 \lyxformat 276
 \begin_document
 \begin_header
@@ -43,39 +43,32 @@
 Getting to know Maven and Project Layout
 \end_layout
 
-\begin_layout List
-\labelwidthstring 00.00.0000
-* Archetypes: project "templates" 
+\begin_layout Itemize
+Archetypes: project "templates" 
 \end_layout
 
-\begin_layout List
-\labelwidthstring 00.00.0000
-* Directory layout 
+\begin_layout Itemize
+Directory layout 
 \end_layout
 
-\begin_layout List
-\labelwidthstring 00.00.0000
-* Scala-specific stuff 
+\begin_layout Itemize
+Scala-specific stuff 
 \end_layout
 
-\begin_layout List
-\labelwidthstring 00.00.0000
-* web content resources 
+\begin_layout Itemize
+web content resources 
 \end_layout
 
-\begin_layout List
-\labelwidthstring 00.00.0000
-* Introducing the POM 
+\begin_layout Itemize
+Introducing the POM 
 \end_layout
 
-\begin_layout List
-\labelwidthstring 00.00.0000
-* Project info (author, date, version, etc) 
+\begin_layout Itemize
+Project info (author, date, version, etc) 
 \end_layout
 
-\begin_layout List
-\labelwidthstring 00.00.0000
-* Special build targets
+\begin_layout Itemize
+Special build targets
 \end_layout
 
 \begin_layout Standard
@@ -84,7 +77,12 @@ A great web framework deserves a great build system, so Lift uses Maven
 status collapsed
 
 \begin_layout Standard
-http://maven.apache.org/
+\begin_inset LatexCommand htmlurl
+target "http://maven.apache.org/"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -96,7 +94,12 @@ http://maven.apache.org/
 status collapsed
 
 \begin_layout Standard
-http://www.apache.org
+\begin_inset LatexCommand htmlurl
+target "http://www.apache.org"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -137,7 +140,13 @@ jetty:run
  will compile your source, start Jetty as a web container and deploy your
  application to 
 \family typewriter
-http://localhost:8080/
+
+\begin_inset LatexCommand htmlurl
+target "http://localhost:8080/"
+
+\end_inset
+
+
 \family default
 .
  As your project matures and features you add start to require additional
@@ -150,7 +159,13 @@ pom.xml
  If you'd like more information about the details of Maven, please check
  
 \family typewriter
-http://maven.apache.org.
+
+\begin_inset LatexCommand htmlurl
+target "http://maven.apache.org"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
