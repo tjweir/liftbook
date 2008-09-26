@@ -1,4 +1,4 @@
-#LyX 1.5.6 created this file. For more info see http://www.lyx.org/
+#LyX 1.5.3 created this file. For more info see http://www.lyx.org/
 \lyxformat 276
 \begin_document
 \begin_header
@@ -40,135 +40,15 @@
 \begin_body
 
 \begin_layout Chapter
-AJAX and COMET
+Using Scala Actors
 \end_layout
 
 \begin_layout Standard
-AJAX and COMET in Lift
+This is a broad topic, ask the committor list for opinions
 \end_layout
 
 \begin_layout Standard
-* What is AJAX? http://en.wikipedia.org/wiki/Ajax_(programming)
-\end_layout
 
-\begin_layout Standard
-AJAX (asynchronous JavaScript and XML) is a group of techniques that allow
- for interactive web applications.
- Using AJAX applications can talk to the server asynchronously and therefore
- not disrupt the display of the client.
- (this is awkward)
-\end_layout
-
-\begin_layout Standard
-* why is AJAX awesome? [example] 
-\end_layout
-
-\begin_layout Standard
-Ajax allows for a much richer interface for a web application, and example
- is Google Suggest.
- When you start typing your search term, the word fragment is sent to the
- server and common completions of your term are sent back.
-\end_layout
-
-\begin_layout Standard
-* Method for async updates pulled from the client without a full page reload
- 
-\end_layout
-
-\begin_layout Standard
-* Relies heavily on javascript and XML 
-\end_layout
-
-\begin_layout Standard
-* Javascript client-side events (button push, timer, etc) trigger requests
- "behind the scenes" 
-\end_layout
-
-\begin_layout Standard
-* Web 2.0 built on this 
-\end_layout
-
-\begin_layout Standard
-* Using AJAX in Lift 
-\end_layout
-
-\begin_layout Standard
-* Allows you to bind Javascript events (AJAX) to form elements, links, etc
- 
-\end_layout
-
-\begin_layout Standard
-* Go through example HelloDarwin AJAX example
-\end_layout
-
-\begin_layout Standard
-* What is COMET? http://en.wikipedia.org/wiki/Comet_(programming)
-\end_layout
-
-\begin_layout Standard
-Comet is a method that uses long-polling to keep a connection between a
- browser and a server open, to allow the server to push data to the browser.
- An example of this would be a Stock Ticker.
- A user may have a page open that has a number of stock prices and as the
- price changes, the new value is pushed to the broswer without the need
- to refresh the page.
- Another example is the embedded Google Talk chat client in GMail.
- Instant messages from friends are automatically pushed to your browser.
-\end_layout
-
-\begin_layout Standard
-* Push to the browser 
-\end_layout
-
-\begin_layout Standard
-* [Example] following a LiveBlog of a keynote presentation, elememts are
- pushed to your browser 
-\end_layout
-
-\begin_layout Standard
-* Here's a super simple example - http://wiki.liftweb.net/index.php/CometActor
- 
-\end_layout
-
-\begin_layout Standard
-* Method for async updates pushed 
-\end_layout
-
-\begin_layout Standard
-*from server to client* 
-\end_layout
-
-\begin_layout Standard
-* Connection is kept open 
-\end_layout
-
-\begin_layout Standard
-* Streaming 
-\end_layout
-
-\begin_layout Standard
-* Long polling 
-\end_layout
-
-\begin_layout Standard
-* Scalability issues 
-\end_layout
-
-\begin_layout Standard
-* Using COMET in Lift 
-\end_layout
-
-\begin_layout Standard
-* CometActor 
-\end_layout
-
-\begin_layout Standard
-* Mine Jorge's blog post: http://scala-blogs.org/2007/12/dynamic-web-applications
--with-lift-and.html 
-\end_layout
-
-\begin_layout Standard
-* Go through Dynamic chat room example 
 \end_layout
 
 \end_body

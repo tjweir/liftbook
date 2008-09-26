@@ -40,7 +40,19 @@
 \begin_body
 
 \begin_layout Chapter
-Getting to know Maven and Project Layout
+Getting to know Maven
+\begin_inset LatexCommand index
+name "Maven"
+
+\end_inset
+
+ and Project Layout
+\begin_inset LatexCommand label
+name "cha:Maven"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Itemize
@@ -88,7 +100,13 @@ target "http://maven.apache.org/"
 \end_inset
 
 .
- Maven is a project management tool that is developed under the Apache Software
+ Maven
+\begin_inset LatexCommand index
+name "Maven"
+
+\end_inset
+
+ is a project management tool that is developed under the Apache Software
  Foundation
 \begin_inset Foot
 status collapsed
@@ -119,7 +137,17 @@ At the beginning of your development your interaction with Maven will be
 \family typewriter
 mvn -U clean jetty:run
 \family default
- repeatedly.
+ repeatedly
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Maybe we should mention the scala:cc target for continuous compilation?
+\end_layout
+
+\end_inset
+
+.
  When you issue 
 \family typewriter
 mvn -U clean jetty:run
@@ -153,9 +181,25 @@ target "http://localhost:8080/"
  JARs, you'll have to spend a bit of time in the 
 \family typewriter
 pom.xml
+\begin_inset LatexCommand index
+name "pom.xml"
+
+\end_inset
+
+
 \family default
  file.
- We'll get into that later in the book [WHEN?].
+ We'll get into that later in the book 
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+WHEN?
+\end_layout
+
+\end_inset
+
+.
  If you'd like more information about the details of Maven, please check
  
 \family typewriter

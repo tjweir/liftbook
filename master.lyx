@@ -1,11 +1,55 @@
-#LyX 1.5.6 created this file. For more info see http://www.lyx.org/
+#LyX 1.5.3 created this file. For more info see http://www.lyx.org/
 \lyxformat 276
 \begin_document
 \begin_header
 \textclass book
+\begin_preamble
+% DO NOT ALTER THIS PREAMBLE!!!
+%
+% This preamble is designed to ensure that the User's Guide prints
+% out as advertised. If you mess with this preamble,
+% parts of the User's Guide may not print out as expected.  If you
+% have problems LaTeXing this file, please contact 
+% the documentation team
+% email: lyx-docs@lists.lyx.org
+
+\usepackage{ifpdf} % part of the hyperref bundle
+\ifpdf % if pdflatex is used
+
+ % link all cross references and URLs in pdf output
+ \usepackage[colorlinks=true, bookmarks, bookmarksnumbered,
+ linkcolor=black, citecolor=black, urlcolor=blue, filecolor=blue,
+ pdfpagelayout=OneColumn, pdfnewwindow=true,
+ pdfstartview=XYZ, plainpages=false, pdfpagelabels,
+ pdfauthor={Derek Chen-Becker and Tyler Weir}, pdftex,
+ pdftitle={Exploring Lift},pdfsubject={The Lift Web Framework},
+ pdfkeywords={Lift Web}]{hyperref}
+ 
+\else % if dvi or ps is produced
+
+ % link all cross references and URLs in dvi output
+ \usepackage[ps2pdf]{hyperref}
+
+\fi % end if pdflatex is used
+
+ % the pages of the TOC are numbered roman
+ % and a pdf-bookmark for the TOC is added
+ \pagenumbering{roman}
+ \let\myTOC\tableofcontents
+ \renewcommand\tableofcontents{%
+   \pdfbookmark[1]{Contents}{}
+   \myTOC
+   \cleardoublepage
+   \pagenumbering{arabic} }
+
+% redefine the \LyX macro for PDF bookmarks
+\def\LyX{\texorpdfstring{%
+  L\kern-.1667em\lower.25em\hbox{Y}\kern-.125emX\@}
+  {LyX }}
+\end_preamble
 \language english
 \inputencoding auto
-\font_roman default
+\font_roman palatino
 \font_sans default
 \font_typewriter default
 \font_default_family default
@@ -23,10 +67,10 @@
 \cite_engine basic
 \use_bibtopic false
 \paperorientation portrait
-\paperwidth 18cm
-\paperheight 24cm
+\paperwidth 7in
+\paperheight 7.85in
 \secnumdepth 3
-\tocdepth 3
+\tocdepth 2
 \paragraph_separation indent
 \defskip medskip
 \quotes_language english
@@ -47,10 +91,26 @@ Exploring Lift
 
 \begin_layout Author
 Derek Chen-Becker and Tyler Weir
+\newpage
+
 \end_layout
 
 \begin_layout Standard
 \begin_inset LatexCommand tableofcontents
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+We can put acknowledgements, foreward, etc here.
+ I just need to figure out how to get them properly numbered in LyX - Derek
+\end_layout
 
 \end_inset
 
@@ -150,6 +210,88 @@ preview false
 \begin_layout Standard
 \begin_inset Include \include{chapter11.lyx}
 preview false
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Include \include{chapter12.lyx}
+preview false
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Include \include{chapter13.lyx}
+preview false
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Include \include{chapter14.lyx}
+preview false
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Include \include{chapter15.lyx}
+preview false
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Include \include{chapter16.lyx}
+preview false
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Include \include{chapter17.lyx}
+preview false
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Include \include{chapter18.lyx}
+preview false
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\start_of_appendix
+\begin_inset LatexCommand bibtex
+options "bibtotoc,plain"
+bibfiles "references"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset LatexCommand printindex
 
 \end_inset
 

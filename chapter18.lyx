@@ -34,22 +34,20 @@
 \tracking_changes false
 \output_changes false
 \author "" 
-\author "" 
 \end_header
 
 \begin_body
 
 \begin_layout Chapter
-AJAX and COMET in Depth
+Lift Widgets
 \end_layout
 
-\begin_layout Itemize
-This is probably the place for the Spreadsheet example
+\begin_layout Standard
+Let's build one together, Marius' Sparklines
 \end_layout
 
-\begin_layout Itemize
-Talk about design "patterns" ex.
- the proper TagCloud example
+\begin_layout Standard
+
 \end_layout
 
 \end_body
