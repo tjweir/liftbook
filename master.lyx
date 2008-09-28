@@ -1,4 +1,4 @@
-#LyX 1.5.3 created this file. For more info see http://www.lyx.org/
+#LyX 1.5.6 created this file. For more info see http://www.lyx.org/
 \lyxformat 276
 \begin_document
 \begin_header
@@ -104,12 +104,35 @@ Derek Chen-Becker and Tyler Weir
 \end_layout
 
 \begin_layout Standard
+\begin_inset FloatList figure
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 \begin_inset Note Note
 status open
 
 \begin_layout Standard
 We can put acknowledgements, foreward, etc here.
  I just need to figure out how to get them properly numbered in LyX - Derek
+\end_layout
+
+\begin_layout Standard
+I guess we'll have to write our bios as well.
+ 
+\begin_inset Quotes eld
+\end_inset
+
+Tyler helped write this book.
+ And...
+ well, that's about it.
+\begin_inset Quotes erd
+\end_inset
+
+ :)
 \end_layout
 
 \end_inset

@@ -44,91 +44,79 @@ Request/Response Lifecycle
 \end_layout
 
 \begin_layout Standard
-8.
- Detailed request/response handling info (should cover how Actors are used,
+Detailed request/response handling info (should cover how Actors are used,
  too) 
 \end_layout
 
-\begin_layout Standard
-1.
- Request hits LiftFilter 
+\begin_layout Enumerate
+Request hits LiftFilter 
 \end_layout
 
-\begin_layout Standard
-2.
- LiftFilter executes each item in LiftRules.early.
+\begin_layout Enumerate
+LiftFilter executes each item in LiftRules.early.
  This would allow you to do advance processing of the HttpRequest 
 \end_layout
 
-\begin_layout Standard
-3.
- Rewrites occur per the LiftRules.rewriteTable (set up via LiftRules.addRewriteBef
-ore/After) 
+\begin_layout Enumerate
+Rewrites occur per the LiftRules.rewriteTable (set up via LiftRules.addRewriteBefo
+re/After) 
 \end_layout
 
-\begin_layout Standard
-4.
- LiftFilter determines whether the request should be handled by Lift or
- if it should be chained.
+\begin_layout Enumerate
+LiftFilter determines whether the request should be handled by Lift or if
+ it should be chained.
  If the processing fails it's automatically chained 
 \end_layout
 
-\begin_layout Standard
-5.
- Processing takes place via the LiftFilter's internal LiftServlet instance
+\begin_layout Enumerate
+Processing takes place via the LiftFilter's internal LiftServlet instance
  
 \end_layout
 
-\begin_layout Standard
-6.
- If Lift is running in Jetty, any continuations are invoked (explain a little
+\begin_layout Enumerate
+If Lift is running in Jetty, any continuations are invoked (explain a little
  about Jetty continuations here...).
  If continuation exists and returns a response, return 
 \end_layout
 
-\begin_layout Standard
-7.
- LiftServlet checks LiftRules.statelessDispatchTable and returns if matched
+\begin_layout Enumerate
+LiftServlet checks LiftRules.statelessDispatchTable and returns if matched
  (what is this for?) 
 \end_layout
 
-\begin_layout Standard
-8.
- LiftServlet checks LiftRules.dispatchTable (set up via LiftRules.addDispatchBefor
-e/After) and if dispatches match it dispatches there and returns the result
+\begin_layout Enumerate
+LiftServlet checks LiftRules.dispatchTable (set up via LiftRules.addDispatchBefore
+/After) and if dispatches match it dispatches there and returns the result
  * detail dispatch handling 
 \end_layout
 
-\begin_layout Standard
-9.
- LiftServlet then checks to see if the request starts with LiftRules.cometPath
- (default "comet_request") and if so, handles the request as a COMET request
+\begin_layout Enumerate
+LiftServlet then checks to see if the request starts with LiftRules.cometPath
+ (default "/comet_request") and if so, handles the request as a COMET request
  * detail COMET handling path 
 \end_layout
 
-\begin_layout Standard
-10.
- LiftServlet then checks to see if the request starts with LiftRules.ajaxPath
- (default "ajax_request") and if so, handles the request as an AJAX request
+\begin_layout Enumerate
+LiftServlet then checks to see if the request starts with LiftRules.ajaxPath
+ (default "/ajax_request") and if so, handles the request as an AJAX request
  * detail AJAX handling 
 \end_layout
 
-\begin_layout Standard
-11.
- If nothing else has occurred, do normal template processing at this point
+\begin_layout Enumerate
+If nothing else has occurred, do normal template processing at this point
  
 \end_layout
 
-\begin_layout Standard
-11.1.
- Lookup template based on path 
+\begin_deeper
+\begin_layout Enumerate
+Lookup template based on path 
 \end_layout
 
-\begin_layout Standard
-11.2.
- Process template recursively (surround, include, etc) 
+\begin_layout Enumerate
+Process template recursively (surround, include, etc) 
 \end_layout
 
+\end_deeper
 \begin_layout Standard
 * Additional topics 
 \end_layout

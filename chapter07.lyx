@@ -44,62 +44,62 @@ Deployment
 \end_layout
 
 \begin_layout Standard
-- Ask the list what they are deploying with.
+Ask the list what they are deploying with.
  Generally it shouldn't be an issue where they deploy since Lift is essentially
  self-contained.
  We can go into specifics for special cases, I suppose 
 \end_layout
 
-\begin_layout Standard
--!! jetty is required for continuations
+\begin_layout Itemize
+Jetty is required for continuations
 \end_layout
 
-\begin_layout Standard
-* Basic deployment via Jetty 
+\begin_layout Itemize
+Basic deployment via Jetty 
 \end_layout
 
-\begin_layout Standard
-* Brief overview of Jetty 
+\begin_layout Itemize
+Brief overview of Jetty 
 \end_layout
 
-\begin_layout Standard
-* Capabilities 
+\begin_layout Itemize
+Capabilities 
 \end_layout
 
-\begin_layout Standard
-* Configuration 
+\begin_layout Itemize
+Configuration 
 \end_layout
 
-\begin_layout Standard
-* SSL 
+\begin_layout Itemize
+SSL 
 \end_layout
 
-\begin_layout Standard
-* How jetty is configured in maven for testing 
+\begin_layout Itemize
+How jetty is configured in maven for testing 
 \end_layout
 
-\begin_layout Standard
-* Changing the default port (8080) 
+\begin_layout Itemize
+Changing the default port (8080) 
 \end_layout
 
-\begin_layout Standard
-* Tips and tricks 
+\begin_layout Itemize
+Tips and tricks 
 \end_layout
 
-\begin_layout Standard
-* Deployment in Tomcat 
+\begin_layout Itemize
+Deployment in Tomcat 
 \end_layout
 
-\begin_layout Standard
-* Packaging options (pom dependency scope) 
+\begin_layout Itemize
+Packaging options (pom dependency scope) 
 \end_layout
 
-\begin_layout Standard
-* Deployment in JBoss 
+\begin_layout Itemize
+Deployment in JBoss 
 \end_layout
 
-\begin_layout Standard
-* Deployment in GlassFish 
+\begin_layout Itemize
+Deployment in GlassFish 
 \end_layout
 
 \begin_layout Standard

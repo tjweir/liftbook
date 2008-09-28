@@ -1,4 +1,4 @@
-#LyX 1.5.3 created this file. For more info see http://www.lyx.org/
+#LyX 1.5.6 created this file. For more info see http://www.lyx.org/
 \lyxformat 276
 \begin_document
 \begin_header
@@ -83,6 +83,10 @@ Project info (author, date, version, etc)
 Special build targets
 \end_layout
 
+\begin_layout Section
+Maven
+\end_layout
+
 \begin_layout Standard
 A great web framework deserves a great build system, so Lift uses Maven
 \begin_inset Foot
@@ -123,26 +127,159 @@ target "http://www.apache.org"
 \end_inset
 
 .
- Maven's concept of a single config file, pom file, that controls the project's
- build, dependencies, reporting and documentation generation was a desirable
- feature for the Lift project.
- Lift requires at least version 2.0.7 or Maven.
+ Maven's concept of a single config file, known as the Project Object Model
+ or pom file, that controls the project's build, dependencies, reporting
+ and documentation generation was a desirable feature for the Lift project.
+ Below is a sample pom.xml file.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+\end_layout
+
+\begin_layout Standard
+
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+\end_layout
+
+\begin_layout Standard
+
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+\end_layout
+
+\begin_layout Standard
+
+  http://maven.apache.org/xsd/maven-4.0.0.xsd">   
+\end_layout
+
+\begin_layout Standard
+
+  <modelVersion>4.0.0</modelVersion>   
+\end_layout
+
+\begin_layout Standard
+
+  <groupId>com.mycompany.app</groupId>   
+\end_layout
+
+\begin_layout Standard
+
+  <artifactId>my-app</artifactId>   
+\end_layout
+
+\begin_layout Standard
+
+  <packaging>jar</packaging>   
+\end_layout
+
+\begin_layout Standard
+
+  <version>1.0-SNAPSHOT</version>   
+\end_layout
+
+\begin_layout Standard
+
+  <name>Maven Quick Start Archetype</name>   
+\end_layout
+
+\begin_layout Standard
+
+  <url>http://maven.apache.org</url>   
+\end_layout
+
+\begin_layout Standard
+
+  <dependencies>     
+\end_layout
+
+\begin_layout Standard
+
+    <dependency>       
+\end_layout
+
+\begin_layout Standard
+
+      <groupId>junit</groupId>       
+\end_layout
+
+\begin_layout Standard
+
+      <artifactId>junit</artifactId>       
+\end_layout
+
+\begin_layout Standard
+
+      <version>3.8.1</version>       
+\end_layout
+
+\begin_layout Standard
+
+      <scope>test</scope>     
+\end_layout
+
+\begin_layout Standard
+
+    </dependency>   
+\end_layout
+
+\begin_layout Standard
+
+  </dependencies> 
+\end_layout
+
+\begin_layout Standard
+
+</project>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout Standard
+Lift requires at least version 2.0.7.
  
 \end_layout
 
 \begin_layout Standard
-At the beginning of your development your interaction with Maven will be
- sparse.
- You'll probably issue 
+Maven uses the concept of lifecycle phases for execution.
+ Some of the default phases are validate, compile, test, package.
+ At the beginning of your development you'll probably just use clean and
+ jetty:run, in the form 
 \family typewriter
-mvn -U clean jetty:run
+mvn -U clean jetty:run.
 \family default
- repeatedly
+
 \begin_inset Note Note
 status open
 
 \begin_layout Standard
 Maybe we should mention the scala:cc target for continuous compilation?
+ - Derek Maybe we have a section in the Appendix about scala:cc and JavaRebel,
+ or something like 
+\begin_inset Quotes eld
+\end_inset
+
+How we develop
+\begin_inset Quotes erd
+\end_inset
+
+ -Ty
 \end_layout
 
 \end_inset
@@ -177,8 +314,12 @@ target "http://localhost:8080/"
 
 \family default
 .
- As your project matures and features you add start to require additional
- JARs, you'll have to spend a bit of time in the 
+ 
+\end_layout
+
+\begin_layout Standard
+As your project matures you may start to require additional JARs due to
+ new dependencies , you'll have to spend a bit of time in the 
 \family typewriter
 pom.xml
 \begin_inset LatexCommand index
@@ -212,18 +353,24 @@ target "http://maven.apache.org"
 .
 \end_layout
 
-\begin_layout Standard
-[This should go later, new people won't care about .m2 for a while]
+\begin_layout Section
+Project Layout
 \end_layout
 
 \begin_layout Standard
-Maven will look in (or create) ~/.m2 and find the required dependencies.
- These will either be found in your local repository or will be pulled down
- from the net from a public repository.
-\end_layout
+The layout of a Lift project is not complicated, please see figure 
+\begin_inset LatexCommand ref
+reference "fig:dirlayout"
 
-\begin_layout Standard
-[This should go later, new people won't care about .m2 for a while]
+\end_inset
+
+.
+ The directory /src/main will contain your scala files.
+ This will follow the traditional Java packaging style.
+ The directory /src/main/webapp will contain all of the static web files,
+ such as JavaScript, XHTML, CSS and images.
+ In /src/main/webapp/templates-hidden you will find a file named default.html.
+ This is the default template that other XHTML fragments will be embedded.
 \end_layout
 
 \begin_layout Standard
@@ -262,22 +409,6 @@ name "fig:dirlayout"
 \end_inset
 
 
-\end_layout
-
-\begin_layout Standard
-The layout of a Lift project is not complicated, please see figure 
-\begin_inset LatexCommand ref
-reference "fig:dirlayout"
-
-\end_inset
-
-.
- The directory /src/main will contain your scala files.
- This will follow the traditional Java packaging style.
- The directory /src/main/webapp will contain all of the static web files,
- such as JavaScript, XHTML, CSS and images.
- In /src/main/webapp/templates-hidden you will find a file named default.html.
- This is the default template that other XHTML fragments will be embedded.
 \end_layout
 
 \end_body

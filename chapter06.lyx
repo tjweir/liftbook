@@ -48,35 +48,6 @@ AJAX and COMET in Lift
 \end_layout
 
 \begin_layout Standard
-* 
-\series bold
-What is AJAX?
-\series default
- http://en.wikipedia.org/wiki/Ajax_(programming)
-\end_layout
-
-\begin_layout Standard
-AJAX (asynchronous JavaScript and XML) is a group of techniques that allow
- for interactive web applications.
- Using AJAX applications can talk to the server asynchronously and therefore
- not disrupt the display of the client.
- (this is awkwardly worded)
-\end_layout
-
-\begin_layout Standard
-* why is AJAX awesome? [example] 
-\end_layout
-
-\begin_layout Standard
-Ajax allows for a much richer interface for a web application, an example
- is Google Suggest.
- When you start typing your search term, the word fragment is sent to the
- server and common completions of your term are sent back, you see an instant
- response.
- 
-\end_layout
-
-\begin_layout Standard
 * Method for async updates pulled from the client without a full page reload
  
 \end_layout
@@ -175,6 +146,225 @@ Comet is a method that uses long-polling to keep a connection between a
 
 \begin_layout Standard
 * Go through Dynamic chat room example 
+\end_layout
+
+\begin_layout Section
+AJAX
+\end_layout
+
+\begin_layout Subsection
+What is AJAX
+\end_layout
+
+\begin_layout Standard
+AJAX
+\begin_inset Foot
+status open
+
+\begin_layout Standard
+\begin_inset LatexCommand htmlurl
+name "AJAX"
+target "http://en.wikipedia.org/wiki/Ajax_(programming)"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ or (asynchronous JavaScript and XML) is a group of techniques that allow
+ for interactive web applications.
+ Using AJAX applications can talk to the server asynchronously and therefore
+ not disrupt the display of the client.
+ (this is awkwardly worded) 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Standard
+\begin_inset Caption
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename ajax.png
+	lyxscale 50
+	scale 50
+	subcaption
+	subcaptionText "AJAX Application Model"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Copyright Check Required
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset LatexCommand label
+name "fig:ajaxarch"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+What is the benefit of AJAX?
+\end_layout
+
+\begin_layout Standard
+Ajax allows for a much richer interface for a web application, an example
+ is Google Suggest.
+ When you start typing your search term, the word fragment is sent to the
+ server and common completions of your term are sent back, you see an instant
+ response.
+ 
+\end_layout
+
+\begin_layout Subsection
+Examples of AJAX
+\end_layout
+
+\begin_layout Subsection
+AJAX Example in Lift
+\end_layout
+
+\begin_layout Section
+COMET
+\end_layout
+
+\begin_layout Subsection
+What is COMET
+\end_layout
+
+\begin_layout Standard
+COMET
+\begin_inset Foot
+status open
+
+\begin_layout Standard
+\begin_inset LatexCommand htmlurl
+name "Comet"
+target "http://en.wikipedia.org/wiki/Comet_(programming)"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ is a group of methods that use long-polling to keep a connection between
+ a browser and a server open.
+ The allows the server to push data to the browser, rather than requiring
+ the browser to request the data.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Standard
+\begin_inset Caption
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename Comet.png
+	lyxscale 50
+	scale 50
+	subcaption
+	subcaptionText "COMET Application Model"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Copyright Check Required
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset LatexCommand label
+name "fig:cometarch"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+What is the benefit of COMET?
+\end_layout
+
+\begin_layout Standard
+The main benefit 
+\end_layout
+
+\begin_layout Subsection
+Examples of COMET
+\end_layout
+
+\begin_layout Standard
+An example of this would be a Stock Ticker.
+ A user may have a page open that has a number of stock prices and as the
+ price changes, the new value is pushed to the broswer without the need
+ to refresh the page.
+ Another example is the embedded Google Talk chat client in GMail.
+ Instant messages from friends are automatically pushed to your browser.
+\end_layout
+
+\begin_layout Subsection
+COMET Example in Lift
 \end_layout
 
 \end_body
