@@ -1,4 +1,4 @@
-#LyX 1.5.3 created this file. For more info see http://www.lyx.org/
+#LyX 1.5.6 created this file. For more info see http://www.lyx.org/
 \lyxformat 276
 \begin_document
 \begin_header
@@ -43,8 +43,24 @@
 OpenID Integration
 \end_layout
 
-\begin_layout Standard
+\begin_layout Itemize
+Rolled into lift-proper a while ago
+\end_layout
 
+\begin_layout Itemize
+Overview of OpenID, no politics :)
+\end_layout
+
+\begin_layout Itemize
+Request cycle of an OpenID auth
+\end_layout
+
+\begin_layout Itemize
+How to integrate into Lift
+\end_layout
+
+\begin_layout Itemize
+OpenIDProtoUser
 \end_layout
 
 \end_body

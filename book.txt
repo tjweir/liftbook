@@ -340,6 +340,9 @@ BOOK
 18. Lift Widgets
 - let's build one together, Marius' Sparklines
 
+19. Web Services
+- Building an API
+- REST
 ====== Appendices ======
 
 A. Lift message handling

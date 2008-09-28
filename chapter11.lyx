@@ -48,28 +48,44 @@ JsCommands
  JsCommands 
 \end_layout
 
-\begin_layout Standard
-* Integrated javascript handling without hard-coding it in templates 
+\begin_layout Itemize
+Integrated javascript handling without hard-coding it in templates 
 \end_layout
 
-\begin_layout Standard
-* jQuery intro 
+\begin_layout Itemize
+Further the goal of pushing logic out of templates
 \end_layout
 
-\begin_layout Standard
-* Utility library that makes IE6 less ugly ;) 
+\begin_layout Itemize
+jQuery intro: Steal from this: http://docs.jquery.com/How_jQuery_Works
 \end_layout
 
-\begin_layout Standard
-* Powerful support for dynamic attributing of elements 
+\begin_layout Itemize
+Utility library that makes IE6 less ugly ;) 
 \end_layout
 
-\begin_layout Standard
-* Based on CSS selectors 
+\begin_layout Itemize
+Powerful support for dynamic attributing of elements 
 \end_layout
 
+\begin_layout Itemize
+Based on CSS selectors 
+\end_layout
+
+\begin_layout Itemize
+Talk about Marius JS abstraction for YUI and jQuery 
+\begin_inset Note Note
+status open
+
 \begin_layout Standard
-* Talk about Marius JS abstraction
+I know nothing about YUI, except that v3 is supposed to be good.
+ :) jQuery for me.
+ -Ty
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \end_body

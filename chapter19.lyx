@@ -40,20 +40,33 @@
 \begin_body
 
 \begin_layout Chapter
-AJAX and COMET
+Web Services
 \end_layout
 
-\begin_layout Section
-\begin_inset Note Note
-status open
+\begin_layout Itemize
+REST
+\end_layout
 
+\begin_layout Itemize
+api demo from the wiki
+\end_layout
+
+\begin_layout Itemize
+Talk to SteveJ about using his demo from LiftOff: http://liftweb.net/index.php/How
+To_do_Web_Services
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Add a dispatcher to sit on the right urls
+\end_layout
+
+\begin_layout Itemize
+Add a class that has the methods that correspond to your API/Service
+\end_layout
+
+\end_deeper
 \begin_layout Standard
-Let's combine this chapter and Chapter 12.
- Thoughts? -Ty
-\end_layout
-
-\end_inset
-
 
 \end_layout
 

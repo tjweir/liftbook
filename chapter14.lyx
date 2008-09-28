@@ -1,4 +1,4 @@
-#LyX 1.5.3 created this file. For more info see http://www.lyx.org/
+#LyX 1.5.6 created this file. For more info see http://www.lyx.org/
 \lyxformat 276
 \begin_document
 \begin_header
@@ -43,10 +43,43 @@
 Using Scala Actors
 \end_layout
 
-\begin_layout Standard
-This is a broad topic, ask the committor list for opinions
+\begin_layout Itemize
+Intro to Concurrency
 \end_layout
 
+\begin_layout Itemize
+Intro to Actors as a potential solution
+\end_layout
+
+\begin_layout Itemize
+Examples of Actor usage within Lift base
+\end_layout
+
+\begin_layout Itemize
+Examples of Actor usage on top of lift
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Simple: Mailer
+\end_layout
+
+\begin_layout Itemize
+Complex: Pulling RSS feeds? 
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+We need a better example.
+ -Ty
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
 \begin_layout Standard
 
 \end_layout
