@@ -44,140 +44,95 @@ AJAX and COMET
 \end_layout
 
 \begin_layout Standard
-AJAX and COMET in Lift
+
 \end_layout
 
-\begin_layout Standard
-* Method for async updates pulled from the client without a full page reload
- 
+\begin_layout Itemize
+Talk about:
 \end_layout
 
-\begin_layout Standard
-* Relies heavily on javascript and XML 
+\begin_layout Itemize
+Traditional Browser Server interaction
 \end_layout
 
-\begin_layout Standard
-* Javascript client-side events (button push, timer, etc) trigger requests
- "behind the scenes" 
+\begin_layout Itemize
+AJAX style interaction
 \end_layout
 
-\begin_layout Standard
-* Using AJAX in Lift 
-\end_layout
-
-\begin_layout Standard
-* Allows you to bind Javascript events (AJAX) to form elements, links, etc
- 
-\end_layout
-
-\begin_layout Standard
-* Go through example HelloDarwin AJAX example
-\end_layout
-
-\begin_layout Standard
-* 
-\series bold
-What is COMET?
-\series default
- http://en.wikipedia.org/wiki/Comet_(programming)
-\end_layout
-
-\begin_layout Standard
-Comet is a method that uses long-polling to keep a connection between a
- browser and a server open, to allow the server to push data to the browser.
- An example of this would be a Stock Ticker.
- A user may have a page open that has a number of stock prices and as the
- price changes, the new value is pushed to the broswer without the need
- to refresh the page.
- Another example is the embedded Google Talk chat client in GMail.
- Instant messages from friends are automatically pushed to your browser.
-\end_layout
-
-\begin_layout Standard
-* Push to the browser 
-\end_layout
-
-\begin_layout Standard
-* [Example] following a LiveBlog of a keynote presentation, elememts are
- pushed to your browser 
-\end_layout
-
-\begin_layout Standard
-* Here's a super simple example - http://wiki.liftweb.net/index.php/CometActor
- 
-\end_layout
-
-\begin_layout Standard
-* Method for async updates pushed 
-\end_layout
-
-\begin_layout Standard
-*from server to client* 
-\end_layout
-
-\begin_layout Standard
-* Connection is kept open 
-\end_layout
-
-\begin_layout Standard
-* Streaming 
-\end_layout
-
-\begin_layout Standard
-* Long polling 
-\end_layout
-
-\begin_layout Standard
-* Scalability issues 
-\end_layout
-
-\begin_layout Standard
-* Using COMET in Lift
-\end_layout
-
-\begin_layout Standard
-* CometActor 
-\end_layout
-
-\begin_layout Standard
-* Mine Jorge's blog post: http://scala-blogs.org/2007/12/dynamic-web-applications
--with-lift-and.html 
-\end_layout
-
-\begin_layout Standard
-* Go through Dynamic chat room example 
-\end_layout
-
-\begin_layout Section
-AJAX
-\end_layout
-
-\begin_layout Subsection
+\begin_deeper
+\begin_layout Itemize
 What is AJAX
 \end_layout
 
-\begin_layout Standard
-AJAX
-\begin_inset Foot
-status open
-
-\begin_layout Standard
-\begin_inset LatexCommand htmlurl
-name "AJAX"
-target "http://en.wikipedia.org/wiki/Ajax_(programming)"
-
-\end_inset
-
-
+\begin_layout Itemize
+AJAX example
 \end_layout
 
-\end_inset
+\begin_layout Itemize
+AJAX in Lift
+\end_layout
 
- or (asynchronous JavaScript and XML) is a group of techniques that allow
- for interactive web applications.
- Using AJAX applications can talk to the server asynchronously and therefore
- not disrupt the display of the client.
- (this is awkwardly worded) 
+\end_deeper
+\begin_layout Itemize
+COMET style interaction
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+What is COMET
+\end_layout
+
+\begin_layout Itemize
+COMET examples
+\end_layout
+
+\begin_layout Itemize
+COMET in Lift
+\end_layout
+
+\end_deeper
+\begin_layout Section
+Traditional Browser/Server Interaction 
+\end_layout
+
+\begin_layout Standard
+AJAX and Comet are variations on the traditional model of web application
+ interaction.
+ The traditional model starts with the user making a request for a page,
+ the server doing some amount of processing and then sending the appropriate
+ response.
+ This model is common today but models are evolving to include AJAX and
+ Comet.
+ AJAX and Comet differ in implementation of the traditional model.
+ AJAX adds the concept of asynchronisity.
+ This translates into a more responsive User Interface for a web application.
+ If we take the example of adding a comment to a blog post, the traditional
+ model has the user fill in a form, hit the submit button to send the request
+ to the server, the server processes and add the comment and sends the updated
+ blog post with the newly added comment.
+ The AJAX model of this event would change such that the display of the
+ new comment is not tied to the response from the server.
+ After the user hits submit, the request is sent to the server and while
+ it's being processed, the User Interface has responded by added the comment
+ without the need of a full page request.
+ 
+\end_layout
+
+\begin_layout Standard
+Comet takes the AJAX model and adds to it with the idea of multiple users.
+ The AJAX model increases the richness of the User Experience for a single
+ client at a time.
+ If we think about the previous example but add another person looking at
+ the same page, they will not see the new comment until they refresh the
+ post.
+ Comet changes this by enabling the server to push to multiple clients,
+ so the previous example changes such that when Client A hits submit, that
+ new comment is pushed to Client B's browser, without the need to refresh
+ the page.
+\end_layout
+
+\begin_layout Section
+AJAX in Lift
 \end_layout
 
 \begin_layout Standard
@@ -226,66 +181,13 @@ name "fig:ajaxarch"
 
 \end_layout
 
-\begin_layout Standard
-
-\end_layout
-
 \end_inset
 
 
-\end_layout
-
-\begin_layout Subsection
-What is the benefit of AJAX?
-\end_layout
-
-\begin_layout Standard
-Ajax allows for a much richer interface for a web application, an example
- is Google Suggest.
- When you start typing your search term, the word fragment is sent to the
- server and common completions of your term are sent back, you see an instant
- response.
- 
-\end_layout
-
-\begin_layout Subsection
-Examples of AJAX
-\end_layout
-
-\begin_layout Subsection
-AJAX Example in Lift
 \end_layout
 
 \begin_layout Section
-COMET
-\end_layout
-
-\begin_layout Subsection
-What is COMET
-\end_layout
-
-\begin_layout Standard
-COMET
-\begin_inset Foot
-status open
-
-\begin_layout Standard
-\begin_inset LatexCommand htmlurl
-name "Comet"
-target "http://en.wikipedia.org/wiki/Comet_(programming)"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
- is a group of methods that use long-polling to keep a connection between
- a browser and a server open.
- The allows the server to push data to the browser, rather than requiring
- the browser to request the data.
- 
+COMET in Lift
 \end_layout
 
 \begin_layout Standard
@@ -340,31 +242,6 @@ name "fig:cometarch"
 \end_inset
 
 
-\end_layout
-
-\begin_layout Subsection
-What is the benefit of COMET?
-\end_layout
-
-\begin_layout Standard
-The main benefit 
-\end_layout
-
-\begin_layout Subsection
-Examples of COMET
-\end_layout
-
-\begin_layout Standard
-An example of this would be a Stock Ticker.
- A user may have a page open that has a number of stock prices and as the
- price changes, the new value is pushed to the broswer without the need
- to refresh the page.
- Another example is the embedded Google Talk chat client in GMail.
- Instant messages from friends are automatically pushed to your browser.
-\end_layout
-
-\begin_layout Subsection
-COMET Example in Lift
 \end_layout
 
 \end_body
