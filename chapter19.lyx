@@ -65,6 +65,10 @@ Add a dispatcher to sit on the right urls
 Add a class that has the methods that correspond to your API/Service
 \end_layout
 
+\begin_layout Itemize
+That's about it
+\end_layout
+
 \end_deeper
 \begin_layout Standard
 

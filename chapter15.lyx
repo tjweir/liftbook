@@ -63,5 +63,73 @@ How to integrate into Lift
 OpenIDProtoUser
 \end_layout
 
+\begin_layout Section
+What is OpenID?
+\end_layout
+
+\begin_layout Standard
+The OpenID Foundation
+\begin_inset Foot
+status open
+
+\begin_layout Standard
+http://openid.net/
+\end_layout
+
+\end_inset
+
+ as:
+\end_layout
+
+\begin_layout Quotation
+\begin_inset Quotes eld
+\end_inset
+
+OpenID eliminates the need for multiple usernames across different websites,
+ simplifying your online experience.
+\end_layout
+
+\begin_layout Quotation
+You get to choose the OpenID Provider that best meets your needs and most
+ importantly that you trust.
+ At the same time, your OpenID can stay with you, no matter which Provider
+ you move to.
+ And best of all, the OpenID technology is not proprietary and is completely
+ free.
+\end_layout
+
+\begin_layout Quotation
+For businesses, this means a lower cost of password and account management,
+ while drawing new web traffic.
+ OpenID lowers user frustration by letting users have control of their login.
+\end_layout
+
+\begin_layout Quotation
+For geeks, OpenID is an open, decentralized, free framework for user-centric
+ digital identity.
+ OpenID takes advantage of already existing internet technology (URI, HTTP,
+ SSL, Diffie-Hellman) and realizes that people are already creating identities
+ for themselves whether it be at their blog, photostream, profile page,
+ etc.
+ With OpenID you can easily transform one of these existing URIs into an
+ account which can be used at sites which support OpenID logins.
+\end_layout
+
+\begin_layout Quotation
+OpenID is still in the adoption phase and is becoming more and more popular,
+ as large organizations like AOL, Microsoft, Sun, Novell, etc.
+ begin to accept and provide OpenIDs.
+ Today it is estimated that there are over 160-million OpenID enabled URIs
+ with nearly ten-thousand sites supporting OpenID logins.
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
 \end_body
 \end_document

@@ -1,4 +1,4 @@
-#LyX 1.5.3 created this file. For more info see http://www.lyx.org/
+#LyX 1.5.6 created this file. For more info see http://www.lyx.org/
 \lyxformat 276
 \begin_document
 \begin_header
@@ -50,6 +50,179 @@ This is probably the place for the Spreadsheet example
 \begin_layout Itemize
 Talk about design "patterns" ex.
  the proper TagCloud example
+\end_layout
+
+\begin_layout Itemize
+http://en.wikipedia.org/wiki/Comet_(programming)
+\end_layout
+
+\begin_layout Itemize
+http://en.wikipedia.org/wiki/AJAX_(programming)
+\end_layout
+
+\begin_layout Section
+Traditional Browser/Server Interaction 
+\end_layout
+
+\begin_layout Standard
+AJAX and Comet are variations on the traditional model of web application
+ interaction.
+ The traditional model starts with the user making a request for a page,
+ the server doing some amount of processing and then sending the appropriate
+ response.
+ This model is common today but models are evolving to include AJAX and
+ Comet.
+ AJAX and Comet differ in implementation of the traditional model.
+ AJAX adds the concept of asynchronisity.
+ This translates into a more responsive User Interface for a web application.
+ If we take the example of adding a comment to a blog post, the traditional
+ model has the user fill in a form, hit the submit button to send the request
+ to the server, the server processes and add the comment and sends the updated
+ blog post with the newly added comment.
+ The AJAX model of this session would change such that the display of the
+ new comment is not tied to the response from the server.
+ After the user hits submit, the request is sent to the server and while
+ it's being processed, the User Interface has responded by added the comment
+ without the need of a full page request.
+ 
+\end_layout
+
+\begin_layout Standard
+Comet takes the AJAX model and adds to it with the idea of multiple users.
+ The AJAX model increases the richness of the User Experience for a single
+ client at a time.
+ If we think about the previous example but add another person looking at
+ the same page, they will not see the new comment until they refresh the
+ post.
+ Comet changes this by enabling the server to push to multiple clients,
+ so the previous example changes such that when Client A hits submit, that
+ new comment is pushed to Client B's browser, without the need to refresh
+ the page.
+\end_layout
+
+\begin_layout Section
+AJAX in Lift
+\end_layout
+
+\begin_layout Standard
+/ajax_request
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Standard
+\begin_inset Caption
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename /Users/tjweir/g/liftbook/ajax.png
+	lyxscale 50
+	scale 50
+	subcaption
+	subcaptionText "AJAX Application Model"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Copyright Check Required
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset LatexCommand label
+name "fig:ajaxarch"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+COMET in Lift
+\end_layout
+
+\begin_layout Itemize
+/comet_request
+\end_layout
+
+\begin_layout Itemize
+What happens to the snippet code
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Standard
+\begin_inset Caption
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename /Users/tjweir/g/liftbook/Comet.png
+	lyxscale 50
+	scale 50
+	subcaption
+	subcaptionText "COMET Application Model"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Copyright Check Required
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset LatexCommand label
+name "fig:cometarch"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \end_body

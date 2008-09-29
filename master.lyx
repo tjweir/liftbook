@@ -303,6 +303,15 @@ preview false
 \end_layout
 
 \begin_layout Standard
+\begin_inset Include \include{chapter19.lyx}
+preview false
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 \start_of_appendix
 \begin_inset LatexCommand bibtex
 options "bibtotoc,plain"

@@ -55,34 +55,6 @@ name "cha:Maven"
 
 \end_layout
 
-\begin_layout Itemize
-Archetypes: project "templates" 
-\end_layout
-
-\begin_layout Itemize
-Directory layout 
-\end_layout
-
-\begin_layout Itemize
-Scala-specific stuff 
-\end_layout
-
-\begin_layout Itemize
-web content resources 
-\end_layout
-
-\begin_layout Itemize
-Introducing the POM 
-\end_layout
-
-\begin_layout Itemize
-Project info (author, date, version, etc) 
-\end_layout
-
-\begin_layout Itemize
-Special build targets
-\end_layout
-
 \begin_layout Section
 Maven
 \end_layout
