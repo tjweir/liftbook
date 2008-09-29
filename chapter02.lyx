@@ -1,4 +1,4 @@
-#LyX 1.5.6 created this file. For more info see http://www.lyx.org/
+#LyX 1.5.3 created this file. For more info see http://www.lyx.org/
 \lyxformat 276
 \begin_document
 \begin_header
@@ -241,9 +241,8 @@ mvn -U clean jetty:run.
 status open
 
 \begin_layout Standard
-Maybe we should mention the scala:cc target for continuous compilation?
- - Derek Maybe we have a section in the Appendix about scala:cc and JavaRebel,
- or something like 
+Maybe we have a section in the Appendix about scala:cc and JavaRebel, or
+ something like 
 \begin_inset Quotes eld
 \end_inset
 
@@ -251,7 +250,9 @@ How we develop
 \begin_inset Quotes erd
 \end_inset
 
- -Ty
+ -Ty.
+ That would work, but I think we should at least mention it and cross-ref
+ here
 \end_layout
 
 \end_inset
@@ -352,29 +353,34 @@ sideways false
 status open
 
 \begin_layout Standard
-\begin_inset Caption
-
-\begin_layout Standard
+\align center
 \begin_inset Graphics
-	filename dirlayout.png
-	lyxscale 80
-	scale 80
-	subcaption
-	subcaptionText "A typical application layout."
-
-\end_inset
-
-
-\begin_inset LatexCommand label
-name "fig:dirlayout"
+	filename images/dirlayout.png
+	height 6in
 
 \end_inset
 
 
 \end_layout
 
+\begin_layout Standard
+\begin_inset Caption
+
+\begin_layout Standard
+\begin_inset LatexCommand label
+name "fig:dirlayout"
+
 \end_inset
 
+Project directory layout
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 
 \end_layout
 

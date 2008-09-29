@@ -1,4 +1,4 @@
-#LyX 1.5.6 created this file. For more info see http://www.lyx.org/
+#LyX 1.5.3 created this file. For more info see http://www.lyx.org/
 \lyxformat 276
 \begin_document
 \begin_header
@@ -119,7 +119,7 @@ status open
 
 \begin_layout Standard
 \begin_inset Graphics
-	filename /Users/tjweir/g/liftbook/ajax.png
+	filename images/ajax.png
 	lyxscale 50
 	scale 50
 	subcaption
@@ -182,7 +182,7 @@ status open
 
 \begin_layout Standard
 \begin_inset Graphics
-	filename /Users/tjweir/g/liftbook/Comet.png
+	filename images/Comet.png
 	lyxscale 50
 	scale 50
 	subcaption

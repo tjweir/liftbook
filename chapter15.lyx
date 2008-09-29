@@ -1,4 +1,4 @@
-#LyX 1.5.6 created this file. For more info see http://www.lyx.org/
+#LyX 1.5.3 created this file. For more info see http://www.lyx.org/
 \lyxformat 276
 \begin_document
 \begin_header
@@ -73,7 +73,12 @@ The OpenID Foundation
 status open
 
 \begin_layout Standard
-http://openid.net/
+\begin_inset LatexCommand htmlurl
+target "http://openid.net/"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset

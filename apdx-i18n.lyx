@@ -34,32 +34,24 @@
 \tracking_changes false
 \output_changes false
 \author "" 
-\author "" 
 \end_header
 
 \begin_body
 
 \begin_layout Chapter
-AJAX and COMET
+Internationalization
 \end_layout
 
-\begin_layout Standard
-\begin_inset Note Note
-status open
-
-\begin_layout Standard
-Let's combine this chapter and Chapter 12.
- Thoughts? -Ty
+\begin_layout Itemize
+S.?(String)
 \end_layout
 
-\begin_layout Standard
-Works for me.
- The question
+\begin_layout Itemize
+lift:loc tag
 \end_layout
 
-\end_inset
-
-
+\begin_layout Itemize
+Proper placement of language resource
 \end_layout
 
 \end_body
