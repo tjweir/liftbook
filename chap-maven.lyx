@@ -356,7 +356,7 @@ status open
 \align center
 \begin_inset Graphics
 	filename images/dirlayout.png
-	height 6in
+	height 4in
 
 \end_inset
 
@@ -372,7 +372,7 @@ name "fig:dirlayout"
 
 \end_inset
 
-Project directory layout
+Project Directory Layout
 \end_layout
 
 \end_inset
@@ -386,6 +386,10 @@ Project directory layout
 
 \end_inset
 
+
+\end_layout
+
+\begin_layout Standard
 
 \end_layout
 
