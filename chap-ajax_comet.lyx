@@ -115,19 +115,29 @@ sideways false
 status open
 
 \begin_layout Standard
-\begin_inset Caption
-
-\begin_layout Standard
+\align center
 \begin_inset Graphics
 	filename images/ajax.png
 	lyxscale 50
-	scale 50
+	height 4in
 	subcaption
 	subcaptionText "AJAX Application Model"
 
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Caption
+
+\begin_layout Standard
+\begin_inset LatexCommand label
+name "fig:ajaxarch"
+
+\end_inset
+
+AJAX Architecture
 \end_layout
 
 \end_inset
@@ -139,15 +149,6 @@ status open
 \begin_layout Standard
 Copyright Check Required
 \end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset LatexCommand label
-name "fig:ajaxarch"
 
 \end_inset
 
@@ -178,19 +179,29 @@ sideways false
 status open
 
 \begin_layout Standard
-\begin_inset Caption
-
-\begin_layout Standard
+\align center
 \begin_inset Graphics
 	filename images/Comet.png
 	lyxscale 50
-	scale 50
+	height 4in
 	subcaption
 	subcaptionText "COMET Application Model"
 
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Caption
+
+\begin_layout Standard
+\begin_inset LatexCommand label
+name "fig:cometarch"
+
+\end_inset
+
+COMET Architecture
 \end_layout
 
 \end_inset
@@ -205,15 +216,6 @@ status open
 \begin_layout Standard
 Copyright Check Required
 \end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset LatexCommand label
-name "fig:cometarch"
 
 \end_inset
 

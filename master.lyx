@@ -101,6 +101,35 @@ Derek Chen-Becker and Tyler Weir
 \end_layout
 
 \begin_layout Standard
+\begin_inset FloatList figure
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Chapter
+Dedication
+\end_layout
+
+\begin_layout Standard
+Derek would like to thank his wife, Debbie, for her patience and support
+ while writing this book
+\end_layout
+
+\begin_layout Standard
+Tyler would like to thank...
+\end_layout
+
+\begin_layout Chapter
+Acknowledgements
+\end_layout
+
+\begin_layout Standard
+This book would not have been possible without...
+\end_layout
+
+\begin_layout Standard
 \begin_inset ERT
 status open
 
@@ -162,7 +191,7 @@ part{The Basics}
 \end_layout
 
 \begin_layout Standard
-\begin_inset Include \include{chapter01.lyx}
+\begin_inset Include \include{chap-welcome.lyx}
 preview false
 
 \end_inset
@@ -171,7 +200,7 @@ preview false
 \end_layout
 
 \begin_layout Standard
-\begin_inset Include \include{chapter02.lyx}
+\begin_inset Include \include{chap-maven.lyx}
 preview false
 
 \end_inset
@@ -180,7 +209,7 @@ preview false
 \end_layout
 
 \begin_layout Standard
-\begin_inset Include \include{chapter03.lyx}
+\begin_inset Include \include{chap-lift_architecture.lyx}
 preview false
 
 \end_inset
@@ -189,7 +218,7 @@ preview false
 \end_layout
 
 \begin_layout Standard
-\begin_inset Include \include{chapter04.lyx}
+\begin_inset Include \include{chap-lift_components.lyx}
 preview false
 
 \end_inset
@@ -198,7 +227,7 @@ preview false
 \end_layout
 
 \begin_layout Standard
-\begin_inset Include \include{chapter05.lyx}
+\begin_inset Include \include{chap-record_and_mapper.lyx}
 preview false
 
 \end_inset
@@ -207,16 +236,7 @@ preview false
 \end_layout
 
 \begin_layout Standard
-\begin_inset Include \include{chapter06.lyx}
-preview false
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset Include \include{chapter07.lyx}
+\begin_inset Include \include{chap-deployment.lyx}
 preview false
 
 \end_inset
@@ -241,7 +261,7 @@ part{Advanced Topics}
 \end_layout
 
 \begin_layout Standard
-\begin_inset Include \include{chapter08.lyx}
+\begin_inset Include \include{chap-req_resp_lifecycle.lyx}
 preview false
 
 \end_inset
@@ -250,7 +270,7 @@ preview false
 \end_layout
 
 \begin_layout Standard
-\begin_inset Include \include{chapter09.lyx}
+\begin_inset Include \include{chap-url_rewrite.lyx}
 preview false
 
 \end_inset
@@ -259,7 +279,7 @@ preview false
 \end_layout
 
 \begin_layout Standard
-\begin_inset Include \include{chapter10.lyx}
+\begin_inset Include \include{chap-json.lyx}
 preview false
 
 \end_inset
@@ -268,7 +288,7 @@ preview false
 \end_layout
 
 \begin_layout Standard
-\begin_inset Include \include{chapter11.lyx}
+\begin_inset Include \include{chap-js_commands.lyx}
 preview false
 
 \end_inset
@@ -277,7 +297,7 @@ preview false
 \end_layout
 
 \begin_layout Standard
-\begin_inset Include \include{chapter12.lyx}
+\begin_inset Include \include{chap-ajax_comet.lyx}
 preview false
 
 \end_inset
@@ -286,7 +306,7 @@ preview false
 \end_layout
 
 \begin_layout Standard
-\begin_inset Include \include{chapter13.lyx}
+\begin_inset Include \include{chap-JPA.lyx}
 preview false
 
 \end_inset
@@ -295,7 +315,7 @@ preview false
 \end_layout
 
 \begin_layout Standard
-\begin_inset Include \include{chapter14.lyx}
+\begin_inset Include \include{chap-actors.lyx}
 preview false
 
 \end_inset
@@ -304,7 +324,7 @@ preview false
 \end_layout
 
 \begin_layout Standard
-\begin_inset Include \include{chapter15.lyx}
+\begin_inset Include \include{chap-openid.lyx}
 preview false
 
 \end_inset
@@ -313,7 +333,7 @@ preview false
 \end_layout
 
 \begin_layout Standard
-\begin_inset Include \include{chapter16.lyx}
+\begin_inset Include \include{chap-lucene_compass.lyx}
 preview false
 
 \end_inset
@@ -322,7 +342,7 @@ preview false
 \end_layout
 
 \begin_layout Standard
-\begin_inset Include \include{chapter17.lyx}
+\begin_inset Include \include{chap-tagging.lyx}
 preview false
 
 \end_inset
@@ -331,7 +351,7 @@ preview false
 \end_layout
 
 \begin_layout Standard
-\begin_inset Include \include{chapter18.lyx}
+\begin_inset Include \include{chap-widgets.lyx}
 preview false
 
 \end_inset
@@ -340,7 +360,7 @@ preview false
 \end_layout
 
 \begin_layout Standard
-\begin_inset Include \include{chapter19.lyx}
+\begin_inset Include \include{chap-web_services.lyx}
 preview false
 
 \end_inset
