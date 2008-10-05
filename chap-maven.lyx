@@ -1,4 +1,4 @@
-#LyX 1.5.3 created this file. For more info see http://www.lyx.org/
+#LyX 1.5.6 created this file. For more info see http://www.lyx.org/
 \lyxformat 276
 \begin_document
 \begin_header
@@ -344,6 +344,22 @@ reference "fig:dirlayout"
  such as JavaScript, XHTML, CSS and images.
  In /src/main/webapp/templates-hidden you will find a file named default.html.
  This is the default template that other XHTML fragments will be embedded.
+\end_layout
+
+\begin_layout Description
+/src/main/scala This directory will contain your Scala source, such as snippets,
+ model objects, and any libraries you write.
+\end_layout
+
+\begin_layout Description
+/src/main/webapp All of the static aspects, such as images, XHTML, JavaScript
+ and style will be in this directory.
+\end_layout
+
+\begin_layout Description
+/src/main/webapp/templates-hidden You'll find Lift templates are contained
+ here.
+ [See LiftViewFirst]
 \end_layout
 
 \begin_layout Standard

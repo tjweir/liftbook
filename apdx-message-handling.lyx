@@ -1,4 +1,4 @@
-#LyX 1.5.3 created this file. For more info see http://www.lyx.org/
+#LyX 1.5.6 created this file. For more info see http://www.lyx.org/
 \lyxformat 276
 \begin_document
 \begin_header
@@ -34,12 +34,122 @@
 \tracking_changes false
 \output_changes false
 \author "" 
+\author "" 
 \end_header
 
 \begin_body
 
 \begin_layout Chapter
 Message Handling
+\end_layout
+
+\begin_layout Standard
+builtin/snippet/Msgs.scala
+\end_layout
+
+\begin_layout Standard
+<lift:Msgs />
+\end_layout
+
+\begin_layout Standard
+Marius: Comet push to msgs: http://groups.google.com/group/liftweb/browse_thread/t
+hread/cfab4a332bb7cf81/32c04a0758c71205?lnk=gst&q=msgs#32c04a0758c71205
+\end_layout
+
+\begin_layout Standard
+You can send Errors, Warnings and Notices and out of the box you can use:
+\end_layout
+
+\begin_layout LyX-Code
+<lift:Msgs />
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+<lift:Msgs id=
+\begin_inset Quotes erd
+\end_inset
+
+msg_area
+\begin_inset Quotes erd
+\end_inset
+
+ />
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+<lift:snippet type="error_report">    
+\end_layout
+
+\begin_layout LyX-Code
+  <lift:error_msg>Error!  The details are:</lift:error_msg>    
+\end_layout
+
+\begin_layout LyX-Code
+  <lift:error_class>errorBox</lift:error_class>    
+\end_layout
+
+\begin_layout LyX-Code
+  <lift:warning_msg>Whoops, I had a problem:</lift:warning_msg>    
+\end_layout
+
+\begin_layout LyX-Code
+  <lift:warning_class>warningBox</lift:warning_class>    
+\end_layout
+
+\begin_layout LyX-Code
+  <lift:notice_msg>Note:</lift:notice_msg>    
+\end_layout
+
+\begin_layout LyX-Code
+  <lift:notice_class>noticeBox</lift:notice_class>  
+\end_layout
+
+\begin_layout LyX-Code
+</lift:snippet> 
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout Standard
+Talk to the Msgs area via: 
+\end_layout
+
+\begin_layout LyX-Code
+S.error, S.warning and S.notice
+\end_layout
+
+\begin_layout Standard
+You can style them using CSS, for example:
+\end_layout
+
+\begin_layout LyX-Code
+.error, .warning, .notice {
+\end_layout
+
+\begin_layout LyX-Code
+  color: red;
+\end_layout
+
+\begin_layout LyX-Code
+  font-size: bigger;
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout LyX-Code
+
 \end_layout
 
 \end_body
