@@ -43,83 +43,233 @@
 Lift Architecture in General
 \end_layout
 
-\begin_layout Standard
-* Everything handled by LiftFilter 
+\begin_layout Itemize
+Everything handled by LiftFilter 
 \end_layout
 
-\begin_layout Standard
-* Show example config in web.xml 
+\begin_layout Itemize
+Show example config in web.xml 
 \end_layout
 
-\begin_layout Standard
-* Handling in LiftFilter allows fall-through to default handlers for things
+\begin_layout Itemize
+Handling in LiftFilter allows fall-through to default handlers for things
  that Lift doesn't handle (Static content, primarily) 
 \end_layout
 
-\begin_layout Standard
-* Rendering pipeline (This can be high-level right now, with links to detailed
+\begin_layout Itemize
+Rendering pipeline (This can be high-level right now, with links to detailed
  info in the advanced section - Derek) 
 \end_layout
 
-\begin_layout Standard
-* Dispatch to proper code 
+\begin_layout Itemize
+Dispatch to proper code 
 \end_layout
 
-\begin_layout Standard
-* dispatch methods in effect? 
+\begin_layout Itemize
+dispatch methods in effect? 
 \end_layout
 
-\begin_layout Standard
-* rewrite methods in effect? 
+\begin_layout Itemize
+rewrite methods in effect? 
 \end_layout
 
-\begin_layout Standard
-* SiteMap matching and access control 
+\begin_layout Itemize
+SiteMap matching and access control 
 \end_layout
 
-\begin_layout Standard
-* template or view matched? 
+\begin_layout Itemize
+template or view matched? 
 \end_layout
 
-\begin_layout Standard
-* recursive processing of template and any snippets contained therein 
+\begin_layout Itemize
+recursive processing of template and any snippets contained therein 
 \end_layout
 
-\begin_layout Standard
-* direct processing of view 
+\begin_layout Itemize
+direct processing of view 
 \end_layout
 
-\begin_layout Standard
-* Error handling 
+\begin_layout Itemize
+Error handling 
 \end_layout
 
-\begin_layout Standard
-* List of tags that are handled by Lift (stolen from http://liftweb.net/index.php/
-LiftTags, not sure how up-to-date this is) 
+\begin_layout Itemize
+List of tags that are handled by Lift (stolen from http://liftweb.net/index.php/Li
+ftTags, not sure how up-to-date this is) 
 \end_layout
 
-\begin_layout Standard
-* surround 
+\begin_deeper
+\begin_layout Itemize
+surround 
 \end_layout
 
-\begin_layout Standard
-* embed 
+\begin_layout Itemize
+embed 
 \end_layout
 
-\begin_layout Standard
-* comet 
+\begin_layout Itemize
+comet 
 \end_layout
 
-\begin_layout Standard
-* ignore 
+\begin_layout Itemize
+ignore 
 \end_layout
 
-\begin_layout Standard
-* snippet (and, the alternative lift:<class>.<method>) 
+\begin_layout Itemize
+snippet (and, the alternative lift:<class>.<method>) 
 \end_layout
 
-\begin_layout Standard
-* additional attribute handling in tags (via S.attr)
+\begin_layout Itemize
+additional attribute handling in tags (via S.attr)
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+The SHtml object defines many functions for creating User Interface and
+ input Xhtml fragments.
+\end_layout
+
+\begin_deeper
+\begin_layout Description
+ajaxButton An <input type=
+\begin_inset Quotes erd
+\end_inset
+
+button
+\begin_inset Quotes erd
+\end_inset
+
+> with onClick connected to an AjaxCall
+\end_layout
+
+\begin_layout Description
+a An <a> tag with a function associated with it
+\end_layout
+
+\begin_layout Description
+span A <span> with onClick connected to a JsCmd.
+\end_layout
+
+\begin_layout Description
+toggleKids 
+\end_layout
+
+\begin_layout Description
+ajaxCheckbox An <input type=
+\begin_inset Quotes erd
+\end_inset
+
+checkbox
+\begin_inset Quotes erd
+\end_inset
+
+> with onClick connected to an AjaxCall
+\end_layout
+
+\begin_layout Description
+ajaxSelect 
+\end_layout
+
+\begin_layout Description
+select A <select>
+\end_layout
+
+\begin_layout Description
+text An <input type=
+\begin_inset Quotes erd
+\end_inset
+
+text
+\begin_inset Quotes erd
+\end_inset
+
+>
+\end_layout
+
+\begin_layout Description
+ajaxText 
+\end_layout
+
+\begin_layout Description
+textarea A <textarea>
+\end_layout
+
+\begin_layout Description
+link Create an anchor tag around a body Xhtml fragment.
+\end_layout
+
+\begin_layout Description
+select A <select> tag
+\end_layout
+
+\begin_layout Description
+untrustedSelect A <select> tag that has no test to see whether or not the
+ value was in the list.
+ This is commonly used for dynamic select lists.
+\end_layout
+
+\begin_layout Description
+multiselect A <select multiple=
+\begin_inset Quotes erd
+\end_inset
+
+true
+\begin_inset Quotes erd
+\end_inset
+
+>
+\end_layout
+
+\begin_layout Description
+fileholder An <input type=
+\begin_inset Quotes erd
+\end_inset
+
+file
+\begin_inset Quotes erd
+\end_inset
+
+>
+\end_layout
+
+\begin_layout Description
+radio An <input type=
+\begin_inset Quotes erd
+\end_inset
+
+radio
+\begin_inset Quotes erd
+\end_inset
+
+>
+\end_layout
+
+\begin_layout Description
+submit An <input type=
+\begin_inset Quotes erd
+\end_inset
+
+submit
+\begin_inset Quotes erd
+\end_inset
+
+>
+\end_layout
+
+\begin_layout Description
+hidden A hidden form element
+\end_layout
+
+\begin_layout Description
+password An <input type=
+\begin_inset Quotes erd
+\end_inset
+
+password
+\begin_inset Quotes erd
+\end_inset
+
+> 
 \end_layout
 
 \end_body

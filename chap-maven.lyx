@@ -40,7 +40,7 @@
 \begin_body
 
 \begin_layout Chapter
-Getting to know Maven
+An introduction to Maven
 \begin_inset LatexCommand index
 name "Maven"
 
@@ -314,7 +314,7 @@ WHEN?
 \end_inset
 
 .
- If you'd like more information about the details of Maven, please check
+ If you'd like more information about the details of Maven, please visit
  
 \family typewriter
 
@@ -331,34 +331,24 @@ Project Layout
 \end_layout
 
 \begin_layout Standard
-The layout of a Lift project is not complicated, please see figure 
-\begin_inset LatexCommand ref
-reference "fig:dirlayout"
-
-\end_inset
-
-.
- The directory /src/main will contain your scala files.
- This will follow the traditional Java packaging style.
- The directory /src/main/webapp will contain all of the static web files,
- such as JavaScript, XHTML, CSS and images.
- In /src/main/webapp/templates-hidden you will find a file named default.html.
- This is the default template that other XHTML fragments will be embedded.
+The directory structure of a Lift application is straight-forward, but we'll
+ highlight a few important ones here.
 \end_layout
 
 \begin_layout Description
-/src/main/scala This directory will contain your Scala source, such as snippets,
- model objects, and any libraries you write.
+<application_root>/src/main/scala This directory will contain your Scala
+ source, such as snippets, model objects, and any libraries you write.
+ The subfolder structure follows the traditional Java packaging style.
 \end_layout
 
 \begin_layout Description
-/src/main/webapp All of the static aspects, such as images, XHTML, JavaScript
- and style will be in this directory.
+<application_root>/src/main/webapp All of the static aspects, such as images,
+ XHTML, JavaScript and style will be in this directory.
 \end_layout
 
 \begin_layout Description
-/src/main/webapp/templates-hidden You'll find Lift templates are contained
- here.
+<application_root>/src/main/webapp/templates-hidden You'll find Lift templates
+ are contained here.
  [See LiftViewFirst]
 \end_layout
 
