@@ -43,81 +43,1385 @@
 JPA Integration
 \end_layout
 
-\begin_layout Itemize
-What is JPA?
+\begin_layout Standard
+The Java Persistence API
+\begin_inset Foot
+status collapsed
+
+\begin_layout Standard
+\begin_inset LatexCommand htmlurl
+target "http://java.sun.com/javaee/overview/faq/persistence.jsp"
+
+\end_inset
+
+
 \end_layout
 
-\begin_deeper
-\begin_layout Itemize
-Part of EJB3 spec
+\end_inset
+
+, or JPA
+\begin_inset LatexCommand index
+name "JPA"
+
+\end_inset
+
+ for short, is the evolution of a number of frameworks in Java to provide
+ a simple database access layer for plain java objects (and, transitively,
+ Scala objects).
+ JPA was developed as part of the EJB3 specification, with the goal of simplifyi
+ng the persistence model.
+ Prior versions had used the Container Managed Persistence (CMP
+\begin_inset LatexCommand index
+name "CMP"
+
+\end_inset
+
+) framework, which required many boilerplate artifacts in the form of interfaces
+ and XML descriptors.
+ As part of the overarching theme of EJB3 to simplify and use configuration
+ by convention, JPA uses annotations
+\begin_inset LatexCommand index
+name "annotations"
+
+\end_inset
+
+ heavily, while allowing for targetted overrides of behavior via XML descriptors.
+ JPA also does away with many of the interfaces used in CMP and provides
+ a single EntityManager
+\begin_inset LatexCommand index
+name "EntityManager"
+
+\end_inset
+
+ object for all persistence operations.
+ An additional benefit is that JPA was designed so that it could be used
+ both inside and outside of the Enterprise container, and several projects
+ (Hibernate
+\begin_inset LatexCommand index
+name "Hibernate"
+
+\end_inset
+
+, TopLink
+\begin_inset LatexCommand index
+name "TopLink"
+
+\end_inset
+
+, JPOX
+\begin_inset LatexCommand index
+name "JPOX"
+
+\end_inset
+
+, etc) provide standalone implementations of EntityManager.
 \end_layout
 
-\begin_layout Itemize
-Evolution of container-managed persistence
+\begin_layout Standard
+As we've seen in chapter 
+\begin_inset LatexCommand ref
+reference "cha:mapper_and_record"
+
+\end_inset
+
+, Lift already comes with a very capable database abstraction layer, so
+ why would we want to use something else? There are a number of reasons:
 \end_layout
 
-\begin_layout Itemize
-Simplified model (a lot less XML)
+\begin_layout Enumerate
+JPA is easily accessible from both Java and Scala.
+ If you are using Lift to complement part of a project that also contains
+ Java components, JPA allows you to use a common database layer between
+ both and avoid duplication of effort.
+ It also means that if you have an existing project based on JPA, you can
+ easily integrate it into Lift
 \end_layout
 
-\begin_layout Itemize
-Heavy use of annotations, although you can define/override via XML descriptors
- if you want
+\begin_layout Enumerate
+JPA gives you more flexibility with complex and/or large schemas.
+ While Lift's Record
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+TODO: is it Record or Mapper?
 \end_layout
 
-\begin_layout Itemize
-Available in container and outside of container (Hibernate EM, JPOX, etc)
+\end_inset
+
+provides most of the functionality you would need, JPA provides additional
+ lifecycle methods and mapping controls when you have complex needs
 \end_layout
 
-\end_deeper
-\begin_layout Itemize
-Why use JPA when we have mapper?
+\begin_layout Enumerate
+JPA can provide additional performance improvements via second-level object
+ caching.
+ It's possible to roll your own in Lift, but JPA allows you to cache frequently-
+accessed objects in memory so that you avoid hitting the database entirely
 \end_layout
 
-\begin_deeper
-\begin_layout Itemize
-Usable outside of Lift
+\begin_layout Enumerate
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+May need to remove this if it's not true by printing
 \end_layout
 
-\begin_layout Itemize
-Easily accessible from Java and Scala
+\end_inset
+
+JPA and Lift's Record are not mutually exclusive.
+ You can use an adapter to allow Record to utilize JPA as the underlying
+ provider, thus gaining the best of both worlds.
 \end_layout
 
-\begin_layout Itemize
-Legacy models
+\begin_layout Section
+Introduction to JPA
 \end_layout
 
-\begin_layout Itemize
-More flexibility w/large schemas
+\begin_layout Standard
+In order to provide a concrete example to build on while learning how to
+ integrate JPA, we'll be building a small Lift app to manage a library of
+ books.
+ The completed example is available under the Lift Git
+\begin_inset LatexCommand index
+name "Git"
+
+\end_inset
+
+ repository in the sites directory, and is called 
+\begin_inset Quotes eld
+\end_inset
+
+JPADemo
+\begin_inset Quotes erd
+\end_inset
+
+.
+ We will assume that you already know how to use JPA in a Java context;
+ if not, there are several very good tutorials to be found online
+\begin_inset Foot
+status collapsed
+
+\begin_layout Standard
+\begin_inset LatexCommand htmlurl
+target "http://java.sun.com/developer/technicalArticles/J2EE/jpa/"
+
+\end_inset
+
+, 
+\begin_inset LatexCommand htmlurl
+target "http://www.jpox.org/docs/1_2/tutorials/jpa_tutorial.html"
+
+\end_inset
+
+
 \end_layout
 
-\begin_layout Itemize
-Performance/Caching
+\end_inset
+
+.
+ Our first step is to set up a master project
+\begin_inset LatexCommand index
+name "master project"
+
+\end_inset
+
+ for Maven
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Will the Maven chapter have a section on master/module projects?
 \end_layout
 
-\begin_layout Itemize
-Not mutually exclusive (Record adapter possibly?)
+\end_inset
+
+.
+ This project will have two modules under it, one for the JPA library and
+ one for the Lift application.
+ The only thing we actually need for the master project is the pom.xml
+\begin_inset LatexCommand index
+name "pom.xml"
+
+\end_inset
+
+.
+ The complete pom.xml is shown in section 
+\begin_inset LatexCommand vref
+reference "lst:JPA-Master-pom.xml"
+
+\end_inset
+
+.
 \end_layout
 
-\end_deeper
-\begin_layout Itemize
-Intro to JPA
+\begin_layout Standard
+The master pom.xml sets up some basic dependencies and plugin configurations
+ which the modules will inherit.
+ Our next step will be to create the JPA module using an archetype
+\begin_inset LatexCommand index
+name "archetype"
+
+\end_inset
+
+ for Maven to create the scaffolding of our project
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+I need to get the JPA archetype set up
 \end_layout
 
-\begin_deeper
-\begin_layout Itemize
-JPA archetype in Maven
+\end_inset
+
+.
+ From your master project directory, use the 
+\family typewriter
+mvn archetype:generate
+\family default
+ command, select the 
+\begin_inset Quotes eld
+\end_inset
+
+Scala JPA
+\begin_inset Quotes erd
+\end_inset
+
+ archetype and when prompted use com.foo.jpaweb for the group ID, JPADemo-spa
+ for the artifact ID, and com.foo.jpaweb.model for the package.
+ You should now have a JPADemo-spa module that we can explore.
 \end_layout
 
-\begin_layout Itemize
-Annotations on Scala classes
+\begin_layout Subsection
+Entity Classes
+\begin_inset LatexCommand index
+name "entity class"
+
+\end_inset
+
+ in Scala
 \end_layout
 
-\begin_layout Itemize
-Using orm.xml to override and define
+\begin_layout Standard
+The main components of a JPA library are the entity classes that comprise
+ your data model.
+ For our example application we need two primary entities: Author and Book.
+ Let's take a look at the Author class first, shown in listing 
+\begin_inset LatexCommand ref
+reference "lst:Author.scala"
+
+\end_inset
+
+.
+ The listing shows our import of the entire javax.persistence package as
+ well as several annotations on a basic class.
+ For those of you coming from the Java world in JPA, the annotations should
+ look very familiar.
+ The major difference between Java and Scala annotations is that each parameter
+ in a Scala annotation is considered a val, which explains the presence
+ of the val keyword in lines 11, 14 and 17-18.
+ In line 18 you may also note that we must specify the target entity class;
+ although Scala uses generics, the generic types aren't visible from Java
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+I think this changes in 2.8
 \end_layout
 
-\end_deeper
+\end_inset
+
+, so the Java JPA libraries can't deduce the correct type.
+ You may also notice that on line 19 we need to use the Java collections
+ classes for Set, List, etc.
+ With a little bit of implicit conversion magic (to be shown later), this
+ has very little impact on our code.
+ On final item item to note is that the Scala compiler currently does not
+ support nested annotations 
+\begin_inset Foot
+status open
+
+\begin_layout Standard
+\begin_inset LatexCommand htmlurl
+target "https://lampsvn.epfl.ch/trac/scala/ticket/294"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+, so where we would normally use them (join tables, named queries, etc),
+ we will have to use the orm.xml descriptor, which we cover next.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "basicstyle={\footnotesize},float,frame=single,numbers=left,numberstyle={\tiny},stepnumber=2"
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+\begin_inset LatexCommand label
+name "lst:Author.scala"
+
+\end_inset
+
+Author.scala
+\end_layout
+
+\end_inset
+
+package com.foo.jpaweb.model
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+import javax.persistence._
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+/**
+\end_layout
+
+\begin_layout Standard
+
+  An author is someone who writes books.
+\end_layout
+
+\begin_layout Standard
+
+*/
+\end_layout
+
+\begin_layout Standard
+
+@Entity
+\end_layout
+
+\begin_layout Standard
+
+class Author {
+\end_layout
+
+\begin_layout Standard
+
+  @Id
+\end_layout
+
+\begin_layout Standard
+
+  @GeneratedValue{val strategy = GenerationType.AUTO}
+\end_layout
+
+\begin_layout Standard
+
+  var id : Long = _
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+  @Column{val unique = true, val nullable = false}
+\end_layout
+
+\begin_layout Standard
+
+  var name : String = ""
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+  @OneToMany{val mappedBy = "author",
+\end_layout
+
+\begin_layout Standard
+
+             val targetEntity = classOf[Book]}
+\end_layout
+
+\begin_layout Standard
+
+  var books : java.util.Set[Book] = new java.util.HashSet[Book]()
+\end_layout
+
+\begin_layout Standard
+
+}
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Using the orm.xml
+\begin_inset LatexCommand index
+name "orm.xml"
+
+\end_inset
+
+ descriptor
+\end_layout
+
+\begin_layout Standard
+As we stated in the last section, there are some instances where the Scala
+ compiler doesn't fully cover the JPA annotations (nested annotations in
+ particular).
+ Some would also argue that queries and other ancillary data (table names,
+ column names, etc) should be separate from code.
+ Because of that, JPA allows you to specify an external mapping descriptor
+ to define and/or override the mappings for your entity classes
+\begin_inset LatexCommand index
+name "entity classes"
+
+\end_inset
+
+.
+ The basic orm.xml file starts with the DTD type declaration, as shown in
+ listing 
+\begin_inset LatexCommand vref
+reference "lst:orm.xml"
+
+\end_inset
+
+.
+ Following the preamble, we can define a package that will apply to all
+ subsequent entries so that we don't need to use the fully-qualified name
+ for each class.
+ In our example, we would like to define some named queries for each class.
+ Putting them in the orm.xml allows us to modify them without requiring a
+ recompile.
+ The complete XML Schema Definition can be found at 
+\begin_inset LatexCommand htmlurl
+target "http://java.sun.com/xml/ns/persistence/orm_1_0.xsd"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+In this case we have used the orm.xml file to augment our entity classes.
+ If, however, we would like to override the configuration, we may use that
+ as well on a case-by-case basis.
+ Suppose we wished to change the column name for the Author's name property.
+ We can add (per the XSD) a section to the Author entity element as shown
+ in listing 
+\begin_inset LatexCommand ref
+reference "lst:JPA-Author-override"
+
+\end_inset
+
+.
+ The 
+\family typewriter
+attribute-override
+\family default
+ element lets us change anything that we would normally specify on the 
+\family typewriter
+@Column
+\family default
+ annotation.
+ This gives us an extremely powerful method for controlling our schema mapping
+ outside of the source code.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "basicstyle={\footnotesize},float,frame=single,language=XML"
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+\begin_inset LatexCommand label
+name "lst:JPA-Author-override"
+
+\end_inset
+
+Author override
+\end_layout
+
+\end_inset
+
+  <entity class="Author">
+\end_layout
+
+\begin_layout Standard
+
+    <named-query name="findAllAuthors">
+\end_layout
+
+\begin_layout Standard
+
+      <query><![CDATA[from Author a order by a.name]]></query>
+\end_layout
+
+\begin_layout Standard
+
+    </named-query>
+\end_layout
+
+\begin_layout Standard
+
+    <attribute-override name="name">
+\end_layout
+
+\begin_layout Standard
+
+      <column name="author_name" length="30" />
+\end_layout
+
+\begin_layout Standard
+
+    </attribute-override>
+\end_layout
+
+\begin_layout Standard
+
+  </entity>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Support for user types
+\end_layout
+
+\begin_layout Standard
+JPA can handle any Java primitive type, their corresponding Object versions
+ (java.lang.Long, java.lang.Integer, etc), and any entity classes comprised
+ of these types 
+\begin_inset Foot
+status collapsed
+
+\begin_layout Standard
+It can technically handle more; see the JPA spec, section 2.1.1 for details
+\end_layout
+
+\end_inset
+
+.
+ Occasionally, though, you may have a requirement for a type that doesn't
+ fit directly with those specifications.
+ One example in particular would be Scala's enumerations
+\begin_inset LatexCommand index
+name "enumerations"
+
+\end_inset
+
+.
+ Unfortunately, the JPA spec currently doesn't have a means to handle this
+ directly, although the various JPA providers such as Toplink and Hibernate
+ provide mechanisms for resolving custom user types.
+ JPA does provide direct support for 
+\emph on
+Java
+\emph default
+ enumerations, but that doesn't help us here since Scala enumerations aren't
+ an extension of Java enumerations.
+ In this example, we'll be using Hibernate's UserType to support an enumeration
+ for the Genre of a Book.
+\end_layout
+
+\begin_layout Standard
+We begin by implementing a few helper classes besides the Genre enumeration
+ itself.
+ First, we define an Enumv trait, shown in listing 
+\begin_inset LatexCommand ref
+reference "lst:Enumv-Trait"
+
+\end_inset
+
+.
+ Its main purpose is to provide a 
+\family typewriter
+valueOf
+\family default
+ method that we can use to resolve the enumerations database value to the
+ actual enumeration.
+ We also add some extra methods so that we can encapsulate a description
+ along with the database value.
+ Scala enumerations can use either Ints or Strings for the identity of the
+ enumeration value (unique to each val), and in this case we've chosen Strings.
+ By adding a map for the description (since Scala enumeration values must
+ extend the Enumeration#Value class and therefore can't carry the additional
+ string) we allow for the additional info.
+ We could extend this concept to make the Map carry additional data, but
+ for our purposes this is sufficient.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "basicstyle={\scriptsize},breaklines=true,firstline=5,float,frame=single,numbers=left,numberstyle={\tiny}"
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+\begin_inset LatexCommand label
+name "lst:Enumv-Trait"
+
+\end_inset
+
+Enumv Trait
+\end_layout
+
+\end_inset
+
+package com.foo.jpaweb.model
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+/* adds a valueOf function, assumes name is defined
+\end_layout
+
+\begin_layout Standard
+
+add optional description */
+\end_layout
+
+\begin_layout Standard
+
+trait Enumv  {
+\end_layout
+
+\begin_layout Standard
+
+  
+\end_layout
+
+\begin_layout Standard
+
+  this: Enumeration =>
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+  private var nameDescriptionMap = scala.collection.mutable.Map[String, String]()
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+  /* store a name and description for forms */
+\end_layout
+
+\begin_layout Standard
+
+  def Value(name: String, desc: String) : Value = {
+\end_layout
+
+\begin_layout Standard
+
+    nameDescriptionMap += (name -> desc)
+\end_layout
+
+\begin_layout Standard
+
+    new Val(name)
+\end_layout
+
+\begin_layout Standard
+
+  }
+\end_layout
+
+\begin_layout Standard
+
+  
+\end_layout
+
+\begin_layout Standard
+
+    /* get description if it exists else name */
+\end_layout
+
+\begin_layout Standard
+
+  def getDescriptionOrName(ev: this.Value) = {
+\end_layout
+
+\begin_layout Standard
+
+    try {
+\end_layout
+
+\begin_layout Standard
+
+      nameDescriptionMap(""+ev)
+\end_layout
+
+\begin_layout Standard
+
+    } catch {
+\end_layout
+
+\begin_layout Standard
+
+      case e: NoSuchElementException => ev.toString
+\end_layout
+
+\begin_layout Standard
+
+    }
+\end_layout
+
+\begin_layout Standard
+
+  }
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+  /* get name description pair list for forms */
+\end_layout
+
+\begin_layout Standard
+
+  def getNameDescriptionList =  this.elements.toList.map(v => (v.toString, getDescri
+ptionOrName(v) ) ).toList
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+  /* get the enum given a string */
+\end_layout
+
+\begin_layout Standard
+
+  def valueOf(str: String) = this.elements.toList.filter(_.toString == str)
+ match {
+\end_layout
+
+\begin_layout Standard
+
+    case Nil => null
+\end_layout
+
+\begin_layout Standard
+
+    case x => x.head
+\end_layout
+
+\begin_layout Standard
+
+  }
+\end_layout
+
+\begin_layout Standard
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In order to actually convert the Enumeration class into the proper database
+ type (String, Int, etc), we need to implement the Hibernate UserType interface,
+ shown in listing 
+\begin_inset LatexCommand ref
+reference "lst:EnumvType"
+
+\end_inset
+
+.
+ We can see on line 18 that we will be using a varchar column for the enumeratio
+n value.
+ Since this is based on the Scala Enumeration's Value method, we could technical
+ly use either Integer or character types here.
+ We override the 
+\family typewriter
+sqlTypes
+\family default
+ and 
+\family typewriter
+returnedClass
+\family default
+ methods to match our preferred type, and set the 
+\family typewriter
+equals
+\family default
+ and 
+\family typewriter
+hashCode
+\family default
+ methods accordingly.
+ Note that in Scala, the 
+\begin_inset Quotes eld
+\end_inset
+
+==
+\begin_inset Quotes erd
+\end_inset
+
+ operator on objects delegates to the 
+\family typewriter
+equals
+\family default
+ method, so we're not testing reference equality here.
+ The actual resolution of database column value to Enumeration is done in
+ the 
+\family typewriter
+nullSafeGet
+\family default
+ method; if we decided, for instance, that the null value should be returned
+ as unknown, we could do this here with some minor modifications to the
+ Enumv class (defining the unknown value, for one).The rest of the methods
+ are set appropriately for an immutable object (Enumeration).
+ The great thing about the EnumvType class, is that it can easily be used
+ for a variety of types due to the 
+\begin_inset Quotes eld
+\end_inset
+
+et
+\begin_inset Quotes erd
+\end_inset
+
+ constructor argument; as long as we mix in the Enumv trait to our Enumeration
+ objects, we get persistence essentially for free.
+ If we determined instead that we want to use Integer enumeration IDs, we
+ need to make minor modifications to the EnumvType to make sure arguments
+ match and we're set.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "basicstyle={\scriptsize},breaklines=true,firstline=15,float,frame=single,lastline=35,numbers=left,numberstyle={\tiny}"
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+\begin_inset LatexCommand label
+name "lst:EnumvType"
+
+\end_inset
+
+EnumvType class
+\end_layout
+
+\end_inset
+
+package com.foo.jpaweb.model
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+import java.io.Serializable
+\end_layout
+
+\begin_layout Standard
+
+import java.sql.PreparedStatement
+\end_layout
+
+\begin_layout Standard
+
+import java.sql.ResultSet
+\end_layout
+
+\begin_layout Standard
+
+import java.sql.SQLException
+\end_layout
+
+\begin_layout Standard
+
+import java.sql.Types
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+import org.hibernate.HibernateException
+\end_layout
+
+\begin_layout Standard
+
+import org.hibernate.usertype.UserType
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+/**
+\end_layout
+
+\begin_layout Standard
+
+ * Helper class to translate enum for hibernate
+\end_layout
+
+\begin_layout Standard
+
+ */
+\end_layout
+
+\begin_layout Standard
+
+abstract class EnumvType(val et: Enumeration with Enumv) extends UserType
+ {
+\end_layout
+
+\begin_layout Standard
+
+  
+\end_layout
+
+\begin_layout Standard
+
+  val SQL_TYPES = Array({Types.VARCHAR})
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+  override def sqlTypes() = SQL_TYPES
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+  override def returnedClass = classOf[et.Value]
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+  override def equals(x: Object, y: Object): Boolean = {
+\end_layout
+
+\begin_layout Standard
+
+    return x == y
+\end_layout
+
+\begin_layout Standard
+
+  }
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+  override def hashCode(x: Object) = x.hashCode
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+  override def nullSafeGet(resultSet: ResultSet, names: Array[String], owner:
+ Object): Object = {
+\end_layout
+
+\begin_layout Standard
+
+    val value = resultSet.getString(names(0))
+\end_layout
+
+\begin_layout Standard
+
+    if (resultSet.wasNull()) return null
+\end_layout
+
+\begin_layout Standard
+
+    else {
+\end_layout
+
+\begin_layout Standard
+
+      return et.valueOf(value)
+\end_layout
+
+\begin_layout Standard
+
+    }
+\end_layout
+
+\begin_layout Standard
+
+  }
+\end_layout
+
+\begin_layout Standard
+
+  
+\end_layout
+
+\begin_layout Standard
+
+  override def nullSafeSet(statement: PreparedStatement, value: Object,
+ index: Int): Unit = {
+\end_layout
+
+\begin_layout Standard
+
+    if (value == null) {
+\end_layout
+
+\begin_layout Standard
+
+      statement.setNull(index, Types.VARCHAR)
+\end_layout
+
+\begin_layout Standard
+
+    } else {
+\end_layout
+
+\begin_layout Standard
+
+      val en = value.toString
+\end_layout
+
+\begin_layout Standard
+
+      statement.setString(index, en)
+\end_layout
+
+\begin_layout Standard
+
+    }
+\end_layout
+
+\begin_layout Standard
+
+  }
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+  override def deepCopy(value: Object): Object = value
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+  override def isMutable() = false
+\end_layout
+
+\begin_layout Standard
+
+    
+\end_layout
+
+\begin_layout Standard
+
+  override def disassemble(value: Object) = value.asInstanceOf[Serializable]
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+  override def assemble(cached: Serializable, owner: Object): Serializable
+ = cached
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+  override def replace(original: Object, target: Object, owner: Object)
+ = original
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "basicstyle={\scriptsize},breaklines=true,firstline=3,float,frame=single,numbers=left,numberstyle={\tiny}"
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+
+\begin_inset LatexCommand label
+name "lst:Genre-and-GenreType"
+
+\end_inset
+
+Genre and GenreType
+\end_layout
+
+\end_inset
+
+package com.foo.jpaweb.model
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+object Genre extends Enumeration with Enumv {
+\end_layout
+
+\begin_layout Standard
+
+  val Mystery = Value("Mystery", "Mystery")
+\end_layout
+
+\begin_layout Standard
+
+  val Science = Value("Science", "Science")
+\end_layout
+
+\begin_layout Standard
+
+  val Theater = Value("Theater", "Drama literature")
+\end_layout
+
+\begin_layout Standard
+
+  // more values here...
+\end_layout
+
+\begin_layout Standard
+
+}
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+class GenreType extends EnumvType(Genre) {}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Finally, the Genre object and the associated GenreType is shown in listing
+ 
+\begin_inset LatexCommand ref
+reference "lst:Genre-and-GenreType"
+
+\end_inset
+
+.
+ You can see that we create a singleton Genre object with specific member
+ values for each enumeration value.
+ The GenreType class is trivial now that we have the EnumvType class defined.
+ To use the Genre type in our entity classes, we simply need to add the
+ proper 
+\family typewriter
+var
+\family default
+ and annotate it with the @Type annotation, as shown in listing 
+\begin_inset LatexCommand ref
+reference "lst:Using-the-@Type"
+
+\end_inset
+
+.
+ We need to specify the type of the var due to the fact that the actual
+ enumeration values are of the type Enumeration.Val, which doesn't match
+ our valueOf method in the Enumv trait.
+ We also want to make sure we set the enumeration to some reasonable default;
+ in our example we have an 
+\emph on
+unknown
+\emph default
+ value to cover that case.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "basicstyle={\scriptsize},float,frame=single"
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+
+\begin_inset LatexCommand label
+name "lst:Using-the-@Type"
+
+\end_inset
+
+Using the @Type annotation
+\end_layout
+
+\end_inset
+
+  @Type{val `type` = "com.foo.jpaweb.model.GenreType"}
+\end_layout
+
+\begin_layout Standard
+
+  var genre : Genre.Value = Genre.unknown
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now that we have our objects defined, let's start using them.
+\end_layout
+
+\begin_layout Section
+Obtaining a Per-Session EntityManager
+\end_layout
+
+\begin_layout Standard
+Ideally, we would like our JPA access to be as seamless as possible, particularl
+y when it comes to object lifecycle.
+ In JPA, objects can be attached to a current persistence session, or they
+ can be detached from a JPA session.
+ This gives us a lot of flexibility (which we'll use later) in dealing with
+ the objects themselves, but it also means that we need to be careful when
+ we're accessing object properties.
+ JPA can use lazy retrieval for instance properties; in particular, this
+ is the default behavior for collection-based properties.
+ What this means is that if we're working on a detached object and we attempt
+ to access a collection contained in the instance, we're going to get an
+ exception that the session that the object was loaded in is no longer live.
+ What we're really like to do is have some hooks into Lift's request cycle
+ that allows us to set up a session when the request starts and properly
+ close it down when the request ends.
+ We still have to be careful with objects that have been passed into our
+ request (from form callbacks, for instance), but in general this will guarantee
+ us that once we've loaded an object in our snippet code we have full access
+ to all properties at any point within our snippets.
+\end_layout
+
+\begin_layout Standard
+Fortunately for us, Lift provides just such a mechanism.
+ In fact, Lift supports several related mechanisms for lifecycle management,
+ but for now we're going to focus on just one: the RequestVar.
+ 
+\end_layout
+
 \begin_layout Itemize
 Getting a per-session entity manager
 \end_layout
@@ -154,7 +1458,603 @@ Implicit defs for conversion from java.util.{Set,List} to Scala counterparts
 Example app (Library catalog)
 \end_layout
 
+\begin_layout Section
+Code Listings
+\end_layout
+
 \begin_layout Standard
+\begin_inset listings
+lstparams "basicstyle={\scriptsize},frame=single,language=XML,numbers=left,numberstyle={\footnotesize},stepnumber=5"
+inline false
+status collapsed
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+\begin_inset LatexCommand label
+name "lst:JPA-Master-pom.xml"
+
+\end_inset
+
+
+Master pom.xml
+\end_layout
+
+\end_inset
+
+<?xml version="1.0" encoding="UTF-8"?>
+\end_layout
+
+\begin_layout Standard
+
+<project>
+\end_layout
+
+\begin_layout Standard
+
+  <modelVersion>4.0.0</modelVersion>
+\end_layout
+
+\begin_layout Standard
+
+  <groupId>com.foo.jpaweb</groupId>
+\end_layout
+
+\begin_layout Standard
+
+  <artifactId>master</artifactId>
+\end_layout
+
+\begin_layout Standard
+
+  <version>1.0-SNAPSHOT</version>
+\end_layout
+
+\begin_layout Standard
+
+  <description>JPA tutorial master project</description>
+\end_layout
+
+\begin_layout Standard
+
+  <name>JPA Demo Master</name>
+\end_layout
+
+\begin_layout Standard
+
+  <inceptionYear>2007</inceptionYear>
+\end_layout
+
+\begin_layout Standard
+
+  <packaging>pom</packaging>
+\end_layout
+
+\begin_layout Standard
+
+  <modules>
+\end_layout
+
+\begin_layout Standard
+
+    <module>JPADemo-web</module>
+\end_layout
+
+\begin_layout Standard
+
+    <module>JPADemo-spa</module>
+\end_layout
+
+\begin_layout Standard
+
+  </modules>
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+  <repositories>
+\end_layout
+
+\begin_layout Standard
+
+    <repository>
+\end_layout
+
+\begin_layout Standard
+
+      <id>scala-tools.org</id>
+\end_layout
+
+\begin_layout Standard
+
+      <name>Scala-Tools Maven2 Repository</name>
+\end_layout
+
+\begin_layout Standard
+
+      <url>http://scala-tools.org/repo-releases</url>
+\end_layout
+
+\begin_layout Standard
+
+    </repository>
+\end_layout
+
+\begin_layout Standard
+
+  </repositories>
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+  <pluginRepositories>
+\end_layout
+
+\begin_layout Standard
+
+    <pluginRepository>
+\end_layout
+
+\begin_layout Standard
+
+      <id>scala-tools.org</id>
+\end_layout
+
+\begin_layout Standard
+
+      <name>Scala-Tools Maven2 Repository</name>
+\end_layout
+
+\begin_layout Standard
+
+      <url>http://scala-tools.org/repo-releases</url>
+\end_layout
+
+\begin_layout Standard
+
+    </pluginRepository>
+\end_layout
+
+\begin_layout Standard
+
+  </pluginRepositories>
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+  <dependencies>
+\end_layout
+
+\begin_layout Standard
+
+    <dependency>
+\end_layout
+
+\begin_layout Standard
+
+      <groupId>org.scala-lang</groupId>
+\end_layout
+
+\begin_layout Standard
+
+      <artifactId>scala-library</artifactId>
+\end_layout
+
+\begin_layout Standard
+
+      <version>${scala.version}</version>
+\end_layout
+
+\begin_layout Standard
+
+    </dependency>
+\end_layout
+
+\begin_layout Standard
+
+    <dependency>
+\end_layout
+
+\begin_layout Standard
+
+      <groupId>junit</groupId>
+\end_layout
+
+\begin_layout Standard
+
+      <artifactId>junit</artifactId>
+\end_layout
+
+\begin_layout Standard
+
+      <version>4.4</version>
+\end_layout
+
+\begin_layout Standard
+
+      <scope>test</scope>
+\end_layout
+
+\begin_layout Standard
+
+    </dependency>
+\end_layout
+
+\begin_layout Standard
+
+  </dependencies>
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+  <build>
+\end_layout
+
+\begin_layout Standard
+
+    <sourceDirectory>src/main/scala</sourceDirectory>
+\end_layout
+
+\begin_layout Standard
+
+    <testSourceDirectory>src/test/scala</testSourceDirectory>
+\end_layout
+
+\begin_layout Standard
+
+    <plugins>
+\end_layout
+
+\begin_layout Standard
+
+      <plugin>
+\end_layout
+
+\begin_layout Standard
+
+        <groupId>org.scala-tools</groupId>
+\end_layout
+
+\begin_layout Standard
+
+        <artifactId>maven-scala-plugin</artifactId>
+\end_layout
+
+\begin_layout Standard
+
+        <executions>
+\end_layout
+
+\begin_layout Standard
+
+          <execution>
+\end_layout
+
+\begin_layout Standard
+
+            <goals>
+\end_layout
+
+\begin_layout Standard
+
+              <goal>compile</goal>
+\end_layout
+
+\begin_layout Standard
+
+              <goal>testCompile</goal>
+\end_layout
+
+\begin_layout Standard
+
+            </goals>
+\end_layout
+
+\begin_layout Standard
+
+          </execution>
+\end_layout
+
+\begin_layout Standard
+
+        </executions>
+\end_layout
+
+\begin_layout Standard
+
+        <configuration>
+\end_layout
+
+\begin_layout Standard
+
+          <scalaVersion>${scala.version}</scalaVersion>
+\end_layout
+
+\begin_layout Standard
+
+        </configuration>
+\end_layout
+
+\begin_layout Standard
+
+      </plugin>
+\end_layout
+
+\begin_layout Standard
+
+    </plugins>
+\end_layout
+
+\begin_layout Standard
+
+  </build>
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+  <reporting>
+\end_layout
+
+\begin_layout Standard
+
+    <plugins>
+\end_layout
+
+\begin_layout Standard
+
+      <plugin>
+\end_layout
+
+\begin_layout Standard
+
+        <groupId>org.scala-tools</groupId>
+\end_layout
+
+\begin_layout Standard
+
+        <artifactId>maven-scala-plugin</artifactId>
+\end_layout
+
+\begin_layout Standard
+
+        <configuration>
+\end_layout
+
+\begin_layout Standard
+
+          <scalaVersion>${scala.version}</scalaVersion>
+\end_layout
+
+\begin_layout Standard
+
+        </configuration>
+\end_layout
+
+\begin_layout Standard
+
+      </plugin>
+\end_layout
+
+\begin_layout Standard
+
+    </plugins>
+\end_layout
+
+\begin_layout Standard
+
+  </reporting>
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+</project>
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "basicstyle={\scriptsize},breaklines=true,frame=single,language=XML,numbers=left,numberstyle={\tiny}"
+inline false
+status collapsed
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+\begin_inset LatexCommand label
+name "lst:orm.xml"
+
+\end_inset
+
+orm.xml
+\end_layout
+
+\end_inset
+
+<?xml version="1.0" encoding="UTF-8" ?>
+\end_layout
+
+\begin_layout Standard
+
+<entity-mappings xmlns="http://java.sun.com/xml/ns/persistence/orm"
+\end_layout
+
+\begin_layout Standard
+
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+\end_layout
+
+\begin_layout Standard
+
+    xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm
+\end_layout
+
+\begin_layout Standard
+
+        http://java.sun.com/xml/ns/persistence/orm_1_0.xsd" version="1.0">
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+  <package>com.foo.jpaweb.model</package>
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+  <entity class="Book">
+\end_layout
+
+\begin_layout Standard
+
+    <named-query name="findBooksByAuthor">
+\end_layout
+
+\begin_layout Standard
+
+      <query><![CDATA[from Book b where b.author.id = :id order by b.title]]></quer
+y>
+\end_layout
+
+\begin_layout Standard
+
+    </named-query>
+\end_layout
+
+\begin_layout Standard
+
+    <named-query name="findBooksByDate">
+\end_layout
+
+\begin_layout Standard
+
+      <query><![CDATA[from Book b where b.published between :startDate and
+ :endDate]]></query>
+\end_layout
+
+\begin_layout Standard
+
+    </named-query>
+\end_layout
+
+\begin_layout Standard
+
+    <named-query name="findBooksByTitle">
+\end_layout
+
+\begin_layout Standard
+
+      <query><![CDATA[from Book b where lower(b.title) like :title order
+ by b.title]]></query>
+\end_layout
+
+\begin_layout Standard
+
+    </named-query>
+\end_layout
+
+\begin_layout Standard
+
+    <named-query name="findAllBooks">
+\end_layout
+
+\begin_layout Standard
+
+      <query><![CDATA[from Book b order by b.title]]></query>
+\end_layout
+
+\begin_layout Standard
+
+    </named-query>
+\end_layout
+
+\begin_layout Standard
+
+  </entity>
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+  <entity class="Author">
+\end_layout
+
+\begin_layout Standard
+
+    <named-query name="findAllAuthors">
+\end_layout
+
+\begin_layout Standard
+
+      <query><![CDATA[from Author a order by a.name]]></query>
+\end_layout
+
+\begin_layout Standard
+
+    </named-query>
+\end_layout
+
+\begin_layout Standard
+
+  </entity>
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+</entity-mappings>
+\end_layout
+
+\end_inset
+
 
 \end_layout
 
