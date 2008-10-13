@@ -33,9 +33,14 @@ S: The start of the Record Stuff
 T: record, 
 
 ------------------------------------------------------
-L:
-S:
-T:
+L: http://groups.google.com/group/liftweb/browse_thread/thread/6c1cd13c3f2f7178
+S: Big change to Loc
+T: Loc, Menu
+
+------------------------------------------------------
+L: http://groups.google.com/group/liftweb/browse_thread/thread/a682f87941be3345/dfe35f5456580408 
+S: Handling Exceptions and redirecting the user
+T: Exception, Redirect
 
 ------------------------------------------------------
 L:
@@ -46,6 +51,8 @@ T:
 L:
 S:
 T:
+
+
 
 
 

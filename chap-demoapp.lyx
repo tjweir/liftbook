@@ -1,0 +1,74 @@
+#LyX 1.5.6 created this file. For more info see http://www.lyx.org/
+\lyxformat 276
+\begin_document
+\begin_header
+\textclass book
+\language english
+\inputencoding auto
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\paperfontsize default
+\spacing single
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\cite_engine basic
+\use_bibtopic false
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\author "" 
+\author "" 
+\end_header
+
+\begin_body
+
+\begin_layout Chapter
+Demo Application: PocketChange 
+\end_layout
+
+\begin_layout Section
+Our Demo Application
+\end_layout
+
+\begin_layout Standard
+We decided to build an application throughout the book as evolutionary example.
+ The application we've picked is an Expense Tracker and we're calling it
+ 
+\shape italic
+PocketChange.
+\end_layout
+
+\begin_layout Standard
+SCREENSHOT
+\end_layout
+
+\begin_layout Standard
+PocketChange will track your expenses, keep a running total, allow you to
+ tag your expenditures, and visualize the data.
+ During the advanced sections we'll add features such as multiple people
+ per account and <super awesome feature>.
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\end_body
+\end_document

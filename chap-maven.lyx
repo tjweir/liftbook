@@ -62,7 +62,7 @@ Maven
 \begin_layout Standard
 A great web framework deserves a great build system, so Lift uses Maven
 \begin_inset Foot
-status collapsed
+status open
 
 \begin_layout Standard
 \begin_inset LatexCommand htmlurl
@@ -82,8 +82,7 @@ name "Maven"
 
 \end_inset
 
- is a project management tool that is developed under the Apache Software
- Foundation
+ is a project management tool developed by the Apache Software Foundation
 \begin_inset Foot
 status collapsed
 
@@ -102,7 +101,15 @@ target "http://www.apache.org"
  Maven's concept of a single config file, known as the Project Object Model
  or pom file, that controls the project's build, dependencies, reporting
  and documentation generation was a desirable feature for the Lift project.
- Below is a sample pom.xml file.
+ We won't go deeply into Maven's internals as it's not needed for building
+ an application with Lift.
+ During the building of the sample application we will highlight any changes
+ that we need to make to the pom file then.
+\end_layout
+
+\begin_layout Standard
+Below is a basic sample pom.xml for an application.
+ This application has a single dependancy on JUnit.
 \end_layout
 
 \begin_layout Standard
@@ -224,7 +231,20 @@ status open
 \end_layout
 
 \begin_layout Standard
-Lift requires at least version 2.0.7.
+As you can see there are no surprises, just a bit of XML to describe metadata
+ about the application.
+ One thing to point out regarding Maven and Lift, is that Lift needs version
+ 2.0.7 or greater as we use
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Swtich to mvn 2.0.6 and get the error.
+\end_layout
+
+\end_inset
+
+.
  
 \end_layout
 
@@ -292,7 +312,8 @@ target "http://localhost:8080/"
 
 \begin_layout Standard
 As your project matures you may start to require additional JARs due to
- new dependencies , you'll have to spend a bit of time in the 
+ new dependencies, such as talking to new Databases, you'll have to spend
+ a bit of time in the 
 \family typewriter
 pom.xml
 \begin_inset LatexCommand index
@@ -303,18 +324,13 @@ name "pom.xml"
 
 \family default
  file.
- We'll get into that later in the book 
-\begin_inset Note Note
-status open
-
-\begin_layout Standard
-WHEN?
+ As mentioned earlier, we'll highlight these changes as we build the demo
+ application.
+ 
 \end_layout
 
-\end_inset
-
-.
- If you'd like more information about the details of Maven, please visit
+\begin_layout Standard
+If you'd like more information about the details of Maven, please visit
  
 \family typewriter
 
@@ -332,7 +348,7 @@ Project Layout
 
 \begin_layout Standard
 The directory structure of a Lift application is straight-forward, but we'll
- highlight a few important ones here.
+ highlight a few important locations here.
 \end_layout
 
 \begin_layout Description
@@ -342,8 +358,8 @@ The directory structure of a Lift application is straight-forward, but we'll
 \end_layout
 
 \begin_layout Description
-<application_root>/src/main/webapp All of the static aspects, such as images,
- XHTML, JavaScript and style will be in this directory.
+<application_root>/src/main/webapp All of the static aspects of your application
+, such as images, XHTML, JavaScript and CSS will be in this directory.
 \end_layout
 
 \begin_layout Description

@@ -133,7 +133,7 @@ You can style them using CSS, for example:
 \end_layout
 
 \begin_layout LyX-Code
-.error, .warning, .notice {
+.error {
 \end_layout
 
 \begin_layout LyX-Code
@@ -146,6 +146,42 @@ You can style them using CSS, for example:
 
 \begin_layout LyX-Code
 }
+\end_layout
+
+\begin_layout LyX-Code
+.warning {
+\end_layout
+
+\begin_layout LyX-Code
+  color: yellow;
+\end_layout
+
+\begin_layout LyX-Code
+  font-size: bigger;
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout LyX-Code
+.notice {
+\end_layout
+
+\begin_layout LyX-Code
+  color: green;
+\end_layout
+
+\begin_layout LyX-Code
+  font-size: bigger;
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout Standard
+Handing exceptions and redirecting the user
 \end_layout
 
 \begin_layout LyX-Code

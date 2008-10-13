@@ -122,7 +122,7 @@ Tyler would like to thank his wife Laura, for encouraging him.
 \end_layout
 
 \begin_layout Standard
-We would both like to thank all of the Lift committors and especially David
+We would both like to thank all of the Lift Developers and especially David
  Pollak, without him, we wouldn't have this opportunity.
 \end_layout
 
@@ -191,6 +191,15 @@ preview false
 
 \begin_layout Standard
 \begin_inset Include \include{chap-maven.lyx}
+preview false
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Include \include{chap-demoapp.lyx}
 preview false
 
 \end_inset
