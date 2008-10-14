@@ -74,7 +74,7 @@ rewrite methods in effect?
 \end_layout
 
 \begin_layout Itemize
-SiteMap matching and access control 
+SiteMap matching and access control - New Loc/Menu stuff
 \end_layout
 
 \begin_layout Itemize
@@ -94,7 +94,7 @@ LiftViewFirst - http://wiki.liftweb.net/index.php/Lift_View_First
 \end_layout
 
 \begin_layout Itemize
-Error handling 
+Error handling - Msgs and 
 \end_layout
 
 \begin_layout Itemize

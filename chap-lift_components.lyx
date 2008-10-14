@@ -47,164 +47,168 @@ A Detailed Look at Lift User Components
 * SiteMap 
 \end_layout
 
-\begin_layout Standard
-* Performs two primary duties: generates the menu for your site (customizable)
+\begin_layout Itemize
+Performs two primary duties: generates the menu for your site (customizable)
  and performs per-page access control 
 \end_layout
 
-\begin_layout Standard
-* Cover Menu, Loc objects to define paths and superpaths (my term for paths
+\begin_layout Itemize
+Cover Menu, Loc objects to define paths and superpaths (my term for paths
  that match anything under them) 
 \end_layout
 
-\begin_layout Standard
-* Support for grouping via LocGroup object 
+\begin_layout Itemize
+Support for grouping via LocGroup object 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Itemize
 
 \series bold
-* <lift:Menu> snippets: 
+<lift:Menu> snippets: 
 \end_layout
 
-\begin_layout Standard
-* <lift:Menu.group group="...">content</...> (http://groups.google.com/group/liftweb/brow
-se_thread/thread/5f18df13cd735c51?hl=en#) 
+\begin_deeper
+\begin_layout Itemize
+<lift:Menu.group group="...">content</...> (http://groups.google.com/group/liftweb/browse
+_thread/thread/5f18df13cd735c51?hl=en#) 
 \end_layout
 
-\begin_layout Standard
-*<lift:Menu.itemname="...">binding to Loc("...",) (http://groups.google.com/group/liftweb
-/browse_thread/thread/dbdf6a17b9704c99/30f5168e87161f74?hl=en&lnk=gst&q=new+site
-map%2Fmenu+features) 
+\begin_layout Itemize
+<lift:Menu.itemname="...">binding to Loc("...",) (http://groups.google.com/group/liftweb/
+browse_thread/thread/dbdf6a17b9704c99/30f5168e87161f74?hl=en&lnk=gst&q=new+sitem
+ap%2Fmenu+features) 
 \end_layout
 
-\begin_layout Standard
-* Customizing content and attributes on menus 
+\begin_layout Itemize
+Customizing content and attributes on menus 
 \end_layout
 
-\begin_layout Standard
-* 
+\end_deeper
+\begin_layout Itemize
+
 \series bold
 Additional attributes 
 \end_layout
 
-\begin_layout Standard
-* If 
+\begin_deeper
+\begin_layout Itemize
+If 
 \end_layout
 
-\begin_layout Standard
-* Unless 
+\begin_layout Itemize
+Unless 
 \end_layout
 
-\begin_layout Standard
-* Test 
+\begin_layout Itemize
+Test 
 \end_layout
 
-\begin_layout Standard
-* Title 
+\begin_layout Itemize
+Title 
 \end_layout
 
-\begin_layout Standard
-* Finding the current Loc for a page (RequestState.location) 
+\begin_layout Itemize
+Finding the current Loc for a page (RequestState.location) 
 \end_layout
 
+\end_deeper
 \begin_layout Standard
 
 \series bold
-* Templates 
+Templates 
 \end_layout
 
-\begin_layout Standard
-* Static xml that may embed or surround other templates, and may embed snippets
+\begin_layout Itemize
+Static xml that may embed or surround other templates, and may embed snippets
  (reference tag list) 
 \end_layout
 
-\begin_layout Standard
-* well-formed XML 
+\begin_layout Itemize
+well-formed XML 
 \end_layout
 
-\begin_layout Standard
-* Special template-hidden directory not directly accessible 
+\begin_layout Itemize
+Special template-hidden directory not directly accessible 
 \end_layout
 
-\begin_layout Standard
-* Use of prefixed elements to assist with binding in snippets 
+\begin_layout Itemize
+Use of prefixed elements to assist with binding in snippets 
 \end_layout
 
-\begin_layout Standard
-* Re-cover how templates are located/dispatched 
+\begin_layout Itemize
+Re-cover how templates are located/dispatched 
 \end_layout
 
 \begin_layout Standard
 
 \series bold
-* Snippets 
+Snippets 
 \end_layout
 
-\begin_layout Standard
-* Chunks of code that generate pieces of a final output page.
+\begin_layout Itemize
+Chunks of code that generate pieces of a final output page.
  May themselves generate template code that is interpreted 
 \end_layout
 
-\begin_layout Standard
-* Generic Scala classes (stateless) 
+\begin_layout Itemize
+Generic Scala classes (stateless) 
 \end_layout
 
-\begin_layout Standard
-* How to deal with state in snippets 
+\begin_layout Itemize
+How to deal with state in snippets 
 \end_layout
 
-\begin_layout Standard
-* RequestVars 
+\begin_layout Itemize
+RequestVars 
 \end_layout
 
-\begin_layout Standard
-* SessionVars 
+\begin_layout Itemize
+SessionVars 
 \end_layout
 
-\begin_layout Standard
-* StatefulSnippets 
+\begin_layout Itemize
+StatefulSnippets 
 \end_layout
 
-\begin_layout Standard
-* Using Helpers.bind.
+\begin_layout Itemize
+Using Helpers.bind.
  In particular, cover view vs.
  forms usage 
 \end_layout
 
-\begin_layout Standard
-* Using Helpers.chooseTemplate for nested templates 
+\begin_layout Itemize
+Using Helpers.chooseTemplate for nested templates 
 \end_layout
 
 \begin_layout Standard
-* 
+
 \series bold
 Views 
 \end_layout
 
-\begin_layout Standard
-* Chunks of code intended to generate a complete page 
+\begin_layout Itemize
+Chunks of code intended to generate a complete page 
 \end_layout
 
-\begin_layout Standard
-* Can be shoehorned to process template code via processSurroundAndInclude
+\begin_layout Itemize
+Can be shoehorned to process template code via processSurroundAndInclude
  
 \end_layout
 
-\begin_layout Standard
-* Re-cover how views are located/dispatched 
+\begin_layout Itemize
+Re-cover how views are located/dispatched 
 \end_layout
 
-\begin_layout Standard
-* Path-based (/my/view) 
+\begin_layout Itemize
+Path-based (/my/view) 
 \end_layout
 
-\begin_layout Standard
-* addDispatchBefore/After 
+\begin_layout Itemize
+addDispatchBefore/After 
 \end_layout
 
-\begin_layout Standard
-* What are the use cases for snippets vs.
+\begin_layout Itemize
+What are the use cases for snippets vs.
  views?
 \end_layout
 

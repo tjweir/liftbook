@@ -60,14 +60,11 @@ SCREENSHOT
 \end_layout
 
 \begin_layout Standard
-PocketChange will track your expenses, keep a running total, allow you to
- tag your expenditures, and visualize the data.
- During the advanced sections we'll add features such as multiple people
- per account and <super awesome feature>.
-\end_layout
-
-\begin_layout Standard
-
+PocketChange will track your expenses, keep a running total of what you've
+ spent, allow you to organize by tags, and visualize the data.
+ During the later chapters of the book we'll add a few fun features such
+ as multiple people per account and <super awesome feature goes here when
+ we think of it.>.
 \end_layout
 
 \end_body
