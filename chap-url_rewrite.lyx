@@ -44,28 +44,28 @@ URL Rewriting
 \end_layout
 
 \begin_layout Standard
-* What is URL rewriting 
+What is URL rewriting 
 \end_layout
 
-\begin_layout Standard
-* Using LiftRules.addRewriteBefore.After 
+\begin_layout Itemize
+Using LiftRules.addRewriteBefore.After 
 \end_layout
 
-\begin_layout Standard
-* What constitutes a rewrite function? 
+\begin_layout Itemize
+What constitutes a rewrite function? 
 \end_layout
 
-\begin_layout Standard
-* Using the params Map to pass parts of the path back into your code via
- S.param 
+\begin_layout Itemize
+Using the params Map to pass parts of the path back into your code via S.param
+ 
 \end_layout
 
-\begin_layout Standard
-* Example: user-friendly URLs
+\begin_layout Itemize
+Example: user-friendly URLs
 \end_layout
 
-\begin_layout Standard
-
+\begin_layout Itemize
+Example: REST API pattern
 \end_layout
 
 \end_body

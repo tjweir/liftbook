@@ -48,6 +48,10 @@ Explain REST - http://en.wikipedia.org/wiki/REST
 \end_layout
 
 \begin_layout Itemize
+Build off of the URL rewriting comment
+\end_layout
+
+\begin_layout Itemize
 api demo from the wiki
 \end_layout
 
