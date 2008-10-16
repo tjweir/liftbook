@@ -94,7 +94,7 @@ LiftViewFirst - http://wiki.liftweb.net/index.php/Lift_View_First
 \end_layout
 
 \begin_layout Itemize
-Error handling - Msgs and 
+Error handling - Msgs and handling exceptions
 \end_layout
 
 \begin_layout Itemize
@@ -129,8 +129,7 @@ additional attribute handling in tags (via S.attr)
 
 \end_deeper
 \begin_layout Itemize
-The SHtml object defines many functions for creating User Interface and
- input Xhtml fragments.
+The SHtml object is used to create most of the input elements.
 \end_layout
 
 \begin_deeper
