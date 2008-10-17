@@ -260,6 +260,17 @@ reference "lst:JPA-Master-pom.xml"
 
 \end_inset
 
+
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Should we really include complete code listings in the text? Should they
+ be in an appendix?
+\end_layout
+
+\end_inset
+
 .
 \end_layout
 
@@ -466,7 +477,12 @@ class Author {
 
 \begin_layout Standard
 
-             val targetEntity = classOf[Book]}
+             val targetEntity = classOf[Book],
+\end_layout
+
+\begin_layout Standard
+
+             val cascade = Array(CascadeType.REMOVE)}
 \end_layout
 
 \begin_layout Standard
@@ -636,6 +652,56 @@ Author override
 \end_inset
 
 
+\end_layout
+
+\begin_layout Subsection
+Object attachment and detachment
+\end_layout
+
+\begin_layout Standard
+JPA operates with entities in one of two modes: attached and detached.
+ An attached object is one that is under the direct control of a live JPA
+ session.
+ That means that the JPA provider monitors the state of the object and writes
+ it to the database at the appropriate time.
+ Objects can be attached either explicitly via the 
+\family typewriter
+persist
+\family default
+ and 
+\family typewriter
+merge
+\family default
+ methods (section 
+\begin_inset LatexCommand ref
+reference "sub:Persisting,-merging-and-removing"
+
+\end_inset
+
+), or implicitly via query results, the 
+\family typewriter
+getReference
+\family default
+ method or the 
+\family typewriter
+find
+\family default
+ method.
+ As soon as the session ends, any formerly attached objects are now considered
+ detached.
+ You can still operate on them as normal objects but any changes are not
+ directly applied to the database.
+ If you have a detached object, you can re-attach it to your current session
+ with the 
+\family typewriter
+merge
+\family default
+ method; any changes since the object was detached, as well as any subsequent
+ changes to the attached object, will be applied to the database at the
+ appropriate time.
+ The concept of object attachment is particularly useful in Lift because
+ it allows us to generate or query for an object in one request cycle and
+ then make modifications and merge in a different cycle.
 \end_layout
 
 \begin_layout Subsection
@@ -1517,7 +1583,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Standard
-
 \begin_inset LatexCommand label
 name "lst:Setting-up-EM"
 
@@ -1856,7 +1921,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Standard
-
 \begin_inset LatexCommand label
 name "lst:EM-Via-JNDI"
 
@@ -2037,7 +2101,7 @@ status open
 
 \begin_layout Standard
 \begin_inset LatexCommand htmlurl
-target "http://java.sun.com/developer/EJTechTips/2005/tt0125.html#1"
+target "http://java.sun.com/developer/EJTechTips/2005/tt0125.html"
 
 \end_inset
 
@@ -2228,7 +2292,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Standard
-
 \begin_inset LatexCommand label
 name "lst:Setting-resource-local-properties"
 
@@ -2382,14 +2445,14 @@ reference "sec:Obtaining-an-EM"
 
 .
  Following that, we have a few convenience methods for creating and executing
- named queries in a single method, as well as a combo method to merge an
- entity and flush to the database in one go.
+ named queries in a single method, as well combo methods to merge or remove
+ an entity and flush to the database in one go.
  The rest of the methods essentially delegate to the underlying EM directly.
 \end_layout
 
 \begin_layout Standard
 \begin_inset listings
-lstparams "basicstyle={\scriptsize},breaklines=true,float,frame=single,numbers=left,numberstyle={\tiny}"
+lstparams "basicstyle={\scriptsize},breaklines=true,frame=single,numbers=left,numberstyle={\tiny}"
 inline false
 status open
 
@@ -2398,7 +2461,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Standard
-
 \begin_inset LatexCommand label
 name "lst:ScalaEntityManager"
 
@@ -2537,8 +2599,20 @@ Any]]) : ScalaQuery[A] = {
 
 \begin_layout Standard
 
+  def persistAndFlush(entity : AnyRef) = { em.persist(entity); em.flush()
+ }
+\end_layout
+
+\begin_layout Standard
+
   def mergeAndFlush[T](entity : T) : T = {val e = merge(entity); flush();
  e}
+\end_layout
+
+\begin_layout Standard
+
+  def removeAndFlush(entity : AnyRef) = { em.remove(entity); em.flush() }
+ 
 \end_layout
 
 \begin_layout Standard
@@ -2696,7 +2770,7 @@ reference "lst:ScalaQuery"
 
 \begin_layout Standard
 \begin_inset listings
-lstparams "basicstyle={\scriptsize},breaklines=true,float,frame=single,numbers=left,numberstyle={\tiny}"
+lstparams "basicstyle={\scriptsize},breaklines=true,frame=single,numbers=left,numberstyle={\tiny}"
 inline false
 status open
 
@@ -2705,7 +2779,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Standard
-
 \begin_inset LatexCommand label
 name "lst:ScalaQuery"
 
@@ -2855,6 +2928,133 @@ We find it helpful to solidify what we've discussed here with some concrete
 \end_layout
 
 \begin_layout Subsection
+\begin_inset LatexCommand label
+name "sub:Persisting,-merging-and-removing"
+
+\end_inset
+
+Persisting, merging and removing
+\end_layout
+
+\begin_layout Standard
+The first step to working with any persistent entities is to actually persist
+ them.
+ If you have a brand new object, you can do this with the 
+\family typewriter
+persist
+\family default
+ method:
+\end_layout
+
+\begin_layout LyX-Code
+Model.persist(myNewAuthor)
+\end_layout
+
+\begin_layout Standard
+This attaches the myNewAuthor object to the current persistence session.
+ Once the object is attached it should be visible in any subsequent queries,
+ although it may not be written to the database just yet (see section 
+\begin_inset LatexCommand ref
+reference "sub:The-importance-of-flush"
+
+\end_inset
+
+).
+ Note that the persist method is only intended for brand new objects.
+ If you have a detached object and you try to use persist you will most
+ likely get an EntityExistsException as the instance you're merging is technical
+ly conflicting with itself.
+ Instead, you want to use the merge method to re-attach detached objects:
+\end_layout
+
+\begin_layout LyX-Code
+val author = Model.merge(myOldAuthor)
+\end_layout
+
+\begin_layout Standard
+An important thing to note is that the merge method doesn't actually attach
+ the object passed to it; instead, it makes an attached 
+\emph on
+copy
+\emph default
+ of the passed object and returns the copy.
+ If you mistakenly merge without using the returned value:
+\end_layout
+
+\begin_layout LyX-Code
+Model.merge(myOldAuthor)
+\end_layout
+
+\begin_layout LyX-Code
+myOldAuthor.name = 
+\begin_inset Quotes eld
+\end_inset
+
+Fred
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+you'll find that subsequent changes to the object won't be written to the
+ database.
+ One nice aspect of the merge method is that it intelligently detects whether
+ the entity you're merging is a new object or a detached object.
+ That means that you can use merge everywhere and let it sort out the semantics.
+ For example, in our library application, using merge allows us to combine
+ the add and edit functionality into a single snippet; if we want to edit
+ an existing Author we pass it into the method.
+ Otherwise, we pass a brand new Author instance into the method and the
+ merge takes care of either case appropriately.
+\end_layout
+
+\begin_layout Standard
+Removing an object is achieved by calling the 
+\family typewriter
+remove
+\family default
+ method:
+\end_layout
+
+\begin_layout LyX-Code
+Model.remove(myAuthor)
+\end_layout
+
+\begin_layout Standard
+The passed entity is detached from the session immediately and will be removed
+ from the database at the appropriate time.
+ If the entity has any associations on it (to collections or other entities),
+ they will be cascaded as indicated by the entity mapping.
+ An example of a cascade is shown in the Author listing on page 
+\begin_inset LatexCommand pageref
+reference "lst:Author.scala"
+
+\end_inset
+
+.
+ The books collection has the cascade set to REMOVE, which means that if
+ an author is deleted, all of the books by that author will be removed as
+ well.
+ The default is to not cascade anything, so it's important that you properly
+ set the cascade on collections to avoid constraint violations when you
+ remove entities.
+ It's also useful to point out that you don't actually need to have an entity
+ loaded to remove it.
+ You can use the 
+\family typewriter
+getReference
+\family default
+ method to obtain a proxy that will cause the corresponding database entry
+ to be removed:
+\end_layout
+
+\begin_layout LyX-Code
+Model.remove(Model.getReference(classOf[Author], someId))
+\end_layout
+
+\begin_layout Subsection
 Loading an Entity
 \end_layout
 
@@ -2968,7 +3168,11 @@ find
 \end_layout
 
 \begin_layout LyX-Code
-val myBook = Model.createQuery[Book](
+val myBook = 
+\end_layout
+
+\begin_layout LyX-Code
+  Model.createQuery[Book](
 \begin_inset Quotes eld
 \end_inset
 
@@ -2976,7 +3180,11 @@ from Book bk where bk.id = :id
 \begin_inset Quotes erd
 \end_inset
 
-).setParams(
+)
+\end_layout
+
+\begin_layout LyX-Code
+       .setParams(
 \begin_inset Quotes eld
 \end_inset
 
@@ -3006,8 +3214,8 @@ Loading many entities
 \begin_layout Standard
 Corresponding to the findOne method is the findAll method, which returns
  all entities based on a query.
- There are two ways to use findAll: you can either use the convenience method
- defined in the ScalaEntityManager class:
+ There are two ways to use findAll; the first is to use the convenience
+ findAll method defined in the ScalaEntityManager class:
 \end_layout
 
 \begin_layout LyX-Code
@@ -3031,13 +3239,23 @@ year
 \end_layout
 
 \begin_layout Standard
-This requires the use of named queries
+This requires the use of a named query for the first arg, and subsequent
+ args are of the form (
+\begin_inset Quotes eld
+\end_inset
+
+paramName
+\begin_inset Quotes erd
+\end_inset
+
+ -> value).
+ Named queries
 \begin_inset LatexCommand index
 name "named queries"
 
 \end_inset
 
- defined in your orm.xml
+ can be defined in your orm.xml
 \begin_inset LatexCommand index
 name "orm.xml"
 
@@ -3054,46 +3272,242 @@ reference "sub:Using-the-orm.xml"
  you to keep the queries in one location instead of being scattered all
  over your code.
  Named queries can also be pre-compiled by the JPA provider, which will
- catch errors at startup instead of when the query gets run.
+ catch errors at startup (or in your unit tests, hint hint) instead of when
+ the query is run inside your code.
+\end_layout
+
+\begin_layout Standard
+The second method is to create a ScalaQuery instance directly and then set
+ parameters and execute it.
+ In reality this is exactly what the Model.findAll method is doing.
+ The advantage here is that with the ScalaQuery instance you can do things
+ like set hinting, paging, etc.
+ For instance, if you wanted to do paging on the books query, you could
+ do
+\end_layout
+
+\begin_layout LyX-Code
+val myBooks = Model.createNamedQuery(
+\begin_inset Quotes eld
+\end_inset
+
+booksByYear
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\begin_layout LyX-Code
+                   .setParams(
+\begin_inset Quotes eld
+\end_inset
+
+year
+\begin_inset Quotes erd
+\end_inset
+
+ -> myYear)
+\end_layout
+
+\begin_layout LyX-Code
+                   .setMaxResults(20)
+\end_layout
+
+\begin_layout LyX-Code
+                   .setFirstResult(pageOffset).findAll
 \end_layout
 
 \begin_layout Subsection
 Tips for using queries
 \end_layout
 
-\begin_layout Subsection
-Persisting, merging and removing
+\begin_layout Standard
+In general we recommend that you use named queries throughout your code.
+ In our experience, the extra effort involved in adding a named query is
+ more than offset by the time it saves you if you ever need to modify the
+ query.
+ Additionally, we recommend that you use named parameters in your queries.
+ Named parameters are just that: parameters that are inserted into your
+ query by name, in contrast to positional parameters.
+ As an example, here is the same query using named and positional parameters:
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+Named\InsetSpace ~
+parameters 
+\family typewriter
+select user from User where (user.name like :searchString or user.email like
+ :searchString) and user.widgets > :widgetCount
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+Positional\InsetSpace ~
+parameters 
+\family typewriter
+select user from User where (user.name like ? or user.email like ?) and user.widget
+s > :widgetCount
+\end_layout
+
+\begin_layout Standard
+From this example we can show several advantages of named params over positional
+ params
+\end_layout
+
+\begin_layout Enumerate
+You can reuse the same parameter within the same query and you only set
+ it once.
+ In the example about we would set the same parameter twice using positional
+ params
+\end_layout
+
+\begin_layout Enumerate
+The parameters can have meaningful names.
+\end_layout
+
+\begin_layout Enumerate
+With positional params you may have to edit your code if you need to alter
+ your query to add or remove parameters
+\end_layout
+
+\begin_layout Standard
+In any case, you should generally use the parameterized query types as opposed
+ to hand constructing your queries; using things like string concatenation
+ opens up your site to SQL injection attacks unless you're very careful.
+ For more information on queries there's an excellent reference for the
+ EJBQL on the Hibernate website at 
+\begin_inset LatexCommand htmlurl
+target "http://www.hibernate.org/hib_docs/entitymanager/reference/en/html/queryhql.html"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Subsection
 Converting collection properties
 \end_layout
 
-\begin_layout Subsection
-The importance of flush()
-\end_layout
-
-\begin_layout Itemize
-Provide Scala-esque access to all EM methods (List vs java.util.List,etc)
-\end_layout
-
-\begin_layout Itemize
-Implicit defs for conversion from java.util.{Set,List} to Scala counterparts
- 
-\begin_inset Note Note
-status open
+\begin_layout Standard
+The ScalaEntityManager and ScalaQuery methods are already defined so that
+ they return Scala-friendly collections such as 
+\family typewriter
+scala.collection.jcl.BufferWrapper
+\family default
+ or SetWrapper.
+ We have to use Java Collections
+\begin_inset Foot
+status collapsed
 
 \begin_layout Standard
-This should really be scala.collection.jcl.Conversions
-\end_layout
+\begin_inset LatexCommand htmlurl
+target "http://java.sun.com/docs/books/tutorial/collections/index.html"
 
 \end_inset
 
 
 \end_layout
 
-\begin_layout Section
-Example app (Library catalog)
+\end_inset
+
+ 
+\begin_inset Quotes eld
+\end_inset
+
+under the hood
+\begin_inset Quotes erd
+\end_inset
+
+ and then wrap them because JPA doesn't understand Scala collections.
+ For the same reason, collections in your entity classes must also use the
+ Java Collections classes.
+ Fortunately, Scala has a very nice framework for wrapping Java collections.
+ In particular, the scala.collection.jcl.Conversions class contains a number
+ of implicit conversions
+\begin_inset LatexCommand index
+name "implicit conversions"
+
+\end_inset
+
+; all you have to do is import them at the top of your source file like
+ so:
+\end_layout
+
+\begin_layout LyX-Code
+import scala.collection.jcl.Conversions._
+\end_layout
+
+\begin_layout Standard
+Once you've done that the methods are automatically in scope and you can
+ use collections in your entities as if they were real Scala collections.
+ For example, we may want to see if our Author has written any mysteries:
+\end_layout
+
+\begin_layout LyX-Code
+val suspenseful = author.books.exists(_.genre = Genre.Mystery)
+\end_layout
+
+\begin_layout Subsection
+\begin_inset LatexCommand label
+name "sub:The-importance-of-flush"
+
+\end_inset
+
+The importance of flush()
+\end_layout
+
+\begin_layout Standard
+It's important to understand that in JPA the provider isn't required to
+ write to the database until the session closes or is flushed.
+ That means that constraint violations aren't necessarily checked at the
+ time that you persist, merge or remove and object.
+ Using the flush method forces the provider to write any pending changes
+ to the database and immediately throw any exceptions resulting from any
+ violations.
+ As a convenience, we've written methods to do persist, merge and remove
+ with a subsequent flush, as shown in listing 
+\begin_inset LatexCommand vref
+reference "lst:ScalaEntityManager"
+
+\end_inset
+
+.
+ We do, however, recommend that if you will be doing multiple operations
+ in one session cycle that you use a single flush at the end:
+\end_layout
+
+\begin_layout LyX-Code
+val container = Model.find(classOf[Container], containerId)
+\end_layout
+
+\begin_layout LyX-Code
+Model.remove(container.widget)
+\end_layout
+
+\begin_layout LyX-Code
+container.widget = new Widget(
+\begin_inset Quotes eld
+\end_inset
+
+Foo!
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\begin_layout LyX-Code
+// next line only required if container.widget doesn't cascade PERSIST
+\end_layout
+
+\begin_layout LyX-Code
+Model.persist(container.widget)
+\end_layout
+
+\begin_layout LyX-Code
+Model.flush()
 \end_layout
 
 \begin_layout Section
