@@ -233,28 +233,17 @@ status open
 \begin_layout Standard
 As you can see there are no surprises, just a bit of XML to describe metadata
  about the application.
- One thing to point out regarding Maven and Lift, is that Lift needs version
- 2.0.7 or greater as we use
-\begin_inset Note Note
-status open
-
-\begin_layout Standard
-Swtich to mvn 2.0.6 and get the error.
-\end_layout
-
-\end_inset
-
-.
- 
+ One thing to point out regarding Maven and Lift, is that we require Maven
+ 2.0.7 or greater.
 \end_layout
 
 \begin_layout Standard
 Maven uses the concept of lifecycle phases for execution.
- Some of the default phases are validate, compile, test, package.
+ Some of the default phases include validate, compile, test, package.
  At the beginning of your development you'll probably just use clean and
  jetty:run, in the form 
 \family typewriter
-mvn -U clean jetty:run.
+of mvn -U clean jetty:run.
 \family default
 
 \begin_inset Note Note
@@ -277,7 +266,6 @@ How we develop
 
 \end_inset
 
-.
  When you issue 
 \family typewriter
 mvn -U clean jetty:run

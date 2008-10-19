@@ -1,0 +1,77 @@
+Scrum Style Schedule to get stuff done: 
+Scrum info: http://www.controlchaos.com/about/
+
+
+----------------------------------------
+Schedule:
+P - Planned?
+D - Drafted?
+R - Revised?
+E - Edited?
+F - Formatted?
+H - Happy?
+
+----------------------------------------
+Basic:
+Chapter 01 - Dedication
+P
+
+Chapter 02 - Acknowledgements
+
+Chapter 03 - Welcome to Lift
+
+Chapter 04 - An intro to Maven and Project Layout
+
+Chapter 05 - Demo Application
+
+Chapter 06 - Lift Arch in General
+
+Chapter 07 - Lift User Components
+
+Chapter 08 - Mapper and Record
+
+Chapter 09 - Deployment
+
+
+----------------------------------------
+Advanced:
+Chapter 10 - Request/Response Lifecycle
+
+Chapter 11 - URL Rewriting
+
+Chapter 12 - JSON Handling
+
+Chapter 12 - JsCommands
+
+Chapter 12 - AJAX and COMET
+
+Chapter 12 - JPA Integration
+
+Chapter 12 - Scala Actors and Lift
+
+Chapter 12 - OpenID and OAuth
+
+Chapter 12 - Lucene and Compass
+
+Chapter 12 - Tagging Support
+
+Chapter 12 - Lift Widgets
+
+Chapter 12 - Web Services
+
+
+----------------------------------------
+Appendices
+A - Message Handling
+
+B - Helpers
+
+C - Internationalization
+
+D - Logging
+
+E - Sending Email
+
+F - Dev Tips
+
+
