@@ -1,4 +1,4 @@
-#LyX 1.5.3 created this file. For more info see http://www.lyx.org/
+#LyX 1.5.6 created this file. For more info see http://www.lyx.org/
 \lyxformat 276
 \begin_document
 \begin_header
@@ -44,6 +44,11 @@ OpenID Integration
 \end_layout
 
 \begin_layout Itemize
+OpenID
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
 Rolled into lift-proper a while ago
 \end_layout
 
@@ -63,6 +68,25 @@ How to integrate into Lift
 OpenIDProtoUser
 \end_layout
 
+\end_deeper
+\begin_layout Itemize
+OAuth
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+What?
+\end_layout
+
+\begin_layout Itemize
+Why?
+\end_layout
+
+\begin_layout Itemize
+How?
+\end_layout
+
+\end_deeper
 \begin_layout Section
 What is OpenID?
 \end_layout

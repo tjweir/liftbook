@@ -22,7 +22,7 @@
 \use_esint 1
 \cite_engine basic
 \use_bibtopic false
-\paperorientation portrait
+\paperorientation landscape
 \secnumdepth 3
 \tocdepth 3
 \paragraph_separation indent
@@ -43,12 +43,108 @@
 Message Handling
 \end_layout
 
+\begin_layout Section
+Planning:
+\end_layout
+
+\begin_layout Itemize
+Introduce message concept
+\end_layout
+
+\begin_layout Itemize
+Introduce message types
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+error
+\end_layout
+
+\begin_layout Itemize
+notice
+\end_layout
+
+\begin_layout Itemize
+warning
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Talk about how they get to the screen
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+There is a requestVar that handles a list of messages
+\end_layout
+
+\begin_layout Itemize
+LiftSession spills those to the screen
+\end_layout
+
+\end_deeper
 \begin_layout Standard
-builtin/snippet/Msgs.scala
+
 \end_layout
 
 \begin_layout Standard
-<lift:Msgs />
+For example, if a user successfully saves, notify with S.notice(
+\begin_inset Quotes eld
+\end_inset
+
+Save was sucessful
+\begin_inset Quotes erd
+\end_inset
+
+) and then redirect/sit on the page/etc
+\end_layout
+
+\begin_layout LyX-Code
+def saveAuthor(a: Author): NodeSeq = {
+\end_layout
+
+\begin_layout LyX-Code
+  a.save
+\end_layout
+
+\begin_layout LyX-Code
+  S.notice(
+\begin_inset Quotes eld
+\end_inset
+
+Author 
+\begin_inset Quotes eld
+\end_inset
+
+ + a.niceName + 
+\begin_inset Quotes eld
+\end_inset
+
+ saved successfully.
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\begin_layout LyX-Code
+  S.redirect(
+\begin_inset Quotes eld
+\end_inset
+
+/
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout Section
+builtin/snippet/Msgs.scala
 \end_layout
 
 \begin_layout Standard

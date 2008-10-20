@@ -44,6 +44,10 @@ Lucene/Compass Integration
 \end_layout
 
 \begin_layout Standard
+Search is a requirement for any app
+\end_layout
+
+\begin_layout Standard
 Dave has some code in ESME for this, I'll ask if we can pinch it as a starting
  point.
 \end_layout

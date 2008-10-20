@@ -43,6 +43,10 @@
 Helper Methods
 \end_layout
 
+\begin_layout Section
+Planning
+\end_layout
+
 \begin_layout Itemize
 Can/Empty/Full/Failure
 \end_layout
@@ -137,6 +141,173 @@ IO Helpers
 
 \begin_layout Itemize
 tryo wrappers
+\end_layout
+
+\begin_layout Section
+Writing
+\end_layout
+
+\begin_layout Subsection*
+Can (or Scala's Option class on steroids)
+\end_layout
+
+\begin_layout Standard
+Option Class in Scala:
+\end_layout
+
+\begin_layout Standard
+Scala has a standard type named Option for optional values.
+ Such a value can be of two forms: It can be of the form Some(x) where x
+ is the actual value.
+ Or it can be the None object, which represents a missing value.
+ Optional values are produced by some of the standard operations on Scala’s
+ collections.
+ For instance, the get method of a Map produces Some(value) if a value correspon
+ding to a given key has been found, or None if the given key is not deﬁned
+ in the Map.
+ Here’s an example: scala> val capitals = | Map("France" -> "Paris", "Japan"
+ -> "Tokyo") capitals: scala.collection.immutable.Map[java.lang.String,java.lang.String
+]
+\end_layout
+
+\begin_layout Standard
+scala> capitals get "France" res21: Option[java.lang.String] = Some(Paris)
+ scala> capitals get "North Pole" res22: Option[java.lang.String] = None The
+ most common way to take optional values apart is through a pattern match.
+ For instance: scala> def show(x: Option[String]) = x match { | case Some(s)
+ => s | case None => "?" | } show: (Option[String])String scala> show(capitals
+ get "Japan") res23: String = Tokyo scala> show(capitals get "North Pole")
+ res24: String = ? 
+\end_layout
+
+\begin_layout Standard
+- Things are either Some(value) or None.
+\end_layout
+
+\begin_layout Standard
+- Show Map example
+\end_layout
+
+\begin_layout LyX-Code
+val authors = Map(
+\begin_inset Quotes eld
+\end_inset
+
+a
+\begin_inset Quotes erd
+\end_inset
+
+ -> 
+\begin_inset Quotes eld
+\end_inset
+
+A
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+b
+\begin_inset Quotes erd
+\end_inset
+
+ -> 
+\begin_inset Quotes eld
+\end_inset
+
+B
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\begin_layout LyX-Code
+authors.get(
+\begin_inset Quotes eld
+\end_inset
+
+a
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\begin_layout LyX-Code
+Some(
+\begin_inset Quotes eld
+\end_inset
+
+A
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\begin_layout LyX-Code
+authors.get(
+\begin_inset Quotes eld
+\end_inset
+
+Monkey
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\begin_layout LyX-Code
+None
+\end_layout
+
+\begin_layout Standard
+- .map on collections is the typical way to get values out
+\end_layout
+
+\begin_layout Standard
+util/Can.scala
+\end_layout
+
+\begin_layout LyX-Code
+def confirmDelete {     
+\end_layout
+
+\begin_layout LyX-Code
+  (for (val id <- param("id");     // get the ID           
+\end_layout
+
+\begin_layout LyX-Code
+        val user <- User.find(id)) // find the user                     
+                                                           
+\end_layout
+
+\begin_layout LyX-Code
+  yield {          
+\end_layout
+
+\begin_layout LyX-Code
+    user.delete_!                   
+\end_layout
+
+\begin_layout LyX-Code
+    notice("User deleted")          
+\end_layout
+
+\begin_layout LyX-Code
+    redirectTo("/simple/index.html")        
+\end_layout
+
+\begin_layout LyX-Code
+  }) getOrElse {error("User not found"); redirectTo("/simple/index.html")}
+    
+\end_layout
+
+\begin_layout LyX-Code
+}
 \end_layout
 
 \end_body

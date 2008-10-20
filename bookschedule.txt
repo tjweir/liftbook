@@ -13,65 +13,64 @@ H - Happy?
 
 ----------------------------------------
 Basic:
-Chapter 01 - Dedication
-P
+Chapter 01 - Dedication - PDRE
 
-Chapter 02 - Acknowledgements
+Chapter 02 - Acknowledgements - PDRE
 
-Chapter 03 - Welcome to Lift
+Chapter 03 - Welcome to Lift - PDR
 
-Chapter 04 - An intro to Maven and Project Layout
+Chapter 04 - An intro to Maven and Project Layout - PDR
 
-Chapter 05 - Demo Application
+Chapter 05 - Demo Application - P
 
-Chapter 06 - Lift Arch in General
+Chapter 06 - Lift Arch in General - P
 
-Chapter 07 - Lift User Components
+Chapter 07 - Lift User Components - P
 
-Chapter 08 - Mapper and Record
+Chapter 08 - Mapper and Record - :(
 
-Chapter 09 - Deployment
+Chapter 09 - Deployment - P (maybe going to kill this)
 
 
 ----------------------------------------
 Advanced:
-Chapter 10 - Request/Response Lifecycle
+Chapter 10 - Request/Response Lifecycle - P
 
-Chapter 11 - URL Rewriting
+Chapter 11 - URL Rewriting - P
 
-Chapter 12 - JSON Handling
+Chapter 12 - JSON Handling - P
 
-Chapter 12 - JsCommands
+Chapter 12 - JsCommands - P
 
-Chapter 12 - AJAX and COMET
+Chapter 12 - AJAX and COMET - P
 
-Chapter 12 - JPA Integration
+Chapter 12 - JPA Integration - PDRE
 
-Chapter 12 - Scala Actors and Lift
+Chapter 12 - Scala Actors and Lift - P
 
-Chapter 12 - OpenID and OAuth
+Chapter 12 - OpenID and OAuth - 
 
-Chapter 12 - Lucene and Compass
+Chapter 12 - Lucene and Compass - P
 
-Chapter 12 - Tagging Support
+Chapter 12 - Tagging Support - P
 
-Chapter 12 - Lift Widgets
+Chapter 12 - Lift Widgets - P
 
-Chapter 12 - Web Services
+Chapter 12 - Web Services - P
 
 
 ----------------------------------------
 Appendices
-A - Message Handling
+A - Message Handling -PD
 
-B - Helpers
+B - Helpers - P
 
-C - Internationalization
+C - Internationalization - P
 
-D - Logging
+D - Logging - P
 
-E - Sending Email
+E - Sending Email - P
 
-F - Dev Tips
+F - Dev Tips - P
 
 

@@ -44,6 +44,10 @@ Request/Response Lifecycle
 \end_layout
 
 \begin_layout Standard
+Planning:
+\end_layout
+
+\begin_layout Standard
 Detailed request/response handling info (should cover how Actors are used,
  too) 
 \end_layout
@@ -128,6 +132,11 @@ Process template recursively (surround, include, etc)
 \begin_layout Standard
 * How S.attr works in conjunction with XML attributes on snippets, etc and
  with Rewriting
+\end_layout
+
+\begin_layout Standard
+This is going to be super-helpful for the later chapters, like WebServices
+ and Rewriting.
 \end_layout
 
 \end_body

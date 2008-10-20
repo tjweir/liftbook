@@ -102,120 +102,18 @@ target "http://www.apache.org"
  or pom file, that controls the project's build, dependencies, reporting
  and documentation generation was a desirable feature for the Lift project.
  We won't go deeply into Maven's internals as it's not needed for building
- an application with Lift.
- During the building of the sample application we will highlight any changes
- that we need to make to the pom file then.
+ an application with Lift, but during the building of the sample application
+ we will highlight any changes that we need to make to the pom file then.
 \end_layout
 
 \begin_layout Standard
-Below is a basic sample pom.xml for an application.
- This application has a single dependancy on JUnit.
+Below is a pom.xml file for the sample JPA application later in the book.
+ 
 \end_layout
 
 \begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Standard
-
-<project xmlns="http://maven.apache.org/POM/4.0.0" 
-\end_layout
-
-\begin_layout Standard
-
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-\end_layout
-
-\begin_layout Standard
-
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
-\end_layout
-
-\begin_layout Standard
-
-  http://maven.apache.org/xsd/maven-4.0.0.xsd">   
-\end_layout
-
-\begin_layout Standard
-
-  <modelVersion>4.0.0</modelVersion>   
-\end_layout
-
-\begin_layout Standard
-
-  <groupId>com.mycompany.app</groupId>   
-\end_layout
-
-\begin_layout Standard
-
-  <artifactId>my-app</artifactId>   
-\end_layout
-
-\begin_layout Standard
-
-  <packaging>jar</packaging>   
-\end_layout
-
-\begin_layout Standard
-
-  <version>1.0-SNAPSHOT</version>   
-\end_layout
-
-\begin_layout Standard
-
-  <name>Maven Quick Start Archetype</name>   
-\end_layout
-
-\begin_layout Standard
-
-  <url>http://maven.apache.org</url>   
-\end_layout
-
-\begin_layout Standard
-
-  <dependencies>     
-\end_layout
-
-\begin_layout Standard
-
-    <dependency>       
-\end_layout
-
-\begin_layout Standard
-
-      <groupId>junit</groupId>       
-\end_layout
-
-\begin_layout Standard
-
-      <artifactId>junit</artifactId>       
-\end_layout
-
-\begin_layout Standard
-
-      <version>3.8.1</version>       
-\end_layout
-
-\begin_layout Standard
-
-      <scope>test</scope>     
-\end_layout
-
-\begin_layout Standard
-
-    </dependency>   
-\end_layout
-
-\begin_layout Standard
-
-  </dependencies> 
-\end_layout
-
-\begin_layout Standard
-
-</project>
-\end_layout
+\begin_inset LatexCommand ref
+reference "lst:JPA-Master-pom.xml"
 
 \end_inset
 
@@ -231,10 +129,11 @@ status open
 \end_layout
 
 \begin_layout Standard
-As you can see there are no surprises, just a bit of XML to describe metadata
- about the application.
- One thing to point out regarding Maven and Lift, is that we require Maven
- 2.0.7 or greater.
+In the listing you will see some metadata about the application, listings
+ of repositories to download updated libraries, dependancies and a build
+ and a reporting lifecycle.
+ One thing to point out regarding Maven and Lift, is that Maven 2.0.7 or greater
+ is required.
 \end_layout
 
 \begin_layout Standard

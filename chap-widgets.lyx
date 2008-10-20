@@ -43,8 +43,12 @@
 Lift Widgets
 \end_layout
 
+\begin_layout Standard
+Planning:
+\end_layout
+
 \begin_layout Itemize
-Sparklines widget from Marius
+Create and extend the Sparklines widget from Marius
 \end_layout
 
 \begin_deeper

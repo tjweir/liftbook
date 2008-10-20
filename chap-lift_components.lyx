@@ -44,7 +44,9 @@ A Detailed Look at Lift User Components
 \end_layout
 
 \begin_layout Standard
-* SiteMap 
+
+\series bold
+SiteMap 
 \end_layout
 
 \begin_layout Itemize
@@ -178,6 +180,10 @@ Using Helpers.bind.
 
 \begin_layout Itemize
 Using Helpers.chooseTemplate for nested templates 
+\end_layout
+
+\begin_layout Itemize
+Assert the concept of Fragment Generation
 \end_layout
 
 \begin_layout Standard

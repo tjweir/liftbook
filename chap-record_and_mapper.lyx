@@ -1,4 +1,4 @@
-#LyX 1.5.3 created this file. For more info see http://www.lyx.org/
+#LyX 1.5.6 created this file. For more info see http://www.lyx.org/
 \lyxformat 276
 \begin_document
 \begin_header
@@ -57,6 +57,17 @@ Database abstraction...
 
 \begin_layout Standard
 Record has started, Marius and dpp are working on it.
+\end_layout
+
+\begin_layout Standard
+Oh man, what do we do.
+ Record is moving along, but it's not finished.
+ 
+\end_layout
+
+\begin_layout Standard
+Quickly go over mapper for a simple-CRUD app, then point to Hibernate,JPA
+ for a larger-scale application.
 \end_layout
 
 \end_body
