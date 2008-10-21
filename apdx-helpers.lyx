@@ -78,18 +78,6 @@ Using and/or chaining Failure objects
 \end_layout
 
 \begin_layout Itemize
-var c = Can[String]
-\end_layout
-
-\begin_layout Itemize
-c match { case Full(value) => //do something with the value case _ =>
-\end_layout
-
-\begin_layout Itemize
-} 
-\end_layout
-
-\begin_layout Itemize
 OR
 \end_layout
 
@@ -143,7 +131,7 @@ tryo wrappers
 Writing
 \end_layout
 
-\begin_layout Subsection*
+\begin_layout Subsection
 Can (or Scala's Option class on steroids)
 \end_layout
 
@@ -397,7 +385,77 @@ lazy val UserBio = UserBio.find(By(UserBio.id, id)) openOr (new UserBio)
 \end_layout
 
 \begin_layout LyX-Code
+def view (xhtml: NodeSeq): NodeSeq = passedAuthor.map({ author => // do bind,
+ etc here and return a NodeSeq}) openOr Text("Invalid author") 
+\end_layout
 
+\begin_layout Subsection
+Time/date formatting
+\end_layout
+
+\begin_layout Standard
+Various time span and general convenience functions.
+\end_layout
+
+\begin_layout Subsection
+String formatting and utilities
+\end_layout
+
+\begin_layout Standard
+Capitailize, spliting, parsing strings to numbers, cleaning non-standard
+ chars.
+\end_layout
+
+\begin_layout Subsection
+Encryption and hashing
+\end_layout
+
+\begin_layout Standard
+Blowfish en/decrypt, md5, sha256, hexEncode
+\end_layout
+
+\begin_layout Subsection
+List helpers
+\end_layout
+
+\begin_layout Standard
+Rotation, enumsToList, join, or
+\end_layout
+
+\begin_layout Subsection
+Binding
+\end_layout
+
+\begin_layout Standard
+Binding for templates
+\end_layout
+
+\begin_layout Subsection
+URL modification
+\end_layout
+
+\begin_layout Standard
+encode, decode, add params, check appropriate file extensions.
+\end_layout
+
+\begin_layout Subsection
+IO Helpers
+\end_layout
+
+\begin_layout Standard
+Reading files and Streams, executing files
+\end_layout
+
+\begin_layout Subsection
+tryo wrappers
+\end_layout
+
+\begin_layout Standard
+Addition to try blocks, allows the developer to ignore certain exceptions.
+\end_layout
+
+\begin_layout Subsection
+Regular Expressions
 \end_layout
 
 \end_body
