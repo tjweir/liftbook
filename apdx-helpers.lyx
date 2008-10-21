@@ -58,10 +58,6 @@ ad/thread/1a0808688d7923b2
 
 \begin_deeper
 \begin_layout Itemize
-Richer alternative to Scala's Option/None/Some
-\end_layout
-
-\begin_layout Itemize
 openOr examples
 \end_layout
 
@@ -152,44 +148,21 @@ Can (or Scala's Option class on steroids)
 \end_layout
 
 \begin_layout Standard
-Option Class in Scala:
+The Can Type is a utility that is built on top of Scala's Option Type, so
+ let's take a quick look at Option first.
 \end_layout
 
 \begin_layout Standard
-Scala has a standard type named Option for optional values.
- Such a value can be of two forms: It can be of the form Some(x) where x
- is the actual value.
- Or it can be the None object, which represents a missing value.
- Optional values are produced by some of the standard operations on Scala’s
- collections.
- For instance, the get method of a Map produces Some(value) if a value correspon
-ding to a given key has been found, or None if the given key is not deﬁned
- in the Map.
- Here’s an example: scala> val capitals = | Map("France" -> "Paris", "Japan"
- -> "Tokyo") capitals: scala.collection.immutable.Map[java.lang.String,java.lang.String
-]
+The Option class allows for typesafe method of dealing with a situation
+ where you may or may not have a result.
+ Option has two values, either Some(value) where value is actually the value
+ and None which is used to represent nothing.
 \end_layout
 
 \begin_layout Standard
-scala> capitals get "France" res21: Option[java.lang.String] = Some(Paris)
- scala> capitals get "North Pole" res22: Option[java.lang.String] = None The
- most common way to take optional values apart is through a pattern match.
- For instance: scala> def show(x: Option[String]) = x match { | case Some(s)
- => s | case None => "?" | } show: (Option[String])String scala> show(capitals
- get "Japan") res23: String = Tokyo scala> show(capitals get "North Pole")
- res24: String = ? 
-\end_layout
-
-\begin_layout Standard
-- Things are either Some(value) or None.
-\end_layout
-
-\begin_layout Standard
-- Show Map example
-\end_layout
-
-\begin_layout LyX-Code
-val authors = Map(
+A typical example for Option is outlined using Scala's Map type.
+ Below you'll see a definition of a Map, a successful attempt to get the
+ value of key 
 \begin_inset Quotes eld
 \end_inset
 
@@ -197,35 +170,19 @@ a
 \begin_inset Quotes erd
 \end_inset
 
- -> 
+ and an attempt to get the value of key 
 \begin_inset Quotes eld
 \end_inset
 
-A
+i
 \begin_inset Quotes erd
 \end_inset
 
-, 
-\begin_inset Quotes eld
-\end_inset
-
-b
-\begin_inset Quotes erd
-\end_inset
-
- -> 
-\begin_inset Quotes eld
-\end_inset
-
-B
-\begin_inset Quotes erd
-\end_inset
-
-)
+.
 \end_layout
 
-\begin_layout LyX-Code
-authors.get(
+\begin_layout Standard
+Notice that when there was an existing key-value pair for 
 \begin_inset Quotes eld
 \end_inset
 
@@ -233,15 +190,136 @@ a
 \begin_inset Quotes erd
 \end_inset
 
-)
-\end_layout
-
-\begin_layout LyX-Code
-Some(
+ the value was returned as Some(A) and when we asked for the value of key
+ 
 \begin_inset Quotes eld
 \end_inset
 
-A
+i
+\begin_inset Quotes erd
+\end_inset
+
+ we received None.
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+scala> val cap = Map("a" -> "A", "b" -> "B") 
+\end_layout
+
+\begin_layout LyX-Code
+cap: scala.collection.immutable.Map[java.lang.String,java.lang.String] = Map(a
+ -> A, b -> B)
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+scala> cap.get("a")  
+\end_layout
+
+\begin_layout LyX-Code
+res1: Option[java.lang.String] = Some(A)
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+scala> cap.get("i") 
+\end_layout
+
+\begin_layout LyX-Code
+res2: Option[java.lang.String] = None 
+\end_layout
+
+\begin_layout Standard
+Getting the value out of an Option is usually handled via map, for example:
+\end_layout
+
+\begin_layout LyX-Code
+def prettyPrint(foo: Option[String]): String = foo match {
+\end_layout
+
+\begin_layout LyX-Code
+  case Some(x) => x
+\end_layout
+
+\begin_layout LyX-Code
+  case None => 
+\begin_inset Quotes eld
+\end_inset
+
+Nothing found.
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout Standard
+Which would be used in conjunction with the previous code:
+\end_layout
+
+\begin_layout LyX-Code
+scala> prettyPrint(cap.get("a")) 
+\end_layout
+
+\begin_layout LyX-Code
+res7: String = A
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+scala> prettyPrint(cap.get("i")) 
+\end_layout
+
+\begin_layout LyX-Code
+res8: String = Nothing found.
+\end_layout
+
+\begin_layout Standard
+Lift's Can extends Option with a few ideas, mainly the fact that you can
+ add a message about why a Can is Empty.
+ Empty corresponds to Option's None and Full to Option's Some.
+ So you can pattern match against a Can like so:
+\end_layout
+
+\begin_layout LyX-Code
+a match {
+\end_layout
+
+\begin_layout LyX-Code
+  Full(author) => Text(
+\begin_inset Quotes eld
+\end_inset
+
+I found the author 
+\begin_inset Quotes eld
+\end_inset
+
+ + author.niceName)
+\end_layout
+
+\begin_layout LyX-Code
+  Empty => Text(
+\begin_inset Quotes eld
+\end_inset
+
+No author by that name.
 \begin_inset Quotes erd
 \end_inset
 
@@ -249,27 +327,27 @@ A
 \end_layout
 
 \begin_layout LyX-Code
-authors.get(
+  Failure(message, _, _) => Text(
 \begin_inset Quotes eld
 \end_inset
 
-Monkey
+Nothing found due to 
+\begin_inset Quotes eld
+\end_inset
+
+ + message) // message may be something like 
+\begin_inset Quotes eld
+\end_inset
+
+Database disconnected.
 \begin_inset Quotes erd
 \end_inset
 
-)
+
 \end_layout
 
 \begin_layout LyX-Code
-None
-\end_layout
-
-\begin_layout Standard
-- .map on collections is the typical way to get values out
-\end_layout
-
-\begin_layout Standard
-util/Can.scala
+}
 \end_layout
 
 \begin_layout LyX-Code
@@ -308,6 +386,18 @@ def confirmDelete {
 
 \begin_layout LyX-Code
 }
+\end_layout
+
+\begin_layout Standard
+openOr example
+\end_layout
+
+\begin_layout LyX-Code
+lazy val UserBio = UserBio.find(By(UserBio.id, id)) openOr (new UserBio)
+\end_layout
+
+\begin_layout LyX-Code
+
 \end_layout
 
 \end_body
