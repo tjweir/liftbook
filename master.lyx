@@ -1,4 +1,4 @@
-#LyX 1.5.6 created this file. For more info see http://www.lyx.org/
+#LyX 1.5.3 created this file. For more info see http://www.lyx.org/
 \lyxformat 276
 \begin_document
 \begin_header
@@ -231,15 +231,6 @@ preview false
 \end_layout
 
 \begin_layout Standard
-\begin_inset Include \include{chap-deployment.lyx}
-preview false
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
 \begin_inset ERT
 status open
 
@@ -427,6 +418,24 @@ preview false
 
 \begin_layout Standard
 \begin_inset Include \include{apdx-devtips.lyx}
+preview false
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Include \include{chap-deployment.lyx}
+preview false
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Include \include{apdx-code_listings.lyx}
 preview false
 
 \end_inset
