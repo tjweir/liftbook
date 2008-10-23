@@ -13,23 +13,23 @@ H - Happy?
 
 ----------------------------------------
 Basic:
-Chapter 01 - Dedication - PDRE
+Chapter 01 - Dedication - PDRE [Derek and Tyler]
 
-Chapter 02 - Acknowledgements - PDRE
+Chapter 02 - Acknowledgements - PDRE [Derek and Tyler]
 
-Chapter 03 - Welcome to Lift - PDR
+Chapter 03 - Welcome to Lift - PDR [Derek]
 
-Chapter 04 - An intro to Maven and Project Layout - PDR
+Chapter 04 - An intro to Maven and Project Layout - PDR [Tyler]
 
-Chapter 05 - Demo Application - P
+Chapter 05 - Demo Application - P [Tyler]
 
-Chapter 06 - Lift Arch in General - P
+Chapter 06 - Lift Arch in General - P [Derek]
 
-Chapter 07 - Lift User Components - P
+Chapter 07 - Lift User Components - P [Tyler]
 
-Chapter 08 - Mapper and Record - :(
+Chapter 08 - Mapper and Record - TDD
 
-Chapter 09 - Deployment - P (maybe going to kill this)
+Chapter 09 - Deployment - DEAD
 
 
 ----------------------------------------
