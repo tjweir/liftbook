@@ -1,4 +1,4 @@
-#LyX 1.5.6 created this file. For more info see http://www.lyx.org/
+#LyX 1.5.3 created this file. For more info see http://www.lyx.org/
 \lyxformat 276
 \begin_document
 \begin_header
@@ -40,37 +40,773 @@
 \begin_body
 
 \begin_layout Chapter
-Lift Architecture in General
+Lift Architecture
+\end_layout
+
+\begin_layout Standard
+In order to better understand how to use Lift to its fullest potential,
+ we're going to dig into the guts a bit to examine how requests are handled.
+ We assume that you have a basic understanding of how HTTP and Servlets
+ work
+\begin_inset Foot
+status collapsed
+
+\begin_layout Standard
+For a refresher, check here: 
+\begin_inset LatexCommand htmlurl
+target "http://java.sun.com/developer/onlineTraining/Servlets/Fundamentals/index.html"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Section
+Entry into Lift
+\end_layout
+
+\begin_layout Standard
+The first step in Lift's request processing is intercepting the HTTP request.
+ Originally, Lift used a Servlet instance to process incoming requests.
+ This was changed to using a Filter instance
+\begin_inset Foot
+status open
+
+\begin_layout Standard
+\begin_inset LatexCommand htmlurl
+target "http://groups.google.com/group/liftweb/browse_thread/thread/b484ea2a13b6f84b/90ba1ef1115055a6"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ because this allows the container to handle any requests that Lift does
+ not (in particular, static content).
+ The filter really acts as a thin wrapper on top of the existing LiftServlet
+ (which still does all of the work), so don't be confused when you look
+ at the ScalaDoc and see both classes.
+ The main thing to remember is that your web.xml
+\begin_inset LatexCommand index
+name "web.xml"
+
+\end_inset
+
+ should specify the filter and not the servlet:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "basicstyle={\scriptsize},breaklines=true,firstline=7,frame=single,language=XML,lastline=18,numbers=left,numberstyle={\tiny}"
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+
+\begin_inset LatexCommand label
+name "lst:LiftFilter-setup-in-web.xml"
+
+\end_inset
+
+LiftFilter setup in web.xml
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+<?xml version="1.0" encoding="ISO-8859-1"?>
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+<!DOCTYPE web-app
+\end_layout
+
+\begin_layout Standard
+
+PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+\end_layout
+
+\begin_layout Standard
+
+"http://java.sun.com/j2ee/dtds/web-app_2_3.dtd">
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+<web-app>
+\end_layout
+
+\begin_layout Standard
+
+  <filter>
+\end_layout
+
+\begin_layout Standard
+
+    <filter-name>LiftFilter</filter-name>
+\end_layout
+
+\begin_layout Standard
+
+    <display-name>Lift Filter</display-name>
+\end_layout
+
+\begin_layout Standard
+
+    <description>The Filter that intercepts lift calls</description>
+\end_layout
+
+\begin_layout Standard
+
+    <filter-class>net.liftweb.http.LiftFilter</filter-class>
+\end_layout
+
+\begin_layout Standard
+
+  </filter>      
+\end_layout
+
+\begin_layout Standard
+
+  <filter-mapping>
+\end_layout
+
+\begin_layout Standard
+
+    <filter-name>LiftFilter</filter-name>
+\end_layout
+
+\begin_layout Standard
+
+    <url-pattern>/*</url-pattern>
+\end_layout
+
+\begin_layout Standard
+
+  </filter-mapping>
+\end_layout
+
+\begin_layout Standard
+
+</web-app>
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+A full web.xml example is shown in section 
+\begin_inset LatexCommand vref
+reference "lst:JPA-web.xml"
+
+\end_inset
+
+.
+ In particular, the filter-mapping specifies that the Filter is responsible
+ for everything.
+ When the filter receives the request, it checks a set of rules to see if
+ it can handle it.
+ If the request is one that Lift handles, it passes it on to an internal
+ LiftServlet instance for processing; otherwise, it chains the request and
+ allows the container to handle it.
+\end_layout
+
+\begin_layout Section
+The Rendering Pipeline
+\end_layout
+
+\begin_layout Standard
+Now that the request has entered the LiftServlet instance, it's time to
+ process it.
+ We break this processing up into several basic steps:
+\end_layout
+
+\begin_layout Enumerate
+URL Rewriting
+\end_layout
+
+\begin_layout Enumerate
+User-defined dispatch
+\end_layout
+
+\begin_layout Enumerate
+SiteMap matching and access control (covered in section 
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+TODO: Cross-ref
+\end_layout
+
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Enumerate
+View or Template dispatch and processing
+\end_layout
+
+\begin_layout Standard
+A lot more is going on under the hood (Lift is highly customizable) but
+ for now this should cover 95% of what you will want to do in a Lift application.
+\end_layout
+
+\begin_layout Subsection
+\begin_inset LatexCommand label
+name "sub:URL-Rewriting"
+
+\end_inset
+
+URL Rewriting
+\begin_inset LatexCommand index
+name "Rewriting"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+URL rewriting is a mechanism that allows you to modify the incoming request
+ so that it dispatches to a different URL.
+ This can be used, among other things, to allow you to
 \end_layout
 
 \begin_layout Itemize
-Everything handled by LiftFilter 
+Use short URLs so that users don't need to remember a huge link (think tinyurl.co
+m)
 \end_layout
 
 \begin_layout Itemize
-Show example config in web.xml 
+Use portions of the URL to determine how a particular snippet or view responds.
+ For example, you could make it so that a user's profile is displayed via
+ a URL like 
+\family typewriter
+http://someplace.com/user/derek
+\family default
+ instead of having the username sent as part of a query string.
 \end_layout
 
-\begin_layout Itemize
-Handling in LiftFilter allows fall-through to default handlers for things
- that Lift doesn't handle (Static content, primarily) 
+\begin_layout Standard
+The mechanism is fairly simple to set up.
+ We need to write a function of type PartialFunction[RewriteRequest,RewriteRespo
+nse] to determine if and how we want to rewrite particular requests.
+ The simplest way to do this is with a match statement which will allow
+ us to selectively match on some or all of the request information.
+ RewriteRequest is a case object that contains three items: the parsed path,
+ the request type and the original HttpServletRequest
+\begin_inset LatexCommand index
+name "HttpServletRequest"
+
+\end_inset
+
+ object.
 \end_layout
 
-\begin_layout Itemize
-Rendering pipeline (This can be high-level right now, with links to detailed
- info in the advanced section - Derek) 
+\begin_layout Standard
+The parsed path of the request in a ParsePath
+\begin_inset LatexCommand index
+name "ParsePath"
+
+\end_inset
+
+ case class instance.
+ The ParsePath class contains
 \end_layout
 
-\begin_layout Itemize
-Dispatch to proper code 
+\begin_layout Enumerate
+The parsed path as a List[String]
 \end_layout
 
-\begin_layout Itemize
-dispatch methods in effect? 
+\begin_layout Enumerate
+The suffix of the request (i.e.
+ 
+\begin_inset Quotes eld
+\end_inset
+
+html
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+xml
+\begin_inset Quotes erd
+\end_inset
+
+, etc)
 \end_layout
 
-\begin_layout Itemize
-rewrite methods in effect? 
+\begin_layout Enumerate
+Whether the path is absolute 
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Clarification needed on what this means
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Whether the path ends in a slash (
+\begin_inset Quotes eld
+\end_inset
+
+/
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Standard
+The latter three properties are useful only in specific circumstances, but
+ the parsed path is what lets us work magic.
+ The path of the request is defined as the parts of the URI between the
+ context path and the query string.
+ The following table shows examples of parsed paths for a Lift application
+ under the 
+\begin_inset Quotes eld
+\end_inset
+
+myapp
+\begin_inset Quotes erd
+\end_inset
+
+ context path
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="4" columns="2">
+<features>
+<column alignment="left" valignment="top" leftline="true" width="0">
+<column alignment="left" valignment="top" leftline="true" rightline="true" width="0">
+<row topline="true" bottomline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\series bold
+\size footnotesize
+Requested URL
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\series bold
+\size footnotesize
+Parsed Path
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\series bold
+\size footnotesize
+http://somewhere.com/myapp/home?test_this=true
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\series bold
+\size footnotesize
+List[String](
+\begin_inset Quotes eld
+\end_inset
+
+home
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\series bold
+\size footnotesize
+http://somewhere.com/myapp/user/derek
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\series bold
+\size footnotesize
+List[String](
+\begin_inset Quotes eld
+\end_inset
+
+user
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+derek
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row topline="true" bottomline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\series bold
+\size footnotesize
+http://somewhere.com/myapp/view/item/14592
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\series bold
+\size footnotesize
+List[String](
+\begin_inset Quotes eld
+\end_inset
+
+view
+\begin_inset Quotes erd
+\end_inset
+
+,
+\begin_inset Quotes erd
+\end_inset
+
+item
+\begin_inset Quotes erd
+\end_inset
+
+,
+\begin_inset Quotes erd
+\end_inset
+
+14592
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The RequestType basically maps to the five HTTP methods: GET, POST, HEAD,
+ PUT and DELETE.
+ These are represented by the corresponding GetRequest, PostRequest, etc
+ cases classes, with an UnknownRequest case class to cover anything strange.
+\end_layout
+
+\begin_layout Standard
+The flexibility of Scala's matching system is what really makes this powerful.
+ With matching on Lists in particular, we can match parts of the path and
+ capture others.
+ For instance, for our second example we'd like to rewrite the 
+\begin_inset Quotes eld
+\end_inset
+
+/user/<username>
+\begin_inset Quotes erd
+\end_inset
+
+ path so that it's handled by the 
+\begin_inset Quotes eld
+\end_inset
+
+/viewUser
+\begin_inset Quotes erd
+\end_inset
+
+ template:
+\end_layout
+
+\begin_layout LyX-Code
+
+\series bold
+\size footnotesize
+val rewriter = {
+\end_layout
+
+\begin_layout LyX-Code
+
+\series bold
+\size footnotesize
+  case RewriteRequest(ParsePath(
+\begin_inset Quotes eld
+\end_inset
+
+user
+\begin_inset Quotes erd
+\end_inset
+
+ :: username :: Nil, _, _, _), _, _) => 
+\end_layout
+
+\begin_layout LyX-Code
+
+\series bold
+\size footnotesize
+       RewriteResponse(
+\begin_inset Quotes eld
+\end_inset
+
+viewUser
+\begin_inset Quotes erd
+\end_inset
+
+ :: Nil, Map(
+\begin_inset Quotes eld
+\end_inset
+
+username
+\begin_inset Quotes erd
+\end_inset
+
+ -> username))
+\end_layout
+
+\begin_layout LyX-Code
+
+\series bold
+\size footnotesize
+}
+\end_layout
+
+\begin_layout Standard
+The RewriteResponse
+\begin_inset LatexCommand index
+name "RewriteResponse"
+
+\end_inset
+
+ simply contains the new path to send and can also take a Map
+\begin_inset LatexCommand index
+name "Map"
+
+\end_inset
+
+ that contains parameters that will be accessible via S.param
+\begin_inset LatexCommand index
+name "S.param"
+
+\end_inset
+
+
+\begin_inset LatexCommand index
+name "S"
+
+\end_inset
+
+ in the snippet or view.
+ We can combine this with the RequestType and HttpServletRequest to be very
+ specific with our matchs:
+\end_layout
+
+\begin_layout LyX-Code
+
+\series bold
+\size footnotesize
+val rewriter = {
+\end_layout
+
+\begin_layout LyX-Code
+
+\series bold
+\size footnotesize
+  case RewriteRequest(ParsePath(username :: Nil, _, _, _),
+\end_layout
+
+\begin_layout LyX-Code
+
+\series bold
+\size footnotesize
+                      DeleteRequest,
+\end_layout
+
+\begin_layout LyX-Code
+
+\series bold
+\size footnotesize
+                      httpreq) if isMgmtSubnet(httpreq.getRemoteHost()) =>
+ 
+\end_layout
+
+\begin_layout LyX-Code
+
+\series bold
+\size footnotesize
+       RewriteResponse(
+\begin_inset Quotes eld
+\end_inset
+
+deleteUser
+\begin_inset Quotes erd
+\end_inset
+
+ :: Nil, Map(
+\begin_inset Quotes eld
+\end_inset
+
+username
+\begin_inset Quotes erd
+\end_inset
+
+ -> username))
+\end_layout
+
+\begin_layout LyX-Code
+
+\series bold
+\size footnotesize
+}
+\end_layout
+
+\begin_layout Standard
+We'll go into more detail about how you can use this in the following sections.
+ In particular, SiteMap
+\begin_inset LatexCommand index
+name "SiteMap"
+
+\end_inset
+
+ 
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Cross-ref
+\end_layout
+
+\end_inset
+
+provides a mechanism for doing rewrites combined with menu entries.
+ 
+\series bold
+Important:
+\series default
+ please note that the Lift session is not created at the point when the
+ rewrite functions run.
+ Specifically, that means that you generally can't set or access properties
+ in S.
+ 
+\end_layout
+
+\begin_layout Subsection
+Custom Dispatch
+\end_layout
+
+\begin_layout Subsection
+View Processing
+\end_layout
+
+\begin_layout Subsection
+Template Processing
+\end_layout
+
+\begin_layout Subsection
+Displaying Messages to the User
+\end_layout
+
+\begin_layout Subsection
+Template Tags
+\end_layout
+
+\begin_layout Subsection
+SHtml Generator Methods
+\end_layout
+
+\begin_layout Section
+To Be Written
 \end_layout
 
 \begin_layout Itemize

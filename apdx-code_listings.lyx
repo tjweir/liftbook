@@ -2252,5 +2252,215 @@ rameter(param._1, param._2)); this}
 
 \end_layout
 
+\begin_layout Standard
+
+\clearpage
+
+\end_layout
+
+\begin_layout Subsection
+JPA web.xml
+\begin_inset LatexCommand index
+name "web.xml"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This shows the LiftFilter setup as well as the persistence-context-ref.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "frame=single"
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+
+\begin_inset LatexCommand label
+name "lst:JPA-web.xml"
+
+\end_inset
+
+JPA web.xml
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+<?xml version="1.0" encoding="ISO-8859-1"?>
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+<!DOCTYPE web-app
+\end_layout
+
+\begin_layout Standard
+
+PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+\end_layout
+
+\begin_layout Standard
+
+"http://java.sun.com/j2ee/dtds/web-app_2_3.dtd">
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+<web-app>
+\end_layout
+
+\begin_layout Standard
+
+<filter>
+\end_layout
+
+\begin_layout Standard
+
+  <filter-name>LiftFilter</filter-name>
+\end_layout
+
+\begin_layout Standard
+
+  <display-name>Lift Filter</display-name>
+\end_layout
+
+\begin_layout Standard
+
+  <description>The Filter that intercepts lift calls</description>
+\end_layout
+
+\begin_layout Standard
+
+  <filter-class>net.liftweb.http.LiftFilter</filter-class>
+\end_layout
+
+\begin_layout Standard
+
+  <persistence-context-ref>
+\end_layout
+
+\begin_layout Standard
+
+    <description>
+\end_layout
+
+\begin_layout Standard
+
+      Persistence context for the library app
+\end_layout
+
+\begin_layout Standard
+
+    </description>
+\end_layout
+
+\begin_layout Standard
+
+    <persistence-context-ref-name>
+\end_layout
+
+\begin_layout Standard
+
+      persistence/jpaweb
+\end_layout
+
+\begin_layout Standard
+
+    </persistence-context-ref-name>
+\end_layout
+
+\begin_layout Standard
+
+    <persistence-unit-name>
+\end_layout
+
+\begin_layout Standard
+
+      jpaweb
+\end_layout
+
+\begin_layout Standard
+
+    </persistence-unit-name>
+\end_layout
+
+\begin_layout Standard
+
+  </persistence-context-ref>
+\end_layout
+
+\begin_layout Standard
+
+</filter>
+\end_layout
+
+\begin_layout Standard
+
+        
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+<filter-mapping>
+\end_layout
+
+\begin_layout Standard
+
+  <filter-name>LiftFilter</filter-name>
+\end_layout
+
+\begin_layout Standard
+
+  <url-pattern>/*</url-pattern>
+\end_layout
+
+\begin_layout Standard
+
+</filter-mapping>
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+</web-app>
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \end_body
 \end_document

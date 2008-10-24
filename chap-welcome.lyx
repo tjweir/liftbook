@@ -142,8 +142,17 @@ name "MVC"
 \end_inset
 
  pattern
-\begin_inset LatexCommand cite
-key "Reenskaug1979"
+\begin_inset Foot
+status collapsed
+
+\begin_layout Standard
+\begin_inset LatexCommand htmlurl
+target "http://heim.ifi.uio.no/~trygver/1979/mvc-2/1979-12-MVC.pdf"
+
+\end_inset
+
+
+\end_layout
 
 \end_inset
 

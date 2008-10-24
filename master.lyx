@@ -444,16 +444,6 @@ preview false
 \end_layout
 
 \begin_layout Standard
-\begin_inset LatexCommand bibtex
-options "bibtotoc,plain"
-bibfiles "references"
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
 \begin_inset LatexCommand printindex
 
 \end_inset
