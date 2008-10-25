@@ -321,10 +321,16 @@ http://someplace.com/user/derek
 
 \begin_layout Standard
 The mechanism is fairly simple to set up.
- We need to write a function of type PartialFunction[RewriteRequest,RewriteRespo
-nse] to determine if and how we want to rewrite particular requests.
+ We need to write a function of type 
+\family typewriter
+PartialFunction[RewriteRequest,RewriteResponse]
+\family default
+ to determine if and how we want to rewrite particular requests.
  The simplest way to do this is with a match statement which will allow
  us to selectively match on some or all of the request information.
+ It is important to understand that the Lift session is not created at the
+ point when the rewrite functions run; that means that you generally can't
+ set or access properties in the S object.
  RewriteRequest is a case object that contains three items: the parsed path,
  the request type and the original HttpServletRequest
 \begin_inset LatexCommand index
@@ -455,7 +461,7 @@ Parsed Path
 
 \series bold
 \size footnotesize
-http://somewhere.com/myapp/home?test_this=true
+http://foo.com/myapp/home?test_this=true
 \end_layout
 
 \end_inset
@@ -489,7 +495,7 @@ home
 
 \series bold
 \size footnotesize
-http://somewhere.com/myapp/user/derek
+http://foo.com/myapp/user/derek
 \end_layout
 
 \end_inset
@@ -531,7 +537,7 @@ derek
 
 \series bold
 \size footnotesize
-http://somewhere.com/myapp/view/item/14592
+http://foo.com/myapp/view/item/14592
 \end_layout
 
 \end_inset
@@ -607,7 +613,17 @@ The flexibility of Scala's matching system is what really makes this powerful.
 \begin_inset Quotes erd
 \end_inset
 
- template:
+ template
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Modify for PocketChange
+\end_layout
+
+\end_inset
+
+:
 \end_layout
 
 \begin_layout LyX-Code
@@ -688,8 +704,32 @@ name "S"
 \end_inset
 
  in the snippet or view.
- We can combine this with the RequestType and HttpServletRequest to be very
- specific with our matchs:
+ As we stated before, the LiftSession (and therefore most of S) isn't available
+ at this time, so the Map is the only way to pass information on to the
+ rewritten location.
+ Technically, a rewrite results in a 
+\begin_inset Quotes eld
+\end_inset
+
+302 Moved Temporarily
+\begin_inset Quotes erd
+\end_inset
+
+ result code that forwards the client to a new request.
+ Because of that, even if you could set data in LiftSession or S it would
+ disappear when the redirect occurs.
+\end_layout
+
+\begin_layout Standard
+We can combine the ParsePath matching with the RequestType and HttpServletReques
+t to be very specific with our matches.
+ For example, if we wanted to support the DELETE HTTP verb for a RESTful
+\begin_inset LatexCommand index
+name "RESTful"
+
+\end_inset
+
+ interface through an existing template, we could redirect it like so:
 \end_layout
 
 \begin_layout LyX-Code
@@ -770,19 +810,254 @@ Cross-ref
 \end_inset
 
 provides a mechanism for doing rewrites combined with menu entries.
- 
-\series bold
-Important:
-\series default
- please note that the Lift session is not created at the point when the
- rewrite functions run.
- Specifically, that means that you generally can't set or access properties
- in S.
- 
 \end_layout
 
 \begin_layout Subsection
 Custom Dispatch
+\end_layout
+
+\begin_layout Standard
+Once the rewriting phase is complete (whether we pass through or are redirected)
+, the next phase is to determine if there should be a custom dispatch for
+ the request.
+ A custom dispatch allows you to handle a matching request directly by a
+ method instead of going through the template lookup system; because it
+ bypasses templating, you're responsible for the full content of the response.
+ Typical use cases for this would be a web service
+\begin_inset LatexCommand index
+name "web service"
+
+\end_inset
+
+ returning XML or a service to return, say, a generated image or PDF.
+ In that sense, the custom dispatch mechanism allows you to write your own
+ 
+\begin_inset Quotes eld
+\end_inset
+
+sub-servlets
+\begin_inset Quotes erd
+\end_inset
+
+ without all the mess of implementing the interface and configuring them
+ in web.xml
+\begin_inset LatexCommand index
+name "web.xml"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Custom dispatch is realized, like rewriting, via a partial function.
+ In this case, it's a function of type 
+\family typewriter
+PartialFunction[RequestState, () => Can[LiftResponse]]
+\family default
+ that will do the work.
+ The RequestState is similar to the the RewriteRequest case class; it provides
+ the path as a List[String], the suffix, and the RequestType.
+ Note that at this point in the request cycle the LiftSession has been initializ
+ed, so you have full access to the S object
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Confirm this!
+\end_layout
+
+\end_inset
+
+.
+ The result of the dispatch should be a function that returns a 
+\family typewriter
+Can[LiftResponse]
+\family default
+.
+ If the function returns 
+\family typewriter
+Empty
+\family default
+ then Lift returns a 
+\begin_inset Quotes eld
+\end_inset
+
+404 not found
+\begin_inset Quotes erd
+\end_inset
+
+ response.
+\end_layout
+
+\begin_layout Standard
+As a concrete example, let's look at returning a generated chart image from
+ our application
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Modify as appropriate for PocketChange
+\end_layout
+
+\end_inset
+
+.
+ There are several libraries for charting, but we'll take a look at JFreeChart
+ in particular.
+ First, let's write a method that will chart our account balances by month
+ for the last year (full listing shown in section 
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+TODO: Cross-ref
+\end_layout
+
+\end_inset
+
+):
+\end_layout
+
+\begin_layout LyX-Code
+def chart (endDate : String) : LiftResponse = {
+\end_layout
+
+\begin_layout LyX-Code
+  // Query, set up chart, etc...
+\end_layout
+
+\begin_layout LyX-Code
+  val chartImage = ChartUtilities.encodeAsPNG(balanceChart.createBufferedImage(wid
+th,height))
+\end_layout
+
+\begin_layout LyX-Code
+  Full(InMemoryResponse(chartImage, (
+\begin_inset Quotes eld
+\end_inset
+
+Content-Type
+\begin_inset Quotes erd
+\end_inset
+
+ -> 
+\begin_inset Quotes eld
+\end_inset
+
+image/png
+\begin_inset Quotes erd
+\end_inset
+
+) :: Nil, Nil, 200))
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout Standard
+Once we've set up the chart, we use the ChartUtilities helper class from
+ JFreeChart to encode the chart into a PNG byte array.
+ We can then use Lift's InMemoryResponse
+\begin_inset LatexCommand index
+name "InMemoryResponse"
+
+\end_inset
+
+ to pass the encoded data back to the client with the appropriate Content-Type
+\begin_inset LatexCommand index
+name "Type"
+
+\end_inset
+
+ header.
+ Now we just need to hook the request into the dispatch table from the Boot
+ class:
+\end_layout
+
+\begin_layout LyX-Code
+LiftRules.addDispatchBefore {
+\end_layout
+
+\begin_layout LyX-Code
+  case RequestState(
+\begin_inset Quotes eld
+\end_inset
+
+chart
+\begin_inset Quotes erd
+\end_inset
+
+ :: 
+\begin_inset Quotes eld
+\end_inset
+
+balances
+\begin_inset Quotes erd
+\end_inset
+
+ :: endDate :: Nil, _, _) =>
+\end_layout
+
+\begin_layout LyX-Code
+    Charting.chart(endDate)
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout Standard
+As you can see, we capture the endDate parameter from the path and pass
+ it into our chart method.
+ This means we can use a URL like 
+\family typewriter
+http://foo.com/chart/balances/20080401
+\family default
+ to obtain the image.
+ Since the dispatch function has an associated lift session, we can also
+ use the S.param method to get query string parameters, in case we wanted
+ to allow someone to send an optional width and height:
+\end_layout
+
+\begin_layout LyX-Code
+val width = S.param(
+\begin_inset Quotes eld
+\end_inset
+
+width
+\begin_inset Quotes erd
+\end_inset
+
+).map(_.toInt) openOr 400
+\end_layout
+
+\begin_layout LyX-Code
+val height = S.param(
+\begin_inset Quotes eld
+\end_inset
+
+height
+\begin_inset Quotes erd
+\end_inset
+
+).map(_.toInt) openOr 300
+\end_layout
+
+\begin_layout Standard
+There are a number of other ListResponse subclasses to cover your needs,
+ including responses for XHTML, XML, Atom, Javascript, CSS, and JSON
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Should I give more examples?
+\end_layout
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Subsection
