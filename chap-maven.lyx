@@ -137,7 +137,8 @@ In the listing you will see some metadata about the application, listings
 \end_layout
 
 \begin_layout Standard
-Maven uses the concept of lifecycle phases for execution.
+In the pom file above there were two lifecycles listed, build and reporting.
+ Maven uses the concept of lifecycle phases for execution.
  Some of the default phases include validate, compile, test, package.
  At the beginning of your development you'll probably just use clean and
  jetty:run, in the form 
@@ -265,7 +266,6 @@ status open
 \align center
 \begin_inset Graphics
 	filename images/dirlayout.png
-	height 4in
 
 \end_inset
 
@@ -289,16 +289,8 @@ Project Directory Layout
 
 \end_layout
 
-\begin_layout Standard
-
-\end_layout
-
 \end_inset
 
-
-\end_layout
-
-\begin_layout Standard
 
 \end_layout
 

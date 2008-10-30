@@ -44,11 +44,177 @@ A Detailed Look at Lift User Components
 \end_layout
 
 \begin_layout Standard
+Plan, Draft, Revise, Edit, Format, Happy
+\end_layout
+
+\begin_layout Standard
+Templates contain snippets
+\end_layout
+
+\begin_layout Standard
+Snippets come in various types
+\end_layout
+
+\begin_layout Standard
+Lift uses a combination of technologies to get the XHTML to the user.
+ We'll discuss these methods in ths chapter.
+\end_layout
+
+\begin_layout Section
+
+\series bold
+Templates 
+\end_layout
+
+\begin_layout Standard
+The most common User Component is the Template.
+ A Template is static XHTML that is used as a skeleton of a page.
+ Within this sequence of XML there are various Lift-specific tags called
+ Snippets, which are discussed later in the chapter.
+\end_layout
+
+\begin_layout Itemize
+Static xml that may embed or surround other templates, and may embed snippets
+ (reference tag list) 
+\end_layout
+
+\begin_layout Itemize
+well-formed XML 
+\end_layout
+
+\begin_layout Itemize
+Special template-hidden directory not directly accessible 
+\end_layout
+
+\begin_layout Itemize
+Use of prefixed elements to assist with binding in snippets 
+\end_layout
+
+\begin_layout Itemize
+Re-cover how templates are located/dispatched 
+\end_layout
+
+\begin_layout Section
+
+\series bold
+Snippets 
+\end_layout
+
+\begin_layout Itemize
+Chunks of code that generate pieces of a final output page.
+ May themselves generate template code that is interpreted 
+\end_layout
+
+\begin_layout Itemize
+Generic Scala classes (stateless) 
+\end_layout
+
+\begin_layout Itemize
+How to deal with state in snippets 
+\end_layout
+
+\begin_layout Itemize
+RequestVars 
+\end_layout
+
+\begin_layout Itemize
+SessionVars 
+\end_layout
+
+\begin_layout Itemize
+StatefulSnippet
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+extends DispatchSnippet
+\end_layout
+
+\begin_layout Itemize
+register and unregister SnippetForClass
+\end_layout
+
+\begin_layout Itemize
+Register the name of the class for the snippet, 
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+DispatchSnippet
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+type DispatchIt = PartialFunction[String, NodeSeq => NodeSeq]
+\end_layout
+
+\begin_layout Itemize
+def dispatch: DispatchIt
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Using Helpers.bind.
+ In particular, cover view vs.
+ forms usage 
+\end_layout
+
+\begin_layout Itemize
+Using Helpers.chooseTemplate for nested templates 
+\end_layout
+
+\begin_layout Itemize
+Assert the concept of Fragment Generation
+\end_layout
+
+\begin_layout Section
+Built-in Snippets
+\end_layout
+
+\begin_layout Itemize
+CSS.scala
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Simple method for cleaning up CSS includes.
+ 
+\end_layout
+
+\begin_layout Itemize
+By default brings in BluePrint
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Menu.scala
+\end_layout
+
+\begin_layout Itemize
+Msg.scala
+\end_layout
+
+\begin_layout Itemize
+Msgs.scala
+\end_layout
+
+\begin_layout Section
 
 \series bold
 SiteMap 
 \end_layout
 
+\begin_layout Itemize
+http://groups.google.com/group/liftweb/browse_thread/thread/6c1cd13c3f2f7178?hl=en
+#
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+dpp redid this whole thing recently.
+\end_layout
+
+\end_deeper
 \begin_layout Itemize
 Performs two primary duties: generates the menu for your site (customizable)
  and performs per-page access control 
@@ -76,9 +242,12 @@ _thread/thread/5f18df13cd735c51?hl=en#)
 \end_layout
 
 \begin_layout Itemize
-<lift:Menu.itemname="...">binding to Loc("...",) (http://groups.google.com/group/liftweb/
-browse_thread/thread/dbdf6a17b9704c99/30f5168e87161f74?hl=en&lnk=gst&q=new+sitem
-ap%2Fmenu+features) 
+<lift:Menu.itemname="...">binding to 
+\end_layout
+
+\begin_layout Itemize
+Loc("...",) (http://groups.google.com/group/liftweb/browse_thread/thread/dbdf6a17b970
+4c99/30f5168e87161f74?hl=en&lnk=gst&q=new+sitemap%2Fmenu+features) 
 \end_layout
 
 \begin_layout Itemize
@@ -114,82 +283,43 @@ Finding the current Loc for a page (RequestState.location)
 \end_layout
 
 \end_deeper
-\begin_layout Standard
-
-\series bold
-Templates 
-\end_layout
-
-\begin_layout Itemize
-Static xml that may embed or surround other templates, and may embed snippets
- (reference tag list) 
-\end_layout
-
-\begin_layout Itemize
-well-formed XML 
-\end_layout
-
-\begin_layout Itemize
-Special template-hidden directory not directly accessible 
-\end_layout
-
-\begin_layout Itemize
-Use of prefixed elements to assist with binding in snippets 
-\end_layout
-
-\begin_layout Itemize
-Re-cover how templates are located/dispatched 
-\end_layout
-
-\begin_layout Standard
-
-\series bold
-Snippets 
-\end_layout
-
-\begin_layout Itemize
-Chunks of code that generate pieces of a final output page.
- May themselves generate template code that is interpreted 
-\end_layout
-
-\begin_layout Itemize
-Generic Scala classes (stateless) 
-\end_layout
-
-\begin_layout Itemize
-How to deal with state in snippets 
-\end_layout
-
-\begin_layout Itemize
-RequestVars 
-\end_layout
-
-\begin_layout Itemize
-SessionVars 
-\end_layout
-
-\begin_layout Itemize
-StatefulSnippets 
-\end_layout
-
-\begin_layout Itemize
-Using Helpers.bind.
- In particular, cover view vs.
- forms usage 
-\end_layout
-
-\begin_layout Itemize
-Using Helpers.chooseTemplate for nested templates 
-\end_layout
-
-\begin_layout Itemize
-Assert the concept of Fragment Generation
-\end_layout
-
-\begin_layout Standard
+\begin_layout Section
 
 \series bold
 Views 
+\end_layout
+
+\begin_layout Standard
+As discussed a template is a page that is built with both a static component
+ and a dynamic component.
+ Lift offers the option to generate a page entirely from scala code.
+ This is accomplished by using a LiftView.
+ 
+\end_layout
+
+\begin_layout Standard
+There are two types of views, InsecureLiftView and LiftView.
+\end_layout
+
+\begin_layout Standard
+With an InsecureLiftView if you have a URI such as /foo/bar, Lift will look
+ for the class foo and execute the method bar.
+ This is discouraged as a malicious user could simply type /foo/deleteWorld
+ and if that method exists it will be executed.
+\end_layout
+
+\begin_layout Standard
+The recommended method is to use LiftView instead.
+ LiftView has all the same security measures as Snippets in that you must
+ build a dispatch list and define that if the user hits /foo/index, that
+ is mapped to Foo.render.
+ You get control over what method is executed when.
+\end_layout
+
+\begin_layout Quotation
+Why should you use a View instead of a Template? Building an RSS or Atom
+ feed.
+ Building a pure XML response.
 \end_layout
 
 \begin_layout Itemize
