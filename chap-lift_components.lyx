@@ -61,6 +61,24 @@ Lift uses a combination of technologies to get the XHTML to the user.
 \end_layout
 
 \begin_layout Section
+Intro
+\end_layout
+
+\begin_layout Standard
+In this chapter you'll learn about how Lift builds the markup that is sent
+ to the browser.
+\end_layout
+
+\begin_layout Section
+Prerequisites
+\end_layout
+
+\begin_layout Standard
+Before diving in to this chapter, you should understand how XML is structured
+ and general browser-server interactions.
+\end_layout
+
+\begin_layout Section
 
 \series bold
 Templates 
@@ -92,6 +110,132 @@ Use of prefixed elements to assist with binding in snippets
 
 \begin_layout Itemize
 Re-cover how templates are located/dispatched 
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+TemplateFinder finds Templates...
+ :)
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:lift="http://liftweb.net/">
+         
+\end_layout
+
+\begin_layout Standard
+<head>                 
+\end_layout
+
+\begin_layout Standard
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />  
+               
+\end_layout
+
+\begin_layout Standard
+<meta name="description" content="" />                 
+\end_layout
+
+\begin_layout Standard
+<meta name="keywords" content="" />
+\end_layout
+
+\begin_layout Standard
+<title>demo.helloworld:helloworld:1.0-SNAPSHOT</title>                 
+\end_layout
+
+\begin_layout Standard
+<script id="jquery" src="/classpath/jquery.js" type="text/javascript"></script>
+         
+\end_layout
+
+\begin_layout Standard
+</head>         
+\end_layout
+
+\begin_layout Standard
+<body>                 
+\end_layout
+
+\begin_layout Standard
+<lift:bind name="content" />                 
+\end_layout
+
+\begin_layout Standard
+<lift:Menu.builder />                 
+\end_layout
+
+\begin_layout Standard
+<lift:msgs/>         
+\end_layout
+
+\begin_layout Standard
+</body> 
+\end_layout
+
+\begin_layout Standard
+</html>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Tags
+\end_layout
+
+\begin_layout Standard
+surround 
+\end_layout
+
+\begin_layout Standard
+embed
+\end_layout
+
+\begin_layout Standard
+comet
+\end_layout
+
+\begin_layout Standard
+ignore
+\end_layout
+
+\begin_layout Standard
+snippet (below)
+\end_layout
+
+\begin_layout Standard
+children
+\end_layout
+
+\begin_layout Standard
+loc
 \end_layout
 
 \begin_layout Section
@@ -167,35 +311,176 @@ Using Helpers.chooseTemplate for nested templates
 Assert the concept of Fragment Generation
 \end_layout
 
+\begin_layout Standard
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout LyX-Code
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:lift="http://liftweb.net/">
+         
+\end_layout
+
+\begin_layout LyX-Code
+<head>                 
+\end_layout
+
+\begin_layout LyX-Code
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />  
+               
+\end_layout
+
+\begin_layout LyX-Code
+<meta name="description" content="" />                 
+\end_layout
+
+\begin_layout LyX-Code
+<meta name="keywords" content="" />
+\end_layout
+
+\begin_layout LyX-Code
+<title>demo.helloworld:helloworld:1.0-SNAPSHOT</title>                 
+\end_layout
+
+\begin_layout LyX-Code
+<script id="jquery" src="/classpath/jquery.js" type="text/javascript"></script>
+         
+\end_layout
+
+\begin_layout LyX-Code
+</head>         
+\end_layout
+
+\begin_layout LyX-Code
+<body>
+\end_layout
+
+\begin_layout LyX-Code
+<!-- snippet for default main content -->                
+\end_layout
+
+\begin_layout LyX-Code
+
+\series bold
+<lift:bind name="content" />
+\series default
+  
+\end_layout
+
+\begin_layout LyX-Code
+<!-- snippet for class Menu, method builder -->               
+\end_layout
+
+\begin_layout LyX-Code
+
+\series bold
+<lift:Menu.builder />
+\series default
+                 
+\end_layout
+
+\begin_layout LyX-Code
+<!-- snippet for Lifts Messages, one of the builtin snippets -->
+\end_layout
+
+\begin_layout LyX-Code
+
+\series bold
+<lift:msgs/>
+\series default
+         
+\end_layout
+
+\begin_layout LyX-Code
+</body> 
+\end_layout
+
+\begin_layout LyX-Code
+</html>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Section
 Built-in Snippets
 \end_layout
 
-\begin_layout Itemize
+\begin_layout Standard
+Can be overridden or not used.
+ Are provided because most sites will use them in one way or another.
+\end_layout
+
+\begin_layout Subsection
 CSS.scala
 \end_layout
 
-\begin_deeper
-\begin_layout Itemize
-Simple method for cleaning up CSS includes.
- 
+\begin_layout Standard
+The CSS snippet currently provides a simple way to in the Blueprint CSS
+ framework.
+ Please see the 
+\begin_inset LatexCommand htmlurl
+name "BlueprintCSS homepage"
+target "http://www.blueprintcss.org/"
+
+\end_inset
+
+ for more details.
 \end_layout
 
-\begin_layout Itemize
-By default brings in BluePrint
+\begin_layout LyX-Code
+Usage: <lift:CSS.blueprint />
 \end_layout
 
-\end_deeper
-\begin_layout Itemize
+\begin_layout Subsection
 Menu.scala
 \end_layout
 
-\begin_layout Itemize
+\begin_layout Standard
+Reference 1.6, general builder stuff here.
+ It's all different now.
+\end_layout
+
+\begin_layout LyX-Code
+Usage: <lift:Menu.builder />
+\end_layout
+
+\begin_layout Subsection
 Msg.scala
 \end_layout
 
-\begin_layout Itemize
+\begin_layout Standard
+A snippet for rendering messages close to other elements, for example validation
+ errors on a submission form.
+\end_layout
+
+\begin_layout LyX-Code
+Usage: <input type="text" value="" name="132746123548765"/><lift:msg id="user_ms
+g" errorClass="error_class" warningClass="warning_class" noticeClass="notice_cla
+ss"/>
+\end_layout
+
+\begin_layout Subsection
 Msgs.scala
+\end_layout
+
+\begin_layout Standard
+Default snippet for displaying messages generated from S.error, S.warning
+ and S.notice.
+\end_layout
+
+\begin_layout LyX-Code
+Usage: <lift:msgs />
 \end_layout
 
 \begin_layout Section
@@ -346,6 +631,16 @@ addDispatchBefore/After
 \begin_layout Itemize
 What are the use cases for snippets vs.
  views?
+\end_layout
+
+\begin_layout Section
+Conclusion
+\end_layout
+
+\begin_layout Standard
+In this chapter you learned how Lift produces the markup that is sent to
+ the browser.
+ Using Templates in conjunction with Snippets or Views.
 \end_layout
 
 \end_body
