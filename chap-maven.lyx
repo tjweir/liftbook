@@ -1497,6 +1497,12 @@ http://mirrors.ibiblio.org/pub/mirrors/maven2/org/mortbay/jetty/jetty/6.1.12.rc5
 y-6.1.12.rc5.pom - pom.xml file for Jetty 6.1.12.RC5
 \end_layout
 
+\begin_layout Itemize
+http://mvnrepository.com/ - Search for plugins and dependancies for your
+ application.
+ This site is invaluable.
+\end_layout
+
 \begin_layout Section
 Project Layout
 \end_layout
