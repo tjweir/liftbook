@@ -417,8 +417,14 @@ Built-in Snippets
 \end_layout
 
 \begin_layout Standard
-Can be overridden or not used.
- Are provided because most sites will use them in one way or another.
+There are a few built-in snippets that offer some standards functionality,
+ such as messages and menus.
+ We'll go over them here and they'll serve as a nice introduction into Snippets
+ in general.
+ These builtin Snippets can be overridden by your own code or omitted if
+ you like.
+ The reason they exist is that most web apps are going to need to offer
+ these features anyway.a
 \end_layout
 
 \begin_layout Subsection

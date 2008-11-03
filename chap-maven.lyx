@@ -31,6 +31,7 @@
 \papercolumns 1
 \papersides 1
 \paperpagestyle default
+\bullet 0 0 6 -1
 \tracking_changes false
 \output_changes false
 \author "" 
@@ -55,14 +56,27 @@ name "cha:Maven"
 
 \end_layout
 
+\begin_layout Standard
+In this chapter we'll discuss the Maven build tool and how Lift uses it.
+ We'll also take a brief look at the typical layout of a Lift application.
+\end_layout
+
+\begin_layout Standard
+http://suereth.blogspot.com/2008/10/maven-for-beginners.html
+\end_layout
+
+\begin_layout Standard
+http://scala-blogs.org/2008/01/maven-for-scala.html
+\end_layout
+
 \begin_layout Section
-Maven
+[OLD]Maven
 \end_layout
 
 \begin_layout Standard
 A great web framework deserves a great build system, so Lift uses Maven
 \begin_inset Foot
-status open
+status collapsed
 
 \begin_layout Standard
 \begin_inset LatexCommand htmlurl
@@ -219,15 +233,1268 @@ name "pom.xml"
 
 \begin_layout Standard
 If you'd like more information about the details of Maven, please visit
- 
+ their homepage 
 \family typewriter
 
+\begin_inset Foot
+status collapsed
+
+\begin_layout Standard
+
+\family typewriter
 \begin_inset LatexCommand htmlurl
-target "http://maven.apache.org"
+name "http://maven.apache.org"
+
+\end_inset
+
+
+\end_layout
 
 \end_inset
 
 .
+\end_layout
+
+\begin_layout Subsection
+What is Maven?
+\end_layout
+
+\begin_layout Standard
+It's a project management tool.
+ The Maven site 
+\begin_inset Foot
+status collapsed
+
+\begin_layout Standard
+\begin_inset LatexCommand htmlurl
+name "http://maven.apache.org/what-is-maven.html"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ describes the goals as:
+\end_layout
+
+\begin_layout Itemize
+Make the build process easy
+\end_layout
+
+\begin_layout Itemize
+Provide a uniform build system
+\end_layout
+
+\begin_layout Itemize
+Provide quality project information
+\end_layout
+
+\begin_layout Itemize
+Provide guidelines for best practices
+\end_layout
+
+\begin_layout Itemize
+Allow transparent migration to new features
+\end_layout
+
+\begin_layout Standard
+If you've dealt with ant or rake, think of maven as another attempt to simply
+ the build and deploy process.
+\end_layout
+
+\begin_layout Subsection
+What's the pom file?
+\end_layout
+
+\begin_layout Standard
+The pom file, or 
+\begin_inset Quotes eld
+\end_inset
+
+Project Object Model
+\begin_inset Quotes erd
+\end_inset
+
+ is the XML file that describes the details of the project.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "basicstyle={\small\ttfamily},language=XML,numbers=left"
+inline false
+status open
+
+\begin_layout Standard
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+\end_layout
+
+\begin_layout Standard
+
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+\end_layout
+
+\begin_layout Standard
+
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-
+v4_0_0.xsd">   
+\end_layout
+
+\begin_layout Standard
+
+<modelVersion>4.0.0</modelVersion>   
+\end_layout
+
+\begin_layout Standard
+
+<groupId>com.theliftbook</groupId>   
+\end_layout
+
+\begin_layout Standard
+
+<artifactId>Demo Application</artifactId>   
+\end_layout
+
+\begin_layout Standard
+
+<version>1.0-SNAPSHOT</version>   
+\end_layout
+
+\begin_layout Standard
+
+<packaging>war</packaging>   
+\end_layout
+
+\begin_layout Standard
+
+<name>Demo Application</name>   
+\end_layout
+
+\begin_layout Standard
+
+<inceptionYear>2007</inceptionYear>   
+\end_layout
+
+\begin_layout Standard
+
+<properties>     
+\end_layout
+
+\begin_layout Standard
+
+<scala.version>2.7.1</scala.version>   
+\end_layout
+
+\begin_layout Standard
+
+</properties>
+\end_layout
+
+\begin_layout Standard
+
+<repositories>     
+\end_layout
+
+\begin_layout Standard
+
+<repository>       
+\end_layout
+
+\begin_layout Standard
+
+<id>scala-tools.org</id>       
+\end_layout
+
+\begin_layout Standard
+
+<name>Scala-Tools Maven2 Repository</name>       
+\end_layout
+
+\begin_layout Standard
+
+<url>http://scala-tools.org/repo-releases</url>     
+\end_layout
+
+\begin_layout Standard
+
+</repository>   
+\end_layout
+
+\begin_layout Standard
+
+</repositories>
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+<pluginRepositories>     
+\end_layout
+
+\begin_layout Standard
+
+<pluginRepository>       
+\end_layout
+
+\begin_layout Standard
+
+<id>scala-tools.org</id>       
+\end_layout
+
+\begin_layout Standard
+
+<name>Scala-Tools Maven2 Repository</name>       
+\end_layout
+
+\begin_layout Standard
+
+<url>http://scala-tools.org/repo-releases</url>     
+\end_layout
+
+\begin_layout Standard
+
+</pluginRepository>   
+\end_layout
+
+\begin_layout Standard
+
+</pluginRepositories>
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+<dependencies>     
+\end_layout
+
+\begin_layout Standard
+
+<dependency>       
+\end_layout
+
+\begin_layout Standard
+
+<groupId>org.scala-lang</groupId>       
+\end_layout
+
+\begin_layout Standard
+
+<artifactId>scala-library</artifactId>       
+\end_layout
+
+\begin_layout Standard
+
+<version>${scala.version}</version>     
+\end_layout
+
+\begin_layout Standard
+
+</dependency>     
+\end_layout
+
+\begin_layout Standard
+
+<dependency>       
+\end_layout
+
+\begin_layout Standard
+
+<groupId>net.liftweb</groupId>       
+\end_layout
+
+\begin_layout Standard
+
+<artifactId>lift-core</artifactId>       
+\end_layout
+
+\begin_layout Standard
+
+<version>0.8</version>     
+\end_layout
+
+\begin_layout Standard
+
+</dependency>     
+\end_layout
+
+\begin_layout Standard
+
+<dependency>       
+\end_layout
+
+\begin_layout Standard
+
+<groupId>org.apache.derby</groupId>       
+\end_layout
+
+\begin_layout Standard
+
+<artifactId>derby</artifactId>       
+\end_layout
+
+\begin_layout Standard
+
+<version>10.2.2.0</version>     
+\end_layout
+
+\begin_layout Standard
+
+</dependency>     
+\end_layout
+
+\begin_layout Standard
+
+<dependency>       
+\end_layout
+
+\begin_layout Standard
+
+<groupId>javax.servlet</groupId>       
+\end_layout
+
+\begin_layout Standard
+
+<artifactId>servlet-api</artifactId>       
+\end_layout
+
+\begin_layout Standard
+
+<version>2.5</version>       
+\end_layout
+
+\begin_layout Standard
+
+<scope>provided</scope>     
+\end_layout
+
+\begin_layout Standard
+
+</dependency>     
+\end_layout
+
+\begin_layout Standard
+
+<dependency>       
+\end_layout
+
+\begin_layout Standard
+
+<groupId>junit</groupId>       
+\end_layout
+
+\begin_layout Standard
+
+<artifactId>junit</artifactId>       
+\end_layout
+
+\begin_layout Standard
+
+<version>3.8.1</version>       
+\end_layout
+
+\begin_layout Standard
+
+<scope>test</scope>     
+\end_layout
+
+\begin_layout Standard
+
+</dependency>     
+\end_layout
+
+\begin_layout Standard
+
+<dependency>       
+\end_layout
+
+\begin_layout Standard
+
+<groupId>org.mortbay.jetty</groupId>       
+\end_layout
+
+\begin_layout Standard
+
+<artifactId>jetty</artifactId>       
+\end_layout
+
+\begin_layout Standard
+
+<version>[6.1.6,)</version>       
+\end_layout
+
+\begin_layout Standard
+
+<scope>test</scope>     
+\end_layout
+
+\begin_layout Standard
+
+</dependency>     
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+<!-- for LiftConsole -->     
+\end_layout
+
+\begin_layout Standard
+
+<dependency>       
+\end_layout
+
+\begin_layout Standard
+
+<groupId>org.scala-lang</groupId>       
+\end_layout
+
+\begin_layout Standard
+
+<artifactId>scala-compiler</artifactId>       
+\end_layout
+
+\begin_layout Standard
+
+<version>${scala.version}</version>       
+\end_layout
+
+\begin_layout Standard
+
+<scope>test</scope>     
+\end_layout
+
+\begin_layout Standard
+
+</dependency>   
+\end_layout
+
+\begin_layout Standard
+
+</dependencies>
+\end_layout
+
+\begin_layout Standard
+
+<build>     
+\end_layout
+
+\begin_layout Standard
+
+<sourceDirectory>src/main/scala</sourceDirectory>     
+\end_layout
+
+\begin_layout Standard
+
+<testSourceDirectory>src/test/scala</testSourceDirectory>     
+\end_layout
+
+\begin_layout Standard
+
+<plugins>       
+\end_layout
+
+\begin_layout Standard
+
+<plugin>         
+\end_layout
+
+\begin_layout Standard
+
+<groupId>org.scala-tools</groupId>         
+\end_layout
+
+\begin_layout Standard
+
+<artifactId>maven-scala-plugin</artifactId>         
+\end_layout
+
+\begin_layout Standard
+
+<executions>           
+\end_layout
+
+\begin_layout Standard
+
+<execution>             
+\end_layout
+
+\begin_layout Standard
+
+<goals>               
+\end_layout
+
+\begin_layout Standard
+
+<goal>compile</goal>               
+\end_layout
+
+\begin_layout Standard
+
+<goal>testCompile</goal>             
+\end_layout
+
+\begin_layout Standard
+
+</goals>           
+\end_layout
+
+\begin_layout Standard
+
+</execution>         
+\end_layout
+
+\begin_layout Standard
+
+</executions>         
+\end_layout
+
+\begin_layout Standard
+
+<configuration>           
+\end_layout
+
+\begin_layout Standard
+
+<scalaVersion>${scala.version}</scalaVersion>         
+\end_layout
+
+\begin_layout Standard
+
+</configuration>       
+\end_layout
+
+\begin_layout Standard
+
+</plugin>       
+\end_layout
+
+\begin_layout Standard
+
+<plugin>         
+\end_layout
+
+\begin_layout Standard
+
+<groupId>org.mortbay.jetty</groupId>         
+\end_layout
+
+\begin_layout Standard
+
+<artifactId>maven-jetty-plugin</artifactId>         
+\end_layout
+
+\begin_layout Standard
+
+<configuration>           
+\end_layout
+
+\begin_layout Standard
+
+<contextPath>/</contextPath>           
+\end_layout
+
+\begin_layout Standard
+
+<scanIntervalSeconds>5</scanIntervalSeconds>         
+\end_layout
+
+\begin_layout Standard
+
+</configuration>       
+\end_layout
+
+\begin_layout Standard
+
+</plugin>       
+\end_layout
+
+\begin_layout Standard
+
+<plugin>         
+\end_layout
+
+\begin_layout Standard
+
+<groupId>net.sf.alchim</groupId>         
+\end_layout
+
+\begin_layout Standard
+
+<artifactId>yuicompressor-maven-plugin</artifactId>         
+\end_layout
+
+\begin_layout Standard
+
+<executions>           
+\end_layout
+
+\begin_layout Standard
+
+<execution>             
+\end_layout
+
+\begin_layout Standard
+
+<goals>               
+\end_layout
+
+\begin_layout Standard
+
+<goal>compress</goal>             
+\end_layout
+
+\begin_layout Standard
+
+</goals>           
+\end_layout
+
+\begin_layout Standard
+
+</execution>         
+\end_layout
+
+\begin_layout Standard
+
+</executions>         
+\end_layout
+
+\begin_layout Standard
+
+<configuration>           
+\end_layout
+
+\begin_layout Standard
+
+<nosuffix>true</nosuffix>         
+\end_layout
+
+\begin_layout Standard
+
+</configuration>       
+\end_layout
+
+\begin_layout Standard
+
+</plugin>       
+\end_layout
+
+\begin_layout Standard
+
+<plugin>         
+\end_layout
+
+\begin_layout Standard
+
+<groupId>org.apache.maven.plugins</groupId>         
+\end_layout
+
+\begin_layout Standard
+
+<artifactId>maven-eclipse-plugin</artifactId>         
+\end_layout
+
+\begin_layout Standard
+
+<configuration>           
+\end_layout
+
+\begin_layout Standard
+
+<downloadSources>true</downloadSources>           
+\end_layout
+
+\begin_layout Standard
+
+<excludes>             
+\end_layout
+
+\begin_layout Standard
+
+<exclude>org.scala-lang:scala-library</exclude>           
+\end_layout
+
+\begin_layout Standard
+
+</excludes>           
+\end_layout
+
+\begin_layout Standard
+
+<classpathContainers>             
+\end_layout
+
+\begin_layout Standard
+
+<classpathContainer>ch.epfl.lamp.sdt.launching.SCALA_CONTAINER</classpathContainer>
+           
+\end_layout
+
+\begin_layout Standard
+
+</classpathContainers>           
+\end_layout
+
+\begin_layout Standard
+
+<projectnatures>             
+\end_layout
+
+\begin_layout Standard
+
+<java.lang.String>ch.epfl.lamp.sdt.core.scalanature</java.lang.String>          
+   
+\end_layout
+
+\begin_layout Standard
+
+<java.lang.String>org.eclipse.jdt.core.javanature</java.lang.String>           
+\end_layout
+
+\begin_layout Standard
+
+</projectnatures>           
+\end_layout
+
+\begin_layout Standard
+
+<buildcommands>             
+\end_layout
+
+\begin_layout Standard
+
+<java.lang.String>ch.epfl.lamp.sdt.core.scalabuilder</java.lang.String>         
+  
+\end_layout
+
+\begin_layout Standard
+
+</buildcommands>         
+\end_layout
+
+\begin_layout Standard
+
+</configuration>       
+\end_layout
+
+\begin_layout Standard
+
+</plugin>     
+\end_layout
+
+\begin_layout Standard
+
+</plugins>   
+\end_layout
+
+\begin_layout Standard
+
+</build>   
+\end_layout
+
+\begin_layout Standard
+
+<reporting>     
+\end_layout
+
+\begin_layout Standard
+
+<plugins>       
+\end_layout
+
+\begin_layout Standard
+
+<plugin>         
+\end_layout
+
+\begin_layout Standard
+
+<groupId>org.scala-tools</groupId>         
+\end_layout
+
+\begin_layout Standard
+
+<artifactId>maven-scala-plugin</artifactId>         
+\end_layout
+
+\begin_layout Standard
+
+<configuration>           
+\end_layout
+
+\begin_layout Standard
+
+<scalaVersion>${scala.version}</scalaVersion>         
+\end_layout
+
+\begin_layout Standard
+
+</configuration>       
+\end_layout
+
+\begin_layout Standard
+
+</plugin>     
+\end_layout
+
+\begin_layout Standard
+
+</plugins>   
+\end_layout
+
+\begin_layout Standard
+
+</reporting> 
+\end_layout
+
+\begin_layout Standard
+
+</project> 
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+
+Default pom.xml
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Build Lifecycles
+\end_layout
+
+\begin_layout Standard
+Maven is built on the concept of lifecycles and there are three that are
+ built-in, 
+\family typewriter
+default, clean
+\family default
+ and 
+\family typewriter
+site
+\end_layout
+
+\begin_layout Standard
+The 
+\family typewriter
+default
+\family default
+ lifecycle builds and deploys your project.
+ The 
+\family typewriter
+clean
+\family default
+ lifecycle cleans compiled objects or anything else that needs to be removed
+ or reset.
+ Finally, the 
+\family typewriter
+site
+\family default
+ lifecycle creates the projects documentation.
+\end_layout
+
+\begin_layout Standard
+Within each of the lifecycle there are a number of phases.
+ Below is a listing of the phases that make up the 
+\family typewriter
+default
+\family default
+ lifecycle.
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+validate
+\family default
+ - validate the project is correct and all necessary information is available
+ 
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+compile
+\family default
+ - compile the source code of the project 
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+test
+\family default
+ - test the compiled source code using a suitable unit testing framework.
+ These tests should not require the code be packaged or deployed 
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+package
+\family default
+ - take the compiled code and package it in its distributable format, such
+ as a JAR.
+ 
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+integration-test
+\family default
+ - process and deploy the package if necessary into an environment where
+ integration tests can be run 
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+verify
+\family default
+ - run any checks to verify the package is valid and meets quality criteria
+ 
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+install
+\family default
+ - install the package into the local repository, for use as a dependency
+ in other projects locally 
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+deploy
+\family default
+ - done in an integration or release environment, copies the final package
+ to the remote repository for sharing with other developers and projects.
+\end_layout
+
+\begin_layout Standard
+When you run
+\family typewriter
+ mvn deploy
+\family default
+, maven with run through each of these phases, executing the tasks associated
+ with them.
+ Since 
+\family typewriter
+deploy
+\family default
+ is last in the list of tasks, all preceeding tasks will be executed as
+ well.
+ If you ran 
+\family typewriter
+mvn package
+\family default
+, only 
+\family typewriter
+validate
+\family default
+, 
+\family typewriter
+compile
+\family default
+, 
+\family typewriter
+test
+\family default
+ and 
+\family typewriter
+package
+\family default
+ will be run.
+ Typically, during the development of your Lift application you'll run 
+\family typewriter
+mvn clean jetty:run
+\family default
+.
+\end_layout
+
+\begin_layout Subsection
+Plugins
+\end_layout
+
+\begin_layout Standard
+Plugins add functionality to the build system.
+ Lift is written in Scala, so we need to add the Maven Scala Plugin that
+ adds the ability to compile Scala code.
+ Below is a snippet from the main pom.xml file for a Lift application.
+ You can see the Scala plugin adds a 
+\family typewriter
+compile
+\family default
+ and 
+\family typewriter
+testCompile
+\family default
+ goal for the build phase.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+<plugin>         
+\end_layout
+
+\begin_layout Standard
+
+<groupId>org.scala-tools</groupId>         
+\end_layout
+
+\begin_layout Standard
+
+<artifactId>maven-scala-plugin</artifactId>         
+\end_layout
+
+\begin_layout Standard
+
+<executions>           
+\end_layout
+
+\begin_layout Standard
+
+<execution>             
+\end_layout
+
+\begin_layout Standard
+
+<goals>               
+\end_layout
+
+\begin_layout Standard
+
+<goal>compile</goal>               
+\end_layout
+
+\begin_layout Standard
+
+<goal>testCompile</goal>             
+\end_layout
+
+\begin_layout Standard
+
+</goals>           
+\end_layout
+
+\begin_layout Standard
+
+</execution>         
+\end_layout
+
+\begin_layout Standard
+
+</executions>         
+\end_layout
+
+\begin_layout Standard
+
+<configuration>           
+\end_layout
+
+\begin_layout Standard
+
+<scalaVersion>${scala.version}</scalaVersion>         
+\end_layout
+
+\begin_layout Standard
+
+</configuration>       
+\end_layout
+
+\begin_layout Standard
+
+</plugin>       
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Dependencies
+\end_layout
+
+\begin_layout Standard
+Dependency management is one of the more useful features of Maven.
+ Below is a declaration of the Jetty dependancy for the default Lift application.
+ The details of the specification are straight forward, naming the dependency,
+ setting a minimum version and defining the scope, in this case, the 
+\family typewriter
+test
+\family default
+ phase is defined.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+<dependency>       
+\end_layout
+
+\begin_layout Standard
+
+<groupId>org.mortbay.jetty</groupId>       
+\end_layout
+
+\begin_layout Standard
+
+<artifactId>jetty</artifactId>       
+\end_layout
+
+\begin_layout Standard
+
+<version>[6.1.6,)</version>       
+\end_layout
+
+\begin_layout Standard
+
+<scope>test</scope>     
+\end_layout
+
+\begin_layout Standard
+
+</dependency> 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Using Maven with Lift
+\end_layout
+
+\begin_layout Standard
+As we touched on earlier, the interaction with Maven is generally limited
+ with Lift.
+ Getting started with either a sample application or starting from scratch
+ you will mostly run the command 
+\family typewriter
+mvn clean jetty:run.
+
+\family default
+ This command asks Maven to 
+\family typewriter
+clean
+\family default
+ all your compiled classes and then execute the build phases that are pre-requis
+ites for the 
+\family typewriter
+jetty:run
+\family default
+ goal.
+ You can see the pom.xml file for Jetty here: http://mirrors.ibiblio.org/pub/mirror
+s/maven2/org/mortbay/jetty/jetty/6.1.12.rc5/jetty-6.1.12.rc5.pom
+\end_layout
+
+\begin_layout Subsection
+Further Resources
+\end_layout
+
+\begin_layout Itemize
+http://maven.apache.org - Home page.
+\end_layout
+
+\begin_layout Itemize
+http://maven.apache.org/what-is-maven.html - Their definition of Maven.
+\end_layout
+
+\begin_layout Itemize
+http://maven.apache.org/guides/introduction/introduction-to-the-pom.html -
+ Introduction to the pom file.
+\end_layout
+
+\begin_layout Itemize
+http://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html#Life
+cycle_Reference - Introduction to the lifecycles.
+\end_layout
+
+\begin_layout Itemize
+http://suereth.blogspot.com/2008/10/maven-for-beginners.html - General introduction
+ to Maven.
+\end_layout
+
+\begin_layout Itemize
+http://scala-blogs.org/2008/01/maven-for-scala.html - Introduction to Maven
+ for Scala projects.
+\end_layout
+
+\begin_layout Itemize
+http://mirrors.ibiblio.org/pub/mirrors/maven2/org/mortbay/jetty/jetty/6.1.12.rc5/jett
+y-6.1.12.rc5.pom - pom.xml file for Jetty 6.1.12.RC5
 \end_layout
 
 \begin_layout Section
