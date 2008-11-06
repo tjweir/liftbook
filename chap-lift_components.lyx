@@ -48,6 +48,10 @@ Plan, Draft, Revise, Edit, Format, Happy
 \end_layout
 
 \begin_layout Standard
+My Notes, since I don't know this yet.:
+\end_layout
+
+\begin_layout Standard
 Templates contain snippets
 \end_layout
 
@@ -60,13 +64,69 @@ Lift uses a combination of technologies to get the XHTML to the user.
  We'll discuss these methods in ths chapter.
 \end_layout
 
+\begin_layout Standard
+In LiftSession._defaultLiftTagProcessing
+\end_layout
+
+\begin_layout Standard
+Partials are fun! http://creativekarma.com/ee.php/weblog/comments/scala_function_o
+bjects_from_a_java_perspective/
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Well ..
+ findTemplate first splits the name argument and does a lookup for that
+ path.
+ If template is not found then it looks in templates- hidden.
+ 
+\end_layout
+
+\begin_layout Standard
+- LiftSession.TemplateFinder: 
+\end_layout
+
+\begin_layout Standard
+--findAnyTemplate looks up paths, such as (List(
+\begin_inset Quotes eld
+\end_inset
+
+foo
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+index
+\begin_inset Quotes erd
+\end_inset
+
+)) , attempt to locate the Template, and returns it if found.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Can reference Derek's dicussion of Partials in the arch chapter.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Section
 Intro
 \end_layout
 
 \begin_layout Standard
 In this chapter you'll learn about how Lift builds the markup that is sent
- to the browser.
+ to the browser after a request is made to the application.
 \end_layout
 
 \begin_layout Section
@@ -75,7 +135,7 @@ Prerequisites
 
 \begin_layout Standard
 Before diving in to this chapter, you should understand how XML is structured
- and general browser-server interactions.
+ and how a browser and a server interact in the typical case.
 \end_layout
 
 \begin_layout Section
@@ -112,93 +172,103 @@ Use of prefixed elements to assist with binding in snippets
 Re-cover how templates are located/dispatched 
 \end_layout
 
-\begin_deeper
 \begin_layout Itemize
 TemplateFinder finds Templates...
  :)
 \end_layout
 
-\end_deeper
-\begin_layout Standard
-\begin_inset Box Frameless
-position "t"
-hor_pos "c"
-has_inner_box 1
-inner_pos "t"
-use_parbox 0
-width "100col%"
-special "none"
-height "1in"
-height_special "totalheight"
-status open
-
 \begin_layout Standard
 \begin_inset listings
+lstparams "basicstyle={\footnotesize},language=XML,numbers=left,numberstyle={\tiny}"
 inline false
 status open
 
 \begin_layout Standard
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:lift="http://liftweb.net/">
-         
-\end_layout
+
+\begin_inset Caption
 
 \begin_layout Standard
-<head>                 
-\end_layout
 
-\begin_layout Standard
-<meta http-equiv="content-type" content="text/html; charset=UTF-8" />  
-               
-\end_layout
-
-\begin_layout Standard
-<meta name="description" content="" />                 
-\end_layout
-
-\begin_layout Standard
-<meta name="keywords" content="" />
-\end_layout
-
-\begin_layout Standard
-<title>demo.helloworld:helloworld:1.0-SNAPSHOT</title>                 
-\end_layout
-
-\begin_layout Standard
-<script id="jquery" src="/classpath/jquery.js" type="text/javascript"></script>
-         
-\end_layout
-
-\begin_layout Standard
-</head>         
-\end_layout
-
-\begin_layout Standard
-<body>                 
-\end_layout
-
-\begin_layout Standard
-<lift:bind name="content" />                 
-\end_layout
-
-\begin_layout Standard
-<lift:Menu.builder />                 
-\end_layout
-
-\begin_layout Standard
-<lift:msgs/>         
-\end_layout
-
-\begin_layout Standard
-</body> 
-\end_layout
-
-\begin_layout Standard
-</html>
+Simple Template
 \end_layout
 
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:lift="http://liftweb.net/">
+         
+\end_layout
+
+\begin_layout Standard
+
+  <head>                 
+\end_layout
+
+\begin_layout Standard
+
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+                 
+\end_layout
+
+\begin_layout Standard
+
+    <meta name="description" content="" />                 
+\end_layout
+
+\begin_layout Standard
+
+    <meta name="keywords" content="" />
+\end_layout
+
+\begin_layout Standard
+
+    <title>demo.helloworld:helloworld:1.0-SNAPSHOT</title>               
+  
+\end_layout
+
+\begin_layout Standard
+
+    <script id="jquery" src="/classpath/jquery.js" type="text/javascript"></scrip
+t>         
+\end_layout
+
+\begin_layout Standard
+
+  </head>         
+\end_layout
+
+\begin_layout Standard
+
+  <body>                 
+\end_layout
+
+\begin_layout Standard
+
+    <lift:bind name="content" />                 
+\end_layout
+
+\begin_layout Standard
+
+    <lift:Menu.builder />                 
+\end_layout
+
+\begin_layout Standard
+
+    <lift:msgs/>         
+\end_layout
+
+\begin_layout Standard
+
+  </body> 
+\end_layout
+
+\begin_layout Standard
+
+</html>
 \end_layout
 
 \end_inset
@@ -312,98 +382,113 @@ Assert the concept of Fragment Generation
 \end_layout
 
 \begin_layout Standard
-\begin_inset Box Frameless
-position "t"
-hor_pos "c"
-has_inner_box 1
-inner_pos "t"
-use_parbox 0
-width "100col%"
-special "none"
-height "1in"
-height_special "totalheight"
+\begin_inset listings
+lstparams "basicstyle={\small},numbers=left,numberstyle={\tiny}"
+inline false
 status open
 
-\begin_layout LyX-Code
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+
+Default Template Listing
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:lift="http://liftweb.net/">
          
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Standard
+
 <head>                 
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Standard
+
 <meta http-equiv="content-type" content="text/html; charset=UTF-8" />  
                
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Standard
+
 <meta name="description" content="" />                 
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Standard
+
 <meta name="keywords" content="" />
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Standard
+
 <title>demo.helloworld:helloworld:1.0-SNAPSHOT</title>                 
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Standard
+
 <script id="jquery" src="/classpath/jquery.js" type="text/javascript"></script>
          
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Standard
+
 </head>         
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Standard
+
 <body>
 \end_layout
 
-\begin_layout LyX-Code
-<!-- snippet for default main content -->                
+\begin_layout Standard
+
+<!-- 1.
+ snippet for default main content -->                
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Standard
 
-\series bold
-<lift:bind name="content" />
-\series default
-  
+<lift:bind name="content" /> 
 \end_layout
 
-\begin_layout LyX-Code
-<!-- snippet for class Menu, method builder -->               
+\begin_layout Standard
+
+<!-- 2.
+ snippet for class Menu, method builder -->               
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Standard
 
-\series bold
-<lift:Menu.builder />
-\series default
-                 
+<lift:Menu.builder />                 
 \end_layout
 
-\begin_layout LyX-Code
-<!-- snippet for Lifts Messages, one of the builtin snippets -->
+\begin_layout Standard
+
+<!-- 3.
+ snippet for Lifts Messages, one of the builtin snippets -->
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Standard
 
-\series bold
-<lift:msgs/>
-\series default
-         
+<lift:msgs/>         
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Standard
+
 </body> 
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Standard
+
 </html>
 \end_layout
 
@@ -493,6 +578,18 @@ Usage: <lift:msgs />
 
 \series bold
 SiteMap 
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+
+\series bold
+Is Derek handling this?
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Itemize
