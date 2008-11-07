@@ -1,4 +1,4 @@
-#LyX 1.5.3 created this file. For more info see http://www.lyx.org/
+#LyX 1.5.6 created this file. For more info see http://www.lyx.org/
 \lyxformat 276
 \begin_document
 \begin_header
@@ -105,7 +105,7 @@ name "web.xml"
 
 \begin_layout Standard
 \begin_inset listings
-lstparams "basicstyle={\scriptsize},breaklines=true,firstline=7,frame=single,language=XML,lastline=18,numbers=left,numberstyle={\tiny}"
+lstparams "numbers=left,numberstyle={\tiny}"
 inline false
 status open
 
@@ -114,7 +114,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Standard
-
 \begin_inset LatexCommand label
 name "lst:LiftFilter-setup-in-web.xml"
 
@@ -131,10 +130,6 @@ LiftFilter setup in web.xml
 \begin_layout Standard
 
 <?xml version="1.0" encoding="ISO-8859-1"?>
-\end_layout
-
-\begin_layout Standard
-
 \end_layout
 
 \begin_layout Standard
