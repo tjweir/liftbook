@@ -809,6 +809,12 @@ provides a mechanism for doing rewrites combined with menu entries.
 
 \begin_layout Subsection
 Custom Dispatch
+\begin_inset LatexCommand label
+name "sub:Custom-Dispatch"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -1057,10 +1063,257 @@ Should I give more examples?
 
 \begin_layout Subsection
 View Processing
+\begin_inset LatexCommand label
+name "sub:View-Processing"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Views
+\begin_inset LatexCommand index
+name "Views"
+
+\end_inset
+
+ are essentially implicitly defined custom dispatch methods, very similar
+ to what we just covered in section 
+\begin_inset LatexCommand ref
+reference "sub:Custom-Dispatch"
+
+\end_inset
+
+.
+ A view is a normal Scala method that returns a NodeSeq
+\begin_inset LatexCommand index
+name "NodeSeq"
+
+\end_inset
+
+; the main difference is that with custom dispatch we explicitly define
+ the path that will lead to the method via LiftRules, whereas in a view,
+ the class itself defines the path.
+ In either case, View lookup and dispatch is done after template resolution
+ (to be covered later), so templates take priority
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+TODO: Confirm this!
+\end_layout
+
+\end_inset
+
+.
+ There are two options for implementing a view class: one is to extend the
+ LiftView
+\begin_inset LatexCommand index
+name "LiftView"
+
+\end_inset
+
+ trait, the other is to implement the InsecureLiftView
+\begin_inset LatexCommand index
+name "InsecureLiftView"
+
+\end_inset
+
+ trait.
+ As you may be able to tell from the names, we would prefer that you use
+ the LiftView trait.
+ The InsecureLiftView determines method dispatch by turning a request path
+ into a class and method name.
+ For instance, if we have a path 
+\family typewriter
+/MyStuff/enumerate
+\family default
+, then Lift will look for a class called 
+\family typewriter
+MyStuff
+\family default
+ in the view subpackage 
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Standard
+Where to cross-ref for class resolution, LiftRules.addToPackages
+\end_layout
+
+\end_inset
+
+ and if it finds it and it has a method called 
+\family typewriter
+enumerate
+\family default
+, then Lift will execute the method and return its results to the user.
+ The main issue there is that Lift uses reflection
+\begin_inset LatexCommand index
+name "reflection"
+
+\end_inset
+
+ to get the method, so it can access any method in the class, even ones
+ marked private.
+ A better way to do it is to use the LiftView trait, which defines a dispatch
+ partial function.
+ This dispatch function maps a string (the 
+\begin_inset Quotes eld
+\end_inset
+
+method name
+\begin_inset Quotes erd
+\end_inset
+
+) to a function that will return a NodeSeq.
+ Listing 
+\begin_inset LatexCommand ref
+reference "lst:Dispatch-in-LiftView"
+
+\end_inset
+
+ shows a custom LiftView class where the path 
+\family typewriter
+/MyView/enumerate
+\family default
+ will map to the MyView.doEnumerate method.
+ If someone attempts to go to 
+\family typewriter
+/MyView/privateMethod
+\family default
+ they'll get a 404 since it's not defined in the dispatch function.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+
+This should be a pocketchange example
+\end_layout
+
+\end_inset
+
+Dispatch in LiftView
+\begin_inset LatexCommand label
+name "lst:Dispatch-in-LiftView"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+class MyView extends LiftView {
+\end_layout
+
+\begin_layout Standard
+
+  override def dispatch = {
+\end_layout
+
+\begin_layout Standard
+
+    case "enumerate" => doEnumerate _
+\end_layout
+
+\begin_layout Standard
+
+  }
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+  def doEnumerate () : NodeSeq = {  
+\end_layout
+
+\begin_layout Standard
+
+    ...
+\end_layout
+
+\begin_layout Standard
+
+    <lift:surround with="default" at="content">
+\end_layout
+
+\begin_layout Standard
+
+     { itemList.toTable }
+\end_layout
+
+\begin_layout Standard
+
+    </lift:surround>
+\end_layout
+
+\begin_layout Standard
+
+  }
+\end_layout
+
+\begin_layout Standard
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Another difference between custom dispatch and Views is that the NodeSeq
+ returned from the view method is processed for template tags including
+ surrounds and includes 
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Confirm this!
+\end_layout
+
+\end_inset
+
+, just like snippets.
+ That means that you can use the full power of the templating system from
+ within your View, as shown in listing 
+\begin_inset LatexCommand ref
+reference "lst:Dispatch-in-LiftView"
+
+\end_inset
+
+'s doEnumerate method.
 \end_layout
 
 \begin_layout Subsection
 Template Processing
+\end_layout
+
+\begin_layout Standard
+Templates form the backbone of Lift's flexibility and power.
 \end_layout
 
 \begin_layout Subsection
