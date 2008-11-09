@@ -776,5 +776,211 @@ In this chapter you learned how Lift produces the markup that is sent to
  Using Templates in conjunction with Snippets or Views.
 \end_layout
 
+\begin_layout Section
+To Write
+\end_layout
+
+\begin_layout Itemize
+SiteMap matching and access control - New Loc/Menu stuff
+\end_layout
+
+\begin_layout Itemize
+template or view matched? 
+\end_layout
+
+\begin_layout Itemize
+recursive processing of template and any snippets contained therein 
+\end_layout
+
+\begin_layout Itemize
+direct processing of view 
+\end_layout
+
+\begin_layout Itemize
+LiftViewFirst - http://wiki.liftweb.net/index.php/Lift_View_First
+\end_layout
+
+\begin_layout Itemize
+Error handling - Msgs and handling exceptions
+\end_layout
+
+\begin_layout Itemize
+List of tags that are handled by Lift (stolen from http://liftweb.net/index.php/Li
+ftTags, not sure how up-to-date this is) 
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+surround 
+\end_layout
+
+\begin_layout Itemize
+embed 
+\end_layout
+
+\begin_layout Itemize
+comet 
+\end_layout
+
+\begin_layout Itemize
+ignore 
+\end_layout
+
+\begin_layout Itemize
+snippet (and, the alternative lift:<class>.<method>) 
+\end_layout
+
+\begin_layout Itemize
+additional attribute handling in tags (via S.attr)
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+The SHtml object is used to create most of the input elements.
+\end_layout
+
+\begin_deeper
+\begin_layout Description
+ajaxButton An <input type=
+\begin_inset Quotes erd
+\end_inset
+
+button
+\begin_inset Quotes erd
+\end_inset
+
+> with onClick connected to an AjaxCall
+\end_layout
+
+\begin_layout Description
+a An <a> tag with a function associated with it
+\end_layout
+
+\begin_layout Description
+span A <span> with onClick connected to a JsCmd.
+\end_layout
+
+\begin_layout Description
+toggleKids 
+\end_layout
+
+\begin_layout Description
+ajaxCheckbox An <input type=
+\begin_inset Quotes erd
+\end_inset
+
+checkbox
+\begin_inset Quotes erd
+\end_inset
+
+> with onClick connected to an AjaxCall
+\end_layout
+
+\begin_layout Description
+ajaxSelect 
+\end_layout
+
+\begin_layout Description
+select A <select>
+\end_layout
+
+\begin_layout Description
+text An <input type=
+\begin_inset Quotes erd
+\end_inset
+
+text
+\begin_inset Quotes erd
+\end_inset
+
+>
+\end_layout
+
+\begin_layout Description
+ajaxText 
+\end_layout
+
+\begin_layout Description
+textarea A <textarea>
+\end_layout
+
+\begin_layout Description
+link Create an anchor tag around a body Xhtml fragment.
+\end_layout
+
+\begin_layout Description
+select A <select> tag
+\end_layout
+
+\begin_layout Description
+untrustedSelect A <select> tag that has no test to see whether or not the
+ value was in the list.
+ This is commonly used for dynamic select lists.
+\end_layout
+
+\begin_layout Description
+multiselect A <select multiple=
+\begin_inset Quotes erd
+\end_inset
+
+true
+\begin_inset Quotes erd
+\end_inset
+
+>
+\end_layout
+
+\begin_layout Description
+fileholder An <input type=
+\begin_inset Quotes erd
+\end_inset
+
+file
+\begin_inset Quotes erd
+\end_inset
+
+>
+\end_layout
+
+\begin_layout Description
+radio An <input type=
+\begin_inset Quotes erd
+\end_inset
+
+radio
+\begin_inset Quotes erd
+\end_inset
+
+>
+\end_layout
+
+\begin_layout Description
+submit An <input type=
+\begin_inset Quotes erd
+\end_inset
+
+submit
+\begin_inset Quotes erd
+\end_inset
+
+>
+\end_layout
+
+\begin_layout Description
+hidden A hidden form element
+\end_layout
+
+\begin_layout Description
+password An <input type=
+\begin_inset Quotes erd
+\end_inset
+
+password
+\begin_inset Quotes erd
+\end_inset
+
+> 
+\end_layout
+
 \end_body
 \end_document
