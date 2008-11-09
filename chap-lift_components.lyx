@@ -44,6 +44,36 @@ A Detailed Look at Lift User Components
 \end_layout
 
 \begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Chapter: Components: 
+\end_layout
+
+\begin_layout Standard
+- in-depth discussion of Snippets and Views, how they work, how to use them
+ 
+\end_layout
+
+\begin_layout Standard
+- details and how to use Messages 
+\end_layout
+
+\begin_layout Standard
+- details of generative SHtml components
+\end_layout
+
+\begin_layout Standard
+- template tags
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 Plan, Draft, Revise, Edit, Format, Happy
 \end_layout
 

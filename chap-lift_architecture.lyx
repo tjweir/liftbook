@@ -44,6 +44,35 @@ Lift Architecture
 \end_layout
 
 \begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+From our discussion:
+\end_layout
+
+\begin_layout Standard
+Chapter: Arch: 
+\end_layout
+
+\begin_layout Standard
+- all the fun in Boot (url rewriting, like the stuff you have) 
+\end_layout
+
+\begin_layout Standard
+- how lift handles requests (what you have got) 
+\end_layout
+
+\begin_layout Standard
+- intro to views, snippets and how they relate to dispatch
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 In order to better understand how to use Lift to its fullest potential,
  we're going to dig into the guts a bit to examine how requests are handled.
  We assume that you have a basic understanding of how HTTP and Servlets
@@ -1195,12 +1224,10 @@ status open
 \begin_inset Caption
 
 \begin_layout Standard
-
 \begin_inset Note Note
 status open
 
 \begin_layout Standard
-
 This should be a pocketchange example
 \end_layout
 
