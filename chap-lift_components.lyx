@@ -171,7 +171,15 @@ Before diving in to this chapter, you should understand how XML is structured
 \begin_layout Section
 
 \series bold
-Templates 
+Templates
+\series default
+
+\begin_inset LatexCommand label
+name "sec:Templates"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -218,7 +226,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Standard
-
 Simple Template
 \end_layout
 
@@ -449,6 +456,12 @@ Caveats: if you have a <lift:comet /> tag and you're using the tag from
 
 \begin_layout Subsection
 snippet
+\begin_inset LatexCommand label
+name "sub:snippet-tag"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -589,7 +602,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Standard
-
 Default Template Listing
 \end_layout
 

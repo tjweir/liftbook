@@ -134,7 +134,7 @@ name "web.xml"
 
 \begin_layout Standard
 \begin_inset listings
-lstparams "numbers=left,numberstyle={\tiny}"
+lstparams "basicstyle={\scriptsize},frame=single,language=XML,numbers=left,numberstyle={\tiny}"
 inline false
 status open
 
@@ -1635,17 +1635,15 @@ default
 
  template.
  We also use our own snippet (lift:Hello.world) to generate some content.
- We'll cover all of Lift's built-in tags in more detail in section 
-\begin_inset Note Note
-status open
-
-\begin_layout Standard
-Cross-ref
-\end_layout
+ We'll cover templates as well as all of Lift's built-in tags in more detail
+ in section 
+\begin_inset LatexCommand ref
+reference "sec:Templates"
 
 \end_inset
 
-, but for now let's look at how Lift determines which template to use.
+; in this section we're mainly concerened with how Lift performs template
+ dispatch.
 \end_layout
 
 \begin_layout Standard
@@ -1812,12 +1810,8 @@ form
 multipart
 \family default
  which we will cover in extensive detail in section 
-\begin_inset Note Note
-status open
-
-\begin_layout Standard
-cross-ref
-\end_layout
+\begin_inset LatexCommand ref
+reference "sub:snippet-tag"
 
 \end_inset
 
