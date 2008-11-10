@@ -1,4 +1,4 @@
-#LyX 1.5.3 created this file. For more info see http://www.lyx.org/
+#LyX 1.5.6 created this file. For more info see http://www.lyx.org/
 \lyxformat 276
 \begin_document
 \begin_header
@@ -86,6 +86,51 @@ frontmatter
 
 \begin_layout Title
 Exploring Lift
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Examples, either to write or to highlight in PocketChange:
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+- REST, can show Digest Authentication as well
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+- Comet for something...
+ chat section? Multiple people per account discussing? This may be a one-off
+ example
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+- AJAX - tag completion in the entry form
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+- JPA - written
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+- Sitemap/Menu
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+- 
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Author

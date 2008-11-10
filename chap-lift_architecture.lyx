@@ -44,6 +44,35 @@ Lift Architecture
 \end_layout
 
 \begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+From our discussion:
+\end_layout
+
+\begin_layout Standard
+Chapter: Arch: 
+\end_layout
+
+\begin_layout Standard
+- all the fun in Boot (url rewriting, like the stuff you have) 
+\end_layout
+
+\begin_layout Standard
+- how lift handles requests (what you have got) 
+\end_layout
+
+\begin_layout Standard
+- intro to views, snippets and how they relate to dispatch
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 In order to better understand how to use Lift to its fullest potential,
  we're going to dig into the guts a bit to examine how requests are handled.
  We assume that you have a basic understanding of how HTTP and Servlets
@@ -105,7 +134,7 @@ name "web.xml"
 
 \begin_layout Standard
 \begin_inset listings
-lstparams "basicstyle={\scriptsize},breaklines=true,firstline=7,frame=single,language=XML,lastline=18,numbers=left,numberstyle={\tiny}"
+lstparams "numbers=left,numberstyle={\tiny}"
 inline false
 status open
 
@@ -130,10 +159,6 @@ LiftFilter setup in web.xml
 \begin_layout Standard
 
 <?xml version="1.0" encoding="ISO-8859-1"?>
-\end_layout
-
-\begin_layout Standard
-
 \end_layout
 
 \begin_layout Standard
@@ -327,7 +352,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Standard
-
 Minimal Boot class
 \begin_inset LatexCommand label
 name "lst:Minimal-Boot-class"
@@ -767,7 +791,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Standard
-
 Simple rewrite example
 \begin_inset LatexCommand label
 name "lst:Simple-rewrite-example"
@@ -872,7 +895,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Standard
-
 Complex rewrite example
 \begin_inset LatexCommand label
 name "lst:Complex-rewrite-example"
@@ -1072,7 +1094,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Standard
-
 Charting method
 \begin_inset LatexCommand label
 name "lst:Charting-method"
@@ -1168,7 +1189,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Standard
-
 Hooking dispatch into Boot
 \begin_inset LatexCommand label
 name "lst:Hooking-dispatch-into-Boot"
@@ -1555,7 +1575,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Standard
-
 Sample template
 \begin_inset LatexCommand label
 name "lst:Sample-template"
@@ -1818,7 +1837,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Standard
-
 Hello World snippet
 \begin_inset LatexCommand label
 name "lst:Hello-World-snippet"
@@ -1950,196 +1968,6 @@ head
  This means that you can use a surround tag to keep a uniform default template,
  but still change things like the title of the tag, add in scripts or special
  CSS, etc.
-\end_layout
-
-\begin_layout Section
-Move to components
-\end_layout
-
-\begin_layout Itemize
-SiteMap matching and access control - New Loc/Menu stuff
-\end_layout
-
-\begin_layout Itemize
-Error handling - Msgs and handling exceptions
-\end_layout
-
-\begin_layout Itemize
-List of tags that are handled by Lift (stolen from http://liftweb.net/index.php/Li
-ftTags, not sure how up-to-date this is) 
-\end_layout
-
-\begin_deeper
-\begin_layout Itemize
-surround 
-\end_layout
-
-\begin_layout Itemize
-embed 
-\end_layout
-
-\begin_layout Itemize
-comet 
-\end_layout
-
-\begin_layout Itemize
-ignore 
-\end_layout
-
-\begin_layout Itemize
-snippet (and, the alternative lift:<class>.<method>) 
-\end_layout
-
-\begin_layout Itemize
-additional attribute handling in tags (via S.attr)
-\end_layout
-
-\end_deeper
-\begin_layout Itemize
-The SHtml object is used to create most of the input elements.
-\end_layout
-
-\begin_deeper
-\begin_layout Description
-ajaxButton An <input type=
-\begin_inset Quotes erd
-\end_inset
-
-button
-\begin_inset Quotes erd
-\end_inset
-
-> with onClick connected to an AjaxCall
-\end_layout
-
-\begin_layout Description
-a An <a> tag with a function associated with it
-\end_layout
-
-\begin_layout Description
-span A <span> with onClick connected to a JsCmd.
-\end_layout
-
-\begin_layout Description
-toggleKids 
-\end_layout
-
-\begin_layout Description
-ajaxCheckbox An <input type=
-\begin_inset Quotes erd
-\end_inset
-
-checkbox
-\begin_inset Quotes erd
-\end_inset
-
-> with onClick connected to an AjaxCall
-\end_layout
-
-\begin_layout Description
-ajaxSelect 
-\end_layout
-
-\begin_layout Description
-select A <select>
-\end_layout
-
-\begin_layout Description
-text An <input type=
-\begin_inset Quotes erd
-\end_inset
-
-text
-\begin_inset Quotes erd
-\end_inset
-
->
-\end_layout
-
-\begin_layout Description
-ajaxText 
-\end_layout
-
-\begin_layout Description
-textarea A <textarea>
-\end_layout
-
-\begin_layout Description
-link Create an anchor tag around a body Xhtml fragment.
-\end_layout
-
-\begin_layout Description
-select A <select> tag
-\end_layout
-
-\begin_layout Description
-untrustedSelect A <select> tag that has no test to see whether or not the
- value was in the list.
- This is commonly used for dynamic select lists.
-\end_layout
-
-\begin_layout Description
-multiselect A <select multiple=
-\begin_inset Quotes erd
-\end_inset
-
-true
-\begin_inset Quotes erd
-\end_inset
-
->
-\end_layout
-
-\begin_layout Description
-fileholder An <input type=
-\begin_inset Quotes erd
-\end_inset
-
-file
-\begin_inset Quotes erd
-\end_inset
-
->
-\end_layout
-
-\begin_layout Description
-radio An <input type=
-\begin_inset Quotes erd
-\end_inset
-
-radio
-\begin_inset Quotes erd
-\end_inset
-
->
-\end_layout
-
-\begin_layout Description
-submit An <input type=
-\begin_inset Quotes erd
-\end_inset
-
-submit
-\begin_inset Quotes erd
-\end_inset
-
->
-\end_layout
-
-\begin_layout Description
-hidden A hidden form element
-\end_layout
-
-\begin_layout Description
-password An <input type=
-\begin_inset Quotes erd
-\end_inset
-
-password
-\begin_inset Quotes erd
-\end_inset
-
-> 
 \end_layout
 
 \end_body
