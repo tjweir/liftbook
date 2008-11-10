@@ -307,41 +307,200 @@ t>
 \end_layout
 
 \begin_layout Section
+Views
+\end_layout
+
+\begin_layout Description
+LiftView - ref Arch + example You do all the work to process and return
+ XHTML to the user.
+ You still get all the good stuff from a snippet, like dispatch and S and
+ url rewriting, but no Templates generally.
+ 
+\end_layout
+
+\begin_layout Description
+InsecureLiftView - ref Arch + example You do all work and you skip dispatch,
+ so class.method resolution happens via the URL.
+ If I do /admin/deleteallgoodstuff, that resolves to Admin.deleteallgoodstuff
+ and is executed.
+\end_layout
+
+\begin_layout Section
 Tags
 \end_layout
 
 \begin_layout Standard
+List of tags that are handled by Lift (stolen from http://liftweb.net/index.php/Li
+ftTags, not sure how up-to-date this is) 
+\end_layout
+
+\begin_layout Standard
+Tag name | example | explanation | notes
+\end_layout
+
+\begin_layout Subsection
 surround 
 \end_layout
 
 \begin_layout Standard
-embed
+
+\family typewriter
+<lift:surround with="template_name">children</lift:surround> 
 \end_layout
 
 \begin_layout Standard
-comet
+Surrounds the child nodes with a named template (located in the <app_root>/webap
+p/templates-hidden).
+ It is used to apply a unified template to all the page in a site.
+ 
 \end_layout
 
 \begin_layout Standard
-ignore
+Demo example:<lift:surround with="default"> <b>Dude</b>...
+ this is my page...
+ but it'll appear in your browser in a template.
+ </lift:surround> 
 \end_layout
 
 \begin_layout Standard
-snippet (below)
+In the target template there must be a <lift:bind /> tag to indicate where
+ the contents should be bound.
+ Note that you can use multiple surround templates by adding them to the
+ /templates-hidden directory.
+ For example, you might want to have a separate template for your administrative
+ pages.
+ In that case, you might add that template as admin.html in the /templates-hidden
+ directory and then call it from your other pages using:<lift:surround with="adm
+in">page code here</lift:surround>
 \end_layout
 
 \begin_layout Standard
-children
+Notes: You cannot have a hidden template with the same name as a sub-directory
+ of your webapp directory.
+ For example, if you had an admin.html template in /templates-hidden, you
+ could not also have an admin directory.
+ 
+\end_layout
+
+\begin_layout Subsection
+embed 
 \end_layout
 
 \begin_layout Standard
-loc
+
+\family typewriter
+<lift:embed what="template" />
+\end_layout
+
+\begin_layout Standard
+Uses: Allows you to embed a template within another template (or to access
+ a template from a JsCmd such as SetHtml, ModalDialog, etc.)
+\end_layout
+
+\begin_layout Standard
+Note that incoming requests that contain *-hidden in the request will not
+ be serviced, but you can access templates in directories named *-hidden.
+ So, you can put AJAX templates in /ajax-templates-hidden in webapps.
+\end_layout
+
+\begin_layout Standard
+Also, lift's i18n support extends to templates as well, so you can specify
+ "/ajax-templates-hidden/welcome" and lift will serve the appropriate localized
+ template.
+ For example, if the current locale is set to French Canadian lift will
+ look for /ajax-templates-hidden/welcome_fr_CA.html, /ajax-templates-hidden/welco
+me_fr.html, and /ajax-templates-hidden/welcome.html Demo example:
+\end_layout
+
+\begin_layout Standard
+<lift:embed what="/ajax-templates-hidden/welcome" />
+\end_layout
+
+\begin_layout Standard
+Caveats: JavaScript contained in templates rendered via JsCmd (sent in response
+ to AJAX requests) will not be executed.
+ This includes Comet Widgets.
+ 
+\end_layout
+
+\begin_layout Subsection
+comet 
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+<lift:comet type="ClassName" name="optional"/>
+\end_layout
+
+\begin_layout Standard
+Uses:
+\end_layout
+
+\begin_layout Standard
+Demo example:
+\end_layout
+
+\begin_layout Standard
+Caveats: if you have a <lift:comet /> tag and you're using the tag from
+ within sending AJAX stuff back, things might not work well.
+ 
+\end_layout
+
+\begin_layout Subsection
+snippet
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+<lift:snippet form="METHOD" type="ClassName:method" multipart="true" />
+\end_layout
+
+\begin_layout Standard
+form and multipart are optional.
+\end_layout
+
+\begin_layout Standard
+form types are GET | POST
+\end_layout
+
+\begin_layout Standard
+type resolves to the method call ClassName.method
+\end_layout
+
+\begin_layout Standard
+multipart is a boolean
+\end_layout
+
+\begin_layout Standard
+Demo example:
+\end_layout
+
+\begin_layout Standard
+Caveats: 
+\end_layout
+
+\begin_layout Standard
+More in section 
+\begin_inset LatexCommand ref
+reference "sec:Snippets"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section
 
 \series bold
 Snippets 
+\begin_inset LatexCommand label
+name "sec:Snippets"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Itemize
@@ -382,9 +541,17 @@ register and unregister SnippetForClass
 Register the name of the class for the snippet, 
 \end_layout
 
+\begin_layout Itemize
+Point is to maintain state across requests
+\end_layout
+
+\begin_layout Itemize
+Example to illustrate the idea, the guess a number game
+\end_layout
+
 \end_deeper
 \begin_layout Itemize
-DispatchSnippet
+Snippet
 \end_layout
 
 \begin_deeper
@@ -767,79 +934,9 @@ What are the use cases for snippets vs.
 \end_layout
 
 \begin_layout Section
-Conclusion
+SHtml Generators
 \end_layout
 
-\begin_layout Standard
-In this chapter you learned how Lift produces the markup that is sent to
- the browser.
- Using Templates in conjunction with Snippets or Views.
-\end_layout
-
-\begin_layout Section
-To Write
-\end_layout
-
-\begin_layout Itemize
-SiteMap matching and access control - New Loc/Menu stuff
-\end_layout
-
-\begin_layout Itemize
-template or view matched? 
-\end_layout
-
-\begin_layout Itemize
-recursive processing of template and any snippets contained therein 
-\end_layout
-
-\begin_layout Itemize
-direct processing of view 
-\end_layout
-
-\begin_layout Itemize
-LiftViewFirst - http://wiki.liftweb.net/index.php/Lift_View_First
-\end_layout
-
-\begin_layout Itemize
-Error handling - Msgs and handling exceptions
-\end_layout
-
-\begin_layout Itemize
-List of tags that are handled by Lift (stolen from http://liftweb.net/index.php/Li
-ftTags, not sure how up-to-date this is) 
-\end_layout
-
-\begin_deeper
-\begin_layout Itemize
-surround 
-\end_layout
-
-\begin_layout Itemize
-embed 
-\end_layout
-
-\begin_layout Itemize
-comet 
-\end_layout
-
-\begin_layout Itemize
-ignore 
-\end_layout
-
-\begin_layout Itemize
-snippet (and, the alternative lift:<class>.<method>) 
-\end_layout
-
-\begin_layout Itemize
-additional attribute handling in tags (via S.attr)
-\end_layout
-
-\end_deeper
-\begin_layout Itemize
-The SHtml object is used to create most of the input elements.
-\end_layout
-
-\begin_deeper
 \begin_layout Description
 ajaxButton An <input type=
 \begin_inset Quotes erd
@@ -980,6 +1077,44 @@ password
 \end_inset
 
 > 
+\end_layout
+
+\begin_layout Section
+Conclusion
+\end_layout
+
+\begin_layout Standard
+In this chapter you learned how Lift produces the markup that is sent to
+ the browser.
+ Using Templates in conjunction with Snippets or Views.
+\end_layout
+
+\begin_layout Section
+To Write
+\end_layout
+
+\begin_layout Itemize
+SiteMap matching and access control - New Loc/Menu stuff
+\end_layout
+
+\begin_layout Itemize
+template or view matched? 
+\end_layout
+
+\begin_layout Itemize
+recursive processing of template and any snippets contained therein 
+\end_layout
+
+\begin_layout Itemize
+direct processing of view 
+\end_layout
+
+\begin_layout Itemize
+LiftViewFirst - http://wiki.liftweb.net/index.php/Lift_View_First
+\end_layout
+
+\begin_layout Itemize
+Error handling - Msgs and handling exceptions
 \end_layout
 
 \end_body
