@@ -23,7 +23,7 @@ Chapter 04 - An intro to Maven and Project Layout - PDR [Tyler]
 
 Chapter 05 - Demo Application - P [Tyler]
 
-Chapter 06 - Lift Arch in General - P [Derek]
+Chapter 06 - Lift Arch in General - PD [Derek]
 
 Chapter 07 - Lift User Components - P [Tyler]
 
