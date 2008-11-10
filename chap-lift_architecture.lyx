@@ -241,6 +241,137 @@ reference "lst:JPA-web.xml"
  allows the container to handle it.
 \end_layout
 
+\begin_layout Subsection
+Bootstrap
+\end_layout
+
+\begin_layout Standard
+When Lift starts up there are a number of things that you'll want to set
+ up before any requests are processed.
+ These things include setting up a SiteMenu, URL rewriting, custom dispatch
+ and class path search.
+ The Lift servlet looks for the bootstrap.liftweb.Boot
+\begin_inset LatexCommand index
+name "Boot"
+
+\end_inset
+
+ class and executes the boot method in the class.
+ The boot method will only be run once, so you can place any initialization
+ calls for other libraries here as well.
+ 
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Cover logging setup here, too?
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Classpath lookup
+\end_layout
+
+\begin_layout Standard
+As part of our discussion of the Boot class, it's important to cover a small
+ detail of how Lift determines where to find classes for Views and Snippet
+ rendering.
+ The LiftRules.addToPackages method tells lift what Scala packages to look
+ in for a given class.
+ Lift has implicit extensions to the paths you enter; in particular, if
+ you tell Lift to use the 
+\begin_inset Quotes eld
+\end_inset
+
+com.foo
+\begin_inset Quotes erd
+\end_inset
+
+ package, Lift will look for View classes under 
+\begin_inset Quotes eld
+\end_inset
+
+com.foo.view
+\begin_inset Quotes erd
+\end_inset
+
+ and will look for Snippet classes under 
+\begin_inset Quotes eld
+\end_inset
+
+com.foo.snippet
+\begin_inset Quotes erd
+\end_inset
+
+.
+ Typically the 
+\family typewriter
+addToPackages
+\family default
+ method is excuted in your Boot class.
+ A minimal Boot class would look like
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "basicstyle={\footnotesize},frame=single"
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+
+Minimal Boot class
+\begin_inset LatexCommand label
+name "lst:Minimal-Boot-class"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+class Boot {
+\end_layout
+
+\begin_layout Standard
+
+  def boot = {
+\end_layout
+
+\begin_layout Standard
+
+    LiftRules.addToPackages("my.root.class.path")
+\end_layout
+
+\begin_layout Standard
+
+  }
+\end_layout
+
+\begin_layout Standard
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Section
 The Rendering Pipeline
 \end_layout
@@ -625,56 +756,55 @@ Modify for PocketChange
 :
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Standard
+\begin_inset listings
+lstparams "basicstyle={\scriptsize},frame=single"
+inline false
+status open
 
-\series bold
-\size footnotesize
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+
+Simple rewrite example
+\begin_inset LatexCommand label
+name "lst:Simple-rewrite-example"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
 val rewriter = {
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Standard
 
-\series bold
-\size footnotesize
-  case RewriteRequest(ParsePath(
-\begin_inset Quotes eld
-\end_inset
-
-user
-\begin_inset Quotes erd
-\end_inset
-
- :: username :: Nil, _, _, _), _, _) => 
+  case RewriteRequest(ParsePath(user :: username :: Nil,_,_,_),_,_) => 
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Standard
 
-\series bold
-\size footnotesize
-       RewriteResponse(
-\begin_inset Quotes eld
-\end_inset
-
-viewUser
-\begin_inset Quotes erd
-\end_inset
-
- :: Nil, Map(
-\begin_inset Quotes eld
-\end_inset
-
-username
-\begin_inset Quotes erd
-\end_inset
-
- -> username))
+       RewriteResponse(viewUser :: Nil, Map(username -> username))
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Standard
 
-\series bold
-\size footnotesize
 }
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -731,63 +861,70 @@ name "RESTful"
  interface through an existing template, we could redirect it like so:
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Standard
+\begin_inset listings
+lstparams "basicstyle={\scriptsize},frame=single"
+inline false
+status open
 
-\series bold
-\size footnotesize
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+
+Complex rewrite example
+\begin_inset LatexCommand label
+name "lst:Complex-rewrite-example"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
 val rewriter = {
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Standard
 
-\series bold
-\size footnotesize
   case RewriteRequest(ParsePath(username :: Nil, _, _, _),
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Standard
 
-\series bold
-\size footnotesize
                       DeleteRequest,
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Standard
 
-\series bold
-\size footnotesize
-                      httpreq) if isMgmtSubnet(httpreq.getRemoteHost()) =>
- 
+                      httpreq) 
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Standard
 
-\series bold
-\size footnotesize
-       RewriteResponse(
-\begin_inset Quotes eld
-\end_inset
-
-deleteUser
-\begin_inset Quotes erd
-\end_inset
-
- :: Nil, Map(
-\begin_inset Quotes eld
-\end_inset
-
-username
-\begin_inset Quotes erd
-\end_inset
-
- -> username))
+                      if isMgmtSubnet(httpreq.getRemoteHost()) => 
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Standard
 
-\series bold
-\size footnotesize
+       RewriteResponse(deleteUser :: Nil, Map(username -> username))
+\end_layout
+
+\begin_layout Standard
+
 }
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -924,41 +1061,80 @@ TODO: Cross-ref
 ):
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Standard
+\begin_inset listings
+lstparams "basicstyle={\scriptsize},frame=single"
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+
+Charting method
+\begin_inset LatexCommand label
+name "lst:Charting-method"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
 def chart (endDate : String) : LiftResponse = {
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Standard
+
   // Query, set up chart, etc...
 \end_layout
 
-\begin_layout LyX-Code
-  val chartImage = ChartUtilities.encodeAsPNG(balanceChart.createBufferedImage(wid
-th,height))
+\begin_layout Standard
+
+  val buffered = balanceChart.createBufferedImage(width,height)
 \end_layout
 
-\begin_layout LyX-Code
-  Full(InMemoryResponse(chartImage, (
-\begin_inset Quotes eld
-\end_inset
+\begin_layout Standard
 
-Content-Type
-\begin_inset Quotes erd
-\end_inset
-
- -> 
-\begin_inset Quotes eld
-\end_inset
-
-image/png
-\begin_inset Quotes erd
-\end_inset
-
-) :: Nil, Nil, 200))
+  val chartImage = ChartUtilities.encodeAsPNG(buffered)
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Standard
+
+  Full(InMemoryResponse(chartImage, 
+\end_layout
+
+\begin_layout Standard
+
+                        (Content-Type -> image/png) :: Nil,
+\end_layout
+
+\begin_layout Standard
+
+                        Nil,
+\end_layout
+
+\begin_layout Standard
+
+                        200))
+\end_layout
+
+\begin_layout Standard
+
 }
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -981,36 +1157,55 @@ name "Type"
  class:
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Standard
+\begin_inset listings
+lstparams "basicstyle={\footnotesize},frame=single"
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+
+Hooking dispatch into Boot
+\begin_inset LatexCommand label
+name "lst:Hooking-dispatch-into-Boot"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
 LiftRules.addDispatchBefore {
 \end_layout
 
-\begin_layout LyX-Code
-  case RequestState(
-\begin_inset Quotes eld
-\end_inset
+\begin_layout Standard
 
-chart
-\begin_inset Quotes erd
-\end_inset
-
- :: 
-\begin_inset Quotes eld
-\end_inset
-
-balances
-\begin_inset Quotes erd
-\end_inset
-
- :: endDate :: Nil, _, _) =>
+  case RequestState(chart :: balances :: endDate :: Nil, _, _) =>
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Standard
+
     Charting.chart(endDate)
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Standard
+
 }
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -1191,6 +1386,7 @@ reference "lst:Dispatch-in-LiftView"
 
 \begin_layout Standard
 \begin_inset listings
+lstparams "frame=single"
 inline false
 status open
 
@@ -1199,12 +1395,10 @@ status open
 \begin_inset Caption
 
 \begin_layout Standard
-
 \begin_inset Note Note
 status open
 
 \begin_layout Standard
-
 This should be a pocketchange example
 \end_layout
 
@@ -1317,43 +1511,453 @@ Template Processing
 \end_layout
 
 \begin_layout Standard
-Templates form the backbone of Lift's flexibility and power.
+Templates
+\begin_inset LatexCommand index
+name "Templates"
+
+\end_inset
+
+ form the backbone of Lift's flexibility and power.
+ A template is essentially an XML file that contains Lift-specific tags
+ as well as whatever content you want returned to the user.
+ There are a number of built-in tags that perform static functionality,
+ such as embedding other templates, localizing
+\begin_inset LatexCommand index
+name "localizing"
+
+\end_inset
+
+ strings, etc.
+ Lift also allows you to create your own tags, called 
+\emph on
+snippets
+\emph default
+
+\begin_inset LatexCommand index
+name "snippets"
+
+\end_inset
+
+, that are linked directly to Scala methods; these scala methods can process
+ the contents of the snippet tag, or can generate their own content from
+ scratch.
+ For example, a typical template could look like
 \end_layout
 
-\begin_layout Subsection
-Displaying Messages to the User
+\begin_layout Standard
+\begin_inset listings
+lstparams "basicstyle={\footnotesize},frame=single,language=XML"
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+
+Sample template
+\begin_inset LatexCommand label
+name "lst:Sample-template"
+
+\end_inset
+
+
 \end_layout
 
-\begin_layout Subsection
-Template Tags
+\end_inset
+
+
 \end_layout
 
-\begin_layout Subsection
-SHtml Generator Methods
+\begin_layout Standard
+
+<lift:surround with=default at=content>
+\end_layout
+
+\begin_layout Standard
+
+  <head><title>Hello!</title></head>
+\end_layout
+
+\begin_layout Standard
+
+  <lift:Hello.world />
+\end_layout
+
+\begin_layout Standard
+
+</lift:surround>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In this template we use the built-in 
+\family typewriter
+lift:surround
+\begin_inset LatexCommand index
+name "lift:surround"
+
+\end_inset
+
+
+\family default
+ tag to make lift embed our current template inside the 
+\begin_inset Quotes eld
+\end_inset
+
+default
+\begin_inset Quotes erd
+\end_inset
+
+ template.
+ We also use our own snippet (lift:Hello.world) to generate some content.
+ We'll cover all of Lift's built-in tags in more detail in section 
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Cross-ref
+\end_layout
+
+\end_inset
+
+, but for now let's look at how Lift determines which template to use.
+\end_layout
+
+\begin_layout Standard
+Following rewriting and custom dispatch, Lift checks to see if it can find
+ a file in the WAR tree that matches the request.
+ Lift tries several suffixes (html, xhtml, htm, and no suffix) and also
+ tries to match based on the client's Accept-Language header.
+ The pattern Lift uses is
+\end_layout
+
+\begin_layout LyX-Code
+<path to template>[_<language, optional>][.<suffix>]
+\end_layout
+
+\begin_layout Standard
+Because Lift will implicitly search for suffixes, it's best to leave the
+ suffix off of your links within the web app.
+ If you have a link with an href of 
+\family typewriter
+/test/template.xhtml
+\family default
+, it will only match that file, but if you use 
+\family typewriter
+/test/template
+\family default
+ for the href and you have the following templates in your web app:
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+/test/template.xhtml
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+/test/template_es-ES.xhtml
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+/test/template_ja.xhtml
+\end_layout
+
+\begin_layout Standard
+then Lift will use the appropriate template based on the user's requested
+ language if a corresponding template is available.
+ In addition to normal templates, your application can make use of hidden
+ templates
+\begin_inset LatexCommand index
+name "hidden templates"
+
+\end_inset
+
+.
+ These are templates that are located under the 
+\family typewriter
+/templates-hidden
+\family default
+ directory of your web app.
+ Like the 
+\family typewriter
+WEB-XML
+\family default
+ directory, the contents cannot be directly requested by clients.
+ They can, however, be used by other templates through mechanisms like the
+ 
+\family typewriter
+lift:surround
+\family default
+ and 
+\family typewriter
+lift:embed
+\family default
+ tags.
+ If Lift cannot locate an appropriate template based on the request path
+ then it will return a 404 to the user.
+\end_layout
+
+\begin_layout Standard
+Once Lift has located the correct template, the next step is to process
+ the contents.
+ It is important to understand that Lift processes XML tags from the outside
+ in.
+ That means that in our example listing 
+\begin_inset LatexCommand ref
+reference "lst:Sample-template"
+
+\end_inset
+
+, the surround tag gets processed first.
+ In this case the surround loads the default template and embeds our content
+ at the appropriate location.
+ The next tag to be processed is the lift:Hello.world snippet.
+ This tag is essentially an alias for the lift:snippet tag (specifically,
+ 
+\family typewriter
+<lift:snippet type=
+\begin_inset Quotes eld
+\end_inset
+
+Hello:world
+\begin_inset Quotes erd
+\end_inset
+
+>
+\family default
+) , and will locate the Hello class and execute the world method on it.
+ A snippet method takes a single scala.xml.NodeSeq
+\begin_inset LatexCommand index
+name "NodeSeq"
+
+\end_inset
+
+ argument and is expected to return a NodeSeq.
+ The argument passed to the method is the XML contents of the snippet tag;
+ because Lift processes from the outside in, the contents are not processed
+ by default before being passed to the snippet method.
+ If you want the contents of a snippet tag to be processed before the snippet
+ (say, if you're using a 
+\family typewriter
+lift:embed
+\begin_inset LatexCommand index
+name "embed"
+
+\end_inset
+
+
+\family default
+ tag), then you would specify the 
+\family typewriter
+eager_eval
+\family default
+
+\begin_inset LatexCommand index
+name "eval"
+
+\end_inset
+
+ attribute on the tag:
+\end_layout
+
+\begin_layout LyX-Code
+<lift:Hello.world eager_eval=
+\begin_inset Quotes erd
+\end_inset
+
+true
+\begin_inset Quotes erd
+\end_inset
+
+>...</lift:Hello.world>
+\end_layout
+
+\begin_layout Standard
+In addition to eager_eval, there are attributes such as 
+\family typewriter
+form
+\family default
+ and 
+\family typewriter
+multipart
+\family default
+ which we will cover in extensive detail in section 
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+cross-ref
+\end_layout
+
+\end_inset
+
+.
+ For our current example, we could simply have a method that looks like
+ this:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "frame=single"
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+
+Hello World snippet
+\begin_inset LatexCommand label
+name "lst:Hello-World-snippet"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+class Hello {
+\end_layout
+
+\begin_layout Standard
+
+  def world (content : NodeSeq) : NodeSeq = 
+\end_layout
+
+\begin_layout Standard
+
+    Text("Hello, world!")
+\end_layout
+
+\begin_layout Standard
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We simply return an XML Text node with our greeting.
+ Note that the XML that a snippet returns is further processed from the
+ outside in, so if your snippet instead looked like
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+Returning tags from a snippet
+\begin_inset LatexCommand label
+name "lst:Returning-tags-snippet"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+class Hello {
+\end_layout
+
+\begin_layout Standard
+
+  def world (content : NodeSeq) : NodeSeq = 
+\end_layout
+
+\begin_layout Standard
+
+    <p>{"Hello, "}<lift:User.name /></p>
+\end_layout
+
+\begin_layout Standard
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+then the lift:User.name snippet will be processed as well.
+ It is this hierarchical processing of template tags that makes Lift so
+ flexible.
+\end_layout
+
+\begin_layout Standard
+Another feature of Lift's template processing is the ability to merge the
+ HTML 
+\family typewriter
+head
+\family default
+
+\begin_inset LatexCommand index
+name "head"
+
+\end_inset
+
+ tag from within a template.
+ In our example listing 
+\begin_inset LatexCommand ref
+reference "lst:Sample-template"
+
+\end_inset
+
+, notice that we've specified a 
+\family typewriter
+head
+\family default
+ tag inside the template.
+ Without the head merge, this head tag would show up in the default template
+ where our template gets bound.
+ Lift is smart about this, though, and instead takes the contents of the
+ head tag and merges it into the outer template's head tag.
+ This means that you can use a surround tag to keep a uniform default template,
+ but still change things like the title of the tag, add in scripts or special
+ CSS, etc.
 \end_layout
 
 \begin_layout Section
-To Be Written
+Move to components
 \end_layout
 
 \begin_layout Itemize
 SiteMap matching and access control - New Loc/Menu stuff
-\end_layout
-
-\begin_layout Itemize
-template or view matched? 
-\end_layout
-
-\begin_layout Itemize
-recursive processing of template and any snippets contained therein 
-\end_layout
-
-\begin_layout Itemize
-direct processing of view 
-\end_layout
-
-\begin_layout Itemize
-LiftViewFirst - http://wiki.liftweb.net/index.php/Lift_View_First
 \end_layout
 
 \begin_layout Itemize
