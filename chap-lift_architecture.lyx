@@ -44,6 +44,10 @@ Lift Architecture
 \end_layout
 
 \begin_layout Standard
+@Derek - dpp just changed RequestState to Req
+\end_layout
+
+\begin_layout Standard
 \begin_inset Note Note
 status open
 

@@ -91,7 +91,7 @@ Snippets come in various types
 
 \begin_layout Standard
 Lift uses a combination of technologies to get the XHTML to the user.
- We'll discuss these methods in ths chapter.
+ We'll discuss these methods in this chapter.
 \end_layout
 
 \begin_layout Standard
@@ -351,8 +351,11 @@ surround
 
 \begin_layout Standard
 
+\emph on
+Example:
 \family typewriter
-<lift:surround with="template_name">children</lift:surround> 
+\emph default
+ <lift:surround with="template_name">children</lift:surround> 
 \end_layout
 
 \begin_layout Standard
@@ -395,8 +398,11 @@ embed
 
 \begin_layout Standard
 
+\emph on
+Example:
 \family typewriter
-<lift:embed what="template" />
+\emph default
+ <lift:embed what="template" />
 \end_layout
 
 \begin_layout Standard
@@ -436,16 +442,145 @@ comet
 
 \begin_layout Standard
 
+\emph on
+Example:
 \family typewriter
-<lift:comet type="ClassName" name="optional"/>
+\emph default
+ <lift:comet type="ClassName" name="optional"/>
 \end_layout
 
 \begin_layout Standard
-Uses:
+Uses: Defines a block of the XML document that is to be con
 \end_layout
 
 \begin_layout Standard
 Demo example:
+\end_layout
+
+\begin_layout Standard
+This:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+<div class="widget" style="text-align: center">
+\end_layout
+
+\begin_layout Standard
+
+<lift:comet type="Clock">Current Time: <clk:time>Missing Clock</clk:time></lift:
+comet>
+\end_layout
+
+\begin_layout Standard
+
+</div>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Will turn into this after processing:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+<div style="text-align: center" class="widget">   
+\end_layout
+
+\begin_layout Standard
+
+<span id="LCHVVTE3H5CHZ31L1C2ZEQ_outer">     
+\end_layout
+
+\begin_layout Standard
+
+<span id="LCHVVTE3H5CHZ31L1C2ZEQ" lift:when="12">Current Time: <span id="LCHVVTE
+3H5CHZ31L1C2ZEQ_timespan">Fri Nov 14 17:29:53 EST 2008</span>     
+\end_layout
+
+\begin_layout Standard
+
+<script>     
+\end_layout
+
+\begin_layout Standard
+
+// <![CDATA[     /* JSON Func clk $$ F1226701773224999000_BBP */     
+\end_layout
+
+\begin_layout Standard
+
+function F1226701773224999000_BBP(obj) {lift_ajaxHandler('F1226701773224999000_B
+BP='+ encodeURIComponent(JSON.stringify(obj)), null,null);}     
+\end_layout
+
+\begin_layout Standard
+
+// ]]>     
+\end_layout
+
+\begin_layout Standard
+
+</script>
+\end_layout
+
+\begin_layout Standard
+
+</span>
+\end_layout
+
+\begin_layout Standard
+
+<script>     
+\end_layout
+
+\begin_layout Standard
+
+// <![CDATA[     
+\end_layout
+
+\begin_layout Standard
+
+var destroy_LCHVVTE3H5CHZ31L1C2ZEQ = function() {}     
+\end_layout
+
+\begin_layout Standard
+
+// ]]>     
+\end_layout
+
+\begin_layout Standard
+
+</script>     
+\end_layout
+
+\begin_layout Standard
+
+</span>     
+\end_layout
+
+\begin_layout Standard
+
+</div>  
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -466,8 +601,11 @@ name "sub:snippet-tag"
 
 \begin_layout Standard
 
+\emph on
+Example:
 \family typewriter
-<lift:snippet form="METHOD" type="ClassName:method" multipart="true" />
+\emph default
+ <lift:snippet form="METHOD" type="ClassName:method" multipart="true" />
 \end_layout
 
 \begin_layout Standard
