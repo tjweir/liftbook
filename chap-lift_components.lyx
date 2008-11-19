@@ -78,18 +78,6 @@ Plan, Draft, Revise, Edit, Format, Happy
 \end_layout
 
 \begin_layout Standard
-My Notes, since I don't know this yet.:
-\end_layout
-
-\begin_layout Standard
-Templates contain snippets
-\end_layout
-
-\begin_layout Standard
-Snippets come in various types
-\end_layout
-
-\begin_layout Standard
 Lift uses a combination of technologies to get the XHTML to the user.
  We'll discuss these methods in this chapter.
 \end_layout
@@ -99,8 +87,12 @@ In LiftSession._defaultLiftTagProcessing
 \end_layout
 
 \begin_layout Standard
-Partials are fun! http://creativekarma.com/ee.php/weblog/comments/scala_function_o
-bjects_from_a_java_perspective/
+Partials are fun! 
+\end_layout
+
+\begin_layout Standard
+http://creativekarma.com/ee.php/weblog/comments/scala_function_objects_from_a_java
+_perspective/
 \end_layout
 
 \begin_layout Standard
@@ -355,7 +347,7 @@ surround
 Example:
 \family typewriter
 \emph default
- <lift:surround with="template_name">children</lift:surround> 
+ <lift:surround with="template_name">children</lift:surround>
 \end_layout
 
 \begin_layout Standard
@@ -463,18 +455,41 @@ This:
 
 \begin_layout Standard
 \begin_inset listings
+lstparams "basicstyle={\footnotesize},language=Java,numbers=left,numberstyle={\tiny}"
 inline false
 status open
 
 \begin_layout Standard
 
-<div class="widget" style="text-align: center">
+\begin_inset Caption
+
+\begin_layout Standard
+Comet Html template
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
 
-<lift:comet type="Clock">Current Time: <clk:time>Missing Clock</clk:time></lift:
-comet>
+<div class="widget">
+\end_layout
+
+\begin_layout Standard
+
+  <lift:comet type="Clock">Current Time: 
+\end_layout
+
+\begin_layout Standard
+
+    <clk:time>Missing Clock</clk:time>
+\end_layout
+
+\begin_layout Standard
+
+  </lift:comet>
 \end_layout
 
 \begin_layout Standard
@@ -493,8 +508,22 @@ Will turn into this after processing:
 
 \begin_layout Standard
 \begin_inset listings
+lstparams "basicstyle={\footnotesize},numbers=left,numberstyle={\tiny}"
 inline false
 status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+Comet as rendered in the browser
+\end_layout
+
+\end_inset
+
+
+\end_layout
 
 \begin_layout Standard
 
@@ -508,8 +537,18 @@ status open
 
 \begin_layout Standard
 
-<span id="LCHVVTE3H5CHZ31L1C2ZEQ" lift:when="12">Current Time: <span id="LCHVVTE
-3H5CHZ31L1C2ZEQ_timespan">Fri Nov 14 17:29:53 EST 2008</span>     
+<span id="LCHVVTE3H5CHZ31L1C2ZEQ" lift:when="12">
+\end_layout
+
+\begin_layout Standard
+
+  Current Time: 
+\end_layout
+
+\begin_layout Standard
+
+  <span id="LCHVVTE3H5CHZ31L1C2ZEQ_timespan">Fri Nov 14 17:29:53 EST 2008</span>
+     
 \end_layout
 
 \begin_layout Standard
@@ -524,8 +563,23 @@ status open
 
 \begin_layout Standard
 
-function F1226701773224999000_BBP(obj) {lift_ajaxHandler('F1226701773224999000_B
-BP='+ encodeURIComponent(JSON.stringify(obj)), null,null);}     
+function F1226701773224999000_BBP(obj) {
+\end_layout
+
+\begin_layout Standard
+
+  lift_ajaxHandler('F1226701773224999000_BBP='+ encodeURIComponent(JSON.stringify
+(obj)), 
+\end_layout
+
+\begin_layout Standard
+
+  null, null);
+\end_layout
+
+\begin_layout Standard
+
+}     
 \end_layout
 
 \begin_layout Standard
@@ -609,23 +663,166 @@ Example:
 \end_layout
 
 \begin_layout Standard
-form and multipart are optional.
-\end_layout
+The 
+\family typewriter
+form
+\family default
+ and 
+\family typewriter
+multipart
+\family default
+ attributes are optional.
+ If 
+\family typewriter
+form
+\family default
+ is included the attribute options are 
+\family typewriter
+GET
+\family default
+ and 
+\family typewriter
+POST.
 
-\begin_layout Standard
-form types are GET | POST
-\end_layout
-
-\begin_layout Standard
-type resolves to the method call ClassName.method
-\end_layout
-
-\begin_layout Standard
-multipart is a boolean
+\family default
+ The 
+\family typewriter
+type
+\family default
+ attribute resolves to the method call 
+\family typewriter
+ClassName.method
+\family default
+.
+ The 
+\family typewriter
+multipart
+\family default
+ attribute is a boolean.
 \end_layout
 
 \begin_layout Standard
 Demo example:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "basicstyle={\footnotesize},numbers=left,numberstyle={\tiny}"
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+Snippet that generates a NodeSeq
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+def add(xhtml: Group): NodeSeq =     
+\end_layout
+
+\begin_layout Standard
+
+  selectedUser.is.openOr(new User).toForm(Empty, saveUser _) ++ 
+\end_layout
+
+\begin_layout Standard
+
+  <tr>     
+\end_layout
+
+\begin_layout Standard
+
+    <td><a href="/simple/index.html">Cancel</a></td>     
+\end_layout
+
+\begin_layout Standard
+
+    <td><input type="submit" value="Create"/></td>     
+\end_layout
+
+\begin_layout Standard
+
+  </tr>
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "basicstyle={\footnotesize},numbers=left,numberstyle={\tiny}"
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+Snippet the generates Nodes to bind...
+ TODO: Explain the difference better...
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+def render(in: NodeSeq): NodeSeq = {     
+\end_layout
+
+\begin_layout Standard
+
+  val attr: String = S.attr("name").openOr("N/A")     
+\end_layout
+
+\begin_layout Standard
+
+  val value = CountHolder.is(attr)
+\end_layout
+
+\begin_layout Standard
+
+  bind("count", in, "value" -> value, 
+\end_layout
+
+\begin_layout Standard
+
+    "incr" -> link("/count", () => CountHolder.is(attr) = value + 1, Text("++")),
+     
+\end_layout
+
+\begin_layout Standard
+
+    "decr" -> link("/count", () => CountHolder.is(attr) = 0 max (value -
+ 1), Text("--")))   
+\end_layout
+
+\begin_layout Standard
+
+} 
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -652,6 +849,496 @@ name "sec:Snippets"
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+Snippets are the most common way of getting markup back to the user.
+ A Snippet is a special tag that Lift processes/does stuff with to do something
+ more exciting than your normal tag.
+ Let's take a quick look at example Snippet:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+Sample Snippet in index.html
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+<lift:surround with="default" at="content">     
+\end_layout
+
+\begin_layout Standard
+
+  <h2>Welcome to your project!</h2>     
+\end_layout
+
+\begin_layout Standard
+
+  <p>
+\end_layout
+
+\begin_layout Standard
+
+    <!-- This is a snippet tag -->
+\end_layout
+
+\begin_layout Standard
+
+    <lift:helloWorld.howdy />
+\end_layout
+
+\begin_layout Standard
+
+    <!-- This is also a snippet tag -->
+\end_layout
+
+\begin_layout Standard
+
+    <lift:snippet type="helloWorld.howdy" />
+\end_layout
+
+\begin_layout Standard
+
+  </p> 
+\end_layout
+
+\begin_layout Standard
+
+</lift:surround>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Notice the tag <lift:helloWorld.howdy />, this is a snippet and what it means
+ to Lift is to lookup the class 
+\family typewriter
+helloWorld
+\family default
+ and execute the method 
+\family typewriter
+howdy.
+
+\family default
+ The method 
+\family typewriter
+howdy
+\family default
+ is defined as:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "basicstyle={\footnotesize}"
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+Sample Snippet Definition in HelloWorld.scala
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+package org.test.snippet
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+class HelloWorld {   
+\end_layout
+
+\begin_layout Standard
+
+  def howdy = <span>Welcome to Your Super Rad Site at {new java.util.Date}</span>
+ 
+\end_layout
+
+\begin_layout Standard
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+So what's happening is when Lift is processing the XML contained in index.html
+ it will notice the special Lift snippet tag, execute the method and replace
+ the tag with the XML generated.
+ There's the sequence of transformations:
+\end_layout
+
+\begin_layout Standard
+The template contains:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+<p><lift:helloWorld.howdy /></p>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The method definition is:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+<p><span>Welcome to Your Super Rad Site at {new java.util.Date}</span></p>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+And the final XML sent back to the browser will be:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "basicstyle={\footnotesize}"
+inline false
+status open
+
+\begin_layout Standard
+
+<p><span>Welcome toYour Super Rad Site at Tue Nov 18 10:40:55 EST 2008</span></p
+> 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Using Snippets and bind you can generate XML in a different way.
+\end_layout
+
+\begin_layout Standard
+The html template would look like this:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "basicstyle={\footnotesize}"
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+Alternate Snippet Definition
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+<lift:surround with="default" at="content">
+\end_layout
+
+\begin_layout Standard
+
+  <lift:snippet type="helloWord:simpleForm" form="POST"> 
+\end_layout
+
+\begin_layout Standard
+
+    <tr><td>City</td><td><sampleBind:city><input type="text" /></sampleBind:city
+></td></tr>
+\end_layout
+
+\begin_layout Standard
+
+    <tr><td>Country</td><td><sampleBind:country><input type="text" /></sampleBin
+d:country></td></tr> 
+\end_layout
+
+\begin_layout Standard
+
+    <tr><td>&nbsp;</td><td><input type="submit" value="Add"/></td></tr>
+ 
+\end_layout
+
+\begin_layout Standard
+
+  </lift:snippet> 
+\end_layout
+
+\begin_layout Standard
+
+</lift:surround>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+And the method definition would be:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "basicstyle={\footnotesize}"
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+Alternate Snippet Method Definition
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+package org.test.snippet
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+class HelloWorld {   
+\end_layout
+
+\begin_layout Standard
+
+  def myForm(xhtml: Group) = {      
+\end_layout
+
+\begin_layout Standard
+
+    var city = ""      
+\end_layout
+
+\begin_layout Standard
+
+    var country = ""
+\end_layout
+
+\begin_layout Standard
+
+    
+\end_layout
+
+\begin_layout Standard
+
+    Helpers.bind("sampleBind", xhtml, 
+\end_layout
+
+\begin_layout Standard
+
+      "city" -> SHtml.text(name, name = _),                    
+\end_layout
+
+\begin_layout Standard
+
+      "country" -> SHtml.text(country, country = _))
+\end_layout
+
+\begin_layout Standard
+
+    }
+\end_layout
+
+\begin_layout Standard
+
+  } 
+\end_layout
+
+\begin_layout Standard
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Stateful Snippets
+\end_layout
+
+\begin_layout Standard
+Lift also has a the concept of a stateful snippet.
+ All of our previous examples, while simple, were stateless.
+ That is to say, from request to request, there is no saved state on the
+ server-side.
+ Stateless snippets are useful in the sense that many requirements for a
+ web applications need no state to be
+\end_layout
+
+\begin_layout Subsection
+Snippet Notes
+\end_layout
+
+\begin_layout Standard
+There are a few things to mention about snippets that will help.
+ If you define a snippet as 
+\family typewriter
+<lift:CSS />
+\family default
+ rather than 
+\family typewriter
+<lift:CSS.show /> 
+\family default
+Lift will look for the method named 
+\family typewriter
+render
+\family default
+ in the class 
+\family typewriter
+CSS
+\family default
+.
+\end_layout
+
+\begin_layout Standard
+Important Functions to trace:
+\end_layout
+
+\begin_layout Standard
+LiftSession processes all the tags (like snippet, comet, embed, etc) and
+ if it matches snippet, then it invokes LiftSession.processSnippet
+\end_layout
+
+\begin_layout Standard
+LiftSession.processSnippet calls =>
+\end_layout
+
+\begin_layout Standard
+S.locateSnippet - looks up the snippetname in the LiftRules.snippetTable
+\end_layout
+
+\begin_layout Standard
+- turns 
+\begin_inset Quotes eld
+\end_inset
+
+HelloClass.fooMethod
+\begin_inset Quotes erd
+\end_inset
+
+ into List(
+\begin_inset Quotes eld
+\end_inset
+
+HelloClass
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+fooMethod
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Standard
+What is S.doSnippet all about??
+\end_layout
+
+\begin_layout Standard
+Stateless and stateful Snippet:
+\end_layout
+
+\begin_layout Standard
+Stateless are the default type of snippet when generating pages.
+ The Class/Method lookup occurs within the statelessDispatchTable 
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Confirm.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Stateful Snippets are used as a way to utilize the same snippet instance
+ over the same page rendering session.
+ This is useful for many events on the web, such as a multi-page form where
+ data is is needed throughout the steps or when submitting a form and you'd
+ like to keep the values the user has entered in the event of validation
+ error.
+ 
+\end_layout
+
+\begin_layout Standard
+Stateful Snippets use 
 \end_layout
 
 \begin_layout Itemize
@@ -731,7 +1418,7 @@ Assert the concept of Fragment Generation
 
 \begin_layout Standard
 \begin_inset listings
-lstparams "basicstyle={\small},numbers=left,numberstyle={\tiny}"
+lstparams "basicstyle={\footnotesize},numbers=left,numberstyle={\tiny}"
 inline false
 status open
 
@@ -849,7 +1536,7 @@ Built-in Snippets
 \end_layout
 
 \begin_layout Standard
-There are a few built-in snippets that offer some standards functionality,
+There are a few built-in snippets that offer some standard functionality,
  such as messages and menus.
  We'll go over them here and they'll serve as a nice introduction into Snippets
  in general.
@@ -903,9 +1590,16 @@ A snippet for rendering messages close to other elements, for example validation
 \end_layout
 
 \begin_layout LyX-Code
-Usage: <input type="text" value="" name="132746123548765"/><lift:msg id="user_ms
-g" errorClass="error_class" warningClass="warning_class" noticeClass="notice_cla
-ss"/>
+Usage: 
+\end_layout
+
+\begin_layout LyX-Code
+<input type="text" value="" name="132746123548765"/>
+\end_layout
+
+\begin_layout LyX-Code
+<lift:msg id="user_msg" errorClass="error_class" warningClass="warning_class"
+ noticeClass="notice_class"/>
 \end_layout
 
 \begin_layout Subsection
@@ -1087,6 +1781,98 @@ What are the use cases for snippets vs.
 SHtml Generators
 \end_layout
 
+\begin_layout Standard
+def mapFunc(in: AFuncHolder): String = mapFunc(
+\begin_inset Quotes eld
+\end_inset
+
+F
+\begin_inset Quotes erd
+\end_inset
+
+ + System.nanoTime + 
+\begin_inset Quotes eld
+\end_inset
+
+_
+\begin_inset Quotes erd
+\end_inset
+
+ + randomString(3), in)
+\end_layout
+
+\begin_layout Standard
+def mapFunc(name: String, inf: AFuncHolder): String = {
+\end_layout
+
+\begin_layout Standard
+addFunctionMpa(name, inf)
+\end_layout
+
+\begin_layout Standard
+name
+\end_layout
+
+\begin_layout Standard
+}
+\end_layout
+
+\begin_layout Description
+swappable A swappable visual element.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+
+swappable example
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+def renderSwappable = {      
+\end_layout
+
+\begin_layout Standard
+
+  swappable(<span>Click to edit: <span id='the_text'></span></span>,   
+  
+\end_layout
+
+\begin_layout Standard
+
+    ajaxText("", v => DisplayMessage("messages", Text("You entered some
+ text: "+v), 4 seconds, 1 second)        
+\end_layout
+
+\begin_layout Standard
+
+    & SetHtml("the_text", Text(v))))  
+\end_layout
+
+\begin_layout Standard
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Description
 ajaxButton An <input type=
 \begin_inset Quotes erd
@@ -1099,36 +1885,125 @@ button
 > with onClick connected to an AjaxCall
 \end_layout
 
+\begin_layout Standard
+\begin_inset listings
+lstparams "basicstyle={\footnotesize},language=Java,numbers=left,numberstyle={\tiny}"
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+ajaxButton example
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+def renderAjaxButton(in: NodeSeq): NodeSeq = SHtml.ajaxButton("Validate",
+ () => {   
+\end_layout
+
+\begin_layout Standard
+
+  LoginStuff(true)   
+\end_layout
+
+\begin_layout Standard
+
+  S.notice("Your session is validated")   
+\end_layout
+
+\begin_layout Standard
+
+  RedirectTo("/login/index")   
+\end_layout
+
+\begin_layout Standard
+
+})
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Description
-a An <a> tag with a function associated with it
+a An <a> tag with a function associated with it : <lift:a hey={key}>{body}</lift
+>
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+ a(() => {cnt = cnt + 1; SetHtml("cnt_id", Text( cnt.toString))}, <span>Click
+ me to increase the count (currently <span id='cnt_id'>0</span>)</span>)
+  
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Description
 span A <span> with onClick connected to a JsCmd.
+ span(body, cmd)
 \end_layout
 
-\begin_layout Description
-toggleKids 
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+<span onclick={cmd.toJsCmd}>{body}</span>
 \end_layout
 
-\begin_layout Description
-ajaxCheckbox An <input type=
-\begin_inset Quotes erd
 \end_inset
 
-checkbox
-\begin_inset Quotes erd
+
+\end_layout
+
+\begin_layout Description
+select A <select></select>
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+def renderSelect(in: NodeSeq): NodeSeq = {
+\end_layout
+
+\begin_layout Standard
+
+  select(List(String, String), Full(defaultValue), FunctionToDoSomething)
+\end_layout
+
+\begin_layout Standard
+
+}
+\end_layout
+
 \end_inset
 
-> with onClick connected to an AjaxCall
-\end_layout
 
-\begin_layout Description
-ajaxSelect 
-\end_layout
-
-\begin_layout Description
-select A <select>
 \end_layout
 
 \begin_layout Description
@@ -1143,26 +2018,87 @@ text
 >
 \end_layout
 
-\begin_layout Description
-ajaxText 
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+def renderText(in: NodeSeq): NodeSeq = {
+\end_layout
+
+\begin_layout Standard
+
+  text("This is the default text", FunctionToDoSomething)
+\end_layout
+
+\begin_layout Standard
+
+}
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Description
 textarea A <textarea>
 \end_layout
 
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+def renderTextarea(in: NodeSeq): NodeSeq = {
+\end_layout
+
+\begin_layout Standard
+
+  textarea("This is the default text", FunctionToDoSomething)
+\end_layout
+
+\begin_layout Standard
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Description
 link Create an anchor tag around a body Xhtml fragment.
 \end_layout
 
-\begin_layout Description
-select A <select> tag
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+def link(to: String, func: () => Any, body: NodeSeq): Elem
 \end_layout
 
-\begin_layout Description
-untrustedSelect A <select> tag that has no test to see whether or not the
- value was in the list.
- This is commonly used for dynamic select lists.
+\begin_layout Standard
+
+generates
+\end_layout
+
+\begin_layout Standard
+
+<a href={to + "">{body}</a>
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Description
@@ -1177,16 +2113,31 @@ true
 >
 \end_layout
 
-\begin_layout Description
-fileholder An <input type=
-\begin_inset Quotes erd
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+def multiSelect(opts: Seq[(String, String)], deflt: Seq[String], func: String
+ => Any): Elem
+\end_layout
+
+\begin_layout Standard
+
+generates
+\end_layout
+
+\begin_layout Standard
+
+<select multiple="true" name={mapFunc(func)}>{opts.flatMap(o => (<option
+ value={o._1}>{0._2}</option>) % selected(deflt.contains(o._1)))}</select>
+\end_layout
+
 \end_inset
 
-file
-\begin_inset Quotes erd
-\end_inset
 
->
 \end_layout
 
 \begin_layout Description
@@ -1201,6 +2152,31 @@ radio
 >
 \end_layout
 
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+def radio(opts: Seq[String], deflt: Can[String], func: String => Any): Elem
+\end_layout
+
+\begin_layout Standard
+
+generates
+\end_layout
+
+\begin_layout Standard
+
+<input type="radio" name={name} value={v} />
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Description
 submit An <input type=
 \begin_inset Quotes erd
@@ -1213,8 +2189,58 @@ submit
 >
 \end_layout
 
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+def submit(value: String, func: () => Any): Elem
+\end_layout
+
+\begin_layout Standard
+
+generates
+\end_layout
+
+\begin_layout Standard
+
+<input type="submit" name={mapFunc(func))} />
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Description
 hidden A hidden form element
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+def hidden(func: () => Any): Elem
+\end_layout
+
+\begin_layout Standard
+
+generates
+\end_layout
+
+\begin_layout Standard
+
+<input type="hidden" name={mapFunc(func))} />
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Description
@@ -1227,6 +2253,117 @@ password
 \end_inset
 
 > 
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+def password(value: String, func: String => Any): Elem
+\end_layout
+
+\begin_layout Standard
+
+generates
+\end_layout
+
+\begin_layout Standard
+
+<input type="password" name={mapFunc(func))} />
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Explaining mapFunc:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+/** Associates a name with a function impersonated by AFuncHolder.
+ These are basically functions    
+\end_layout
+
+\begin_layout Standard
+
+* that are executed when a request contains the 'name' request parameter.
+    */   
+\end_layout
+
+\begin_layout Standard
+
+def addFunctionMap(name: String, value: AFuncHolder) = _functionMap.value
+ += (name -> value)
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+/** * Maps a function with an random generated and name */ 
+\end_layout
+
+\begin_layout Standard
+
+def mapFunc(in: AFuncHolder): String = mapFunc("F"+System.nanoTime+"_"+randomStri
+ng(3), in)
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+/** * Similar with addFunctionMap but also returns the name.
+ */ 
+\end_layout
+
+\begin_layout Standard
+
+def mapFunc(name: String, inf: AFuncHolder): String = { 
+\end_layout
+
+\begin_layout Standard
+
+  addFunctionMap(name, inf) 
+\end_layout
+
+\begin_layout Standard
+
+  name 
+\end_layout
+
+\begin_layout Standard
+
+}
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+Do I need to explain the functionMap that is built per session?
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section
@@ -1265,6 +2402,106 @@ LiftViewFirst - http://wiki.liftweb.net/index.php/Lift_View_First
 
 \begin_layout Itemize
 Error handling - Msgs and handling exceptions
+\end_layout
+
+\begin_layout Section
+Debugging Junk
+\end_layout
+
+\begin_layout Standard
+S.locateSnippet: Looking for: Menu.title 
+\end_layout
+
+\begin_layout Standard
+S.locateSnippet: Processed: List(Menu, title) 
+\end_layout
+
+\begin_layout Standard
+ProcessSnippet cls: Menu 
+\end_layout
+
+\begin_layout Standard
+ProcessSnippet method: title 
+\end_layout
+
+\begin_layout Standard
+Looking for snippet: Menu 
+\end_layout
+
+\begin_layout Standard
+S.locateSnippet: Looking for: CSS.blueprint 
+\end_layout
+
+\begin_layout Standard
+S.locateSnippet: Processed: List(CSS, blueprint) 
+\end_layout
+
+\begin_layout Standard
+ProcessSnippet cls: CSS 
+\end_layout
+
+\begin_layout Standard
+ProcessSnippet method: blueprint 
+\end_layout
+
+\begin_layout Standard
+Looking for snippet: CSS 
+\end_layout
+
+\begin_layout Standard
+S.locateSnippet: Looking for: CSS.fancyType 
+\end_layout
+
+\begin_layout Standard
+S.locateSnippet: Processed: List(CSS, fancyType) 
+\end_layout
+
+\begin_layout Standard
+ProcessSnippet cls: CSS 
+\end_layout
+
+\begin_layout Standard
+ProcessSnippet method: fancyType 
+\end_layout
+
+\begin_layout Standard
+Looking for snippet: CSS 
+\end_layout
+
+\begin_layout Standard
+S.locateSnippet: Looking for: menu.builder 
+\end_layout
+
+\begin_layout Standard
+S.locateSnippet: Processed: List(menu, builder) 
+\end_layout
+
+\begin_layout Standard
+ProcessSnippet cls: menu 
+\end_layout
+
+\begin_layout Standard
+ProcessSnippet method: builder 
+\end_layout
+
+\begin_layout Standard
+Looking for snippet: menu 
+\end_layout
+
+\begin_layout Standard
+S.locateSnippet: Looking for: Msgs 
+\end_layout
+
+\begin_layout Standard
+S.locateSnippet: Processed: List(Msgs) 
+\end_layout
+
+\begin_layout Standard
+ProcessSnippet cls: Msgs 
+\end_layout
+
+\begin_layout Standard
+ProcessSnippet method: render
 \end_layout
 
 \end_body
