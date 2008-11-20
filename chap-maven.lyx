@@ -1067,7 +1067,6 @@ v4_0_0.xsd">
 \begin_inset Caption
 
 \begin_layout Standard
-
 Default pom.xml
 \end_layout
 
@@ -1433,6 +1432,134 @@ status open
 
 \end_layout
 
+\begin_layout Subsubsection
+Adding a Dependency
+\end_layout
+
+\begin_layout Standard
+Let's say that you'd like to add a new library and you want Maven to make
+ sure you've got the most up-to-date version.
+ We're going to add Configgy
+\begin_inset Foot
+status open
+
+\begin_layout Standard
+Configgy's home is http://www.lag.net/configgy/
+\end_layout
+
+\end_inset
+
+ as a dependency.
+ Configgy is 
+\begin_inset Quotes eld
+\end_inset
+
+a library for handling config files and logging for a scala daemon.
+ The idea is that it should be simple and straightforward, allowing you
+ to plug it in and get started quickly, writing small useful daemons without
+ entering the shadowy world of java frameworks.
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+First we need to tell Maven where we can get Configgy, so in the <repositories>
+ section add the following:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+<repository> 
+\end_layout
+
+\begin_layout Standard
+
+  <id>http://www.lag.net/repo/</id> 
+\end_layout
+
+\begin_layout Standard
+
+  <name>http://www.lag.net/repo/</name> 
+\end_layout
+
+\begin_layout Standard
+
+  <url>http://www.lag.net/repo/</url> 
+\end_layout
+
+\begin_layout Standard
+
+</repository>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Then in the <dependencies> section add:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+<dependency> 
+\end_layout
+
+\begin_layout Standard
+
+  <groupid>net.lag</groupid> 
+\end_layout
+
+\begin_layout Standard
+
+  <artifactid>configgy</artifactid> 
+\end_layout
+
+\begin_layout Standard
+
+  <version>[1.2,)</version> 
+\end_layout
+
+\begin_layout Standard
+
+</dependency>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+That's it, you're done.
+ The next time you run Maven for your project, it will pull down the Configgy
+ jars into your M2_REPO.
+ 
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Oh snap, add a section about M2_REPO
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Subsection
 Using Maven with Lift
 \end_layout
@@ -1456,8 +1583,8 @@ ites for the
 jetty:run
 \family default
  goal.
- You can see the pom.xml file for Jetty here: http://mirrors.ibiblio.org/pub/mirror
-s/maven2/org/mortbay/jetty/jetty/6.1.12.rc5/jetty-6.1.12.rc5.pom
+ You can see an example pom.xml file for Jetty here: http://mirrors.ibiblio.org/pub
+/mirrors/maven2/org/mortbay/jetty/jetty/6.1.12.rc5/jetty-6.1.12.rc5.pom
 \end_layout
 
 \begin_layout Subsection
