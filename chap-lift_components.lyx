@@ -45,7 +45,7 @@ A Detailed Look at Lift User Components
 
 \begin_layout Standard
 \begin_inset Note Note
-status open
+status collapsed
 
 \begin_layout Standard
 Chapter: Components: 
@@ -149,6 +149,9 @@ Intro
 \begin_layout Standard
 In this chapter you'll learn about how Lift builds the markup that is sent
  to the browser after a request is made to the application.
+ We've touched on the two main methods in the Architecture chapter, Templates
+ and Views.
+ We'll go a bit deeper in this chapter.
 \end_layout
 
 \begin_layout Section
@@ -175,11 +178,17 @@ name "sec:Templates"
 \end_layout
 
 \begin_layout Standard
-The most common User Component is the Template.
- A Template is static XHTML that is used as a skeleton of a page.
- Within this sequence of XML there are various Lift-specific tags called
- Snippets, which are discussed later in the chapter.
+As we learned in the previous chapter, the most common User Component is
+ the Template.
+ A Template is a block of XML that is used as a skeleton of a page.
+ Within this sequence of XML there are various Lift-specific tags.
+ We will discuss the role of each of the Lift tags later in the chapter.
+ Below is an example of a simple Template.
 \end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status collapsed
 
 \begin_layout Itemize
 Static xml that may embed or surround other templates, and may embed snippets
@@ -205,6 +214,11 @@ Re-cover how templates are located/dispatched
 \begin_layout Itemize
 TemplateFinder finds Templates...
  :)
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -305,8 +319,37 @@ t>
 
 \end_layout
 
+\begin_layout Standard
+It appears to be a regular XHTML file but there are a few tags that Lift
+ will process and replace, namely, <lift:bind />, <lift:Menu.builder /> and
+ <lift:msgs />.
+ The content of the tags offer clues to what these tags do and we'll discuss
+ the them later in 
+\begin_inset LatexCommand ref
+reference "sec:Comp-Tags"
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Section
 Views
+\end_layout
+
+\begin_layout Standard
+We offered a description of Views in 
+\begin_inset LatexCommand ref
+reference "sub:View-Processing"
+
+\end_inset
+
+and discussed the differences between a LiftView and an InsecureLiftView.
+ To refresh your memory, a LiftView comprises both the code to handle dispatchin
+g requests to the appropriate Class and the code in the Class that does
+ the work, while an InsecureLiftView does not include the dispatch code,
+ so Class-Method resolution is handled by the URL.
+ As we pointed out, we'd prefer that you use LiftView.
 \end_layout
 
 \begin_layout Description
@@ -317,6 +360,10 @@ LiftView - ref Arch + example You do all the work to process and return
  
 \end_layout
 
+\begin_layout Standard
+Put a code listing in for LiftView
+\end_layout
+
 \begin_layout Description
 InsecureLiftView - ref Arch + example You do all work and you skip dispatch,
  so class.method resolution happens via the URL.
@@ -324,7 +371,16 @@ InsecureLiftView - ref Arch + example You do all work and you skip dispatch,
  and is executed.
 \end_layout
 
+\begin_layout Standard
+Put a code listing in for InsecureLiftView
+\end_layout
+
 \begin_layout Section
+\begin_inset LatexCommand label
+name "sec:Comp-Tags"
+
+\end_inset
+
 Tags
 \end_layout
 
@@ -1222,6 +1278,17 @@ class HelloWorld {
 \end_layout
 
 \begin_layout Subsection
+Stateless Snippets, aka, default Snippets
+\end_layout
+
+\begin_layout Standard
+All of the above examples showed Stateless snippets, those that execute
+ and render a block of XML and send it back to the broswer.
+ This is the default type of snippet.
+ 
+\end_layout
+
+\begin_layout Subsection
 Stateful Snippets
 \end_layout
 
@@ -1231,7 +1298,42 @@ Lift also has a the concept of a stateful snippet.
  That is to say, from request to request, there is no saved state on the
  server-side.
  Stateless snippets are useful in the sense that many requirements for a
- web applications need no state to be
+ web applications need no state to be preserved as the user moves from page
+ to page.
+ There are a similar number of cases where we would like to preserve some
+ state as the user navigates.
+ For example, if you think about a graph that shows your spending for the
+ last 3 months.
+ You've changed the time span from the default 1 month to 3 months.
+ Now you'd like to limit the exspense categories to show only 
+\begin_inset Quotes eld
+\end_inset
+
+Food.
+\begin_inset Quotes erd
+\end_inset
+
+ More than likely, you'll want the application to respect the change in
+ time-span as well.
+ This is a case where keeping a bit of state around will allow you to do
+ this.
+\end_layout
+
+\begin_layout Standard
+Below is an example of a stateful snippet that handles the above example.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Write and then steal from PocketChange
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
@@ -1832,7 +1934,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Standard
-
 swappable example
 \end_layout
 
