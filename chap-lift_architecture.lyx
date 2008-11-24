@@ -293,7 +293,8 @@ name "Boot"
 status open
 
 \begin_layout Standard
-Cover logging setup here, too?
+Cover logging setup here, too? - Probably a good idea to touch on simple
+ logging.
 \end_layout
 
 \end_inset
