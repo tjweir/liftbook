@@ -1744,7 +1744,7 @@ reference "lst:Sample-template"
 , the surround tag gets processed first.
  In this case the surround loads the default template and embeds our content
  at the appropriate location.
- The next tag to be processed is the lift:Hello.world snippet.
+ The next tag to be processed is the <lift:Hello.world/> snippet.
  This tag is essentially an alias for the lift:snippet tag (specifically,
  
 \family typewriter
@@ -1759,7 +1759,36 @@ Hello:world
 >
 \family default
 ) , and will locate the Hello class and execute the world method on it.
- A snippet method takes a single scala.xml.NodeSeq
+ If your omit the 
+\begin_inset Quotes eld
+\end_inset
+
+method
+\begin_inset Quotes erd
+\end_inset
+
+ part of the type and only specify the class (<lift:Hello> or <lift:snippet
+ type=
+\begin_inset Quotes eld
+\end_inset
+
+Hello
+\begin_inset Quotes erd
+\end_inset
+
+>) then Lift will attempt to call the 
+\family typewriter
+render
+\family default
+ method of the class.
+\end_layout
+
+\begin_layout Subsection
+Snippet Methods
+\end_layout
+
+\begin_layout Standard
+A snippet method takes a single scala.xml.NodeSeq
 \begin_inset LatexCommand index
 name "NodeSeq"
 
@@ -1769,58 +1798,6 @@ name "NodeSeq"
  The argument passed to the method is the XML contents of the snippet tag;
  because Lift processes from the outside in, the contents are not processed
  by default before being passed to the snippet method.
- If you want the contents of a snippet tag to be processed before the snippet
- (say, if you're using a 
-\family typewriter
-lift:embed
-\begin_inset LatexCommand index
-name "embed"
-
-\end_inset
-
-
-\family default
- tag), then you would specify the 
-\family typewriter
-eager_eval
-\family default
-
-\begin_inset LatexCommand index
-name "eval"
-
-\end_inset
-
- attribute on the tag:
-\end_layout
-
-\begin_layout LyX-Code
-<lift:Hello.world eager_eval=
-\begin_inset Quotes erd
-\end_inset
-
-true
-\begin_inset Quotes erd
-\end_inset
-
->...</lift:Hello.world>
-\end_layout
-
-\begin_layout Standard
-In addition to eager_eval, there are attributes such as 
-\family typewriter
-form
-\family default
- and 
-\family typewriter
-multipart
-\family default
- which we will cover in extensive detail in section 
-\begin_inset LatexCommand ref
-reference "sub:snippet-tag"
-
-\end_inset
-
-.
  For our current example, we could simply have a method that looks like
  this:
 \end_layout
@@ -1931,9 +1908,84 @@ class Hello {
 \end_layout
 
 \begin_layout Standard
-then the lift:User.name snippet will be processed as well.
+then the lift:User.name snippet will be processed as well after our snippet
+ method returns.
  It is this hierarchical processing of template tags that makes Lift so
  flexible.
+\end_layout
+
+\begin_layout Subsection
+Eager Evaluation
+\end_layout
+
+\begin_layout Standard
+If you want the contents of a snippet tag to be processed 
+\emph on
+before
+\emph default
+ the snippet, then you would specify the 
+\family typewriter
+eager_eval
+\family default
+
+\begin_inset LatexCommand index
+name "eager_eval"
+
+\end_inset
+
+ attribute on the tag:
+\end_layout
+
+\begin_layout LyX-Code
+<lift:Hello.world eager_eval=
+\begin_inset Quotes erd
+\end_inset
+
+true
+\begin_inset Quotes erd
+\end_inset
+
+>...</lift:Hello.world>
+\end_layout
+
+\begin_layout Standard
+This is especially useful if you're using a 
+\family typewriter
+lift:embed
+\begin_inset LatexCommand index
+name "embed"
+
+\end_inset
+
+
+\family default
+ tag; without the eager_eval attribute your snippet just sees the <lift:embed>
+ tag, but with eager_eval set to true you can put 
+\emph on
+bindable
+\emph default
+ common snippet content into a single embedded template instead of copying
+ it between templates.
+ In addition to eager_eval, there are attributes such as 
+\family typewriter
+form
+\family default
+ and 
+\family typewriter
+multipart
+\family default
+ which we will cover in extensive detail in section 
+\begin_inset LatexCommand ref
+reference "sub:snippet-tag"
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Subsection
+Head Merge
 \end_layout
 
 \begin_layout Standard

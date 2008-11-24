@@ -3,6 +3,15 @@
 \begin_document
 \begin_header
 \textclass book
+\begin_preamble
+% "define" Scala
+\lstdefinelanguage{scala}{morekeywords={class,object,trait,extends,with,new,if,while,for,def,val,var},sensitive=true,morecomment=[l]{//},
+morecomment=[s]{/*}{*/},
+morestring=[b]"}
+
+% Default settings for code listings
+\lstset{frame=single,frameround=tttt,language=scala}
+\end_preamble
 \language english
 \inputencoding auto
 \font_roman default
@@ -40,7 +49,7 @@
 \begin_body
 
 \begin_layout Chapter
-Introduction to Mapper and Record
+The Record Framework
 \begin_inset LatexCommand label
 name "cha:mapper_and_record"
 
@@ -50,24 +59,869 @@ name "cha:mapper_and_record"
 \end_layout
 
 \begin_layout Standard
-Database abstraction...
- Mapper vs.
- Record - Delay until Record is done? Timeframe?
+Usually we find that most webapps end up wanting to store user data somewhere.
+ Once you start working with user data, though, you start dealing with issues
+ like coding up input forms, validation
+\begin_inset LatexCommand index
+name "validation"
+
+\end_inset
+
+, persistence, etc to handle the data.
+ That's where the Record framework comes in.
+ The Record framework provides a scaffolding for all of your data manipulation
+ needs.
+ Record is backing-store agnostic at its core, so it doesn't matter whether
+ you want to save your data to JDBC, JPA, or even something like XML.
+ Selecting the proper driver is as simple as hooking in the proper traits
+ to your class.
+\end_layout
+
+\begin_layout Section
+Introduction to Record and MetaRecord
 \end_layout
 
 \begin_layout Standard
-Record has started, Marius and dpp are working on it.
+Let's start by discussing the relationship between the Record
+\begin_inset LatexCommand index
+name "Record"
+
+\end_inset
+
+ and MetaRecord traits.
+ Record provides the 
+\emph on
+per-instance
+\emph default
+ functionality for your class, while MetaRecord handles the 
+\begin_inset Quotes eld
+\end_inset
+
+global
+\begin_inset Quotes erd
+\end_inset
+
+ operations for your class and provides a common location to define per-class
+ static specializations of things like field order, form generation and
+ HTML representation.
+ In fact, many of the Record methods actually delegate to methods on MetaRecord.
+ Technically, Record and MetaRecord are not the only players in the framework;
+ there is a third trait, Field, that provides the per-field functionality
+ for your class.
+ The Field trait lets you define the individual validators as well as things
+ like tab order and error messages.
+\end_layout
+
+\begin_layout Subsection
+Constructing a Record-enabled class
 \end_layout
 
 \begin_layout Standard
-Oh man, what do we do.
- Record is moving along, but it's not finished.
+Now that we've covered some basic background, we can start constructing
+ some Record classes to get more familiar with the framework.
+ We'll start with a simple example of an entry for a ledger entry with the
+ following fields:
+\end_layout
+
+\begin_layout Itemize
+Date
+\end_layout
+
+\begin_layout Itemize
+Description, with a max length of 100 chars
+\end_layout
+
+\begin_layout Itemize
+Amount
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+TODO: we need DecimalField
+\end_layout
+
+\end_inset
+
+, a decimal value with a precsion of two places
+\end_layout
+
+\begin_layout Standard
+The first thing we do is declare our Entry class, as shown in listing 
+\begin_inset LatexCommand ref
+reference "lst:Entry-class"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "float"
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+
+Entry class
+\begin_inset LatexCommand label
+name "lst:Entry-class"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+class Entry extends Record[Entry] {
+\end_layout
+
+\begin_layout Standard
+
+  def meta = EntryMeta
+\end_layout
+
+\begin_layout Standard
+
+  object date extends DateTimeField[Entry](this)
+\end_layout
+
+\begin_layout Standard
+
+  object description extends StringField[Entry](this, 100)
+\end_layout
+
+\begin_layout Standard
+
+  object amount extends DecimalField[Entry](this, 2) // 2 digits to the
+ right
+\end_layout
+
+\begin_layout Standard
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+As you can see, we've set Entry to extend the Record trait (we need to tell
+ Record what the subtype is) and we've added the fields required by our
+ class.
+ You've probably noticed that the fields are defined as objects rather than
+ instance members (vars).
+ The basic reason for this is that the MetaRecord needs access to fields
+ for its validation and form functionality; it wouldn't be possible to cleanly
+ define these properties in the MetaRecord if it had to access member vars
+ on each instance since a MetaRecord instance is itself an object.
+\end_layout
+
+\begin_layout Standard
+In order to tie all of this together, we need to define a matching MetaRecord
+\begin_inset LatexCommand index
+name "MetaRecord"
+
+\end_inset
+
+ object, as shown in listing 
+\begin_inset LatexCommand ref
+reference "lst:EntryMeta-object"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+
+EntryMeta object
+\begin_inset LatexCommand label
+name "lst:EntryMeta-object"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+object EntryMeta extends Entry with MetaRecord[Entry] {
+\end_layout
+
+\begin_layout Standard
+
+  override def fieldOrder = date :: description :: amount :: Nil
+\end_layout
+
+\begin_layout Standard
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In our case we'll simply define the order of fields as they'll be displayed
+ in XHTML
+\begin_inset LatexCommand index
+name "XHTML"
+
+\end_inset
+
+ and forms
+\begin_inset LatexCommand index
+name "form"
+
+\end_inset
+
+.
+ If you don't want a particular field to show up in forms or XHTML output,
+ simply omit it from the fieldOrder
+\begin_inset LatexCommand index
+name "fieldOrder"
+
+\end_inset
+
+ list.
+ Once we have the MetaEntry object defined we can use it to create objects
+ using the 
+\family typewriter
+createRecord
+\begin_inset LatexCommand index
+name "createRecord"
+
+\end_inset
+
+
+\family default
+ method.
+ You can't just use the 
+\begin_inset Quotes eld
+\end_inset
+
+new
+\begin_inset Quotes erd
+\end_inset
+
+ operator because the framework has to set up internal data for the instance
+ such as field owner, etc.
  
 \end_layout
 
 \begin_layout Standard
-Quickly go over mapper for a simple-CRUD app, then point to Hibernate,JPA
- for a larger-scale application.
+Since fields aren't actually instance members, operations on them are slightly
+ different that a regular var.
+ The biggest difference is in how we set fields: we use the apply method.
+ In addition, field access can be chained so that you can set multiple field
+ values in one statement.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+myEntry.date(new Date).description("A sample entry")
+\end_layout
+
+\begin_layout Standard
+
+myEntry.amount("127.20")
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Comparing fields to values is done using the 
+\family typewriter
+==
+\family default
+ operator
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+if (myEntry.description == "Doughnuts") {
+\end_layout
+
+\begin_layout Standard
+
+  println("Diet ruined!")
+\end_layout
+
+\begin_layout Standard
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If you need more complex processing of the field, the underlying value can
+ be retrieved with the 
+\family typewriter
+value
+\family default
+ method
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+val tenthOfAmount = myEntry.amount.value / 10
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+XHTML and Javascript generation
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Need to clarify with DPP that current behavior (NodeSeq.Empty) is correct
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Form generation
+\begin_inset LatexCommand label
+name "sub:Form-generation"
+
+\end_inset
+
+
+\begin_inset LatexCommand index
+name "Forms"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+One of the biggest pieces of functionality in the Record framework is the
+ ability to generate entry forms for a given record.
+ The 
+\family typewriter
+toForm
+\begin_inset LatexCommand index
+name "toForm"
+
+\end_inset
+
+
+\family default
+ method on Record is overloaded so that you can control how your form is
+ created.
+ The first 
+\family typewriter
+toForm
+\family default
+ method simply takes a function to process the submitted form and returns
+ the XHTML
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+myEntry.toForm { (entry : Entry) => entry.save }
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+As you can see, this makes it very easy to generate a form for editing an
+ entity.
+ The second 
+\family typewriter
+toForm
+\family default
+ method allows you to specify whether or not a submit button is generated
+ by additionally passing in a Can[String]; if the Can is Empty, no submit
+ button is generated, otherwise, the String contents of the Can are used
+ as the button label
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+myEntry.toForm (Full("Save me now!")) { ...
+ }
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The MetaRecord object allows you to change the default template
+\begin_inset LatexCommand index
+name "Override form template"
+
+\end_inset
+
+ that the form uses by setting the formTemplate
+\begin_inset LatexCommand index
+name "formTemplate"
+
+\end_inset
+
+ var.
+ The template may contain any XHTML you want, but specifically, the toForm
+ method will do special handling for the following tags:
+\end_layout
+
+\begin_layout Description
+<lift:field_label\InsetSpace ~
+name=
+\begin_inset Quotes eld
+\end_inset
+
+...
+\begin_inset Quotes erd
+\end_inset
+
+\InsetSpace ~
+/> The label for the field with the given name will be rendered here.
+\end_layout
+
+\begin_layout Description
+<lift:field\InsetSpace ~
+name=
+\begin_inset Quotes eld
+\end_inset
+
+...
+\begin_inset Quotes erd
+\end_inset
+
+\InsetSpace ~
+/> The field itself (specified by the given name) will be rendered here.
+ Typically this will be an input field, although it can be anything type-appropr
+iate.
+ For example, a BooleanField would render a checkbox.
+\end_layout
+
+\begin_layout Description
+<lift:field_msg\InsetSpace ~
+name=
+\begin_inset Quotes eld
+\end_inset
+
+...
+\begin_inset Quotes erd
+\end_inset
+
+\InsetSpace ~
+/> Any messages, such as from validation, for the field with the given name
+ will be rendered here.
+\end_layout
+
+\begin_layout Standard
+As an example, if we wanted to use tables to lay out the form for our ledger
+ entry, the row for the description field could look like
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=XML"
+inline false
+status open
+
+\begin_layout Standard
+
+<tr>
+\end_layout
+
+\begin_layout Standard
+
+  <th><lift:field_label name="description" /></th>
+\end_layout
+
+\begin_layout Standard
+
+  <td><lift:field name="description" /> <lift:field_msg name="description"
+ /></td>
+\end_layout
+
+\begin_layout Standard
+
+</tr>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Technically, the field_msg binding looks up lift messages (section 
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Cross-ref
+\end_layout
+
+\end_inset
+
+) based on the field's uniqueId, so you can set your own messages outside
+ of validation using the S.{error,notice,warning} methods like
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+S.warning(myEntry.amount.uniqueFieldId, "You have entered a negative amount!")
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+For most purposes, though, using the validation mechanism discussed in the
+ next section would be the appropriate way to handle error checking and
+ reporting.
+\end_layout
+
+\begin_layout Subsection
+Validation
+\begin_inset LatexCommand index
+name "Validation"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Validation is the process of checking a field during form processing to
+ make sure that the submitted value meets requirements.
+ This can be something as simple as ensuring that a value was submitted,
+ or as complex as comparing multiple field values together.
+ Validation is achieved via a 
+\family typewriter
+List
+\family default
+ of functions on a field that take the field value as input and return a
+ 
+\family typewriter
+Can[Node]
+\family default
+.
+ To indicate that validation succeeded, simply return an Empty, otherwise
+ the XML Node you return is used as the failure message to be presented
+ to the user.
+ As an example, let's say we don't want someone to be able to add a ledger
+ entry in the future.
+ First, we need to define a function for our date field that takes a Calendar
+ as an input (java.util.Calendar
+\begin_inset LatexCommand index
+name "Calendar"
+
+\end_inset
+
+ is the actual value type of DateTimeField) and returns the proper Can.
+ We show a simple function in listing 
+\begin_inset LatexCommand ref
+reference "lst:Date-validation"
+
+\end_inset
+
+.
+ In the method we simply check to see if the millisecond count is greater
+ than 
+\begin_inset Quotes eld
+\end_inset
+
+now
+\begin_inset Quotes erd
+\end_inset
+
+ and return an error message if so.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+
+Date validation
+\begin_inset LatexCommand label
+name "lst:Date-validation"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+def noFutureDates (time : java.util.Calendar) = {
+\end_layout
+
+\begin_layout Standard
+
+  if (time.getTimeInMillis > System.currentTimeMillis) {
+\end_layout
+
+\begin_layout Standard
+
+    Text("You cannot make future ledger entries")
+\end_layout
+
+\begin_layout Standard
+
+  } else {
+\end_layout
+
+\begin_layout Standard
+
+    Empty
+\end_layout
+
+\begin_layout Standard
+
+  }
+\end_layout
+
+\begin_layout Standard
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The next step is to tie the validation into the field itself.
+ We do this by slightly modifying our field definition for 
+\family typewriter
+date
+\family default
+ to set our list of validators
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+object date extends DateTimeField[Entry](this) {
+\end_layout
+
+\begin_layout Standard
+
+  override def validators = noFutureDates :: Nil
+\end_layout
+
+\begin_layout Standard
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+When our form is submitted, all of the validators for each field are run,
+ and if all of them return Empty then validation succeeds.
+ If any validators return a Full Can, then the contents of the Can are displayed
+ as error messages to the user.
+\end_layout
+
+\begin_layout Subsection
+Mutable vs Immutable
+\end_layout
+
+\begin_layout Standard
+Immutability
+\begin_inset LatexCommand index
+name "Immutability"
+
+\end_inset
+
+ of instances is an important property that programmers can use to simplify
+ thread-safety; if an object is immutable then you don't need to worry about
+ locking between multiple threads since no thread can modify the object.
+ Record supports this via the 
+\family typewriter
+mutable_?
+\family default
+ method on MetaRecord.
+ By default, Records are mutable, so if you need to use multiple threads
+ (with actors, for instance) you need to be careful about changing the fields
+ of a given Record instance.
+ If you want a Record type to be immutable then simply override the 
+\family typewriter
+mutable_?
+\family default
+ method to return false.
+ Note that making a record immutable doesn't mean that you can't change
+ values on it, rather that changing the value of a field actually generates
+ a new instance that copies over the original instances values and uses
+ the new value for the given field.
+ For example:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+val firstDesc = myEntry.description("one")
+\end_layout
+
+\begin_layout Standard
+
+val secondDesc = firstDesc("two")
+\end_layout
+
+\begin_layout Standard
+
+println(firstDesc.value) // prints "one"
+\end_layout
+
+\begin_layout Standard
+
+println(secondDesc.value) // prints "two"
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Record's chaining of field operation makes this essentially transparent
+ in general use.
+\end_layout
+
+\begin_layout Subsection
+Lifecycle Callbacks
+\end_layout
+
+\begin_layout Standard
+Record provides for a set of lifecycle callbacks that allow
+\end_layout
+
+\begin_layout Subsection
+Querying
+\end_layout
+
+\begin_layout Subsection
+Object relationships
+\end_layout
+
+\begin_layout Subsection
+Base Field Types
+\end_layout
+
+\begin_layout Subsection
+Defining Custom Field Types
+\end_layout
+
+\begin_layout Section
+JDBC Records
+\end_layout
+
+\begin_layout Section
+JPA Records
 \end_layout
 
 \end_body
