@@ -40,7 +40,7 @@
 \begin_body
 
 \begin_layout Chapter
-Lift Architecture
+Lift Introduction
 \end_layout
 
 \begin_layout Standard
@@ -70,6 +70,10 @@ Chapter: Arch:
 \end_inset
 
 
+\end_layout
+
+\begin_layout Section
+Prerequisites
 \end_layout
 
 \begin_layout Standard
