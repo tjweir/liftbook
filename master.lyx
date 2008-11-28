@@ -30,12 +30,15 @@
   {LyX }}
 
 % "define" Scala
-\lstdefinelanguage{scala}{morekeywords={class,object,trait,extends,with,new,if,while,for,def,val,var,this},sensitive=true,morecomment=[l]{//},
+\lstdefinelanguage{scala}{morekeywords={class,object,trait,extends,with,new,if,while,for,def,val,var,this},
+otherkeywords={->,=>},
+sensitive=true,
+morecomment=[l]{//},
 morecomment=[s]{/*}{*/},
 morestring=[b]"}
 
 % Default settings for code listings
-\lstset{frame=single,frameround=tttt,language=scala}
+\lstset{frame=tb,language=scala,basicstyle=\small,aboveskip=3mm,belowskip=3mm,showstringspaces=false}
 \end_preamble
 \language english
 \inputencoding auto
@@ -161,7 +164,7 @@ Derek Chen-Becker and Tyler Weir
 
 \end_layout
 
-\begin_layout Chapter
+\begin_layout Chapter*
 Dedication
 \end_layout
 
@@ -174,7 +177,7 @@ Derek would like to thank his wife, Debbie, for her patience and support
 Tyler would like to thank his wife Laura, for encouraging him.
 \end_layout
 
-\begin_layout Chapter
+\begin_layout Chapter*
 Acknowledgements
 \end_layout
 
