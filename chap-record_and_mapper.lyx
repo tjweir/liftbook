@@ -73,8 +73,8 @@ name "validation"
  needs.
  Record is backing-store agnostic at its core, so it doesn't matter whether
  you want to save your data to JDBC, JPA, or even something like XML.
- Selecting the proper driver is as simple as hooking in the proper traits
- to your class.
+ Selecting the proper driver is as simple as hooking the proper traits into
+ your class.
 \end_layout
 
 \begin_layout Section
@@ -94,22 +94,17 @@ name "Record"
 per-instance
 \emph default
  functionality for your class, while MetaRecord handles the 
-\begin_inset Quotes eld
-\end_inset
-
+\emph on
 global
-\begin_inset Quotes erd
-\end_inset
-
+\emph default
  operations for your class and provides a common location to define per-class
  static specializations of things like field order, form generation and
  HTML representation.
  In fact, many of the Record methods actually delegate to methods on MetaRecord.
- Technically, Record and MetaRecord are not the only players in the framework;
- there is a third trait, Field, that provides the per-field functionality
- for your class.
+ In addition to Record and MetaRecord there is a third trait, Field, that
+ provides the per-field functionality for your class.
  The Field trait lets you define the individual validators as well as things
- like tab order and error messages.
+ like tab order and error messages for form input handling.
 \end_layout
 
 \begin_layout Subsection
@@ -119,7 +114,7 @@ Constructing a Record-enabled class
 \begin_layout Standard
 Now that we've covered some basic background, we can start constructing
  some Record classes to get more familiar with the framework.
- We'll start with a simple example of an entry for a ledger entry with the
+ We'll start with a simple example of a class for a ledger entry with the
  following fields:
 \end_layout
 
@@ -132,17 +127,7 @@ Description, with a max length of 100 chars
 \end_layout
 
 \begin_layout Itemize
-Amount
-\begin_inset Note Note
-status open
-
-\begin_layout Standard
-TODO: we need DecimalField
-\end_layout
-
-\end_inset
-
-, a decimal value with a precsion of two places
+Amount, a decimal value with a precsion of two places.
 \end_layout
 
 \begin_layout Standard
@@ -157,7 +142,7 @@ reference "lst:Entry-class"
 
 \begin_layout Standard
 \begin_inset listings
-lstparams "float"
+lstparams "showstringspaces=false"
 inline false
 status open
 
@@ -166,7 +151,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Standard
-
 Entry class
 \begin_inset LatexCommand label
 name "lst:Entry-class"
@@ -193,18 +177,22 @@ class Entry extends Record[Entry] {
 
 \begin_layout Standard
 
-  object date extends DateTimeField[Entry](this)
+  object date extends DateTimeField(this)
 \end_layout
 
 \begin_layout Standard
 
-  object description extends StringField[Entry](this, 100)
+  object description extends StringField(this, 100)
 \end_layout
 
 \begin_layout Standard
 
-  object amount extends DecimalField[Entry](this, 2) // 2 digits to the
- right
+  // 2 digits to the right
+\end_layout
+
+\begin_layout Standard
+
+  object amount extends DecimalField(this, 2)
 \end_layout
 
 \begin_layout Standard
@@ -227,6 +215,14 @@ As you can see, we've set Entry to extend the Record trait (we need to tell
  for its validation and form functionality; it wouldn't be possible to cleanly
  define these properties in the MetaRecord if it had to access member vars
  on each instance since a MetaRecord instance is itself an object.
+ Also note that DecimalField is a custom field type, which we will cover
+ in section 
+\begin_inset LatexCommand ref
+reference "sub:Defining-Custom-Field-types"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
@@ -255,7 +251,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Standard
-
 EntryMeta object
 \begin_inset LatexCommand label
 name "lst:EntryMeta-object"
@@ -343,13 +338,38 @@ Since fields aren't actually instance members, operations on them are slightly
  different that a regular var.
  The biggest difference is in how we set fields: we use the apply method.
  In addition, field access can be chained so that you can set multiple field
- values in one statement.
+ values in one statement, as shown in listing 
+\begin_inset LatexCommand ref
+reference "lst:Setting-field-values"
+
+\end_inset
+
+:
 \end_layout
 
 \begin_layout Standard
 \begin_inset listings
 inline false
 status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+Setting field values
+\begin_inset LatexCommand label
+name "lst:Setting-field-values"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
 
 \begin_layout Standard
 
@@ -367,11 +387,17 @@ myEntry.amount("127.20")
 \end_layout
 
 \begin_layout Standard
-Comparing fields to values is done using the 
+The underlying value of a given field can be retrieved with the 
 \family typewriter
-==
+value
 \family default
- operator
+ method as shown in listing 
+\begin_inset LatexCommand ref
+reference "lst:Accessing-field-values"
+
+\end_inset
+
+:
 \end_layout
 
 \begin_layout Standard
@@ -381,7 +407,46 @@ status open
 
 \begin_layout Standard
 
-if (myEntry.description == "Doughnuts") {
+\begin_inset Caption
+
+\begin_layout Standard
+Accessing field values
+\begin_inset LatexCommand label
+name "lst:Accessing-field-values"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+val tenthOfAmount = myEntry.amount.value / 10
+\end_layout
+
+\begin_layout Standard
+
+val formatted = String.format("%s : %s",
+\end_layout
+
+\begin_layout Standard
+
+                              myEntry.description.value,
+\end_layout
+
+\begin_layout Standard
+
+                              myEntry.amount.value.toString)
+\end_layout
+
+\begin_layout Standard
+
+if (myEntry.description.value == "Doughnuts") {
 \end_layout
 
 \begin_layout Standard
@@ -399,13 +464,29 @@ if (myEntry.description == "Doughnuts") {
 
 \end_layout
 
+\begin_layout Subsection
+Display generation
+\end_layout
+
 \begin_layout Standard
-If you need more complex processing of the field, the underlying value can
- be retrieved with the 
+If you want to display a record instance as XHTML, simply call the 
 \family typewriter
-value
+toXHtml
 \family default
- method
+ method on your instance.
+ The default implementation turns each field's value into a Text node via
+ the 
+\family typewriter
+toString
+\family default
+ method and concatenates the results, separated by newlines.
+ If you want to change this behavior, override the 
+\family typewriter
+toXHtml
+\family default
+ on your field definitions.
+ For example, if we wanted to control formatting on our date we could modify
+ the field as shown in listing
 \end_layout
 
 \begin_layout Standard
@@ -415,7 +496,16 @@ status open
 
 \begin_layout Standard
 
-val tenthOfAmount = myEntry.amount.value / 10
+\begin_inset Caption
+
+\begin_layout Standard
+Custom field display
+\begin_inset LatexCommand label
+name "lst:Custom-field-display"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -423,21 +513,71 @@ val tenthOfAmount = myEntry.amount.value / 10
 
 \end_layout
 
-\begin_layout Subsection
-XHTML and Javascript generation
+\begin_layout Standard
+
+import java.util.DateFormat
 \end_layout
 
 \begin_layout Standard
+
+...
+\end_layout
+
+\begin_layout Standard
+
+object date extends DateTimeField(this) {
+\end_layout
+
+\begin_layout Standard
+
+  final val dateFormat = 
+\end_layout
+
+\begin_layout Standard
+
+    DateFormat.getDateInstance(DateFormat.SHORT)
+\end_layout
+
+\begin_layout Standard
+
+  override def toXHtml = Text(dateFormat.format(value.getTime))
+\end_layout
+
+\begin_layout Standard
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Note that the DateTimeField contains a 
+\family typewriter
+java.util.Calendar
+\family default
+ instance, which is why we need to use the 
+\family typewriter
+getTime
+\family default
+ method on the value.
+ A similar method, 
+\family typewriter
+asJs
+\family default
+, will return the JSON representation of the instance
 \begin_inset Note Note
 status open
 
 \begin_layout Standard
-Need to clarify with DPP that current behavior (NodeSeq.Empty) is correct
+Still in flux and not implemented
 \end_layout
 
 \end_inset
 
-
+.
 \end_layout
 
 \begin_layout Subsection
@@ -476,7 +616,13 @@ name "toForm"
 toForm
 \family default
  method simply takes a function to process the submitted form and returns
- the XHTML
+ the XHTML as shown in listing 
+\begin_inset LatexCommand ref
+reference "lst:Default-toForm-method"
+
+\end_inset
+
+:
 \end_layout
 
 \begin_layout Standard
@@ -486,7 +632,26 @@ status open
 
 \begin_layout Standard
 
-myEntry.toForm { (entry : Entry) => entry.save }
+\begin_inset Caption
+
+\begin_layout Standard
+Default toForm method
+\begin_inset LatexCommand label
+name "lst:Default-toForm-method"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+myEntry.toForm { _.save }
 \end_layout
 
 \end_inset
@@ -504,7 +669,13 @@ toForm
  method allows you to specify whether or not a submit button is generated
  by additionally passing in a Can[String]; if the Can is Empty, no submit
  button is generated, otherwise, the String contents of the Can are used
- as the button label
+ as the button label as shown in listing 
+\begin_inset LatexCommand ref
+reference "lst:Custom-submit-button"
+
+\end_inset
+
+:
 \end_layout
 
 \begin_layout Standard
@@ -514,8 +685,36 @@ status open
 
 \begin_layout Standard
 
-myEntry.toForm (Full("Save me now!")) { ...
- }
+\begin_inset Caption
+
+\begin_layout Standard
+Custom submit button
+\begin_inset LatexCommand label
+name "lst:Custom-submit-button"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+myEntry.toForm (Full("Save me now!")) { _.save }
+\end_layout
+
+\begin_layout Standard
+
+// No submit button generated
+\end_layout
+
+\begin_layout Standard
+
+myEntry.toForm (Empty) {_.save}
 \end_layout
 
 \end_inset
@@ -589,14 +788,39 @@ name=
 
 \begin_layout Standard
 As an example, if we wanted to use tables to lay out the form for our ledger
- entry, the row for the description field could look like
+ entry, the row for the description field could look like listing 
+\begin_inset LatexCommand ref
+reference "lst:Custom-form-template"
+
+\end_inset
+
+:
 \end_layout
 
 \begin_layout Standard
 \begin_inset listings
-lstparams "language=XML"
+lstparams "basicstyle={\scriptsize},language=XML"
 inline false
 status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+Custom form template
+\begin_inset LatexCommand label
+name "lst:Custom-form-template"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
 
 \begin_layout Standard
 
@@ -636,7 +860,14 @@ Cross-ref
 \end_inset
 
 ) based on the field's uniqueId, so you can set your own messages outside
- of validation using the S.{error,notice,warning} methods like
+ of validation using the S.{error,notice,warning} methods as shown in listing
+ 
+\begin_inset LatexCommand ref
+reference "lst:Setting-messages-via-S"
+
+\end_inset
+
+:
 \end_layout
 
 \begin_layout Standard
@@ -646,7 +877,36 @@ status open
 
 \begin_layout Standard
 
-S.warning(myEntry.amount.uniqueFieldId, "You have entered a negative amount!")
+\begin_inset Caption
+
+\begin_layout Standard
+Setting messages via S
+\begin_inset LatexCommand label
+name "lst:Setting-messages-via-S"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+S.warning(myEntry.amount.uniqueFieldId, 
+\end_layout
+
+\begin_layout Standard
+
+          "You have entered a negative amount!")
+\end_layout
+
+\begin_layout Standard
+
+S.warning("amount_id", "This is brittle")
 \end_layout
 
 \end_inset
@@ -727,7 +987,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Standard
-
 Date validation
 \begin_inset LatexCommand label
 name "lst:Date-validation"
@@ -788,7 +1047,13 @@ The next step is to tie the validation into the field itself.
 \family typewriter
 date
 \family default
- to set our list of validators
+ to set our list of validators as shown in listing 
+\begin_inset LatexCommand ref
+reference "lst:Setting-validators"
+
+\end_inset
+
+:
 \end_layout
 
 \begin_layout Standard
@@ -798,12 +1063,26 @@ status open
 
 \begin_layout Standard
 
+\begin_inset Caption
+
+\begin_layout Standard
+Setting validators
+\begin_inset LatexCommand label
+name "lst:Setting-validators"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
 object date extends DateTimeField[Entry](this) {
 \end_layout
 
 \begin_layout Standard
 
-  override def validators = noFutureDates :: Nil
+  override def validators = noFutureDates _ :: Nil
 \end_layout
 
 \begin_layout Standard
@@ -817,7 +1096,19 @@ object date extends DateTimeField[Entry](this) {
 \end_layout
 
 \begin_layout Standard
-When our form is submitted, all of the validators for each field are run,
+Note that we need to add the underscore after each function so that it's
+ not applied
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Make this sound more clear
+\end_layout
+
+\end_inset
+
+.
+ When our form is submitted, all of the validators for each field are run,
  and if all of them return Empty then validation succeeds.
  If any validators return a Full Can, then the contents of the Can are displayed
  as error messages to the user.
@@ -854,13 +1145,38 @@ mutable_?
  values on it, rather that changing the value of a field actually generates
  a new instance that copies over the original instances values and uses
  the new value for the given field.
- For example:
+ An example of using immutable fields is shown in listing 
+\begin_inset LatexCommand ref
+reference "lst:Immutable-fields"
+
+\end_inset
+
+:
 \end_layout
 
 \begin_layout Standard
 \begin_inset listings
 inline false
 status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+Immutable fields
+\begin_inset LatexCommand label
+name "lst:Immutable-fields"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
 
 \begin_layout Standard
 
@@ -897,7 +1213,628 @@ Lifecycle Callbacks
 \end_layout
 
 \begin_layout Standard
-Record provides for a set of lifecycle callbacks that allow
+Record provides for a set of callbacks that allow you to perform actions
+ at various points during the lifecycle of a given instance.
+ If you want to define your own handling for one of the lifecycle events,
+ simply add the LifecycleCallbacks trait to your Record object.
+ For example, if we wanted to notify a comet actor whenever a new ledger
+ entry is saved, we could change our Entry as shown in listing 
+\begin_inset LatexCommand ref
+reference "lst:Lifecycle-Callbacks"
+
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+Lifecycle callbacks
+\begin_inset LatexCommand label
+name "lst:Lifecycle-Callbacks"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+object Entry extends Record[Entry] with LifecycleCallbacks {
+\end_layout
+
+\begin_layout Standard
+
+  ...
+\end_layout
+
+\begin_layout Standard
+
+  override def afterSave { myActor ! this }
+\end_layout
+
+\begin_layout Standard
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Base Field Types
+\end_layout
+
+\begin_layout Standard
+The Record framework defines several basic field types:
+\end_layout
+
+\begin_layout Description
+BinaryField Represents a byte array.
+ You must provide your own overrides for toForm and asXHtml for input and
+ display
+\end_layout
+
+\begin_layout Description
+BooleanField Represents a Boolean value.
+ The default form representation is a checkbox
+\end_layout
+
+\begin_layout Description
+CountryField Represents a choice from an enumeration of country phone codes
+ as provided by the net.liftweb.mapper.Countries.I18NCountry class.
+ The default form representation is a select
+\end_layout
+
+\begin_layout Description
+DateTimeField Represents a timestamp (java.util.Date).
+ The default form representation is a text input
+\end_layout
+
+\begin_layout Description
+DoubleField Represents a Double value
+\end_layout
+
+\begin_layout Description
+EmailField Represents an email address
+\end_layout
+
+\begin_layout Description
+EnumField Represents a choice from a given scala.Enumeration.
+ The default form representation is a select
+\end_layout
+
+\begin_layout Description
+IntField Represents an Int value
+\end_layout
+
+\begin_layout Description
+LocaleField Represents a locale as selected from the java.util.Locale.getAvailableL
+ocales method.
+ The default form representation is a select
+\end_layout
+
+\begin_layout Description
+LongField Represents a Long value
+\end_layout
+
+\begin_layout Description
+PasswordField Represents a password string.
+ The default form representation is a password input (obscured text)
+\end_layout
+
+\begin_layout Description
+PostalCodeField Represents a validated postal code string.
+ The field takes a reference to a CountryField at definition and validates
+ the input string against the selected country's postal code format
+\end_layout
+
+\begin_layout Description
+StringField Represents a string value with a maximum length and optional
+ default value
+\end_layout
+
+\begin_layout Description
+TextareaField Represents a text area (string) value.
+ You can override the textareaRows and textareaCols methods to change the
+ default size of the text area
+\end_layout
+
+\begin_layout Description
+TimeZoneField Represents a time zone selected from java.util.TimeZone.getAvailableI
+Ds.
+ The default form representation is a select
+\end_layout
+
+\begin_layout Subsection
+Defining Custom Field Types
+\begin_inset LatexCommand label
+name "sub:Defining-Custom-Field-types"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The basic field types cover a wide range of needs, but sometimes you may
+ find yourself wanting to cover a specific type.
+ In our case, we would like a DecimalField to represent decimal currency
+ amounts.
+ Using a double would be inappropriate due to imprecision and rounding errors
+\begin_inset Foot
+status collapsed
+
+\begin_layout Standard
+\begin_inset LatexCommand htmlurl
+target "http://stephan.reposita.org/archives/2008/01/11/once-and-for-all-do-not-use-double-for-money/"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+, so instead we base it on BigDecimal.
+ Our first task is to specify the class signature and constructors, as shown
+ in listing 
+\begin_inset LatexCommand ref
+reference "lst:DecimalField-constructors"
+
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+DecimalField constructors
+\begin_inset LatexCommand label
+name "lst:DecimalField-constructors"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+class DecimalField[OwnerType <: Record[OwnerType]]
+\end_layout
+
+\begin_layout Standard
+
+    (rec : OwnerType, scale : Int)
+\end_layout
+
+\begin_layout Standard
+
+    extends Field[BigDecimal,OwnerType] {
+\end_layout
+
+\begin_layout Standard
+
+  def this(rec : OwnerType, newVal : BigDecimal) = {
+\end_layout
+
+\begin_layout Standard
+
+    this(rec, newVal.scale)
+\end_layout
+
+\begin_layout Standard
+
+    set(newVal)
+\end_layout
+
+\begin_layout Standard
+
+  }
+\end_layout
+
+\begin_layout Standard
+
+  var rounding = RoundingMode.HALF_EVEN
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The first part of the class definition is the type signature; basically
+ the type 
+\family typewriter
+[OwnerType <: Record[OwnerType]]
+\family default
+ indicates that whatever type 
+\begin_inset Quotes eld
+\end_inset
+
+owns
+\begin_inset Quotes erd
+\end_inset
+
+ this field must be a Record subclass (<: specifies an upper type bound).
+ With our constructor we specify the owner record as well as the 
+\begin_inset Quotes eld
+\end_inset
+
+scale
+\begin_inset Quotes erd
+\end_inset
+
+ of the decimal value.
+ The scale in BigDecimal essentially represents the number of digits to
+ the right of the decimal point.
+ In addition, we specify a second constructor that allows us to initialize
+ the field to a value.
+ This second constructor uses the scale of the provided value as the default.
+ At the end of the listing we provide a var to control the rounding mode
+ of the field.
+\end_layout
+
+\begin_layout Standard
+Now that we have the constructors in place, there are several abstract methods
+ on Field that we need to define.
+ The first of these is a method to provide a default value.
+ The default value is used for uninitialized fields or if validation failes.
+ We also need to specify the owner of this field via the owner method.
+ Listing 
+\begin_inset LatexCommand ref
+reference "lst:Setting-a-default-value"
+
+\end_inset
+
+ shows both of these methods.
+ In our case, we default to a zero value, with the scale set as specified
+ in the contructor, and our owner def simply returns the rec value from
+ our constructor.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+
+Setting a default value
+\begin_inset LatexCommand label
+name "lst:Setting-a-default-value"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+def owner = rec
+\end_layout
+
+\begin_layout Standard
+
+def defaultValue = (new BigDecimal("0")).setScale(scale)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The next two methods that we need to provide deal with actually setting
+ the value of the field.
+ The first is 
+\family typewriter
+setFromAny
+\family default
+, which takes an 
+\family typewriter
+Any
+\family default
+ parameter and must convert it into a 
+\family typewriter
+Can[BigDecimal]
+\family default
+.
+ The second, 
+\family typewriter
+setFromString
+\family default
+ is a subset of 
+\family typewriter
+setFromAny
+\family default
+ in that it takes a 
+\family typewriter
+String
+\family default
+ parameter and must return a 
+\family typewriter
+Can[BigDecimal]
+\family default
+.
+ With either of these methods, if the conversion is unsuccesful, you need
+ to return an 
+\family typewriter
+Empty
+\family default
+ as well as call the 
+\family typewriter
+couldNotSetValue
+\family default
+ method (from the Field trait) to set a flag on the field that other parts
+ of the library use.
+ Our implementation of these two methods is shown in listing 
+\begin_inset LatexCommand ref
+reference "lst:setFrom...-Methods"
+
+\end_inset
+
+.
+ We've also added a setAll method so that we have a common place to properly
+ set scale and rounding modes on the value of the field.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "numbers=left,numberstyle={\tiny},stepnumber=2"
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+
+setFrom...
+ Methods
+\begin_inset LatexCommand label
+name "lst:setFrom...-Methods"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+  def setFromAny (in : Any) : Can[BigDecimal] =
+\end_layout
+
+\begin_layout Standard
+
+    in match {
+\end_layout
+
+\begin_layout Standard
+
+      case n :: _ => setFromString(n.toString)
+\end_layout
+
+\begin_layout Standard
+
+      case Some(n) => setFromString(n.toString)
+\end_layout
+
+\begin_layout Standard
+
+      case Full(n) => setFromString(n.toString)
+\end_layout
+
+\begin_layout Standard
+
+      case None | Empty | Failure(_, _, _) | null => setFromString("0")
+\end_layout
+
+\begin_layout Standard
+
+      case n => setFromString(n.toString)
+\end_layout
+
+\begin_layout Standard
+
+    }
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+  def setFromString (in : String) : Can[BigDecimal] = {
+\end_layout
+
+\begin_layout Standard
+
+    try {
+\end_layout
+
+\begin_layout Standard
+
+      Full(this.setAll(new BigDecimal(in)))
+\end_layout
+
+\begin_layout Standard
+
+    } catch {
+\end_layout
+
+\begin_layout Standard
+
+      case e : Exception => couldNotSetValue; Empty
+\end_layout
+
+\begin_layout Standard
+
+    }
+\end_layout
+
+\begin_layout Standard
+
+  }
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+  protected def setAll (in : BigDecimal) = set(in.setScale(scale, rounding))
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Our implementations are relatively straightforward.
+ The only special handling we need for setFromAny is to properly deal with
+ Lists, Cans, Options and the null value.
+ The BigDecimal constructor takes Strings, so the setFromString method is
+ easy.
+ The only addition we make over the BigDecimal constructor is to properly
+ set the scale and rounding on the returned value.
+ To make the field a little more useful, we can also specify some convenience
+ methods on it to make arithmetic a little more natural, as shown in listing
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+
+Convenience methods
+\begin_inset LatexCommand label
+name "lst:Convenience-methods"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+  def += (other : BigDecimal) = setAll(value.add(other))
+\end_layout
+
+\begin_layout Standard
+
+  def -= (other : BigDecimal) = setAll(value.subtract(other))
+\end_layout
+
+\begin_layout Standard
+
+  def *= (other : BigDecimal) = setAll(value.multiply(other))
+\end_layout
+
+\begin_layout Standard
+
+  def /= (other : BigDecimal) = setAll(value.divide(other))
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+  // Use in practice:
+\end_layout
+
+\begin_layout Standard
+
+  myEntry.amount *= BigDecimal.valueOf(2)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+You could expand on the convenience methods as you wish to cover Ints, Longs,
+ Doubles, etc.
+\end_layout
+
+\begin_layout Section
+JDBC Records
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+This part of the library hasn't been finished yet
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
@@ -908,20 +1845,21 @@ Querying
 Object relationships
 \end_layout
 
-\begin_layout Subsection
-Base Field Types
-\end_layout
-
-\begin_layout Subsection
-Defining Custom Field Types
-\end_layout
-
-\begin_layout Section
-JDBC Records
-\end_layout
-
 \begin_layout Section
 JPA Records
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+This part of the library hasn't been finished yet
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \end_body
