@@ -108,9 +108,9 @@ name "Mapper"
 
 \end_inset
 
- and MetaRecord
+ and MetaMapper
 \begin_inset LatexCommand index
-name "MetaRecord"
+name "MetaMapper"
 
 \end_inset
 
@@ -151,7 +151,159 @@ Field
 
 .
  The MappedField trait lets you define the individual validators as well
- as things like tab order and error messages for form input handling.
+ as things transform filters and filed name.
+ Under Record, Field adds things like tab order and default error messages
+ for form input handling.
+\end_layout
+
+\begin_layout Subsection
+Setting Up the Database Connection
+\end_layout
+
+\begin_layout Standard
+The first step you need to get out of the way is defining the database connectio
+n.
+ We do this by defining a singleton under the 
+\family typewriter
+bootstrap.liftweb
+\family default
+ package called 
+\family typewriter
+DBVendor
+\family default
+.
+ This object extends the net.liftweb.mapper.ConnectionManager trait and must
+ implement two methods: newConnection and releaseConnection.
+ You can make this as sophisticated as you want, with pooling, caching,
+ etc, but for now, listing shows a basic implementation to set up a PostgreSQL
+ driver.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "breaklines=true,numbers=left,numberstyle={\tiny}"
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+
+Setting up the Database
+\begin_inset LatexCommand label
+name "lst:Setting-up-the-database"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+object DBVendor extends ConnectionManager {
+\end_layout
+
+\begin_layout Standard
+
+  // Force load the driver
+\end_layout
+
+\begin_layout Standard
+
+  Class.forName("org.postgresql.Driver")
+\end_layout
+
+\begin_layout Standard
+
+  // define methods
+\end_layout
+
+\begin_layout Standard
+
+  def newConnection(name : ConnectionIdentifier) = {
+\end_layout
+
+\begin_layout Standard
+
+    try {
+\end_layout
+
+\begin_layout Standard
+
+      Full(DriverManager.getConnection("jdbc:postgresql://localhost/mydatabase?us
+er=root&password=secret"))
+\end_layout
+
+\begin_layout Standard
+
+    } catch {
+\end_layout
+
+\begin_layout Standard
+
+      case e : Exception => e.printStackTrace; Empty
+\end_layout
+
+\begin_layout Standard
+
+    }
+\end_layout
+
+\begin_layout Standard
+
+  }
+\end_layout
+
+\begin_layout Standard
+
+  def releaseConnection (conn : Connection) { conn.close }
+\end_layout
+
+\begin_layout Standard
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+A few items to note:
+\end_layout
+
+\begin_layout Enumerate
+The name parameter for newConnection can be used in case you need to have
+ connections to multiple distinct databases.
+ One specialized case of this is when you're doing DB sharding (horizontal
+ scaling).
+ Sharding is covered in more depth in section 
+\begin_inset LatexCommand ref
+reference "sub:Database-Sharding"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+The newConnection method needs to return a Can[java.sql.Connection].
+ Returning an Empty Can indicates failure
+\end_layout
+
+\begin_layout Enumerate
+The releaseConnection method exists so that you have complete control over
+ the lifecycle of the connection.
+ For instance, if you were doing connection pooling yourself you would return
+ the connection to the available pool rather than closing it
 \end_layout
 
 \begin_layout Subsection
@@ -323,7 +475,7 @@ class Entry extends KeyedRecord[Entry,Long] {
 
 \begin_layout Standard
 
-  object id extends LongField(this) with KeyField
+  object id extends LongField(this) with KeyField[Long,Entry]
 \end_layout
 
 \begin_layout Standard
@@ -361,39 +513,49 @@ As you can see, we've set Entry to extend the KeyedMapper trait (we need
  to tell Mapper what the subtype is) and we've added the fields required
  by our class.
  We need to provide a primary key on the entity, so we use the KeyedMapper
- trait instead of Mapper (or, correspondingly, KeyedRecord
-\begin_inset Note Note
-status open
+\begin_inset LatexCommand index
+name "KeyedMapper"
 
-\begin_layout Standard
-Something is wrong in the lift code here.
-\end_layout
+\end_inset
+
+ trait instead of Mapper (or, correspondingly, KeyedRecord
+\begin_inset LatexCommand index
+name "KeyedRecord"
 
 \end_inset
 
  instead of Record).
  When you use the KeyedMapper trait you need to provide an implementation
  for the primaryKeyField def, which must match the type of the KeyedMapper
- trait and be a subtype of IndexedField.
- Currently, Mapper supports indexed Ints, Longs and Strings, so if you want
- to use some other type for your primary key you'll need to roll your own
-\begin_inset Note Note
-status open
-
-\begin_layout Standard
-Add section on custom Mapped fields
-\end_layout
+ trait and be a subtype of IndexedField
+\begin_inset LatexCommand index
+name "IndexedField"
 
 \end_inset
 
 .
- You must also provide a KeyedMetaMapper object instead of just MetaMapper.
- The identity of an entity is a unique value associated with the entity
- that can be used, typically by the underlying data store, for retrieval
- and indexing.
- In SQL this is essentially a primary synthetic key on the table holding
- the entity.
- 
+ Currently, Mapper supports both indexed Longs and Strings, so if you want
+ to use some other type for your primary key you'll need to roll your own
+ (section 
+\begin_inset LatexCommand ref
+reference "sub:Defining-Custom-Field-types-mapper"
+
+\end_inset
+
+).
+ Technically Int indexes are supported as well, but there is no corresponding
+ trait for an Int foreign key.
+ That means that if you use an Int for the primary key you may not be able
+ to do a relationship with other objects (section 
+\begin_inset LatexCommand ref
+reference "sub:Object-Relationships"
+
+\end_inset
+
+) unless you write your own.
+ Record is a little more flexible in primary key selection since it uses,
+ in effect, a marker trait (KeyField) to indicate that a particular field
+ is a key field.
 \end_layout
 
 \begin_layout Standard
@@ -406,7 +568,7 @@ Looking at these examples, you've probably noticed that the fields are defined
  Also note that DecimalField is a custom field type, which we will cover
  in section 
 \begin_inset LatexCommand ref
-reference "sub:Defining-Custom-Field-types"
+reference "sub:Defining-Custom-Field-types-record"
 
 \end_inset
 
@@ -414,19 +576,22 @@ reference "sub:Defining-Custom-Field-types"
 \end_layout
 
 \begin_layout Standard
-In order to tie all of this together, we need to define a matching MetaMapper
+In order to tie all of this together, we need to define a matching KeyedMetaMapp
+er
 \begin_inset LatexCommand index
-name "MetaRecord"
+name "KeyedMetaMapper"
 
 \end_inset
 
- object, as shown in listing 
+ object as the singleton for our entity, as shown in listing 
 \begin_inset LatexCommand ref
 reference "lst:EntryMeta-object"
 
 \end_inset
 
 .
+ The Meta object (whether MetMapper or MetaRecord) is where you define most
+ behavior that is common across all of your instances.
 \end_layout
 
 \begin_layout Standard
@@ -474,7 +639,7 @@ object EntryMeta extends Entry with KeyedMetaMapper[Long,Entry] {
 \end_layout
 
 \begin_layout Standard
-In our case we'll simply define the order of fields as they'll be displayed
+In our case we're simply defining the order of fields as they'll be displayed
  in XHTML
 \begin_inset LatexCommand index
 name "XHTML"
@@ -487,7 +652,17 @@ name "form"
 
 \end_inset
 
-.
+ by overriding the 
+\family typewriter
+fieldOrder
+\family default
+ method.
+ The default behavior is an empty list, which means no fields are involved
+ in display or form generation; generally you will want to override 
+\family typewriter
+fieldOrder
+\family default
+ since this is not very useful.
  If you don't want a particular field to show up in forms or XHTML output,
  simply omit it from the fieldOrder
 \begin_inset LatexCommand index
@@ -645,15 +820,310 @@ if (myEntry.description.value == "Doughnuts") {
 
 \begin_layout Subsection
 Object Relationships
+\begin_inset LatexCommand label
+name "sub:Object-Relationships"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
-\begin_inset Note Note
+Often it's appropriate to have relationships between different entities.
+ The archetypical example of this is the parent-child relationship.
+ In SQL, a relationship can be defined with a foreign key that associates
+ one table to another based on the primary key of the associated table.
+ In Mapper, there is a corresponding MappedForeignKey trait, with concrete
+ implementations for Long and String foreign keys.
+ To give an example, our ledger entries should be owned by a particular
+ user.
+ Listing 
+\begin_inset LatexCommand ref
+reference "lst:Foreign-Key-Definition"
+
+\end_inset
+
+ shows a rough User entity definition along with the addition of the MappedForei
+gnKey field on our existing Ledger class to specify a one-to-many from User
+ to Entry.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
 status open
 
 \begin_layout Standard
-Need something here.
- Search mail archives for discussion
+
+\begin_inset Caption
+
+\begin_layout Standard
+
+Foreign Key Definition
+\begin_inset LatexCommand label
+name "lst:Foreign-Key-Definition"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+class User extends KeyedMapper[Long,User] {
+\end_layout
+
+\begin_layout Standard
+
+  def getSingleton = UserMeta // not shown here
+\end_layout
+
+\begin_layout Standard
+
+  def primaryKeyField = id
+\end_layout
+
+\begin_layout Standard
+
+  object id extends MappedLongIndex(this)
+\end_layout
+
+\begin_layout Standard
+
+}
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+class Entry extends KeyedMapper[Long,Entry] {
+\end_layout
+
+\begin_layout Standard
+
+  ...
+\end_layout
+
+\begin_layout Standard
+
+  object owner extends MappedLongForeignKey(this,UserMeta)
+\end_layout
+
+\begin_layout Standard
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Once we have this defined, accessing the object via the relationship is
+ achieved by using the obj method on the foreign key field, as shown in
+ listing 
+\begin_inset LatexCommand ref
+reference "lst:Accessing-Foreign-Objects"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+
+Accessing Foreign Objects
+\begin_inset LatexCommand label
+name "lst:Accessing-Foreign-Objects"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+class Entry extends KeyedMapper[Long,Entry] {
+\end_layout
+
+\begin_layout Standard
+
+ ...
+\end_layout
+
+\begin_layout Standard
+
+ def parentName = Text("My parent is " + owner.obj.name.is)
+\end_layout
+
+\begin_layout Standard
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+With the foreign key functionality you can easily do one-to-many and many-to-one
+ relationships (depending on where you put the foreign key).
+ If you want to do many-to-many mappings you'll need to provide your own
+ 
+\begin_inset Quotes eld
+\end_inset
+
+join
+\begin_inset Quotes erd
+\end_inset
+
+ class with foreign keys to both of your mapped entities.
+ An example would be if we wanted to have categories for our ledger entries
+ and wanted to be able to have a given entry have multiple categories (i.e.
+ you purchase a book for your mother's birthday, so it has the categories
+ Gift, Mom and Books).
+ First we define the category entity, as shown in listing
+\begin_inset LatexCommand ref
+reference "lst:Category-Entity"
+
+\end_inset
+
+ .
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+
+Category Entity
+\begin_inset LatexCommand label
+name "lst:Category-Entity"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+class Category extends KeyedMapper[Long,Category] {
+\end_layout
+
+\begin_layout Standard
+
+  def getSingleton = CategoryMeta
+\end_layout
+
+\begin_layout Standard
+
+  def primaryKeyField = id
+\end_layout
+
+\begin_layout Standard
+
+  object id extends MappedLongIndex(this)
+\end_layout
+
+\begin_layout Standard
+
+  object name extends MappedString(this,100)
+\end_layout
+
+\begin_layout Standard
+
+}
+\end_layout
+
+\begin_layout Standard
+
+object CategoryMeta extends Category with KeyedMetaMapper[Long,Category]
+ {
+\end_layout
+
+\begin_layout Standard
+
+  override def fieldOrder = List(name)
+\end_layout
+
+\begin_layout Standard
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Next, we define our join entity, as shown in listing .
+ It's a KeyedMapper just like the rest of the entities, but it only contains
+ foreign key fields to the other entities.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+
+Join Entity
+\begin_inset LatexCommand label
+name "lst:Join-Entity"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
 \end_layout
 
 \end_inset
@@ -677,7 +1147,6 @@ create Creates a new instance of the entity
 
 \begin_layout Description
 save Saves an instance to the database.
- This method correctly handles updates versus completely new instances
 \end_layout
 
 \begin_layout Description
@@ -754,7 +1223,37 @@ Saving an instance is as easy as calling the
 save
 \family default
  method on the instance you want to save.
- Optionally, you 
+ Optionally, you can call the 
+\family typewriter
+save
+\family default
+ method on the Meta object, passing in the instance you want to save.
+ The save method uses the id field to determine whether an insert or update
+ is required to persist the current state to the database.
+\end_layout
+
+\begin_layout Subsubsection*
+Deleting an Instance
+\end_layout
+
+\begin_layout Standard
+There are several ways to delete instances.
+ The simplest way is to call the 
+\family typewriter
+delete_!
+\family default
+ method on the instance you'd like to remove.
+ An alternative is to call the 
+\family typewriter
+delete_!
+\family default
+ method on the Meta object, passing in the instance to delete.
+ In either case, the 
+\family typewriter
+delete_!
+\family default
+ method returns a boolean indicating whether the delete was successful or
+ not.
 \end_layout
 
 \begin_layout Subsection
@@ -1667,6 +2166,19 @@ object Entry extends Mapper[Entry] with LifecycleCallbacks {
 
 \end_layout
 
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Expand this to detail each lifecycle operation
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Subsection
 Base Field Types
 \end_layout
@@ -1674,7 +2186,7 @@ Base Field Types
 \begin_layout Standard
 The Record and Mapper frameworks define several basic field types.
  The following table shows the corresponding types between Mapper and Record,
- as well as a brief description
+ as well as a brief description of each type
 \end_layout
 
 \begin_layout Description
@@ -1756,9 +2268,19 @@ Ds.
 \end_layout
 
 \begin_layout Subsection
+Defining Custom Field Types in Mapper
+\begin_inset LatexCommand label
+name "sub:Defining-Custom-Field-types-mapper"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
 Defining Custom Field Types in Record
 \begin_inset LatexCommand label
-name "sub:Defining-Custom-Field-types"
+name "sub:Defining-Custom-Field-types-record"
 
 \end_inset
 
@@ -2267,6 +2789,28 @@ This part of the library hasn't been finished yet
 \end_inset
 
 
+\end_layout
+
+\begin_layout Section
+Advanced Features
+\end_layout
+
+\begin_layout Standard
+In this section we'll cover some of the advanced features of Mapper
+\end_layout
+
+\begin_layout Subsection
+Database Sharding
+\begin_inset LatexCommand label
+name "sub:Database-Sharding"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+SQL-based Queries
 \end_layout
 
 \end_body
