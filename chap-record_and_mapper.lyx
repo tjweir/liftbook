@@ -49,7 +49,7 @@ morestring=[b]"}
 \begin_body
 
 \begin_layout Chapter
-The Record Framework
+The Mapper and Record Frameworks
 \begin_inset LatexCommand label
 name "cha:mapper_and_record"
 
@@ -68,52 +68,99 @@ name "validation"
 \end_inset
 
 , persistence, etc to handle the data.
- That's where the Record framework comes in.
- The Record framework provides a scaffolding for all of your data manipulation
+ That's where the Mapper and Record frameworks comes in.
+ These frameworks provides a scaffolding for all of your data manipulation
  needs.
- Record is backing-store agnostic at its core, so it doesn't matter whether
- you want to save your data to JDBC, JPA, or even something like XML.
- Selecting the proper driver is as simple as hooking the proper traits into
- your class.
-\end_layout
-
-\begin_layout Section
-Introduction to Record and MetaRecord
+ Mapper is the original Lift persistence framework, and is closely tied
+ to JDBC for its storage.
+ Record is a new refactorization of Mapper that is backing-store agnostic
+ at its core, so it doesn't matter whether you want to save your data to
+ JDBC, JPA, or even something like XML.
+ With Record, selecting the proper driver is as simple as hooking the proper
+ traits into your class.
+ Because these frameworks are based on the same concepts, we will be covering
+ them in parallel in this chapter.
 \end_layout
 
 \begin_layout Standard
-Let's start by discussing the relationship between the Record
+\begin_inset Note Framed
+status open
+
+\begin_layout Standard
+Unless we note otherwise, functionality for each framework is the same.
+ We will point out minor differences like method names inline, while major
+ differences will be covered in their own sections.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Introduction to Mapper and MetaMapper
+\end_layout
+
+\begin_layout Standard
+Let's start by discussing the relationship between the Mapper
+\begin_inset LatexCommand index
+name "Mapper"
+
+\end_inset
+
+ and MetaRecord
+\begin_inset LatexCommand index
+name "MetaRecord"
+
+\end_inset
+
+ traits (and the corresponding Record
 \begin_inset LatexCommand index
 name "Record"
 
 \end_inset
 
- and MetaRecord traits.
- Record provides the 
+ and MetaRecord
+\begin_inset LatexCommand index
+name "MetaRecord"
+
+\end_inset
+
+).
+ Mapper provides the 
 \emph on
 per-instance
 \emph default
- functionality for your class, while MetaRecord handles the 
+ functionality for your class, while MetaMapper handles the 
 \emph on
 global
 \emph default
  operations for your class and provides a common location to define per-class
  static specializations of things like field order, form generation and
  HTML representation.
- In fact, many of the Record methods actually delegate to methods on MetaRecord.
- In addition to Record and MetaRecord there is a third trait, Field, that
- provides the per-field functionality for your class.
- The Field trait lets you define the individual validators as well as things
- like tab order and error messages for form input handling.
+ In fact, many of the Mapper methods actually delegate to methods on MetaMapper.
+ In addition to Mapper and MetaMapper there is a third trait, MappedField,
+ that provides the per-field functionality for your class.
+ In Record the trait is simply called 
+\begin_inset Quotes eld
+\end_inset
+
+Field
+\begin_inset Quotes erd
+\end_inset
+
+.
+ The MappedField trait lets you define the individual validators as well
+ as things like tab order and error messages for form input handling.
 \end_layout
 
 \begin_layout Subsection
-Constructing a Record-enabled class
+Constructing a Mapper-enabled class
 \end_layout
 
 \begin_layout Standard
 Now that we've covered some basic background, we can start constructing
- some Record classes to get more familiar with the framework.
+ some Mapper classes to get more familiar with the framework.
  We'll start with a simple example of a class for a ledger entry with the
  following fields:
 \end_layout
@@ -133,7 +180,7 @@ Amount, a decimal value with a precsion of two places.
 \begin_layout Standard
 The first thing we do is declare our Entry class, as shown in listing 
 \begin_inset LatexCommand ref
-reference "lst:Entry-class"
+reference "lst:Entry-class-mapper"
 
 \end_inset
 
@@ -151,9 +198,9 @@ status open
 \begin_inset Caption
 
 \begin_layout Standard
-Entry class
+Entry class in Mapper
 \begin_inset LatexCommand label
-name "lst:Entry-class"
+name "lst:Entry-class-mapper"
 
 \end_inset
 
@@ -167,12 +214,116 @@ name "lst:Entry-class"
 
 \begin_layout Standard
 
-class Entry extends Record[Entry] {
+class MapEntry extends KeyedMapper[Long,MapEntry] {
+\end_layout
+
+\begin_layout Standard
+
+  def getSingleton = MapEntryMeta
+\end_layout
+
+\begin_layout Standard
+
+  def primaryKeyField = id
+\end_layout
+
+\begin_layout Standard
+
+  object id extends MappedLongIndex(this)
+\end_layout
+
+\begin_layout Standard
+
+  object date extends MappedDateTime(this)
+\end_layout
+
+\begin_layout Standard
+
+  object description extends MappedString(this,100)
+\end_layout
+
+\begin_layout Standard
+
+  // 2 digits to the right
+\end_layout
+
+\begin_layout Standard
+
+  object amount extends MappedDecimal(this,2)
+\end_layout
+
+\begin_layout Standard
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The Record version is shown in listing 
+\begin_inset LatexCommand ref
+reference "lst:Entry-class-record"
+
+\end_inset
+
+; the only differences are that the 
+\family typewriter
+getSingleton
+\family default
+ method has been renamed to 
+\family typewriter
+meta
+\family default
+, and the Field traits use different names under the Record framework (DateTimeF
+ield vs MappedDateTime).
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "showstringspaces=false"
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+Entry class in Record
+\begin_inset LatexCommand label
+name "lst:Entry-class-record"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+class Entry extends KeyedRecord[Entry,Long] {
 \end_layout
 
 \begin_layout Standard
 
   def meta = EntryMeta
+\end_layout
+
+\begin_layout Standard
+
+  def primaryKey = id
+\end_layout
+
+\begin_layout Standard
+
+  object id extends LongField(this) with KeyField
 \end_layout
 
 \begin_layout Standard
@@ -206,15 +357,52 @@ class Entry extends Record[Entry] {
 \end_layout
 
 \begin_layout Standard
-As you can see, we've set Entry to extend the Record trait (we need to tell
- Record what the subtype is) and we've added the fields required by our
- class.
- You've probably noticed that the fields are defined as objects rather than
- instance members (vars).
- The basic reason for this is that the MetaRecord needs access to fields
+As you can see, we've set Entry to extend the KeyedMapper trait (we need
+ to tell Mapper what the subtype is) and we've added the fields required
+ by our class.
+ We need to provide a primary key on the entity, so we use the KeyedMapper
+ trait instead of Mapper (or, correspondingly, KeyedRecord
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Something is wrong in the lift code here.
+\end_layout
+
+\end_inset
+
+ instead of Record).
+ When you use the KeyedMapper trait you need to provide an implementation
+ for the primaryKeyField def, which must match the type of the KeyedMapper
+ trait and be a subtype of IndexedField.
+ Currently, Mapper supports indexed Ints, Longs and Strings, so if you want
+ to use some other type for your primary key you'll need to roll your own
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Add section on custom Mapped fields
+\end_layout
+
+\end_inset
+
+.
+ You must also provide a KeyedMetaMapper object instead of just MetaMapper.
+ The identity of an entity is a unique value associated with the entity
+ that can be used, typically by the underlying data store, for retrieval
+ and indexing.
+ In SQL this is essentially a primary synthetic key on the table holding
+ the entity.
+ 
+\end_layout
+
+\begin_layout Standard
+Looking at these examples, you've probably noticed that the fields are defined
+ as objects rather than instance members (vars).
+ The basic reason for this is that the MetaMapper needs access to fields
  for its validation and form functionality; it wouldn't be possible to cleanly
- define these properties in the MetaRecord if it had to access member vars
- on each instance since a MetaRecord instance is itself an object.
+ define these properties in the MetaMapper if it had to access member vars
+ on each instance since a MetaMapper instance is itself an object.
  Also note that DecimalField is a custom field type, which we will cover
  in section 
 \begin_inset LatexCommand ref
@@ -226,7 +414,7 @@ reference "sub:Defining-Custom-Field-types"
 \end_layout
 
 \begin_layout Standard
-In order to tie all of this together, we need to define a matching MetaRecord
+In order to tie all of this together, we need to define a matching MetaMapper
 \begin_inset LatexCommand index
 name "MetaRecord"
 
@@ -267,12 +455,12 @@ name "lst:EntryMeta-object"
 
 \begin_layout Standard
 
-object EntryMeta extends Entry with MetaRecord[Entry] {
+object EntryMeta extends Entry with KeyedMetaMapper[Long,Entry] {
 \end_layout
 
 \begin_layout Standard
 
-  override def fieldOrder = date :: description :: amount :: Nil
+  override def fieldOrder = List(date, description, amount)
 \end_layout
 
 \begin_layout Standard
@@ -308,29 +496,6 @@ name "fieldOrder"
 \end_inset
 
  list.
- Once we have the MetaEntry object defined we can use it to create objects
- using the 
-\family typewriter
-createRecord
-\begin_inset LatexCommand index
-name "createRecord"
-
-\end_inset
-
-
-\family default
- method.
- You can't just use the 
-\begin_inset Quotes eld
-\end_inset
-
-new
-\begin_inset Quotes erd
-\end_inset
-
- operator because the framework has to set up internal data for the instance
- such as field owner, etc.
- 
 \end_layout
 
 \begin_layout Standard
@@ -389,15 +554,19 @@ myEntry.amount("127.20")
 \begin_layout Standard
 The underlying value of a given field can be retrieved with the 
 \family typewriter
+is
+\family default
+ method (
+\family typewriter
 value
 \family default
- method as shown in listing 
+ method in Record) as shown in listing 
 \begin_inset LatexCommand ref
 reference "lst:Accessing-field-values"
 
 \end_inset
 
-:
+.
 \end_layout
 
 \begin_layout Standard
@@ -410,7 +579,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Standard
-Accessing field values
+Accessing field values in Record
 \begin_inset LatexCommand label
 name "lst:Accessing-field-values"
 
@@ -426,7 +595,12 @@ name "lst:Accessing-field-values"
 
 \begin_layout Standard
 
-val tenthOfAmount = myEntry.amount.value / 10
+// mapper
+\end_layout
+
+\begin_layout Standard
+
+val tenthOfAmount = myEntry.amount.is / 10
 \end_layout
 
 \begin_layout Standard
@@ -436,12 +610,17 @@ val formatted = String.format("%s : %s",
 
 \begin_layout Standard
 
-                              myEntry.description.value,
+                              myEntry.description.is,
 \end_layout
 
 \begin_layout Standard
 
-                              myEntry.amount.value.toString)
+                              myEntry.amount.is.toString)
+\end_layout
+
+\begin_layout Standard
+
+// record
 \end_layout
 
 \begin_layout Standard
@@ -465,15 +644,178 @@ if (myEntry.description.value == "Doughnuts") {
 \end_layout
 
 \begin_layout Subsection
+Object Relationships
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Need something here.
+ Search mail archives for discussion
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Persistence Operations on an Entity
+\end_layout
+
+\begin_layout Standard
+Now that we've defined our entity we probably want to use it in the real
+ world to load and store data.
+ There are several operations on KeyedMetaMapper that we can use :
+\end_layout
+
+\begin_layout Description
+create Creates a new instance of the entity
+\end_layout
+
+\begin_layout Description
+save Saves an instance to the database.
+ This method correctly handles updates versus completely new instances
+\end_layout
+
+\begin_layout Description
+delete Deletes the given entity instance
+\end_layout
+
+\begin_layout Description
+find* A whole host of means for locating entities, by primary key, typesafe
+ queries, raw SQL queries, etc.
+ These will be covered in detail in their own section, 
+\begin_inset LatexCommand ref
+reference "sub:Querying-for-Entities"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In general these operations will be supported in both Record and Mapper.
+ However, because Record isn't coupled tightly to a JDBC backend some of
+ the find methods may not be supported and there may be additional methods
+ not available in Mapper for persistence.
+ For this reason, this section will deal specifically with Mapper's persistence
+ operations; Record's backends and their supported operations are covered
+ in section 
+\begin_inset LatexCommand ref
+reference "sec:Record-Backends"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection*
+Creating an Instance
+\end_layout
+
+\begin_layout Standard
+Once we have the KeyedMetaMapper object defined we can use it to create
+ objects using the 
+\family typewriter
+create
+\begin_inset LatexCommand index
+name "create"
+
+\end_inset
+
+
+\family default
+ method.
+ You can't just use the 
+\begin_inset Quotes eld
+\end_inset
+
+new
+\begin_inset Quotes erd
+\end_inset
+
+ operator because the framework has to set up internal data for the instance
+ such as field owner, etc.
+ This is important to remember, since nothing will prevent you from creating
+ an instance manually; you'll just get all kinds of errors when you go to
+ use the instance.
+\end_layout
+
+\begin_layout Subsubsection*
+Saving an Instance
+\end_layout
+
+\begin_layout Standard
+Saving an instance is as easy as calling the 
+\family typewriter
+save
+\family default
+ method on the instance you want to save.
+ Optionally, you 
+\end_layout
+
+\begin_layout Subsection
+Querying for Entities
+\begin_inset LatexCommand label
+name "sub:Querying-for-Entities"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Here we cover how to find entities
+\end_layout
+
+\begin_layout Section
+Utility Functionality
+\end_layout
+
+\begin_layout Standard
+In addition to the first-class persistence support in Mapper and Record,
+ the frameworks provide additional functionality to make writing data-driven
+ applications much simpler.
+ This includes things like automatic XHtml representation of objects and
+ support for generating everything from simple forms for an entity up to
+ a full-fledged CRUD
+\begin_inset Foot
+status collapsed
+
+\begin_layout Standard
+An abbreviation (Create, Read, Update and Delete) representing the standard
+ operations that are performed on database records.
+ Taken from 
+\begin_inset LatexCommand htmlurl
+target "http://provost.uiowa.edu/maui/Glossary.html"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ implementation for your entities.
+\end_layout
+
+\begin_layout Subsection
 Display generation
 \end_layout
 
 \begin_layout Standard
-If you want to display a record instance as XHTML, simply call the 
+If you want to display a mapper instance as XHTML, simply call the 
+\family typewriter
+asHtml
+\family default
+ method (
 \family typewriter
 toXHtml
 \family default
- method on your instance.
+ in Record) on your instance.
  The default implementation turns each field's value into a Text node via
  the 
 \family typewriter
@@ -482,7 +824,7 @@ toString
  method and concatenates the results, separated by newlines.
  If you want to change this behavior, override the 
 \family typewriter
-toXHtml
+asHtml
 \family default
  on your field definitions.
  For example, if we wanted to control formatting on our date we could modify
@@ -525,7 +867,7 @@ import java.util.DateFormat
 
 \begin_layout Standard
 
-object date extends DateTimeField(this) {
+object date extends MappedDateTime(this) {
 \end_layout
 
 \begin_layout Standard
@@ -540,7 +882,7 @@ object date extends DateTimeField(this) {
 
 \begin_layout Standard
 
-  override def toXHtml = Text(dateFormat.format(value.getTime))
+  override def asHtml = Text(dateFormat.format(value.getTime))
 \end_layout
 
 \begin_layout Standard
@@ -565,14 +907,14 @@ getTime
  method on the value.
  A similar method, 
 \family typewriter
-asJs
+asJSON
 \family default
 , will return the JSON representation of the instance
 \begin_inset Note Note
 status open
 
 \begin_layout Standard
-Still in flux and not implemented
+Still in flux and not implemented in Record
 \end_layout
 
 \end_inset
@@ -597,7 +939,7 @@ name "Forms"
 \end_layout
 
 \begin_layout Standard
-One of the biggest pieces of functionality in the Record framework is the
+One of the biggest pieces of functionality in the Mapper framework is the
  ability to generate entry forms for a given record.
  The 
 \family typewriter
@@ -609,8 +951,22 @@ name "toForm"
 
 
 \family default
- method on Record is overloaded so that you can control how your form is
+ method on Mapper is overloaded so that you can control how your form is
  created.
+ All three 
+\family typewriter
+toForm
+\family default
+ methods on Mapper take a 
+\family typewriter
+Can[String]
+\family default
+ as their first parameter to control the submit button; if the Can is Empty,
+ no submit button is generated, otherwise, the String contents of the Can
+ are used as the button label.
+ If you opt to skip the submit button you'll need to provide it yourself
+ via binding or some other mechanism, or you can rely on implicit form submissio
+n (when the user hits enter in a text field, for instance).
  The first 
 \family typewriter
 toForm
@@ -651,7 +1007,7 @@ name "lst:Default-toForm-method"
 
 \begin_layout Standard
 
-myEntry.toForm { _.save }
+myEntry.toForm(Full("Save"), { _.save })
 \end_layout
 
 \end_inset
@@ -666,12 +1022,21 @@ As you can see, this makes it very easy to generate a form for editing an
 \family typewriter
 toForm
 \family default
- method allows you to specify whether or not a submit button is generated
- by additionally passing in a Can[String]; if the Can is Empty, no submit
- button is generated, otherwise, the String contents of the Can are used
- as the button label as shown in listing 
+ method allows you to provide a URL which the Mapper will redirect to if
+ validation succeeds on form submission (this is not provided in Record
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+for now
+\end_layout
+
+\end_inset
+
+).
+ This can be used for something like a login form, as shown in listing 
 \begin_inset LatexCommand ref
-reference "lst:Custom-submit-button"
+reference "lst:Custom-form-redirect"
 
 \end_inset
 
@@ -690,7 +1055,7 @@ status open
 \begin_layout Standard
 Custom submit button
 \begin_inset LatexCommand label
-name "lst:Custom-submit-button"
+name "lst:Custom-form-redirect"
 
 \end_inset
 
@@ -704,17 +1069,7 @@ name "lst:Custom-submit-button"
 
 \begin_layout Standard
 
-myEntry.toForm (Full("Save me now!")) { _.save }
-\end_layout
-
-\begin_layout Standard
-
-// No submit button generated
-\end_layout
-
-\begin_layout Standard
-
-myEntry.toForm (Empty) {_.save}
+myEntry.toForm (Full("Login"), "/member/profile")
 \end_layout
 
 \end_inset
@@ -723,7 +1078,34 @@ myEntry.toForm (Empty) {_.save}
 \end_layout
 
 \begin_layout Standard
-The MetaRecord object allows you to change the default template
+The third form of the toForm method is similar to the first form, with the
+ addition of 
+\begin_inset Quotes eld
+\end_inset
+
+redo
+\begin_inset Quotes erd
+\end_inset
+
+ snippet parameter.
+ This allows you to present a different snippet to the user if validation
+ fails.
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+What's the use case here? Examples? Will this exist in Record?
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The Record framework allows for a little more flexibility in controlling
+ form output.
+ The MetaRecord object allows you to change the default template
 \begin_inset LatexCommand index
 name "Override form template"
 
@@ -736,7 +1118,10 @@ name "formTemplate"
 \end_inset
 
  var.
- The template may contain any XHTML you want, but specifically, the toForm
+ The template may contain any XHTML you want, but specifically, the 
+\family typewriter
+toForm
+\family default
  method will do special handling for the following tags:
 \end_layout
 
@@ -942,22 +1327,32 @@ List
  of functions on a field that take the field value as input and return a
  
 \family typewriter
+List[FieldError]]
+\family default
+ (
+\family typewriter
 Can[Node]
 \family default
-.
- To indicate that validation succeeded, simply return an Empty, otherwise
- the XML Node you return is used as the failure message to be presented
- to the user.
+ in Record).
+ To indicate that validation succeeded, simply return an empty List, otherwise
+ the list of 
+\family typewriter
+FieldErrors
+\family default
+ you return are used as the failure messages to be presented to the user.
+ A FieldError is simply a case class that associates an error message with
+ a particular field.
  As an example, let's say we don't want someone to be able to add a ledger
  entry in the future.
- First, we need to define a function for our date field that takes a Calendar
- as an input (java.util.Calendar
+ First, we need to define a function for our date field that takes a Date
+ as an input (For Record, java.util.Calendar
 \begin_inset LatexCommand index
 name "Calendar"
 
 \end_inset
 
- is the actual value type of DateTimeField) and returns the proper Can.
+ and not Date is the actual value type of DateTimeField) and returns the
+ proper List.
  We show a simple function in listing 
 \begin_inset LatexCommand ref
 reference "lst:Date-validation"
@@ -1013,7 +1408,7 @@ def noFutureDates (time : java.util.Calendar) = {
 
 \begin_layout Standard
 
-    Text("You cannot make future ledger entries")
+    List(FieldError(this, "You cannot make future ledger entries"))
 \end_layout
 
 \begin_layout Standard
@@ -1023,7 +1418,7 @@ def noFutureDates (time : java.util.Calendar) = {
 
 \begin_layout Standard
 
-    Empty
+    List[FieldError]()
 \end_layout
 
 \begin_layout Standard
@@ -1082,7 +1477,7 @@ object date extends DateTimeField[Entry](this) {
 
 \begin_layout Standard
 
-  override def validators = noFutureDates _ :: Nil
+  override def validations = noFutureDates _ :: Nil
 \end_layout
 
 \begin_layout Standard
@@ -1096,18 +1491,8 @@ object date extends DateTimeField[Entry](this) {
 \end_layout
 
 \begin_layout Standard
-Note that we need to add the underscore after each function so that it's
- not applied
-\begin_inset Note Note
-status open
-
-\begin_layout Standard
-Make this sound more clear
-\end_layout
-
-\end_inset
-
-.
+Note that we need to add the underscore for each validation function to
+ be partially applied on the submitted value.
  When our form is submitted, all of the validators for each field are run,
  and if all of them return Empty then validation succeeds.
  If any validators return a Full Can, then the contents of the Can are displayed
@@ -1115,7 +1500,11 @@ Make this sound more clear
 \end_layout
 
 \begin_layout Subsection
-Mutable vs Immutable
+CRUD Support
+\end_layout
+
+\begin_layout Subsection
+Mutable vs Immutable on Record
 \end_layout
 
 \begin_layout Standard
@@ -1128,7 +1517,7 @@ name "Immutability"
  of instances is an important property that programmers can use to simplify
  thread-safety; if an object is immutable then you don't need to worry about
  locking between multiple threads since no thread can modify the object.
- Record supports this via the 
+ Record (but not Mapper) supports this via the 
 \family typewriter
 mutable_?
 \family default
@@ -1213,10 +1602,12 @@ Lifecycle Callbacks
 \end_layout
 
 \begin_layout Standard
-Record provides for a set of callbacks that allow you to perform actions
- at various points during the lifecycle of a given instance.
+Mapper and Record provide for a set of callbacks that allow you to perform
+ actions at various points during the lifecycle of a given instance.
  If you want to define your own handling for one of the lifecycle events,
- simply add the LifecycleCallbacks trait to your Record object.
+ simply add the LifecycleCallbacks trait to your object.
+ Note that there is a separate LifecycleCallback trait in each of the record
+ and mapper pacakges, so make sure that you import the correct one.
  For example, if we wanted to notify a comet actor whenever a new ledger
  entry is saved, we could change our Entry as shown in listing 
 \begin_inset LatexCommand ref
@@ -1253,7 +1644,7 @@ name "lst:Lifecycle-Callbacks"
 
 \begin_layout Standard
 
-object Entry extends Record[Entry] with LifecycleCallbacks {
+object Entry extends Mapper[Entry] with LifecycleCallbacks {
 \end_layout
 
 \begin_layout Standard
@@ -1281,10 +1672,13 @@ Base Field Types
 \end_layout
 
 \begin_layout Standard
-The Record framework defines several basic field types:
+The Record and Mapper frameworks define several basic field types.
+ The following table shows the corresponding types between Mapper and Record,
+ as well as a brief description
 \end_layout
 
 \begin_layout Description
+MappedBinary,\InsetSpace ~
 BinaryField Represents a byte array.
  You must provide your own overrides for toForm and asXHtml for input and
  display
@@ -1362,7 +1756,7 @@ Ds.
 \end_layout
 
 \begin_layout Subsection
-Defining Custom Field Types
+Defining Custom Field Types in Record
 \begin_inset LatexCommand label
 name "sub:Defining-Custom-Field-types"
 
@@ -1520,7 +1914,11 @@ reference "lst:Setting-a-default-value"
  In our case, we default to a zero value, with the scale set as specified
  in the contructor, and our owner def simply returns the rec value from
  our constructor.
- 
+ We also provide the methods that convert the field into a display NodeSeq
+ and a form.
+ Since we already have the setFromString method (covered later in this section)
+ to take an input string and convert it to the proper value we simply pass
+ this method into our text form element for the setter.
 \end_layout
 
 \begin_layout Standard
@@ -1533,7 +1931,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Standard
-
 Setting a default value
 \begin_inset LatexCommand label
 name "lst:Setting-a-default-value"
@@ -1556,6 +1953,16 @@ def owner = rec
 \begin_layout Standard
 
 def defaultValue = (new BigDecimal("0")).setScale(scale)
+\end_layout
+
+\begin_layout Standard
+
+def asXHtml = Text(value.toString)
+\end_layout
+
+\begin_layout Standard
+
+def toForm = SHtml.text(value.toString, this.setFromString)
 \end_layout
 
 \end_inset
@@ -1629,7 +2036,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Standard
-
 setFrom...
  Methods
 \begin_inset LatexCommand label
@@ -1761,7 +2167,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Standard
-
 Convenience methods
 \begin_inset LatexCommand label
 name "lst:Convenience-methods"
@@ -1821,6 +2226,16 @@ You could expand on the convenience methods as you wish to cover Ints, Longs,
 \end_layout
 
 \begin_layout Section
+Record Backends
+\begin_inset LatexCommand label
+name "sec:Record-Backends"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
 JDBC Records
 \end_layout
 
@@ -1838,14 +2253,6 @@ This part of the library hasn't been finished yet
 \end_layout
 
 \begin_layout Subsection
-Querying
-\end_layout
-
-\begin_layout Subsection
-Object relationships
-\end_layout
-
-\begin_layout Section
 JPA Records
 \end_layout
 
