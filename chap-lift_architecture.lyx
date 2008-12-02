@@ -73,6 +73,2414 @@ Chapter: Arch:
 \end_layout
 
 \begin_layout Section
+Entry into Lift
+\end_layout
+
+\begin_layout Standard
+The first step in Lift's request processing is intercepting the HTTP request.
+ Originally, Lift used a Servlet instance to process incoming requests.
+ This was changed to use a Filter instance
+\begin_inset Foot
+status open
+
+\begin_layout Standard
+\begin_inset LatexCommand htmlurl
+target "http://groups.google.com/group/liftweb/browse_thread/thread/b484ea2a13b6f84b/90ba1ef1115055a6"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ because this allows the container to handle any requests that Lift does
+ not (in particular, static content).
+ The filter really acts as a thin wrapper on top of the existing LiftServlet
+ (which still does all of the work), so don't be confused when you look
+ at the ScalaDoc and see both classes.
+ The main thing to remember is that your web.xml
+\begin_inset LatexCommand index
+name "web.xml"
+
+\end_inset
+
+ should specify the filter and not the servlet:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "basicstyle={\scriptsize},frame=single,language=XML,numbers=left,numberstyle={\tiny}"
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+\begin_inset LatexCommand label
+name "lst:LiftFilter-setup-in-web.xml"
+
+\end_inset
+
+LiftFilter setup in web.xml
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+<?xml version="1.0" encoding="ISO-8859-1"?>
+\end_layout
+
+\begin_layout Standard
+
+<!DOCTYPE web-app
+\end_layout
+
+\begin_layout Standard
+
+PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+\end_layout
+
+\begin_layout Standard
+
+"http://java.sun.com/j2ee/dtds/web-app_2_3.dtd">
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+<web-app>
+\end_layout
+
+\begin_layout Standard
+
+  <filter>
+\end_layout
+
+\begin_layout Standard
+
+    <filter-name>LiftFilter</filter-name>
+\end_layout
+
+\begin_layout Standard
+
+    <display-name>Lift Filter</display-name>
+\end_layout
+
+\begin_layout Standard
+
+    <description>The Filter that intercepts lift calls</description>
+\end_layout
+
+\begin_layout Standard
+
+    <filter-class>net.liftweb.http.LiftFilter</filter-class>
+\end_layout
+
+\begin_layout Standard
+
+  </filter>      
+\end_layout
+
+\begin_layout Standard
+
+  <filter-mapping>
+\end_layout
+
+\begin_layout Standard
+
+    <filter-name>LiftFilter</filter-name>
+\end_layout
+
+\begin_layout Standard
+
+    <url-pattern>/*</url-pattern>
+\end_layout
+
+\begin_layout Standard
+
+  </filter-mapping>
+\end_layout
+
+\begin_layout Standard
+
+</web-app>
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+A full web.xml example is shown in section 
+\begin_inset LatexCommand vref
+reference "lst:JPA-web.xml"
+
+\end_inset
+
+.
+ In particular, the filter-mapping specifies that the Filter is responsible
+ for everything.
+ When the filter receives the request, it checks a set of rules to see if
+ it can handle it.
+ If the request is one that Lift handles, it passes it on to an internal
+ LiftServlet instance for processing; otherwise, it chains the request and
+ allows the container to handle it.
+\end_layout
+
+\begin_layout Section
+Bootstrap
+\end_layout
+
+\begin_layout Standard
+When Lift starts up there are a number of things that you'll want to set
+ up before any requests are processed.
+ These things include setting up a SiteMenu, URL rewriting, custom dispatch
+ and classpath search.
+ The Lift servlet looks for the bootstrap.liftweb.Boot
+\begin_inset LatexCommand index
+name "Boot"
+
+\end_inset
+
+ class and executes the boot method in the class.
+ The boot method will only be run once, so you can place any initialization
+ calls for other libraries here as well.
+ 
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Cover logging setup here, too? - Probably a good idea to touch on simple
+ logging.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Classpath
+\end_layout
+
+\begin_layout Standard
+As part of our discussion of the Boot class, it's important to cover a small
+ detail of how Lift determines where to find classes for Views and Snippet
+ rendering.
+ The LiftRules.addToPackages method tells lift what Scala packages to look
+ in for a given class.
+ Lift has implicit extensions to the paths you enter; in particular, if
+ you tell Lift to use the 
+\begin_inset Quotes eld
+\end_inset
+
+com.pocketchangeapp
+\begin_inset Quotes erd
+\end_inset
+
+ package, Lift will look for View classes under 
+\begin_inset Quotes eld
+\end_inset
+
+com.pocketchangeapp.view
+\begin_inset Quotes erd
+\end_inset
+
+ and will look for Snippet classes under 
+\begin_inset Quotes eld
+\end_inset
+
+com.pocketchangeapp.snippet
+\begin_inset Quotes erd
+\end_inset
+
+.
+ Typically the 
+\family typewriter
+addToPackages
+\family default
+ method is excuted in your Boot class.
+ A minimal Boot class would look like
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "basicstyle={\footnotesize},frame=single"
+inline false
+status collapsed
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+Minimal Boot class
+\begin_inset LatexCommand label
+name "lst:Minimal-Boot-class"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+class Boot {
+\end_layout
+
+\begin_layout Standard
+
+  def boot = {
+\end_layout
+
+\begin_layout Standard
+
+    LiftRules.addToPackages("com.pocketchangeapp")
+\end_layout
+
+\begin_layout Standard
+
+  }
+\end_layout
+
+\begin_layout Standard
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Rendering Pipeline
+\end_layout
+
+\begin_layout Standard
+Now that the request has entered the LiftServlet instance, it's time to
+ process it.
+ We break this processing up into several basic steps:
+\end_layout
+
+\begin_layout Enumerate
+URL Rewriting
+\end_layout
+
+\begin_layout Enumerate
+User-defined dispatch
+\end_layout
+
+\begin_layout Enumerate
+SiteMap matching and access control (covered in section 
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+TODO: Cross-ref
+\end_layout
+
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Enumerate
+View or Template dispatch and processing
+\end_layout
+
+\begin_layout Standard
+A lot more is going on under the hood (Lift is highly customizable) but
+ for now this should cover 95% of what you will want to do in a Lift application.
+\end_layout
+
+\begin_layout Standard
+We're going to explain these in a different order than the execution order,
+ instead we'll talk about them in increasing complexity.
+\end_layout
+
+\begin_layout Standard
+Templates are the easiest concept to understand so we'll start with them.
+\end_layout
+
+\begin_layout Section
+Templates
+\end_layout
+
+\begin_layout Standard
+Templates
+\begin_inset LatexCommand index
+name "Templates"
+
+\end_inset
+
+ form the backbone of Lift's flexibility and power.
+ A template is essentially an XML file that contains Lift-specific tags
+ as well as whatever content you want returned to the user.
+ There are a number of built-in XML tags that Lift uses for specific reasons,
+ these are of the form 
+\family typewriter
+<lift:name />
+\family default
+.
+ Lift also allows you to create your own tags, which are called 
+\emph on
+snippets
+\emph default
+
+\begin_inset LatexCommand index
+name "snippets"
+
+\end_inset
+
+.
+ These user-defined tags are linked directly to Scala methods and these
+ methods can process the contents of the snippet tag, or can generate their
+ own content from scratch.
+ Below is a simple template:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "basicstyle={\footnotesize},frame=single,language=XML"
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+Sample template
+\begin_inset LatexCommand label
+name "lst:Sample-template"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+<lift:surround with="default" at="content">
+\end_layout
+
+\begin_layout Standard
+
+  <head><title>Hello!</title></head>
+\end_layout
+
+\begin_layout Standard
+
+  <lift:snippet type="Hello.world" />
+\end_layout
+
+\begin_layout Standard
+
+</lift:surround>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Notice the tags that are of the form 
+\family typewriter
+<lift:name>
+\family default
+ which in this case are 
+\family typewriter
+<lift:surround>
+\family default
+ and 
+\family typewriter
+<lift:snippet>.
+ 
+\family default
+These are two examples of Lift-specific tags.
+ We'll discuss all of the tags that users will use in section ???, but let's
+ discuss the two contained here.
+ We use the built-in 
+\family typewriter
+<lift:surround>
+\begin_inset LatexCommand index
+name "lift:surround"
+
+\end_inset
+
+
+\family default
+ tag to make Lift embed our current template inside the 
+\begin_inset Quotes eld
+\end_inset
+
+
+\family typewriter
+default
+\family default
+
+\begin_inset Quotes erd
+\end_inset
+
+ template.
+ We also use 
+\family typewriter
+<lift:snippet>
+\family default
+ to execute a snippet that we defined.
+ In this case we execute the method 
+\family typewriter
+world
+\family default
+ in the class 
+\family typewriter
+Hello 
+\family default
+to generate some content.
+ 
+\end_layout
+
+\begin_layout Standard
+Following rewriting and custom dispatch, Lift checks to see if it can find
+ a file in the WAR tree that matches the request.
+ Lift tries several suffixes (html, xhtml, htm, and no suffix) and also
+ tries to match based on the client's Accept-Language header.
+ The pattern Lift uses is
+\end_layout
+
+\begin_layout LyX-Code
+<path to template>[_<language, optional>][.<suffix>]
+\end_layout
+
+\begin_layout Standard
+Because Lift will implicitly search for suffixes, it's best to leave the
+ suffix off of your links within the web app.
+ If you have a link with an href of 
+\family typewriter
+/test/template.xhtml
+\family default
+, it will only match that file, but if you use 
+\family typewriter
+/test/template
+\family default
+ for the href and you have the following templates in your web app:
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+/test/template.xhtml
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+/test/template_es-ES.xhtml
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+/test/template_ja.xhtml
+\end_layout
+
+\begin_layout Standard
+then Lift will use the appropriate template based on the user's requested
+ language if a corresponding template is available.
+ In addition to normal templates, your application can make use of hidden
+ templates
+\begin_inset LatexCommand index
+name "hidden templates"
+
+\end_inset
+
+.
+ These are templates that are located under the 
+\family typewriter
+/templates-hidden
+\family default
+ directory of your web app.
+ Like the 
+\family typewriter
+WEB-XML
+\family default
+ directory, the contents cannot be directly requested by clients.
+ They can, however, be used by other templates through mechanisms like the
+ 
+\family typewriter
+lift:surround
+\family default
+ and 
+\family typewriter
+lift:embed
+\family default
+ tags.
+ If Lift cannot locate an appropriate template based on the request path
+ then it will return a 404 to the user.
+\end_layout
+
+\begin_layout Standard
+Once Lift has located the correct template, the next step is to process
+ the contents.
+ It is important to understand that Lift processes XML tags from the outside
+ in.
+ That means that in our example listing 
+\begin_inset LatexCommand ref
+reference "lst:Sample-template"
+
+\end_inset
+
+, the surround tag gets processed first.
+ In this case the surround loads the default template and embeds our content
+ at the appropriate location.
+ The next tag to be processed is the <lift:Hello.world/> snippet.
+ This tag is essentially an alias for the lift:snippet tag (specifically,
+ 
+\family typewriter
+<lift:snippet type=
+\begin_inset Quotes eld
+\end_inset
+
+Hello:world
+\begin_inset Quotes erd
+\end_inset
+
+>
+\family default
+) , and will locate the Hello class and execute the world method on it.
+ If your omit the 
+\begin_inset Quotes eld
+\end_inset
+
+method
+\begin_inset Quotes erd
+\end_inset
+
+ part of the type and only specify the class (
+\family typewriter
+<lift:Hello>
+\family default
+ or 
+\family typewriter
+<lift:snippet type=
+\begin_inset Quotes eld
+\end_inset
+
+Hello
+\begin_inset Quotes erd
+\end_inset
+
+>
+\family default
+) then Lift will attempt to call the 
+\family typewriter
+render
+\family default
+ method of the class.
+\end_layout
+
+\begin_layout Standard
+So templates are a nice way of setting up your layout and then writing a
+ few methods to fill in the XML fragments that make up your web applications.
+ They provide a simple way to generate a uniform look for your site.
+ If you'd like more control or don't need a template for a certain section,
+ you'll want to use a View, which is coming up in the next section.
+\end_layout
+
+\begin_layout Section
+Views
+\end_layout
+
+\begin_layout Standard
+Views
+\begin_inset LatexCommand index
+name "Views"
+
+\end_inset
+
+ are essentially implicitly defined custom dispatch methods, very similar
+ to what we just covered in section 
+\begin_inset LatexCommand ref
+reference "sub:Custom-Dispatch"
+
+\end_inset
+
+.
+ A view is a normal Scala method that returns a NodeSeq
+\begin_inset LatexCommand index
+name "NodeSeq"
+
+\end_inset
+
+; the main difference is that with custom dispatch we explicitly define
+ the path that will lead to the method via LiftRules, whereas in a view,
+ the class itself defines the path.
+ In either case, View lookup and dispatch is done after template resolution
+ (to be covered later), so templates take priority
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+TODO: Confirm this!
+\end_layout
+
+\end_inset
+
+.
+ There are two options for implementing a view class: one is to extend the
+ LiftView
+\begin_inset LatexCommand index
+name "LiftView"
+
+\end_inset
+
+ trait, the other is to implement the InsecureLiftView
+\begin_inset LatexCommand index
+name "InsecureLiftView"
+
+\end_inset
+
+ trait.
+ As you may be able to tell from the names, we would prefer that you use
+ the LiftView trait.
+ The InsecureLiftView determines method dispatch by turning a request path
+ into a class and method name.
+ For instance, if we have a path 
+\family typewriter
+/MyStuff/enumerate
+\family default
+, then Lift will look for a class called 
+\family typewriter
+MyStuff
+\family default
+ in the view subpackage 
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Standard
+Where to cross-ref for class resolution, LiftRules.addToPackages
+\end_layout
+
+\end_inset
+
+ and if it finds it and it has a method called 
+\family typewriter
+enumerate
+\family default
+, then Lift will execute the method and return its results to the user.
+ The main issue there is that Lift uses reflection
+\begin_inset LatexCommand index
+name "reflection"
+
+\end_inset
+
+ to get the method, so it can access any method in the class, even ones
+ marked private.
+ A better way to do it is to use the LiftView trait, which defines a dispatch
+ partial function.
+ This dispatch function maps a string (the 
+\begin_inset Quotes eld
+\end_inset
+
+method name
+\begin_inset Quotes erd
+\end_inset
+
+) to a function that will return a NodeSeq.
+ Listing 
+\begin_inset LatexCommand ref
+reference "lst:Dispatch-in-LiftView"
+
+\end_inset
+
+ shows a custom LiftView class where the path 
+\family typewriter
+/MyView/enumerate
+\family default
+ will map to the MyView.doEnumerate method.
+ If someone attempts to go to 
+\family typewriter
+/MyView/privateMethod
+\family default
+ they'll get a 404 since it's not defined in the dispatch function.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "frame=single"
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+This should be a pocketchange example
+\end_layout
+
+\end_inset
+
+Dispatch in LiftView
+\begin_inset LatexCommand label
+name "lst:Dispatch-in-LiftView"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+class MyView extends LiftView {
+\end_layout
+
+\begin_layout Standard
+
+  override def dispatch = {
+\end_layout
+
+\begin_layout Standard
+
+    case "enumerate" => doEnumerate _
+\end_layout
+
+\begin_layout Standard
+
+  }
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+  def doEnumerate () : NodeSeq = {  
+\end_layout
+
+\begin_layout Standard
+
+    ...
+\end_layout
+
+\begin_layout Standard
+
+    <lift:surround with="default" at="content">
+\end_layout
+
+\begin_layout Standard
+
+     { itemList.toTable }
+\end_layout
+
+\begin_layout Standard
+
+    </lift:surround>
+\end_layout
+
+\begin_layout Standard
+
+  }
+\end_layout
+
+\begin_layout Standard
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Another difference between custom dispatch and Views is that the NodeSeq
+ returned from the view method is processed for template tags including
+ surrounds and includes 
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Confirm this!
+\end_layout
+
+\end_inset
+
+, just like snippets.
+ That means that you can use the full power of the templating system from
+ within your View, as shown in listing 
+\begin_inset LatexCommand ref
+reference "lst:Dispatch-in-LiftView"
+
+\end_inset
+
+'s doEnumerate method.
+\end_layout
+
+\begin_layout Standard
+Since you can not include any of the pre-defined template XHTML, you generate
+ Atom or RSS feeds using a View.
+ Resources of that nature, such as XML responses, or JSON, or an image response,
+ would most likely be handled by a View.
+\end_layout
+
+\begin_layout Section
+URL rewriting and dispatch and how they relate to Templates/Views
+\end_layout
+
+\begin_layout Standard
+Now that we've gone over Templates and Views and how the dispatching of
+ a request to a Class.method works we can discuss how to intercept requests
+ and handle them any way we want.
+\end_layout
+
+\begin_layout Standard
+URL rewriting is a mechanism that allows you to modify the incoming request
+ so that it dispatches to a different URL.
+ It can be used, among other things, to allow you to:
+\end_layout
+
+\begin_layout Itemize
+Use user-friendly URLs like www.example.com/user/joe instead of www.example.com/admi
+n/users/88
+\end_layout
+
+\begin_layout Itemize
+Use short URLs instead of long, hard to remember ones, similar to tinyurl.com
+\end_layout
+
+\begin_layout Itemize
+Use portions of the URL to determine how a particular snippet or view responds.
+ For example, you could make it so that a user's profile is displayed via
+ a URL like 
+\family typewriter
+http://someplace.com/user/derek
+\family default
+ instead of having the username sent as part of a query string.
+\end_layout
+
+\begin_layout Standard
+The mechanism is fairly simple to set up.
+ We need to write a function of type 
+\family typewriter
+PartialFunction[RewriteRequest,RewriteResponse]
+\family default
+ to determine if and how we want to rewrite particular requests.
+ The simplest way to do this is with a match statement which will allow
+ us to selectively match on some or all of the request information.
+ It is important to understand that the Lift session is not created at the
+ point when the rewrite functions run; that means that you generally can't
+ set or access properties in the S object.
+ RewriteRequest is a case object that contains three items: the parsed path,
+ the request type and the original HttpServletRequest
+\begin_inset LatexCommand index
+name "HttpServletRequest"
+
+\end_inset
+
+ object.
+\end_layout
+
+\begin_layout Standard
+The parsed path of the request in a ParsePath
+\begin_inset LatexCommand index
+name "ParsePath"
+
+\end_inset
+
+ case class instance.
+ The ParsePath class contains
+\end_layout
+
+\begin_layout Enumerate
+The parsed path as a List[String]
+\end_layout
+
+\begin_layout Enumerate
+The suffix of the request (i.e.
+ 
+\begin_inset Quotes eld
+\end_inset
+
+html
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+xml
+\begin_inset Quotes erd
+\end_inset
+
+, etc)
+\end_layout
+
+\begin_layout Enumerate
+Whether the path is absolute 
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Clarification needed on what this means
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Whether the path ends in a slash (
+\begin_inset Quotes eld
+\end_inset
+
+/
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Standard
+The latter three properties are useful only in specific circumstances, but
+ the parsed path is what lets us work magic.
+ The path of the request is defined as the parts of the URI between the
+ context path and the query string.
+ The following table shows examples of parsed paths for a Lift application
+ under the 
+\begin_inset Quotes eld
+\end_inset
+
+myapp
+\begin_inset Quotes erd
+\end_inset
+
+ context path
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="4" columns="2">
+<features>
+<column alignment="left" valignment="top" leftline="true" width="0">
+<column alignment="left" valignment="top" leftline="true" rightline="true" width="0">
+<row topline="true" bottomline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\series bold
+\size footnotesize
+Requested URL
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\series bold
+\size footnotesize
+Parsed Path
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\series bold
+\size footnotesize
+http://foo.com/myapp/home?test_this=true
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\series bold
+\size footnotesize
+List[String](
+\begin_inset Quotes eld
+\end_inset
+
+home
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\series bold
+\size footnotesize
+http://foo.com/myapp/user/derek
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\series bold
+\size footnotesize
+List[String](
+\begin_inset Quotes eld
+\end_inset
+
+user
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+derek
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row topline="true" bottomline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\series bold
+\size footnotesize
+http://foo.com/myapp/view/item/14592
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\series bold
+\size footnotesize
+List[String](
+\begin_inset Quotes eld
+\end_inset
+
+view
+\begin_inset Quotes erd
+\end_inset
+
+,
+\begin_inset Quotes erd
+\end_inset
+
+item
+\begin_inset Quotes erd
+\end_inset
+
+,
+\begin_inset Quotes erd
+\end_inset
+
+14592
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The RequestType basically maps to the five HTTP methods: GET, POST, HEAD,
+ PUT and DELETE.
+ These are represented by the corresponding GetRequest, PostRequest, etc
+ cases classes, with an UnknownRequest case class to cover anything strange.
+\end_layout
+
+\begin_layout Standard
+The flexibility of Scala's matching system is what really makes this powerful.
+ With matching on Lists in particular, we can match parts of the path and
+ capture others.
+ For instance, for our second example we'd like to rewrite the 
+\begin_inset Quotes eld
+\end_inset
+
+/user/<username>
+\begin_inset Quotes erd
+\end_inset
+
+ path so that it's handled by the 
+\begin_inset Quotes eld
+\end_inset
+
+/viewUser
+\begin_inset Quotes erd
+\end_inset
+
+ template
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Modify for PocketChange
+\end_layout
+
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "basicstyle={\scriptsize},frame=single"
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+Simple rewrite example
+\begin_inset LatexCommand label
+name "lst:Simple-rewrite-example"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+val rewriter = {
+\end_layout
+
+\begin_layout Standard
+
+  case RewriteRequest(ParsePath(user :: username :: Nil,_,_,_),_,_) => 
+\end_layout
+
+\begin_layout Standard
+
+       RewriteResponse(viewUser :: Nil, Map(username -> username))
+\end_layout
+
+\begin_layout Standard
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The RewriteResponse
+\begin_inset LatexCommand index
+name "RewriteResponse"
+
+\end_inset
+
+ simply contains the new path to send and can also take a Map
+\begin_inset LatexCommand index
+name "Map"
+
+\end_inset
+
+ that contains parameters that will be accessible via S.param
+\begin_inset LatexCommand index
+name "S.param"
+
+\end_inset
+
+
+\begin_inset LatexCommand index
+name "S"
+
+\end_inset
+
+ in the snippet or view.
+ As we stated before, the LiftSession (and therefore most of S) isn't available
+ at this time, so the Map is the only way to pass information on to the
+ rewritten location.
+ Technically, a rewrite results in a 
+\begin_inset Quotes eld
+\end_inset
+
+302 Moved Temporarily
+\begin_inset Quotes erd
+\end_inset
+
+ result code that forwards the client to a new request.
+ Because of that, even if you could set data in LiftSession or S it would
+ disappear when the redirect occurs.
+\end_layout
+
+\begin_layout Standard
+We can combine the ParsePath matching with the RequestType and HttpServletReques
+t to be very specific with our matches.
+ For example, if we wanted to support the DELETE HTTP verb for a RESTful
+\begin_inset LatexCommand index
+name "RESTful"
+
+\end_inset
+
+ interface through an existing template, we could redirect it like so:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "basicstyle={\scriptsize},frame=single"
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+Complex rewrite example
+\begin_inset LatexCommand label
+name "lst:Complex-rewrite-example"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+val rewriter = {
+\end_layout
+
+\begin_layout Standard
+
+  case RewriteRequest(ParsePath(username :: Nil, _, _, _),
+\end_layout
+
+\begin_layout Standard
+
+                      DeleteRequest,
+\end_layout
+
+\begin_layout Standard
+
+                      httpreq) 
+\end_layout
+
+\begin_layout Standard
+
+                      if isMgmtSubnet(httpreq.getRemoteHost()) => 
+\end_layout
+
+\begin_layout Standard
+
+       RewriteResponse(deleteUser :: Nil, Map(username -> username))
+\end_layout
+
+\begin_layout Standard
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We'll go into more detail about how you can use this in the following sections.
+ In particular, SiteMap
+\begin_inset LatexCommand index
+name "SiteMap"
+
+\end_inset
+
+ 
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Cross-ref
+\end_layout
+
+\end_inset
+
+provides a mechanism for doing rewrites combined with menu entries.
+\end_layout
+
+\begin_layout Section
+Tags
+\end_layout
+
+\begin_layout Standard
+List of tags that are handled by Lift (stolen from http://liftweb.net/index.php/Li
+ftTags, not sure how up-to-date this is) 
+\end_layout
+
+\begin_layout Standard
+Tag name | example | explanation | notes
+\end_layout
+
+\begin_layout Subsubsection
+surround 
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+Example:
+\family typewriter
+\emph default
+ <lift:surround with="template_name">children</lift:surround>
+\end_layout
+
+\begin_layout Standard
+Surrounds the child nodes with a named template (located in the <app_root>/webap
+p/templates-hidden).
+ It is used to apply a unified template to all the page in a site.
+ 
+\end_layout
+
+\begin_layout Standard
+Demo example:<lift:surround with="default"> <b>Dude</b>...
+ this is my page...
+ but it'll appear in your browser in a template.
+ </lift:surround> 
+\end_layout
+
+\begin_layout Standard
+In the target template there must be a <lift:bind /> tag to indicate where
+ the contents should be bound.
+ Note that you can use multiple surround templates by adding them to the
+ /templates-hidden directory.
+ For example, you might want to have a separate template for your administrative
+ pages.
+ In that case, you might add that template as admin.html in the /templates-hidden
+ directory and then call it from your other pages using:<lift:surround with="adm
+in">page code here</lift:surround>
+\end_layout
+
+\begin_layout Standard
+Notes: You cannot have a hidden template with the same name as a sub-directory
+ of your webapp directory.
+ For example, if you had an admin.html template in /templates-hidden, you
+ could not also have an admin directory.
+ 
+\end_layout
+
+\begin_layout Subsubsection
+embed 
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+Example:
+\family typewriter
+\emph default
+ <lift:embed what="template" />
+\end_layout
+
+\begin_layout Standard
+Uses: Allows you to embed a template within another template (or to access
+ a template from a JsCmd such as SetHtml, ModalDialog, etc.)
+\end_layout
+
+\begin_layout Standard
+Note that incoming requests that contain *-hidden in the request will not
+ be serviced, but you can access templates in directories named *-hidden.
+ So, you can put AJAX templates in /ajax-templates-hidden in webapps.
+\end_layout
+
+\begin_layout Standard
+Also, lift's i18n support extends to templates as well, so you can specify
+ "/ajax-templates-hidden/welcome" and lift will serve the appropriate localized
+ template.
+ For example, if the current locale is set to French Canadian lift will
+ look for /ajax-templates-hidden/welcome_fr_CA.html, /ajax-templates-hidden/welco
+me_fr.html, and /ajax-templates-hidden/welcome.html Demo example:
+\end_layout
+
+\begin_layout Standard
+<lift:embed what="/ajax-templates-hidden/welcome" />
+\end_layout
+
+\begin_layout Standard
+Caveats: JavaScript contained in templates rendered via JsCmd (sent in response
+ to AJAX requests) will not be executed.
+ This includes Comet Widgets.
+ 
+\end_layout
+
+\begin_layout Subsubsection
+comet 
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+Example:
+\family typewriter
+\emph default
+ <lift:comet type="ClassName" name="optional"/>
+\end_layout
+
+\begin_layout Standard
+Uses: Defines a block of the XML document that is to be con
+\end_layout
+
+\begin_layout Standard
+Demo example:
+\end_layout
+
+\begin_layout Standard
+This:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "basicstyle={\footnotesize},language=Java,numbers=left,numberstyle={\tiny}"
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+Comet Html template
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+<div class="widget">
+\end_layout
+
+\begin_layout Standard
+
+  <lift:comet type="Clock">Current Time: 
+\end_layout
+
+\begin_layout Standard
+
+    <clk:time>Missing Clock</clk:time>
+\end_layout
+
+\begin_layout Standard
+
+  </lift:comet>
+\end_layout
+
+\begin_layout Standard
+
+</div>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Will turn into this after processing:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "basicstyle={\footnotesize},numbers=left,numberstyle={\tiny}"
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+Comet as rendered in the browser
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+<div style="text-align: center" class="widget">   
+\end_layout
+
+\begin_layout Standard
+
+<span id="LCHVVTE3H5CHZ31L1C2ZEQ_outer">     
+\end_layout
+
+\begin_layout Standard
+
+<span id="LCHVVTE3H5CHZ31L1C2ZEQ" lift:when="12">
+\end_layout
+
+\begin_layout Standard
+
+  Current Time: 
+\end_layout
+
+\begin_layout Standard
+
+  <span id="LCHVVTE3H5CHZ31L1C2ZEQ_timespan">Fri Nov 14 17:29:53 EST 2008</span>
+     
+\end_layout
+
+\begin_layout Standard
+
+<script>     
+\end_layout
+
+\begin_layout Standard
+
+// <![CDATA[     /* JSON Func clk $$ F1226701773224999000_BBP */     
+\end_layout
+
+\begin_layout Standard
+
+function F1226701773224999000_BBP(obj) {
+\end_layout
+
+\begin_layout Standard
+
+  lift_ajaxHandler('F1226701773224999000_BBP='+ encodeURIComponent(JSON.stringify
+(obj)), 
+\end_layout
+
+\begin_layout Standard
+
+  null, null);
+\end_layout
+
+\begin_layout Standard
+
+}     
+\end_layout
+
+\begin_layout Standard
+
+// ]]>     
+\end_layout
+
+\begin_layout Standard
+
+</script>
+\end_layout
+
+\begin_layout Standard
+
+</span>
+\end_layout
+
+\begin_layout Standard
+
+<script>     
+\end_layout
+
+\begin_layout Standard
+
+// <![CDATA[     
+\end_layout
+
+\begin_layout Standard
+
+var destroy_LCHVVTE3H5CHZ31L1C2ZEQ = function() {}     
+\end_layout
+
+\begin_layout Standard
+
+// ]]>     
+\end_layout
+
+\begin_layout Standard
+
+</script>     
+\end_layout
+
+\begin_layout Standard
+
+</span>     
+\end_layout
+
+\begin_layout Standard
+
+</div>  
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Caveats: if you have a <lift:comet /> tag and you're using the tag from
+ within sending AJAX stuff back, things might not work well.
+ 
+\end_layout
+
+\begin_layout Subsubsection
+snippet
+\begin_inset LatexCommand label
+name "sub:snippet-tag"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+Example:
+\family typewriter
+\emph default
+ <lift:snippet form="METHOD" type="ClassName:method" multipart="true" />
+\end_layout
+
+\begin_layout Standard
+The 
+\family typewriter
+form
+\family default
+ and 
+\family typewriter
+multipart
+\family default
+ attributes are optional.
+ If 
+\family typewriter
+form
+\family default
+ is included the attribute options are 
+\family typewriter
+GET
+\family default
+ and 
+\family typewriter
+POST.
+
+\family default
+ The 
+\family typewriter
+type
+\family default
+ attribute resolves to the method call 
+\family typewriter
+ClassName.method
+\family default
+.
+ The 
+\family typewriter
+multipart
+\family default
+ attribute is a boolean.
+\end_layout
+
+\begin_layout Standard
+Demo example:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "basicstyle={\footnotesize},numbers=left,numberstyle={\tiny}"
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+Snippet that generates a NodeSeq
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+def add(xhtml: Group): NodeSeq =     
+\end_layout
+
+\begin_layout Standard
+
+  selectedUser.is.openOr(new User).toForm(Empty, saveUser _) ++ 
+\end_layout
+
+\begin_layout Standard
+
+  <tr>     
+\end_layout
+
+\begin_layout Standard
+
+    <td><a href="/simple/index.html">Cancel</a></td>     
+\end_layout
+
+\begin_layout Standard
+
+    <td><input type="submit" value="Create"/></td>     
+\end_layout
+
+\begin_layout Standard
+
+  </tr>
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "basicstyle={\footnotesize},numbers=left,numberstyle={\tiny}"
+inline false
+status collapsed
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+Snippet the generates Nodes to bind...
+ TODO: Explain the difference better...
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+def render(in: NodeSeq): NodeSeq = {     
+\end_layout
+
+\begin_layout Standard
+
+  val attr: String = S.attr("name").openOr("N/A")     
+\end_layout
+
+\begin_layout Standard
+
+  val value = CountHolder.is(attr)
+\end_layout
+
+\begin_layout Standard
+
+  bind("count", in, "value" -> value, 
+\end_layout
+
+\begin_layout Standard
+
+    "incr" -> link("/count", () => CountHolder.is(attr) = value + 1, Text("++")),
+     
+\end_layout
+
+\begin_layout Standard
+
+    "decr" -> link("/count", () => CountHolder.is(attr) = 0 max (value -
+ 1), Text("--")))   
+\end_layout
+
+\begin_layout Standard
+
+} 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Caveats: 
+\end_layout
+
+\begin_layout Standard
+More in section 
+\begin_inset LatexCommand ref
+reference "sec:Snippets"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Snippets
+\end_layout
+
+\begin_layout Standard
+A snippet method takes a single Scala.xml.NodeSeq
+\begin_inset LatexCommand index
+name "NodeSeq"
+
+\end_inset
+
+ argument and is expected to return a NodeSeq.
+ The argument passed to the method is the XML contents of the snippet tag;
+ because Lift processes from the outside in, the contents are not processed
+ by default before being passed to the snippet method.
+ For our current example, we could simply have a method that looks like
+ this:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "frame=single"
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+Hello World snippet
+\begin_inset LatexCommand label
+name "lst:Hello-World-snippet"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+class Hello {
+\end_layout
+
+\begin_layout Standard
+
+  def world (content : NodeSeq) : NodeSeq = 
+\end_layout
+
+\begin_layout Standard
+
+    Text("Hello, world!")
+\end_layout
+
+\begin_layout Standard
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We simply return an XML Text node with our greeting.
+ Note that the XML that a snippet returns is further processed from the
+ outside in, so if your snippet instead looked like
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+Returning tags from a snippet
+\begin_inset LatexCommand label
+name "lst:Returning-tags-snippet"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+class Hello {
+\end_layout
+
+\begin_layout Standard
+
+  def world (content : NodeSeq) : NodeSeq = 
+\end_layout
+
+\begin_layout Standard
+
+    <p>{"Hello, "}<lift:User.name /></p>
+\end_layout
+
+\begin_layout Standard
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+then the lift:User.name snippet will be processed as well after our snippet
+ method returns.
+ It is this hierarchical processing of template tags that makes Lift so
+ flexible.
+\end_layout
+
+\begin_layout Subsection
+Stateless Snippets
+\end_layout
+
+\begin_layout Standard
+All of the above examples showed Stateless snippets, those that execute
+ and render a block of XML and send it back to the broswer.
+ This is the default type of snippet.
+ 
+\end_layout
+
+\begin_layout Subsection
+Stateful Snippets
+\end_layout
+
+\begin_layout Standard
+Lift also has a the concept of a stateful snippet.
+ All of our previous examples, while simple, were stateless.
+ That is to say, from request to request, there is no saved state on the
+ server-side.
+ Stateless snippets are useful in the sense that many requirements for a
+ web applications need no state to be preserved as the user moves from page
+ to page.
+ There are a similar number of cases where we would like to preserve some
+ state as the user navigates.
+ For example, if you think about a graph that shows your spending for the
+ last 3 months.
+ You've changed the time span from the default 1 month to 3 months.
+ Now you'd like to limit the exspense categories to show only 
+\begin_inset Quotes eld
+\end_inset
+
+Food.
+\begin_inset Quotes erd
+\end_inset
+
+ More than likely, you'll want the application to respect the change in
+ time-span as well.
+ This is a case where keeping a bit of state around will allow you to do
+ this.
+\end_layout
+
+\begin_layout Standard
+Below is an example of a stateful snippet that handles the above example.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Write and then steal from PocketChange
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Notes
+\end_layout
+
+\begin_layout Standard
+There are a few things to mention about snippets that will help.
+ If you define a snippet as 
+\family typewriter
+<lift:CSS />
+\family default
+ rather than 
+\family typewriter
+<lift:CSS.show /> 
+\family default
+Lift will look for the method named 
+\family typewriter
+render
+\family default
+ in the class 
+\family typewriter
+CSS
+\family default
+.
+\end_layout
+
+\begin_layout Section
+Eager Eval
+\end_layout
+
+\begin_layout Standard
+If you want the contents of a snippet tag to be processed 
+\emph on
+before
+\emph default
+ the snippet, then you would specify the 
+\family typewriter
+eager_eval
+\family default
+
+\begin_inset LatexCommand index
+name "eager_eval"
+
+\end_inset
+
+ attribute on the tag:
+\end_layout
+
+\begin_layout LyX-Code
+<lift:Hello.world eager_eval=
+\begin_inset Quotes erd
+\end_inset
+
+true
+\begin_inset Quotes erd
+\end_inset
+
+>...</lift:Hello.world>
+\end_layout
+
+\begin_layout Standard
+This is especially useful if you're using a 
+\family typewriter
+lift:embed
+\begin_inset LatexCommand index
+name "embed"
+
+\end_inset
+
+
+\family default
+ tag; without the eager_eval attribute your snippet just sees the <lift:embed>
+ tag, but with eager_eval set to true you can put 
+\emph on
+bindable
+\emph default
+ common snippet content into a single embedded template instead of copying
+ it between templates.
+ In addition to eager_eval, there are attributes such as 
+\family typewriter
+form
+\family default
+ and 
+\family typewriter
+multipart
+\family default
+ which we will cover in extensive detail in section 
+\begin_inset LatexCommand ref
+reference "sub:snippet-tag"
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Section
+Head Merge
+\end_layout
+
+\begin_layout Standard
+Another feature of Lift's template processing is the ability to merge the
+ HTML 
+\family typewriter
+head
+\family default
+
+\begin_inset LatexCommand index
+name "head"
+
+\end_inset
+
+ tag from within a template.
+ In our example listing 
+\begin_inset LatexCommand ref
+reference "lst:Sample-template"
+
+\end_inset
+
+, notice that we've specified a 
+\family typewriter
+head
+\family default
+ tag inside the template.
+ Without the head merge, this head tag would show up in the default template
+ where our template gets bound.
+ Lift is smart about this, though, and instead takes the contents of the
+ head tag and merges it into the outer template's head tag.
+ This means that you can use a surround tag to keep a uniform default template,
+ but still change things like the title of the tag, add in scripts or special
+ CSS, etc.
+ For example, if you have a table in a page that you'd like to style with
+ jQuery's TableSorter, you would add a Lift tag:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+<lift:tohead><script src="/scripts/tablesorter.js" type="text/javascript"
+ /></lift:tohead>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+And just for this snippet, you'll import TableSorter.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Better example: Head merge looks like it's gone...
+ WARN - Snippet Failure: SnippetFailure(/index -> ParsePath(List(index),,true,fa
+lse),Full(tohead),Class Not Found)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+SHtml intro
+\end_layout
+
+\begin_layout Standard
+SHtml.scala - methods to generate NodeSeqs.
+ Typical usage is for form creation.
+ 
+\end_layout
+
+\begin_layout Standard
+Some of the functions are text, button, select, checkbox, there are a lot
+ more helper functions, so take a look at the ScalaDocs and at net/liftweb/http/
+SHtml.scala.
+\end_layout
+
+\begin_layout Standard
+Here's a short snippet for generating a form:
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Add the tag in the template as well? Add the output that lift generates?
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+def addForm = {     
+\end_layout
+
+\begin_layout Standard
+
+  <div>
+\end_layout
+
+\begin_layout Standard
+
+   {SHtml.text("Date", println _)}      
+\end_layout
+
+\begin_layout Standard
+
+   {SHtml.textarea("Description", println _)}     
+\end_layout
+
+\begin_layout Standard
+
+   {SHtml.text("Tags", println _)}     
+\end_layout
+
+\begin_layout Standard
+
+   {SHtml.text("Value", println _)}     
+\end_layout
+
+\begin_layout Standard
+
+   {SHtml.submit("Submit", () => S.notice("Submitted"))}</div>   
+\end_layout
+
+\begin_layout Standard
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+SiteMap
+\end_layout
+
+\begin_layout Standard
+SiteMap is crazy now.
+ It's a combination of access control and menu generation.
+ Since both of these concepts are tightly related to each other, SiteMap
+ is the one point of control.
+\end_layout
+
+\begin_layout Standard
+We're mentioning it here briefly, as we have an entire chapter dedicated
+ to SiteMap.
+ It's worth touching on as it relates to most of what we just discussed.
+\end_layout
+
+\begin_layout Standard
+
+\clearpage
+
+\end_layout
+
+\begin_layout Standard
+
+\lyxline
+
+\end_layout
+
+\begin_layout Standard
+OLD
+\end_layout
+
+\begin_layout Section
 Prerequisites
 \end_layout
 
@@ -278,7 +2686,7 @@ Bootstrap
 When Lift starts up there are a number of things that you'll want to set
  up before any requests are processed.
  These things include setting up a SiteMenu, URL rewriting, custom dispatch
- and class path search.
+ and classpath search.
  The Lift servlet looks for the bootstrap.liftweb.Boot
 \begin_inset LatexCommand index
 name "Boot"
@@ -317,7 +2725,7 @@ As part of our discussion of the Boot class, it's important to cover a small
 \begin_inset Quotes eld
 \end_inset
 
-com.foo
+com.pocketchangeapp
 \begin_inset Quotes erd
 \end_inset
 
@@ -325,7 +2733,7 @@ com.foo
 \begin_inset Quotes eld
 \end_inset
 
-com.foo.view
+com.pocketchangeapp.view
 \begin_inset Quotes erd
 \end_inset
 
@@ -333,7 +2741,7 @@ com.foo.view
 \begin_inset Quotes eld
 \end_inset
 
-com.foo.snippet
+com.pocketchangeapp.snippet
 \begin_inset Quotes erd
 \end_inset
 
@@ -350,7 +2758,7 @@ addToPackages
 \begin_inset listings
 lstparams "basicstyle={\footnotesize},frame=single"
 inline false
-status open
+status collapsed
 
 \begin_layout Standard
 
@@ -383,7 +2791,7 @@ class Boot {
 
 \begin_layout Standard
 
-    LiftRules.addToPackages("my.root.class.path")
+    LiftRules.addToPackages("com.pocketchangeapp")
 \end_layout
 
 \begin_layout Standard
@@ -1563,10 +3971,10 @@ name "snippets"
 
 \end_inset
 
-, that are linked directly to Scala methods; these scala methods can process
+, that are linked directly to Scala methods; these Scala methods can process
  the contents of the snippet tag, or can generate their own content from
  scratch.
- For example, a typical template could look like
+ For example, a typical template could look like:
 \end_layout
 
 \begin_layout Standard
@@ -1596,7 +4004,7 @@ name "lst:Sample-template"
 
 \begin_layout Standard
 
-<lift:surround with=default at=content>
+<lift:surround with="default" at="content">
 \end_layout
 
 \begin_layout Standard
@@ -1788,7 +4196,7 @@ Snippet Methods
 \end_layout
 
 \begin_layout Standard
-A snippet method takes a single scala.xml.NodeSeq
+A snippet method takes a single Scala.xml.NodeSeq
 \begin_inset LatexCommand index
 name "NodeSeq"
 
@@ -2511,7 +4919,7 @@ def add(xhtml: Group): NodeSeq =
 \begin_inset listings
 lstparams "basicstyle={\footnotesize},numbers=left,numberstyle={\tiny}"
 inline false
-status open
+status collapsed
 
 \begin_layout Standard
 
@@ -3828,7 +6236,7 @@ Views
 \begin_layout Standard
 As discussed a template is a page that is built with both a static component
  and a dynamic component.
- Lift offers the option to generate a page entirely from scala code.
+ Lift offers the option to generate a page entirely from Scala code.
  This is accomplished by using a LiftView.
  
 \end_layout
@@ -3885,594 +6293,6 @@ What are the use cases for snippets vs.
 \end_layout
 
 \begin_layout Section
-SHtml Generators
-\end_layout
-
-\begin_layout Standard
-def mapFunc(in: AFuncHolder): String = mapFunc(
-\begin_inset Quotes eld
-\end_inset
-
-F
-\begin_inset Quotes erd
-\end_inset
-
- + System.nanoTime + 
-\begin_inset Quotes eld
-\end_inset
-
-_
-\begin_inset Quotes erd
-\end_inset
-
- + randomString(3), in)
-\end_layout
-
-\begin_layout Standard
-def mapFunc(name: String, inf: AFuncHolder): String = {
-\end_layout
-
-\begin_layout Standard
-addFunctionMpa(name, inf)
-\end_layout
-
-\begin_layout Standard
-name
-\end_layout
-
-\begin_layout Standard
-}
-\end_layout
-
-\begin_layout Description
-swappable A swappable visual element.
- 
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Standard
-
-\begin_inset Caption
-
-\begin_layout Standard
-swappable example
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-
-def renderSwappable = {      
-\end_layout
-
-\begin_layout Standard
-
-  swappable(<span>Click to edit: <span id='the_text'></span></span>,   
-  
-\end_layout
-
-\begin_layout Standard
-
-    ajaxText("", v => DisplayMessage("messages", Text("You entered some
- text: "+v), 4 seconds, 1 second)        
-\end_layout
-
-\begin_layout Standard
-
-    & SetHtml("the_text", Text(v))))  
-\end_layout
-
-\begin_layout Standard
-
-}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Description
-ajaxButton An <input type=
-\begin_inset Quotes erd
-\end_inset
-
-button
-\begin_inset Quotes erd
-\end_inset
-
-> with onClick connected to an AjaxCall
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-lstparams "basicstyle={\footnotesize},language=Java,numbers=left,numberstyle={\tiny}"
-inline false
-status open
-
-\begin_layout Standard
-
-\begin_inset Caption
-
-\begin_layout Standard
-ajaxButton example
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-
-def renderAjaxButton(in: NodeSeq): NodeSeq = SHtml.ajaxButton("Validate",
- () => {   
-\end_layout
-
-\begin_layout Standard
-
-  LoginStuff(true)   
-\end_layout
-
-\begin_layout Standard
-
-  S.notice("Your session is validated")   
-\end_layout
-
-\begin_layout Standard
-
-  RedirectTo("/login/index")   
-\end_layout
-
-\begin_layout Standard
-
-})
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Description
-a An <a> tag with a function associated with it : <lift:a hey={key}>{body}</lift
->
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Standard
-
- a(() => {cnt = cnt + 1; SetHtml("cnt_id", Text( cnt.toString))}, <span>Click
- me to increase the count (currently <span id='cnt_id'>0</span>)</span>)
-  
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Description
-span A <span> with onClick connected to a JsCmd.
- span(body, cmd)
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Standard
-
-<span onclick={cmd.toJsCmd}>{body}</span>
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Description
-select A <select></select>
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Standard
-
-def renderSelect(in: NodeSeq): NodeSeq = {
-\end_layout
-
-\begin_layout Standard
-
-  select(List(String, String), Full(defaultValue), FunctionToDoSomething)
-\end_layout
-
-\begin_layout Standard
-
-}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Description
-text An <input type=
-\begin_inset Quotes erd
-\end_inset
-
-text
-\begin_inset Quotes erd
-\end_inset
-
->
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Standard
-
-def renderText(in: NodeSeq): NodeSeq = {
-\end_layout
-
-\begin_layout Standard
-
-  text("This is the default text", FunctionToDoSomething)
-\end_layout
-
-\begin_layout Standard
-
-}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Description
-textarea A <textarea>
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Standard
-
-def renderTextarea(in: NodeSeq): NodeSeq = {
-\end_layout
-
-\begin_layout Standard
-
-  textarea("This is the default text", FunctionToDoSomething)
-\end_layout
-
-\begin_layout Standard
-
-}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Description
-link Create an anchor tag around a body Xhtml fragment.
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Standard
-
-def link(to: String, func: () => Any, body: NodeSeq): Elem
-\end_layout
-
-\begin_layout Standard
-
-generates
-\end_layout
-
-\begin_layout Standard
-
-<a href={to + "">{body}</a>
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Description
-multiselect A <select multiple=
-\begin_inset Quotes erd
-\end_inset
-
-true
-\begin_inset Quotes erd
-\end_inset
-
->
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Standard
-
-def multiSelect(opts: Seq[(String, String)], deflt: Seq[String], func: String
- => Any): Elem
-\end_layout
-
-\begin_layout Standard
-
-generates
-\end_layout
-
-\begin_layout Standard
-
-<select multiple="true" name={mapFunc(func)}>{opts.flatMap(o => (<option
- value={o._1}>{0._2}</option>) % selected(deflt.contains(o._1)))}</select>
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Description
-radio An <input type=
-\begin_inset Quotes erd
-\end_inset
-
-radio
-\begin_inset Quotes erd
-\end_inset
-
->
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Standard
-
-def radio(opts: Seq[String], deflt: Can[String], func: String => Any): Elem
-\end_layout
-
-\begin_layout Standard
-
-generates
-\end_layout
-
-\begin_layout Standard
-
-<input type="radio" name={name} value={v} />
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Description
-submit An <input type=
-\begin_inset Quotes erd
-\end_inset
-
-submit
-\begin_inset Quotes erd
-\end_inset
-
->
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Standard
-
-def submit(value: String, func: () => Any): Elem
-\end_layout
-
-\begin_layout Standard
-
-generates
-\end_layout
-
-\begin_layout Standard
-
-<input type="submit" name={mapFunc(func))} />
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Description
-hidden A hidden form element
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Standard
-
-def hidden(func: () => Any): Elem
-\end_layout
-
-\begin_layout Standard
-
-generates
-\end_layout
-
-\begin_layout Standard
-
-<input type="hidden" name={mapFunc(func))} />
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Description
-password An <input type=
-\begin_inset Quotes erd
-\end_inset
-
-password
-\begin_inset Quotes erd
-\end_inset
-
-> 
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Standard
-
-def password(value: String, func: String => Any): Elem
-\end_layout
-
-\begin_layout Standard
-
-generates
-\end_layout
-
-\begin_layout Standard
-
-<input type="password" name={mapFunc(func))} />
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Explaining mapFunc:
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Standard
-
-/** Associates a name with a function impersonated by AFuncHolder.
- These are basically functions    
-\end_layout
-
-\begin_layout Standard
-
-* that are executed when a request contains the 'name' request parameter.
-    */   
-\end_layout
-
-\begin_layout Standard
-
-def addFunctionMap(name: String, value: AFuncHolder) = _functionMap.value
- += (name -> value)
-\end_layout
-
-\begin_layout Standard
-
-\end_layout
-
-\begin_layout Standard
-
-/** * Maps a function with an random generated and name */ 
-\end_layout
-
-\begin_layout Standard
-
-def mapFunc(in: AFuncHolder): String = mapFunc("F"+System.nanoTime+"_"+randomStri
-ng(3), in)
-\end_layout
-
-\begin_layout Standard
-
-\end_layout
-
-\begin_layout Standard
-
-/** * Similar with addFunctionMap but also returns the name.
- */ 
-\end_layout
-
-\begin_layout Standard
-
-def mapFunc(name: String, inf: AFuncHolder): String = { 
-\end_layout
-
-\begin_layout Standard
-
-  addFunctionMap(name, inf) 
-\end_layout
-
-\begin_layout Standard
-
-  name 
-\end_layout
-
-\begin_layout Standard
-
-}
-\end_layout
-
-\begin_layout Standard
-
-\end_layout
-
-\begin_layout Standard
-
-Do I need to explain the functionMap that is built per session?
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Section
 Conclusion
 \end_layout
 
@@ -4508,106 +6328,6 @@ LiftViewFirst - http://wiki.liftweb.net/index.php/Lift_View_First
 
 \begin_layout Itemize
 Error handling - Msgs and handling exceptions
-\end_layout
-
-\begin_layout Section
-Debugging Junk
-\end_layout
-
-\begin_layout Standard
-S.locateSnippet: Looking for: Menu.title 
-\end_layout
-
-\begin_layout Standard
-S.locateSnippet: Processed: List(Menu, title) 
-\end_layout
-
-\begin_layout Standard
-ProcessSnippet cls: Menu 
-\end_layout
-
-\begin_layout Standard
-ProcessSnippet method: title 
-\end_layout
-
-\begin_layout Standard
-Looking for snippet: Menu 
-\end_layout
-
-\begin_layout Standard
-S.locateSnippet: Looking for: CSS.blueprint 
-\end_layout
-
-\begin_layout Standard
-S.locateSnippet: Processed: List(CSS, blueprint) 
-\end_layout
-
-\begin_layout Standard
-ProcessSnippet cls: CSS 
-\end_layout
-
-\begin_layout Standard
-ProcessSnippet method: blueprint 
-\end_layout
-
-\begin_layout Standard
-Looking for snippet: CSS 
-\end_layout
-
-\begin_layout Standard
-S.locateSnippet: Looking for: CSS.fancyType 
-\end_layout
-
-\begin_layout Standard
-S.locateSnippet: Processed: List(CSS, fancyType) 
-\end_layout
-
-\begin_layout Standard
-ProcessSnippet cls: CSS 
-\end_layout
-
-\begin_layout Standard
-ProcessSnippet method: fancyType 
-\end_layout
-
-\begin_layout Standard
-Looking for snippet: CSS 
-\end_layout
-
-\begin_layout Standard
-S.locateSnippet: Looking for: menu.builder 
-\end_layout
-
-\begin_layout Standard
-S.locateSnippet: Processed: List(menu, builder) 
-\end_layout
-
-\begin_layout Standard
-ProcessSnippet cls: menu 
-\end_layout
-
-\begin_layout Standard
-ProcessSnippet method: builder 
-\end_layout
-
-\begin_layout Standard
-Looking for snippet: menu 
-\end_layout
-
-\begin_layout Standard
-S.locateSnippet: Looking for: Msgs 
-\end_layout
-
-\begin_layout Standard
-S.locateSnippet: Processed: List(Msgs) 
-\end_layout
-
-\begin_layout Standard
-ProcessSnippet cls: Msgs 
-\end_layout
-
-\begin_layout Standard
-ProcessSnippet method: render
 \end_layout
 
 \end_body
