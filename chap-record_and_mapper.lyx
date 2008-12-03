@@ -59,6 +59,19 @@ name "cha:mapper_and_record"
 \end_layout
 
 \begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Link types to Java/ScalaDoc with footnotes where possible
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 Usually we find that most webapps end up wanting to store user data somewhere.
  Once you start working with user data, though, you start dealing with issues
  like coding up input forms, validation
@@ -190,7 +203,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Standard
-
 Setting up the Database
 \begin_inset LatexCommand label
 name "lst:Setting-up-the-database"
@@ -556,6 +568,20 @@ reference "sub:Object-Relationships"
  Record is a little more flexible in primary key selection since it uses,
  in effect, a marker trait (KeyField) to indicate that a particular field
  is a key field.
+ One thing to note is that in Mapper, the table name
+\begin_inset LatexCommand index
+name "table name"
+
+\end_inset
+
+ foryour entity defaults to the name of the class (Entry in our case).
+ If you want to change this then you just need to override the dbTableName
+\begin_inset LatexCommand index
+name "dbTableName"
+
+\end_inset
+
+ def.
 \end_layout
 
 \begin_layout Standard
@@ -858,7 +884,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Standard
-
 Foreign Key Definition
 \begin_inset LatexCommand label
 name "lst:Foreign-Key-Definition"
@@ -949,7 +974,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Standard
-
 Accessing Foreign Objects
 \begin_inset LatexCommand label
 name "lst:Accessing-Foreign-Objects"
@@ -1025,7 +1049,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Standard
-
 Category Entity
 \begin_inset LatexCommand label
 name "lst:Category-Entity"
@@ -1107,7 +1130,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Standard
-
 Join Entity
 \begin_inset LatexCommand label
 name "lst:Join-Entity"
@@ -1124,11 +1146,183 @@ name "lst:Join-Entity"
 
 \begin_layout Standard
 
+class CategoryEntry extends KeyedMapper[Long,CategoryEntry] {
+\end_layout
+
+\begin_layout Standard
+
+  ...
+ singleton, primary key defs here ...
+\end_layout
+
+\begin_layout Standard
+
+  object entry extends MappedLongForeignKey(this,EntryMeta)
+\end_layout
+
+\begin_layout Standard
+
+  object category extends MappedLongForeignKey(this,CategoryMeta)
+\end_layout
+
+\begin_layout Standard
+
+}
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+object CategoryEntryMeta extends CategoryEntry with KeyedMetaMapper[Long,Categor
+yEntryMeta] {
+\end_layout
+
+\begin_layout Standard
+
+  def join (category : Category, entry : Entry) = {
+\end_layout
+
+\begin_layout Standard
+
+    val joiner = this.create
+\end_layout
+
+\begin_layout Standard
+
+    joiner.entry(entry)
+\end_layout
+
+\begin_layout Standard
+
+    joiner.category(category)
+\end_layout
+
+\begin_layout Standard
+
+    joiner
+\end_layout
+
+\begin_layout Standard
+
+  }
+\end_layout
+
+\begin_layout Standard
+
+}
 \end_layout
 
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+To use the join entity, you'll need to create a new instance and set the
+ appropriate foreign keys to point to the associated instances.
+ As you can see, we've defined a convenience method on out CategoryJoinMeta
+ object to do just that.
+ To make the many-to-many accessible as a field on our entities, we can
+ use the HasManyThrough trait, as shown in listing 
+\begin_inset LatexCommand ref
+reference "lst:HasManyThrough-for-Many-to-Many"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+
+HasManyThrough for Many-to-Many Relationships
+\begin_inset LatexCommand label
+name "lst:HasManyThrough-for-Many-to-Many"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+object categories extends 
+\end_layout
+
+\begin_layout Standard
+
+  HasManyThrough(this,
+\end_layout
+
+\begin_layout Standard
+
+                 CategoryMeta,
+\end_layout
+
+\begin_layout Standard
+
+                 CategoryEntryMeta,
+\end_layout
+
+\begin_layout Standard
+
+                 CategoryEntryMeta.entry,
+\end_layout
+
+\begin_layout Standard
+
+                 CategoryEntryMeta.category)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+A similar field could be set up on the Category entity to point to entries.
+ It's important to note a few items:
+\end_layout
+
+\begin_layout Itemize
+The only way to add new entries is to directly construct the CategoryEntry
+ instances and save them.
+ You can't make any modifications via the HasManyThrough trait
+\end_layout
+
+\begin_layout Itemize
+Although the field is defined as a query, the field is actually lazy and
+ only runs once.
+ That means if you query it and then add some new CategoryEntry instances,
+ they won't show up in the field contents
+\end_layout
+
+\begin_layout Standard
+If you want a way to retrieve the joined results such that it pulls fresh
+ from the database each time, you can instead define a helper method as
+ shown in listing 
+\begin_inset LatexCommand vref
+reference "lst:Convenience-methods"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Subsection
@@ -1229,11 +1423,18 @@ save
 \family default
  method on the Meta object, passing in the instance you want to save.
  The save method uses the id field to determine whether an insert or update
- is required to persist the current state to the database.
+ is required to persist the current state to the database, and returns a
+ boolean to indicate whether the save was successful or not.
 \end_layout
 
 \begin_layout Subsubsection*
 Deleting an Instance
+\begin_inset LatexCommand label
+name "sub:Deleting-an-Instance"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -1256,6 +1457,28 @@ delete_!
  not.
 \end_layout
 
+\begin_layout Standard
+Another approach to deleting entities is to use the 
+\family typewriter
+bulkDelete_!!
+\family default
+ method on MetaMapper.This method allows you to specify query parameters
+ to control which entities are deleted.
+ We will cover query parameters in section 
+\begin_inset LatexCommand ref
+reference "sub:Querying-for-Entities"
+
+\end_inset
+
+ (an example is in listing 
+\begin_inset LatexCommand vref
+reference "lst:Bulk-Deletion"
+
+\end_inset
+
+).
+\end_layout
+
 \begin_layout Subsection
 Querying for Entities
 \begin_inset LatexCommand label
@@ -1267,7 +1490,981 @@ name "sub:Querying-for-Entities"
 \end_layout
 
 \begin_layout Standard
-Here we cover how to find entities
+There are a variety of methods on MetaMapper for querying for instances
+ of a given entity.
+ The simplest method is 
+\family typewriter
+findAll
+\family default
+
+\begin_inset LatexCommand index
+name "findAll"
+
+\end_inset
+
+ called with no parameters.
+ The 
+\begin_inset Quotes eld
+\end_inset
+
+bare
+\begin_inset Quotes erd
+\end_inset
+
+ 
+\family typewriter
+findAll
+\family default
+ returns a List of all of the instances of a given entity loaded from the
+ database.
+ Note that each findAll...
+ method has a corresponding method that takes a database connection for
+ sharding or multiple database usage (see sharding in section 
+\begin_inset LatexCommand ref
+reference "sub:Database-Sharding"
+
+\end_inset
+
+).
+ Of course, for all but the smallest datasets, pulling the entire model
+ to get one entity from the database is inefficient and slow.
+ Instead, the MetMapper provides methods for using queries to narrow the
+ set of entities returned.
+ 
+\end_layout
+
+\begin_layout Standard
+The ability to use fine-grained queries to select data is a fundamental
+ feature of relational databases, and Mapper provides first-class support
+ for constructing queries in a manner that is not only easy to use, but
+ type-safe.
+ This means that you can catch query errors at compile time instead of runtime.
+ The basis for this functionality is the QueryParam trait, which has several
+ concrete implementations that are used to construct the actual query.
+ The QueryParam impls can be broken up into two main groups:
+\end_layout
+
+\begin_layout Enumerate
+Comparison - These are typically items that would go in the where clause
+ of an SQL query.
+ They are used to refine the set of instances that will be returned
+\end_layout
+
+\begin_layout Enumerate
+Control - These are items that control things like sort order and pagination
+ of the results
+\end_layout
+
+\begin_layout Standard
+Although Mapper provides a large amount of the functionality in SQL, some
+ features are not covered directly or at all.
+ In some cases we can define helper methods to make querying easier, particularl
+y for joins (section 
+\begin_inset LatexCommand ref
+reference "sub:helper-joins"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Standard
+The simplest QueryParam to refine your query is the By
+\begin_inset LatexCommand index
+name "By"
+
+\end_inset
+
+ object, and its related objects.
+ By is used for a direct value comparison of a given field, essentially
+ an 
+\begin_inset Quotes eld
+\end_inset
+
+=
+\begin_inset Quotes erd
+\end_inset
+
+ in SQL.
+ For instance, to get an instance of our ledger entry by its primary key,
+ we use findAll as shown in listing 
+\begin_inset LatexCommand ref
+reference "lst:Retrieving-by-Primary-key"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+Retrieving by Primary Key
+\begin_inset LatexCommand label
+name "lst:Retrieving-by-Primary-key"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+val myEntry = EntryMeta.findAll(By(Entry.id, myId)).firstOption
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+As you can see, we use the firstOption to convert from a List to an Option.
+ If the Option is None it means that the entity could not be loaded.
+ Loading a single entity is somewhat of a special case, but in this example
+ we're selecting on the primary key, which has a unique constraint and thus
+ should return either one entity or none (perfect for an Option).
+ Besides By, the other basic clauses are:
+\end_layout
+
+\begin_layout Itemize
+NotBy
+\begin_inset LatexCommand index
+name "NotBy"
+
+\end_inset
+
+ - Selects entities whose queried field is not equal to the given value
+\end_layout
+
+\begin_layout Itemize
+By_>
+\begin_inset LatexCommand index
+name "By_>"
+
+\end_inset
+
+ - Selects entities whose queried field is larger than the given value
+\end_layout
+
+\begin_layout Itemize
+By_<
+\begin_inset LatexCommand index
+name "By_<"
+
+\end_inset
+
+ - Selects entities whose queried field is less than the given value
+\end_layout
+
+\begin_layout Itemize
+ByList
+\begin_inset LatexCommand index
+name "ByList"
+
+\end_inset
+
+ - Selects entities whose queried field is equal to one of the values in
+ the given List.
+ This corresponds to the 
+\begin_inset Quotes eld
+\end_inset
+
+field IN (x,y,z)
+\begin_inset Quotes erd
+\end_inset
+
+ syntax in SQL.
+\end_layout
+
+\begin_layout Itemize
+NullRef
+\begin_inset LatexCommand index
+name "NullRef"
+
+\end_inset
+
+ - Selects entities whose queried field is NULL
+\end_layout
+
+\begin_layout Itemize
+NotNullRef
+\begin_inset LatexCommand index
+name "NotNullRef"
+
+\end_inset
+
+ - Select entities whose queried field is not NULL
+\end_layout
+
+\begin_layout Itemize
+Like
+\begin_inset LatexCommand index
+name "Like"
+
+\end_inset
+
+ - Select entities whose queried field is like the given string.
+ As in SQL, the percent sign is used as a wildcard
+\end_layout
+
+\begin_layout Standard
+In addition to the basic clauses there are some slightly more complex ways
+ to control the query.
+ The first of these is ByRef
+\begin_inset LatexCommand index
+name "ByRef"
+
+\end_inset
+
+, which selects entities whose queried field is equal to the value of another
+ query field.
+ This can be used to build your own joins or any other query where you need
+ to test between tables
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Is there a better example?
+\end_layout
+
+\end_inset
+
+.
+ The related NotByRef tests for inequality between two query fields.
+\end_layout
+
+\begin_layout Standard
+Getting slightly more complex, we come to the In
+\begin_inset LatexCommand index
+name "In"
+
+\end_inset
+
+ QueryParameter, which is used just like an 
+\begin_inset Quotes eld
+\end_inset
+
+IN
+\begin_inset Quotes erd
+\end_inset
+
+ clause with a subselect in an SQL statement.
+ As a totally contrived example 
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Can we think of a better one?
+\end_layout
+
+\end_inset
+
+, let's say we wanted to get all of the entries that belong to categories
+ that start with the letter 
+\begin_inset Quotes eld
+\end_inset
+
+c
+\begin_inset Quotes erd
+\end_inset
+
+.
+ Listing 
+\begin_inset LatexCommand ref
+reference "lst:Using-In"
+
+\end_inset
+
+ shows the full breakdown.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+
+Using In
+\begin_inset LatexCommand label
+name "lst:Using-In"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+EntryMeta.findAll(
+\end_layout
+
+\begin_layout Standard
+
+  ByRef(EntryMeta.id, CategoryJoinMeta.entry),
+\end_layout
+
+\begin_layout Standard
+
+  In(CategoryJoinMeta.category,
+\end_layout
+
+\begin_layout Standard
+
+     CategoryMeta.id,
+\end_layout
+
+\begin_layout Standard
+
+     Like(CategoryMeta.name, "c%")))
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We use the ByRef params to do the join between the many-to-many entity on
+ the query.
+ Related to In is InRaw
+\begin_inset LatexCommand index
+name "InRaw"
+
+\end_inset
+
+, which allows you to specify your own SQL subquery for the 
+\begin_inset Quotes eld
+\end_inset
+
+IN
+\begin_inset Quotes erd
+\end_inset
+
+ portion of the where clause.
+ An example in listing 
+\begin_inset LatexCommand ref
+reference "lst:Using-InRaw"
+
+\end_inset
+
+ shows how we could use this to find Categories for ledger entries made
+ in the last 30 days.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "breaklines=true,numbers=left,numberstyle={\tiny}"
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+
+Using InRaw
+\begin_inset LatexCommand label
+name "lst:Using-InRaw"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+def recentCategories = {
+\end_layout
+
+\begin_layout Standard
+
+  val joins = CategoryJoinMeta.findAll(
+\end_layout
+
+\begin_layout Standard
+
+    InRaw(CategoryJoinMeta.entry,
+\end_layout
+
+\begin_layout Standard
+
+          "select id from Entry where Entry.date > (CURRENT_DATE - interval
+ '30 days')",
+\end_layout
+
+\begin_layout Standard
+
+          IHaveValidatedThisSQL("dchenbecker", "2008-12-03"))
+\end_layout
+
+\begin_layout Standard
+
+  joins.map(_.category.obj).sort(_.id < _.id).removeDuplicates
+\end_layout
+
+\begin_layout Standard
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Here things are starting to get a little hairy 
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Is there a better way to do this?
+\end_layout
+
+\end_inset
+
+.
+ The InRaw only allows us to specify the subquery for the IN clause, so
+ we have to do some postprocessing to get unique results.
+ If you want to do this in the query itself you'll have to use the findAllByInse
+cureSql or findAllByPreparedStatement methods, which are covered later in
+ this section on page 
+\begin_inset LatexCommand pageref
+reference "sub:SQL-based-queries"
+
+\end_inset
+
+.
+ The final parameter for InRaw acts as a code audit mechanism that says
+ that someone has checked the SQL to make sure it's safe to use.
+ Since the query fragment is added to the master query as-is, no escaping
+ or other filtering is performed on the string.
+ That means that if you take user input you need to be very careful about
+ it or you run the risk of an SQL injection attack on your site.
+\end_layout
+
+\begin_layout Standard
+The next QueryParam we'll cover is BySql, which essentially lets you use
+ a complete SQL fragment that gets put into the where clause
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Why no IHaveValidated...
+ on this?
+\end_layout
+
+\end_inset
+
+.
+ An example of this would be if we want to find all ledger entries within
+ the last 30 days, as shown in listing 
+\begin_inset LatexCommand ref
+reference "lst:Using-BySql"
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+
+Using BySql
+\begin_inset LatexCommand label
+name "lst:Using-BySql"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+val recentEntries = EntryMeta.findAll(
+\end_layout
+
+\begin_layout Standard
+
+  BySql("Entry.date > (CURRENT_DATE - interval '30 days')"))
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The tradeoff with using BySql is that you need to be careful with what you
+ allow into the query string.
+ BySql supports parameterized queries as shown in listing 
+\begin_inset LatexCommand ref
+reference "lst:Parameterized-BySql"
+
+\end_inset
+
+, so use those if you need to have dynamic queries.
+ Whatever you do, don't use string concatenation unless you really know
+ what you're doing.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+
+Parameterized BySql
+\begin_inset LatexCommand label
+name "lst:Parameterized-BySql"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+val amountRange = EntryMeta.findAll(
+\end_layout
+
+\begin_layout Standard
+
+  BySql("Entry.amount between ? and ?", lowVal, highVal))
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+As we mentioned in section 
+\begin_inset LatexCommand vref
+reference "sub:Deleting-an-Instance"
+
+\end_inset
+
+, we can use the parameters to effect bulk deletes in addition to querying
+ for instances.
+ Simply use the QueryParam classes to constrain what you want to delete.
+ Obviously the control params that we'll cover next make no sense but the
+ compiler won't complain.
+ Listing 
+\begin_inset LatexCommand ref
+reference "lst:Bulk-Deletion"
+
+\end_inset
+
+ shows an example of deleting all entries older than a certain date.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+
+Bulk Deletion
+\begin_inset LatexCommand label
+name "lst:Bulk-Deletion"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+def deleteBefore (date : Date) = 
+\end_layout
+
+\begin_layout Standard
+
+  EntryMeta.bulkDelete_!!(By_<(EntryMeta.date, date))
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now that we've covered the selection and comparison QueryParams, we can
+ start to look at the control params.
+ The first one that we'll look at is OrderBy.
+ This operates exactly like the order by clause in SQL, and allows you to
+ order on a given field in either ascending or descending order.
+ Listing 
+\begin_inset LatexCommand ref
+reference "lst:OrderBy-Clause"
+
+\end_inset
+
+ shows an example of ordering our ledger entries by amount.
+ The Ascending and Descending case objects are in the net.liftweb.mapper package.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+
+OrderBy Clause
+\begin_inset LatexCommand label
+name "lst:OrderBy-Clause"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+val cheapestFirst = EntryMeta.findAll(OrderBy(EntryMeta.amount,Ascending))
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Pagination of results is another feature that people often want to use,
+ and Mapper provides a simple means for controlling it with two more QueryParam
+ classes: StartAt and MaxRows, as shown in listing 
+\begin_inset LatexCommand ref
+reference "lst:Pagination-of-Results"
+
+\end_inset
+
+.
+ In this example we take the offset from a parameter passed to our snippet,
+ with a default of zero.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+
+Pagination of Results
+\begin_inset LatexCommand label
+name "lst:Pagination-of-Results"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+val offset = S.param("offset").map(_.toLong) openOr 0
+\end_layout
+
+\begin_layout Standard
+
+EntryMeta.findAll(StartAt(offset), MaxRows(20))
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+An important feature of the methods that take QueryParams is that they can
+ take multiple params, as shown in this example.
+ A more complex example is shown in listing 
+\begin_inset LatexCommand ref
+reference "lst:Multiple-QueryParams"
+
+\end_inset
+
+.
+ In this example we're doing a query using a Like clause, ordering on the
+ date of the entries, and paginating the results, all in one statement!
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+
+Multiple QueryParams
+\begin_inset LatexCommand label
+name "lst:Multiple-QueryParams"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+EntryMeta.findAll(Like(EntryMeta.description, "Gift for%"),
+\end_layout
+
+\begin_layout Standard
+
+                  OrderBy(EntryMeta.date,Descending),
+\end_layout
+
+\begin_layout Standard
+
+                  StartAt(offset),
+\end_layout
+
+\begin_layout Standard
+
+                  MaxRows(pageSize))
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The final 
+\begin_inset Quotes eld
+\end_inset
+
+control
+\begin_inset Quotes erd
+\end_inset
+
+ QueryParam that we'll cover is Join
+\begin_inset LatexCommand index
+name "Join"
+
+\end_inset
+
+.
+ It's used when you have a mapped foreign key field on an entity.
+ Normally, when Mapper loads your main entity it leaves the foreign key
+ field in a lazy state, so that the query to get the foreign object isn't
+ executed until you access the field.
+ This can obviously be inefficient when you have a whole lot of entities
+ loaded that you need to access, so the Join parameter forces Mapper to
+ preload the foreign objects as part of the query.
+ Listing 
+\begin_inset LatexCommand ref
+reference "lst:Using-Join-to-preload"
+
+\end_inset
+
+ shows how we could use this to fetch a ledger entry as well as the owner
+ of the entry (we would need to set up an owner field for this example to
+ work).
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+
+Using Join to Preload Objects
+\begin_inset LatexCommand label
+name "lst:Using-Join-to-preload"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+def loadEntry (id : Long) =
+\end_layout
+
+\begin_layout Standard
+
+  EntryMeta.findAll(By(EntryMeta.id, id),
+\end_layout
+
+\begin_layout Standard
+
+                    Join(EntryMeta.owner))
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Making Joins a Little Friendlier
+\begin_inset LatexCommand label
+name "sub:helper-joins"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In case you would prefer to keep your queries type-safe but you want a little
+ more convenience in your joins between entities, you can define helper
+ methods on your entities.
+ One example would be finding all of the Categories for a given Entry, as
+ shown in listing 
+\begin_inset LatexCommand pageref
+reference "lst:Join-Convenience-Method"
+
+\end_inset
+
+.
+ Using this method in our example has an advantage over using HasManyThrough
+ in that it will pull from the database each time instead of just once at
+ query.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+
+Join Convenience Method
+\begin_inset LatexCommand label
+name "lst:Join-Convenience-Method"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+def categoriesPull = CategoryEntryMeta.
+\end_layout
+
+\begin_layout Standard
+
+  findAll(By(CategoryEntryMeta.entry, this.id)).map(_.category.obj)
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section
@@ -2002,6 +3199,140 @@ Note that we need to add the underscore for each validation function to
 CRUD Support
 \end_layout
 
+\begin_layout Standard
+Adding CRUD support to your Mapper classes is very simple.
+ We just mix in the CRUDify trait to our class and it provides a full set
+ of add, edit, list, delete and view pages automatically.
+ Listing 
+\begin_inset LatexCommand ref
+reference "lst:Mixing-in-CRUDify"
+
+\end_inset
+
+ shows our Entry class with CRUDify mixed in.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+
+Mixing in CRUDify
+\begin_inset LatexCommand label
+name "lst:Mixing-in-CRUDify"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+class Entry extends KeyedMapper[Long,Entry] with CRUDify[Long,Entry] {
+\end_layout
+
+\begin_layout Standard
+
+  ...
+ normal def here ...
+\end_layout
+
+\begin_layout Standard
+
+  // disable delete functionality
+\end_layout
+
+\begin_layout Standard
+
+  override def deleteMenuLoc = Empty
+\end_layout
+
+\begin_layout Standard
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The CRUDify behavior is very flexible, with plenty of defs you can override
+ to control the templates for pages or whether pages are shown at all (as
+ we do in our example).
+ CRUDify automatically creates a set of menus for SiteMap (section 
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+cross-ref
+\end_layout
+
+\end_inset
+
+) that we can use by appending them onto the rest of our menus as shown
+ in listing 
+\begin_inset LatexCommand ref
+reference "lst:Using-CRUDify-Menus"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+
+Using CRUDify Menus
+\begin_inset LatexCommand label
+name "lst:Using-CRUDify-Menus"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+val menus = ...
+ Menu(Loc(...)) :: Entry.menus :: Nil
+\end_layout
+
+\begin_layout Standard
+
+LiftRules.setSiteMap(SiteMap(menus : _*))
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Subsection
 Mutable vs Immutable on Record
 \end_layout
@@ -2167,16 +3498,33 @@ object Entry extends Mapper[Entry] with LifecycleCallbacks {
 \end_layout
 
 \begin_layout Standard
-\begin_inset Note Note
-status open
-
-\begin_layout Standard
-Expand this to detail each lifecycle operation
+The lifecycle hooks come at the main operations in an instance lifecycle:
 \end_layout
 
-\end_inset
+\begin_layout Itemize
+Create - When a new instance is created
+\end_layout
 
+\begin_layout Itemize
+Delete - When an instance is deleted
+\end_layout
 
+\begin_layout Itemize
+Save - When a fresh instance is first saved (corresponding to a table insert)
+\end_layout
+
+\begin_layout Itemize
+Update - When an instance that already exists in the database is updated
+ (corresponding to a table update)
+\end_layout
+
+\begin_layout Itemize
+Validation - When form validation occurs.
+\end_layout
+
+\begin_layout Standard
+For each of these points you can execute your code before or after the operation
+ is run.
 \end_layout
 
 \begin_layout Subsection
@@ -2187,6 +3535,16 @@ Base Field Types
 The Record and Mapper frameworks define several basic field types.
  The following table shows the corresponding types between Mapper and Record,
  as well as a brief description of each type
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Break this into a table
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Description
@@ -2277,10 +3635,13 @@ name "sub:Defining-Custom-Field-types-mapper"
 
 \end_layout
 
-\begin_layout Subsection
-Defining Custom Field Types in Record
-\begin_inset LatexCommand label
-name "sub:Defining-Custom-Field-types-record"
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Add optional precision to this class
+\end_layout
 
 \end_inset
 
@@ -2288,10 +3649,9 @@ name "sub:Defining-Custom-Field-types-record"
 \end_layout
 
 \begin_layout Standard
-The basic field types cover a wide range of needs, but sometimes you may
- find yourself wanting to cover a specific type.
- In our case, we would like a DecimalField to represent decimal currency
- amounts.
+The basic MappedField types cover a wide range of needs, but sometimes you
+ may find yourself wanting to cover a specific type.
+ In our example, we would like a decimal value for our ledger amount.
  Using a double would be inappropriate due to imprecision and rounding errors
 \begin_inset Foot
 status collapsed
@@ -2311,11 +3671,620 @@ target "http://stephan.reposita.org/archives/2008/01/11/once-and-for-all-do-not-
  Our first task is to specify the class signature and constructors, as shown
  in listing 
 \begin_inset LatexCommand ref
+reference "lst:MappedDecimal-constructors"
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+
+MappedDecimal constructors
+\begin_inset LatexCommand label
+name "lst:MappedDecimal-constructors"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+class MappedDecimal[OwnerType <: MappedField[T]]
+\end_layout
+
+\begin_layout Standard
+
+    (val owner : OwnerType, scale : Int)
+\end_layout
+
+\begin_layout Standard
+
+    extends MappedField[BigDecimal,T] {
+\end_layout
+
+\begin_layout Standard
+
+  def this(rec : OwnerType, newVal : BigDecimal) = {
+\end_layout
+
+\begin_layout Standard
+
+    this(rec, newVal.scale)
+\end_layout
+
+\begin_layout Standard
+
+    set(newVal)
+\end_layout
+
+\begin_layout Standard
+
+  }
+\end_layout
+
+\begin_layout Standard
+
+  var rounding = RoundingMode.HALF_EVEN
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The first part of the class definition is the type signature; basically
+ the type 
+\family typewriter
+[T <: MappedField[T]]
+\family default
+ indicates that whatever type 
+\begin_inset Quotes eld
+\end_inset
+
+owns
+\begin_inset Quotes erd
+\end_inset
+
+ this field must be a Mapper subclass (<: specifies an upper type bound
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Should we reference type bounds somewhere?
+\end_layout
+
+\end_inset
+
+).
+ With our constructor we specify the owner record as well as the 
+\begin_inset Quotes eld
+\end_inset
+
+scale
+\begin_inset Quotes erd
+\end_inset
+
+ of the decimal value.
+ The scale in BigDecimal essentially represents the number of digits to
+ the right of the decimal point.
+ In addition, we specify a second constructor that allows us to initialize
+ the field to a value.
+ This second constructor uses the scale of the provided value as the default.
+ At the end of the listing we provide a var to control the rounding mode
+ of the field.
+\end_layout
+
+\begin_layout Standard
+Now that we have the constructors in place, there are several abstract methods
+ on MappedField that we need to define.
+ The first of these is a method to provide a default value.
+ The default value is used for uninitialized fields or if validation failes.
+ We also need to specify the class for our value type by implementing the
+ 
+\family typewriter
+dbFieldClass
+\family default
+ method.
+ Listing 
+\begin_inset LatexCommand ref
+reference "lst:Setting-a-default-value"
+
+\end_inset
+
+ shows both of these methods.
+ In our case, we default to a zero value, with the scale set as specified
+ in the contructor.
+ We also provide the vars and methods that handle the before and after values
+ of the field.
+ These values are used to handle persistence state; if you change the value
+ of the field, the original value is held until the instance is saved to
+ the database.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+Setting a default value
+\begin_inset LatexCommand label
+name "lst:Setting-a-default-value"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+  def defaultValue = (new BigDecimal("0")).setScale(scale)
+\end_layout
+
+\begin_layout Standard
+
+  def dbFieldClass = classOf[BigDecimal]
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+  private var data : BigDecimal = defaultValue
+\end_layout
+
+\begin_layout Standard
+
+  private var orgData : BigDecimal = defaultValue
+\end_layout
+
+\begin_layout Standard
+
+  private def st (in : BigDecimal) {
+\end_layout
+
+\begin_layout Standard
+
+    data = in
+\end_layout
+
+\begin_layout Standard
+
+    orgData = in
+\end_layout
+
+\begin_layout Standard
+
+  }
+\end_layout
+
+\begin_layout Standard
+
+  protected def i_is_! = data
+\end_layout
+
+\begin_layout Standard
+
+  protected def i_was_! = orgData
+\end_layout
+
+\begin_layout Standard
+
+  override def doneWithSave() {
+\end_layout
+
+\begin_layout Standard
+
+    orgData = data
+\end_layout
+
+\begin_layout Standard
+
+  }
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The next set of methods we need to provide deal with when and how we can
+ access the data.
+ Listing 
+\begin_inset LatexCommand ref
+reference "lst:Access-Control"
+
+\end_inset
+
+ shows the overrides that set the read and write permissions to true (default
+ to false for both) as well as the i_obscure_! and real_i_set_! methods.
+ The i_obscure_! method returns the a value that is used then the user doesn't
+ have read permissions.
+ The real_i_set_! method is what actually stores the internal value and
+ sets the dirty flag when the field is updated.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+
+Access Control
+\begin_inset LatexCommand label
+name "lst:Access-Control"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+  override def readPermission_? = true
+\end_layout
+
+\begin_layout Standard
+
+  override def writePermission_? = true
+\end_layout
+
+\begin_layout Standard
+
+  protected def i_obscure_!(in : BigDecimal) = defaultValue
+\end_layout
+
+\begin_layout Standard
+
+  protected def real_i_set_!(value : BigDecimal): BigDecimal = {
+\end_layout
+
+\begin_layout Standard
+
+    if (value != data) {
+\end_layout
+
+\begin_layout Standard
+
+      data = value
+\end_layout
+
+\begin_layout Standard
+
+      dirty_?(true)
+\end_layout
+
+\begin_layout Standard
+
+    }
+\end_layout
+
+\begin_layout Standard
+
+    data
+\end_layout
+
+\begin_layout Standard
+
+  }
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The next two methods that we need to provide deal with actually setting
+ the value of the field.
+ The first is 
+\family typewriter
+setFromAny
+\family default
+, which takes an 
+\family typewriter
+Any
+\family default
+ parameter and must convert it into a 
+\family typewriter
+BigDecimal
+\family default
+.
+ The second, 
+\family typewriter
+setFromString
+\family default
+ is a subset of 
+\family typewriter
+setFromAny
+\family default
+ in that it takes a 
+\family typewriter
+String
+\family default
+ parameter and must return a 
+\family typewriter
+BigDecimal
+\family default
+.
+ Our implementation of these two methods is shown in listing 
+\begin_inset LatexCommand ref
+reference "lst:setFrom...-Methods"
+
+\end_inset
+
+.
+ We've also added a setAll method so that we have a common place to properly
+ set scale and rounding modes on the value of the field.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "numbers=left,numberstyle={\tiny},stepnumber=2"
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+setFrom...
+ Methods
+\begin_inset LatexCommand label
+name "lst:setFrom...-Methods"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+  def setFromAny (in : Any) : BigDecimal =
+\end_layout
+
+\begin_layout Standard
+
+    in match {
+\end_layout
+
+\begin_layout Standard
+
+      case n :: _ => setFromString(n.toString)
+\end_layout
+
+\begin_layout Standard
+
+      case Some(n) => setFromString(n.toString)
+\end_layout
+
+\begin_layout Standard
+
+      case Full(n) => setFromString(n.toString)
+\end_layout
+
+\begin_layout Standard
+
+      case None | Empty | Failure(_, _, _) | null => setFromString("0")
+\end_layout
+
+\begin_layout Standard
+
+      case n => setFromString(n.toString)
+\end_layout
+
+\begin_layout Standard
+
+    }
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+  def setFromString (in : String) : BigDecimal = {
+\end_layout
+
+\begin_layout Standard
+
+    this.setAll(new BigDecimal(in))
+\end_layout
+
+\begin_layout Standard
+
+  }
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+  protected def setAll (in : BigDecimal) = set(in.setScale(scale, rounding))
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Our implementations are relatively straightforward.
+ The only special handling we need for setFromAny is to properly deal with
+ Lists, Cans, Options and the null value.
+ The BigDecimal constructor takes Strings, so the setFromString method is
+ easy.
+ The only addition we make over the BigDecimal constructor is to properly
+ set the scale and rounding on the returned value.
+ 
+\end_layout
+
+\begin_layout Standard
+Our final step is to define the database-specific methods
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Fill this in
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+To make the field a little more useful, we can also specify some convenience
+ methods on it to make arithmetic a little more natural, as shown in listing
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+Convenience methods
+\begin_inset LatexCommand label
+name "lst:Convenience-methods"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+  def += (other : BigDecimal) = setAll(data.add(other))
+\end_layout
+
+\begin_layout Standard
+
+  def -= (other : BigDecimal) = setAll(data.subtract(other))
+\end_layout
+
+\begin_layout Standard
+
+  def *= (other : BigDecimal) = setAll(data.multiply(other))
+\end_layout
+
+\begin_layout Standard
+
+  def /= (other : BigDecimal) = setAll(data.divide(other))
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+  // Use in practice:
+\end_layout
+
+\begin_layout Standard
+
+  myEntry.amount *= BigDecimal.valueOf(2)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+You could expand on the convenience methods as you wish to cover Ints, Longs,
+ Doubles, etc.
+\end_layout
+
+\begin_layout Subsection
+Defining Custom Field Types in Record
+\begin_inset LatexCommand label
+name "sub:Defining-Custom-Field-types-record"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Similar to the example in section 
+\begin_inset LatexCommand ref
+reference "sub:Defining-Custom-Field-types-mapper"
+
+\end_inset
+
+, when using Record we would like a DecimalField to represent decimal currency
+ amounts.
+ Our implementation starts off looking very similar to the Mapper version,
+ as shown in listing 
+\begin_inset LatexCommand ref
 reference "lst:DecimalField-constructors"
 
 \end_inset
 
-:
+.
+ The main difference so far is that the owner type has to be a subtype of
+ Record instead of Mapper.
 \end_layout
 
 \begin_layout Standard
@@ -2388,363 +4357,16 @@ class DecimalField[OwnerType <: Record[OwnerType]]
 \end_layout
 
 \begin_layout Standard
-The first part of the class definition is the type signature; basically
- the type 
-\family typewriter
-[OwnerType <: Record[OwnerType]]
-\family default
- indicates that whatever type 
-\begin_inset Quotes eld
-\end_inset
-
-owns
-\begin_inset Quotes erd
-\end_inset
-
- this field must be a Record subclass (<: specifies an upper type bound).
- With our constructor we specify the owner record as well as the 
-\begin_inset Quotes eld
-\end_inset
-
-scale
-\begin_inset Quotes erd
-\end_inset
-
- of the decimal value.
- The scale in BigDecimal essentially represents the number of digits to
- the right of the decimal point.
- In addition, we specify a second constructor that allows us to initialize
- the field to a value.
- This second constructor uses the scale of the provided value as the default.
- At the end of the listing we provide a var to control the rounding mode
- of the field.
-\end_layout
-
-\begin_layout Standard
-Now that we have the constructors in place, there are several abstract methods
- on Field that we need to define.
- The first of these is a method to provide a default value.
- The default value is used for uninitialized fields or if validation failes.
- We also need to specify the owner of this field via the owner method.
- Listing 
-\begin_inset LatexCommand ref
-reference "lst:Setting-a-default-value"
-
-\end_inset
-
- shows both of these methods.
- In our case, we default to a zero value, with the scale set as specified
- in the contructor, and our owner def simply returns the rec value from
- our constructor.
- We also provide the methods that convert the field into a display NodeSeq
- and a form.
- Since we already have the setFromString method (covered later in this section)
- to take an input string and convert it to the proper value we simply pass
- this method into our text form element for the setter.
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-inline false
+\begin_inset Note Note
 status open
 
 \begin_layout Standard
-
-\begin_inset Caption
-
-\begin_layout Standard
-Setting a default value
-\begin_inset LatexCommand label
-name "lst:Setting-a-default-value"
-
-\end_inset
-
-
+Confirm change in behavior from Mapper to not save the original value
 \end_layout
 
 \end_inset
 
 
-\end_layout
-
-\begin_layout Standard
-
-def owner = rec
-\end_layout
-
-\begin_layout Standard
-
-def defaultValue = (new BigDecimal("0")).setScale(scale)
-\end_layout
-
-\begin_layout Standard
-
-def asXHtml = Text(value.toString)
-\end_layout
-
-\begin_layout Standard
-
-def toForm = SHtml.text(value.toString, this.setFromString)
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-The next two methods that we need to provide deal with actually setting
- the value of the field.
- The first is 
-\family typewriter
-setFromAny
-\family default
-, which takes an 
-\family typewriter
-Any
-\family default
- parameter and must convert it into a 
-\family typewriter
-Can[BigDecimal]
-\family default
-.
- The second, 
-\family typewriter
-setFromString
-\family default
- is a subset of 
-\family typewriter
-setFromAny
-\family default
- in that it takes a 
-\family typewriter
-String
-\family default
- parameter and must return a 
-\family typewriter
-Can[BigDecimal]
-\family default
-.
- With either of these methods, if the conversion is unsuccesful, you need
- to return an 
-\family typewriter
-Empty
-\family default
- as well as call the 
-\family typewriter
-couldNotSetValue
-\family default
- method (from the Field trait) to set a flag on the field that other parts
- of the library use.
- Our implementation of these two methods is shown in listing 
-\begin_inset LatexCommand ref
-reference "lst:setFrom...-Methods"
-
-\end_inset
-
-.
- We've also added a setAll method so that we have a common place to properly
- set scale and rounding modes on the value of the field.
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-lstparams "numbers=left,numberstyle={\tiny},stepnumber=2"
-inline false
-status open
-
-\begin_layout Standard
-
-\begin_inset Caption
-
-\begin_layout Standard
-setFrom...
- Methods
-\begin_inset LatexCommand label
-name "lst:setFrom...-Methods"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-
-  def setFromAny (in : Any) : Can[BigDecimal] =
-\end_layout
-
-\begin_layout Standard
-
-    in match {
-\end_layout
-
-\begin_layout Standard
-
-      case n :: _ => setFromString(n.toString)
-\end_layout
-
-\begin_layout Standard
-
-      case Some(n) => setFromString(n.toString)
-\end_layout
-
-\begin_layout Standard
-
-      case Full(n) => setFromString(n.toString)
-\end_layout
-
-\begin_layout Standard
-
-      case None | Empty | Failure(_, _, _) | null => setFromString("0")
-\end_layout
-
-\begin_layout Standard
-
-      case n => setFromString(n.toString)
-\end_layout
-
-\begin_layout Standard
-
-    }
-\end_layout
-
-\begin_layout Standard
-
-\end_layout
-
-\begin_layout Standard
-
-  def setFromString (in : String) : Can[BigDecimal] = {
-\end_layout
-
-\begin_layout Standard
-
-    try {
-\end_layout
-
-\begin_layout Standard
-
-      Full(this.setAll(new BigDecimal(in)))
-\end_layout
-
-\begin_layout Standard
-
-    } catch {
-\end_layout
-
-\begin_layout Standard
-
-      case e : Exception => couldNotSetValue; Empty
-\end_layout
-
-\begin_layout Standard
-
-    }
-\end_layout
-
-\begin_layout Standard
-
-  }
-\end_layout
-
-\begin_layout Standard
-
-\end_layout
-
-\begin_layout Standard
-
-  protected def setAll (in : BigDecimal) = set(in.setScale(scale, rounding))
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Our implementations are relatively straightforward.
- The only special handling we need for setFromAny is to properly deal with
- Lists, Cans, Options and the null value.
- The BigDecimal constructor takes Strings, so the setFromString method is
- easy.
- The only addition we make over the BigDecimal constructor is to properly
- set the scale and rounding on the returned value.
- To make the field a little more useful, we can also specify some convenience
- methods on it to make arithmetic a little more natural, as shown in listing
- 
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Standard
-
-\begin_inset Caption
-
-\begin_layout Standard
-Convenience methods
-\begin_inset LatexCommand label
-name "lst:Convenience-methods"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-
-  def += (other : BigDecimal) = setAll(value.add(other))
-\end_layout
-
-\begin_layout Standard
-
-  def -= (other : BigDecimal) = setAll(value.subtract(other))
-\end_layout
-
-\begin_layout Standard
-
-  def *= (other : BigDecimal) = setAll(value.multiply(other))
-\end_layout
-
-\begin_layout Standard
-
-  def /= (other : BigDecimal) = setAll(value.divide(other))
-\end_layout
-
-\begin_layout Standard
-
-\end_layout
-
-\begin_layout Standard
-
-  // Use in practice:
-\end_layout
-
-\begin_layout Standard
-
-  myEntry.amount *= BigDecimal.valueOf(2)
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-You could expand on the convenience methods as you wish to cover Ints, Longs,
- Doubles, etc.
 \end_layout
 
 \begin_layout Section
@@ -2811,6 +4433,166 @@ name "sub:Database-Sharding"
 
 \begin_layout Subsection
 SQL-based Queries
+\begin_inset LatexCommand label
+name "sub:SQL-based-queries"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If, despite all that Mapper covers, you find yourself still wanting more
+ control over the query, there are two more options available to you: findAllByP
+reparedStatement and findAllByInsecureSql.
+ The findAllByPreparedStatement method allows you to, in essence, construct
+ your query completely by hand.
+ The added benefit of using a PreparedStatement
+\begin_inset Foot
+status collapsed
+
+\begin_layout Standard
+\begin_inset LatexCommand htmlurl
+target "http://java.sun.com/javase/6/docs/api/java/sql/PreparedStatement.html"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ means that you can easily include user-defined data in your queries.
+ The findAllByPreparedStatement method takes a single function parameter;
+ this function needs to take a SuperConnection
+\begin_inset Foot
+status collapsed
+
+\begin_layout Standard
+Essentially a thin wrapper on java.sql.Connection, 
+\begin_inset LatexCommand htmlurl
+target "http://scala-tools.org/mvnsites/liftweb/lift-webkit/scaladocs/net/liftweb/mapper/SuperConnection.html"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ and return a PreparedStatement instance.
+ Listing 
+\begin_inset LatexCommand ref
+reference "lst:Using-findAllByPreparedStatement"
+
+\end_inset
+
+ shows our previous example of looking up all Categories for a recent ledger
+ entries using findAllByPreparedStatement instead
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Validate this SQL
+\end_layout
+
+\end_inset
+
+.
+ The query that you provide must at least return the fields that are mapped
+ by your entity, but you can return other columns as well (they'll just
+ be ignored) in case you just want to do a 
+\begin_inset Quotes eld
+\end_inset
+
+select *
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+
+Using 
+\lang english
+findAllByPreparedStatement
+\begin_inset LatexCommand label
+name "lst:Using-findAllByPreparedStatement"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+def recentCategories = CategoryMeta.findAllByPreparedStatement({ superconn
+ =>
+\end_layout
+
+\begin_layout Standard
+
+  superconn.connection.prepareStatement(
+\end_layout
+
+\begin_layout Standard
+
+    "select distinct category.id, category.name " +
+\end_layout
+
+\begin_layout Standard
+
+    "from Category category " +
+\end_layout
+
+\begin_layout Standard
+
+    "join CategoryJoin cj on category.id = cj.category " +
+\end_layout
+
+\begin_layout Standard
+
+    "join Entry entry on entry.id = cj.entry " +
+\end_layout
+
+\begin_layout Standard
+
+    "where entry.date > (CURRENT_DATE - interval '30 days')")
+\end_layout
+
+\begin_layout Standard
+
+})
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The findAllByInsecureSql method goes even further, executing the string
+ you submit directly as a statement without any checks.
+ The same general rules apply as for findAllByPreparedStatement, although
+ you need to add the IHaveValidatedThisSQL parameter as a code audit check.
+ In either case, the ability to use full SQL queries can allow you to do
+ some very powerful things, but it comes at the cost of losing type safety
+ and possibly making your app non-portable.
 \end_layout
 
 \end_body
