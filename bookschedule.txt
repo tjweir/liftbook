@@ -23,10 +23,11 @@ Chapter 04 - An intro to Maven and Project Layout - PDR [Tyler]
 
 Chapter 05 - Demo Application - P [Tyler]
 
-Chapter 06 - Lift Arch in General - PD [Derek]
+Chapter 06 - Lift Arch in General - PD [Derek+Tyler]
  - Add in Tyler's HTTP Auth stuff
+ - Merge User Components
 
-Chapter 07 - Lift User Components - P [Tyler]
+Chapter 07 - Lift User Components - DEAD
 
 Chapter 08 - Mapper and Record - P [Derek]
  - Record portion on hold until actual impls are done
@@ -39,6 +40,8 @@ Advanced:
 Chapter 10 - Request/Response Lifecycle - P
 
 Chapter 11 - URL Rewriting - P
+- Still need this?  
+- Maybe a list of examples?
 
 Chapter 12 - JSON Handling - P
 

@@ -96,9 +96,9 @@ target "http://groups.google.com/group/liftweb/browse_thread/thread/b484ea2a13b6
 
  because this allows the container to handle any requests that Lift does
  not (in particular, static content).
- The filter really acts as a thin wrapper on top of the existing LiftServlet
- (which still does all of the work), so don't be confused when you look
- at the ScalaDoc and see both classes.
+ The filter acts as a thin wrapper on top of the existing LiftServlet (which
+ still does all of the work), so don't be confused when you look at the
+ ScalaDoc and see both classes.
  The main thing to remember is that your web.xml
 \begin_inset LatexCommand index
 name "web.xml"
@@ -322,7 +322,7 @@ addToPackages
 \begin_inset listings
 lstparams "basicstyle={\footnotesize},frame=single"
 inline false
-status collapsed
+status open
 
 \begin_layout Standard
 
@@ -415,8 +415,8 @@ A lot more is going on under the hood (Lift is highly customizable) but
 \end_layout
 
 \begin_layout Standard
-We're going to explain these in a different order than the execution order,
- instead we'll talk about them in increasing complexity.
+Rather than explain these steps in the order of execution, we will be covering
+ them in the order of increasing complexity.
 \end_layout
 
 \begin_layout Standard
@@ -525,8 +525,13 @@ Notice the tags that are of the form
  
 \family default
 These are two examples of Lift-specific tags.
- We'll discuss all of the tags that users will use in section ???, but let's
- discuss the two contained here.
+ We'll discuss all of the tags that users will use in section Tags 
+\begin_inset LatexCommand ref
+reference "sec:ArchTags"
+
+\end_inset
+
+, but let's discuss the two contained here.
  We use the built-in 
 \family typewriter
 <lift:surround>
@@ -660,7 +665,11 @@ reference "lst:Sample-template"
 , the surround tag gets processed first.
  In this case the surround loads the default template and embeds our content
  at the appropriate location.
- The next tag to be processed is the <lift:Hello.world/> snippet.
+ The next tag to be processed is the 
+\family typewriter
+<lift:Hello.world/>
+\family default
+ snippet.
  This tag is essentially an alias for the lift:snippet tag (specifically,
  
 \family typewriter
@@ -675,7 +684,7 @@ Hello:world
 >
 \family default
 ) , and will locate the Hello class and execute the world method on it.
- If your omit the 
+ If you omit the 
 \begin_inset Quotes eld
 \end_inset
 
@@ -716,6 +725,23 @@ So templates are a nice way of setting up your layout and then writing a
 
 \begin_layout Section
 Views
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Standard
+Convert examples to PocketChange...
+ aka, work on PocketChange :)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We just discussed Templates and we saw how through a combination of an XML
+ file, Lift tags, and Scala code we can respond to requests made by a user.
+ You can also generate those responses entirely in code by using Views.
 \end_layout
 
 \begin_layout Standard
@@ -725,8 +751,9 @@ name "Views"
 
 \end_inset
 
- are essentially implicitly defined custom dispatch methods, very similar
- to what we just covered in section 
+ are implicitly defined custom dispatch methods.
+ We'll cover Dispatch in more depth in the next section.
+ 
 \begin_inset LatexCommand ref
 reference "sub:Custom-Dispatch"
 
@@ -745,7 +772,7 @@ name "NodeSeq"
  In either case, View lookup and dispatch is done after template resolution
  (to be covered later), so templates take priority
 \begin_inset Note Note
-status open
+status collapsed
 
 \begin_layout Standard
 TODO: Confirm this!
@@ -822,12 +849,12 @@ reference "lst:Dispatch-in-LiftView"
 
  shows a custom LiftView class where the path 
 \family typewriter
-/MyView/enumerate
+/ExpenseView/enumerate
 \family default
- will map to the MyView.doEnumerate method.
+ will map to the ExpenseView.doEnumerate method.
  If someone attempts to go to 
 \family typewriter
-/MyView/privateMethod
+/ExpenseView/privateMethod
 \family default
  they'll get a 404 since it's not defined in the dispatch function.
 \end_layout
@@ -844,7 +871,7 @@ status open
 
 \begin_layout Standard
 \begin_inset Note Note
-status open
+status collapsed
 
 \begin_layout Standard
 This should be a pocketchange example
@@ -868,7 +895,7 @@ name "lst:Dispatch-in-LiftView"
 
 \begin_layout Standard
 
-class MyView extends LiftView {
+class ExpenseView extends LiftView {
 \end_layout
 
 \begin_layout Standard
@@ -907,7 +934,7 @@ class MyView extends LiftView {
 
 \begin_layout Standard
 
-     { itemList.toTable }
+     { expenseItems.toTable }
 \end_layout
 
 \begin_layout Standard
@@ -933,9 +960,17 @@ class MyView extends LiftView {
 \begin_layout Standard
 Another difference between custom dispatch and Views is that the NodeSeq
  returned from the view method is processed for template tags including
- surrounds and includes 
+ 
+\family typewriter
+surrounds
+\family default
+ and 
+\family typewriter
+includes
+\family default
+ 
 \begin_inset Note Note
-status open
+status collapsed
 
 \begin_layout Standard
 Confirm this!
@@ -951,28 +986,29 @@ reference "lst:Dispatch-in-LiftView"
 
 \end_inset
 
-'s doEnumerate method.
+'s 
+\family typewriter
+doEnumerate
+\family default
+ method.
 \end_layout
 
 \begin_layout Standard
-Since you can not include any of the pre-defined template XHTML, you generate
- Atom or RSS feeds using a View.
+Since you can choose to not include any of the pre-defined template XHTML,
+ you generate Atom or RSS feeds using a View.
  Resources of that nature, such as XML responses, or JSON, or an image response,
  would most likely be handled by a View.
 \end_layout
 
 \begin_layout Section
-URL rewriting and dispatch and how they relate to Templates/Views
+URL Rewriting and Dispatch
 \end_layout
 
 \begin_layout Standard
 Now that we've gone over Templates and Views and how the dispatching of
  a request to a Class.method works we can discuss how to intercept requests
  and handle them any way we want.
-\end_layout
-
-\begin_layout Standard
-URL rewriting is a mechanism that allows you to modify the incoming request
+ URL rewriting is the mechanism that allows you to modify the incoming request
  so that it dispatches to a different URL.
  It can be used, among other things, to allow you to:
 \end_layout
@@ -1094,7 +1130,7 @@ myapp
 \begin_inset Quotes erd
 \end_inset
 
- context path
+ context path:
 \end_layout
 
 \begin_layout Standard
@@ -1267,7 +1303,7 @@ item
 The RequestType basically maps to the five HTTP methods: GET, POST, HEAD,
  PUT and DELETE.
  These are represented by the corresponding GetRequest, PostRequest, etc
- cases classes, with an UnknownRequest case class to cover anything strange.
+ case classes, with an UnknownRequest case class to cover anything strange.
 \end_layout
 
 \begin_layout Standard
@@ -1494,19 +1530,15 @@ provides a mechanism for doing rewrites combined with menu entries.
 \end_layout
 
 \begin_layout Section
+\begin_inset LatexCommand label
+name "sec:ArchTags"
+
+\end_inset
+
 Tags
 \end_layout
 
-\begin_layout Standard
-List of tags that are handled by Lift (stolen from http://liftweb.net/index.php/Li
-ftTags, not sure how up-to-date this is) 
-\end_layout
-
-\begin_layout Standard
-Tag name | example | explanation | notes
-\end_layout
-
-\begin_layout Subsubsection
+\begin_layout Subsection
 surround 
 \end_layout
 
@@ -1522,7 +1554,7 @@ Example:
 \begin_layout Standard
 Surrounds the child nodes with a named template (located in the <app_root>/webap
 p/templates-hidden).
- It is used to apply a unified template to all the page in a site.
+ It is used to apply a unified template to all the pages in a site.
  
 \end_layout
 
@@ -1553,7 +1585,287 @@ Notes: You cannot have a hidden template with the same name as a sub-directory
  
 \end_layout
 
-\begin_layout Subsubsection
+\begin_layout Subsection
+snippet
+\begin_inset LatexCommand label
+name "sub:snippet-tag"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+Example:
+\family typewriter
+\emph default
+ <lift:snippet form="METHOD" type="ClassName:method" multipart="true" />
+\end_layout
+
+\begin_layout Standard
+The 
+\family typewriter
+form
+\family default
+ and 
+\family typewriter
+multipart
+\family default
+ attributes are optional.
+ If 
+\family typewriter
+form
+\family default
+ is included the attribute options are 
+\family typewriter
+GET
+\family default
+ and 
+\family typewriter
+POST.
+
+\family default
+ The 
+\family typewriter
+type
+\family default
+ attribute resolves to the method call 
+\family typewriter
+ClassName.method
+\family default
+.
+ The 
+\family typewriter
+multipart
+\family default
+ attribute is a boolean.
+\end_layout
+
+\begin_layout Standard
+Demo example:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "basicstyle={\footnotesize},numbers=left,numberstyle={\tiny}"
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+Snippet that generates a NodeSeq
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+class Entry {
+\end_layout
+
+\begin_layout Standard
+
+def add(xhtml: Group): NodeSeq =     
+\end_layout
+
+\begin_layout Standard
+
+  selectedUser.is.openOr(new User).toForm(Empty, saveUser _) ++ 
+\end_layout
+
+\begin_layout Standard
+
+  <tr>     
+\end_layout
+
+\begin_layout Standard
+
+    <td><a href="/simple/index.html">Cancel</a></td>     
+\end_layout
+
+\begin_layout Standard
+
+    <td><input type="submit" value="Create"/></td>     
+\end_layout
+
+\begin_layout Standard
+
+  </tr>
+\end_layout
+
+\begin_layout Standard
+
+}
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Y ou could use this snippet in the following manner:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+...
+\end_layout
+
+\begin_layout Standard
+
+<lift:Entry.add form="POST"/>
+\end_layout
+
+\begin_layout Standard
+
+or
+\end_layout
+
+\begin_layout Standard
+
+<lift:snippet type="Entry.add" form="POST" />
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "basicstyle={\footnotesize},numbers=left,numberstyle={\tiny}"
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+Snippet that generates Nodes to bind...
+ TODO: Explain the difference better...
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+class Entry {
+\end_layout
+
+\begin_layout Standard
+
+  def showCount(in: NodeSeq): NodeSeq = {     
+\end_layout
+
+\begin_layout Standard
+
+    val attr: String = S.attr("name").openOr("N/A")     
+\end_layout
+
+\begin_layout Standard
+
+    val value = CountHolder.is(attr)
+\end_layout
+
+\begin_layout Standard
+
+    bind("count", in, "value" -> value, 
+\end_layout
+
+\begin_layout Standard
+
+      "incr" -> link("/count", () => CountHolder.is(attr) = value + 1, Text("++")
+),     
+\end_layout
+
+\begin_layout Standard
+
+      "decr" -> link("/count", () => CountHolder.is(attr) = 0 max (value
+ - 1), Text("--")))   
+\end_layout
+
+\begin_layout Standard
+
+  } 
+\end_layout
+
+\begin_layout Standard
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+You would then use this snippet like this:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+...
+\end_layout
+
+\begin_layout Standard
+
+<lift:Entry.showCount>
+\end_layout
+
+\begin_layout Standard
+
+  Click this to increse the counter: <count:incr /><br />
+\end_layout
+
+\begin_layout Standard
+
+  Click this to decrease the counter: <count:decr />
+\end_layout
+
+\begin_layout Standard
+
+</lift:Entry.showCount>
+\end_layout
+
+\begin_layout Standard
+
+...
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
 embed 
 \end_layout
 
@@ -1583,11 +1895,48 @@ Also, lift's i18n support extends to templates as well, so you can specify
  template.
  For example, if the current locale is set to French Canadian lift will
  look for /ajax-templates-hidden/welcome_fr_CA.html, /ajax-templates-hidden/welco
-me_fr.html, and /ajax-templates-hidden/welcome.html Demo example:
+me_fr.html, and /ajax-templates-hidden/welcome.html 
+\end_layout
+
+\begin_layout Standard
+Demo example:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+
+Embedding Templates within Templates
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+<lift:embed what="/templates-hidden/supersecret-template"/>
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
 <lift:embed what="/ajax-templates-hidden/welcome" />
+\end_layout
+
+\begin_layout Standard
+<lift:embed what="/templates-hidden/ajax"/>
 \end_layout
 
 \begin_layout Standard
@@ -1597,7 +1946,7 @@ Caveats: JavaScript contained in templates rendered via JsCmd (sent in response
  
 \end_layout
 
-\begin_layout Subsubsection
+\begin_layout Subsection
 comet 
 \end_layout
 
@@ -1615,11 +1964,7 @@ Uses: Defines a block of the XML document that is to be con
 \end_layout
 
 \begin_layout Standard
-Demo example:
-\end_layout
-
-\begin_layout Standard
-This:
+Example:
 \end_layout
 
 \begin_layout Standard
@@ -1810,192 +2155,6 @@ var destroy_LCHVVTE3H5CHZ31L1C2ZEQ = function() {}
 Caveats: if you have a <lift:comet /> tag and you're using the tag from
  within sending AJAX stuff back, things might not work well.
  
-\end_layout
-
-\begin_layout Subsubsection
-snippet
-\begin_inset LatexCommand label
-name "sub:snippet-tag"
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-
-\emph on
-Example:
-\family typewriter
-\emph default
- <lift:snippet form="METHOD" type="ClassName:method" multipart="true" />
-\end_layout
-
-\begin_layout Standard
-The 
-\family typewriter
-form
-\family default
- and 
-\family typewriter
-multipart
-\family default
- attributes are optional.
- If 
-\family typewriter
-form
-\family default
- is included the attribute options are 
-\family typewriter
-GET
-\family default
- and 
-\family typewriter
-POST.
-
-\family default
- The 
-\family typewriter
-type
-\family default
- attribute resolves to the method call 
-\family typewriter
-ClassName.method
-\family default
-.
- The 
-\family typewriter
-multipart
-\family default
- attribute is a boolean.
-\end_layout
-
-\begin_layout Standard
-Demo example:
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-lstparams "basicstyle={\footnotesize},numbers=left,numberstyle={\tiny}"
-inline false
-status open
-
-\begin_layout Standard
-
-\begin_inset Caption
-
-\begin_layout Standard
-Snippet that generates a NodeSeq
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-
-def add(xhtml: Group): NodeSeq =     
-\end_layout
-
-\begin_layout Standard
-
-  selectedUser.is.openOr(new User).toForm(Empty, saveUser _) ++ 
-\end_layout
-
-\begin_layout Standard
-
-  <tr>     
-\end_layout
-
-\begin_layout Standard
-
-    <td><a href="/simple/index.html">Cancel</a></td>     
-\end_layout
-
-\begin_layout Standard
-
-    <td><input type="submit" value="Create"/></td>     
-\end_layout
-
-\begin_layout Standard
-
-  </tr>
-\end_layout
-
-\begin_layout Standard
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-lstparams "basicstyle={\footnotesize},numbers=left,numberstyle={\tiny}"
-inline false
-status collapsed
-
-\begin_layout Standard
-
-\begin_inset Caption
-
-\begin_layout Standard
-Snippet the generates Nodes to bind...
- TODO: Explain the difference better...
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-
-def render(in: NodeSeq): NodeSeq = {     
-\end_layout
-
-\begin_layout Standard
-
-  val attr: String = S.attr("name").openOr("N/A")     
-\end_layout
-
-\begin_layout Standard
-
-  val value = CountHolder.is(attr)
-\end_layout
-
-\begin_layout Standard
-
-  bind("count", in, "value" -> value, 
-\end_layout
-
-\begin_layout Standard
-
-    "incr" -> link("/count", () => CountHolder.is(attr) = value + 1, Text("++")),
-     
-\end_layout
-
-\begin_layout Standard
-
-    "decr" -> link("/count", () => CountHolder.is(attr) = 0 max (value -
- 1), Text("--")))   
-\end_layout
-
-\begin_layout Standard
-
-} 
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Caveats: 
 \end_layout
 
 \begin_layout Standard
