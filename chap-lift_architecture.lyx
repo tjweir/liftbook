@@ -1912,7 +1912,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Standard
-
 Embedding Templates within Templates
 \end_layout
 
@@ -2396,8 +2395,12 @@ before
 eager_eval
 \family default
 
-\begin_inset LatexCommand index
-name "eager_eval"
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Add index entry
+\end_layout
 
 \end_inset
 
@@ -2420,14 +2423,18 @@ true
 This is especially useful if you're using a 
 \family typewriter
 lift:embed
-\begin_inset LatexCommand index
-name "embed"
+\family default
+ 
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Add index entry
+\end_layout
 
 \end_inset
 
-
-\family default
- tag; without the eager_eval attribute your snippet just sees the <lift:embed>
+tag; without the eager_eval attribute your snippet just sees the <lift:embed>
  tag, but with eager_eval set to true you can put 
 \emph on
 bindable
@@ -4579,8 +4586,12 @@ before
 eager_eval
 \family default
 
-\begin_inset LatexCommand index
-name "eager_eval"
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Add index entry
+\end_layout
 
 \end_inset
 
@@ -4603,8 +4614,14 @@ true
 This is especially useful if you're using a 
 \family typewriter
 lift:embed
-\begin_inset LatexCommand index
-name "embed"
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+
+\family typewriter
+Add index entry
+\end_layout
 
 \end_inset
 

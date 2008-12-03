@@ -1651,8 +1651,12 @@ name "NotBy"
 
 \begin_layout Itemize
 By_>
-\begin_inset LatexCommand index
-name "By_>"
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Add index entry
+\end_layout
 
 \end_inset
 
@@ -1661,12 +1665,16 @@ name "By_>"
 
 \begin_layout Itemize
 By_<
-\begin_inset LatexCommand index
-name "By_<"
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Add index entry
+\end_layout
 
 \end_inset
 
- - Selects entities whose queried field is less than the given value
+- Selects entities whose queried field is less than the given value
 \end_layout
 
 \begin_layout Itemize

@@ -286,8 +286,12 @@ preview false
 \end_layout
 
 \begin_layout Standard
-\begin_inset Include \include{chap-lift_components.lyx}
-preview false
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Removed the chap-lift_components link that was here.
+\end_layout
 
 \end_inset
 
