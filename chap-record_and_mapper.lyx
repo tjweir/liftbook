@@ -176,20 +176,21 @@ Setting Up the Database Connection
 \begin_layout Standard
 The first step you need to get out of the way is defining the database connectio
 n.
- We do this by defining a singleton under the 
-\family typewriter
-bootstrap.liftweb
-\family default
- package called 
+ We do this by defining an object called 
 \family typewriter
 DBVendor
 \family default
-.
+ (you can call it whatever you want).
  This object extends the net.liftweb.mapper.ConnectionManager trait and must
  implement two methods: newConnection and releaseConnection.
  You can make this as sophisticated as you want, with pooling, caching,
- etc, but for now, listing shows a basic implementation to set up a PostgreSQL
- driver.
+ etc, but for now, listing 
+\begin_inset LatexCommand ref
+reference "lst:Setting-up-the-database"
+
+\end_inset
+
+shows a basic implementation to set up a PostgreSQL driver.
 \end_layout
 
 \begin_layout Standard
@@ -249,8 +250,17 @@ object DBVendor extends ConnectionManager {
 
 \begin_layout Standard
 
-      Full(DriverManager.getConnection("jdbc:postgresql://localhost/mydatabase?us
-er=root&password=secret"))
+      Full(DriverManager.getConnection(
+\end_layout
+
+\begin_layout Standard
+
+           "jdbc:postgresql://localhost/mydatabase",
+\end_layout
+
+\begin_layout Standard
+
+           "root", "secret"))
 \end_layout
 
 \begin_layout Standard
@@ -283,6 +293,15 @@ er=root&password=secret"))
 }
 \end_layout
 
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+DB.defineConnectionManager(DefaultConnectionIdentifier, DBVendor)
+\end_layout
+
 \end_inset
 
 
@@ -297,9 +316,9 @@ The name parameter for newConnection can be used in case you need to have
  connections to multiple distinct databases.
  One specialized case of this is when you're doing DB sharding (horizontal
  scaling).
- Sharding is covered in more depth in section 
+ Multiple database usage is covered in more depth in section 
 \begin_inset LatexCommand ref
-reference "sub:Database-Sharding"
+reference "sub:Multiple-Databases"
 
 \end_inset
 
@@ -316,6 +335,11 @@ The releaseConnection method exists so that you have complete control over
  the lifecycle of the connection.
  For instance, if you were doing connection pooling yourself you would return
  the connection to the available pool rather than closing it
+\end_layout
+
+\begin_layout Enumerate
+The DB.defineConnectionManager call is what binds our manager into Mapper.
+ Without it your manager will never get called
 \end_layout
 
 \begin_layout Subsection
@@ -1245,7 +1269,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Standard
-
 HasManyThrough for Many-to-Many Relationships
 \begin_inset LatexCommand label
 name "lst:HasManyThrough-for-Many-to-Many"
@@ -1521,7 +1544,7 @@ findAll
  method has a corresponding method that takes a database connection for
  sharding or multiple database usage (see sharding in section 
 \begin_inset LatexCommand ref
-reference "sub:Database-Sharding"
+reference "sub:Multiple-Databases"
 
 \end_inset
 
@@ -1738,14 +1761,17 @@ name "ByRef"
 \end_inset
 
 , which selects entities whose queried field is equal to the value of another
- query field.
- This can be used to build your own joins or any other query where you need
- to test between tables
+ query field 
+\emph on
+on the same entity
+\emph default
+.
+ 
 \begin_inset Note Note
 status open
 
 \begin_layout Standard
-Is there a better example?
+Is there an example?
 \end_layout
 
 \end_inset
@@ -1809,7 +1835,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Standard
-
 Using In
 \begin_inset LatexCommand label
 name "lst:Using-In"
@@ -1893,7 +1918,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Standard
-
 Using InRaw
 \begin_inset LatexCommand label
 name "lst:Using-InRaw"
@@ -1981,19 +2005,8 @@ reference "sub:SQL-based-queries"
 \end_layout
 
 \begin_layout Standard
-The next QueryParam we'll cover is BySql, which essentially lets you use
- a complete SQL fragment that gets put into the where clause
-\begin_inset Note Note
-status open
-
-\begin_layout Standard
-Why no IHaveValidated...
- on this?
-\end_layout
-
-\end_inset
-
-.
+The next QueryParam we'll cover is BySql, which lets you use a complete
+ SQL fragment that gets put into the where clause.
  An example of this would be if we want to find all ledger entries within
  the last 30 days, as shown in listing 
 \begin_inset LatexCommand ref
@@ -2002,7 +2015,8 @@ reference "lst:Using-BySql"
 \end_inset
 
 .
- 
+ The IHaveValidatedThieSQL case class is required as a code audit mechanism
+ to make sure someone has verified that the SQL used is safe.
 \end_layout
 
 \begin_layout Standard
@@ -2015,7 +2029,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Standard
-
 Using BySql
 \begin_inset LatexCommand label
 name "lst:Using-BySql"
@@ -2037,7 +2050,12 @@ val recentEntries = EntryMeta.findAll(
 
 \begin_layout Standard
 
-  BySql("Entry.date > (CURRENT_DATE - interval '30 days')"))
+  BySql("Entry.date > (CURRENT_DATE - interval '30 days')",
+\end_layout
+
+\begin_layout Standard
+
+        IHaveValidatedThisSQL("dchenbecker","2008-12-03"))
 \end_layout
 
 \end_inset
@@ -2069,7 +2087,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Standard
-
 Parameterized BySql
 \begin_inset LatexCommand label
 name "lst:Parameterized-BySql"
@@ -2106,11 +2123,21 @@ reference "sub:Deleting-an-Instance"
 
 \end_inset
 
-, we can use the parameters to effect bulk deletes in addition to querying
- for instances.
+, we can use the query parameters to effect bulk deletes in addition to
+ querying for instances.
  Simply use the QueryParam classes to constrain what you want to delete.
  Obviously the control params that we'll cover next make no sense but the
- compiler won't complain.
+ compiler won't complain 
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Will the delete work, though?
+\end_layout
+
+\end_inset
+
+.
  Listing 
 \begin_inset LatexCommand ref
 reference "lst:Bulk-Deletion"
@@ -2130,7 +2157,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Standard
-
 Bulk Deletion
 \begin_inset LatexCommand label
 name "lst:Bulk-Deletion"
@@ -2174,6 +2200,9 @@ reference "lst:OrderBy-Clause"
 
  shows an example of ordering our ledger entries by amount.
  The Ascending and Descending case objects are in the net.liftweb.mapper package.
+ The OrderBySql case class operates similarly except you provide your own
+ SQL fragment for the ordering, as shown in the example.
+ Again, you need to validate this SQL.
 \end_layout
 
 \begin_layout Standard
@@ -2186,7 +2215,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Standard
-
 OrderBy Clause
 \begin_inset LatexCommand label
 name "lst:OrderBy-Clause"
@@ -2203,7 +2231,32 @@ name "lst:OrderBy-Clause"
 
 \begin_layout Standard
 
-val cheapestFirst = EntryMeta.findAll(OrderBy(EntryMeta.amount,Ascending))
+val cheapestFirst = 
+\end_layout
+
+\begin_layout Standard
+
+  EntryMeta.findAll(OrderBy(EntryMeta.amount,Ascending))
+\end_layout
+
+\begin_layout Standard
+
+// or
+\end_layout
+
+\begin_layout Standard
+
+val cheapestFirst = 
+\end_layout
+
+\begin_layout Standard
+
+  EntryMeta.findAll(OrdeBySql("Entry.amount asc"),
+\end_layout
+
+\begin_layout Standard
+
+    IHaveValidatedThisSQL("dchenbecker", "2008-12-03"))
 \end_layout
 
 \end_inset
@@ -2235,7 +2288,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Standard
-
 Pagination of Results
 \begin_inset LatexCommand label
 name "lst:Pagination-of-Results"
@@ -2289,7 +2341,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Standard
-
 Multiple QueryParams
 \begin_inset LatexCommand label
 name "lst:Multiple-QueryParams"
@@ -2330,7 +2381,9 @@ EntryMeta.findAll(Like(EntryMeta.description, "Gift for%"),
 \end_layout
 
 \begin_layout Standard
-The final 
+Another useful QueryParam is the Distinct case class, which acts exactly
+ the same way as the DISTINCT keyword in SQL.
+ The final 
 \begin_inset Quotes eld
 \end_inset
 
@@ -2338,9 +2391,9 @@ control
 \begin_inset Quotes erd
 \end_inset
 
- QueryParam that we'll cover is Join
+ QueryParam that we'll cover is PreCache
 \begin_inset LatexCommand index
-name "Join"
+name "PreCache"
 
 \end_inset
 
@@ -2350,11 +2403,11 @@ name "Join"
  field in a lazy state, so that the query to get the foreign object isn't
  executed until you access the field.
  This can obviously be inefficient when you have a whole lot of entities
- loaded that you need to access, so the Join parameter forces Mapper to
- preload the foreign objects as part of the query.
+ loaded that you need to access, so the PreCache parameter forces Mapper
+ to preload the foreign objects as part of the query.
  Listing 
 \begin_inset LatexCommand ref
-reference "lst:Using-Join-to-preload"
+reference "lst:Using-PreCache"
 
 \end_inset
 
@@ -2373,10 +2426,9 @@ status open
 \begin_inset Caption
 
 \begin_layout Standard
-
-Using Join to Preload Objects
+Using PreCache
 \begin_inset LatexCommand label
-name "lst:Using-Join-to-preload"
+name "lst:Using-PreCache"
 
 \end_inset
 
@@ -2400,7 +2452,7 @@ def loadEntry (id : Long) =
 
 \begin_layout Standard
 
-                    Join(EntryMeta.owner))
+                    PreCache(EntryMeta.owner))
 \end_layout
 
 \end_inset
@@ -2445,7 +2497,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Standard
-
 Join Convenience Method
 \begin_inset LatexCommand label
 name "lst:Join-Convenience-Method"
@@ -2792,18 +2843,19 @@ redo
 \end_inset
 
  snippet parameter.
- This allows you to present a different snippet to the user if validation
- fails.
+ This allows you to keep the current state of the snippet when validation
+ fails so that the user doesn't have to re-enter all of the data in the
+ form
 \begin_inset Note Note
 status open
 
 \begin_layout Standard
-What's the use case here? Examples? Will this exist in Record?
+Not yet in Record
 \end_layout
 
 \end_inset
 
-
+.
 \end_layout
 
 \begin_layout Standard
@@ -3230,7 +3282,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Standard
-
 Mixing in CRUDify
 \begin_inset LatexCommand label
 name "lst:Mixing-in-CRUDify"
@@ -3310,7 +3361,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Standard
-
 Using CRUDify Menus
 \begin_inset LatexCommand label
 name "lst:Using-CRUDify-Menus"
@@ -3542,12 +3592,376 @@ Base Field Types
 \begin_layout Standard
 The Record and Mapper frameworks define several basic field types.
  The following table shows the corresponding types between Mapper and Record,
- as well as a brief description of each type
+ as well as a brief description of each type.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="28" columns="3">
+<features islongtable="true">
+<column alignment="center" valignment="top" leftline="true" width="0">
+<column alignment="center" valignment="top" leftline="true" width="0">
+<column alignment="left" valignment="top" leftline="true" rightline="true" width="0">
+<row topline="true" bottomline="true" endhead="true" endfirsthead="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Mapper
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Record
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Notes
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+MappedBinary
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+BinaryField
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Represents a byte array.
+ You must provide your own overrides for toForm and asXHtml/asHtml for input
+ and display
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+MappedBirthYear
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+N/A
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Holds an Int that represents a birth year.
+ The constructor takes a minAge parameter that is used for validation
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+MappedBoolean
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+BooleanField
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Represents a Boolean value.
+ The default form representation is a checkbox
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+MappedCountry
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+CountryField
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Represents a choice from an enumeration of country phone codes as provided
+ by the net.liftweb.mapper.Countries.I18NCountry class.
+ The default form representation is a select
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+MappedDateTime
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+DateTimeField
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Represents a timestamp (java.util.Calender for Record, java.util.Date for Mapper).
+ The default form representation is a text input
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+MappedDouble
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+DoubleField
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Represents a Double value
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+MappedEmail
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+EmailField
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Represents an email address with a maximum length
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+MappedEnum
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+EnumField
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Represents a choice from a given scala.Enumeration.
+ The default form representation is a select
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+MappedEnumList
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+N/A
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Represents a choice of multiple Enumerations.
+ The default form representation is a set of checkboxes, one for each enum
+ value
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+MappedFakeClob
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+N/A
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Fakes a CLOB value (really stores String bytes to a BINARY column)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+MappedGender
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+N/A
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Represents a Gender enumeration.
+ Display values are localized via the I18NGenders.
+ 
 \begin_inset Note Note
 status open
 
 \begin_layout Standard
-Break this into a table
+Cross-ref to I18N section
 \end_layout
 
 \end_inset
@@ -3555,82 +3969,529 @@ Break this into a table
 
 \end_layout
 
-\begin_layout Description
-MappedBinary,\InsetSpace ~
-BinaryField Represents a byte array.
- You must provide your own overrides for toForm and asXHtml for input and
- display
+\end_inset
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+MappedInt
 \end_layout
 
-\begin_layout Description
-BooleanField Represents a Boolean value.
- The default form representation is a checkbox
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+IntField
 \end_layout
 
-\begin_layout Description
-CountryField Represents a choice from an enumeration of country phone codes
- as provided by the net.liftweb.mapper.Countries.I18NCountry class.
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Represents an Int value
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+MappedIntIndex
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+N/A
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Represents an indexed Int field (typically a primary key).
+ In Record this is achieved with the KeyField trait
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+MappedLocale
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+LocaleField
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Represents a locale as selected from the java.util.Locale.getAvailableLocales
+ method.
  The default form representation is a select
 \end_layout
 
-\begin_layout Description
-DateTimeField Represents a timestamp (java.util.Date).
- The default form representation is a text input
+\end_inset
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+MappedLong
 \end_layout
 
-\begin_layout Description
-DoubleField Represents a Double value
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+LongField
 \end_layout
 
-\begin_layout Description
-EmailField Represents an email address
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Represents a Long value
 \end_layout
 
-\begin_layout Description
-EnumField Represents a choice from a given scala.Enumeration.
- The default form representation is a select
+\end_inset
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+MappedLongForeignKey
 \end_layout
 
-\begin_layout Description
-IntField Represents an Int value
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+N/A
 \end_layout
 
-\begin_layout Description
-LocaleField Represents a locale as selected from the java.util.Locale.getAvailableL
-ocales method.
- The default form representation is a select
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Represents a mapping to another entity via the other entities Long primary
+ key.
+ This functionality in Record is not yet supported 
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Keep this up-to-date as things progress
 \end_layout
 
-\begin_layout Description
-LongField Represents a Long value
+\end_inset
+
+
 \end_layout
 
-\begin_layout Description
-PasswordField Represents a password string.
+\end_inset
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+MappedLongIndex
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+N/A
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Represents an indexed Long field (typically a primary key).
+ In Record this is achieved with the KeyField trait
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+MappedPassword
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+PasswordField
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Represents a password string.
  The default form representation is a password input (obscured text)
 \end_layout
 
-\begin_layout Description
-PostalCodeField Represents a validated postal code string.
- The field takes a reference to a CountryField at definition and validates
- the input string against the selected country's postal code format
+\end_inset
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+MappedPoliteString
 \end_layout
 
-\begin_layout Description
-StringField Represents a string value with a maximum length and optional
- default value
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+N/A
 \end_layout
 
-\begin_layout Description
-TextareaField Represents a text area (string) value.
- You can override the textareaRows and textareaCols methods to change the
- default size of the text area
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Just like MappedString, but the default value is an empty string and the
+ input is automatically truncated to fit the database column size
 \end_layout
 
-\begin_layout Description
-TimeZoneField Represents a time zone selected from java.util.TimeZone.getAvailableI
-Ds.
+\end_inset
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+MappedPostalCode
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+PostalCodeField
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Represents a validated postal code string.
+ The field takes a reference to a MappedCountry (CountryField in Record)
+ at definition and validates the input string against the selected country's
+ postal code format
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+MappedString
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+StringField
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Represents a string value with a maximum length and optional default value
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+MappedStringForeignKey
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+N/A
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Represents a mapping to another entity via the other entities String primary
+ key.
+ This functionality in Record is not yet supported 
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Keep this up-to-date as things progress
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+MappedStringIndex
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+N/A
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Represents an indexed String field (typically a primary key).
+ In Record this is achieved with the KeyField trait
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+MappedText
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+N/A
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Represents a String field that stores to a CLOB column in the database.
+ This can be used for large volumes of text.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+MappedTextArea
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+TextAreaField
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Represents a String field that will use an HTML textarea element for its
+ form display.
+ When you define the field you can override the textareaCols and textareaRows
+ defs to control the dimensions of the textarea.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+MappedTimeZone
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+TimeZoneField
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Represents a time zone selected from java.util.TimeZone.getAvailableIDs.
  The default form representation is a select
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row topline="true" bottomline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+MappedUniqueId
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+N/A
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Represents a unique string of a specified length that is randomly generated.
+ The implementation doesn't allow the user to write new values to the field.
+ This can be thought of as a GUID field.
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Update if Record ends up with this
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
@@ -3697,7 +4558,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Standard
-
 MappedDecimal constructors
 \begin_inset LatexCommand label
 name "lst:MappedDecimal-constructors"
@@ -3952,7 +4812,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Standard
-
 Access Control
 \begin_inset LatexCommand label
 name "lst:Access-Control"
@@ -4177,12 +5036,127 @@ Our implementations are relatively straightforward.
 \end_layout
 
 \begin_layout Standard
-Our final step is to define the database-specific methods
+Our final step is to define the database-specific methods for our field,
+ as shown in listing 
+\begin_inset LatexCommand ref
+reference "lst:Database-Specific-Methods"
+
+\end_inset
+
+.
+ The first method we implement is targetSQLType.
+ This method tells Mapper what the corresponding SQL type is for our database
+ column.
+ The jdbcFriendly method returns a value that can be used in a JDBC statement;
+ since BigDecimal is a type directly supported by JDBC we simply delegate
+ to the internal value method, 
+\family typewriter
+i_is_!
+\family default
+.
+ The buildSet...
+ methods return functions that can be used to set the value of our field
+ based on different input types.
+ These are essentially conversion functions.
+ Finally, the fieldCreatorString specifices what we would need in a CREATE
+ TABLE statement to define this column
 \begin_inset Note Note
 status open
 
 \begin_layout Standard
-Fill this in
+Need to modify to specify precision or change definition
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "breaklines=true,numbers=left,numberstyle={\tiny}"
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+Database-Specific Methods
+\begin_inset LatexCommand label
+name "lst:Database-Specific-Methods"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+def targetSQLType = Types.DECIMAL
+\end_layout
+
+\begin_layout Standard
+
+def jdbcFriendly(field : String) = i_is_!
+\end_layout
+
+\begin_layout Standard
+
+def buildSetBooleanValue(accessor : Method, columnName : String) : (T, Boolean,
+ Boolean) => Unit = null
+\end_layout
+
+\begin_layout Standard
+
+def buildSetDateValue(accessor : Method, columnName : String) : (T, Date)
+ => Unit =
+\end_layout
+
+\begin_layout Standard
+
+  (inst, v) => doField(inst, accessor, {case f: MappedDecimal[T] => f.st(if
+ (v == null) defaultValue else (new BigDecimal(v.getTime).setScale(scale)))})
+        def buildSetStringValue(accessor: Method, columnName: String): (T,
+ String) => Unit =
+\end_layout
+
+\begin_layout Standard
+
+  (inst, v) => doField(inst, accessor, {case f: MappedDecimal[T] => f.st(new
+ BigDecimal(v).setScale(scale))})
+\end_layout
+
+\begin_layout Standard
+
+def buildSetLongValue(accessor: Method, columnName : String) : (T, Long,
+ Boolean) =>
+\end_layout
+
+\begin_layout Standard
+
+  Unit = (inst, v, isNull) => doField(inst, accessor, {case f: MappedDecimal[T]
+ => f.st(if (isNull) defaultValue else (new BigDecimal(v).setScale(scale)))})
+      def buildSetActualValue(accessor: Method, data: AnyRef, columnName:
+ String) : (T, AnyRef) =>
+\end_layout
+
+\begin_layout Standard
+
+  Unit = (inst, v) => doField(inst, accessor, {case f: MappedDecimal[T]
+ => f.st(new BigDecimal(v.toString).setScale(scale))})
+\end_layout
+
+\begin_layout Standard
+
+def fieldCreatorString(dbType: DriverType, colName: String): String = colName
+ + " DECIMAL(20," + scale + ")" 
 \end_layout
 
 \end_inset
@@ -4305,7 +5279,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Standard
-DecimalField constructors
+DecimalField Constructors
 \begin_inset LatexCommand label
 name "lst:DecimalField-constructors"
 
@@ -4365,6 +5339,226 @@ class DecimalField[OwnerType <: Record[OwnerType]]
 \end_layout
 
 \begin_layout Standard
+The next step is to start defining the methods that are left abstract on
+ Field.
+ Our first set deals with some basic housekeeping and presentation layer
+ details, shown in listing 
+\begin_inset LatexCommand ref
+reference "lst:DecimalField-Methods"
+
+\end_inset
+
+.
+ The defaultValue method simply defines the value that we use for new instances.
+ The owner method lets Record know which Record instance owns this field.
+ asXHtml and toForm define the methods for display and form generation,
+ respectively.
+ We use the setFromString method (defined later in this section) to handle
+ form setting, which keeps the logic clean.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+DecimalField Methods
+\begin_inset LatexCommand label
+name "lst:DecimalField-Methods"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+def defaultValue = (new BigDecimal("0")).setScale(scale)
+\end_layout
+
+\begin_layout Standard
+
+def owner = rec
+\end_layout
+
+\begin_layout Standard
+
+def asXHtml = Text(value.toString)
+\end_layout
+
+\begin_layout Standard
+
+def toForm = text(value.toString, this.setFromString) 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Our final set of methods deals with setting the value of the field, shown
+ in listing 
+\begin_inset LatexCommand ref
+reference "lst:DecimalField-Set-Methods"
+
+\end_inset
+
+.
+ The setFromAny method, and its counterpart setFromString, have replaced
+ the buildSet...
+ method functionality that we would define in Mapper
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Is that correct?
+\end_layout
+
+\end_inset
+
+.
+ setFromAny essentially defers to setFromString for all operations, and
+ the only special handling we need is for Lists, Options and Cans.
+ setFromString is required to catch any exceptions thrown during conversion;
+ if we have a failure we need to return an Empty as well as calling couldNotSetV
+alue to set a flag for validation.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+DecimalField Set Methods
+\begin_inset LatexCommand label
+name "lst:DecimalField-Set-Methods"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+def setFromAny (in : Any) : Can[BigDecimal] =
+\end_layout
+
+\begin_layout Standard
+
+  in match {
+\end_layout
+
+\begin_layout Standard
+
+    case n :: _ => setFromString(n.toString)
+\end_layout
+
+\begin_layout Standard
+
+    case Some(n) => setFromString(n.toString)
+\end_layout
+
+\begin_layout Standard
+
+    case Full(n) => setFromString(n.toString)
+\end_layout
+
+\begin_layout Standard
+
+    case None | Empty | Failure(_, _, _) | null => setFromString("0")
+\end_layout
+
+\begin_layout Standard
+
+    case n => setFromString(n.toString)
+\end_layout
+
+\begin_layout Standard
+
+  }
+\end_layout
+
+\begin_layout Standard
+
+def setFromString (in : String) : Can[BigDecimal] = {
+\end_layout
+
+\begin_layout Standard
+
+  try {
+\end_layout
+
+\begin_layout Standard
+
+    Full(this.setAll(new BigDecimal(in)))
+\end_layout
+
+\begin_layout Standard
+
+  } catch {
+\end_layout
+
+\begin_layout Standard
+
+    case e : Exception => couldNotSetValue; Empty
+\end_layout
+
+\begin_layout Standard
+
+  }
+\end_layout
+
+\begin_layout Standard
+
+}
+\end_layout
+
+\begin_layout Standard
+
+/** Set the value along with proper scale and rounding */
+\end_layout
+
+\begin_layout Standard
+
+protected def setAll (in : BigDecimal) = set(in.setScale(scale,rounding))
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Since BigDecimal takes a string as a constructor (in fact, this is the recommend
+ed way to initialize it to avoid precision issues with numerics), the setFromStr
+ing method is relatively easy to implement.
+ To make things even simpler, we add the setAll method that takes a BigDecimal
+ as input and then sets the proper scale and rounding on it.
+\end_layout
+
+\begin_layout Standard
 \begin_inset Note Note
 status open
 
@@ -4401,7 +5595,7 @@ This part of the library hasn't been finished yet
 
 \end_inset
 
-
+TBD
 \end_layout
 
 \begin_layout Subsection
@@ -4418,7 +5612,7 @@ This part of the library hasn't been finished yet
 
 \end_inset
 
-
+TBD
 \end_layout
 
 \begin_layout Section
@@ -4430,9 +5624,435 @@ In this section we'll cover some of the advanced features of Mapper
 \end_layout
 
 \begin_layout Subsection
-Database Sharding
+Using Multiple Databases 
 \begin_inset LatexCommand label
-name "sub:Database-Sharding"
+name "sub:Multiple-Databases"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+It's common for an application to need to access data in more than one database.
+ Lift supports this feature through the use of overrides on your MetaMapper
+ classes.
+ First, we need to define the identifiers for the various databases using
+ the ConnectionIdentifier trait and overriding the jndiName def.
+ Lift comes with one pre-made: DefaultConnectionIdentifier.
+ It's jndiName is set to 
+\begin_inset Quotes eld
+\end_inset
+
+lift
+\begin_inset Quotes erd
+\end_inset
+
+, so it's recommended that you use something else.
+ Let's say we have two databases: sales and employees.
+ Listing 
+\begin_inset LatexCommand ref
+reference "lst:Defining-Connection-Identifiers"
+
+\end_inset
+
+ shows how we would define the ConnectionIdentifier objects for these.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+
+Defining Connection Identifiers
+\begin_inset LatexCommand label
+name "lst:Defining-Connection-Identifiers"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+object SalesDB extends ConnectionIdentifier {
+\end_layout
+
+\begin_layout Standard
+
+  def jndiName = "sales"
+\end_layout
+
+\begin_layout Standard
+
+}
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+object EmployeeDB extends ConnectionIdentifier {
+\end_layout
+
+\begin_layout Standard
+
+  def jndiName = "employees"
+\end_layout
+
+\begin_layout Standard
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Simple enough.
+ Now, we need to create connection managers for each one, or we can combine
+ the functionality into a single manager.
+ To keep things clean we'll use a single manager, as shown in listing 
+\begin_inset LatexCommand ref
+reference "lst:Multi-database-Connection-Manager"
+
+\end_inset
+
+.
+ Scala's match operator allows us to easily return the correct connection
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Validate this code
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+
+Multi-database Connection Manager
+\begin_inset LatexCommand label
+name "lst:Multi-database-Connection-Manager"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+object DBVendor extends ConnectionManager {
+\end_layout
+
+\begin_layout Standard
+
+  Class.forName("org.postgresql.Driver")
+\end_layout
+
+\begin_layout Standard
+
+ 
+\end_layout
+
+\begin_layout Standard
+
+  def newConnection(name : ConnectionIdentifier) = {
+\end_layout
+
+\begin_layout Standard
+
+    try {
+\end_layout
+
+\begin_layout Standard
+
+      name match {
+\end_layout
+
+\begin_layout Standard
+
+        case SalesDB =>
+\end_layout
+
+\begin_layout Standard
+
+          Full(DriverManager.getConnection(
+\end_layout
+
+\begin_layout Standard
+
+            "jdbc:postgresql://localhost/sales",
+\end_layout
+
+\begin_layout Standard
+
+            "root", "secret"))
+\end_layout
+
+\begin_layout Standard
+
+        case EmployeeDB =>
+\end_layout
+
+\begin_layout Standard
+
+          Full(DriverManager.getConnection(
+\end_layout
+
+\begin_layout Standard
+
+            "jdbc:postgresql://server/employees",
+\end_layout
+
+\begin_layout Standard
+
+            "root", "hidden"))
+\end_layout
+
+\begin_layout Standard
+
+    } catch {
+\end_layout
+
+\begin_layout Standard
+
+      case e : Exception => e.printStackTrace; Empty
+\end_layout
+
+\begin_layout Standard
+
+    }
+\end_layout
+
+\begin_layout Standard
+
+  }
+\end_layout
+
+\begin_layout Standard
+
+  def releaseConnection (conn : Connection) { conn.close }
+\end_layout
+
+\begin_layout Standard
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+A special case of using multiple databases is 
+\emph on
+sharding
+\emph default
+
+\begin_inset Foot
+status collapsed
+
+\begin_layout Standard
+For more information on sharding, see this article: 
+\begin_inset LatexCommand htmlurl
+target "http://highscalability.com/unorthodox-approach-database-design-coming-shard"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+.
+ Sharding is a means to scale your database capacity by associating entities
+ with one database instance out of a federation of servers based on some
+ property of the entity.
+ For instance, we could distribute user entites across 3 database servers
+ by using the first character of the last name: A-H goes to server 1, I-P
+ goes to server 2, and Q-Z goes to server 3.
+ As simple as this sounds, there are some important factors to remember:
+\end_layout
+
+\begin_layout Itemize
+Sharding increases the complexity of your code a little
+\end_layout
+
+\begin_layout Itemize
+To get the most benefit out of sharding, you need to carefully choose and
+ tune your 
+\begin_inset Quotes eld
+\end_inset
+
+selector
+\begin_inset Quotes erd
+\end_inset
+
+.
+ If you're not careful you can get an uneven distribution where some servers
+ handle significantly more load than others, defeating the purpose of sharding.
+ If you decide to re-tune your selctor later on you need to redistribute
+ the data to the proper servers in concert with changing your code or you
+ won't be able to find things
+\end_layout
+
+\begin_layout Itemize
+When you use sharding, you can't just use normal joins anymore, since the
+ data isn't all within one instance.
+ This means more work on your part to properly retrieve and associate data
+\end_layout
+
+\begin_layout Standard
+Mapper provides a handy feature 
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Or does it? Confirm whether or not this is supported.
+\end_layout
+
+\end_inset
+
+for sharding that allows you to choose which database connection you want
+ to use for a specific entity.
+ There are two methods we can use to control the behavior: 
+\family typewriter
+dbSelectDBConnectionForFind
+\family default
+, and 
+\family typewriter
+dbCalculateConnectionIdentifier
+\family default
+.
+ dbSelect...
+ is used in a find by primary key, and takes a partial function (typically
+ a match clause) to determine which connection to use.
+ dbCalculate...
+ is used when a new instance is created to decide where to store the new
+ instance.
+ As an example, say we've defined two database connections, SalesA and SalesB.
+ We want to place new instances in SalesA if the amount is > $100 and SalesB
+ otherwise.
+ Listing 
+\begin_inset LatexCommand ref
+reference "lst:Sharding-in-Action"
+
+\end_inset
+
+ shows our method in action.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+
+Sharding in Action
+\begin_inset LatexCommand label
+name "lst:Sharding-in-Action"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+class Entry extends Mapper[Entry] {
+\end_layout
+
+\begin_layout Standard
+
+  ...
+ fields, etc ...
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+  override def dbCalculateConnectionIdentifier = {
+\end_layout
+
+\begin_layout Standard
+
+    case n if n.amount.is > 100 => SalesA
+\end_layout
+
+\begin_layout Standard
+
+    case _ => SalesB
+\end_layout
+
+\begin_layout Standard
+
+  }
+\end_layout
+
+\begin_layout Standard
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+This needs to be revised and expanded once sharding is truly figured out
+\end_layout
 
 \end_inset
 
@@ -4530,10 +6150,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Standard
-
-Using 
-\lang english
-findAllByPreparedStatement
+Using findAllByPreparedStatement
 \begin_inset LatexCommand label
 name "lst:Using-findAllByPreparedStatement"
 
