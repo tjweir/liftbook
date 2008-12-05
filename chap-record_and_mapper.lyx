@@ -3601,7 +3601,7 @@ The Record and Mapper frameworks define several basic field types.
 <features islongtable="true">
 <column alignment="center" valignment="top" leftline="true" width="0">
 <column alignment="center" valignment="top" leftline="true" width="0">
-<column alignment="left" valignment="top" leftline="true" rightline="true" width="0">
+<column alignment="left" valignment="top" leftline="true" rightline="true" width="3.75in">
 <row topline="true" bottomline="true" endhead="true" endfirsthead="true">
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
