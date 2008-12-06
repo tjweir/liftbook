@@ -423,21 +423,159 @@ class Boot {
 \end_layout
 
 \begin_layout Section
-Rendering Pipeline
+Request/Response Lifecycle
 \end_layout
 
 \begin_layout Standard
 Now that the request has entered the LiftServlet instance, it's time to
  process it.
- We break this processing up into several basic steps:
+ There are a quite a few fundamental steps that must be mentioned in order
+ have a clear picture how and where certain things are happening.
 \end_layout
 
 \begin_layout Enumerate
-URL Rewriting 
+URL Rewriting - this is useful when you want to transform a URI path into
+ something else such as query paramters etc.
+ The result of the transformation will be passed to futher processing.
+ 
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+LiftRules object
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+type RewritePf = PartialFunction[RewriteRequest, RewriteResponse]
+\end_layout
+
+\begin_layout Plain Layout
+
+...
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The pf partial function is composed with the existent partial functions
+\end_layout
+
+\begin_layout Plain Layout
+
+ * such as pf orElse <exitent_partial_function>
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+def addRewriteBefore(pf: RewritePf)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The pf partial function is composed with the existent partial functions
+\end_layout
+
+\begin_layout Plain Layout
+
+ * such as <exitent_partial_function> orElse pf
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+def addRewriteAfter(pf: RewritePf)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Enumerate
-Check for user-defined stateless dispatch (See LiftRules.statelessDispatchTable)
+Check for user-defined stateless dispatch
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+LiftRules object
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+type DispatchPf = PartialFunction[Req, () => Can[LiftResponse]];
+\end_layout
+
+\begin_layout Plain Layout
+
+...
+\end_layout
+
+\begin_layout Plain Layout
+
+var statelessDispatchTable: DispatchPf
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+The term stateless means that when the DispatchPf function is called the
+ S object is not available and LiftSession not created yet.
 \end_layout
 
 \begin_layout Enumerate
@@ -445,13 +583,92 @@ Create Lift session (If there is no applicable stateless dispatch function)
 \end_layout
 
 \begin_layout Enumerate
-Handle statefull request
+Handle stateful request
 \end_layout
 
 \begin_deeper
 \begin_layout Enumerate
 Check the stateful dispatch functions (See LiftRules.addDispatchBefore, LiftRules.
 addDispatchAfter)
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+LiftRules object
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+type DispatchPf = PartialFunction[Req, () => Can[LiftResponse]];
+\end_layout
+
+\begin_layout Plain Layout
+
+...
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Add the in partial function at the begining of the list
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+def prependDispatch(pf: DispatchPf)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Add the in partial function at the end of the list
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+def appendDispatch(pf: DispatchPf)
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Enumerate
@@ -471,8 +688,8 @@ Add a reference to Comet processing
 \begin_layout Enumerate
 If it's an Ajax request process it.
  Bascally execute the user's function mapped with that specific request
- token and return the response which can be a JavaScript, an XML construct
- or vurtually any LiftReponse.
+ token (impersonated by a request parameter) and return the response which
+ can be a JavaScript, an XML construct or virtualy any LiftReponse.
 \end_layout
 
 \begin_layout Enumerate
@@ -480,6 +697,236 @@ If it's a regular HTTP request process it such as:
 \end_layout
 
 \begin_deeper
+\begin_layout Enumerate
+Init S object (S stands for Stateful)
+\end_layout
+
+\begin_layout Enumerate
+Call LoanWrapper-s
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Essentially a LoanWrapper is used to wrap the lift processing logic so you
+ can have code that handle pre and post condisions
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+LoadWraper trait
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+trait LoanWrapper {   
+\end_layout
+
+\begin_layout Plain Layout
+
+	def apply[T](f: => T): T 
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+S object
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def addAround(lw: List[LoanWrapper]): Unit
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def addAround(lw: LoanWrapper): Unit
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Code example for around-invocation
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+class Boot {   
+\end_layout
+
+\begin_layout Plain Layout
+
+  def boot {   
+\end_layout
+
+\begin_layout Plain Layout
+
+	S.addAround(new LoanWrapper { // Let's call it LW1
+\end_layout
+
+\begin_layout Plain Layout
+
+				  def apply[T](f: => T): T = {   
+\end_layout
+
+\begin_layout Plain Layout
+
+		    	    ...your before code goes here...
+   
+\end_layout
+
+\begin_layout Plain Layout
+
+		        	val result = f // Let lift do normal request processing.
+   
+\end_layout
+
+\begin_layout Plain Layout
+
+			        ...your after code goes here...
+   
+\end_layout
+
+\begin_layout Plain Layout
+
+				  }   
+\end_layout
+
+\begin_layout Plain Layout
+
+				} :: new LoanWrapper { // Let's call it LW2
+\end_layout
+
+\begin_layout Plain Layout
+
+				  def apply[T](f: => T): T = {   
+\end_layout
+
+\begin_layout Plain Layout
+
+		    	    ...your before code goes here...
+   
+\end_layout
+
+\begin_layout Plain Layout
+
+		        	val result = f // Let lift do normal request processing.
+   
+\end_layout
+
+\begin_layout Plain Layout
+
+			        ...your after code goes here...
+   
+\end_layout
+
+\begin_layout Plain Layout
+
+				  }   
+\end_layout
+
+\begin_layout Plain Layout
+
+				}
+\end_layout
+
+\begin_layout Plain Layout
+
+				:: Nil)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+   // The call sequence would be LW1(LW2(<normal_request_processing>))
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
 \begin_layout Enumerate
 Check the user's dispatch functions that are set per-session.
  If there is a function applicable execute it and return its response
@@ -507,12 +954,34 @@ Add a reference to SiteMap/Loc section
 \end_layout
 
 \begin_layout Enumerate
-Lookup for the template based on the Request path 
-\begin_inset Note Note
+Lookup for the template based on the Request path.
+ Lift will locate the templates using various aproaches:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Check for ViewDispatchPF functions.
+ If there is a function defined for this path invoke it and return an Either
+\end_layout
+
+\begin_layout Enumerate
+If there is no ViewDispatchPF look for the template in the path specified
+ in the request
+\end_layout
+
+\begin_layout Standard
+The ViewDispatchPf functions are defined in LiftRules
+\begin_inset listings
+inline false
 status open
 
 \begin_layout Plain Layout
-Add a reference to the new unified ViewDispatchPF 
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+LiftRules object
 \end_layout
 
 \end_inset
@@ -520,14 +989,124 @@ Add a reference to the new unified ViewDispatchPF
 
 \end_layout
 
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * A partial Function taking a List[String] parameter impersonating the
+ path such as /foo/bar corresponds with 
+\end_layout
+
+\begin_layout Plain Layout
+
+ * List(
+\begin_inset Quotes eld
+\end_inset
+
+foo
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+bar
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+type ViewDispatchPF = PartialFunction[List[String], Either[() => Can[NodeSeq],
+ LiftView]] 
+\end_layout
+
+\begin_layout Plain Layout
+
+...
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Add the in partial function at the begining of the list
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+def prependViewDispatch(in: ViewDispatchPF)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Add the in partial function at the end of the list
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+def appendViewDispatch(in: ViewDispatchPF)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\end_deeper
+\end_deeper
 \begin_layout Enumerate
 Process the templates by executing snippets combining templates etc.
 \end_layout
 
+\begin_deeper
 \begin_layout Enumerate
 Merge <head> elements
 \end_layout
 
+\begin_deeper
 \begin_layout Enumerate
 Update the internal functions map.
  Basically associate user's scala functions with tokens that are impersonated
@@ -559,15 +1138,6 @@ Convert the LiftResponse to raw bytes stream and send it to client as HTTP
 \begin_layout Standard
 A lot more is going on under the hood (Lift is highly customizable) but
  for now this should cover 95% of what you will want to do in a Lift application.
-\end_layout
-
-\begin_layout Standard
-Rather than explain these steps in the order of execution, we will be covering
- them in the order of increasing complexity.
-\end_layout
-
-\begin_layout Standard
-Templates are the easiest concept to understand so we'll start with them.
 \end_layout
 
 \begin_layout Section
@@ -887,6 +1457,53 @@ So templates are a nice way of setting up your layout and then writing a
  They provide a simple way to generate a uniform look for your site.
  If you'd like more control or don't need a template for a certain section,
  you'll want to use a View, which is coming up in the next section.
+\end_layout
+
+\begin_layout Subparagraph
+
+\emph on
+Sometimes it might be tempting to load manually a template (from a snippet
+ for example) using 
+\end_layout
+
+\begin_layout Subparagraph
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+LiftSession class
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def processSurroundAndInclude(page: String, in: NodeSeq)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subparagraph
+Even if Lift will merge your templates and invoke snippets it is HIGHLY
+ recommended to NOT use this as the processing functions will not be invoked
+ as the functions mapping will not happen as this is called 
+\bar under
+outside 
+\bar default
+of normal rendering pipeline.
+ 
 \end_layout
 
 \begin_layout Section
@@ -2401,11 +3018,6 @@ reference "sec:Snippets"
 \end_layout
 
 \begin_layout Section
-\begin_inset LatexCommand index
-name "Snippets"
-
-\end_inset
-
 Snippets
 \end_layout
 
@@ -2543,11 +3155,6 @@ then the lift:User.name snippet will be processed as well after our snippet
 \end_layout
 
 \begin_layout Subsection
-\begin_inset LatexCommand index
-name "Stateless"
-
-\end_inset
-
 Stateless Snippets
 \end_layout
 
@@ -2559,11 +3166,6 @@ All of the above examples showed Stateless snippets, those that execute
 \end_layout
 
 \begin_layout Subsection
-\begin_inset LatexCommand index
-name "Stateful"
-
-\end_inset
-
 Stateful Snippets
 \end_layout
 
@@ -2642,11 +3244,6 @@ CSS
 \end_layout
 
 \begin_layout Section
-\begin_inset LatexCommand index
-name "Eager"
-
-\end_inset
-
 Eager Eval
 \end_layout
 
@@ -2726,11 +3323,6 @@ reference "sub:snippet-tag"
 \end_layout
 
 \begin_layout Section
-\begin_inset LatexCommand index
-name "Head"
-
-\end_inset
-
 Head Merge
 \end_layout
 
