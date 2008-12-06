@@ -1442,10 +1442,6 @@ So templates are a nice way of setting up your layout and then writing a
  you'll want to use a View, which is coming up in the next section.
 \end_layout
 
-\begin_layout Standard
-
-\end_layout
-
 \begin_layout Subparagraph
 
 \emph on
@@ -1460,8 +1456,6 @@ status open
 
 \begin_layout Plain Layout
 
-<<<<<<< HEAD:chap-lift_architecture.lyx
-=======
 \begin_inset Caption
 
 \begin_layout Plain Layout
@@ -1475,8 +1469,7 @@ LiftSession class
 
 \begin_layout Plain Layout
 
->>>>>>> 798792cf4087c9b4a79fb8e0d7bc3c5e4fa90578:chap-lift_architecture.lyx
-def processSurroundAndInclude(page: String, in: NodeSeq)
+processSurroundAndInclude(page: String, in: NodeSeq)
 \end_layout
 
 \end_inset
