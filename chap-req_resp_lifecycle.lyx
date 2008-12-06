@@ -1,8 +1,9 @@
-#LyX 1.5.6 created this file. For more info see http://www.lyx.org/
-\lyxformat 276
+#LyX 1.6.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
 \begin_document
 \begin_header
 \textclass book
+\use_default_options false
 \language english
 \inputencoding auto
 \font_roman default
@@ -13,9 +14,11 @@
 \font_osf false
 \font_sf_scale 100
 \font_tt_scale 100
+
 \graphics default
 \paperfontsize default
 \spacing single
+\use_hyperref false
 \papersize default
 \use_geometry false
 \use_amsmath 1
@@ -41,6 +44,17 @@
 
 \begin_layout Chapter
 Request/Response Lifecycle
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+This is discussed in the architecture chapter so maybe this should be replaced
+ with something else?
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
