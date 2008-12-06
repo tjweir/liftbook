@@ -1,8 +1,9 @@
-#LyX 1.5.6 created this file. For more info see http://www.lyx.org/
-\lyxformat 276
+#LyX 1.6.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
 \begin_document
 \begin_header
 \textclass book
+\use_default_options false
 \language english
 \inputencoding auto
 \font_roman default
@@ -13,9 +14,11 @@
 \font_osf false
 \font_sf_scale 100
 \font_tt_scale 100
+
 \graphics default
 \paperfontsize default
 \spacing single
+\use_hyperref false
 \papersize default
 \use_geometry false
 \use_amsmath 1
@@ -51,23 +54,23 @@ Entry into Lift
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 From our discussion:
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Chapter: Arch: 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 - all the fun in Boot (url rewriting, like the stuff you have) 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 - how lift handles requests (what you have got) 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 - intro to views, snippets and how they relate to dispatch
 \end_layout
 
@@ -83,9 +86,15 @@ The first step in Lift's request processing is intercepting the HTTP request.
 \begin_inset Foot
 status open
 
-\begin_layout Standard
-\begin_inset LatexCommand htmlurl
-target "http://groups.google.com/group/liftweb/browse_thread/thread/b484ea2a13b6f84b/90ba1ef1115055a6"
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://groups.google.com/group/liftweb/browse_thread/thread/b484ea2a13b6f84b/90ba1
+ef1115055a6
+\end_layout
 
 \end_inset
 
@@ -100,8 +109,12 @@ target "http://groups.google.com/group/liftweb/browse_thread/thread/b484ea2a13b6
  still does all of the work), so don't be confused when you look at the
  ScalaDoc and see both classes.
  The main thing to remember is that your web.xml
-\begin_inset LatexCommand index
-name "web.xml"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+web.xml
+\end_layout
 
 \end_inset
 
@@ -114,12 +127,13 @@ lstparams "basicstyle={\scriptsize},frame=single,language=XML,numbers=left,numbe
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
-\begin_inset LatexCommand label
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:LiftFilter-setup-in-web.xml"
 
 \end_inset
@@ -132,91 +146,91 @@ LiftFilter setup in web.xml
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 <?xml version="1.0" encoding="ISO-8859-1"?>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 <!DOCTYPE web-app
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 "http://java.sun.com/j2ee/dtds/web-app_2_3.dtd">
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 <web-app>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   <filter>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     <filter-name>LiftFilter</filter-name>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     <display-name>Lift Filter</display-name>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     <description>The Filter that intercepts lift calls</description>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     <filter-class>net.liftweb.http.LiftFilter</filter-class>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   </filter>      
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   <filter-mapping>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     <filter-name>LiftFilter</filter-name>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     <url-pattern>/*</url-pattern>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   </filter-mapping>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 </web-app>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
@@ -227,7 +241,8 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 
 \begin_layout Standard
 A full web.xml example is shown in section 
-\begin_inset LatexCommand vref
+\begin_inset CommandInset ref
+LatexCommand vref
 reference "lst:JPA-web.xml"
 
 \end_inset
@@ -252,8 +267,12 @@ When Lift starts up there are a number of things that you'll want to set
  These things include setting up a SiteMenu, URL rewriting, custom dispatch
  and classpath search.
  The Lift servlet looks for the bootstrap.liftweb.Boot
-\begin_inset LatexCommand index
-name "Boot"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+Boot
+\end_layout
 
 \end_inset
 
@@ -264,9 +283,38 @@ name "Boot"
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Cover logging setup here, too? - Probably a good idea to touch on simple
  logging.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+/*marius - I'd address logging in a dedicated section.*/
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+It is important to note that a lot of aspects related with Lift's behavior
+ can be customized from boot by using LiftRules object.
+ 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+/*marius - Add reference to LiftRules section*/
 \end_layout
 
 \end_inset
@@ -324,13 +372,14 @@ lstparams "basicstyle={\footnotesize},frame=single"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Minimal Boot class
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:Minimal-Boot-class"
 
 \end_inset
@@ -343,27 +392,27 @@ name "lst:Minimal-Boot-class"
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 class Boot {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def boot = {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     LiftRules.addToPackages("com.pocketchangeapp")
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   }
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 }
 \end_layout
@@ -384,29 +433,127 @@ Now that the request has entered the LiftServlet instance, it's time to
 \end_layout
 
 \begin_layout Enumerate
-URL Rewriting
+URL Rewriting 
 \end_layout
 
 \begin_layout Enumerate
-User-defined dispatch
+Check for user-defined stateless dispatch (See LiftRules.statelessDispatchTable)
 \end_layout
 
 \begin_layout Enumerate
-SiteMap matching and access control (covered in section 
+Create Lift session (If there is no applicable stateless dispatch function)
+\end_layout
+
+\begin_layout Enumerate
+Handle statefull request
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Check the stateful dispatch functions (See LiftRules.addDispatchBefore, LiftRules.
+addDispatchAfter)
+\end_layout
+
+\begin_layout Enumerate
+If it's a Comet request process it 
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
-TODO: Cross-ref
+\begin_layout Plain Layout
+Add a reference to Comet processing
 \end_layout
 
 \end_inset
 
-)
+
 \end_layout
 
 \begin_layout Enumerate
-View or Template dispatch and processing
+If it's an Ajax request process it.
+ Bascally execute the user's function mapped with that specific request
+ token and return the response which can be a JavaScript, an XML construct
+ or vurtually any LiftReponse.
+\end_layout
+
+\begin_layout Enumerate
+If it's a regular HTTP request process it such as:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Check the user's dispatch functions that are set per-session.
+ If there is a function applicable execute it and return its response
+\end_layout
+
+\begin_layout Enumerate
+If there is no per-session dispatch function process the request by executing
+ the Scala function that user set up for specific events (such as when clicking
+ a link, or pressing the submit button, or a function that will be executed
+ when a form field is set etc.)
+\end_layout
+
+\begin_layout Enumerate
+Check the SiteMap and Loc functions 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Add a reference to SiteMap/Loc section
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Lookup for the template based on the Request path 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Add a reference to the new unified ViewDispatchPF 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Process the templates by executing snippets combining templates etc.
+\end_layout
+
+\begin_layout Enumerate
+Merge <head> elements
+\end_layout
+
+\begin_layout Enumerate
+Update the internal functions map.
+ Basically associate user's scala functions with tokens that are impersonated
+ in subsequent requests by HTTP parameters
+\end_layout
+
+\begin_layout Enumerate
+Check to see if lift needs to send HTTP redirect 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+I think we need a dedicated section for redirects as we have redirect with
+ state etc.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Enumerate
+Convert the LiftResponse to raw bytes stream and send it to client as HTTP
+ response
 \end_layout
 
 \begin_layout Standard
@@ -429,8 +576,12 @@ Templates
 
 \begin_layout Standard
 Templates
-\begin_inset LatexCommand index
-name "Templates"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+Templates
+\end_layout
 
 \end_inset
 
@@ -448,8 +599,12 @@ name "Templates"
 snippets
 \emph default
 
-\begin_inset LatexCommand index
-name "snippets"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+snippets
+\end_layout
 
 \end_inset
 
@@ -466,13 +621,14 @@ lstparams "basicstyle={\footnotesize},frame=single,language=XML"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Sample template
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:Sample-template"
 
 \end_inset
@@ -485,22 +641,22 @@ name "lst:Sample-template"
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 <lift:surround with="default" at="content">
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   <head><title>Hello!</title></head>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   <lift:snippet type="Hello.world" />
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 </lift:surround>
 \end_layout
@@ -526,7 +682,8 @@ Notice the tags that are of the form
 \family default
 These are two examples of Lift-specific tags.
  We'll discuss all of the tags that users will use in section Tags 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "sec:ArchTags"
 
 \end_inset
@@ -535,8 +692,12 @@ reference "sec:ArchTags"
  We use the built-in 
 \family typewriter
 <lift:surround>
-\begin_inset LatexCommand index
-name "lift:surround"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+lift:surround
+\end_layout
 
 \end_inset
 
@@ -621,8 +782,12 @@ then Lift will use the appropriate template based on the user's requested
  language if a corresponding template is available.
  In addition to normal templates, your application can make use of hidden
  templates
-\begin_inset LatexCommand index
-name "hidden templates"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+hidden templates
+\end_layout
 
 \end_inset
 
@@ -657,7 +822,8 @@ Once Lift has located the correct template, the next step is to process
  It is important to understand that Lift processes XML tags from the outside
  in.
  That means that in our example listing 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "lst:Sample-template"
 
 \end_inset
@@ -728,7 +894,7 @@ Views
 \begin_inset Note Note
 status collapsed
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Convert examples to PocketChange...
  aka, work on PocketChange :)
 \end_layout
@@ -746,23 +912,32 @@ We just discussed Templates and we saw how through a combination of an XML
 
 \begin_layout Standard
 Views
-\begin_inset LatexCommand index
-name "Views"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+Views
+\end_layout
 
 \end_inset
 
  are implicitly defined custom dispatch methods.
  We'll cover Dispatch in more depth in the next section.
  
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "sub:Custom-Dispatch"
 
 \end_inset
 
 .
  A view is a normal Scala method that returns a NodeSeq
-\begin_inset LatexCommand index
-name "NodeSeq"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+NodeSeq
+\end_layout
 
 \end_inset
 
@@ -774,7 +949,7 @@ name "NodeSeq"
 \begin_inset Note Note
 status collapsed
 
-\begin_layout Standard
+\begin_layout Plain Layout
 TODO: Confirm this!
 \end_layout
 
@@ -783,14 +958,22 @@ TODO: Confirm this!
 .
  There are two options for implementing a view class: one is to extend the
  LiftView
-\begin_inset LatexCommand index
-name "LiftView"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+LiftView
+\end_layout
 
 \end_inset
 
  trait, the other is to implement the InsecureLiftView
-\begin_inset LatexCommand index
-name "InsecureLiftView"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+InsecureLiftView
+\end_layout
 
 \end_inset
 
@@ -811,7 +994,7 @@ MyStuff
 \begin_inset Note Note
 status collapsed
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Where to cross-ref for class resolution, LiftRules.addToPackages
 \end_layout
 
@@ -823,8 +1006,12 @@ enumerate
 \family default
 , then Lift will execute the method and return its results to the user.
  The main issue there is that Lift uses reflection
-\begin_inset LatexCommand index
-name "reflection"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+reflection
+\end_layout
 
 \end_inset
 
@@ -842,7 +1029,8 @@ method name
 
 ) to a function that will return a NodeSeq.
  Listing 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "lst:Dispatch-in-LiftView"
 
 \end_inset
@@ -865,22 +1053,23 @@ lstparams "frame=single"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 \begin_inset Note Note
 status collapsed
 
-\begin_layout Standard
+\begin_layout Plain Layout
 This should be a pocketchange example
 \end_layout
 
 \end_inset
 
 Dispatch in LiftView
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:Dispatch-in-LiftView"
 
 \end_inset
@@ -893,61 +1082,61 @@ name "lst:Dispatch-in-LiftView"
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 class ExpenseView extends LiftView {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   override def dispatch = {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     case "enumerate" => doEnumerate _
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   }
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def doEnumerate () : NodeSeq = {  
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     ...
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     <lift:surround with="default" at="content">
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
      { expenseItems.toTable }
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     </lift:surround>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   }
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 }
 \end_layout
@@ -972,7 +1161,7 @@ includes
 \begin_inset Note Note
 status collapsed
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Confirm this!
 \end_layout
 
@@ -981,7 +1170,8 @@ Confirm this!
 , just like snippets.
  That means that you can use the full power of the templating system from
  within your View, as shown in listing 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "lst:Dispatch-in-LiftView"
 
 \end_inset
@@ -1002,7 +1192,8 @@ Since you can choose to not include any of the pre-defined template XHTML,
 
 \begin_layout Section
 URL Rewriting and Dispatch
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "sec:URL-Rewriting"
 
 \end_inset
@@ -1052,8 +1243,12 @@ PartialFunction[RewriteRequest,RewriteResponse]
  set or access properties in the S object.
  RewriteRequest is a case object that contains three items: the parsed path,
  the request type and the original HttpServletRequest
-\begin_inset LatexCommand index
-name "HttpServletRequest"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+HttpServletRequest
+\end_layout
 
 \end_inset
 
@@ -1062,8 +1257,12 @@ name "HttpServletRequest"
 
 \begin_layout Standard
 The parsed path of the request in a ParsePath
-\begin_inset LatexCommand index
-name "ParsePath"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+ParsePath
+\end_layout
 
 \end_inset
 
@@ -1101,7 +1300,7 @@ Whether the path is absolute
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Clarification needed on what this means
 \end_layout
 
@@ -1144,13 +1343,13 @@ myapp
 \begin_inset Tabular
 <lyxtabular version="3" rows="4" columns="2">
 <features>
-<column alignment="left" valignment="top" leftline="true" width="0">
-<column alignment="left" valignment="top" leftline="true" rightline="true" width="0">
-<row topline="true" bottomline="true">
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<column alignment="left" valignment="top" width="0">
+<column alignment="left" valignment="top" width="0">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \series bold
 \size footnotesize
@@ -1159,10 +1358,10 @@ Requested URL
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \series bold
 \size footnotesize
@@ -1172,11 +1371,11 @@ Parsed Path
 \end_inset
 </cell>
 </row>
-<row topline="true">
+<row>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \series bold
 \size footnotesize
@@ -1188,7 +1387,7 @@ http://foo.com/myapp/home?test_this=true
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \series bold
 \size footnotesize
@@ -1206,11 +1405,11 @@ home
 \end_inset
 </cell>
 </row>
-<row topline="true">
+<row>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \series bold
 \size footnotesize
@@ -1222,7 +1421,7 @@ http://foo.com/myapp/user/derek
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \series bold
 \size footnotesize
@@ -1248,11 +1447,11 @@ derek
 \end_inset
 </cell>
 </row>
-<row topline="true" bottomline="true">
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \series bold
 \size footnotesize
@@ -1261,10 +1460,10 @@ http://foo.com/myapp/view/item/14592
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \series bold
 \size footnotesize
@@ -1336,7 +1535,7 @@ The flexibility of Scala's matching system is what really makes this powerful.
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Modify for PocketChange
 \end_layout
 
@@ -1351,13 +1550,14 @@ lstparams "basicstyle={\scriptsize},frame=single"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Simple rewrite example
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:Simple-rewrite-example"
 
 \end_inset
@@ -1370,22 +1570,22 @@ name "lst:Simple-rewrite-example"
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 val rewriter = {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   case RewriteRequest(ParsePath(user :: username :: Nil,_,_,_),_,_) => 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
        RewriteResponse(viewUser :: Nil, Map(username -> username))
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 }
 \end_layout
@@ -1397,26 +1597,42 @@ val rewriter = {
 
 \begin_layout Standard
 The RewriteResponse
-\begin_inset LatexCommand index
-name "RewriteResponse"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+RewriteResponse
+\end_layout
 
 \end_inset
 
  simply contains the new path to send and can also take a Map
-\begin_inset LatexCommand index
-name "Map"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+Map
+\end_layout
 
 \end_inset
 
  that contains parameters that will be accessible via S.param
-\begin_inset LatexCommand index
-name "S.param"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+S.param
+\end_layout
 
 \end_inset
 
 
-\begin_inset LatexCommand index
-name "S"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+S
+\end_layout
 
 \end_inset
 
@@ -1441,8 +1657,12 @@ name "S"
 We can combine the ParsePath matching with the RequestType and HttpServletReques
 t to be very specific with our matches.
  For example, if we wanted to support the DELETE HTTP verb for a RESTful
-\begin_inset LatexCommand index
-name "RESTful"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+RESTful
+\end_layout
 
 \end_inset
 
@@ -1455,13 +1675,14 @@ lstparams "basicstyle={\scriptsize},frame=single"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Complex rewrite example
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:Complex-rewrite-example"
 
 \end_inset
@@ -1474,37 +1695,37 @@ name "lst:Complex-rewrite-example"
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 val rewriter = {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   case RewriteRequest(ParsePath(username :: Nil, _, _, _),
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
                       DeleteRequest,
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
                       httpreq) 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
                       if isMgmtSubnet(httpreq.getRemoteHost()) => 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
        RewriteResponse(deleteUser :: Nil, Map(username -> username))
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 }
 \end_layout
@@ -1517,8 +1738,12 @@ val rewriter = {
 \begin_layout Standard
 We'll go into more detail about how you can use this in the following sections.
  In particular, SiteMap
-\begin_inset LatexCommand index
-name "SiteMap"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+SiteMap
+\end_layout
 
 \end_inset
 
@@ -1526,7 +1751,7 @@ name "SiteMap"
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Cross-ref
 \end_layout
 
@@ -1536,7 +1761,8 @@ provides a mechanism for doing rewrites combined with menu entries.
 \end_layout
 
 \begin_layout Section
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "sec:ArchTags"
 
 \end_inset
@@ -1593,7 +1819,8 @@ Notes: You cannot have a hidden template with the same name as a sub-directory
 
 \begin_layout Subsection
 snippet
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "sub:snippet-tag"
 
 \end_inset
@@ -1659,11 +1886,11 @@ lstparams "basicstyle={\footnotesize},numbers=left,numberstyle={\tiny}"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Snippet that generates a NodeSeq
 \end_layout
 
@@ -1672,47 +1899,47 @@ Snippet that generates a NodeSeq
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 class Entry {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 def add(xhtml: Group): NodeSeq =     
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   selectedUser.is.openOr(new User).toForm(Empty, saveUser _) ++ 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   <tr>     
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     <td><a href="/simple/index.html">Cancel</a></td>     
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     <td><input type="submit" value="Create"/></td>     
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   </tr>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 }
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
@@ -1730,22 +1957,22 @@ Y ou could use this snippet in the following manner:
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 ...
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 <lift:Entry.add form="POST"/>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 or
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 <lift:snippet type="Entry.add" form="POST" />
 \end_layout
@@ -1761,11 +1988,11 @@ lstparams "basicstyle={\footnotesize},numbers=left,numberstyle={\tiny}"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Snippet that generates Nodes to bind...
  TODO: Explain the difference better...
 \end_layout
@@ -1775,49 +2002,49 @@ Snippet that generates Nodes to bind...
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 class Entry {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def showCount(in: NodeSeq): NodeSeq = {     
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     val attr: String = S.attr("name").openOr("N/A")     
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     val value = CountHolder.is(attr)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     bind("count", in, "value" -> value, 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       "incr" -> link("/count", () => CountHolder.is(attr) = value + 1, Text("++")
 ),     
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       "decr" -> link("/count", () => CountHolder.is(attr) = 0 max (value
  - 1), Text("--")))   
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   } 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 }
 \end_layout
@@ -1836,32 +2063,32 @@ You would then use this snippet like this:
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 ...
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 <lift:Entry.showCount>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   Click this to increse the counter: <count:incr /><br />
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   Click this to decrease the counter: <count:decr />
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 </lift:Entry.showCount>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 ...
 \end_layout
@@ -1913,11 +2140,11 @@ Demo example:
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Embedding Templates within Templates
 \end_layout
 
@@ -1926,7 +2153,7 @@ Embedding Templates within Templates
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 <lift:embed what="/templates-hidden/supersecret-template"/>
 \end_layout
@@ -1978,11 +2205,11 @@ lstparams "basicstyle={\footnotesize},language=Java,numbers=left,numberstyle={\t
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Comet Html template
 \end_layout
 
@@ -1991,27 +2218,27 @@ Comet Html template
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 <div class="widget">
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   <lift:comet type="Clock">Current Time: 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     <clk:time>Missing Clock</clk:time>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   </lift:comet>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 </div>
 \end_layout
@@ -2031,11 +2258,11 @@ lstparams "basicstyle={\footnotesize},numbers=left,numberstyle={\tiny}"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Comet as rendered in the browser
 \end_layout
 
@@ -2044,109 +2271,109 @@ Comet as rendered in the browser
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 <div style="text-align: center" class="widget">   
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 <span id="LCHVVTE3H5CHZ31L1C2ZEQ_outer">     
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 <span id="LCHVVTE3H5CHZ31L1C2ZEQ" lift:when="12">
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   Current Time: 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   <span id="LCHVVTE3H5CHZ31L1C2ZEQ_timespan">Fri Nov 14 17:29:53 EST 2008</span>
      
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 <script>     
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 // <![CDATA[     /* JSON Func clk $$ F1226701773224999000_BBP */     
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 function F1226701773224999000_BBP(obj) {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   lift_ajaxHandler('F1226701773224999000_BBP='+ encodeURIComponent(JSON.stringify
 (obj)), 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   null, null);
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 }     
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 // ]]>     
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 </script>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 </span>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 <script>     
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 // <![CDATA[     
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 var destroy_LCHVVTE3H5CHZ31L1C2ZEQ = function() {}     
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 // ]]>     
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 </script>     
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 </span>     
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 </div>  
 \end_layout
@@ -2164,7 +2391,8 @@ Caveats: if you have a <lift:comet /> tag and you're using the tag from
 
 \begin_layout Standard
 More in section 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "sec:Snippets"
 
 \end_inset
@@ -2183,8 +2411,12 @@ Snippets
 
 \begin_layout Standard
 A snippet method takes a single Scala.xml.NodeSeq
-\begin_inset LatexCommand index
-name "NodeSeq"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+NodeSeq
+\end_layout
 
 \end_inset
 
@@ -2202,13 +2434,14 @@ lstparams "frame=single"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Hello World snippet
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:Hello-World-snippet"
 
 \end_inset
@@ -2221,22 +2454,22 @@ name "lst:Hello-World-snippet"
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 class Hello {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def world (content : NodeSeq) : NodeSeq = 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     Text("Hello, world!")
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 }
 \end_layout
@@ -2257,13 +2490,14 @@ We simply return an XML Text node with our greeting.
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Returning tags from a snippet
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:Returning-tags-snippet"
 
 \end_inset
@@ -2276,22 +2510,22 @@ name "lst:Returning-tags-snippet"
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 class Hello {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def world (content : NodeSeq) : NodeSeq = 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     <p>{"Hello, "}<lift:User.name /></p>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 }
 \end_layout
@@ -2373,7 +2607,7 @@ Below is an example of a stateful snippet that handles the above example.
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Write and then steal from PocketChange
 \end_layout
 
@@ -2429,7 +2663,7 @@ eager_eval
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Add index entry
 \end_layout
 
@@ -2459,7 +2693,7 @@ lift:embed
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Add index entry
 \end_layout
 
@@ -2481,7 +2715,8 @@ form
 multipart
 \family default
  which we will cover in extensive detail in section 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "sub:snippet-tag"
 
 \end_inset
@@ -2506,14 +2741,19 @@ Another feature of Lift's template processing is the ability to merge the
 head
 \family default
 
-\begin_inset LatexCommand index
-name "head"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+head
+\end_layout
 
 \end_inset
 
  tag from within a template.
  In our example listing 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "lst:Sample-template"
 
 \end_inset
@@ -2539,7 +2779,7 @@ head
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 <lift:tohead><script src="/scripts/tablesorter.js" type="text/javascript"
  /></lift:tohead>
@@ -2558,7 +2798,7 @@ And just for this snippet, you'll import TableSorter.
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Better example: Head merge looks like it's gone...
  WARN - Snippet Failure: SnippetFailure(/index -> ParsePath(List(index),,true,fa
 lse),Full(tohead),Class Not Found)
@@ -2592,7 +2832,7 @@ Here's a short snippet for generating a form:
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Add the tag in the template as well? Add the output that lift generates?
 \end_layout
 
@@ -2606,11 +2846,11 @@ Add the tag in the template as well? Add the output that lift generates?
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 SHtml Example - Snippet
 \end_layout
 
@@ -2619,57 +2859,57 @@ SHtml Example - Snippet
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 class Ajax {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def addForm = {     
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     <div>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
      {SHtml.text("Date", println _)}      
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
      {SHtml.textarea("Description", println _)}     
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
      {SHtml.text("Tags", println _)}     
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
      {SHtml.text("Value", println _)}     
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
      {SHtml.submit("Submit", () => S.notice("Submitted"))}
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     </div>   
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   }
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 }
 \end_layout
@@ -2688,11 +2928,11 @@ And the template would be:
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 SHtml Example - Template
 \end_layout
 
@@ -2701,27 +2941,27 @@ SHtml Example - Template
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 ...
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 <body>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   <lift:Ajax.addForm form="POST" />
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 </body>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 ...
 \end_layout
@@ -2740,11 +2980,11 @@ Which generates the markup:
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 SHtml Example - Generated Markup
 \end_layout
 
@@ -2753,52 +2993,52 @@ SHtml Example - Generated Markup
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 <form method="post" action="/ajax">
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   <div>     
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     <input name="F1228357378876744000_D3J" type="text" value="Date" /><br
  />     
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     <textarea name="F1228357378876890000_GXL">Description</textarea><br
  />     
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     <input name="F1228357378876940000_BLK" type="text" value="Tags" /><br
  />     
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     <input name="F1228357378877015000_RED" type="text" value="Value" /><br
  />
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     <input name="F1228357378877116000_SZF" type="submit" value="Submit"
  /><br />     
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   </div>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 </form>
 \end_layout
@@ -2835,32 +3075,32 @@ Take a look at the SiteMap chapter to get a better feel of what it can do.
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Reference???
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Sets up URL whitelisting
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Builds a menu with submenus
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 URL rewriting
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 When a request comes in, it is recursively re-written and query params are
  optionally extracted.
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 The Menu generation is a freebie based on the URL access control
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 We're mentioning it here briefly, as we have an entire chapter dedicated
  to SiteMap.
  It's worth touching on as it relates to most of what we just discussed.
@@ -2882,8 +3122,9 @@ We just gave you a detailed view of Lift's architecture.
 \end_layout
 
 \begin_layout Standard
+\begin_inset Newpage clearpage
+\end_inset
 
-\clearpage
 
 \end_layout
 
