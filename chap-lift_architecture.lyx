@@ -447,7 +447,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 LiftRules object
 \end_layout
 
@@ -473,12 +472,7 @@ type RewritePf = PartialFunction[RewriteRequest, RewriteResponse]
 
 \begin_layout Plain Layout
 
- * The pf partial function is composed with the existent partial functions
-\end_layout
-
-\begin_layout Plain Layout
-
- * such as pf orElse <exitent_partial_function>
+ * Add the in partial function at the begining of the list
 \end_layout
 
 \begin_layout Plain Layout
@@ -488,7 +482,7 @@ type RewritePf = PartialFunction[RewriteRequest, RewriteResponse]
 
 \begin_layout Plain Layout
 
-def addRewriteBefore(pf: RewritePf)
+def prependRewrite(pf: RewritePf)
 \end_layout
 
 \begin_layout Plain Layout
@@ -502,12 +496,7 @@ def addRewriteBefore(pf: RewritePf)
 
 \begin_layout Plain Layout
 
- * The pf partial function is composed with the existent partial functions
-\end_layout
-
-\begin_layout Plain Layout
-
- * such as <exitent_partial_function> orElse pf
+ * Add the in partial function at the end of the list
 \end_layout
 
 \begin_layout Plain Layout
@@ -517,7 +506,7 @@ def addRewriteBefore(pf: RewritePf)
 
 \begin_layout Plain Layout
 
-def addRewriteAfter(pf: RewritePf)
+def appendRewrite(pf: RewritePf)
 \end_layout
 
 \begin_layout Plain Layout
@@ -540,7 +529,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 LiftRules object
 \end_layout
 
@@ -599,7 +587,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 LiftRules object
 \end_layout
 
@@ -718,7 +705,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 LoadWraper trait
 \end_layout
 
@@ -757,7 +743,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 S object
 \end_layout
 
@@ -799,7 +784,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Code example for around-invocation
 \end_layout
 
@@ -980,7 +964,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 LiftRules object
 \end_layout
 
@@ -1476,7 +1459,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 LiftSession class
 \end_layout
 
