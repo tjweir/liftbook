@@ -447,7 +447,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 LiftRules object
 \end_layout
 
@@ -540,7 +539,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 LiftRules object
 \end_layout
 
@@ -599,7 +597,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 LiftRules object
 \end_layout
 
@@ -718,7 +715,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 LoadWraper trait
 \end_layout
 
@@ -757,7 +753,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 S object
 \end_layout
 
@@ -799,7 +794,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Code example for around-invocation
 \end_layout
 
@@ -980,7 +974,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 LiftRules object
 \end_layout
 
@@ -1459,31 +1452,21 @@ So templates are a nice way of setting up your layout and then writing a
  you'll want to use a View, which is coming up in the next section.
 \end_layout
 
+\begin_layout Standard
+
+\end_layout
+
 \begin_layout Subparagraph
 
 \emph on
-Sometimes it might be tempting to load manually a template (from a snippet
+Sometimes it might be tempted to load manually a template (from a snippet
  for example) using 
 \end_layout
 
-\begin_layout Subparagraph
+\begin_layout Standard
 \begin_inset listings
 inline false
 status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-
-LiftSession class
-\end_layout
-
-\end_inset
-
-
-\end_layout
 
 \begin_layout Plain Layout
 
@@ -3711,19 +3694,6 @@ Conclusion
 We just gave you a detailed view of Lift's architecture.
  This is important material, so you'll want to understand it before moving
  on.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Newpage clearpage
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-
-\lyxline
-
 \end_layout
 
 \end_body
