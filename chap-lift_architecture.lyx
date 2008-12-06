@@ -2167,6 +2167,11 @@ reference "sec:Snippets"
 \end_layout
 
 \begin_layout Section
+\begin_inset LatexCommand index
+name "Snippets"
+
+\end_inset
+
 Snippets
 \end_layout
 
@@ -2298,6 +2303,11 @@ then the lift:User.name snippet will be processed as well after our snippet
 \end_layout
 
 \begin_layout Subsection
+\begin_inset LatexCommand index
+name "Stateless"
+
+\end_inset
+
 Stateless Snippets
 \end_layout
 
@@ -2309,6 +2319,11 @@ All of the above examples showed Stateless snippets, those that execute
 \end_layout
 
 \begin_layout Subsection
+\begin_inset LatexCommand index
+name "Stateful"
+
+\end_inset
+
 Stateful Snippets
 \end_layout
 
@@ -2387,6 +2402,11 @@ CSS
 \end_layout
 
 \begin_layout Section
+\begin_inset LatexCommand index
+name "Eager"
+
+\end_inset
+
 Eager Eval
 \end_layout
 
@@ -2465,6 +2485,11 @@ reference "sub:snippet-tag"
 \end_layout
 
 \begin_layout Section
+\begin_inset LatexCommand index
+name "Head"
+
+\end_inset
+
 Head Merge
 \end_layout
 
