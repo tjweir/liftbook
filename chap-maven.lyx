@@ -1,8 +1,9 @@
-#LyX 1.5.6 created this file. For more info see http://www.lyx.org/
-\lyxformat 276
+#LyX 1.6.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
 \begin_document
 \begin_header
 \textclass book
+\use_default_options false
 \language english
 \inputencoding auto
 \font_roman default
@@ -13,9 +14,11 @@
 \font_osf false
 \font_sf_scale 100
 \font_tt_scale 100
+
 \graphics default
 \paperfontsize default
 \spacing single
+\use_hyperref false
 \papersize default
 \use_geometry false
 \use_amsmath 1
@@ -42,13 +45,18 @@
 
 \begin_layout Chapter
 An introduction to Maven
-\begin_inset LatexCommand index
-name "Maven"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+Maven
+\end_layout
 
 \end_inset
 
  and Project Layout
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "cha:Maven"
 
 \end_inset
@@ -79,823 +87,7 @@ What is Maven?
 
 \begin_layout Standard
 It's a project management tool.
- The Maven site 
-\begin_inset Foot
-status collapsed
-
-\begin_layout Standard
-\begin_inset LatexCommand htmlurl
-name "http://maven.apache.org/what-is-maven.html"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
- describes the goals as:
-\end_layout
-
-\begin_layout Itemize
-Make the build process easy
-\end_layout
-
-\begin_layout Itemize
-Provide a uniform build system
-\end_layout
-
-\begin_layout Itemize
-Provide quality project information
-\end_layout
-
-\begin_layout Itemize
-Provide guidelines for best practices
-\end_layout
-
-\begin_layout Itemize
-Allow transparent migration to new features
-\end_layout
-
-\begin_layout Standard
-If you've dealt with ant or rake, think of maven as another attempt to simply
- the build and deploy process.
-\end_layout
-
-\begin_layout Subsection
-What's the pom file?
-\end_layout
-
-\begin_layout Standard
-The pom file, or 
-\begin_inset Quotes eld
-\end_inset
-
-Project Object Model
-\begin_inset Quotes erd
-\end_inset
-
- is the XML file that describes the details of the project.
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-lstparams "basicstyle={\small\ttfamily},language=XML,numbers=left"
-inline false
-status open
-
-\begin_layout Standard
-
-<project xmlns="http://maven.apache.org/POM/4.0.0" 
-\end_layout
-
-\begin_layout Standard
-
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-\end_layout
-
-\begin_layout Standard
-
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-
-v4_0_0.xsd">   
-\end_layout
-
-\begin_layout Standard
-
-<modelVersion>4.0.0</modelVersion>   
-\end_layout
-
-\begin_layout Standard
-
-<groupId>com.theliftbook</groupId>   
-\end_layout
-
-\begin_layout Standard
-
-<artifactId>Demo Application</artifactId>   
-\end_layout
-
-\begin_layout Standard
-
-<version>1.0-SNAPSHOT</version>   
-\end_layout
-
-\begin_layout Standard
-
-<packaging>war</packaging>   
-\end_layout
-
-\begin_layout Standard
-
-<name>Demo Application</name>   
-\end_layout
-
-\begin_layout Standard
-
-<inceptionYear>2007</inceptionYear>   
-\end_layout
-
-\begin_layout Standard
-
-<properties>     
-\end_layout
-
-\begin_layout Standard
-
-<scala.version>2.7.1</scala.version>   
-\end_layout
-
-\begin_layout Standard
-
-</properties>
-\end_layout
-
-\begin_layout Standard
-
-<repositories>     
-\end_layout
-
-\begin_layout Standard
-
-<repository>       
-\end_layout
-
-\begin_layout Standard
-
-<id>scala-tools.org</id>       
-\end_layout
-
-\begin_layout Standard
-
-<name>Scala-Tools Maven2 Repository</name>       
-\end_layout
-
-\begin_layout Standard
-
-<url>http://scala-tools.org/repo-releases</url>     
-\end_layout
-
-\begin_layout Standard
-
-</repository>   
-\end_layout
-
-\begin_layout Standard
-
-</repositories>
-\end_layout
-
-\begin_layout Standard
-
-\end_layout
-
-\begin_layout Standard
-
-<pluginRepositories>     
-\end_layout
-
-\begin_layout Standard
-
-<pluginRepository>       
-\end_layout
-
-\begin_layout Standard
-
-<id>scala-tools.org</id>       
-\end_layout
-
-\begin_layout Standard
-
-<name>Scala-Tools Maven2 Repository</name>       
-\end_layout
-
-\begin_layout Standard
-
-<url>http://scala-tools.org/repo-releases</url>     
-\end_layout
-
-\begin_layout Standard
-
-</pluginRepository>   
-\end_layout
-
-\begin_layout Standard
-
-</pluginRepositories>
-\end_layout
-
-\begin_layout Standard
-
-\end_layout
-
-\begin_layout Standard
-
-<dependencies>     
-\end_layout
-
-\begin_layout Standard
-
-<dependency>       
-\end_layout
-
-\begin_layout Standard
-
-<groupId>org.scala-lang</groupId>       
-\end_layout
-
-\begin_layout Standard
-
-<artifactId>scala-library</artifactId>       
-\end_layout
-
-\begin_layout Standard
-
-<version>${scala.version}</version>     
-\end_layout
-
-\begin_layout Standard
-
-</dependency>     
-\end_layout
-
-\begin_layout Standard
-
-<dependency>       
-\end_layout
-
-\begin_layout Standard
-
-<groupId>net.liftweb</groupId>       
-\end_layout
-
-\begin_layout Standard
-
-<artifactId>lift-core</artifactId>       
-\end_layout
-
-\begin_layout Standard
-
-<version>0.8</version>     
-\end_layout
-
-\begin_layout Standard
-
-</dependency>     
-\end_layout
-
-\begin_layout Standard
-
-<dependency>       
-\end_layout
-
-\begin_layout Standard
-
-<groupId>org.apache.derby</groupId>       
-\end_layout
-
-\begin_layout Standard
-
-<artifactId>derby</artifactId>       
-\end_layout
-
-\begin_layout Standard
-
-<version>10.2.2.0</version>     
-\end_layout
-
-\begin_layout Standard
-
-</dependency>     
-\end_layout
-
-\begin_layout Standard
-
-<dependency>       
-\end_layout
-
-\begin_layout Standard
-
-<groupId>javax.servlet</groupId>       
-\end_layout
-
-\begin_layout Standard
-
-<artifactId>servlet-api</artifactId>       
-\end_layout
-
-\begin_layout Standard
-
-<version>2.5</version>       
-\end_layout
-
-\begin_layout Standard
-
-<scope>provided</scope>     
-\end_layout
-
-\begin_layout Standard
-
-</dependency>     
-\end_layout
-
-\begin_layout Standard
-
-<dependency>       
-\end_layout
-
-\begin_layout Standard
-
-<groupId>junit</groupId>       
-\end_layout
-
-\begin_layout Standard
-
-<artifactId>junit</artifactId>       
-\end_layout
-
-\begin_layout Standard
-
-<version>3.8.1</version>       
-\end_layout
-
-\begin_layout Standard
-
-<scope>test</scope>     
-\end_layout
-
-\begin_layout Standard
-
-</dependency>     
-\end_layout
-
-\begin_layout Standard
-
-<dependency>       
-\end_layout
-
-\begin_layout Standard
-
-<groupId>org.mortbay.jetty</groupId>       
-\end_layout
-
-\begin_layout Standard
-
-<artifactId>jetty</artifactId>       
-\end_layout
-
-\begin_layout Standard
-
-<version>[6.1.6,)</version>       
-\end_layout
-
-\begin_layout Standard
-
-<scope>test</scope>     
-\end_layout
-
-\begin_layout Standard
-
-</dependency>     
-\end_layout
-
-\begin_layout Standard
-
-\end_layout
-
-\begin_layout Standard
-
-<!-- for LiftConsole -->     
-\end_layout
-
-\begin_layout Standard
-
-<dependency>       
-\end_layout
-
-\begin_layout Standard
-
-<groupId>org.scala-lang</groupId>       
-\end_layout
-
-\begin_layout Standard
-
-<artifactId>scala-compiler</artifactId>       
-\end_layout
-
-\begin_layout Standard
-
-<version>${scala.version}</version>       
-\end_layout
-
-\begin_layout Standard
-
-<scope>test</scope>     
-\end_layout
-
-\begin_layout Standard
-
-</dependency>   
-\end_layout
-
-\begin_layout Standard
-
-</dependencies>
-\end_layout
-
-\begin_layout Standard
-
-<build>     
-\end_layout
-
-\begin_layout Standard
-
-<sourceDirectory>src/main/scala</sourceDirectory>     
-\end_layout
-
-\begin_layout Standard
-
-<testSourceDirectory>src/test/scala</testSourceDirectory>     
-\end_layout
-
-\begin_layout Standard
-
-<plugins>       
-\end_layout
-
-\begin_layout Standard
-
-<plugin>         
-\end_layout
-
-\begin_layout Standard
-
-<groupId>org.scala-tools</groupId>         
-\end_layout
-
-\begin_layout Standard
-
-<artifactId>maven-scala-plugin</artifactId>         
-\end_layout
-
-\begin_layout Standard
-
-<executions>           
-\end_layout
-
-\begin_layout Standard
-
-<execution>             
-\end_layout
-
-\begin_layout Standard
-
-<goals>               
-\end_layout
-
-\begin_layout Standard
-
-<goal>compile</goal>               
-\end_layout
-
-\begin_layout Standard
-
-<goal>testCompile</goal>             
-\end_layout
-
-\begin_layout Standard
-
-</goals>           
-\end_layout
-
-\begin_layout Standard
-
-</execution>         
-\end_layout
-
-\begin_layout Standard
-
-</executions>         
-\end_layout
-
-\begin_layout Standard
-
-<configuration>           
-\end_layout
-
-\begin_layout Standard
-
-<scalaVersion>${scala.version}</scalaVersion>         
-\end_layout
-
-\begin_layout Standard
-
-</configuration>       
-\end_layout
-
-\begin_layout Standard
-
-</plugin>       
-\end_layout
-
-\begin_layout Standard
-
-<plugin>         
-\end_layout
-
-\begin_layout Standard
-
-<groupId>org.mortbay.jetty</groupId>         
-\end_layout
-
-\begin_layout Standard
-
-<artifactId>maven-jetty-plugin</artifactId>         
-\end_layout
-
-\begin_layout Standard
-
-<configuration>           
-\end_layout
-
-\begin_layout Standard
-
-<contextPath>/</contextPath>           
-\end_layout
-
-\begin_layout Standard
-
-<scanIntervalSeconds>5</scanIntervalSeconds>         
-\end_layout
-
-\begin_layout Standard
-
-</configuration>       
-\end_layout
-
-\begin_layout Standard
-
-</plugin>       
-\end_layout
-
-\begin_layout Standard
-
-<plugin>         
-\end_layout
-
-\begin_layout Standard
-
-<groupId>net.sf.alchim</groupId>         
-\end_layout
-
-\begin_layout Standard
-
-<artifactId>yuicompressor-maven-plugin</artifactId>         
-\end_layout
-
-\begin_layout Standard
-
-<executions>           
-\end_layout
-
-\begin_layout Standard
-
-<execution>             
-\end_layout
-
-\begin_layout Standard
-
-<goals>               
-\end_layout
-
-\begin_layout Standard
-
-<goal>compress</goal>             
-\end_layout
-
-\begin_layout Standard
-
-</goals>           
-\end_layout
-
-\begin_layout Standard
-
-</execution>         
-\end_layout
-
-\begin_layout Standard
-
-</executions>         
-\end_layout
-
-\begin_layout Standard
-
-<configuration>           
-\end_layout
-
-\begin_layout Standard
-
-<nosuffix>true</nosuffix>         
-\end_layout
-
-\begin_layout Standard
-
-</configuration>       
-\end_layout
-
-\begin_layout Standard
-
-</plugin>       
-\end_layout
-
-\begin_layout Standard
-
-<plugin>         
-\end_layout
-
-\begin_layout Standard
-
-<groupId>org.apache.maven.plugins</groupId>         
-\end_layout
-
-\begin_layout Standard
-
-<artifactId>maven-eclipse-plugin</artifactId>         
-\end_layout
-
-\begin_layout Standard
-
-<configuration>           
-\end_layout
-
-\begin_layout Standard
-
-<downloadSources>true</downloadSources>           
-\end_layout
-
-\begin_layout Standard
-
-<excludes>             
-\end_layout
-
-\begin_layout Standard
-
-<exclude>org.scala-lang:scala-library</exclude>           
-\end_layout
-
-\begin_layout Standard
-
-</excludes>           
-\end_layout
-
-\begin_layout Standard
-
-<classpathContainers>             
-\end_layout
-
-\begin_layout Standard
-
-<classpathContainer>ch.epfl.lamp.sdt.launching.SCALA_CONTAINER</classpathContainer>
-           
-\end_layout
-
-\begin_layout Standard
-
-</classpathContainers>           
-\end_layout
-
-\begin_layout Standard
-
-<projectnatures>             
-\end_layout
-
-\begin_layout Standard
-
-<java.lang.String>ch.epfl.lamp.sdt.core.scalanature</java.lang.String>          
-   
-\end_layout
-
-\begin_layout Standard
-
-<java.lang.String>org.eclipse.jdt.core.javanature</java.lang.String>           
-\end_layout
-
-\begin_layout Standard
-
-</projectnatures>           
-\end_layout
-
-\begin_layout Standard
-
-<buildcommands>             
-\end_layout
-
-\begin_layout Standard
-
-<java.lang.String>ch.epfl.lamp.sdt.core.scalabuilder</java.lang.String>         
-  
-\end_layout
-
-\begin_layout Standard
-
-</buildcommands>         
-\end_layout
-
-\begin_layout Standard
-
-</configuration>       
-\end_layout
-
-\begin_layout Standard
-
-</plugin>     
-\end_layout
-
-\begin_layout Standard
-
-</plugins>   
-\end_layout
-
-\begin_layout Standard
-
-</build>   
-\end_layout
-
-\begin_layout Standard
-
-<reporting>     
-\end_layout
-
-\begin_layout Standard
-
-<plugins>       
-\end_layout
-
-\begin_layout Standard
-
-<plugin>         
-\end_layout
-
-\begin_layout Standard
-
-<groupId>org.scala-tools</groupId>         
-\end_layout
-
-\begin_layout Standard
-
-<artifactId>maven-scala-plugin</artifactId>         
-\end_layout
-
-\begin_layout Standard
-
-<configuration>           
-\end_layout
-
-\begin_layout Standard
-
-<scalaVersion>${scala.version}</scalaVersion>         
-\end_layout
-
-\begin_layout Standard
-
-</configuration>       
-\end_layout
-
-\begin_layout Standard
-
-</plugin>     
-\end_layout
-
-\begin_layout Standard
-
-</plugins>   
-\end_layout
-
-\begin_layout Standard
-
-</reporting> 
-\end_layout
-
-\begin_layout Standard
-
-</project> 
-\end_layout
-
-\begin_layout Standard
-
-\begin_inset Caption
-
-\begin_layout Standard
-Default pom.xml
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
+ The Maven site
 \end_layout
 
 \begin_layout Subsection
@@ -1087,82 +279,82 @@ height "1in"
 height_special "totalheight"
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 \begin_inset listings
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 <plugin>         
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 <groupId>org.scala-tools</groupId>         
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 <artifactId>maven-scala-plugin</artifactId>         
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 <executions>           
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 <execution>             
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 <goals>               
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 <goal>compile</goal>               
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 <goal>testCompile</goal>             
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 </goals>           
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 </execution>         
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 </executions>         
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 <configuration>           
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 <scalaVersion>${scala.version}</scalaVersion>         
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 </configuration>       
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 </plugin>       
 \end_layout
@@ -1205,37 +397,37 @@ height "1in"
 height_special "totalheight"
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 \begin_inset listings
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 <dependency>       
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 <groupId>org.mortbay.jetty</groupId>       
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 <artifactId>jetty</artifactId>       
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 <version>[6.1.6,)</version>       
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 <scope>test</scope>     
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 </dependency> 
 \end_layout
@@ -1261,7 +453,7 @@ Let's say that you'd like to add a new library and you want Maven to make
 \begin_inset Foot
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Configgy's home is http://www.lag.net/configgy/
 \end_layout
 
@@ -1292,27 +484,27 @@ First we need to tell Maven where we can get Configgy, so in the <repositories>
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 <repository> 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   <id>http://www.lag.net/repo/</id> 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   <name>http://www.lag.net/repo/</name> 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   <url>http://www.lag.net/repo/</url> 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 </repository>
 \end_layout
@@ -1331,27 +523,27 @@ Then in the <dependencies> section add:
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 <dependency> 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   <groupid>net.lag</groupid> 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   <artifactid>configgy</artifactid> 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   <version>[1.2,)</version> 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 </dependency>
 \end_layout
@@ -1369,7 +561,7 @@ That's it, you're done.
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Oh snap, add a section about M2_REPO
 \end_layout
 
@@ -1480,7 +672,7 @@ wide false
 sideways false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 \align center
 \begin_inset Graphics
 	filename images/dirlayout.png
@@ -1490,11 +682,12 @@ status open
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 \begin_inset Caption
 
-\begin_layout Standard
-\begin_inset LatexCommand label
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
 name "fig:dirlayout"
 
 \end_inset

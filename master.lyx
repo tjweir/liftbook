@@ -1,5 +1,5 @@
-#LyX 1.5.6 created this file. For more info see http://www.lyx.org/
-\lyxformat 276
+#LyX 1.6.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
 \begin_document
 \begin_header
 \textclass book
@@ -28,18 +28,8 @@
 \def\LyX{\texorpdfstring{%
   L\kern-.1667em\lower.25em\hbox{Y}\kern-.125emX\@}
   {LyX }}
-
-% "define" Scala
-\lstdefinelanguage{scala}{morekeywords={class,object,trait,extends,with,new,if,while,for,def,val,var,this},
-otherkeywords={->,=>},
-sensitive=true,
-morecomment=[l]{//},
-morecomment=[s]{/*}{*/},
-morestring=[b]"}
-
-% Default settings for code listings
-\lstset{frame=tb,language=scala,basicstyle=\small,aboveskip=3mm,belowskip=3mm,showstringspaces=false}
 \end_preamble
+\use_default_options false
 \language english
 \inputencoding auto
 \font_roman palatino
@@ -50,9 +40,11 @@ morestring=[b]"}
 \font_osf false
 \font_sf_scale 100
 \font_tt_scale 100
+
 \graphics default
 \paperfontsize default
 \spacing single
+\use_hyperref false
 \papersize letterpaper
 \use_geometry true
 \use_amsmath 1
@@ -83,7 +75,7 @@ morestring=[b]"}
 \begin_inset ERT
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 
 \backslash
@@ -108,7 +100,8 @@ Derek Chen-Becker and Tyler Weir
 \end_layout
 
 \begin_layout Standard
-\begin_inset LatexCommand tableofcontents
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
 
 \end_inset
 
@@ -127,7 +120,7 @@ Derek Chen-Becker and Tyler Weir
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Examples, either to write or to highlight in PocketChange:
 \end_layout
 
@@ -172,7 +165,7 @@ Examples, either to write or to highlight in PocketChange:
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 SPELLCHECK!!!!!!!!!
 \end_layout
 
@@ -207,7 +200,7 @@ y David Pollak, without him, we wouldn't have this opportunity.
 \begin_inset ERT
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 
 \backslash
@@ -223,7 +216,7 @@ mainmatter
 \begin_inset ERT
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 
 \backslash
@@ -236,8 +229,9 @@ part{The Basics}
 \end_layout
 
 \begin_layout Standard
-\begin_inset Include \include{chap-welcome.lyx}
-preview false
+\begin_inset CommandInset include
+LatexCommand include
+filename "chap-welcome.lyx"
 
 \end_inset
 
@@ -245,8 +239,9 @@ preview false
 \end_layout
 
 \begin_layout Standard
-\begin_inset Include \include{chap-maven.lyx}
-preview false
+\begin_inset CommandInset include
+LatexCommand include
+filename "chap-maven.lyx"
 
 \end_inset
 
@@ -254,8 +249,9 @@ preview false
 \end_layout
 
 \begin_layout Standard
-\begin_inset Include \include{chap-demoapp.lyx}
-preview false
+\begin_inset CommandInset include
+LatexCommand include
+filename "chap-demoapp.lyx"
 
 \end_inset
 
@@ -263,8 +259,9 @@ preview false
 \end_layout
 
 \begin_layout Standard
-\begin_inset Include \include{chap-lift_architecture.lyx}
-preview false
+\begin_inset CommandInset include
+LatexCommand include
+filename "chap-lift_architecture.lyx"
 
 \end_inset
 
@@ -272,8 +269,9 @@ preview false
 \end_layout
 
 \begin_layout Standard
-\begin_inset Include \include{chap-sitemap.lyx}
-preview false
+\begin_inset CommandInset include
+LatexCommand include
+filename "chap-sitemap.lyx"
 
 \end_inset
 
@@ -281,8 +279,9 @@ preview false
 \end_layout
 
 \begin_layout Standard
-\begin_inset Include \include{chap-record_and_mapper.lyx}
-preview false
+\begin_inset CommandInset include
+LatexCommand include
+filename "chap-record_and_mapper.lyx"
 
 \end_inset
 
@@ -293,7 +292,7 @@ preview false
 \begin_inset ERT
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 
 \backslash
@@ -306,8 +305,9 @@ part{Advanced Topics}
 \end_layout
 
 \begin_layout Standard
-\begin_inset Include \include{chap-req_resp_lifecycle.lyx}
-preview false
+\begin_inset CommandInset include
+LatexCommand include
+filename "chap-req_resp_lifecycle.lyx"
 
 \end_inset
 
@@ -315,8 +315,9 @@ preview false
 \end_layout
 
 \begin_layout Standard
-\begin_inset Include \include{chap-url_rewrite.lyx}
-preview false
+\begin_inset CommandInset include
+LatexCommand include
+filename "chap-url_rewrite.lyx"
 
 \end_inset
 
@@ -324,8 +325,9 @@ preview false
 \end_layout
 
 \begin_layout Standard
-\begin_inset Include \include{chap-json.lyx}
-preview false
+\begin_inset CommandInset include
+LatexCommand include
+filename "chap-json.lyx"
 
 \end_inset
 
@@ -333,8 +335,9 @@ preview false
 \end_layout
 
 \begin_layout Standard
-\begin_inset Include \include{chap-js_commands.lyx}
-preview false
+\begin_inset CommandInset include
+LatexCommand include
+filename "chap-js_commands.lyx"
 
 \end_inset
 
@@ -342,8 +345,9 @@ preview false
 \end_layout
 
 \begin_layout Standard
-\begin_inset Include \include{chap-ajax_comet.lyx}
-preview false
+\begin_inset CommandInset include
+LatexCommand include
+filename "chap-ajax_comet.lyx"
 
 \end_inset
 
@@ -351,8 +355,9 @@ preview false
 \end_layout
 
 \begin_layout Standard
-\begin_inset Include \include{chap-JPA.lyx}
-preview false
+\begin_inset CommandInset include
+LatexCommand include
+filename "chap-JPA.lyx"
 
 \end_inset
 
@@ -360,8 +365,9 @@ preview false
 \end_layout
 
 \begin_layout Standard
-\begin_inset Include \include{chap-actors.lyx}
-preview false
+\begin_inset CommandInset include
+LatexCommand include
+filename "chap-actors.lyx"
 
 \end_inset
 
@@ -369,8 +375,9 @@ preview false
 \end_layout
 
 \begin_layout Standard
-\begin_inset Include \include{chap-openid.lyx}
-preview false
+\begin_inset CommandInset include
+LatexCommand include
+filename "chap-openid.lyx"
 
 \end_inset
 
@@ -378,8 +385,9 @@ preview false
 \end_layout
 
 \begin_layout Standard
-\begin_inset Include \include{chap-lucene_compass.lyx}
-preview false
+\begin_inset CommandInset include
+LatexCommand include
+filename "chap-lucene_compass.lyx"
 
 \end_inset
 
@@ -387,8 +395,9 @@ preview false
 \end_layout
 
 \begin_layout Standard
-\begin_inset Include \include{chap-tagging.lyx}
-preview false
+\begin_inset CommandInset include
+LatexCommand include
+filename "chap-tagging.lyx"
 
 \end_inset
 
@@ -396,8 +405,9 @@ preview false
 \end_layout
 
 \begin_layout Standard
-\begin_inset Include \include{chap-widgets.lyx}
-preview false
+\begin_inset CommandInset include
+LatexCommand include
+filename "chap-widgets.lyx"
 
 \end_inset
 
@@ -405,8 +415,9 @@ preview false
 \end_layout
 
 \begin_layout Standard
-\begin_inset Include \include{chap-web_services.lyx}
-preview false
+\begin_inset CommandInset include
+LatexCommand include
+filename "chap-web_services.lyx"
 
 \end_inset
 
@@ -417,7 +428,7 @@ preview false
 \begin_inset ERT
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 
 \backslash
@@ -431,8 +442,9 @@ part{Appendices}
 
 \begin_layout Standard
 \start_of_appendix
-\begin_inset Include \include{apdx-message-handling.lyx}
-preview false
+\begin_inset CommandInset include
+LatexCommand include
+filename "apdx-message-handling.lyx"
 
 \end_inset
 
@@ -440,8 +452,9 @@ preview false
 \end_layout
 
 \begin_layout Standard
-\begin_inset Include \include{apdx-helpers.lyx}
-preview false
+\begin_inset CommandInset include
+LatexCommand include
+filename "apdx-helpers.lyx"
 
 \end_inset
 
@@ -449,8 +462,9 @@ preview false
 \end_layout
 
 \begin_layout Standard
-\begin_inset Include \include{apdx-i18n.lyx}
-preview false
+\begin_inset CommandInset include
+LatexCommand include
+filename "apdx-i18n.lyx"
 
 \end_inset
 
@@ -458,8 +472,9 @@ preview false
 \end_layout
 
 \begin_layout Standard
-\begin_inset Include \include{apdx-logging.lyx}
-preview false
+\begin_inset CommandInset include
+LatexCommand include
+filename "apdx-logging.lyx"
 
 \end_inset
 
@@ -467,8 +482,9 @@ preview false
 \end_layout
 
 \begin_layout Standard
-\begin_inset Include \include{apdx-email.lyx}
-preview false
+\begin_inset CommandInset include
+LatexCommand include
+filename "apdx-email.lyx"
 
 \end_inset
 
@@ -476,8 +492,9 @@ preview false
 \end_layout
 
 \begin_layout Standard
-\begin_inset Include \include{apdx-devtips.lyx}
-preview false
+\begin_inset CommandInset include
+LatexCommand include
+filename "apdx-devtips.lyx"
 
 \end_inset
 
@@ -485,8 +502,9 @@ preview false
 \end_layout
 
 \begin_layout Standard
-\begin_inset Include \include{chap-deployment.lyx}
-preview false
+\begin_inset CommandInset include
+LatexCommand include
+filename "chap-deployment.lyx"
 
 \end_inset
 
@@ -494,8 +512,9 @@ preview false
 \end_layout
 
 \begin_layout Standard
-\begin_inset Include \include{apdx-code_listings.lyx}
-preview false
+\begin_inset CommandInset include
+LatexCommand include
+filename "apdx-code_listings.lyx"
 
 \end_inset
 
@@ -503,7 +522,8 @@ preview false
 \end_layout
 
 \begin_layout Standard
-\begin_inset LatexCommand printindex
+\begin_inset CommandInset index_print
+LatexCommand printindex
 
 \end_inset
 
@@ -514,7 +534,7 @@ preview false
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Quick reference card goes here
 \end_layout
 
