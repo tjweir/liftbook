@@ -53,15 +53,15 @@ morestring=[b]"}
 \graphics default
 \paperfontsize default
 \spacing single
-\papersize custom
+\papersize letterpaper
 \use_geometry true
 \use_amsmath 1
 \use_esint 1
 \cite_engine basic
 \use_bibtopic false
 \paperorientation portrait
-\paperwidth 7in
-\paperheight 7.85in
+\paperwidth 6.139in
+\paperheight 9.21in
 \secnumdepth 3
 \tocdepth 2
 \paragraph_separation indent
@@ -97,6 +97,30 @@ frontmatter
 
 \begin_layout Title
 Exploring Lift
+\end_layout
+
+\begin_layout Author
+Written by 
+\end_layout
+
+\begin_layout Author
+Derek Chen-Becker and Tyler Weir
+\end_layout
+
+\begin_layout Standard
+\begin_inset LatexCommand tableofcontents
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset FloatList figure
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -157,30 +181,6 @@ SPELLCHECK!!!!!!!!!
 
 \end_layout
 
-\begin_layout Author
-Written by 
-\end_layout
-
-\begin_layout Author
-Derek Chen-Becker and Tyler Weir
-\end_layout
-
-\begin_layout Standard
-\begin_inset LatexCommand tableofcontents
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset FloatList figure
-
-\end_inset
-
-
-\end_layout
-
 \begin_layout Chapter*
 Dedication
 \end_layout
@@ -212,20 +212,6 @@ status open
 
 \backslash
 mainmatter
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset Note Note
-status open
-
-\begin_layout Standard
-We can put acknowledgements, foreward, etc here.
- I just need to figure out how to get them properly numbered in LyX - Derek
 \end_layout
 
 \end_inset
@@ -286,12 +272,8 @@ preview false
 \end_layout
 
 \begin_layout Standard
-\begin_inset Note Note
-status open
-
-\begin_layout Standard
-Removed the chap-lift_components link that was here.
-\end_layout
+\begin_inset Include \include{chap-sitemap.lyx}
+preview false
 
 \end_inset
 

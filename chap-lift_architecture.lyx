@@ -43,6 +43,10 @@
 Lift Introduction
 \end_layout
 
+\begin_layout Section
+Entry into Lift
+\end_layout
+
 \begin_layout Standard
 \begin_inset Note Note
 status open
@@ -70,10 +74,6 @@ Chapter: Arch:
 \end_inset
 
 
-\end_layout
-
-\begin_layout Section
-Entry into Lift
 \end_layout
 
 \begin_layout Standard
@@ -1002,6 +1002,12 @@ Since you can choose to not include any of the pre-defined template XHTML,
 
 \begin_layout Section
 URL Rewriting and Dispatch
+\begin_inset LatexCommand label
+name "sec:URL-Rewriting"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard

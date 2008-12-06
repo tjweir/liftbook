@@ -1,0 +1,188 @@
+#LyX 1.5.6 created this file. For more info see http://www.lyx.org/
+\lyxformat 276
+\begin_document
+\begin_header
+\textclass book
+\language english
+\inputencoding auto
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\paperfontsize default
+\spacing single
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\cite_engine basic
+\use_bibtopic false
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\author "" 
+\author "" 
+\end_header
+
+\begin_body
+
+\begin_layout Chapter
+SiteMap
+\end_layout
+
+\begin_layout Standard
+SiteMap is a very powerful part of Lift that does essentially what it says:
+ provides a map (menu) for your site.
+ Of course, if all it did was generate a set of links on your pages we wouldn't
+ have a whole chapter dedicated to it.
+ SiteMap not only handles the basic menu generation functionality, but it
+ also provides:
+\end_layout
+
+\begin_layout Itemize
+Access control mechanisms that not only control whether a menu item is visible,
+ but whether the page it points to is accessible
+\end_layout
+
+\begin_layout Itemize
+Grouping of menu items so that you can easily display portions of menus
+ where you want them
+\end_layout
+
+\begin_layout Itemize
+Nested Menus
+\end_layout
+
+\begin_layout Itemize
+Request rewriting (similar to section 
+\begin_inset LatexCommand ref
+reference "sec:URL-Rewriting"
+
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Itemize
+State-dependent computations for things like page title, page-specific snippets,
+ etc.
+\end_layout
+
+\begin_layout Standard
+The beauty of SiteMap is that it's very easy to start out with the basic
+ functionality and expand it as needed as you grow.
+\end_layout
+
+\begin_layout Section
+Basic SiteMap Definition
+\end_layout
+
+\begin_layout Subsection
+Creating Menu Entries
+\end_layout
+
+\begin_layout Subsection
+Setting the Global SiteMap
+\end_layout
+
+\begin_layout Section
+Controlling the Link
+\end_layout
+
+\begin_layout Subsection
+Hidden
+\end_layout
+
+\begin_layout Subsection
+Link and LinkText
+\end_layout
+
+\begin_layout Section
+Access Control
+\end_layout
+
+\begin_layout Subsection
+If
+\end_layout
+
+\begin_layout Subsection
+Unless
+\end_layout
+
+\begin_layout Section
+Validation
+\end_layout
+
+\begin_layout Subsection
+Test
+\end_layout
+
+\begin_layout Section
+Page-Specific Rendering
+\end_layout
+
+\begin_layout Subsection
+The Template Parameter
+\end_layout
+
+\begin_layout Subsection
+The Snippet and LocSnippets Parameters
+\end_layout
+
+\begin_layout Subsection
+Title
+\end_layout
+
+\begin_layout Section
+Writing Your Own Loc
+\end_layout
+
+\begin_layout Itemize
+Can handle all of what LocParams do
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Rewriting with type-safe params (rewrite)
+\end_layout
+
+\begin_layout Itemize
+Template resolution (calcTemplate)
+\end_layout
+
+\begin_layout Itemize
+Special snippet handling (snippets)
+\end_layout
+
+\begin_layout Itemize
+Link Text (text)
+\end_layout
+
+\begin_layout Itemize
+URL (link)
+\end_layout
+
+\begin_layout Itemize
+Access control (Add your own If/Unless on params)
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Can specify your own Params still (params)
+\end_layout
+
+\end_body
+\end_document

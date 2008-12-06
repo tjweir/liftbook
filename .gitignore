@@ -7,3 +7,12 @@ target/
 *.bak
 *#
 *.pdf
+*.aux
+*.tex
+master/
+*.dvi
+*.idx
+*.lof
+*.log
+*.out
+*.toc
