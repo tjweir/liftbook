@@ -472,12 +472,7 @@ type RewritePf = PartialFunction[RewriteRequest, RewriteResponse]
 
 \begin_layout Plain Layout
 
- * The pf partial function is composed with the existent partial functions
-\end_layout
-
-\begin_layout Plain Layout
-
- * such as pf orElse <exitent_partial_function>
+ * Add the in partial function at the begining of the list
 \end_layout
 
 \begin_layout Plain Layout
@@ -487,7 +482,7 @@ type RewritePf = PartialFunction[RewriteRequest, RewriteResponse]
 
 \begin_layout Plain Layout
 
-def addRewriteBefore(pf: RewritePf)
+def prependRewrite(pf: RewritePf)
 \end_layout
 
 \begin_layout Plain Layout
@@ -501,12 +496,7 @@ def addRewriteBefore(pf: RewritePf)
 
 \begin_layout Plain Layout
 
- * The pf partial function is composed with the existent partial functions
-\end_layout
-
-\begin_layout Plain Layout
-
- * such as <exitent_partial_function> orElse pf
+ * Add the in partial function at the end of the list
 \end_layout
 
 \begin_layout Plain Layout
@@ -516,7 +506,7 @@ def addRewriteBefore(pf: RewritePf)
 
 \begin_layout Plain Layout
 
-def addRewriteAfter(pf: RewritePf)
+def appendRewrite(pf: RewritePf)
 \end_layout
 
 \begin_layout Plain Layout
@@ -1470,6 +1460,22 @@ status open
 
 \begin_layout Plain Layout
 
+<<<<<<< HEAD:chap-lift_architecture.lyx
+=======
+\begin_inset Caption
+
+\begin_layout Plain Layout
+LiftSession class
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+>>>>>>> 798792cf4087c9b4a79fb8e0d7bc3c5e4fa90578:chap-lift_architecture.lyx
 def processSurroundAndInclude(page: String, in: NodeSeq)
 \end_layout
 
