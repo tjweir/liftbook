@@ -96,7 +96,11 @@ Written by
 \end_layout
 
 \begin_layout Author
-Derek Chen-Becker and Tyler Weir
+Derek Chen-Becker, Marius Danciu and Tyler Weir
+\end_layout
+
+\begin_layout Standard
+
 \end_layout
 
 \begin_layout Standard
@@ -114,6 +118,12 @@ LatexCommand tableofcontents
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+(c) 2008 Derek Chen-Becker, Marius Danciu and Tyler Weir This work is licensed
+ under the Creative Commons Attribution-No Derivative Works 3.0 Unported
+ License.
 \end_layout
 
 \begin_layout Standard
