@@ -43,7 +43,19 @@
 \begin_body
 
 \begin_layout Chapter
-Lift Introduction
+Lift Architecture
+\end_layout
+
+\begin_layout Section
+Introduction
+\end_layout
+
+\begin_layout Standard
+This chapter will walk you through fundamental aspects of understanding
+ how Lift works, lifecycle of various entities, understanding how you can
+ add you own functions to be part of processing and rendering pipeline etc.
+ We will be describing parts of the Lift API such as LiftRules object.
+ 
 \end_layout
 
 \begin_layout Section
@@ -264,8 +276,8 @@ Bootstrap
 \begin_layout Standard
 When Lift starts up there are a number of things that you'll want to set
  up before any requests are processed.
- These things include setting up a SiteMenu, URL rewriting, custom dispatch
- and classpath search.
+ These things include setting up a SiteMenu, URL rewriting, custom dispatch,
+ classpath search and pretty much all what LiftRules object has to offer.
  The Lift servlet looks for the bootstrap.liftweb.Boot
 \begin_inset Index
 status collapsed
@@ -277,15 +289,51 @@ Boot
 \end_inset
 
  class and executes the boot method in the class.
- The boot method will only be run once, so you can place any initialization
- calls for other libraries here as well.
- 
-\begin_inset Note Note
+ You can also specify your own Boot instance by using the following context
+ param in web.xml
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
 status open
 
 \begin_layout Plain Layout
-Cover logging setup here, too? - Probably a good idea to touch on simple
- logging.
+
+ 
+\begin_inset Caption
+
+\begin_layout Plain Layout
+web.xml Boot param
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  <context-param>     
+\end_layout
+
+\begin_layout Plain Layout
+
+	<param-name>bootloader</param-name>
+\end_layout
+
+\begin_layout Plain Layout
+
+    <param-value>foo.bar.baz.MyBoot</param-value>
+\end_layout
+
+\begin_layout Plain Layout
+
+  </context-param> 
 \end_layout
 
 \end_inset
@@ -294,32 +342,57 @@ Cover logging setup here, too? - Probably a good idea to touch on simple
 \end_layout
 
 \begin_layout Standard
-\begin_inset Note Note
+Your MyBoot class needs to be a Bootable
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
 status open
 
 \begin_layout Plain Layout
-/*marius - I'd address logging in a dedicated section.*/
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Bootable class
 \end_layout
 
 \end_inset
 
 
+\end_layout
+
+\begin_layout Plain Layout
+
+abstract class Bootable {   
+\end_layout
+
+\begin_layout Plain Layout
+
+	def boot() : Unit; 
+\end_layout
+
+\begin_layout Plain Layout
+
+} 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The boot method will only be run once, so you can place any initialization
+ calls for other libraries here as well.
+ 
 \end_layout
 
 \begin_layout Standard
 It is important to note that a lot of aspects related with Lift's behavior
  can be customized from boot by using LiftRules object.
  
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-/*marius - Add reference to LiftRules section*/
-\end_layout
-
-\end_inset
-
-
 \end_layout
 
 \begin_layout Section
@@ -420,6 +493,1920 @@ class Boot {
 \end_inset
 
 
+\end_layout
+
+\begin_layout Section
+LiftRules object
+\end_layout
+
+\begin_layout Standard
+Before going further with describing the how lift is processing the requests,
+ how lifecycle is managed etc.
+ it is important to discuss the LiftRules object as this is the entity that
+ allow you to hook up your own functions to be part of processing/rendering
+ pipeline.
+ Think of LiftRules as a way of configuring Lift behavior to fit you application
+ needs.
+\end_layout
+
+\begin_layout Subsection
+Declared types
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+	
+\begin_inset Caption
+
+\begin_layout Plain Layout
+LiftRules types
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	/**
+\end_layout
+
+\begin_layout Plain Layout
+
+     * A partial function that will be called by lift when processing requests.
+\end_layout
+
+\begin_layout Plain Layout
+
+     */ 
+\end_layout
+
+\begin_layout Plain Layout
+
+	type DispatchPF = PartialFunction[Req, () => Can[LiftResponse]];
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	/**
+\end_layout
+
+\begin_layout Plain Layout
+
+     * A partial function that will be called very early by lift so that
+\end_layout
+
+\begin_layout Plain Layout
+
+	 * you can transform an URI path into something else.
+\end_layout
+
+\begin_layout Plain Layout
+
+     */ 
+\end_layout
+
+\begin_layout Plain Layout
+
+	type RewritePF = PartialFunction[RewriteRequest, RewriteResponse]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	/**
+\end_layout
+
+\begin_layout Plain Layout
+
+     * A partial function that allows to specify a dynamic snippet
+\end_layout
+
+\begin_layout Plain Layout
+
+     */ 
+\end_layout
+
+\begin_layout Plain Layout
+
+	type SnippetPF = PartialFunction[List[String], NodeSeq => NodeSeq]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	/**
+\end_layout
+
+\begin_layout Plain Layout
+
+     * A partial function that allows to specify application wide custom
+ lift tags.
+\end_layout
+
+\begin_layout Plain Layout
+
+	 * They can pe used in markup like <lift:xxx/>
+\end_layout
+
+\begin_layout Plain Layout
+
+     */ 
+\end_layout
+
+\begin_layout Plain Layout
+
+	type LiftTagPF = PartialFunction[(String, Elem, MetaData, NodeSeq, String),
+ NodeSeq]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	/**
+\end_layout
+
+\begin_layout Plain Layout
+
+     * A partial function that allows you to specify your own function when
+ lift can not 
+\end_layout
+
+\begin_layout Plain Layout
+
+	 * find a certain path.
+\end_layout
+
+\begin_layout Plain Layout
+
+     */ 
+\end_layout
+
+\begin_layout Plain Layout
+
+	type URINotFoundPF = PartialFunction[(Req, Can[Failure]), LiftResponse]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	/**
+\end_layout
+
+\begin_layout Plain Layout
+
+     * A partial function that allows you 
+\begin_inset Quotes eld
+\end_inset
+
+decorate
+\begin_inset Quotes erd
+\end_inset
+
+ the URL's used for links, form action,
+\end_layout
+
+\begin_layout Plain Layout
+
+	 * Comet and Ajax requests.
+ This is useful when you want to pass certain parameters for
+\end_layout
+
+\begin_layout Plain Layout
+
+     * instance for load balancing rules.
+ There are practices where sticky sessions needs to 
+\end_layout
+
+\begin_layout Plain Layout
+
+	 * be used and Load balancer need to dispatch the requests of a certain
+ session to the same 
+\end_layout
+
+\begin_layout Plain Layout
+
+	 * cluster node.
+ Not always jsessionid cookie or url rewriting.
+ Thus load balancers support
+\end_layout
+
+\begin_layout Plain Layout
+
+	 * to do balancing based on certain query parameters (i.e.
+ srvid=1) which internally are mapped 
+\end_layout
+
+\begin_layout Plain Layout
+
+	 * with the actual node IP address.
+\end_layout
+
+\begin_layout Plain Layout
+
+     */ 
+\end_layout
+
+\begin_layout Plain Layout
+
+	type URLDecorator = PartialFunction[String, String]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	/**
+\end_layout
+
+\begin_layout Plain Layout
+
+     * A partial function that allows you to map a DispatchSnippet with
+ a name.
+ DispatchSnippet 
+\end_layout
+
+\begin_layout Plain Layout
+
+	 * is a trait that allows you to dispatch to various snippet functions
+ without the use
+\end_layout
+
+\begin_layout Plain Layout
+
+	 * of reflection.
+\end_layout
+
+\begin_layout Plain Layout
+
+     */ 
+\end_layout
+
+\begin_layout Plain Layout
+
+	type SnippetDispatchPF = PartialFunction[String, DispatchSnippet]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	/**
+\end_layout
+
+\begin_layout Plain Layout
+
+     * A partial function that allows you to map a DispatchSnippet with
+ a name
+\end_layout
+
+\begin_layout Plain Layout
+
+     */ 
+\end_layout
+
+\begin_layout Plain Layout
+
+	type ViewDispatchPF = PartialFunction[List[String], Either[() => Can[NodeSeq],
+ LiftView]] 
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\end_layout
+
+\begin_layout Plain Layout
+
+    /**
+\end_layout
+
+\begin_layout Plain Layout
+
+     * A partial function that allows the application to define requests
+ that should be
+\end_layout
+
+\begin_layout Plain Layout
+
+     * handled by lift rather than the default servlet handler
+\end_layout
+
+\begin_layout Plain Layout
+
+     */ 
+\end_layout
+
+\begin_layout Plain Layout
+
+    type LiftRequestPF = PartialFunction[Req, Boolean] 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+LiftRules variables
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+LiftRules variables
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * A function that takes the HTTPSession and the contextPath as parameters
+\end_layout
+
+\begin_layout Plain Layout
+
+ * and returns a LiftSession reference.
+ This can be used in cases subclassing
+\end_layout
+
+\begin_layout Plain Layout
+
+ * LiftSession is necessary.
+    
+\end_layout
+
+\begin_layout Plain Layout
+
+ */ 
+\end_layout
+
+\begin_layout Plain Layout
+
+var sessionCreator: (HttpSession,  String, List[(String, String)]) => LiftSessio
+n
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The path to handle served resources.
+ By default it is set to 
+\begin_inset Quotes eld
+\end_inset
+
+classpath
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+ */ 
+\end_layout
+
+\begin_layout Plain Layout
+
+var ResourceServerPath
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Allows you to switch between JavaScript framework that Lift is using.
+ By default it 
+\end_layout
+
+\begin_layout Plain Layout
+
+ * points to JQueryArtifacts.
+ Lift also support YUIArtifacts
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+var jsArtifacts: JSArtifacts
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Use this PartialFunction to to automatically add static URL parameters
+    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * to any URL reference from the markup of Ajax request.
+    
+\end_layout
+
+\begin_layout Plain Layout
+
+ */ 
+\end_layout
+
+\begin_layout Plain Layout
+
+var urlDecorate: List[URLDecorator]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Calculate the Comet Server (by default, the server that
+\end_layout
+
+\begin_layout Plain Layout
+
+ * the request was made on, but can do the multi-server thing  
+\end_layout
+
+\begin_layout Plain Layout
+
+ * as well)    
+\end_layout
+
+\begin_layout Plain Layout
+
+ */ 
+\end_layout
+
+\begin_layout Plain Layout
+
+var cometServer: () => String
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The maximum concurrent requests.
+  If this number of    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * requests are being serviced for a given session, messages    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * will be sent to all Comet requests to terminate    
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var maxConcurrentRequests = 2
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * A partial function that determines content type based on an incoming
+    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Req and Accept header    
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var determineContentType: PartialFunction[(Can[Req], Can[String]), String]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Contains functions that willbe executed when LiftServlet.destroy is called.
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+val unloadHooks: ListBuffer[() => Unit]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The maximum allowed size of a complete mime multi-part POST.
+  Default
+\end_layout
+
+\begin_layout Plain Layout
+
+ * 8MB    
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var maxMimeSize: Long
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Should pages that are not found be passed along the servlet chain to
+ the
+\end_layout
+
+\begin_layout Plain Layout
+
+ * next handler?    
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+var passNotFoundToChain = false
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The maximum allowed size of a single file in a mime multi-part POST.
+  
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Default 7MB    
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var maxMimeFileSize: Long
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The function referenced here is called if there's a localization lookup
+ failure
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var localizationLookupFailureNotice: Can[(String, Locale) => Unit]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The default location to send people if SiteMap access control fails 
+ 
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var siteMapFailRedirectLocation: List[String]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * If you don't want lift to send the application/xhtml+xml mime type to
+ those browsers    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * that understand it, then set this to {@code false}    
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var useXhtmlMimeType: Boolean = true 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * A function that defines how a String should be converted to XML    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * for the localization stuff.
+  By default, Text(s) is returned,    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * but you can change this to attempt to parse the XML in the String and
+    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * return the NodeSeq.
+    
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var localizeStringToXml: String => NodeSeq
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The base name of the resource bundle.
+ Default set to 
+\begin_inset Quotes eld
+\end_inset
+
+lift
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var resourceName = "lift"
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The base name of the resource bundle of the lift core code
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Default set to 
+\begin_inset Quotes eld
+\end_inset
+
+i18n.lift-core
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var liftCoreResourceName
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Where to send the user if there's no comet session.
+ Default set to 
+\begin_inset Quotes eld
+\end_inset
+
+/
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var noCometSessionPage
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Put a function that will calculate the request timeout based on the 
+   
+\end_layout
+
+\begin_layout Plain Layout
+
+ * incoming request.
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var calcRequestTimeout: Can[Req => Int]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * If you want the standard (non-AJAX) request timeout to be something other
+ than 
+\end_layout
+
+\begin_layout Plain Layout
+
+ * 10 seconds, put the value here    
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var stdRequestTimeout: Can[Int]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * If you want the AJAX request timeout to be something other than 120 seconds,
+ put the value here
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var cometRequestTimeout: Can[Int]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Meta information for the notices that are applied via Ajax response 
+   
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var ajaxNoticeMeta: Can[AjaxMessageMeta]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Meta information for the warnings that are applied via Ajax response
+    
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var ajaxWarningMeta: Can[AjaxMessageMeta]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Meta information for the errors that are applied via Ajax response  
+  
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var ajaxErrorMeta: Can[AjaxMessageMeta]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * A function that takes the current HTTP request and returns the current
+    
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var timeZoneCalculator: Can[HttpServletRequest] => TimeZone
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * How many times do we retry an Ajax command before calling it a failure?
+    
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var ajaxRetryCount: Can[Int]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The JavaScript to execute at the begining of an    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Ajax request (for example, showing the spinning working thingy)    
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var ajaxStart: Can[() => JsCmd]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The JavaScript to execute at the end of an  
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Ajax request (for example, removing the spinning working thingy) 
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var ajaxEnd: Can[() => JsCmd]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The default action to take when the JavaScript action fails    
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var ajaxDefaultFailure: Can[() => JsCmd] 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * A function that takes the current HTTP request and returns the current
+    
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var localeCalculator: Can[HttpServletRequest] => Locale
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The Ajax path
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var ajaxPath = "ajax_request"
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The Comet path
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var cometPath = "comet_request"
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Determins the JsExp from the path.
+ By default Lift also adds some unique sequences.
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var calcCometPath: String => JsExp
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * If there is an alternative way of calculating the context path    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * (by default inspecting the X-Lift-ContextPath header)    
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var calculateContextPath: HttpServletRequest => Can[String]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The function that returns a LiftLogger
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var cometLoggerBuilder: () => LiftLogger
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The partial function determining the default HTTP headers to be sent
+ to client
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+var defaultHeaders: PartialFunction[(NodeSeq, Req), List[(String, String)]]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * A lift of functions that allows tranforming the responses
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+var responseTransformers: List[LiftResponse => LiftResponse]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The functions to be executed when a snippet is not found
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+var snippetFailedFunc: List[SnippetFailure => Unit]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The function that deals with how exceptions are presented to the user
+ during processing    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * of an HTTP request.
+  Put a new function here to change the behavior.
+    
+\end_layout
+
+\begin_layout Plain Layout
+
+ *    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The function takes the Req and the Exception and returns a LiftResponse
+ that's
+\end_layout
+
+\begin_layout Plain Layout
+
+ * sent to the browser.
+    
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var logAndReturnExceptionToBrowser: (Req, Throwable) => LiftResponse
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The partial function (pattern matching) for handling converting an exception
+ to something to    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * be sent to the browser depending on the current RunMode (development,
+ etc.)
+\end_layout
+
+\begin_layout Plain Layout
+
+ *
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The best thing to do is browserResponseToException = { case (...) => } orElse
+ browserResponseToException    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * so that your response over-rides the default, but the processing falls
+ through to the default.
+    
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var browserResponseToException: PartialFunction[(Props.RunModes.Value, Req,
+ Throwable), LiftResponse]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The list of partial function for defining the behavior of what happens
+ when    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * URI is invalid and you're not using a site map    
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+def uriNotFound: List[URINotFoundPF]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Hooks to be called when Lift start processing a request
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var onBeginServicing: List[Req => Unit]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Hooks to be called when Lift ends processing a request
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var onEndServicing: List[(Req, Can[LiftResponse]) => Unit]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * By default it is set to true
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var autoIncludeComet: LiftSession => Boolean 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * By default it is set to true
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var autoIncludeAjax: LiftSession => Boolean
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The deault Ajax script.
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var renderAjaxScript: LiftSession => JsCmd
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The deault Comet script.
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+var renderCometScript: LiftSession => JsCmd
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Renders commet versioning
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+var renderCometPageContents: (LiftSession, Seq[CometVersionPair]) => JsCmd
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * If this time does not elapses Lift will send HTTP 304 status to client
+\end_layout
+
+\begin_layout Plain Layout
+
+ * indicating that the cached content should be used.
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+var ajaxScriptUpdateTime: LiftSession => Long
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * If this time does not elapses Lift will send HTTP 304 status to client
+\end_layout
+
+\begin_layout Plain Layout
+
+ * indicating that the cached content should be used.
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+var cometScriptUpdateTime: LiftSession => Long
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The name of the Ajax script
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+var ajaxScriptName: () => String
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The name of the Comet script
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+var cometScriptName: () => String
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Return the Comet JavaScript code
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+var serveCometScript: (LiftSession, Req) => Can[LiftResponse]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Return the Ajax JavaScript code
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+var serveAjaxScript: (LiftSession, Req) => Can[LiftResponse]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+LiftRules useful functions
 \end_layout
 
 \begin_layout Section
