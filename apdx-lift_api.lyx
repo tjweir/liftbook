@@ -1484,6 +1484,43 @@ var responseTransformers: List[LiftResponse => LiftResponse]
 
 \begin_layout Plain Layout
 
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * convertResponse is a PartialFunction that reduces a given Tuple4 into
+ a
+\end_layout
+
+\begin_layout Plain Layout
+
+ * LiftResponse that can then be sent to the browser.
+ The tuple is formed by the xhtml reaponse,
+\end_layout
+
+\begin_layout Plain Layout
+
+ * HTTP headers list, HTTP cookies and the request object.
+\end_layout
+
+\begin_layout Plain Layout
+
+ */ 
+\end_layout
+
+\begin_layout Plain Layout
+
+var convertResponse: PartialFunction[(Any, List[(String, String)], List[Cookie],
+ Req), LiftResponse]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
 /**
 \end_layout
 

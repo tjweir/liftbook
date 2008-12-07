@@ -601,7 +601,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 LiftRules object
 \end_layout
 
@@ -660,10 +659,6 @@ Create Lift session (If there is no applicable stateless dispatch function)
 \end_layout
 
 \begin_layout Enumerate
-Init S object (S stands for Stateful)
-\end_layout
-
-\begin_layout Enumerate
 Call LiftSession.onSetupSession when the HTTP session is activated by container.
  See
 \end_layout
@@ -679,7 +674,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 LiftSession object
 \end_layout
 
@@ -704,158 +698,9 @@ var onSetupSession: List[LiftSession => Unit]
 
 \end_deeper
 \begin_layout Enumerate
-Handle stateful request
+Init S object (S stands for Stateful)
 \end_layout
 
-\begin_deeper
-\begin_layout Enumerate
-Check the stateful dispatch functions (See LiftRules.addDispatchBefore, LiftRules.
-addDispatchAfter)
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-LiftRules object
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-def prependDispatch(pf: DispatchPf)
-\end_layout
-
-\begin_layout Plain Layout
-
-def appendDispatch(pf: DispatchPf)
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Enumerate
-If it's a 
-\series bold
-Comet
-\series default
- request process it 
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Add a reference to Comet processing
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Enumerate
-If it's an 
-\series bold
-Ajax
-\series default
- request process it:
-\end_layout
-
-\begin_deeper
-\begin_layout Enumerate
-Call LiftSession.onBeginServicing
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-
-LiftSession object
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-var onBeginServicing: List[(LiftSession, Req) => Unit]
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Enumerate
-Bascally execute the user's function mapped with that specific request token
- (impersonated by a request parameter) and return the response which can
- be a JavaScript, an XML construct or virtualy any LiftReponse.
-\end_layout
-
-\begin_layout Enumerate
-Call LiftSession.onEndServicing
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-
-LiftSession object
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-var onEndServicing: List[(LiftSession, Req) => Unit]
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_deeper
-\begin_layout Enumerate
-If it's a regular HTTP request process it such as:
-\end_layout
-
-\begin_deeper
 \begin_layout Enumerate
 Call LoanWrapper-s
 \end_layout
@@ -1080,6 +925,162 @@ class Boot {
 
 \end_deeper
 \begin_layout Enumerate
+Handle stateful request
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Check the stateful dispatch functions 
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+LiftRules object
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def prependDispatch(pf: DispatchPf)
+\end_layout
+
+\begin_layout Plain Layout
+
+def appendDispatch(pf: DispatchPf)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+The first function defined for this request is called and a LiftResponse
+ will be provided.
+ If that happens we go to step 10.
+\end_layout
+
+\begin_layout Enumerate
+If it's a 
+\series bold
+Comet
+\series default
+ request process it 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Add a reference to Comet processing
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+If it's an 
+\series bold
+Ajax
+\series default
+ request process it:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Call LiftSession.onBeginServicing
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+LiftSession object
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+var onBeginServicing: List[(LiftSession, Req) => Unit]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Bascally execute the user's function mapped with that specific request token
+ (impersonated by a request parameter) and return the response which can
+ be a JavaScript, an XML construct or virtualy any LiftReponse.
+\end_layout
+
+\begin_layout Enumerate
+Call LiftSession.onEndServicing
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+LiftSession object
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+var onEndServicing: List[(LiftSession, Req) => Unit]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+If it's a regular HTTP request process it such as:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
 Call LiftSession.onBeginServicing hooks.
  See
 \end_layout
@@ -1095,7 +1096,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 LiftSession object
 \end_layout
 
@@ -1200,7 +1200,6 @@ def appendViewDispatch(in: ViewDispatchPF)
 \end_layout
 
 \end_deeper
-\end_deeper
 \begin_layout Enumerate
 Process the templates by executing snippets combining templates etc.
 \end_layout
@@ -1210,13 +1209,57 @@ Process the templates by executing snippets combining templates etc.
 Merge <head> elements
 \end_layout
 
-\begin_deeper
 \begin_layout Enumerate
 Update the internal functions map.
  Basically associate user's scala functions with tokens that are impersonated
  in subsequent requests by HTTP parameters
 \end_layout
 
+\begin_layout Enumerate
+Clean up notices (see S.error, S.warning, S.notice) since they were already
+ rendered
+\end_layout
+
+\begin_layout Enumerate
+Call LiftRules.convertResponse
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+LiftRules object
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+var convertResponse: PartialFunction[(Any, List[(String, String)], List[Cookie],
+ Req), LiftResponse]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
 \begin_layout Enumerate
 Check to see if lift needs to send HTTP redirect 
 \begin_inset Note Note
@@ -1249,7 +1292,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 LiftSession object
 \end_layout
 
@@ -1289,7 +1331,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 LiftRules object
 \end_layout
 
@@ -1329,7 +1370,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 LiftRules object
 \end_layout
 
@@ -1369,7 +1409,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 LiftRules object
 \end_layout
 
@@ -1419,7 +1458,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 LiftRules object
 \end_layout
 
@@ -1483,7 +1521,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 LiftRules example
 \end_layout
 
