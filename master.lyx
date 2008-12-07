@@ -100,10 +100,6 @@ Derek Chen-Becker, Marius Danciu and Tyler Weir
 \end_layout
 
 \begin_layout Standard
-
-\end_layout
-
-\begin_layout Standard
 \begin_inset CommandInset toc
 LatexCommand tableofcontents
 
@@ -525,6 +521,16 @@ filename "chap-deployment.lyx"
 \begin_inset CommandInset include
 LatexCommand include
 filename "apdx-code_listings.lyx"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand include
+filename "apdx-lift_api.lyx"
 
 \end_inset
 
