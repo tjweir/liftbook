@@ -41,6 +41,12 @@
 
 \begin_layout Chapter
 SiteMap
+\begin_inset LatexCommand label
+name "cha:SiteMap"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -302,7 +308,17 @@ reference "sec:Page-Specific-Rendering"
 
 \begin_layout Standard
 For our example we'll tackle the help page link first, since it's the simplest
- (a static link, essentially):
+ (a static link, essentially).
+ The definition is shown in listing 
+\begin_inset LatexCommand ref
+reference "lst:Help-Menu-Definition"
+
+\end_inset
+
+.
+ We're assuming that you've imported the Loc implicit methods to keep things
+ simple; we'll cover instantiating the classes directly in later sections
+ of this chapter.
 \end_layout
 
 \begin_layout Standard
@@ -337,7 +353,7 @@ val helpMenu = Menu(Loc("helpHome",
 
 \begin_layout Standard
 
-                        "help" :: Nil,
+                        ("help" :: Nil) -> true,
 \end_layout
 
 \begin_layout Standard
@@ -348,6 +364,47 @@ val helpMenu = Menu(Loc("helpHome",
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+For our example we've named this menu item 
+\begin_inset Quotes eld
+\end_inset
+
+helpHome
+\begin_inset Quotes erd
+\end_inset
+
+.
+ The second parameter is a Pair[List[String],Boolean] which does two things:
+ the list defines the path of the request to match.
+ The path in this case is considered to be the portion of the request path
+ following our web app context.
+ For example, if we deploy the WAR at 
+\family typewriter
+/pchange/
+\family default
+, then 
+\family typewriter
+/pchange/help/
+\family default
+ would match this Loc.
+ The boolean parameter (false if you just pass in a List[String] to Loc)
+ controls whether the path acts as a prefix match.
+ In our case, but passing in true, we're saying that anything under the
+ help directory will also match.
+ Remember that SiteMap also acts as access control, so by doing this we're
+ allowing full access to all of the help files.
+ The final parameter, 
+\begin_inset Quotes eld
+\end_inset
+
+Help
+\begin_inset Quotes erd
+\end_inset
+
+, is the text for the menu link.
+ 
 \end_layout
 
 \begin_layout Subsection

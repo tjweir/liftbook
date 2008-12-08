@@ -614,10 +614,6 @@ LiftRules object
 var onBeginServicing: List[Req => Unit]
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
 \end_inset
 
 
@@ -687,10 +683,6 @@ LiftSession object
 var onSetupSession: List[LiftSession => Unit] 
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
 \end_inset
 
 
@@ -708,7 +700,7 @@ Call LoanWrapper-s
 \begin_deeper
 \begin_layout Enumerate
 Essentially a LoanWrapper is used to wrap the lift processing logic so you
- can have code that handle pre and post condisions
+ can have code that handle pre and post conditions
 \begin_inset listings
 inline false
 status open
@@ -718,7 +710,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-LoadWraper trait
+LoanWraper trait
 \end_layout
 
 \end_inset
@@ -1109,10 +1101,6 @@ LiftSession object
 var onBeginServicing: List[(LiftSession, Req) => Unit]
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
 \end_inset
 
 
@@ -1235,7 +1223,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 LiftRules object
 \end_layout
 
@@ -1500,7 +1487,7 @@ name "sec:LiftRules-object"
 
 \begin_layout Standard
 LiftRules object is the main way for configuring Lift's behavior which is
- typically doen at startup in Boot.
+ typically done at startup in Boot.
  For more details of the LiftRules API please see 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -1760,7 +1747,17 @@ to generate some content.
 
 \begin_layout Standard
 Following rewriting and custom dispatch, Lift checks to see if it can find
- a file in the WAR tree that matches the request.
+ a file in the WAR tree that matches the request
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+WAR Tree, or is it classpath?
+\end_layout
+
+\end_inset
+
+.
  Lift tries several suffixes (html, xhtml, htm, and no suffix) and also
  tries to match based on the client's Accept-Language header.
  The pattern Lift uses is
@@ -1958,6 +1955,16 @@ outside
 \bar default
 of normal rendering pipeline.
  
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Please clarify this sentence
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section
