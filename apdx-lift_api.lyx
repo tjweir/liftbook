@@ -1,0 +1,2797 @@
+#LyX 1.6.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
+\begin_document
+\begin_header
+\textclass book
+\use_default_options false
+\language english
+\inputencoding auto
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\cite_engine basic
+\use_bibtopic false
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\author "" 
+\author "" 
+\end_header
+
+\begin_body
+
+\begin_layout Chapter
+Lift API
+\end_layout
+
+\begin_layout Section
+LiftRules
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:LiftRules"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+LiftRules object represents the backbone of Lift's flaxibility in terms
+ of modeling the behavior to meet your application needs.
+ It contains a handfull of variables and functions that allows you to hook
+ in your own functions.
+ LiftRules is typically used by the Lift application from Boot such as the
+ application is properly setup at startup.
+\end_layout
+
+\begin_layout Subsection
+Declared types
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+	
+\begin_inset Caption
+
+\begin_layout Plain Layout
+LiftRules types
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	/**
+\end_layout
+
+\begin_layout Plain Layout
+
+     * A partial function that will be called by lift when processing requests.
+\end_layout
+
+\begin_layout Plain Layout
+
+     */ 
+\end_layout
+
+\begin_layout Plain Layout
+
+	type DispatchPF = PartialFunction[Req, () => Can[LiftResponse]];
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	/**
+\end_layout
+
+\begin_layout Plain Layout
+
+     * A partial function that will be called very early by lift so that
+\end_layout
+
+\begin_layout Plain Layout
+
+	 * you can transform an URI path into something else.
+\end_layout
+
+\begin_layout Plain Layout
+
+     */ 
+\end_layout
+
+\begin_layout Plain Layout
+
+	type RewritePF = PartialFunction[RewriteRequest, RewriteResponse]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	/**
+\end_layout
+
+\begin_layout Plain Layout
+
+     * A partial function that allows to specify a dynamic snippet
+\end_layout
+
+\begin_layout Plain Layout
+
+     */ 
+\end_layout
+
+\begin_layout Plain Layout
+
+	type SnippetPF = PartialFunction[List[String], NodeSeq => NodeSeq]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	/**
+\end_layout
+
+\begin_layout Plain Layout
+
+     * A partial function that allows to specify application wide custom
+ lift tags.
+\end_layout
+
+\begin_layout Plain Layout
+
+	 * They can pe used in markup like <lift:xxx/>
+\end_layout
+
+\begin_layout Plain Layout
+
+     */ 
+\end_layout
+
+\begin_layout Plain Layout
+
+	type LiftTagPF = PartialFunction[(String, Elem, MetaData, NodeSeq, String),
+ NodeSeq]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	/**
+\end_layout
+
+\begin_layout Plain Layout
+
+     * A partial function that allows you to specify your own function when
+ lift can not 
+\end_layout
+
+\begin_layout Plain Layout
+
+	 * find a certain path.
+\end_layout
+
+\begin_layout Plain Layout
+
+     */ 
+\end_layout
+
+\begin_layout Plain Layout
+
+	type URINotFoundPF = PartialFunction[(Req, Can[Failure]), LiftResponse]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	/**
+\end_layout
+
+\begin_layout Plain Layout
+
+     * A partial function that allows you 
+\begin_inset Quotes eld
+\end_inset
+
+decorate
+\begin_inset Quotes erd
+\end_inset
+
+ the URL's used for links, form action,
+\end_layout
+
+\begin_layout Plain Layout
+
+	 * Comet and Ajax requests.
+ This is useful when you want to pass certain parameters for
+\end_layout
+
+\begin_layout Plain Layout
+
+     * instance for load balancing rules.
+ There are practices where sticky sessions needs to 
+\end_layout
+
+\begin_layout Plain Layout
+
+	 * be used and Load balancer need to dispatch the requests of a certain
+ session to the same 
+\end_layout
+
+\begin_layout Plain Layout
+
+	 * cluster node.
+ Not always jsessionid cookie or url rewriting.
+ Thus load balancers support
+\end_layout
+
+\begin_layout Plain Layout
+
+	 * to do balancing based on certain query parameters (i.e.
+ srvid=1) which internally are mapped 
+\end_layout
+
+\begin_layout Plain Layout
+
+	 * with the actual node IP address.
+\end_layout
+
+\begin_layout Plain Layout
+
+     */ 
+\end_layout
+
+\begin_layout Plain Layout
+
+	type URLDecorator = PartialFunction[String, String]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	/**
+\end_layout
+
+\begin_layout Plain Layout
+
+     * A partial function that allows you to map a DispatchSnippet with
+ a name.
+ DispatchSnippet 
+\end_layout
+
+\begin_layout Plain Layout
+
+	 * is a trait that allows you to dispatch to various snippet functions
+ without the use
+\end_layout
+
+\begin_layout Plain Layout
+
+	 * of reflection.
+\end_layout
+
+\begin_layout Plain Layout
+
+     */ 
+\end_layout
+
+\begin_layout Plain Layout
+
+	type SnippetDispatchPF = PartialFunction[String, DispatchSnippet]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	/**
+\end_layout
+
+\begin_layout Plain Layout
+
+     * A partial function that allows you to map a DispatchSnippet with
+ a name
+\end_layout
+
+\begin_layout Plain Layout
+
+     */ 
+\end_layout
+
+\begin_layout Plain Layout
+
+	type ViewDispatchPF = PartialFunction[List[String], Either[() => Can[NodeSeq],
+ LiftView]] 
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\end_layout
+
+\begin_layout Plain Layout
+
+    /**
+\end_layout
+
+\begin_layout Plain Layout
+
+     * A partial function that allows the application to define requests
+ that should be
+\end_layout
+
+\begin_layout Plain Layout
+
+     * handled by lift rather than the default servlet handler
+\end_layout
+
+\begin_layout Plain Layout
+
+     */ 
+\end_layout
+
+\begin_layout Plain Layout
+
+    type LiftRequestPF = PartialFunction[Req, Boolean] 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+LiftRules variables
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+LiftRules variables
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * A function that takes the HTTPSession and the contextPath as parameters
+\end_layout
+
+\begin_layout Plain Layout
+
+ * and returns a LiftSession reference.
+ This can be used in cases subclassing
+\end_layout
+
+\begin_layout Plain Layout
+
+ * LiftSession is necessary.
+    
+\end_layout
+
+\begin_layout Plain Layout
+
+ */ 
+\end_layout
+
+\begin_layout Plain Layout
+
+var sessionCreator: (HttpSession,  String, List[(String, String)]) => LiftSessio
+n
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The path to handle served resources.
+ By default it is set to 
+\begin_inset Quotes eld
+\end_inset
+
+classpath
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+ */ 
+\end_layout
+
+\begin_layout Plain Layout
+
+var ResourceServerPath
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Allows you to switch between JavaScript framework that Lift is using.
+ By default it 
+\end_layout
+
+\begin_layout Plain Layout
+
+ * points to JQueryArtifacts.
+ Lift also support YUIArtifacts
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+var jsArtifacts: JSArtifacts
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Use this PartialFunction to to automatically add static URL parameters
+    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * to any URL reference from the markup of Ajax request.
+    
+\end_layout
+
+\begin_layout Plain Layout
+
+ */ 
+\end_layout
+
+\begin_layout Plain Layout
+
+var urlDecorate: List[URLDecorator]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Calculate the Comet Server (by default, the server that
+\end_layout
+
+\begin_layout Plain Layout
+
+ * the request was made on, but can do the multi-server thing  
+\end_layout
+
+\begin_layout Plain Layout
+
+ * as well)    
+\end_layout
+
+\begin_layout Plain Layout
+
+ */ 
+\end_layout
+
+\begin_layout Plain Layout
+
+var cometServer: () => String
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The maximum concurrent requests.
+  If this number of    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * requests are being serviced for a given session, messages    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * will be sent to all Comet requests to terminate    
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var maxConcurrentRequests = 2
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * A partial function that determines content type based on an incoming
+    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Req and Accept header    
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var determineContentType: PartialFunction[(Can[Req], Can[String]), String]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Contains functions that willbe executed when LiftServlet.destroy is called.
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+val unloadHooks: ListBuffer[() => Unit]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The maximum allowed size of a complete mime multi-part POST.
+  Default
+\end_layout
+
+\begin_layout Plain Layout
+
+ * 8MB    
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var maxMimeSize: Long
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Should pages that are not found be passed along the servlet chain to
+ the
+\end_layout
+
+\begin_layout Plain Layout
+
+ * next handler?    
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+var passNotFoundToChain = false
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The maximum allowed size of a single file in a mime multi-part POST.
+  
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Default 7MB    
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var maxMimeFileSize: Long
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The function referenced here is called if there's a localization lookup
+ failure
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var localizationLookupFailureNotice: Can[(String, Locale) => Unit]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The default location to send people if SiteMap access control fails 
+ 
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var siteMapFailRedirectLocation: List[String]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * If you don't want lift to send the application/xhtml+xml mime type to
+ those browsers    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * that understand it, then set this to {@code false}    
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var useXhtmlMimeType: Boolean = true 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * A function that defines how a String should be converted to XML    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * for the localization stuff.
+  By default, Text(s) is returned,    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * but you can change this to attempt to parse the XML in the String and
+    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * return the NodeSeq.
+    
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var localizeStringToXml: String => NodeSeq
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The base name of the resource bundle.
+ Default set to 
+\begin_inset Quotes eld
+\end_inset
+
+lift
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var resourceName = "lift"
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The base name of the resource bundle of the lift core code
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Default set to 
+\begin_inset Quotes eld
+\end_inset
+
+i18n.lift-core
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var liftCoreResourceName
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Where to send the user if there's no comet session.
+ Default set to 
+\begin_inset Quotes eld
+\end_inset
+
+/
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var noCometSessionPage
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Put a function that will calculate the request timeout based on the 
+   
+\end_layout
+
+\begin_layout Plain Layout
+
+ * incoming request.
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var calcRequestTimeout: Can[Req => Int]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * If you want the standard (non-AJAX) request timeout to be something other
+ than 
+\end_layout
+
+\begin_layout Plain Layout
+
+ * 10 seconds, put the value here    
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var stdRequestTimeout: Can[Int]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * If you want the AJAX request timeout to be something other than 120 seconds,
+ put the value here
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var cometRequestTimeout: Can[Int]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Meta information for the notices that are applied via Ajax response 
+   
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var ajaxNoticeMeta: Can[AjaxMessageMeta]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Meta information for the warnings that are applied via Ajax response
+    
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var ajaxWarningMeta: Can[AjaxMessageMeta]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Meta information for the errors that are applied via Ajax response  
+  
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var ajaxErrorMeta: Can[AjaxMessageMeta]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * A function that takes the current HTTP request and returns the current
+    
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var timeZoneCalculator: Can[HttpServletRequest] => TimeZone
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * How many times do we retry an Ajax command before calling it a failure?
+    
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var ajaxRetryCount: Can[Int]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The JavaScript to execute at the begining of an    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Ajax request (for example, showing the spinning working thingy)    
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var ajaxStart: Can[() => JsCmd]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The JavaScript to execute at the end of an  
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Ajax request (for example, removing the spinning working thingy) 
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var ajaxEnd: Can[() => JsCmd]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The default action to take when the JavaScript action fails    
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var ajaxDefaultFailure: Can[() => JsCmd] 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * A function that takes the current HTTP request and returns the current
+    
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var localeCalculator: Can[HttpServletRequest] => Locale
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The Ajax path
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var ajaxPath = "ajax_request"
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The Comet path
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var cometPath = "comet_request"
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Determins the JsExp from the path.
+ By default Lift also adds some unique sequences.
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var calcCometPath: String => JsExp
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * If there is an alternative way of calculating the context path    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * (by default inspecting the X-Lift-ContextPath header)    
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var calculateContextPath: HttpServletRequest => Can[String]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The function that returns a LiftLogger
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var cometLoggerBuilder: () => LiftLogger
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The partial function determining the default HTTP headers to be sent
+ to client
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+var defaultHeaders: PartialFunction[(NodeSeq, Req), List[(String, String)]]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * A lift of functions that allows tranforming the responses
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+var responseTransformers: List[LiftResponse => LiftResponse]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * convertResponse is a PartialFunction that reduces a given Tuple4 into
+ a
+\end_layout
+
+\begin_layout Plain Layout
+
+ * LiftResponse that can then be sent to the browser.
+ The tuple is formed by the xhtml reaponse,
+\end_layout
+
+\begin_layout Plain Layout
+
+ * HTTP headers list, HTTP cookies and the request object.
+\end_layout
+
+\begin_layout Plain Layout
+
+ */ 
+\end_layout
+
+\begin_layout Plain Layout
+
+var convertResponse: PartialFunction[(Any, List[(String, String)], List[Cookie],
+ Req), LiftResponse]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The functions to be executed when a snippet is not found
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+var snippetFailedFunc: List[SnippetFailure => Unit]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The function that deals with how exceptions are presented to the user
+ during processing    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * of an HTTP request.
+  Put a new function here to change the behavior.
+    
+\end_layout
+
+\begin_layout Plain Layout
+
+ *    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The function takes the Req and the Exception and returns a LiftResponse
+ that's
+\end_layout
+
+\begin_layout Plain Layout
+
+ * sent to the browser.
+    
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var logAndReturnExceptionToBrowser: (Req, Throwable) => LiftResponse
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The partial function (pattern matching) for handling converting an exception
+ to something to    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * be sent to the browser depending on the current RunMode (development,
+ etc.)
+\end_layout
+
+\begin_layout Plain Layout
+
+ *
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The best thing to do is browserResponseToException = { case (...) => } orElse
+ browserResponseToException    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * so that your response over-rides the default, but the processing falls
+ through to the default.
+    
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var browserResponseToException: PartialFunction[(Props.RunModes.Value, Req,
+ Throwable), LiftResponse]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The list of partial function for defining the behavior of what happens
+ when    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * URI is invalid and you're not using a site map    
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+def uriNotFound: List[URINotFoundPF]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Hooks to be called when Lift start processing a request
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var onBeginServicing: List[Req => Unit]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Hooks to be called when Lift ends processing a request
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var onEndServicing: List[(Req, Can[LiftResponse]) => Unit]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * By default it is set to true
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var autoIncludeComet: LiftSession => Boolean 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * By default it is set to true
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var autoIncludeAjax: LiftSession => Boolean
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The deault Ajax script.
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var renderAjaxScript: LiftSession => JsCmd
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The deault Comet script.
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+var renderCometScript: LiftSession => JsCmd
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Renders commet versioning
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+var renderCometPageContents: (LiftSession, Seq[CometVersionPair]) => JsCmd
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * If this time does not elapses Lift will send HTTP 304 status to client
+\end_layout
+
+\begin_layout Plain Layout
+
+ * indicating that the cached content should be used.
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+var ajaxScriptUpdateTime: LiftSession => Long
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * If this time does not elapses Lift will send HTTP 304 status to client
+\end_layout
+
+\begin_layout Plain Layout
+
+ * indicating that the cached content should be used.
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+var cometScriptUpdateTime: LiftSession => Long
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The name of the Ajax script
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+var ajaxScriptName: () => String
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The name of the Comet script
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+var cometScriptName: () => String
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Return the Comet JavaScript code
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+var serveCometScript: (LiftSession, Req) => Can[LiftResponse]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Return the Ajax JavaScript code
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+var serveAjaxScript: (LiftSession, Req) => Can[LiftResponse]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+LiftRules useful functions
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+LiftRules functions
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Add functions to be called before sending response to client
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+def appendBeforeSend(f: (BasicResponse, HttpServletResponse, List[(String,
+ String)], Can[Req]) => Any)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Add functions to be called before sending response to client
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+def appendAfterSend(f: (BasicResponse, HttpServletResponse, List[(String,
+ String)], Can[Req]) => Any)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Add unload hook functions
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+def addUnloadHook(f: () => Unit)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Append a named partial function defining application-wide    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * &lt;lift:xxx/&gt; tags    
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+def appendLiftTagProcessing(in: LiftTagPF)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Prepend a named partial function defining application-wide    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * &lt;lift:xxx/&gt; tags    
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+def prependLiftTagProcessing(in: LiftTagPF)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Append a partial function to look up snippets to    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * the rules    
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+def appendSnippetDispatch(in: SnippetDispatchPF)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Prepend a partial function to look up snippets to    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * the rules    
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+def prependSnippetDispatch(in: SnippetDispatchPF)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Prepend a partial function to the list of partial functions    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * the define views    
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+def prependViewDispatch(in: ViewDispatchPF)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Append a partial function to the list of partial functions    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * that define views    
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+def appendViewDispatch(in: ViewDispatchPF)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Append function to be executed very early when receiving the HTTP request
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+def appendEarly(f: HttpServletRequest => Any)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Prepend a request handler to the stateless request handler    
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+def prependStatelessDispatch(in: DispatchPF)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Postpend a request handler to the stateless request handler    
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+def appendStatelessDispatch(in: DispatchPF)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Set the ServletContext in LiftRules
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+def setContext(in: ServletContext): Unit
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Add package name for components lookup such as snippets, LiftView-s etc
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+def addToPackages(what: String)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Obtains the resource using the ServletContext
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+def getResource(name: String): Can[_root_.java.net.URL] 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Obtains the resource using the ServletContext as an InputStream
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+def getResourceAsStream(name: String): Can[_root_.java.io.InputStream] 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Obtains the resource using the ServletContext as an Array[Byte]
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+def loadResource(name: String): Can[Array[Byte]]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Loads a resource as a NodeSeq
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+def loadResourceAsXml(name: String): Can[NodeSeq]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Loads a resource as a String
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+def loadResourceAsString(name: String): Can[String]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Append a partial function to the list of interceptors to test    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * if the request should be handled by lift    
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+def appendLiftRequest(what: LiftRequestPF)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Adds a SnipetPF at the begining of the functions list
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+def prependSnippet(pf: SnippetPF)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Adds a SnipetPF at the end of the functions list
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+def appendSnippet(pf: SnippetPF)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Adds a RewritePF at the begining of the functions list
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+def prependRewrite(pf: RewritePF)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Adds a RewritePF at the end of the functions list
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+def appendRewrite(pf: RewritePF)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Adds a DispatchPF at the begining of the functions list
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+def prependDispatch(pf: DispatchPF)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Adds a DispatchPF at the end of the functions list
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+def appendDispatch(pf: DispatchPF)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Prepend the URINotFound handler to the existing list.
+    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Because the default Lift URI Not Found handler handles    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The default case, you need only handle special cases.
+    
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+def prependUriNotFound(in: URINotFoundPF) 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Modifies the root relative paths from the css url-s    
+\end_layout
+
+\begin_layout Plain Layout
+
+ *    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * @param path - the path of the css resource    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * @prefix - the prefix to be added on the root relative paths.
+ If this is Empty    
+\end_layout
+
+\begin_layout Plain Layout
+
+ *	       the prefix will be the application context path.
+    
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+def fixCSS(path: List[String], prefix: Can[String])
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+S
+\end_layout
+
+\begin_layout Section
+SHtml
+\end_layout
+
+\begin_layout Section
+Foo
+\end_layout
+
+\end_body
+\end_document
