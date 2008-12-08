@@ -63,7 +63,12 @@ name "cha:mapper_and_record"
 status open
 
 \begin_layout Standard
-Link types to Java/ScalaDoc with footnotes where possible
+TODO:Link types to Java/ScalaDoc with footnotes where possible
+\end_layout
+
+\begin_layout Standard
+Update Mapper section with IdPk (make sure I'm doing PK setup correctly
+ even when not using IdPk)
 \end_layout
 
 \end_inset
@@ -5669,7 +5674,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Standard
-
 Defining Connection Identifiers
 \begin_inset LatexCommand label
 name "lst:Defining-Connection-Identifiers"
@@ -5757,7 +5761,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Standard
-
 Multi-database Connection Manager
 \begin_inset LatexCommand label
 name "lst:Multi-database-Connection-Manager"
@@ -5986,7 +5989,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Standard
-
 Sharding in Action
 \begin_inset LatexCommand label
 name "lst:Sharding-in-Action"

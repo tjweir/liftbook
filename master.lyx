@@ -4,6 +4,7 @@
 \begin_header
 \textclass book
 \begin_preamble
+\usepackage[T1]{fontenc}
 \usepackage[notbib]{tocbibind}
 \usepackage{ifpdf} % part of the hyperref bundle
 \ifpdf % if pdflatex is used
@@ -38,7 +39,7 @@ morecomment=[s]{/*}{*/},
 morestring=[b]"}
 
 % Default settings for code listings
-\lstset{frame=tb,language=scala,basicstyle=\small,aboveskip=3mm,belowskip=3mm,showstringspaces=false}
+\lstset{frame=tb,language=scala,basicstyle=\small\ttfamily,aboveskip=3mm,belowskip=3mm,showstringspaces=false,columns=flexible}
 \end_preamble
 \language english
 \inputencoding auto
@@ -105,6 +106,10 @@ Written by
 
 \begin_layout Author
 Derek Chen-Becker and Tyler Weir
+\end_layout
+
+\begin_layout Standard
+Copyright © 2008, Derek Chen-Becker and Tyler Weir
 \end_layout
 
 \begin_layout Standard

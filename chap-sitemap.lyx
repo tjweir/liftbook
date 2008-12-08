@@ -53,8 +53,8 @@ SiteMap is a very powerful part of Lift that does essentially what it says:
 \end_layout
 
 \begin_layout Itemize
-Access control mechanisms that not only control whether a menu item is visible,
- but whether the page it points to is accessible
+Access control mechanisms that dela not only with whether a menu item is
+ visible, but whether the page it points to is accessible
 \end_layout
 
 \begin_layout Itemize
@@ -63,7 +63,7 @@ Grouping of menu items so that you can easily display portions of menus
 \end_layout
 
 \begin_layout Itemize
-Nested Menus
+Nested Menus so you can have hierarchies
 \end_layout
 
 \begin_layout Itemize
@@ -90,8 +90,274 @@ The beauty of SiteMap is that it's very easy to start out with the basic
 Basic SiteMap Definition
 \end_layout
 
+\begin_layout Standard
+Let's start with our basic menu for PocketChange
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Revise this as needed to match reality
+\end_layout
+
+\end_inset
+
+.
+ To keep things simple, we'll just define four menu items at the beginning:
+\end_layout
+
+\begin_layout Enumerate
+The Homepage.
+ Depending on whether the user is logged in or not, this page should display
+ either the user's entries or a welcome page 
+\end_layout
+
+\begin_layout Enumerate
+Login and registration links if the user isn't logged in, a logout link
+ if they are
+\end_layout
+
+\begin_layout Enumerate
+View/edit profile if the user is logged in
+\end_layout
+
+\begin_layout Enumerate
+A help page
+\end_layout
+
+\begin_layout Standard
+We'll assume that we have the corresponding pages, 
+\begin_inset Quotes eld
+\end_inset
+
+homepage
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+login
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+logout
+\begin_inset Quotes erd
+\end_inset
+
+, and 
+\begin_inset Quotes eld
+\end_inset
+
+profile
+\begin_inset Quotes erd
+\end_inset
+
+ written and functional.
+ We'll also assume that the help page(s) reside under the 
+\begin_inset Quotes eld
+\end_inset
+
+help
+\begin_inset Quotes erd
+\end_inset
+
+ subdirectory to keep things neat, and that the entry to help is 
+\family typewriter
+/help/index
+\family default
+.
+\end_layout
+
 \begin_layout Subsection
 Creating Menu Entries
+\end_layout
+
+\begin_layout Standard
+Menu entries are created using the Menu
+\begin_inset Foot
+status open
+
+\begin_layout Standard
+
+\family typewriter
+net.liftweb.sitemap.Menu
+\end_layout
+
+\end_inset
+
+ class, and its corresponding Menu object.
+ A Menu, in turn, holds a Loc
+\begin_inset Foot
+status collapsed
+
+\begin_layout Standard
+
+\family typewriter
+net.liftweb.sitemap.Loc
+\end_layout
+
+\end_inset
+
+ trait instance, which is where most of the interesting things happen.
+ A menu can also hold one or more child menus, which we'll cover in section
+ 
+\begin_inset LatexCommand ref
+reference "sub:Nested-Menus"
+
+\end_inset
+
+.
+ Note that the Loc object has several implicit methods
+\begin_inset Marginal
+status open
+
+\begin_layout Standard
+Import Loc implicits
+\end_layout
+
+\end_inset
+
+ that make defining Locs easier, so you generally want to import them into
+ scope.
+ The simplest way is to import 
+\family typewriter
+net.liftweb.sitemap.Loc._
+\family default
+, but you can import specific methods by name if you prefer.
+ A Loc can essentially be thought of as a link in the menu, and contains
+ four basic items:
+\end_layout
+
+\begin_layout Enumerate
+The name of the Loc.
+ This must be unique across your sitemap because it can be used to look
+ up specific Menu items if you customize your menu display (section 
+\begin_inset LatexCommand ref
+reference "sub:Using-lift-Menu"
+
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Enumerate
+The link that the Loc refers to.
+ Usually this will refer to a specific page, but Lift allows a single Loc
+ to match based on prefix as well (section 
+\begin_inset LatexCommand ref
+reference "sub:Link-and-LinkText"
+
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Enumerate
+The text of the menu item.
+ This what will be displayed to the user.
+ You can use a static string or you can generate it with a function (section
+ 
+\begin_inset LatexCommand ref
+reference "sub:Link-and-LinkText"
+
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Enumerate
+An optional set of parameters that control behavior and appearance of the
+ menu item.
+ These parameters are covered in sections 
+\begin_inset LatexCommand ref
+reference "sec:Customizing-Display"
+
+\end_inset
+
+,
+\begin_inset LatexCommand ref
+reference "sec:Access-Control"
+
+\end_inset
+
+, 
+\begin_inset LatexCommand ref
+reference "sec:Validation"
+
+\end_inset
+
+, and 
+\begin_inset LatexCommand ref
+reference "sec:Page-Specific-Rendering"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+For our example we'll tackle the help page link first, since it's the simplest
+ (a static link, essentially):
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+
+Help Menu Definition
+\begin_inset LatexCommand label
+name "lst:Help-Menu-Definition"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+val helpMenu = Menu(Loc("helpHome",
+\end_layout
+
+\begin_layout Standard
+
+                        "help" :: Nil,
+\end_layout
+
+\begin_layout Standard
+
+                        "Help"))
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Nested Menus
+\begin_inset LatexCommand label
+name "sub:Nested-Menus"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
@@ -99,7 +365,13 @@ Setting the Global SiteMap
 \end_layout
 
 \begin_layout Section
-Controlling the Link
+Customizing Display
+\begin_inset LatexCommand label
+name "sec:Customizing-Display"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
@@ -108,10 +380,32 @@ Hidden
 
 \begin_layout Subsection
 Link and LinkText
+\begin_inset LatexCommand label
+name "sub:Link-and-LinkText"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Using <lift:Menu>
+\begin_inset LatexCommand label
+name "sub:Using-lift-Menu"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section
 Access Control
+\begin_inset LatexCommand label
+name "sec:Access-Control"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
@@ -124,6 +418,12 @@ Unless
 
 \begin_layout Section
 Validation
+\begin_inset LatexCommand label
+name "sec:Validation"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
@@ -132,6 +432,12 @@ Test
 
 \begin_layout Section
 Page-Specific Rendering
+\begin_inset LatexCommand label
+name "sec:Page-Specific-Rendering"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
