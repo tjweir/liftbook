@@ -523,138 +523,44 @@ reference "sec:LiftRules-object"
 
 \begin_layout Enumerate
 Execute early functions.
- See 
+ See LiftRules.appendEarly example.
+ Essentially this is a mechanism that allows user function to be called
+ very early before lift processes the HTTP request.
 \end_layout
 
-\begin_deeper
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-LiftRules object
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-def appendEarly(f: HttpServletRequest => Any)
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_deeper
 \begin_layout Enumerate
-URL Rewriting - this is useful when you want to transform a URI path into
- something else such as query paramters etc.
+URL Rewriting (See LiftRules.prependRewrite/appendRewrite) - this is useful
+ when you want to transform a URI path into something else such as query
+ paramters etc.
  The result of the transformation will be passed to futher processing.
+ Please see 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:URL-Rewriting"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Call LiftRules.onBeginServicing hooks.
+ This is a mechanism that allows you to add your own hook functions that
+ will be called when Lift is starting to procss the reqest.
+\end_layout
+
+\begin_layout Enumerate
+Check for user-defined stateless dispatch (See LiftRules.prependStatelessDispatch
+PF/appendStatelessDispatchPF).
+ These are partial functions that if they are defined for a given HTTP request
+ they will return a LiftResponse which internally is turned in the bytes
+ stream that is sent to client.
+ These are veryusefull to build REST API's
+.
  
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-LiftRules object
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-def prependRewrite(pf: RewritePf)
-\end_layout
-
-\begin_layout Plain Layout
-
-def appendRewrite(pf: RewritePf)
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Enumerate
-Call LiftRules.onBeginServicing hooks
-\end_layout
-
-\begin_deeper
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-LiftRules object
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-var onBeginServicing: List[Req => Unit]
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_deeper
-\begin_layout Enumerate
-Check for user-defined stateless dispatch
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-LiftRules object
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-var statelessDispatchTable: DispatchPf
-\end_layout
-
-\end_inset
-
-The term stateless means that when the DispatchPf function is called the
- S object is not available and LiftSession not created yet.
+\lang english
+The term stateless means that when the DispatchPF function is called the
+ S object is not available and LiftSession not created/obtained yet.
 \end_layout
 
 \begin_layout Enumerate
@@ -663,309 +569,51 @@ Create Lift session (If there is no applicable stateless dispatch function)
 
 \begin_layout Enumerate
 Call LiftSession.onSetupSession when the HTTP session is activated by container.
- See
+ This is a mechanism for adding hook functions when LiftSession is created.
 \end_layout
 
-\begin_deeper
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-LiftSession object
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-var onSetupSession: List[LiftSession => Unit] 
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_deeper
 \begin_layout Enumerate
 Init S object (S stands for Stateful)
 \end_layout
 
 \begin_layout Enumerate
-Call LoanWrapper-s
+Call LoanWrapper-s (See S.addAround).
+ Essentially a LoanWrapper is a way of wrapping the lift's processing logic
+ by your own code.
+ This means that when your LoanWrapper implementation is called, lift is
+ also passing you a function impersonating the entire processing logic.
+ Therefore you have the opportunity to as pre and post conditions to lift's
+ processing code.
 \end_layout
 
-\begin_deeper
-\begin_layout Enumerate
-Essentially a LoanWrapper is used to wrap the lift processing logic so you
- can have code that handle pre and post conditions
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-LoanWraper trait
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-trait LoanWrapper {   
-\end_layout
-
-\begin_layout Plain Layout
-
-	def apply[T](f: => T): T 
-\end_layout
-
-\begin_layout Plain Layout
-
-}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Enumerate
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-S object
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-def addAround(lw: List[LoanWrapper]): Unit
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-def addAround(lw: LoanWrapper): Unit
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Enumerate
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-Code example for around-invocation
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-class Boot {   
-\end_layout
-
-\begin_layout Plain Layout
-
-  def boot {   
-\end_layout
-
-\begin_layout Plain Layout
-
-	S.addAround(new LoanWrapper { // Let's call it LW1
-\end_layout
-
-\begin_layout Plain Layout
-
-				  def apply[T](f: => T): T = {   
-\end_layout
-
-\begin_layout Plain Layout
-
-		    	    ...your before code goes here...
-   
-\end_layout
-
-\begin_layout Plain Layout
-
-		        	val result = f // Let lift do normal request processing.
-   
-\end_layout
-
-\begin_layout Plain Layout
-
-			        ...your after code goes here...
-   
-\end_layout
-
-\begin_layout Plain Layout
-
-				  }   
-\end_layout
-
-\begin_layout Plain Layout
-
-				} :: new LoanWrapper { // Let's call it LW2
-\end_layout
-
-\begin_layout Plain Layout
-
-				  def apply[T](f: => T): T = {   
-\end_layout
-
-\begin_layout Plain Layout
-
-		    	    ...your before code goes here...
-   
-\end_layout
-
-\begin_layout Plain Layout
-
-		        	val result = f // Let lift do normal request processing.
-   
-\end_layout
-
-\begin_layout Plain Layout
-
-			        ...your after code goes here...
-   
-\end_layout
-
-\begin_layout Plain Layout
-
-				  }   
-\end_layout
-
-\begin_layout Plain Layout
-
-				}
-\end_layout
-
-\begin_layout Plain Layout
-
-				:: Nil)
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-   // The call sequence would be LW1(LW2(<normal_request_processing>))
-\end_layout
-
-\begin_layout Plain Layout
-
-  }
-\end_layout
-
-\begin_layout Plain Layout
-
-}
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_deeper
 \begin_layout Enumerate
 Handle stateful request
 \end_layout
 
 \begin_deeper
 \begin_layout Enumerate
-Check the stateful dispatch functions 
-\begin_inset listings
-inline false
-status open
+Check the stateful dispatch functions (See LiftRules.prependDispath/appendDispatc
+h).
+ Similar with what was described on step #4 except that these functions
+ are executed in the context of a LiftSession and veryimportatnt in the
+ context of S object (See 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:S-object"
 
-\begin_layout Plain Layout
+\end_inset
 
-\begin_inset Caption
-
-\begin_layout Plain Layout
-LiftRules object
-\end_layout
+).
+ Of course the first function defined for this request is called and the
+ LiftResponse is returned.
+ For an overview of Diaptch functions please see 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Dispatch-functions"
 
 \end_inset
 
 
-\end_layout
-
-\begin_layout Plain Layout
-
-def prependDispatch(pf: DispatchPf)
-\end_layout
-
-\begin_layout Plain Layout
-
-def appendDispatch(pf: DispatchPf)
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Enumerate
-The first function defined for this request is called and a LiftResponse
- will be provided.
- If that happens we go to step 10.
 \end_layout
 
 \begin_layout Enumerate
@@ -973,13 +621,11 @@ If it's a
 \series bold
 Comet
 \series default
- request process it 
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Add a reference to Comet processing
-\end_layout
+ request process it.
+ For an overview of what Comet is, please see 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Comet"
 
 \end_inset
 
@@ -996,81 +642,31 @@ Ajax
 
 \begin_deeper
 \begin_layout Enumerate
-Call LiftSession.onBeginServicing
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-LiftSession object
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-var onBeginServicing: List[(LiftSession, Req) => Unit]
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-
-
+Call LiftSession.onBeginServicing.
+ Lift comes again with hooking functions.
+ Note that we have LiftRules.onBeginServicing and LiftSession.onBeginServicing.
+ The differences are whne these hooks ar called.
+ In this case when lift is about to process the stateful request.
 \end_layout
 
 \begin_layout Enumerate
 Bascally execute the user's function mapped with that specific request token
  (impersonated by a request parameter) and return the response which can
  be a JavaScript, an XML construct or virtualy any LiftReponse.
+ For an overview about LiftResponse please see 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Lift-reponses"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Enumerate
-Call LiftSession.onEndServicing
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-LiftSession object
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-var onEndServicing: List[(LiftSession, Req) => Unit]
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-
-
+Call LiftSession.onEndServicing.
+ It'sprobably very intuitive what this does.
+ It calls the hooks when finishing process the Ajax request.
 \end_layout
 
 \end_deeper
@@ -1081,59 +677,32 @@ If it's a regular HTTP request process it such as:
 \begin_deeper
 \begin_layout Enumerate
 Call LiftSession.onBeginServicing hooks.
- See
+ Similar with Ajax request processing hooks are called for nomal HTTP requests.
 \end_layout
 
-\begin_deeper
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-LiftSession object
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-var onBeginServicing: List[(LiftSession, Req) => Unit]
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_deeper
 \begin_layout Enumerate
 Check the user's dispatch functions that are set per-session.
- If there is a function applicable execute it and return its response
-\end_layout
-
-\begin_layout Enumerate
-If there is no per-session dispatch function process the request by executing
+ If there is a function applicable execute it and return its response.If
+ there is no per-session dispatch function process the request by executing
  the Scala function that user set up for specific events (such as when clicking
  a link, or pressing the submit button, or a function that will be executed
- when a form field is set etc.)
+ when a form field is set etc.).
+ Please see SHtml obejct 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:SHtml"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Enumerate
-Check the SiteMap and Loc functions 
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Add a reference to SiteMap/Loc section
-\end_layout
+Check the SiteMap and Loc functions.
+ For an overview of SiteMap please see 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:SiteMap"
 
 \end_inset
 
@@ -1153,45 +722,13 @@ Check for ViewDispatchPF functions.
 
 \begin_layout Enumerate
 If there is no ViewDispatchPF look for the template in the path specified
- in the request
-\end_layout
-
-\begin_layout Standard
-The ViewDispatchPf functions are defined in LiftRules
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-LiftRules object
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-def prependViewDispatch(in: ViewDispatchPF)
-\end_layout
-
-\begin_layout Plain Layout
-
-def appendViewDispatch(in: ViewDispatchPF)
-\end_layout
-
-\end_inset
-
-
+ in the request.
+ This is a very interesting mechanism that allows you toplugin your own
+ templates or views.
+ Nomally you markup templates are found in templates-hidden folder of your
+ web application.
+ But again Lift provides excellents means for extending so you can provide
+ your markup templates virtually from anywhere.
 \end_layout
 
 \end_deeper
@@ -1216,53 +753,17 @@ Clean up notices (see S.error, S.warning, S.notice) since they were already
 \end_layout
 
 \begin_layout Enumerate
-Call LiftRules.convertResponse
+Call LiftRules.convertResponse.
+ Basically this glues together different pieces if information such as the
+ actual markup, the response headers, cookies etc.
 \end_layout
 
-\begin_deeper
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-LiftRules object
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-var convertResponse: PartialFunction[(Any, List[(String, String)], List[Cookie],
- Req), LiftResponse]
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_deeper
 \begin_layout Enumerate
-Check to see if lift needs to send HTTP redirect 
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-I think we need a dedicated section for redirects as we have redirect with
- state etc.
-\end_layout
+Check to see if lift needs to send HTTP redirect.
+ For an overview please see 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:HTTP-redirects"
 
 \end_inset
 
@@ -1272,213 +773,46 @@ I think we need a dedicated section for redirects as we have redirect with
 \end_deeper
 \end_deeper
 \begin_layout Enumerate
-Call LiftSession.onEndServicing
+Call LiftSession.onEndServicing.
+ Onviously calling the end-serviceing hooks.
 \end_layout
 
-\begin_deeper
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-LiftSession object
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-var onEndServicing: List[(LiftSession, Req, Can[LiftResponse]) => Unit]
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_deeper
 \begin_layout Enumerate
 Call LiftRules.performTransform.
- See
+ See LiftRules.responseTransformers.
+ Essentially this is a list of functions that allows the user to make certain
+ changes to the LiftResponse before being send to client.
 \end_layout
 
-\begin_deeper
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-LiftRules object
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-var responseTransformers: List[LiftResponse => LiftResponse]
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_deeper
 \end_deeper
 \begin_layout Enumerate
-Call LiftRules.onEndServicing hooks
+Call LiftRules.onEndServicing hooks.
+ These are the outer end-servicing hooks called after the S object context
+ was destroyed.
 \end_layout
 
-\begin_deeper
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-LiftRules object
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-var onEndServicing: List[(Req, Can[LiftResponse]) => Unit]
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_deeper
 \begin_layout Enumerate
 Call before-send functions.
- See
+ I guess you may have seen this comming ...
+ Again we have hooks that are called right before sending the response down
+ to the pipe line.
 \end_layout
 
-\begin_deeper
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-LiftRules object
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-def appendBeforeSend(f: (BasicResponse, HttpServletResponse, List[(String,
- String)], Can[Req]) => Any)
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_deeper
 \begin_layout Enumerate
 Convert the LiftResponse to raw bytes stream and send it to client as HTTP
- response
+ response.
 \end_layout
 
 \begin_layout Enumerate
 Call after-send functions.
- See
+ And of course the hooks that are called after the response was sent.
 \end_layout
 
-\begin_deeper
 \begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-LiftRules object
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-def appendAfterSend(f: (BasicResponse, HttpServletResponse, List[(String,
- String)], Can[Req]) => Any)
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_deeper
-\begin_layout Standard
-A lot more is going on under the hood (Lift is highly customizable) but
- for now this should cover 95% of what you will want to do in a Lift application.
+At a first glance certain things of this flow may seem unclear but after
+ you're familiar with Lift framework and start using it is really important
+ to know when certain things are happening so you can use the Lift goodiesin
+ the right place.
 \end_layout
 
 \begin_layout Section
@@ -1920,54 +1254,57 @@ So templates are a nice way of setting up your layout and then writing a
 
 \begin_layout Subparagraph
 
+\series medium
 \emph on
 Sometimes it might be tempted to load manually a template (from a snippet
- for example) using 
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-LiftSession class
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-processSurroundAndInclude(page: String, in: NodeSeq)
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Subparagraph
-Even if Lift will merge your templates and invoke snippets it is HIGHLY
+ for example) using LiftSession.processSurroundAndInclude.
+ Even if Lift will merge your templates and invoke snippets it is HIGHLY
  recommended to NOT use this as the processing functions will not be invoked
  as the functions mapping will not happen as this is called 
 \bar under
 outside 
 \bar default
 of normal rendering pipeline.
- 
-\begin_inset Note Note
-status open
+ So in other words let's say that in a cetain point in your application
+ you want to return another page then the one that was supposed to be served
+ normally.
+ One classic example would be that when un unnexpected exception is thrown
+ you want toreturn an error page.
+ Let's also say that this error page has 
+\emph default
+a form allowing the user to submit 
+\emph on
+comments about the failure.
+ There is a way of 
+\begin_inset Quotes eld
+\end_inset
 
-\begin_layout Plain Layout
-Please clarify this sentence
-\end_layout
+catching
+\begin_inset Quotes erd
+\end_inset
+
+ soch failure by using LiftRules.browserResponseToException which willbe
+ called by Lift and you can return your own LiftResponse.
+ But most certainly you do not want to hardcode the response so you want
+ to use an existent error.html page.
+ So you can loda this from disk using LiftRules.loadResourceAsXml and the
+ call the LiftSession.processSurroundAndInclude so that Lift will process
+ the <lift:xxx> tags, call your snippets etc.
+ Once you have this done you can return your own LiftResponse by using XhtmlResp
+onse.
+ When you test it you'll be surprised to see that your form is not processed
+ by lift; your functions are not called.
+ That's because you did these things manully but your functions set through
+ SHtml object (most likely) are not seen by Lift.
+ In othertems you did these things outside of Lift's rendering pipeline.
+ To solve this it is recommended that youdo not manually process templates
+ in your own function unless you really know what you're doing.
+ In this particular case instead of doing all this, you can just use a RedirectR
+esponse object.
+ Please see 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:HTTP-redirects"
 
 \end_inset
 
@@ -2273,7 +1610,7 @@ Since you can choose to not include any of the pre-defined template XHTML,
 \end_layout
 
 \begin_layout Section
-URL Rewriting and Dispatch
+URL Rewriting 
 \begin_inset CommandInset label
 LatexCommand label
 name "sec:URL-Rewriting"
@@ -2856,13 +2193,29 @@ provides a mechanism for doing rewrites combined with menu entries.
 \end_layout
 
 \begin_layout Section
+Dispatch functions 
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Dispatch-functions"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+TBC
+\end_layout
+
+\begin_layout Section
+Tags
 \begin_inset CommandInset label
 LatexCommand label
 name "sec:ArchTags"
 
 \end_inset
 
-Tags
+
 \end_layout
 
 \begin_layout Standard
@@ -3904,7 +3257,25 @@ lse),Full(tohead),Class Not Found)
 \end_layout
 
 \begin_layout Section
+S object
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:S-object"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
 SHtml
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:SHtml"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -4144,6 +3515,13 @@ SHtml Example - Generated Markup
 
 \begin_layout Section
 SiteMap
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:SiteMap"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -4199,6 +3577,39 @@ We're mentioning it here briefly, as we have an entire chapter dedicated
  to SiteMap.
  It's worth touching on as it relates to most of what we just discussed.
 \end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Lift reponses
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Lift-reponses"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Comet
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Comet"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+HTTP redirects 
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:HTTP-redirects"
 
 \end_inset
 
