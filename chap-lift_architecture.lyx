@@ -67,27 +67,15 @@ Entry into Lift
 status open
 
 \begin_layout Plain Layout
-From our discussion:
+Todo:
 \end_layout
 
 \begin_layout Plain Layout
-Chapter: Arch: 
+- We need a high level summary of section 4.5
 \end_layout
 
 \begin_layout Plain Layout
-- all the fun in Boot (url rewriting, like the stuff you have) 
-\end_layout
-
-\begin_layout Plain Layout
-- how lift handles requests (what you have got) 
-\end_layout
-
-\begin_layout Plain Layout
-- intro to views, snippets and how they relate to dispatch
-\end_layout
-
-\begin_layout Plain Layout
-We need a high level summary of section 4.5
+- Fix up references
 \end_layout
 
 \end_inset
@@ -511,18 +499,19 @@ Request/Response Lifecycle
 \end_layout
 
 \begin_layout Standard
-Now that the request has entered the LiftServlet instance, it's time to
- process it.
- There are a quite a few fundamental steps that must be mentioned in order
- have a clear picture how and where certain things are happening.
- For more details regarding LiftRules object please see 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "sec:LiftRules-object"
+We just explained what happens as Lift starts up, now we'll discuss what
+ happens when a Request comes in.
+ We'll describe the entire process to sending the Response back to the browser.
+ 
+\end_layout
 
-\end_inset
-
-
+\begin_layout Standard
+As this is the main part of Lift, it is a non-trivial process, but it's
+ imperative that you understand the bulk of it.
+ You'll be much better off knowing how the rendering pipeline works.
+ There are a quite a few steps to mention in order have a clear picture
+ how and where certain things are happening.
+ So let's get started!
 \end_layout
 
 \begin_layout Enumerate
@@ -910,6 +899,17 @@ At a first glance certain things of this flow may seem unclear but after
  you're familiar with Lift framework and start using it is really important
  to know when certain things are happening so you can use the Lift goodies
  in the right place.
+\end_layout
+
+\begin_layout Standard
+For more details regarding LiftRules object please see 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:LiftRules-object"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section
