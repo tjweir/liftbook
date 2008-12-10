@@ -913,7 +913,7 @@ reference "sec:LiftRules-object"
 \end_layout
 
 \begin_layout Section
-LiftRules object 
+LiftRules 
 \begin_inset CommandInset label
 LatexCommand label
 name "sec:LiftRules-object"
@@ -924,8 +924,8 @@ name "sec:LiftRules-object"
 \end_layout
 
 \begin_layout Standard
-LiftRules object is the main way for configuring Lift's behavior which is
- typically done at startup in Boot.
+The LiftRules object is the main way for configuring Lift's behavior which
+ is typically done at startup in Boot.
  For more details of the LiftRules API please see 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -933,7 +933,9 @@ reference "sec:LiftRules"
 
 \end_inset
 
-
+ or take a look at 
+\family typewriter
+liftweb/lift/src/main/scala/net/liftweb/http/LiftRules.scala
 \end_layout
 
 \begin_layout Standard
@@ -985,8 +987,8 @@ class Boot {
 
 \begin_layout Plain Layout
 
-	  // If there is an unnexpecte exception in your application during processing
- a request
+	  // If there is an unexpected exception in your application during the
+ processing of a request
 \end_layout
 
 \begin_layout Plain Layout
@@ -1022,6 +1024,13 @@ class Boot {
 
 \begin_layout Section
 Templates
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Templates"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -2326,6 +2335,36 @@ This needs an intro paragraph
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+We introduced you to a couple of Lift Tags earlier in the the Templates
+ section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Templates"
+
+\end_inset
+
+, namely 
+\family typewriter
+surround
+\family default
+ and 
+\family typewriter
+snippet
+\family default
+.
+ We mentioned that these are reserved tags that Lift uses internally.
+ We'll revisit 
+\family typewriter
+surround
+\family default
+ and 
+\family typewriter
+snippet
+\family default
+ and explain a few others.
 \end_layout
 
 \begin_layout Subsection
