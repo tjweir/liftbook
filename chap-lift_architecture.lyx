@@ -3679,51 +3679,24 @@ SiteMap has a number of roles and they all build off the main goal, which
 Take a look at the SiteMap chapter to get a better feel of what it can do.
 \end_layout
 
-\begin_layout Standard
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Reference???
-\end_layout
-
-\begin_layout Plain Layout
-Sets up URL whitelisting
-\end_layout
-
-\begin_layout Plain Layout
-Builds a menu with submenus
-\end_layout
-
-\begin_layout Plain Layout
-URL rewriting
-\end_layout
-
-\begin_layout Plain Layout
-When a request comes in, it is recursively re-written and query params are
- optionally extracted.
-\end_layout
-
-\begin_layout Plain Layout
-The Menu generation is a freebie based on the URL access control
-\end_layout
-
-\begin_layout Plain Layout
-We're mentioning it here briefly, as we have an entire chapter dedicated
- to SiteMap.
- It's worth touching on as it relates to most of what we just discussed.
-\end_layout
+\begin_layout Section
+Lift Responses
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Lift-reponses"
 
 \end_inset
 
 
 \end_layout
 
-\begin_layout Section
-Lift reponses
-\begin_inset CommandInset label
-LatexCommand label
-name "sec:Lift-reponses"
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+@Marius - Do you mean XmlResponse, JsonResponse etc? - Tyler
+\end_layout
 
 \end_inset
 
@@ -3741,11 +3714,38 @@ name "sec:Comet"
 
 \end_layout
 
+\begin_layout Standard
+Wikipedia: 
+\begin_inset Quotes eld
+\end_inset
+
+Comet is a relatively new term to describe a web application model in which
+ a long-held HTTP request allows a web server to push data to a browser,
+ without the browser explicitly requesting it.
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
 \begin_layout Section
-HTTP redirects 
+HTTP Redirects 
 \begin_inset CommandInset label
 LatexCommand label
 name "sec:HTTP-redirects"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+What do we want to have here?
+\end_layout
 
 \end_inset
 
