@@ -51,10 +51,10 @@ Introduction
 \end_layout
 
 \begin_layout Standard
-This chapter will walk you through fundamental aspects of understanding
- how Lift works, lifecycle of various entities, understanding how you can
- add you own functions to be part of processing and rendering pipeline etc.
- We will be describing parts of the Lift API such as LiftRules object.
+This chapter will walk you through Lift's architecture and how it processes
+ requests.
+ During the explanation of the rendering pipeline, you'll see how you can
+ add your own code to be a part of that processing.
  
 \end_layout
 
@@ -84,6 +84,10 @@ Chapter: Arch:
 
 \begin_layout Plain Layout
 - intro to views, snippets and how they relate to dispatch
+\end_layout
+
+\begin_layout Plain Layout
+We need a high level summary of section 4.5
 \end_layout
 
 \end_inset
@@ -523,17 +527,26 @@ reference "sec:LiftRules-object"
 
 \begin_layout Enumerate
 Execute early functions.
- See LiftRules.appendEarly example.
- Essentially this is a mechanism that allows user function to be called
- very early before lift processes the HTTP request.
+ See 
+\family typewriter
+LiftRules.appendEarly
+\family default
+.
+ This is a mechanism that allows a user function to be called before the
+ request enters the normal processing chain.
+ This can be used for setting the XHTML output to UTF-8.
 \end_layout
 
 \begin_layout Enumerate
-URL Rewriting (See LiftRules.prependRewrite/appendRewrite) - this is useful
- when you want to transform a URI path into something else such as query
- paramters etc.
+URL Rewriting, see 
+\family typewriter
+LiftRules.prependRewrite/appendRewrite,
+\family default
+ this is useful when you want to transform a URI path into something else
+ such as query paramters etc.
  The result of the transformation will be passed to futher processing.
- Please see 
+ You would use this for creating user-friendly URLs.
+ For more information, please see 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:URL-Rewriting"
@@ -546,56 +559,105 @@ reference "sec:URL-Rewriting"
 \begin_layout Enumerate
 Call LiftRules.onBeginServicing hooks.
  This is a mechanism that allows you to add your own hook functions that
- will be called when Lift is starting to procss the reqest.
+ will be called when Lift is starting to procss the request.
+ You could set up logging here.
 \end_layout
 
 \begin_layout Enumerate
-Check for user-defined stateless dispatch (See LiftRules.prependStatelessDispatch
-PF/appendStatelessDispatchPF).
+Check for user-defined stateless dispatch (See 
+\family typewriter
+LiftRules.prependStatelessDispatchPF/appendStatelessDispatchPF
+\family default
+).
  These are partial functions that if they are defined for a given HTTP request
  they will return a LiftResponse which internally is turned in the bytes
  stream that is sent to client.
- These are veryusefull to build REST API's
-.
- 
-\lang english
-The term stateless means that when the DispatchPF function is called the
- S object is not available and LiftSession not created/obtained yet.
+ These are very useful to build REST API's.
+ The term stateless means that when the DispatchPF function is called the
+ stateful object, called 
+\family typewriter
+S
+\family default
+, is not available and LiftSession not created/obtained yet.
 \end_layout
 
 \begin_layout Enumerate
-Create Lift session (If there is no applicable stateless dispatch function)
+Create a Lift session if there is no applicable stateless dispatch function.
 \end_layout
 
 \begin_layout Enumerate
-Call LiftSession.onSetupSession when the HTTP session is activated by container.
+Call 
+\family typewriter
+LiftSession.onSetupSession
+\family default
+ when the HTTP session is activated by container.
  This is a mechanism for adding hook functions when LiftSession is created.
+ 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+What?
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Enumerate
-Init S object (S stands for Stateful)
+Initialize the 
+\family typewriter
+S
+\family default
+ object
 \end_layout
 
 \begin_layout Enumerate
-Call LoanWrapper-s (See S.addAround).
- Essentially a LoanWrapper is a way of wrapping the lift's processing logic
- by your own code.
- This means that when your LoanWrapper implementation is called, lift is
+Call 
+\family typewriter
+LoanWrapper
+\family default
+-s (See 
+\family typewriter
+S.addAround
+\family default
+).
+ Essentially a 
+\family typewriter
+LoanWrapper
+\family default
+ is a way of wrapping the Lift's processing logic by your own code.
+ This means that when your LoanWrapper implementation is called, Lift is
  also passing you a function impersonating the entire processing logic.
- Therefore you have the opportunity to as pre and post conditions to lift's
+ Therefore you have the opportunity to as pre and post conditions to Lift's
  processing code.
+ 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Example of why you would use LoanWrapper needes
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Enumerate
-Handle stateful request
+Process the stateful request
 \end_layout
 
 \begin_deeper
 \begin_layout Enumerate
-Check the stateful dispatch functions (See LiftRules.prependDispath/appendDispatc
-h).
+Check the stateful dispatch functions (See 
+\family typewriter
+LiftRules.prependDispath/appendDispatch
+\family default
+).
  Similar with what was described on step #4 except that these functions
- are executed in the context of a LiftSession and veryimportatnt in the
+ are executed in the context of a LiftSession and very important in the
  context of S object (See 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -617,11 +679,11 @@ reference "sec:Dispatch-functions"
 \end_layout
 
 \begin_layout Enumerate
-If it's a 
+If this is a 
 \series bold
 Comet
 \series default
- request process it.
+ request, then process it.
  For an overview of what Comet is, please see 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -633,27 +695,31 @@ reference "sec:Comet"
 \end_layout
 
 \begin_layout Enumerate
-If it's an 
+If this is an 
 \series bold
 Ajax
 \series default
- request process it:
+ request, then:
 \end_layout
 
 \begin_deeper
 \begin_layout Enumerate
-Call LiftSession.onBeginServicing.
+Call 
+\family typewriter
+LiftSession.onBeginServicing
+\family default
+.
  Lift comes again with hooking functions.
  Note that we have LiftRules.onBeginServicing and LiftSession.onBeginServicing.
- The differences are whne these hooks ar called.
- In this case when lift is about to process the stateful request.
+ The differences are when these hooks are called.
+ In this case when Lift is about to process the stateful request.
 \end_layout
 
 \begin_layout Enumerate
-Bascally execute the user's function mapped with that specific request token
- (impersonated by a request parameter) and return the response which can
- be a JavaScript, an XML construct or virtualy any LiftReponse.
- For an overview about LiftResponse please see 
+Execute the user's function mapped with that specific request token (impersonate
+d by a request parameter) and return the response which can be a JavaScript,
+ an XML construct or virtually any LiftResponse.
+ For an overview of LiftResponse please see 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Lift-reponses"
@@ -664,26 +730,35 @@ reference "sec:Lift-reponses"
 \end_layout
 
 \begin_layout Enumerate
-Call LiftSession.onEndServicing.
- It'sprobably very intuitive what this does.
+Call 
+\family typewriter
+LiftSession.onEndServicing
+\family default
+.
+ It's probably very intuitive what this does.
  It calls the hooks when finishing process the Ajax request.
 \end_layout
 
 \end_deeper
 \begin_layout Enumerate
-If it's a regular HTTP request process it such as:
+If this is a regular HTTP request, then:
 \end_layout
 
 \begin_deeper
 \begin_layout Enumerate
-Call LiftSession.onBeginServicing hooks.
- Similar with Ajax request processing hooks are called for nomal HTTP requests.
+Call 
+\family typewriter
+LiftSession.onBeginServicing
+\family default
+ hooks.
+ Similar with an Ajax request, processing hooks are called for normal HTTP
+ requests.
 \end_layout
 
 \begin_layout Enumerate
-Check the user's dispatch functions that are set per-session.
- If there is a function applicable execute it and return its response.If
- there is no per-session dispatch function process the request by executing
+Check the user-defined dispatch functions that are set per-session.
+ If there is a function applicable, execute it and return its response.
+ If there is no per-session dispatch function, process the request by executing
  the Scala function that user set up for specific events (such as when clicking
  a link, or pressing the submit button, or a function that will be executed
  when a form field is set etc.).
@@ -699,10 +774,15 @@ reference "sec:SHtml"
 
 \begin_layout Enumerate
 Check the SiteMap and Loc functions.
- For an overview of SiteMap please see 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "sec:SiteMap"
+ SiteMap is a big part of Lift, and as such, there is an entire chapter
+ dedicated to it.
+ 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+SiteMap Chapter Lookup
+\end_layout
 
 \end_inset
 
@@ -710,7 +790,7 @@ reference "sec:SiteMap"
 \end_layout
 
 \begin_layout Enumerate
-Lookup for the template based on the Request path.
+Lookup the template based on the Request path.
  Lift will locate the templates using various aproaches:
 \end_layout
 
@@ -773,13 +853,24 @@ reference "sec:HTTP-redirects"
 \end_deeper
 \end_deeper
 \begin_layout Enumerate
-Call LiftSession.onEndServicing.
- Onviously calling the end-serviceing hooks.
+Call 
+\family typewriter
+LiftSession.onEndServicing
+\family default
+ and any end-servicing hooks.
 \end_layout
 
 \begin_layout Enumerate
-Call LiftRules.performTransform.
- See LiftRules.responseTransformers.
+Call 
+\family typewriter
+LiftRules.performTransform
+\family default
+.
+ See 
+\family typewriter
+LiftRules.responseTransformers
+\family default
+.
  Essentially this is a list of functions that allows the user to make certain
  changes to the LiftResponse before being send to client.
 \end_layout
@@ -792,27 +883,33 @@ Call LiftRules.onEndServicing hooks.
 \end_layout
 
 \begin_layout Enumerate
-Call before-send functions.
- I guess you may have seen this comming ...
- Again we have hooks that are called right before sending the response down
- to the pipe line.
+Call any before-send functions.
+ You may have seen this coming, we have hooks that are called right before
+ sending the response down to the pipe line.
+ See 
+\family typewriter
+LiftRules.appendBeforeSend
+\family default
+.
 \end_layout
 
 \begin_layout Enumerate
-Convert the LiftResponse to raw bytes stream and send it to client as HTTP
- response.
+Convert the LiftResponse to a raw byte stream and send it to client as an
+ HTTP response.
 \end_layout
 
 \begin_layout Enumerate
-Call after-send functions.
- And of course the hooks that are called after the response was sent.
+Call any after-send functions.
+ See 
+\family typewriter
+LiftRules.appendAfterSend.
 \end_layout
 
 \begin_layout Standard
 At a first glance certain things of this flow may seem unclear but after
  you're familiar with Lift framework and start using it is really important
- to know when certain things are happening so you can use the Lift goodiesin
- the right place.
+ to know when certain things are happening so you can use the Lift goodies
+ in the right place.
 \end_layout
 
 \begin_layout Section
