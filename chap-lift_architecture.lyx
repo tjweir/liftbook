@@ -580,14 +580,13 @@ Call
 LiftSession.onSetupSession
 \family default
  when the HTTP session is activated by container.
- This is a mechanism for adding hook functions when LiftSession is created.
- 
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-What?
-\end_layout
+ This is a mechanism for adding hook functions that will be called when
+ LiftSession is created.
+ We'll get into more details when talking about Lift's session management.
+ Please see 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Session-Management"
 
 \end_inset
 
@@ -3750,6 +3749,21 @@ What do we want to have here?
 \end_inset
 
 
+\end_layout
+
+\begin_layout Section
+Session Management 
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Session-Management"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+TBC
 \end_layout
 
 \begin_layout Section
