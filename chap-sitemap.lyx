@@ -1,8 +1,9 @@
-#LyX 1.5.6 created this file. For more info see http://www.lyx.org/
-\lyxformat 276
+#LyX 1.6.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
 \begin_document
 \begin_header
 \textclass book
+\use_default_options false
 \language english
 \inputencoding auto
 \font_roman default
@@ -13,9 +14,11 @@
 \font_osf false
 \font_sf_scale 100
 \font_tt_scale 100
+
 \graphics default
 \paperfontsize default
 \spacing single
+\use_hyperref false
 \papersize default
 \use_geometry false
 \use_amsmath 1
@@ -41,7 +44,8 @@
 
 \begin_layout Chapter
 SiteMap
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "cha:SiteMap"
 
 \end_inset
@@ -74,7 +78,8 @@ Nested Menus so you can have hierarchies
 
 \begin_layout Itemize
 Request rewriting (similar to section 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "sec:URL-Rewriting"
 
 \end_inset
@@ -101,7 +106,7 @@ Let's start with our basic menu for PocketChange
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Revise this as needed to match reality
 \end_layout
 
@@ -180,6 +185,193 @@ help
 \end_layout
 
 \begin_layout Subsection
+The Link Class
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:The-Link-Class"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The Link class
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+
+\family typewriter
+net.liftweb.sitemap.Loc.Link
+\end_layout
+
+\end_inset
+
+ is a fundamental part of Menu definitions.
+ The Link class contains two parameters: a List[String] of path components,
+ and a boolean value that controls whether prefix matching is enabled.
+ The path components represent the portion of the URI following your web
+ context, split on the 
+\begin_inset Quotes eld
+\end_inset
+
+/
+\begin_inset Quotes erd
+\end_inset
+
+ character.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Link-Path-Components"
+
+\end_inset
+
+ shows how you would use Link to represent the 
+\begin_inset Quotes eld
+\end_inset
+
+/utils/index
+\begin_inset Quotes erd
+\end_inset
+
+ page.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Link Path Components
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Link-Path-Components"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+val myUtilsIndex = new Link(
+\begin_inset Quotes eld
+\end_inset
+
+utils
+\begin_inset Quotes erd
+\end_inset
+
+ :: 
+\begin_inset Quotes eld
+\end_inset
+
+index
+\begin_inset Quotes erd
+\end_inset
+
+ :: Nil, false)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Prefix matching allows the path components you specify to match any longer
+ paths as well.
+ Following our first example, if you wanted to match anything under the
+ utils directory (say, for access control), you would set the second parameter
+ to 
+\family typewriter
+true
+\family default
+, as shown in listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Link-Prefix-Matching"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Link Prefix Matching
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Link-Prefix-Matching"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+val allUtilPages = new Link(
+\begin_inset Quotes eld
+\end_inset
+
+utils
+\begin_inset Quotes erd
+\end_inset
+
+ :: Nil, true)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Clarify trailing slashes and index file behavior (update: David P.
+ is working on making this simpler)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+ExtLink
+\end_layout
+
+\begin_layout Subsection
 Creating Menu Entries
 \end_layout
 
@@ -188,7 +380,7 @@ Menu entries are created using the Menu
 \begin_inset Foot
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \family typewriter
 net.liftweb.sitemap.Menu
@@ -201,7 +393,7 @@ net.liftweb.sitemap.Menu
 \begin_inset Foot
 status collapsed
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \family typewriter
 net.liftweb.sitemap.Loc
@@ -212,24 +404,25 @@ net.liftweb.sitemap.Loc
  trait instance, which is where most of the interesting things happen.
  A menu can also hold one or more child menus, which we'll cover in section
  
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "sub:Nested-Menus"
 
 \end_inset
 
 .
- Note that the Loc object has several implicit methods
-\begin_inset Marginal
+ Note that the Loc object has several implicit methods that make defining
+ Locs easier, so you generally want to import them into scope 
+\begin_inset Note Note
 status open
 
-\begin_layout Standard
-Import Loc implicits
+\begin_layout Plain Layout
+How to best emphasize this (and other notes)?
 \end_layout
 
 \end_inset
 
- that make defining Locs easier, so you generally want to import them into
- scope.
+.
  The simplest way is to import 
 \family typewriter
 net.liftweb.sitemap.Loc._
@@ -243,7 +436,8 @@ net.liftweb.sitemap.Loc._
 The name of the Loc.
  This must be unique across your sitemap because it can be used to look
  up specific Menu items if you customize your menu display (section 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "sub:Using-lift-Menu"
 
 \end_inset
@@ -255,8 +449,9 @@ reference "sub:Using-lift-Menu"
 The link that the Loc refers to.
  Usually this will refer to a specific page, but Lift allows a single Loc
  to match based on prefix as well (section 
-\begin_inset LatexCommand ref
-reference "sub:Link-and-LinkText"
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:The-Link-Class"
 
 \end_inset
 
@@ -268,8 +463,9 @@ The text of the menu item.
  This what will be displayed to the user.
  You can use a static string or you can generate it with a function (section
  
-\begin_inset LatexCommand ref
-reference "sub:Link-and-LinkText"
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:menu-LinkText"
 
 \end_inset
 
@@ -280,25 +476,29 @@ reference "sub:Link-and-LinkText"
 An optional set of parameters that control behavior and appearance of the
  menu item.
  These parameters are covered in sections 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "sec:Customizing-Display"
 
 \end_inset
 
 ,
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "sec:Access-Control"
 
 \end_inset
 
 , 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "sec:Validation"
 
 \end_inset
 
 , and 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "sec:Page-Specific-Rendering"
 
 \end_inset
@@ -310,7 +510,8 @@ reference "sec:Page-Specific-Rendering"
 For our example we'll tackle the help page link first, since it's the simplest
  (a static link, essentially).
  The definition is shown in listing 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "lst:Help-Menu-Definition"
 
 \end_inset
@@ -326,14 +527,14 @@ reference "lst:Help-Menu-Definition"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
-
+\begin_layout Plain Layout
 Help Menu Definition
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:Help-Menu-Definition"
 
 \end_inset
@@ -346,17 +547,25 @@ name "lst:Help-Menu-Definition"
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 val helpMenu = Menu(Loc("helpHome",
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
-                        ("help" :: Nil) -> true,
+                        ("help" :: 
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+ :: Nil) -> true,
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
                         "Help"))
 \end_layout
@@ -376,25 +585,25 @@ helpHome
 \end_inset
 
 .
- The second parameter is a Pair[List[String],Boolean] which does two things:
- the list defines the path of the request to match.
- The path in this case is considered to be the portion of the request path
- following our web app context.
- For example, if we deploy the WAR at 
-\family typewriter
-/pchange/
-\family default
-, then 
-\family typewriter
-/pchange/help/
-\family default
- would match this Loc.
- The boolean parameter (false if you just pass in a List[String] to Loc)
- controls whether the path acts as a prefix match.
- In our case, but passing in true, we're saying that anything under the
- help directory will also match.
- Remember that SiteMap also acts as access control, so by doing this we're
- allowing full access to all of the help files.
+ The second parameter is a Pair[List[String],Boolean] which converts directly
+ to a Link class with the given parameters.
+ In our case, by passing in true, we're saying that anything under the help
+ directory will also match.
+ If you just use a List[String], the implicit conversion is to a Link with
+ prefix matching disabled.
+ Note that SiteMap won't allow access to any pages that don't match any
+ Menu entries
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+emphasize
+\end_layout
+
+\end_inset
+
+, so by doing this we're allowing full access to all of the help files without
+ having to specify a menu entry for each.
  The final parameter, 
 \begin_inset Quotes eld
 \end_inset
@@ -409,7 +618,8 @@ Help
 
 \begin_layout Subsection
 Nested Menus
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "sub:Nested-Menus"
 
 \end_inset
@@ -417,13 +627,298 @@ name "sub:Nested-Menus"
 
 \end_layout
 
+\begin_layout Standard
+The Menu class supports child menus simply by passing them in as final construct
+or parameters.
+ For instance, if we wanted to have an 
+\begin_inset Quotes eld
+\end_inset
+
+about
+\begin_inset Quotes erd
+\end_inset
+
+ menu under Help, we could define the menu as shown in listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Nested-Menu-Definition"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Nested Menu Definition
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Nested-Menu-Definition"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+val aboutMenu = Menu(Loc(
+\begin_inset Quotes eld
+\end_inset
+
+about
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+help
+\begin_inset Quotes erd
+\end_inset
+
+ :: 
+\begin_inset Quotes eld
+\end_inset
+
+about
+\begin_inset Quotes erd
+\end_inset
+
+ :: Nil, 
+\begin_inset Quotes eld
+\end_inset
+
+About
+\begin_inset Quotes erd
+\end_inset
+
+))
+\end_layout
+
+\begin_layout Plain Layout
+
+val helpMenu = Menu(Loc(...as defined above...), aboutMenu)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+When the menu is rendered it will have a child menu for About.
+ Child menus are only rendered by default when the current page matches
+ their parent's Loc.
+ That means that, for instance the following links would show an 
+\begin_inset Quotes eld
+\end_inset
+
+About
+\begin_inset Quotes erd
+\end_inset
+
+ child menu item:
+\end_layout
+
+\begin_layout Itemize
+/help/index
+\end_layout
+
+\begin_layout Itemize
+/help/usage
+\end_layout
+
+\begin_layout Standard
+But the following would not:
+\end_layout
+
+\begin_layout Itemize
+/index
+\end_layout
+
+\begin_layout Itemize
+/site/example
+\end_layout
+
+\begin_layout Standard
+We'll cover how you can customize the rendering of the menus in section
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Using-lift-Menu"
+
+\end_inset
+
+.
+\end_layout
+
 \begin_layout Subsection
 Setting the Global SiteMap
 \end_layout
 
+\begin_layout Standard
+Once you have all of your menus items defined, you need to set them as your
+ SiteMap.
+ As usual, we do this in the Boot class by calling the 
+\family typewriter
+setSiteMap
+\family default
+ method on LiftRules, as shown in listing ???.
+ The setSiteMap method takes a SiteMap object that can be constructed using
+ your menu items as arguments.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Setting the SiteMap
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Setting-the-SiteMap"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+LiftRules.setSiteMap(SiteMap(homeMenu, profileMenu, ...))
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+When you're dealing with large menus, and in particular when your model
+ objects create their own menus (MegaProtoUser, section 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Should this be added to Mapper, or somehow folded in elsewhere?
+\end_layout
+
+\end_inset
+
+), then it can be more convenient to define List[Menu] and set that.
+ Listing ??? shows this usage.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Using List[Menu] for SiteMap
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+val menus = Menu(Loc(
+\begin_inset Quotes eld
+\end_inset
+
+HomePage
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+Home
+\begin_inset Quotes erd
+\end_inset
+
+),...) ::
+\end_layout
+
+\begin_layout Plain Layout
+
+            ...
+\end_layout
+
+\begin_layout Plain Layout
+
+            Menu(...) :: Nil
+\end_layout
+
+\begin_layout Plain Layout
+
+LiftRules.setSiteMap(SiteMap(menus : _*))
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The key to using List for your menus is to explicitly define the type of
+ the parameter as 
+\begin_inset Quotes eld
+\end_inset
+
+_*
+\begin_inset Quotes erd
+\end_inset
+
+ so that it's treated as a set of varargs instead of a single argument of
+ type List[Menu].
+\end_layout
+
 \begin_layout Section
 Customizing Display
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "sec:Customizing-Display"
 
 \end_inset
@@ -431,23 +926,276 @@ name "sec:Customizing-Display"
 
 \end_layout
 
-\begin_layout Subsection
-Hidden
+\begin_layout Standard
+There are many cases where you may want to change the way that particular
+ menu items are displayed.
+ For instance, if you're using a Menu item for access control a subdirectory,
+ you may not want the menu item displayed at all.
+ We'll discuss how you can control appearance, text, etc in this section.
 \end_layout
 
 \begin_layout Subsection
-Link and LinkText
-\begin_inset LatexCommand label
-name "sub:Link-and-LinkText"
+Hidden
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:menu-Hidden"
 
 \end_inset
 
 
 \end_layout
 
+\begin_layout Standard
+The Hidden LocParam does exactly what it says: hides the menu item from
+ the menu display.
+ Other than not showing the item the rest of the menu functionality is still
+ fully operable.
+ A typical example, shown in listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Hidden-Menus"
+
+\end_inset
+
+, is to restrict access to a particular subdirectory based on some condition.
+ We'll cover the If tag in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:menu-If"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Hidden Menus
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Hidden-Menus"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+val receiptImages =
+\end_layout
+
+\begin_layout Plain Layout
+
+  Menu(Loc(
+\begin_inset Quotes eld
+\end_inset
+
+receipts
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\end_layout
+
+\begin_layout Plain Layout
+
+          (
+\begin_inset Quotes eld
+\end_inset
+
+receipts
+\begin_inset Quotes erd
+\end_inset
+
+ :: Nil) -> true,
+\end_layout
+
+\begin_layout Plain Layout
+
+          
+\begin_inset Quotes eld
+\end_inset
+
+Receipts
+\begin_inset Quotes erd
+\end_inset
+
+,
+\end_layout
+
+\begin_layout Plain Layout
+
+          Hidden, If(...)))
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Note that in this example we've used the implicit conversion from Pair[String,Bo
+olean] to Link to make this Menu apply to everything under the 
+\begin_inset Quotes eld
+\end_inset
+
+receipts
+\begin_inset Quotes erd
+\end_inset
+
+ directory.
+\end_layout
+
+\begin_layout Subsection
+Controlling the Menu Text
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:menu-LinkText"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The LinkText class is what defines the function that will return the text
+ to display for a given menu item.
+ As we've shown, this can easily be set using the implicit conversion for
+ string
+\begin_inset Formula $\rightarrow$
+\end_inset
+
+LinkText from Loc.
+ As an added bonus, the implicit conversion actually takes a by-name String
+ for the parameter; that means you can just as easily pass in a function
+ to generate the link text as a static string.
+ For example, with our profile link we may want to make the link say 
+\begin_inset Quotes eld
+\end_inset
+
+<username>'s profile
+\begin_inset Quotes erd
+\end_inset
+
+.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Customizing-Link-Text"
+
+\end_inset
+
+ shows how we can do it by defining a helper method, assuming that there's
+ another method that will return the current user's name (we use the ubiquitous
+ Foo object here).
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Customizing Link Text
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Customizing-Link-Text"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def profileText = Foo.currentUser + 
+\begin_inset Quotes eld
+\end_inset
+
+'s profile
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+val profileMenu = Menu(Loc(
+\begin_inset Quotes eld
+\end_inset
+
+profile
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\end_layout
+
+\begin_layout Plain Layout
+
+                           
+\begin_inset Quotes eld
+\end_inset
+
+profile
+\begin_inset Quotes erd
+\end_inset
+
+ :: Nil,
+\end_layout
+
+\begin_layout Plain Layout
+
+                           profileText, ...))
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Of course, if you want you can construct the LinkText instance directly,
+ just passing in a constructor function that returns a NodeSeq.
+ The function that you use with LinkText takes a type-safe input parameter,
+ which we'll discuss in more detail in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "ite:Can-specify-your"
+
+\end_inset
+
+.
+\end_layout
+
 \begin_layout Subsection
 Using <lift:Menu>
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "sub:Using-lift-Menu"
 
 \end_inset
@@ -457,7 +1205,8 @@ name "sub:Using-lift-Menu"
 
 \begin_layout Section
 Access Control
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "sec:Access-Control"
 
 \end_inset
@@ -467,15 +1216,30 @@ name "sec:Access-Control"
 
 \begin_layout Subsection
 If
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:menu-If"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
 Unless
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:menu-Unless"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section
 Validation
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "sec:Validation"
 
 \end_inset
@@ -485,11 +1249,19 @@ name "sec:Validation"
 
 \begin_layout Subsection
 Test
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:menu-Test"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section
 Page-Specific Rendering
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "sec:Page-Specific-Rendering"
 
 \end_inset
@@ -545,6 +1317,23 @@ Access control (Add your own If/Unless on params)
 \end_deeper
 \begin_layout Itemize
 Can specify your own Params still (params)
+\begin_inset CommandInset label
+LatexCommand label
+name "ite:Can-specify-your"
+
+\end_inset
+
+
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Move this label to an appropriate location
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \end_body
