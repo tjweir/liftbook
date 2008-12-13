@@ -40,7 +40,6 @@ morestring=[b]"}
 
 % Default settings for code listings
 \lstset{frame=tb,language=scala,basicstyle=\small\ttfamily,aboveskip=3mm,belowskip=3mm,showstringspaces=false,columns=flexible}
-
 \end_preamble
 \use_default_options false
 \language english
@@ -113,15 +112,9 @@ Derek Chen-Becker, Marius Danciu and Tyler Weir
 \end_layout
 
 \begin_layout Standard
-Copyright © 2008, Derek Chen-Becker, Marius Danciu and Tyler Weir
-\end_layout
-
-\begin_layout Standard
-\begin_inset LatexCommand tableofcontents
-
-\end_inset
-
-
+Copyright © 2008, Derek Chen-Becker, Marius Danciu and Tyler Weir.
+ This work is licensed under the Creative Commons Attribution-No Derivative
+ Works 3.0 Unported License.
 \end_layout
 
 \begin_layout Standard
@@ -133,9 +126,7 @@ Copyright © 2008, Derek Chen-Becker, Marius Danciu and Tyler Weir
 \end_layout
 
 \begin_layout Standard
-(c) 2008 Derek Chen-Becker, Marius Danciu and Tyler Weir This work is licensed
- under the Creative Commons Attribution-No Derivative Works 3.0 Unported
- License.
+
 \end_layout
 
 \begin_layout Standard

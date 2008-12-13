@@ -99,6 +99,13 @@ The beauty of SiteMap is that it's very easy to start out with the basic
 
 \begin_layout Section
 Basic SiteMap Definition
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Basic-SiteMap-Definition"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -107,7 +114,7 @@ Let's start with our basic menu for PocketChange
 status open
 
 \begin_layout Plain Layout
-Revise this as needed to match reality
+Revise this as needed to match reality, and verify all code in this chapter
 \end_layout
 
 \end_inset
@@ -371,6 +378,89 @@ Clarify trailing slashes and index file behavior (update: David P.
 ExtLink
 \end_layout
 
+\begin_layout Standard
+The ExtLink object can be used to create a Link instance using your own
+ full link URL.
+ As its name implies, it would usually be used for an external location.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Using-ExtLink"
+
+\end_inset
+
+ shows a menu item that points to a popular website.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Using ExtLink
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Using-ExtLink"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+val goodReference = Menu(Loc(
+\begin_inset Quotes eld
+\end_inset
+
+reference
+\begin_inset Quotes erd
+\end_inset
+
+,
+\end_layout
+
+\begin_layout Plain Layout
+
+                             ExtLink(
+\begin_inset Quotes eld
+\end_inset
+
+http://www.liftweb.net/
+\begin_inset Quotes erd
+\end_inset
+
+),
+\end_layout
+
+\begin_layout Plain Layout
+
+                             
+\begin_inset Quotes eld
+\end_inset
+
+LiftWeb
+\begin_inset Quotes erd
+\end_inset
+
+))
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Subsection
 Creating Menu Entries
 \end_layout
@@ -473,8 +563,8 @@ reference "sub:menu-LinkText"
 \end_layout
 
 \begin_layout Enumerate
-An optional set of parameters that control behavior and appearance of the
- menu item.
+An optional set of LocParam parameters that control behavior and appearance
+ of the menu item.
  These parameters are covered in sections 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -492,7 +582,7 @@ reference "sec:Access-Control"
 , 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "sec:Validation"
+reference "sec:Misc-Menu"
 
 \end_inset
 
@@ -1148,7 +1238,7 @@ val profileMenu = Menu(Loc(
 \begin_inset Quotes eld
 \end_inset
 
-profile
+Profile
 \begin_inset Quotes erd
 \end_inset
 
@@ -1203,6 +1293,491 @@ name "sub:Using-lift-Menu"
 
 \end_layout
 
+\begin_layout Standard
+So far we've covered the Scala side of things.
+ The other half of the magic is the special <lift:Menu> tag.
+ It's this tag that handles the rendering of your menus into XHTML.
+ The Menu tag uses a built-in snippet
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+net.liftweb.builtin.snippet.Menu
+\end_layout
+
+\end_inset
+
+ to handle several rendering functions.
+ The most commonly used method is the Menu.builder snippet.
+ This snippet renders your entire menu structure as an unordered list (<ul>
+ in XHTML).
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Rendering-with-Menu.title"
+
+\end_inset
+
+ shows an example of using the Menu tag to build the default menu (yes,
+ it's that easy).
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=XML"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Rendering with <lift:Menu.title>
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Rendering-with-Menu.title"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<div class=
+\begin_inset Quotes erd
+\end_inset
+
+menu
+\begin_inset Quotes erd
+\end_inset
+
+>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <lift:Menu.builder />
+\end_layout
+
+\begin_layout Plain Layout
+
+</div>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Of course, Lift offers more customization on this snippet than just emitting
+ some XHTML.
+ By specifying some prefixed attributes on the tag itself, you can add attribute
+s directly to the menu elements.
+ The following prefixes are valid for attributes:
+\end_layout
+
+\begin_layout Itemize
+ul - Adds the specified attribute to the <ul> element that makes up the
+ menu
+\end_layout
+
+\begin_layout Itemize
+li - Adds the specified attribute to each <li> element for the menu
+\end_layout
+
+\begin_layout Itemize
+li_item - Adds the specified attribute to the current page's menu item
+\end_layout
+
+\begin_layout Itemize
+li_path - Adds the specified attribute to the current page's breadcrumb
+ path.
+ The breadcrumb path is the set of menu items leading to this one.
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Verify and clarify
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The suffix of the attributes can be anything, and will be passed directly
+ through.
+ For instance, we can add CSS
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+CSS
+\end_layout
+
+\end_inset
+
+ classes to our menu and elements fairly easily, as shown in listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Using-Attribues-with-Menu.builder"
+
+\end_inset
+
+.
+ Notice that we also add a little javascript to our current menu item.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=XML"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Using Attribues with Menu.builder
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Using-Attribues-with-Menu.builder"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<lift:Menu.builder
+\end_layout
+
+\begin_layout Plain Layout
+
+  li:class=
+\begin_inset Quotes erd
+\end_inset
+
+menuitem
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  li_item:class=
+\begin_inset Quotes erd
+\end_inset
+
+selectedMenu
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  li_item:onclick=
+\begin_inset Quotes erd
+\end_inset
+
+javascript:alert('Already selected!');
+\begin_inset Quotes erd
+\end_inset
+
+ />
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In addition to rendering the menu itself, the Menu class has a few other
+ tricks.
+ The Menu.title
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Menu.title
+\end_layout
+
+\end_inset
+
+ snippet can be used to render the title of the page, which by default is
+ the name parameter of the Loc for the menu (the first parameter).
+ If you write your own Loc implementation (section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Writing-Your-Own-Loc"
+
+\end_inset
+
+), or you use the Title
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Title
+\end_layout
+
+\end_inset
+
+ LocParam (section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:menu-Title"
+
+\end_inset
+
+), you can overide the title to be whatever you'd like.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Rendering-the-Title"
+
+\end_inset
+
+ shows how you use Menu.title.
+ In this particular example the title will be rendered as 
+\begin_inset Quotes eld
+\end_inset
+
+Home Page
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Rendering the Menu Title
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Rendering-the-Title"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// In Boot:
+\end_layout
+
+\begin_layout Plain Layout
+
+val MyMenu = Menu(Loc(
+\begin_inset Quotes eld
+\end_inset
+
+Home Page
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+index
+\begin_inset Quotes erd
+\end_inset
+
+ :: Nil, 
+\begin_inset Quotes eld
+\end_inset
+
+Home
+\begin_inset Quotes erd
+\end_inset
+
+))
+\end_layout
+
+\begin_layout Plain Layout
+
+// In template (or wherever)
+\end_layout
+
+\begin_layout Plain Layout
+
+<title><lift:Menu.title></title>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The next snippet in the Menu class is item.
+ The Menu.item snippet allows you to render a particular menu item by specifying
+ the name attribute (matching the first parameter to Loc).
+ Like Menu.builder, it allows you to specify additional prefixed attributes
+ for the link to be passed to the emitted item.
+ Because it applies these attributes to the link itself, the only valid
+ prefix is 
+\begin_inset Quotes eld
+\end_inset
+
+a
+\begin_inset Quotes erd
+\end_inset
+
+.
+ Additionally, if you specify child elements for the snippet tag, it will
+ be used instead of the default link text.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Using-Menu.item"
+
+\end_inset
+
+ shows an example using our 
+\begin_inset Quotes eld
+\end_inset
+
+Home Page
+\begin_inset Quotes erd
+\end_inset
+
+ menu item defined in listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Rendering-the-Title"
+
+\end_inset
+
+; as you can see, we've added some replacement text as well as specifying
+ a CSS
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+CSS
+\end_layout
+
+\end_inset
+
+ class for the link.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=XML"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Using Menu.item
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Using-Menu.item"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<lift:Menu.item name=
+\begin_inset Quotes erd
+\end_inset
+
+Home Page
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  a:class=
+\begin_inset Quotes erd
+\end_inset
+
+homeLink
+\begin_inset Quotes erd
+\end_inset
+
+>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <b>Go Home</b>
+\end_layout
+
+\begin_layout Plain Layout
+
+</lift:Menu.item>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The final snippet that the Menu class provides is the Menu.group method.
+ We're going to cover the use of Menu.group in detail in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:LocGroup"
+
+\end_inset
+
+.
+\end_layout
+
 \begin_layout Section
 Access Control
 \begin_inset CommandInset label
@@ -1214,11 +1789,210 @@ name "sec:Access-Control"
 
 \end_layout
 
+\begin_layout Standard
+So far we've covered how to control the display side of Menus, so now we
+ can cover some of the plumbing behind the scenes.
+ One important function of Menus is that they control access to the pages
+ in your app; if no Menus match a given request then the user gets a 404
+ (not found) error.
+ Other than this binary control of 
+\begin_inset Quotes eld
+\end_inset
+
+matches
+\begin_inset Formula $\rightarrow$
+\end_inset
+
+display
+\begin_inset Quotes erd
+\end_inset
+
+ and 
+\begin_inset Quotes eld
+\end_inset
+
+doesn't match
+\begin_inset Formula $\rightarrow$
+\end_inset
+
+don't display
+\begin_inset Quotes erd
+\end_inset
+
+, SiteMap provides for arbitrary access checks through the If and Unless
+ LocParams.
+\end_layout
+
 \begin_layout Subsection
 If
 \begin_inset CommandInset label
 LatexCommand label
 name "sub:menu-If"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The If
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+If
+\end_layout
+
+\end_inset
+
+ LocParam takes a test function, 
+\begin_inset Formula $()\Rightarrow Boolean$
+\end_inset
+
+, as well as failure message function, 
+\begin_inset Formula $()\Rightarrow LiftResponse$
+\end_inset
+
+, as its arguments.
+ When the Loc that uses the If clause matches a given path, the test function
+ is executed, and if true then the page is displayed as normal.
+ If the function evaluates to false, then the failure message function is
+ executed and its result is sent to the user.
+ There's an implicit conversion in Loc from a String to a response which
+ converts to a RedirectWithState
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+RedirectWithState
+\end_layout
+
+\end_inset
+
+ instance (section 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Cross-ref
+\end_layout
+
+\end_inset
+
+).
+ The redirect is to the location specified by LiftRules.siteMapFailRedirectLocati
+on, which is the root of your webapp (
+\begin_inset Quotes eld
+\end_inset
+
+/
+\begin_inset Quotes erd
+\end_inset
+
+) by default.
+ If you want, you can change this in LiftRules for a global setting, or
+ you can provide your own LiftResponse
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+LiftResponse
+\end_layout
+
+\end_inset
+
+.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Using-the-If-LocParam"
+
+\end_inset
+
+ shows a revision of the profile menu that we defined in listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Customizing-Link-Text"
+
+\end_inset
+
+, extended to check whether the user is logged in.
+ If the user isn't logged in, we redirect to the login page.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Using the If LocParam
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Using-the-If-LocParam"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+val loggedIn = If(() => User.loggedIn_?,
+\end_layout
+
+\begin_layout Plain Layout
+
+                  () => RedirectResponse(
+\begin_inset Quotes eld
+\end_inset
+
+/login
+\begin_inset Quotes erd
+\end_inset
+
+))
+\end_layout
+
+\begin_layout Plain Layout
+
+val profileMenu = Menu(Loc(
+\begin_inset Quotes eld
+\end_inset
+
+Profile
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\end_layout
+
+\begin_layout Plain Layout
+
+                           
+\begin_inset Quotes eld
+\end_inset
+
+profile
+\begin_inset Quotes erd
+\end_inset
+
+ :: Nil,
+\end_layout
+
+\begin_layout Plain Layout
+
+                           profileText, loggedIn))
+\end_layout
 
 \end_inset
 
@@ -1236,26 +2010,30 @@ name "sub:menu-Unless"
 
 \end_layout
 
-\begin_layout Section
-Validation
-\begin_inset CommandInset label
-LatexCommand label
-name "sec:Validation"
+\begin_layout Standard
+The Unless
+\begin_inset Index
+status open
 
-\end_inset
-
-
+\begin_layout Plain Layout
+Unless
 \end_layout
 
-\begin_layout Subsection
-Test
-\begin_inset CommandInset label
-LatexCommand label
-name "sub:menu-Test"
-
 \end_inset
 
+ LocParam is essentially the mirror of If.
+ The exact same rules apply, except that the page is displayed only if the
+ test function returns false.
+ The reason that there are two classes to represent this behavior is that
+ it's generally clearer when a predicate is read as 
+\begin_inset Quotes eld
+\end_inset
 
+working
+\begin_inset Quotes erd
+\end_inset
+
+ when it returns true.
 \end_layout
 
 \begin_layout Section
@@ -1269,20 +2047,931 @@ name "sec:Page-Specific-Rendering"
 
 \end_layout
 
+\begin_layout Standard
+Page specific rendering with SiteMap is an advanced technique that provides
+ a lot of flexibility for making pages render differently depending on state.
+\end_layout
+
 \begin_layout Subsection
 The Template Parameter
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:The-Template-Parameter"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Generally, the template that will be used for a page is derived from the
+ path of the request.
+ The Template LocParam, however, allows you to completely override this
+ mechanism and provide any template you want by passing in a function 
+\begin_inset Formula $()\Rightarrow NodeSeq$
+\end_inset
+
+.
+ Going back to our example menus (section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Basic-SiteMap-Definition"
+
+\end_inset
+
+), we'd like the welcome page to either show the user's entries or a plain
+ welcome screen depending on whether they're logged in.
+ One approach to this is shown in listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Override-Templates"
+
+\end_inset
+
+.
+ In this example we create a Template class that generates the appropriate
+ template and then bind it into the home page menu Loc.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Overriding Templates
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Override-Templates"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+val homepageTempl = Template({ () =>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <lift:surround with=
+\begin_inset Quotes erd
+\end_inset
+
+default
+\begin_inset Quotes erd
+\end_inset
+
+ at=
+\begin_inset Quotes erd
+\end_inset
+
+content
+\begin_inset Quotes erd
+\end_inset
+
+>
+\end_layout
+
+\begin_layout Plain Layout
+
+  { if (User.loggedIn_?) { 
+\end_layout
+
+\begin_layout Plain Layout
+
+      <lift:Entries.list /> 
+\end_layout
+
+\begin_layout Plain Layout
+
+    } else {
+\end_layout
+
+\begin_layout Plain Layout
+
+      <lift:embed what=
+\begin_inset Quotes erd
+\end_inset
+
+welcome
+\begin_inset Quotes erd
+\end_inset
+
+ />
+\end_layout
+
+\begin_layout Plain Layout
+
+    }
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+  </lift:surround>
+\end_layout
+
+\begin_layout Plain Layout
+
+})
+\end_layout
+
+\begin_layout Plain Layout
+
+val homeMenu = Menu(Loc(
+\begin_inset Quotes eld
+\end_inset
+
+Home Page
+\begin_inset Quotes erd
+\end_inset
+
+,
+\end_layout
+
+\begin_layout Plain Layout
+
+                        
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+ :: Nil,
+\end_layout
+
+\begin_layout Plain Layout
+
+                        
+\begin_inset Quotes eld
+\end_inset
+
+Home Page
+\begin_inset Quotes erd
+\end_inset
+
+, homepageTempl))
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
 The Snippet and LocSnippets Parameters
 \end_layout
 
+\begin_layout Standard
+Besides overriding the template for a page render (admittedly, a rather
+ coarse approach), SiteMap has two mechanisms for overriding or defining
+ the behavior of specific snippets.
+ The first, Snippet, allows you to define the dispatch for a single snippet
+ based on the name of the snippet.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Using-the-Snippet-locparam"
+
+\end_inset
+
+ shows how we could use Snippet to achieve the same result for the home
+ page rendering as we just did with the Template Parameter.
+ All we need to do is use the <lift:homepage> snippet on our main page and
+ the snippet mapping will dispatch based on the state.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Using the Snippet LocParam
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Using-the-Snippet-locparam"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+val homeSnippet = Snippet(
+\begin_inset Quotes eld
+\end_inset
+
+homepage
+\begin_inset Quotes erd
+\end_inset
+
+,
+\end_layout
+
+\begin_layout Plain Layout
+
+  if (User.loggedIn_?) {
+\end_layout
+
+\begin_layout Plain Layout
+
+    Entries.list _
+\end_layout
+
+\begin_layout Plain Layout
+
+  } else {
+\end_layout
+
+\begin_layout Plain Layout
+
+    Utils.welcome _
+\end_layout
+
+\begin_layout Plain Layout
+
+  })
+\end_layout
+
+\begin_layout Plain Layout
+
+val homeMenu = Menu(Loc(
+\begin_inset Quotes eld
+\end_inset
+
+Home Page
+\begin_inset Quotes erd
+\end_inset
+
+,
+\end_layout
+
+\begin_layout Plain Layout
+
+                        
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+ :: Nil,
+\end_layout
+
+\begin_layout Plain Layout
+
+                        
+\begin_inset Quotes eld
+\end_inset
+
+Home Page
+\begin_inset Quotes erd
+\end_inset
+
+, homeSnippet))
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The LocSnippets trait extends the concept of Snippet to providing a full
+ dispatch partial function.
+ This allows you to define multiple snippet mappings associated with a particula
+r Loc.
+ To simplify things, Lift provides a DispatchLocSnippets trait that has
+ default implementations for 
+\family typewriter
+apply
+\family default
+ and 
+\family typewriter
+isDefinedAt
+\family default
+; that means you only need to provide a 
+\family typewriter
+dispatch
+\family default
+ method implementation for it to work.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Using-LocSnippets"
+
+\end_inset
+
+ shows an example of using DispatchLocSnippets for a variety of snippets.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Using LocSnippets
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Using-LocSnippets"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+val entrySnippets = new DispatchLocSnippets {
+\end_layout
+
+\begin_layout Plain Layout
+
+  def dispatch = {
+\end_layout
+
+\begin_layout Plain Layout
+
+    case 
+\begin_inset Quotes eld
+\end_inset
+
+entries
+\begin_inset Quotes erd
+\end_inset
+
+ => Entries.list _
+\end_layout
+
+\begin_layout Plain Layout
+
+    case 
+\begin_inset Quotes eld
+\end_inset
+
+add
+\begin_inset Quotes erd
+\end_inset
+
+ => Entries.newEntry _
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Subsection
 Title
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:menu-Title"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+As we mentioned in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Using-lift-Menu"
+
+\end_inset
+
+, the Title LocParam can be used to provide a state-dependent title for
+ a page.
+ The Title case class simply takes a function 
+\begin_inset Formula $(T)\Rightarrow NodeSeq$
+\end_inset
+
+, where T is a type-safe parameter (we'll cover this in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "ite:Can-specify-your"
+
+\end_inset
+
+).
+ Generally you can ignore it if you want, which is what we do in listing
+ ???.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Customizing the Title
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Customizing-the-Title"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+val userTitle = Title(() => 
+\end_layout
+
+\begin_layout Plain Layout
+
+  if (User.loggedIn_?) {
+\end_layout
+
+\begin_layout Plain Layout
+
+    Text(User.name + 
+\begin_inset Quotes eld
+\end_inset
+
+'s Ledger
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Plain Layout
+
+  } else {
+\end_layout
+
+\begin_layout Plain Layout
+
+    Text(
+\begin_inset Quotes eld
+\end_inset
+
+Welcome to PocketChange
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Plain Layout
+
+  })
+\end_layout
+
+\begin_layout Plain Layout
+
+val homeMenu = Menu(Loc(
+\begin_inset Quotes eld
+\end_inset
+
+Home Page
+\begin_inset Quotes erd
+\end_inset
+
+,
+\end_layout
+
+\begin_layout Plain Layout
+
+                        
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+ :: Nil,
+\end_layout
+
+\begin_layout Plain Layout
+
+                        
+\begin_inset Quotes eld
+\end_inset
+
+Home Page
+\begin_inset Quotes erd
+\end_inset
+
+, homepageTempl, userTitle))
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Miscellaneous Menu Functionality
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Misc-Menu"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+These are LocParams that don't quite fit into the other categories.
+\end_layout
+
+\begin_layout Subsection
+Test
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:menu-Test"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Test is intended to be used to ensure that a given request has the proper
+ parameters before servicing.
+ With Test, you provide a function, 
+\begin_inset Formula $(Req)\Rightarrow Boolean$
+\end_inset
+
+ that is passed the full Req object.
+ Note that the test is performed when SiteMap tries to locate the correct
+ menu, as opposed to If and Unless, which are tested after the proper Loc
+ has been identified.
+ Returning a false means that this Loc doesn't match the request, so SiteMap
+ will continue to search through your Menus to find an appropriate Loc.
+ As an example, we could check to make sure that a given request comes from
+ Opera with the code in listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Testing-the-Request"
+
+\end_inset
+
+.
+ 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Come up with a better example
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Testing the Request
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Testing-the-Request"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+val onlyOpera = Test(req => req.isOpera)
+\end_layout
+
+\begin_layout Plain Layout
+
+val operaMenu = Menu(Loc(
+\begin_inset Quotes eld
+\end_inset
+
+Opera
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+opera
+\begin_inset Quotes erd
+\end_inset
+
+ :: Nil, 
+\begin_inset Quotes eld
+\end_inset
+
+Only Opera
+\begin_inset Quotes erd
+\end_inset
+
+, onlyOpera))
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+LocGroup
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:LocGroup"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The LocGroup param allows you to categorize your menu items.
+ Using the Menu.group snippet (mentioned in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Using-lift-Menu"
+
+\end_inset
+
+) allows you to render the menu items for a specific group in place.
+ First, to set up the groups for a Menu item, simply add a LocGroup param
+ with one or more string arguments for the group names, as shown in listing
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Categorizing-your-Menu"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Categorizing your Menu
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Categorizing-your-Menu"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+val siteMenu = Menu(Loc(...,LocGroup(
+\begin_inset Quotes eld
+\end_inset
+
+admin
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+site
+\begin_inset Quotes erd
+\end_inset
+
+)))
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In your templates, you would then specify the binding of the menu as shown
+ in listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Binding-a-Menu-group"
+
+\end_inset
+
+.
+ As you can see, we've also added a prefixed attribute to control the CSS
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+CSS
+\end_layout
+
+\end_inset
+
+ class of the links (
+\begin_inset Quotes eld
+\end_inset
+
+a
+\begin_inset Quotes erd
+\end_inset
+
+ is the only valid prefix), and we've added some body XHTML for display.
+ In particular, the <menu:bind> tag controls where the menu items are rendered.
+ If you don't provide body elements, or if you provide body elements without
+ the <menu:bind> element, your body XHTML will be ignored and the menu will
+ be rendered directly.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Binding a Menu Group
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Binding-a-Menu-group"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<div class=
+\begin_inset Quotes erd
+\end_inset
+
+site
+\begin_inset Quotes erd
+\end_inset
+
+>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <lift:Menu.group group=
+\begin_inset Quotes erd
+\end_inset
+
+site
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    a:class=
+\begin_inset Quotes erd
+\end_inset
+
+siteLink
+\begin_inset Quotes erd
+\end_inset
+
+>
+\end_layout
+
+\begin_layout Plain Layout
+
+   <b>Site Menu</b>:<br/>
+\end_layout
+
+\begin_layout Plain Layout
+
+   <menu:bind />
+\end_layout
+
+\begin_layout Plain Layout
+
+  </lift:Menu.group>
+\end_layout
+
+\begin_layout Plain Layout
+
+</div>
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section
 Writing Your Own Loc
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Writing-Your-Own-Loc"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Itemize
