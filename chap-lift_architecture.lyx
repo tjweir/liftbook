@@ -3690,11 +3690,32 @@ name "sec:Lift-reponses"
 \end_layout
 
 \begin_layout Standard
-\begin_inset Note Note
+Lift framework makes a lot of things really easy and it provides extremly
+ useful abstractions as you may have already discovered.
+ Responses to clients are also abstacted by LiftResponse trait.
+ There are numerous response types such as:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
 status open
 
 \begin_layout Plain Layout
-@Marius - Do you mean XmlResponse, JsonResponse etc? - Tyler
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Lift responses
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
 \end_layout
 
 \end_inset
@@ -3763,7 +3784,174 @@ name "sec:Session-Management"
 \end_layout
 
 \begin_layout Standard
-TBC
+Lift is in essense a stateful framework and naturally state needs to be
+ managed.
+ You may be already familiar with HttpSession and and how a J(2)EE web container
+identifies an HttpSession; either by JSESSIONID cookie or by JSESSIONID
+ URI sequence (in case of URL rewriting).
+ Well Lift uses a LiftSession reference which is is not actually 
+\begin_inset Quotes eld
+\end_inset
+
+persisted
+\begin_inset Quotes erd
+\end_inset
+
+ in HttpSession.
+ As a matter of fact Lift does not really use the HttpSession provided by
+ the web container to maintain conversational state but rather uses a 
+\begin_inset Quotes eld
+\end_inset
+
+bridge
+\begin_inset Quotes erd
+\end_inset
+
+ between the HttpSession and the LiftSession.
+ This 
+\begin_inset Quotes eld
+\end_inset
+
+bridge
+\begin_inset Quotes erd
+\end_inset
+
+ is impersonated by SessionToServletBridge class which implements 
+\emph on
+javax.servlet.http.HttpSessionBindingListener
+\emph default
+ and 
+\emph on
+javax.servlet.http.HttpSessionActivationListener
+\emph default
+.
+ The way it works is:
+\end_layout
+
+\begin_layout Enumerate
+When receiving an HTTP Request and there was no stateless disptach function
+ to execute Lift does the statefull processing.
+ But before doing that it checks to see if there is a LiftSession associated
+ with this http sssion ID.
+ This mapping is kept on a SessionMaster Scala actor.
+ 
+\end_layout
+
+\begin_layout Enumerate
+If there is no LiftSession in SessionMaster actor, create it and add a SessionTo
+ServletBridge attribute on HttpSession.
+ This will make Lift to be aware when container terminates the HttpSession
+ or when the http session is about to be passivated or activated.
+\end_layout
+
+\begin_layout Enumerate
+When the container terminates the http session SessionToServletBridge sends
+ a message to the SessionMaster actor to terminate the LiftSession.
+ Basically the following is taking place:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Call LiftSession.onAboutToShutdownSession hooks
+\end_layout
+
+\begin_layout Enumerate
+Sends ShutDown message to all Comet actors pertaining to this session
+\end_layout
+
+\begin_layout Enumerate
+Cleanup internal LiftSession state
+\end_layout
+
+\begin_layout Enumerate
+Call LiftSession.onShutdownSession hooks
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+SessionMaster actor is also protected another watcher actor.
+ In essense this watcher actor receives the Exit messages of the watched
+ actors.
+ When it receives an Exit message it will call the users' failure functions
+ and restart the watched actor (Please see ActorWatcher.failureFuncs).
+ 
+\end_layout
+
+\begin_layout Standard
+Even so Lift in essence is doing its own session management you still have
+ the freedom to manually add attributes to the HttpSession object.
+ Still we do not recommend this unless you really have to.
+ If you want to keep your own session variables, you can use SessionVar's.
+ Here is an example:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+SessionVar example
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+object count extends SessionVar(0);
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// later in your code you can increment the count by calling
+\end_layout
+
+\begin_layout Plain Layout
+
+count(count + 1)
+\end_layout
+
+\begin_layout Plain Layout
+
+// or obtain the value
+\end_layout
+
+\begin_layout Plain Layout
+
+var theCountValue: Int = count
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+As you've notices SessionVar-s are typesafe representation of http session
+ attributes (actually they are kept in LiftSession and not directly in HttpSessi
+on).
+ There are implicit conversion functions to convert a SessionVar to its
+ underlying type.
 \end_layout
 
 \begin_layout Section
