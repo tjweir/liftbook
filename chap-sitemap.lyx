@@ -3034,13 +3034,18 @@ reference "tab:LocParam-Methods-in-loc"
 
 \end_inset
 
-lists the LocParams and their corresponding method in Loc, with notes concerning
- any differences in definition or usage.
+ lists the LocParams and their corresponding method in Loc, with notes concernin
+g any differences in definition or usage.
+ If yould prefer to use the LocParams instead, just define the 
+\family typewriter
+params
+\family default
+ method on Loc to return a list of the LocParams you want.
 \end_layout
 
 \begin_layout Standard
 \begin_inset Float table
-placement h
+placement H
 wide false
 sideways false
 status open
@@ -3342,17 +3347,6 @@ name "tab:LocParam-Methods-in-loc"
 \end_inset
 
 
-\end_layout
-
-\begin_layout Standard
-We'll show a full example of a Loc implementation in section 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "sub:An-Example-Loc"
-
-\end_inset
-
-.
 \end_layout
 
 \begin_layout Subsection
