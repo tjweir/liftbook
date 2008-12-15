@@ -3895,7 +3895,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 SessionVar example
 \end_layout
 
@@ -3947,11 +3946,72 @@ var theCountValue: Int = count
 \end_layout
 
 \begin_layout Standard
-As you've notices SessionVar-s are typesafe representation of http session
+As you've noticed SessionVar-s are typesafe representation of http session
  attributes (actually they are kept in LiftSession and not directly in HttpSessi
 on).
  There are implicit conversion functions to convert a SessionVar to its
  underlying type.
+\end_layout
+
+\begin_layout Standard
+The next question would be 
+\begin_inset Quotes eld
+\end_inset
+
+So we have internal session management so how do we cope that in a clustered
+ environment? ...
+ how sessions are replicated?
+\begin_inset Quotes erd
+\end_inset
+
+ ...
+ well, in short we're are not.
+ There is no intentions to use the web container's session replication as
+ these technologies appears to be inferior to other solutions on the market.
+ Relying on Java serialization brings a lot of performance concerns and
+ alternative technologies have been investigated and they are still under
+ investigation.
+ Until there is a 
+\begin_inset Quotes eld
+\end_inset
+
+standard
+\begin_inset Quotes erd
+\end_inset
+
+ advocated session replication technology you can still cluster you application
+ using 
+\begin_inset Quotes eld
+\end_inset
+
+sticky session
+\begin_inset Quotes erd
+\end_inset
+
+.
+ Essentially this meas that all requests pertaining to a HTTP session must
+ be processed by the same cluster node.
+ This can be done by load balancers (even hardware load balancer) so they
+ would dispatch the requests based on JSESSIONID cookie.
+ Other approaches are that dispatching is done based on some URI or query
+ parameters.
+ For example a query parameter like serverid=1 is configured in the load
+ balancer to always be dispatched to the node 1 of the cluster, and so on.
+ There are some downsides for the sticky session approach.
+ For instance you are logged in the application and do your stuff.
+ Suddenly the node designated to your session crashes.
+ At this moment essentially you lost your session.
+ The next subsequent request would be automatically dispatched by the load
+ balancer to another cluster node and depending how your application is
+ built this may mean that you need to log in again or if part of the state
+ was persisted in DB you may resume your work from some point avoiding re-login
+ ...
+ but this is application specific behavior that is beyond the scope of this
+ discussion.
+ The advantages of sticky sessions are related with application performance
+ since in this model the state does not need to be replicated in all cluster
+ nodes which for significant state information can be quite time/resources
+ consuming.
 \end_layout
 
 \begin_layout Section
