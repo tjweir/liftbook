@@ -27,7 +27,7 @@ Chapter 06 - Lift Arch in General - PD [Derek+Tyler]
  - Add in Tyler's HTTP Auth stuff
  - Merge User Components
 
-Chapter 07 - SiteMap - P [Derek]
+Chapter 07 - SiteMap - PD [Derek]
 
 Chapter 08 - Mapper and Record - PD [Derek]
  - Record portion on hold until actual impls are done

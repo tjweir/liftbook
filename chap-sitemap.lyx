@@ -1275,7 +1275,7 @@ Of course, if you want you can construct the LinkText instance directly,
  which we'll discuss in more detail in section 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "ite:Can-specify-your"
+reference "sub:Type-Safe-Params"
 
 \end_inset
 
@@ -2502,7 +2502,7 @@ reference "sub:Using-lift-Menu"
 , where T is a type-safe parameter (we'll cover this in section 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "ite:Can-specify-your"
+reference "sub:Type-Safe-Params"
 
 \end_inset
 
@@ -2974,55 +2974,1070 @@ name "sec:Writing-Your-Own-Loc"
 
 \end_layout
 
-\begin_layout Itemize
-Can handle all of what LocParams do
-\end_layout
-
-\begin_deeper
-\begin_layout Itemize
-Rewriting with type-safe params (rewrite)
-\end_layout
-
-\begin_layout Itemize
-Template resolution (calcTemplate)
+\begin_layout Standard
+As we've shown, there's a lot of functionality available for your Menu items.
+ If you need more control, though, the Loc trait offers some functionality,
+ like rewriting, that doesn't have a direct correspondence in a LocParam
+ element.
+ The basic definition of a Loc implementation covers a lot of the same things.
+ The following vals and defs are abstract, so you must provide them:
 \end_layout
 
 \begin_layout Itemize
-Special snippet handling (snippets)
+def name - This is the name that can be used to retrieve the menu via Menu.item
 \end_layout
 
 \begin_layout Itemize
-Link Text (text)
+def link - This represents the actual link.
+ You can use the implicit conversions from List[String] or Pair[List[String],Boo
+lean], or you can create the Link object yourself
 \end_layout
 
 \begin_layout Itemize
-URL (link)
+def text - Represents the text that will be displayed to the user.
+ You can use the implicit conversion from String, or you can provide your
+ own LinkText instance
 \end_layout
 
 \begin_layout Itemize
-Access control (Add your own If/Unless on params)
+def params - Must return a List[LocParam] that is used to control behavior
+ as we've shown in the previous sections
 \end_layout
 
-\end_deeper
 \begin_layout Itemize
-Can specify your own Params still (params)
-\begin_inset CommandInset label
-LatexCommand label
-name "ite:Can-specify-your"
+def defaultParams - This is used for type-safe rewriting, which we'll cover
+ in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Type-Safe-Params"
 
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+These essentially mirror the params that are required when you use Loc.apply
+ to generate a Loc.
+ 
+\end_layout
+
+\begin_layout Subsection
+Corresponding Functions
+\end_layout
+
+\begin_layout Standard
+Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:LocParam-Methods-in-loc"
+
+\end_inset
+
+lists the LocParams and their corresponding method in Loc, with notes concerning
+ any differences in definition or usage.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+placement h
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="8" columns="3">
+<features islongtable="true">
+<column alignment="center" valignment="top" width="1in">
+<column alignment="center" valignment="top" width="1.5in">
+<column alignment="center" valignment="top" width="2.5in">
+<row endhead="true" endfirsthead="true">
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+LocParam
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Loc Method
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Notes
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Hidden
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+N/A
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+To make your Loc hidden, add a Hidden LocParam to your params method return
+ value
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+If/Unless
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+override testAccess
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+You need to return an Either to indicate success (Left[Boolean]) or failure
+ (Right[Can[LiftResponse]])
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Template
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+override calcTemplate
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Return a Can[NodeSeq]
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Snippet and LocSnippets
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+override snippets
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+snippets is a PartialFunction[String, Can[ParamType]), NodeSeq => NodeSeq],
+ which lets you use the type-safe parameter to control behavior.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Title
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+override title
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+You can override 
+\begin_inset Quotes eld
+\end_inset
+
+def title
+\begin_inset Quotes erd
+\end_inset
+
+ or 
+\begin_inset Quotes eld
+\end_inset
+
+def title(in: ParamType)
+\begin_inset Quotes erd
+\end_inset
+
+ depending on whether you want to use type-safe parameters
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Test
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+override doesMatch_?
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+It's your responsibility to make sure that the 
+\emph on
+path
+\emph default
+ of the request matches your Loc, since this method is what SiteMap uses
+ to find the proper Loc for a request
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+LocGroup
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+override inGroup_?
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Nothing special here
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+LocParam Methods in Loc
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:LocParam-Methods-in-loc"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We'll show a full example of a Loc implementation in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:An-Example-Loc"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+Type Safe Parameters
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Type-Safe-Params"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+One of the nice features of Loc is that it allows you to rewrite requests
+ in a type-safe manner.
+ What this means is that we can define a rewrite function on our Loc instance
+ that not only return a standard RewriteResponse, but also a parameter that
+ we can define to pass information back to our menu to control behavior.
+ The reason that this is type-safe is that we define our Loc on the type
+ of the parameter itself.
+ For instance, let's expand the functionality of our app so that we have
+ a page called 
+\begin_inset Quotes eld
+\end_inset
+
+ledger
+\begin_inset Quotes erd
+\end_inset
+
+ that shows the ledger entries.
+ We would like this page to normally only be viewable by the owner of the
+ ledger, but allow them to share it out to other members.
+ We would also like to let the owner choose whether these other users can
+ edit entires on a per-user basis.
+ Let's start by defining our type-safe parameter class as shown in listing
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Defining-LedgerInfo"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Defining LedgerInfo
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Defining-LedgerInfo"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+abstract class LedgerInfo
+\end_layout
+
+\begin_layout Plain Layout
+
+case class NoSuchLedgerInfo extends LedgerInfo
+\end_layout
+
+\begin_layout Plain Layout
+
+case class NoPermsLedgerInfo extends LedgerInfo
+\end_layout
+
+\begin_layout Plain Layout
+
+case class FullLedgerInfo(ledger : Ledger,
+\end_layout
+
+\begin_layout Plain Layout
+
+                          owner : Boolean,
+\end_layout
+
+\begin_layout Plain Layout
+
+                          editor : Boolean) extends LedgerInfo
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We define a few case classes to indicate various states.
+ The FullLedgerInfo holds the ledger itself as well as some flags for behavior.
+ Now that we have our parameter type, we can start to define our Loc, as
+ shown in listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Defining-a-Type-Safe-loc"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Defining a Type-Safe Loc
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Defining-a-Type-Safe-loc"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+class LedgerLoc extends Loc[LedgerInfo] {
+\end_layout
+
+\begin_layout Plain Layout
+
+...
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Assuming that a Ledger instance has a unique string ID, we would like to
+ use URL rewriting so that we can access a ledger via 
+\begin_inset Quotes eld
+\end_inset
+
+/ledger/<unique id>
+\begin_inset Quotes erd
+\end_inset
+
+.
+ Our rewrite function, shown in listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:The-Rewrite-Function"
+
+\end_inset
+
+, handles a few different things at once.
+ It handles checking whether the user is logged in (since testAccess is
+ fired after rewrite 
 \begin_inset Note Note
 status open
 
 \begin_layout Plain Layout
-Move this label to an appropriate location
+confirm
+\end_layout
+
+\end_inset
+
+), locating the correct ledger, and checking permissions if everything else
+ is OK.
+ If the user isn't logged in, we redirect to the login page and pass the
+ original URI to it so that they can come back after login.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+The Rewrite Function
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:The-Rewrite-Function"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
 
 
+\end_layout
+
+\begin_layout Plain Layout
+
+def rewrite (req : RewriteRequest) = req match {
+\end_layout
+
+\begin_layout Plain Layout
+
+  case RewriteRequest(ParsePath(
+\begin_inset Quotes eld
+\end_inset
+
+ledger
+\begin_inset Quotes erd
+\end_inset
+
+ :: lid :: Nil, _, _), _, _) => {
+\end_layout
+
+\begin_layout Plain Layout
+
+	val ledgerList = Ledger.findAll(By(Ledger.id, lid))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    (ledgerList.size, User.loggedIn_?) match {
+\end_layout
+
+\begin_layout Plain Layout
+
+      case (0, _) => (RewriteResponse(
+\begin_inset Quotes eld
+\end_inset
+
+ledger
+\begin_inset Quotes erd
+\end_inset
+
+ :: Nil), NoSuchLedgerInfo)
+\end_layout
+
+\begin_layout Plain Layout
+
+      case (_, false) => (RewriteResponse(
+\begin_inset Quotes eld
+\end_inset
+
+login
+\begin_inset Quotes erd
+\end_inset
+
+ :: Nil, 
+\begin_inset Quotes eld
+\end_inset
+
+origURI
+\begin_inset Quotes erd
+\end_inset
+
+ -> (
+\begin_inset Quotes eld
+\end_inset
+
+/ledger/
+\begin_inset Quotes erd
+\end_inset
+
+ + lid)), NoPermsLedgerInfo)
+\end_layout
+
+\begin_layout Plain Layout
+
+      case (_, true) => {
+\end_layout
+
+\begin_layout Plain Layout
+
+        val ledger = ledgerList.head
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+        if (ledger.viewers.contains(User)) {
+\end_layout
+
+\begin_layout Plain Layout
+
+          val owner = ledger.owner == User
+\end_layout
+
+\begin_layout Plain Layout
+
+          val editor = owner || ledger.editors.contains(User)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+          (RewriteResponse(
+\begin_inset Quotes eld
+\end_inset
+
+ledger
+\begin_inset Quotes erd
+\end_inset
+
+ :: Nil), FullLedgerInfo(ledger, owner, editor))
+\end_layout
+
+\begin_layout Plain Layout
+
+        } else {
+\end_layout
+
+\begin_layout Plain Layout
+
+          (RewriteResponse(
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+ :: Nil, 
+\begin_inset Quotes eld
+\end_inset
+
+error
+\begin_inset Quotes erd
+\end_inset
+
+ -> 
+\begin_inset Quotes eld
+\end_inset
+
+You do not have permission to view this ledger
+\begin_inset Quotes erd
+\end_inset
+
+), NoPermsLedgerInfo)
+\end_layout
+
+\begin_layout Plain Layout
+
+        }
+\end_layout
+
+\begin_layout Plain Layout
+
+      }
+\end_layout
+
+\begin_layout Plain Layout
+
+    }
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now that we've defined the transformation from URL to parameter, we need
+ to define the behaviors based on the parameter.
+ The ledger page will show a list of ledger entries, and if the user is
+ an editor it will allow them to add new entries or edit the old ones.
+ If the user is an owner they will also get a menu to control permissions.
+ For this example we'll use a single template and we'll change the snippet
+ behavior based on our permissions, as shown in listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Defining-Snippet-Behavior"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Defining Snippet Behavior
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Defining-Snippet-Behavior"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def snippets = {
+\end_layout
+
+\begin_layout Plain Layout
+
+  case (
+\begin_inset Quotes eld
+\end_inset
+
+ledger
+\begin_inset Quotes erd
+\end_inset
+
+, NoSuchLedgerInfo) => {ignore => Text(
+\begin_inset Quotes eld
+\end_inset
+
+Could not find the requested ledger
+\begin_inset Quotes erd
+\end_inset
+
+)}
+\end_layout
+
+\begin_layout Plain Layout
+
+  case (
+\begin_inset Quotes eld
+\end_inset
+
+ledger
+\begin_inset Quotes erd
+\end_inset
+
+, NoPermsLedgerInfo) => {ignore => Text(
+\begin_inset Quotes eld
+\end_inset
+
+You don't haver permission to view this ledger
+\begin_inset Quotes erd
+\end_inset
+
+)}
+\end_layout
+
+\begin_layout Plain Layout
+
+  case (
+\begin_inset Quotes eld
+\end_inset
+
+ledger
+\begin_inset Quotes erd
+\end_inset
+
+, FullLedgerInfo(ledger, _, editor) => Ledger.show(ledger, editor) _
+\end_layout
+
+\begin_layout Plain Layout
+
+  case (
+\begin_inset Quotes eld
+\end_inset
+
+addEntry
+\begin_inset Quotes erd
+\end_inset
+
+, FullLedgerInfo(ledger, _, true) => Ledger.add(ledger) _
+\end_layout
+
+\begin_layout Plain Layout
+
+  case (
+\begin_inset Quotes eld
+\end_inset
+
+addEntry
+\begin_inset Quotes erd
+\end_inset
+
+, _) => {ignore => Text(
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+) }
+\end_layout
+
+\begin_layout Plain Layout
+
+  case (
+\begin_inset Quotes eld
+\end_inset
+
+ownerMenu
+\begin_inset Quotes erd
+\end_inset
+
+, FullLedgerInfo(ledger, true, _) => Ledger.ownerOps(ledger) _
+\end_layout
+
+\begin_layout Plain Layout
+
+  case (
+\begin_inset Quotes eld
+\end_inset
+
+ownerMenu
+\begin_inset Quotes erd
+\end_inset
+
+, _) => {ignore => Text(
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+) }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We can also define the title of the page based on the parameter, as shown
+ in listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Defining-the-Title"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Defining the Title
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Defining-the-Title"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def title (in : LedgerInfo) = in match {
+\end_layout
+
+\begin_layout Plain Layout
+
+  case FullLedgerInfo(ledger, _, _) => Text(
+\begin_inset Quotes eld
+\end_inset
+
+Ledger 
+\begin_inset Quotes eld
+\end_inset
+
+ + ledger.name)
+\end_layout
+
+\begin_layout Plain Layout
+
+  case _ => Text(
+\begin_inset Quotes eld
+\end_inset
+
+No ledger available
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Conclusion
+\end_layout
+
+\begin_layout Standard
+As we've shown in this chapter, SiteMap offers a wide range of functionality
+ to let you control site navigation and access.
+ In addition to controlling specific portions of the behavior via individual
+ LocParams, you can subclass Loc directly and gain the benefits of type-safe
+ rewriting of your URLs.
+ Together these offer a rich set of tools for building your website exactly
+ how you want.
 \end_layout
 
 \end_body
