@@ -3693,34 +3693,128 @@ name "sec:Lift-reponses"
 Lift framework makes a lot of things really easy and it provides extremly
  useful abstractions as you may have already discovered.
  Responses to clients are also abstacted by LiftResponse trait.
- There are numerous response types such as:
+ There are numerous response types and here is the simplified vieew of the
+ class hierarchy:
 \end_layout
 
+\begin_layout Itemize
+LiftResponse
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+BasicResponse
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+InMemoryResponse
+\end_layout
+
+\begin_layout Itemize
+StreamingResponse
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+JSonResponse
+\end_layout
+
+\begin_layout Itemize
+RedirectResponse
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+RedirectWithState
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+ToResponse
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+XhtmlRespomse
+\end_layout
+
+\begin_layout Itemize
+XmlResponse
+\end_layout
+
+\begin_layout Itemize
+XmlMimeResponse
+\end_layout
+
+\begin_layout Itemize
+AtomResponse
+\end_layout
+
+\begin_layout Itemize
+OpenSearchResponse
+\end_layout
+
+\begin_layout Itemize
+AtomCreatedResponse
+\end_layout
+
+\begin_layout Itemize
+AtomCategoryResponse
+\end_layout
+
+\begin_layout Itemize
+AtomServiceResponse
+\end_layout
+
+\begin_layout Itemize
+CreatedResponse
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+OkResponse
+\end_layout
+
+\begin_layout Itemize
+PermRedirectResponse
+\end_layout
+
+\begin_layout Itemize
+BadResponse
+\end_layout
+
+\begin_layout Itemize
+UnauthorizedResponse
+\end_layout
+
+\begin_layout Itemize
+UnauthorizedDigestResponse
+\end_layout
+
+\begin_layout Itemize
+NotFoundResponse
+\end_layout
+
+\begin_layout Itemize
+MethodNotAllowedResponse
+\end_layout
+
+\begin_layout Itemize
+GoneResponse
+\end_layout
+
+\end_deeper
 \begin_layout Standard
-\begin_inset Float figure
-wide false
-sideways false
-status open
-
-\begin_layout Plain Layout
-\begin_inset Caption
-
-\begin_layout Plain Layout
-Lift responses
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-
-
+We won't get into details right now oh what exactly each and every class/object
+ does, although their purpose is somehow intuitive.
+ It is important to know that whenever you need to return a LiftResponse
+ reference from one of your functions, for example LiftRules.dispatch you
+ can you can use one of these classes.
+ So ultimatelly Lift doesn;t really provide you the HttpServletResponse
+ object instead all Lift responses are impersonated by a LiftResponse instance
+ and it content (the actual payload, http headers, content-type, cookies
+ etc.) is written internally by Lift to the container's output stream.
 \end_layout
 
 \begin_layout Section
@@ -3760,16 +3854,31 @@ name "sec:HTTP-redirects"
 \end_layout
 
 \begin_layout Standard
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-What do we want to have here?
+HTTP redirects are pretty important artifacts that many web application
+ uses.
+ In Lift there you can use at least two ways of sending a redirect to the
+ client:
 \end_layout
 
-\end_inset
+\begin_layout Enumerate
+Call S.redirectTo.
+ When you do this internally Lift is throwing an exception and catches it
+ later on thus shortcircuiting the rest of the application logic
+\end_layout
 
+\begin_layout Enumerate
+When you need to return a LiftResponse you can actually return a RedirectRespons
+e or a RedirectWithState response.
+\end_layout
 
+\begin_layout Standard
+The idea with RedirectWithState is that you can spacify a function to be
+ executed when the browser sends the request upon the redirect response
+ and you can also sent Lift notices (see S.notice, S.warning, S.error) that
+ would be rendered in the redirectd page.
+ Similarly if you want to execute a function when you call S.redirectTo there
+ is an overloaded version of this function that allows you to also specify
+ a function to be executed.
 \end_layout
 
 \begin_layout Section
@@ -3784,10 +3893,10 @@ name "sec:Session-Management"
 \end_layout
 
 \begin_layout Standard
-Lift is in essense a stateful framework and naturally state needs to be
+Lift is in essence a stateful framework and naturally state needs to be
  managed.
  You may be already familiar with HttpSession and and how a J(2)EE web container
-identifies an HttpSession; either by JSESSIONID cookie or by JSESSIONID
+ identifies an HttpSession; either by JSESSIONID cookie or by JSESSIONID
  URI sequence (in case of URL rewriting).
  Well Lift uses a LiftSession reference which is is not actually 
 \begin_inset Quotes eld
@@ -3958,7 +4067,7 @@ The next question would be
 \begin_inset Quotes eld
 \end_inset
 
-So we have internal session management so how do we cope that in a clustered
+So we have internal session management, how do we cope with that in a clustered
  environment? ...
  how sessions are replicated?
 \begin_inset Quotes erd
