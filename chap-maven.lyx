@@ -1,4 +1,4 @@
-#LyX 1.6.0 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -44,7 +44,7 @@
 \begin_body
 
 \begin_layout Chapter
-An introduction to Maven
+A Brief Tour of Maven
 \begin_inset Index
 status collapsed
 
@@ -54,7 +54,7 @@ Maven
 
 \end_inset
 
- and Project Layout
+
 \begin_inset CommandInset label
 LatexCommand label
 name "cha:Maven"
@@ -65,48 +65,105 @@ name "cha:Maven"
 \end_layout
 
 \begin_layout Standard
-In this chapter we'll discuss the Maven build tool and how Lift uses it.
- We'll also take a brief look at the typical layout of a Lift application.
-\end_layout
-
-\begin_layout Standard
-http://suereth.blogspot.com/2008/10/maven-for-beginners.html
-\end_layout
-
-\begin_layout Standard
-http://scala-blogs.org/2008/01/maven-for-scala.html
+In this chapter we'll discuss the Maven build tool and some of the basics
+ of configuration and usage.
+ Maven is what Lift uses for build management, so becoming acquainted with
+ with Maven is important to getting the most out of Lift.
+ If you're already familiar with Maven you can safely skip this chapter.
+ 
 \end_layout
 
 \begin_layout Section
-Maven
-\end_layout
-
-\begin_layout Subsection
 What is Maven?
 \end_layout
 
 \begin_layout Standard
-It's a project management tool.
+Maven is a project management tool, as opposed to simply a build tool.
  The Maven site
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+\begin_inset CommandInset href
+LatexCommand href
+target "http://maven.apache.org/"
+
+\end_inset
+
+
 \end_layout
 
-\begin_layout Subsection
-Build Lifecycles
+\end_inset
+
+ describes the goals of Maven as:
+\end_layout
+
+\begin_layout Itemize
+Make the build process easy
+\end_layout
+
+\begin_layout Itemize
+Provide a uniform build system
+\end_layout
+
+\begin_layout Itemize
+Provide quality project information
+\end_layout
+
+\begin_layout Itemize
+Provide guidelines for best practices
+\end_layout
+
+\begin_layout Itemize
+Allow transparent migration to new features
 \end_layout
 
 \begin_layout Standard
-Maven is built on the concept of lifecycles and there are three that are
- built-in, 
+As a project management tool, Maven goes beyond just controlling compilation
+ of your code.
+ By default, Maven comes equipped not only to perform development-centric
+ tasks, but it can generate documentation from your code and for your project
+ website.
+ Everything in Maven is controlled via the pom.xml (Project Object Model)
+ file, which contains both information and configuration details on the
+ project.
+ We'll be covering some of the basic aspects of the POM through the rest
+ of this chapter
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+A complete POM reference is available at 
+\begin_inset CommandInset href
+LatexCommand href
+target "http://maven.apache.org/pom.html"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section
+Lifecycles, Phases and Goals
+\end_layout
+
+\begin_layout Standard
+Maven is designed around the concept of project lifecycles.
+ While you can define your own, there are three built-in lifecycles: 
 \family typewriter
 default, clean
 \family default
  and 
 \family typewriter
-site
-\end_layout
+site.
 
-\begin_layout Standard
-The 
+\family default
+ The 
 \family typewriter
 default
 \family default
@@ -115,31 +172,42 @@ default
 \family typewriter
 clean
 \family default
- lifecycle cleans compiled objects or anything else that needs to be removed
- or reset.
+ lifecycle cleans (deletes) compiled objects or anything else that needs
+ to be removed or reset to get the project to a pristine pre-build state.
  Finally, the 
 \family typewriter
 site
 \family default
- lifecycle creates the projects documentation.
+ lifecycle generates the project documentation.
 \end_layout
 
 \begin_layout Standard
-Within each of the lifecycle there are a number of phases.
- Below is a listing of the phases that make up the 
+Within each lifecycle there are a number of phases that define various points
+ in the development process.
+ The most interesting lifecycle (from the perspective of writing code) is
+ 
 \family typewriter
 default
 \family default
- lifecycle.
+.
+ The most commonly used phases in the default lifecycle are
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+A full listing of lifecycles and their phases is at 
+\begin_inset CommandInset href
+LatexCommand href
+target "http://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html"
+
+\end_inset
+
+
 \end_layout
 
-\begin_layout Itemize
+\end_inset
 
-\family typewriter
-validate
-\family default
- - validate the project is correct and all necessary information is available
- 
+:
 \end_layout
 
 \begin_layout Itemize
@@ -147,7 +215,7 @@ validate
 \family typewriter
 compile
 \family default
- - compile the source code of the project 
+ - compiles the main source code of the project 
 \end_layout
 
 \begin_layout Itemize
@@ -155,8 +223,10 @@ compile
 \family typewriter
 test
 \family default
- - test the compiled source code using a suitable unit testing framework.
- These tests should not require the code be packaged or deployed 
+ - tests the main code using a suitable unit testing framework.
+ These tests should not require that the code is packaged or deployed.
+ This phase implicitly calls the testCompile goal to compile the test case
+ source code
 \end_layout
 
 \begin_layout Itemize
@@ -164,27 +234,12 @@ test
 \family typewriter
 package
 \family default
- - take the compiled code and package it in its distributable format, such
- as a JAR.
- 
-\end_layout
-
-\begin_layout Itemize
-
+ - packages the compiled code into its distributable format, such as a JAR.
+ The POM controls how a project is packaged through the 
 \family typewriter
-integration-test
+<packaging/>
 \family default
- - process and deploy the package if necessary into an environment where
- integration tests can be run 
-\end_layout
-
-\begin_layout Itemize
-
-\family typewriter
-verify
-\family default
- - run any checks to verify the package is valid and meets quality criteria
- 
+ element
 \end_layout
 
 \begin_layout Itemize
@@ -192,8 +247,14 @@ verify
 \family typewriter
 install
 \family default
- - install the package into the local repository, for use as a dependency
- in other projects locally 
+ - installs the package into the local repository (see section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Repositories"
+
+\end_inset
+
+), for use as a dependency in other projects locally 
 \end_layout
 
 \begin_layout Itemize
@@ -201,60 +262,326 @@ install
 \family typewriter
 deploy
 \family default
- - done in an integration or release environment, copies the final package
- to the remote repository for sharing with other developers and projects.
+ - used in an integration or release environment.
+ Copies the final package to the remote repository for sharing with other
+ developers and projects.
 \end_layout
 
 \begin_layout Standard
-When you run
+Maven is typically run from the command line
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+There are IDE plugins for Maven for most major IDEs as well
+\end_layout
+
+\end_inset
+
+ by executing command 
+\begin_inset Quotes eld
+\end_inset
+
+
 \family typewriter
- mvn deploy
+mvn <phase>
 \family default
-, maven with run through each of these phases, executing the tasks associated
- with them.
- Since 
+
+\begin_inset Quotes erd
+\end_inset
+
+, where 
 \family typewriter
-deploy
+<phase>
 \family default
- is last in the list of tasks, all preceeding tasks will be executed as
- well.
- If you ran 
+ is one of the phases listed above.
+ Since phases are defined in order, all phases up to the one you specify
+ will be run.
+ For example, if you want to package your code, simply run 
+\begin_inset Quotes eld
+\end_inset
+
+
 \family typewriter
 mvn package
 \family default
-, only 
-\family typewriter
-validate
-\family default
-, 
+
+\begin_inset Quotes erd
+\end_inset
+
+ and the 
 \family typewriter
 compile
 \family default
-, 
+ and 
 \family typewriter
 test
 \family default
- and 
+ phases will automatically be run.
+ You can also execute specific goals for the various plugins that Maven
+ uses.
+ Execution of a specific goal is done with the command 
+\begin_inset Quotes eld
+\end_inset
+
+
 \family typewriter
-package
+mvn <plugin>:<goal>
 \family default
- will be run.
- Typically, during the development of your Lift application you'll run 
+
+\begin_inset Quotes erd
+\end_inset
+
+.
+ For instance, the compile phase actually calls the 
+\family typewriter
+compiler:compile
+\family default
+ goal by default.
+ A common usage of executing a goal for Lift is the 
+\family typewriter
+jetty:run
+\family default
+ goal, which compiles all of your code and then runs an instance of the
+ Jetty
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+\begin_inset CommandInset href
+LatexCommand href
+target "http://www.mortbay.org/jetty/"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ web server so that you can exercise your app.
+ The jetty plugin is not directly bound to any lifecycle or phase, so we
+ have to execute the goal directly.
+ 
+\end_layout
+
+\begin_layout Standard
+One final note is that you can specify multiple phases/goals in one command
+ line, and Maven will execute them in order.
+ This is useful, for instance, if you want to do a clean build of your project.
+ Simply run 
+\begin_inset Quotes eld
+\end_inset
+
+
 \family typewriter
 mvn clean jetty:run
 \family default
+
+\begin_inset Quotes erd
+\end_inset
+
+ and the 
+\family typewriter
+clean
+\family default
+ lifecycle will run, followed by the 
+\family typewriter
+jetty:run
+\family default
+ goal (and all of the prerequisites for jetty:run, such as compile).
+\end_layout
+
+\begin_layout Section
+Repositories
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Repositories"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Repositories are one of the key features of Maven.
+ A repository is a location that contains plugins and packages for your
+ project to use.
+ There are two types of repository: local and remote.
+ Your local repository is, as the name suggests, local to your machine,
+ and represents a cache of artifacts downloaded from remote repositories
+ as well as packages that you've installed from your own projects.
+ The default locations of your local repo will be:
+\end_layout
+
+\begin_layout Itemize
+Unix: 
+\family typewriter
+~/.m2/repository
+\end_layout
+
+\begin_layout Itemize
+Windows: 
+\family typewriter
+C:
+\backslash
+Documents and Settings
+\backslash
+<user>
+\backslash
+.m2
+\backslash
+repository
+\end_layout
+
+\begin_layout Standard
+You can override the local repository location by setting the M2_REPO environmen
+t variable, or by editing the <home>/.m2/settings.xml file
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+Details on customizing your Maven installation are available at 
+\begin_inset CommandInset href
+LatexCommand href
+target "http://maven.apache.org/settings.html"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
 .
 \end_layout
 
-\begin_layout Subsection
+\begin_layout Standard
+Remote repositories are repositories that are reachable via protocols like
+ http and ftp and are generally where you will find the dependencies needed
+ for your projects.
+ Repositories are defined in the POM; listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Repositories"
+
+\end_inset
+
+ shows the definition of the scala-tools.org release repository where Lift
+ is found
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+scala-tools.org also has a snapshots repository where nightly builds of the
+ scala-tools projects are kept
+\end_layout
+
+\end_inset
+
+.
+ Maven has an internal default set of repositories so usually you don't
+ need to define too many extra repos.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=XML"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Defining a repository
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Defining-a-repository"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<repositories>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <repository>
+\end_layout
+
+\begin_layout Plain Layout
+
+    <id>scala-tools.org</id>
+\end_layout
+
+\begin_layout Plain Layout
+
+    <name>Scala Tools Maven2 Repository</name>
+\end_layout
+
+\begin_layout Plain Layout
+
+    <url>http://scala-tools.org/repo-releases</url>
+\end_layout
+
+\begin_layout Plain Layout
+
+  </repository>
+\end_layout
+
+\begin_layout Plain Layout
+
+</repositories>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+As a final note, sometimes you may not have net access or the remote repos
+ will be offline for some reason.
+ In this case, make sure to specify the 
+\begin_inset Quotes eld
+\end_inset
+
+-o
+\begin_inset Quotes erd
+\end_inset
+
+ (offline) flag so that Maven skips checking the remote repos.
+\end_layout
+
+\begin_layout Section
 Plugins
 \end_layout
 
 \begin_layout Standard
-Plugins add functionality to the build system.
- Lift is written in Scala, so we need to add the Maven Scala Plugin that
- adds the ability to compile Scala code.
- Below is a snippet from the main pom.xml file for a Lift application.
+Plugins add functionality to the Maven build system.
+ Lift is written in Scala, so the first plugin that we need to add is the
+ Maven Scala Plugin; this adds the ability to compile Scala code in your
+ project.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Configuring-the-Maven-scala"
+
+\end_inset
+
+ shows how we configure the plugin in the pom.xml file for a Lift application.
  You can see the Scala plugin adds a 
 \family typewriter
 compile
@@ -263,26 +590,38 @@ compile
 \family typewriter
 testCompile
 \family default
- goal for the build phase.
+ goal for the build phase, which makes Maven execute this plugin when those
+ goals are called (explicitly or implicitly).
+ In addition, the configuration element allows you to set properties of
+ the plugin executions; in this case, we're explicitly specifying the version
+ of Scala that should be used for compilation.
 \end_layout
 
 \begin_layout Standard
-\begin_inset Box Frameless
-position "t"
-hor_pos "c"
-has_inner_box 1
-inner_pos "t"
-use_parbox 0
-width "100col%"
-special "none"
-height "1in"
-height_special "totalheight"
+\begin_inset listings
+lstparams "language=XML"
+inline false
 status open
 
 \begin_layout Plain Layout
-\begin_inset listings
-inline false
-status open
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Configuring the Maven Scala Plugin
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Configuring-the-Maven-scala"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
 
 \begin_layout Plain Layout
 
@@ -291,72 +630,72 @@ status open
 
 \begin_layout Plain Layout
 
-<groupId>org.scala-tools</groupId>         
+  <groupId>org.scala-tools</groupId>         
 \end_layout
 
 \begin_layout Plain Layout
 
-<artifactId>maven-scala-plugin</artifactId>         
+  <artifactId>maven-scala-plugin</artifactId>         
 \end_layout
 
 \begin_layout Plain Layout
 
-<executions>           
+  <executions>
 \end_layout
 
 \begin_layout Plain Layout
 
-<execution>             
+    <execution>
 \end_layout
 
 \begin_layout Plain Layout
 
-<goals>               
+      <goals>
 \end_layout
 
 \begin_layout Plain Layout
 
-<goal>compile</goal>               
+        <goal>compile</goal>               
 \end_layout
 
 \begin_layout Plain Layout
 
-<goal>testCompile</goal>             
+        <goal>testCompile</goal>             
 \end_layout
 
 \begin_layout Plain Layout
 
-</goals>           
+      </goals>           
 \end_layout
 
 \begin_layout Plain Layout
 
-</execution>         
+    </execution>         
 \end_layout
 
 \begin_layout Plain Layout
 
-</executions>         
+  </executions>         
 \end_layout
 
 \begin_layout Plain Layout
 
-<configuration>           
+  <configuration>           
 \end_layout
 
 \begin_layout Plain Layout
 
-<scalaVersion>${scala.version}</scalaVersion>         
+    <scalaVersion>${scala.version}</scalaVersion>         
 \end_layout
 
 \begin_layout Plain Layout
 
-</configuration>       
+  </configuration>       
 \end_layout
 
 \begin_layout Plain Layout
 
-</plugin>       
+</plugin>
 \end_layout
 
 \end_inset
@@ -364,67 +703,110 @@ status open
 
 \end_layout
 
-\end_inset
-
-
-\end_layout
-
-\begin_layout Subsection
+\begin_layout Section
 Dependencies
 \end_layout
 
 \begin_layout Standard
 Dependency management is one of the more useful features of Maven.
- Below is a declaration of the Jetty dependancy for the default Lift application.
- The details of the specification are straight forward, naming the dependency,
- setting a minimum version and defining the scope, in this case, the 
-\family typewriter
-test
-\family default
- phase is defined.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Adding-a-Dependency"
+
+\end_inset
+
+ shows a declaration of the Jetty dependency for the default Lift application.
+ The details of the specification are straightforward:
 \end_layout
 
-\begin_layout Standard
-\begin_inset Box Frameless
-position "t"
-hor_pos "c"
-has_inner_box 1
-inner_pos "t"
-use_parbox 0
-width "100col%"
-special "none"
-height "1in"
-height_special "totalheight"
+\begin_layout Itemize
+The groupId and artifactId specify the artifact.
+ A given group may have many artifacts under it; for instance, Lift uses
+ net.liftweb for its groupId and the core artifacts are lift-core and life-util
+\end_layout
+
+\begin_layout Itemize
+The version is specified either directly or with a range, as we've used
+ in this example.
+ A range is defined as <left>min,max<right> where left and right indicate
+ an inclusive or exclusive range: [ and ] are inclusive, ( and ) are exclusive.
+ Omitting a version in a range leaves that portion of the range unbounded.
+ Here we configure the pom so that Jetty 6.1.6 or higher is used
+\end_layout
+
+\begin_layout Itemize
+The scope of the dependency is optional
+\begin_inset Foot
 status open
 
 \begin_layout Plain Layout
+Scope is discussed in detail at 
+\begin_inset CommandInset href
+LatexCommand href
+target "http://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+, and controls exactly where the dependency is used.
+ In this case we specify a test scope which means that the package will
+ only be available to test phases
+\end_layout
+
+\begin_layout Standard
 \begin_inset listings
+lstparams "language=XML"
 inline false
 status open
 
 \begin_layout Plain Layout
 
-<dependency>       
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Adding a Dependency
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Adding-a-Dependency"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Plain Layout
 
-<groupId>org.mortbay.jetty</groupId>       
+<dependency>
 \end_layout
 
 \begin_layout Plain Layout
 
-<artifactId>jetty</artifactId>       
+  <groupId>org.mortbay.jetty</groupId>
 \end_layout
 
 \begin_layout Plain Layout
 
-<version>[6.1.6,)</version>       
+  <artifactId>jetty</artifactId>
 \end_layout
 
 \begin_layout Plain Layout
 
-<scope>test</scope>     
+  <version>[6.1.6,)</version>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <scope>test</scope>
 \end_layout
 
 \begin_layout Plain Layout
@@ -437,24 +819,26 @@ status open
 
 \end_layout
 
-\end_inset
-
-
-\end_layout
-
-\begin_layout Subsubsection
+\begin_layout Subsection
 Adding a Dependency
 \end_layout
 
 \begin_layout Standard
-Let's say that you'd like to add a new library and you want Maven to make
- sure you've got the most up-to-date version.
+As an example, let's say that you'd like to add a new library and you want
+ Maven to make sure you've got the most up-to-date version.
  We're going to add Configgy
 \begin_inset Foot
 status open
 
 \begin_layout Plain Layout
-Configgy's home is http://www.lag.net/configgy/
+Configgy's home is 
+\begin_inset CommandInset href
+LatexCommand href
+target "http://www.lag.net/configgy/"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -475,14 +859,39 @@ a library for handling config files and logging for a scala daemon.
 \end_layout
 
 \begin_layout Standard
-First we need to tell Maven where we can get Configgy, so in the <repositories>
+First we need to tell Maven where we can get Configgy, so in the 
+\family typewriter
+<repositories>
+\family default
  section add the following:
 \end_layout
 
 \begin_layout Standard
 \begin_inset listings
+lstparams "language=XML"
 inline false
 status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Adding the Configgy repo
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Adding-the-Configgy-repo"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
 
 \begin_layout Plain Layout
 
@@ -515,13 +924,39 @@ status open
 \end_layout
 
 \begin_layout Standard
-Then in the <dependencies> section add:
+Then in the 
+\family typewriter
+<dependencies>
+\family default
+ section add:
 \end_layout
 
 \begin_layout Standard
 \begin_inset listings
+lstparams "language=XML"
 inline false
 status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Adding the Configgy dependency
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Adding-the-Configgy-dep"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
 
 \begin_layout Plain Layout
 
@@ -556,88 +991,99 @@ status open
 \begin_layout Standard
 That's it, you're done.
  The next time you run Maven for your project, it will pull down the Configgy
- jars into your M2_REPO.
- 
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Oh snap, add a section about M2_REPO
-\end_layout
-
+ jars into your local repository.
+ Maven will periodically check for new versions of dependencies when you
+ build, but you can always force a check with the 
+\begin_inset Quotes eld
 \end_inset
 
+-U
+\begin_inset Quotes erd
+\end_inset
 
+ (update) flag.
 \end_layout
 
-\begin_layout Subsection
-Using Maven with Lift
-\end_layout
-
-\begin_layout Standard
-As we touched on earlier, the interaction with Maven is generally limited
- with Lift.
- Getting started with either a sample application or starting from scratch
- you will mostly run the command 
-\family typewriter
-mvn clean jetty:run.
-
-\family default
- This command asks Maven to 
-\family typewriter
-clean
-\family default
- all your compiled classes and then execute the build phases that are pre-requis
-ites for the 
-\family typewriter
-jetty:run
-\family default
- goal.
- You can see an example pom.xml file for Jetty here: http://mirrors.ibiblio.org/pub
-/mirrors/maven2/org/mortbay/jetty/jetty/6.1.12.rc5/jetty-6.1.12.rc5.pom
-\end_layout
-
-\begin_layout Subsection
+\begin_layout Section
 Further Resources
 \end_layout
 
-\begin_layout Itemize
-http://maven.apache.org - Home page.
+\begin_layout Standard
+Obviously we've only scratched the surface on what you can with Maven and
+ how to configure it.
+ We've found the following set of references useful in learning and using
+ Maven:
 \end_layout
 
 \begin_layout Itemize
-http://maven.apache.org/what-is-maven.html - Their definition of Maven.
+\begin_inset CommandInset href
+LatexCommand href
+target "http://maven.apache.org"
+
+\end_inset
+
+ - The Maven home page
 \end_layout
 
 \begin_layout Itemize
-http://maven.apache.org/guides/introduction/introduction-to-the-pom.html -
- Introduction to the pom file.
+\begin_inset CommandInset href
+LatexCommand href
+target "http://maven.apache.org/what-is-maven.html"
+
+\end_inset
+
+ - A brief description of Maven's goals
 \end_layout
 
 \begin_layout Itemize
-http://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html#Life
-cycle_Reference - Introduction to the lifecycles.
+\begin_inset CommandInset href
+LatexCommand href
+target "http://maven.apache.org/guides/introduction/introduction-to-the-pom.html"
+
+\end_inset
+
+ - An introduction to the pom file
 \end_layout
 
 \begin_layout Itemize
-http://suereth.blogspot.com/2008/10/maven-for-beginners.html - General introduction
- to Maven.
+\begin_inset CommandInset href
+LatexCommand href
+target "http://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html"
+
+\end_inset
+
+- An overview of the lifecycles
 \end_layout
 
 \begin_layout Itemize
-http://scala-blogs.org/2008/01/maven-for-scala.html - Introduction to Maven
- for Scala projects.
+\begin_inset CommandInset href
+LatexCommand href
+target "http://suereth.blogspot.com/2008/10/maven-for-beginners.html"
+
+\end_inset
+
+- A brief Maven usage tutorial
 \end_layout
 
 \begin_layout Itemize
-http://mirrors.ibiblio.org/pub/mirrors/maven2/org/mortbay/jetty/jetty/6.1.12.rc5/jett
-y-6.1.12.rc5.pom - pom.xml file for Jetty 6.1.12.RC5
+\begin_inset CommandInset href
+LatexCommand href
+target "http://scala-blogs.org/2008/01/maven-for-scala.html"
+
+\end_inset
+
+- A brief tutorial on using Maven geared toward Scala
 \end_layout
 
 \begin_layout Itemize
-http://mvnrepository.com/ - Search for plugins and dependancies for your
- application.
- This site is invaluable.
+\begin_inset CommandInset href
+LatexCommand href
+target "http://mvnrepository.com/"
+
+\end_inset
+
+- A website that lets you search for Maven dependencies by name.
+ Invaluable when you're trying to add libraries to your project
 \end_layout
 
 \begin_layout Section
@@ -645,64 +1091,56 @@ Project Layout
 \end_layout
 
 \begin_layout Standard
-The directory structure of a Lift application is straight-forward, but we'll
- highlight a few important locations here.
+One of the things that allows Maven to work so well is that there is a standardi
+zed layout for projects.
+ We're not going to cover all of the standard locations for parts of your
+ Maven project, but we do want to highlight a few locations that are important
+ to Lift applications specifically:
 \end_layout
 
 \begin_layout Description
-<application_root>/src/main/scala This directory will contain your Scala
- source, such as snippets, model objects, and any libraries you write.
- The subfolder structure follows the traditional Java packaging style.
+<application_root>/src/main/scala This directory is where you place your
+ Scala source, such as snippets, model objects, and any libraries you write.
+ The subfolder structure follows the traditional Java packaging style
 \end_layout
 
 \begin_layout Description
-<application_root>/src/main/webapp All of the static aspects of your application
-, such as images, XHTML, JavaScript and CSS will be in this directory.
+<application_root>/src/main/webapp All of the web and static content for
+ your application, such as images, XHTML templates, JavaScript and CSS are
+ placed under this directory.
+ This directory is essentially what is packaged into the WAR in addition
+ to the output from your Scala sources
 \end_layout
 
 \begin_layout Description
-<application_root>/src/main/webapp/templates-hidden You'll find Lift templates
- are contained here.
- [See LiftViewFirst]
-\end_layout
-
-\begin_layout Standard
-\begin_inset Float figure
-wide false
-sideways false
-status open
-
-\begin_layout Plain Layout
-\align center
-\begin_inset Graphics
-	filename images/dirlayout.png
+<application_root>/src/main/webapp/templates-hidden This is a special location
+ for templates.
+ As we discuss more in sections 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:snippet-tag"
 
 \end_inset
 
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Caption
-
-\begin_layout Plain Layout
-\begin_inset CommandInset label
-LatexCommand label
-name "fig:dirlayout"
+ and 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:embed-tag"
 
 \end_inset
 
-Project Directory Layout
+, templates placed in this directory cannot be viewed directly by clients,
+ but are available to other templates
 \end_layout
 
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
+\begin_layout Description
+<application_root>/src/test/scala This directory is where you can put all
+ of your test code.
+ As with 
+\family typewriter
+src/main/scala
+\family default
+, the subfolder structure follows the traditional Java packaging style
 \end_layout
 
 \end_body
