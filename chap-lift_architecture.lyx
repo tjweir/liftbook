@@ -44,6 +44,13 @@
 
 \begin_layout Chapter
 Lift Architecture and Fundamentals
+\begin_inset CommandInset label
+LatexCommand label
+name "cha:Lift-Architecture"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -75,7 +82,7 @@ status open
 
 \begin_layout Plain Layout
 \begin_inset Flex URL
-status collapsed
+status open
 
 \begin_layout Plain Layout
 
@@ -568,7 +575,7 @@ LiftRules.rewrite
 \family default
 , this is useful for creating user-friendly URLs, among other things.
  The result of the transformation will be checked for possible rewrites
- until there are no more matches or it is explictly stopped
+ until there are no more matches or it is explicitly stopped
 \end_layout
 
 \begin_layout Enumerate
@@ -591,7 +598,7 @@ LiftRules.statelessDispatchTable
  If the partial functions defined in this table match the request then they
  are used to create LiftResponse that is sent to the user, bypassing any
  further processing.
- These are very useful for building things like REST API's.
+ These are very useful for building things like REST APIs.
  The term stateless refers to the fact that at the time the dispatch function
  is called, the stateful object, called 
 \family typewriter
@@ -640,7 +647,7 @@ S
  object (section 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "sec:S-object"
+reference "sub:S-object"
 
 \end_inset
 
@@ -692,18 +699,18 @@ S
  object (section 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "sec:S-object"
+reference "sub:S-object"
 
 \end_inset
 
 ).
- The first matching partial function is used to generate a LiftReponse that
- is returned to the client.
+ The first matching partial function is used to generate a LiftResponse
+ that is returned to the client.
  If none of the dispatch functions match then processing continues.
  Dispatch functions are covered in section 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "sec:Dispatch-functions"
+reference "sec:Custom-dispatch-func"
 
 \end_inset
 
@@ -756,16 +763,6 @@ LiftSession
 Req
 \family default
  arg.
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Is this really done after Comet and before Ajax?
-\end_layout
-
-\end_inset
-
-
 \end_layout
 
 \begin_layout Enumerate
@@ -821,7 +818,7 @@ Where? Do you mean the callbacks for form elements, etc?
  Please see SHtml obejct 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "sec:SHtml"
+reference "sub:SHtml"
 
 \end_inset
 
@@ -852,7 +849,7 @@ reference "cha:SiteMap"
 
 \begin_layout Enumerate
 Lookup the template based on the Req path.
- Lift will locate the templates using various aproaches:
+ Lift will locate the templates using various approaches:
 \end_layout
 
 \begin_deeper
@@ -907,19 +904,17 @@ reference "sec:Head-Merge"
 
 \begin_layout Enumerate
 Update the internal functions map.
- Basically this associates the user's scala functions with tokens that are
+ Basically this associates the user's Scala functions with tokens that are
  passed around in subsequent requests using HTTP query parameters
 \end_layout
 
 \begin_layout Enumerate
 Clean up notices (see S.error, S.warning, S.notice) since they were already
- rendered
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-We need to detail messages somewhere
-\end_layout
+ rendered.
+ Notices are covered in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "cha:Message-Handling"
 
 \end_inset
 
@@ -1289,7 +1284,16 @@ hidden templates
 \family typewriter
 /templates-hidden
 \family default
- directory of your web app.
+ directory of your web app; technically, Lift hides files in any directory
+ ending in 
+\begin_inset Quotes eld
+\end_inset
+
+-hidden
+\begin_inset Quotes erd
+\end_inset
+
+, but templates-hidden is somewhat of a de facto standard.
  Like the 
 \family typewriter
 WEB-XML
@@ -1385,7 +1389,7 @@ render
 As you can see, templates are a nice way of setting up your layout and then
  writing a few methods to fill in the XML fragments that make up your web
  applications.
- They provide a simple way to generate a uniform look for your site, paritcularl
+ They provide a simple way to generate a uniform look for your site, particularl
 y if you composite your templates using the surround and embed tags.
  If you'd like more control or don't need a template for a certain section,
  you'll want to use a View, which is coming up in the next section.
@@ -1446,7 +1450,7 @@ name "sec:Views"
 
 
 \begin_inset Note Note
-status collapsed
+status open
 
 \begin_layout Plain Layout
 Convert examples to PocketChange...
@@ -1480,7 +1484,7 @@ Views
  dispatch in more depth in section 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "sec:Dispatch-functions"
+reference "sec:Custom-dispatch-func"
 
 \end_inset
 
@@ -1606,7 +1610,7 @@ status open
 
 \begin_layout Plain Layout
 \begin_inset Note Note
-status collapsed
+status open
 
 \begin_layout Plain Layout
 This should be a pocketchange example
@@ -1737,6 +1741,1510 @@ Since you can choose to not include any of the pre-defined template XHTML,
 \end_layout
 
 \begin_layout Section
+Tags
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:ArchTags"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In the earlier sections on Templates and Views we briefly touched on some
+ of Lift's built-in tags, namely 
+\family typewriter
+snippet
+\family default
+ and 
+\family typewriter
+surround
+\family default
+.
+ In this section we'll go into more detail on those tags as well as cover
+ the rest of Lift's tags.
+\end_layout
+
+\begin_layout Subsection
+snippet
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:snippet-tag"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+
+\family typewriter
+Usage: <lift:snippet form="GET/POST" type="Class:method" multipart="true/false"
+ />
+\end_layout
+
+\begin_layout LyX-Code
+       <lift:Class.method form=
+\begin_inset Quotes erd
+\end_inset
+
+...
+\begin_inset Quotes erd
+\end_inset
+
+ multipart=
+\begin_inset Quotes erd
+\end_inset
+
+...
+\begin_inset Quotes erd
+\end_inset
+
+ />
+\end_layout
+
+\begin_layout LyX-Code
+       <lift:Class form=
+\begin_inset Quotes erd
+\end_inset
+
+...
+\begin_inset Quotes erd
+\end_inset
+
+ multipart=
+\begin_inset Quotes erd
+\end_inset
+
+...
+\begin_inset Quotes erd
+\end_inset
+
+ />
+\end_layout
+
+\begin_layout Standard
+The snippet tag is the workhorse of Lift.
+ In our experience, most of the functionality of your web apps will be handled
+ via snippets.
+ They're so important that we're going to cover their mechanism separately
+ in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Snippets"
+
+\end_inset
+
+.
+ In this section, however, we'll cover the specifics of the snippet tag.
+\end_layout
+
+\begin_layout Standard
+The most important part of the tag is the class and method definition.
+ There are three ways to specify this:
+\end_layout
+
+\begin_layout Enumerate
+Via the type attribute.
+ The value should be 
+\begin_inset Quotes eld
+\end_inset
+
+
+\family typewriter
+ClassName
+\family default
+:
+\family typewriter
+method
+\family default
+
+\begin_inset Quotes erd
+\end_inset
+
+ for the particular snippet method you want to have handle the tag
+\end_layout
+
+\begin_layout Enumerate
+Via a tag suffix of 
+\family typewriter
+Class.method
+\family default
+.
+ This is the same as specifying the type=
+\begin_inset Quotes erd
+\end_inset
+
+Class:method
+\begin_inset Quotes erd
+\end_inset
+
+ attribute
+\end_layout
+
+\begin_layout Enumerate
+Via a tag suffix of just 
+\family typewriter
+Class
+\family default
+.
+ This will use the 
+\family typewriter
+render
+\family default
+ method on the specified class to handle the tag
+\end_layout
+
+\begin_layout Standard
+Classes are resolved as specified in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Class-Resolution"
+
+\end_inset
+
+.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Snippet-tag-equivalence"
+
+\end_inset
+
+ shows three equivalent snippet tags.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Snippet tag equivalence
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Snippet-tag-equivalence"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<lift:snippet type=
+\begin_inset Quotes erd
+\end_inset
+
+MyClass:render
+\begin_inset Quotes erd
+\end_inset
+
+ />
+\end_layout
+
+\begin_layout Plain Layout
+
+<lift:MyClass.render />
+\end_layout
+
+\begin_layout Plain Layout
+
+<lift:MyClass />
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The 
+\family typewriter
+form
+\family default
+ and 
+\family typewriter
+multipart
+\family default
+ attributes are optional.
+ If 
+\family typewriter
+form
+\family default
+ is included then an appropriate form tag will be emitted into the XHTML
+ using the specified submission method
+\family typewriter
+.
+ 
+\family default
+The 
+\family typewriter
+multipart
+\family default
+ attribute is a boolean, and specifies whether a generated form tag should
+ be set to use multipart form submission; this is most typically used for
+ file uploads (section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:File-Uploads"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Subsection
+surround
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:surround-tag"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+Usage:
+\family typewriter
+ <lift:surround with="template_name" at=
+\begin_inset Quotes erd
+\end_inset
+
+binding
+\begin_inset Quotes erd
+\end_inset
+
+>children</lift:surround>
+\end_layout
+
+\begin_layout Standard
+Surrounds the child nodes with the named template; the child nodes are inserted
+ into the named template at the binding point specified by the 
+\begin_inset Quotes eld
+\end_inset
+
+at
+\begin_inset Quotes erd
+\end_inset
+
+ parameter (we'll cover the bind tag in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:bind-tag"
+
+\end_inset
+
+) Typically templates that will be used to surround other templates are
+ incomplete by themselves, so we usually store them in the 
+\family typewriter
+<app
+\begin_inset space ~
+\end_inset
+
+root>/templates-hidden
+\family default
+ subdirectory so that they can't be accessed directly.
+ Having said that, it's not required that the templates be in any specific
+ location (except for WEB-INF, obviously).
+ The most common usage of surround is so that you can use a 
+\begin_inset Quotes eld
+\end_inset
+
+master
+\begin_inset Quotes erd
+\end_inset
+
+ template for your site CSS, menu, etc.
+ An example use of surround is shown in listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Surrounding-your-page"
+
+\end_inset
+
+.
+ We'll show the counterpart master template in the section on the bind tag.
+ One more note is that the surrounding template name can either be a fully-quali
+fied path (i.e.
+ 
+\begin_inset Quotes eld
+\end_inset
+
+/templates-hidden/default
+\begin_inset Quotes erd
+\end_inset
+
+), or can just be the base filename (
+\begin_inset Quotes eld
+\end_inset
+
+default
+\begin_inset Quotes erd
+\end_inset
+
+).
+ In the latter case Lift will search all subdirectories of the app root
+ for the template.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "breaklines=true,language=XML"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Surrounding your page
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Surrounding-your-page"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<lift:surround with="default" at=
+\begin_inset Quotes erd
+\end_inset
+
+content
+\begin_inset Quotes erd
+\end_inset
+
+>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <p>Welcome to PocketChange!</p>
+\end_layout
+
+\begin_layout Plain Layout
+
+</lift:surround>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Note that you can use multiple surround templates for different functionality,
+ and surrounds can be nested.
+ For example, you might want to have a separate template for your administrative
+ pages that adds a menu to your default template.
+ In that case, your admin.html could look like listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Adding-an-Admin-menu"
+
+\end_inset
+
+.
+ As you can see, we've named our bind in the admin template to also be 
+\begin_inset Quotes eld
+\end_inset
+
+content
+\begin_inset Quotes erd
+\end_inset
+
+ so that we keep things consistent for the rest of our templates.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Adding an Admin Menu
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Adding-an-Admin-menu"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<lift:surround with=
+\begin_inset Quotes erd
+\end_inset
+
+default
+\begin_inset Quotes erd
+\end_inset
+
+ at=
+\begin_inset Quotes erd
+\end_inset
+
+content
+\begin_inset Quotes erd
+\end_inset
+
+>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <lift:Admin.menu />
+\end_layout
+
+\begin_layout Plain Layout
+
+  <lift:bind name=
+\begin_inset Quotes erd
+\end_inset
+
+content
+\begin_inset Quotes erd
+\end_inset
+
+ />
+\end_layout
+
+\begin_layout Plain Layout
+
+</lift:surround>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Greyedout
+status open
+
+\begin_layout Plain Layout
+You cannot have a hidden template with the same name as a sub-directory
+ of your webapp directory.
+ For example, if you had an admin.html template in /templates-hidden, you
+ could not also have an admin directory.
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+bind
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:bind-tag"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+Usage: <lift:bind name=
+\begin_inset Quotes erd
+\end_inset
+
+binding_name
+\begin_inset Quotes erd
+\end_inset
+
+ />
+\end_layout
+
+\begin_layout Standard
+The bind tag is the counterpart to the surround tag; it specifies where
+ in the 
+\begin_inset Quotes eld
+\end_inset
+
+surrounding
+\begin_inset Quotes erd
+\end_inset
+
+ template the content will be placed.
+ An example is shown in listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Binding-in-Templates"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Binding in Templates
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Binding-in-Templates"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<html>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <body>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <lift:bind name=
+\begin_inset Quotes erd
+\end_inset
+
+content
+\begin_inset Quotes erd
+\end_inset
+
+ />
+\end_layout
+
+\begin_layout Plain Layout
+
+  </body>
+\end_layout
+
+\begin_layout Plain Layout
+
+</html>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+embed
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:embed-tag"
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout LyX-Code
+Usage:
+\family typewriter
+ <lift:embed what="template_name" />
+\end_layout
+
+\begin_layout Standard
+The embed tag allows you to embed a template within another template.
+ This can be used to compose your pages from multiple smaller templates,
+ and it also allows you to access templates from javascript commands (chapter
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "cha:Lift-and-Javascript"
+
+\end_inset
+
+).
+ Like the surround tag, the template name can either be the base filename
+ or a fully-qualified path.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Greyedout
+status open
+
+\begin_layout Plain Layout
+Note that if you use the embed tag to access templates from within a JsCmd
+ (typically an Ajax call), any javascript in the embedded template won't
+ be executed.
+ This includes, but is not limited to Comet widgets.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+comet 
+\end_layout
+
+\begin_layout LyX-Code
+
+\family typewriter
+Usage: <lift:comet type="ClassName" name=
+\begin_inset Quotes erd
+\end_inset
+
+optional
+\begin_inset Quotes erd
+\end_inset
+
+/>
+\end_layout
+
+\begin_layout Standard
+The comet tag embeds a comet actor into your page.
+ The class of the comet actor is specified by the type attribute.
+ The name attribute tells Lift to create a unique instance of the Comet
+ actor; for example, you could have one comet actor for site updates and
+ another for admin messages.
+ The contents of the tag are used by the comet actor to bind a response.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Ledger-Entry-Comet"
+
+\end_inset
+
+ shows an example of a comet binding that displays ledger entries as they're
+ added.
+ Comet is covered in more detail in chapter 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "cha:AJAX-and-COMET"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "basicstyle={\footnotesize},language=Java,numbers=left,numberstyle={\tiny}"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Ledger Entry Comet
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Ledger-Entry-Comet"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<div class="ledgerUpdates">
+\end_layout
+
+\begin_layout Plain Layout
+
+  <lift:comet type="LedgerMonitor">
+\end_layout
+
+\begin_layout Plain Layout
+
+    <ul><ledger:entries>
+\end_layout
+
+\begin_layout Plain Layout
+
+      <li><entry:time/> : <entry:user /> : <entry:amount /></li>
+\end_layout
+
+\begin_layout Plain Layout
+
+    </ledger:entries></ul>
+\end_layout
+
+\begin_layout Plain Layout
+
+  </lift:comet>
+\end_layout
+
+\begin_layout Plain Layout
+
+</div>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+As we mentioned in the embed tag documentation, mixing Comet with AJAX responses
+ can be a bit tricky due to the embedded Javascript that Comet uses.
+\end_layout
+
+\begin_layout Section
+Head Merge
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Head-Merge"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Another feature of Lift's template processing is the ability to merge the
+ HTML 
+\family typewriter
+head
+\family default
+
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+head
+\end_layout
+
+\end_inset
+
+ tag from within a template.
+ In our example listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Sample-template"
+
+\end_inset
+
+, notice that we've specified a 
+\family typewriter
+head
+\family default
+ tag inside the template.
+ Without the head merge, this head tag would show up in the default template
+ where our template gets bound.
+ Lift is smart about this, though, and instead takes the contents of the
+ head tag and merges it into the outer template's head tag.
+ This means that you can use a surround tag to keep a uniform default template,
+ but still change things like the title of the tag, add in scripts or special
+ CSS, etc.
+ For example, if you have a table in a page that you'd like to style with
+ jQuery's TableSorter, you would add a head tag:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Using Head Merge
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Using-Head-Merge"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<lift:surround with=
+\begin_inset Quotes erd
+\end_inset
+
+default
+\begin_inset Quotes erd
+\end_inset
+
+ at=
+\begin_inset Quotes erd
+\end_inset
+
+foo
+\begin_inset Quotes erd
+\end_inset
+
+>
+\end_layout
+
+\begin_layout Plain Layout
+
+<head><script src="/scripts/tablesorter.js" type="text/javascript" /><head>
+\end_layout
+
+\begin_layout Plain Layout
+
+...
+\end_layout
+
+\begin_layout Plain Layout
+
+</lift:surround>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+And just for this snippet, you'll import TableSorter.
+\end_layout
+
+\begin_layout Section
+Snippets
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Snippets"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+A snippet is a function that takes a single Scala.xml.NodeSeq
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+NodeSeq
+\end_layout
+
+\end_inset
+
+ argument and is expected to return a NodeSeq.
+ The argument passed to the method is the XML contents of the snippet tag;
+ because Lift processes from the outside in, the contents are not processed
+ before being passed to the snippet method unless you specify the eager_eval
+ attribute (section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Eager-Eval"
+
+\end_inset
+
+).
+ As an example, let's say we wanted a snippet that would output the current
+ balance of our ledger.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:a-simple-snippet"
+
+\end_inset
+
+ shows what our snippet method looks like.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "frame=single"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+A simple snippet
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:a-simple-snippet"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+class Ledger {
+\end_layout
+
+\begin_layout Plain Layout
+
+  def balance (content : NodeSeq) : NodeSeq = 
+\end_layout
+
+\begin_layout Plain Layout
+
+    Text(currentLedger.formattedBalance)
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We simply return an XML Text node with the formatted balance.
+ Note that the XML that a snippet returns is further processed from the
+ outside in, so if your snippet instead looked like:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Returning tags from a snippet
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Returning-tags-snippet"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+class Ledger {
+\end_layout
+
+\begin_layout Plain Layout
+
+  def balance (content : NodeSeq) : NodeSeq = 
+\end_layout
+
+\begin_layout Plain Layout
+
+    <p>{currentLedger.formattedBalance}
+\end_layout
+
+\begin_layout Plain Layout
+
+      as of <lift:Util.time /></p>
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+then the 
+\family typewriter
+lift:Util.time
+\family default
+ snippet will be processed as well after our snippet method returns.
+ It is this hierarchical processing of template tags that makes Lift so
+ flexible.
+ For those of you coming here with some JSP experience, Lift is designed
+ to let you write your own template libraries, except much more powerful
+ and much simpler to use.
+\end_layout
+
+\begin_layout Subsection
+Binding Values in Snippets
+\end_layout
+
+\begin_layout Standard
+So far we've only shown our snippets generating complete output and ignoring
+ the input to the method.
+ Lift actually provides some very nice facilities for using the input NodeSeq
+ within your snippet to help keep presentation and code separate.
+ First, remember that the input NodeSeq consists of the child elements for
+ the snippet tag in your template.
+ That is, given a template containing
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Snippet tag children
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Snippet-tag-children"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<lift:Ledger.balance>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <ledger:balance/> as of <ledger:time />
+\end_layout
+
+\begin_layout Plain Layout
+
+</lift:Ledger.balance>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Then the Ledger.balance method receives
+\end_layout
+
+\begin_layout LyX-Code
+<ledger:balance/> as of <ledger:time />
+\end_layout
+
+\begin_layout Standard
+as its input parameter.
+ This is perfectly valid XML, although it may look a little strange at first
+ unless you've used prefixed elements in XML before.
+ The key is that Lift allows you to selectively 
+\begin_inset Quotes eld
+\end_inset
+
+bind
+\begin_inset Quotes erd
+\end_inset
+
+, or replace, these elements with data inside your snippet.
+ The 
+\family typewriter
+Helpers.bind
+\family default
+
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+net.liftweb.util.Helpers.
+ Technically the bind method is overloaded, and can even fill in values
+ for the lift:bind tag, but this is advanced usage and we're not going to
+ cover that here.
+\end_layout
+
+\end_inset
+
+ method takes three arguments:
+\end_layout
+
+\begin_layout Enumerate
+The namespace, or prefix, of the elements you wish to bind.
+ In our example the namespace is 
+\begin_inset Quotes eld
+\end_inset
+
+ledger
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+The NodeSeq that contains the elements you wish to bind
+\end_layout
+
+\begin_layout Enumerate
+One or more BindParam elements that maps the element name to a replacement
+ value
+\end_layout
+
+\begin_layout Standard
+While you can create your own BindParam instances by hand, we generally
+ recommend importing 
+\family typewriter
+Helpers._
+\family default
+, which among other things contains an implicit conversion from Pair to
+ BindParam.
+ With this knowledge in hand, we can change our previous definition of the
+ balance method to
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Binding the ledger balance
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Binding-the-ledger-balance"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+class Ledger {
+\end_layout
+
+\begin_layout Plain Layout
+
+  def balance (content : NodeSeq ) : NodeSeq = 
+\end_layout
+
+\begin_layout Plain Layout
+
+    bind (
+\begin_inset Quotes eld
+\end_inset
+
+ledger
+\begin_inset Quotes erd
+\end_inset
+
+, content,
+\end_layout
+
+\begin_layout Plain Layout
+
+          
+\begin_inset Quotes eld
+\end_inset
+
+balance
+\begin_inset Quotes erd
+\end_inset
+
+ -> Text(currentLegdger.formattedBalance),
+\end_layout
+
+\begin_layout Plain Layout
+
+          
+\begin_inset Quotes eld
+\end_inset
+
+time
+\begin_inset Quotes erd
+\end_inset
+
+ -> Text((new java.util.Date).toString))
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+As you can see here, we actually gain a line of code over our previous effort,
+ but the trade-off makes it far simpler for us to change the layout just
+ by editing the template.
+\end_layout
+
+\begin_layout Subsection
+Stateless versus Stateful Snippets
+\end_layout
+
+\begin_layout Standard
+The lifecycle of a snippet by default is stateless.
+ That means that for each request, Lift creates a new instance of the snippet
+ class to execute; any changes you make to instance variables will be discarded
+ after the request is processed.
+ If you want to keep some state around you have a couple of options:
+\end_layout
+
+\begin_layout Itemize
+Store the state in a cookie (section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Cookies"
+
+\end_inset
+
+).
+ This has a few drawbacks, including having to manage the cookie as well
+ as any security implications for the data stored in the cookie
+\end_layout
+
+\begin_layout Itemize
+Store the state in a SessionVar (section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Session-and-Request"
+
+\end_inset
+
+).
+ This is a little easier to manage than cookies but you still have to manage
+ adding and removing the session data if you don't want it around for the
+ duration of the session
+\end_layout
+
+\begin_layout Itemize
+Use a StatefulSnippet subclass.
+ This is ideal for small, conversational state, such as a form the spans
+ multiple pages
+\end_layout
+
+\begin_layout Standard
+.
+ Using a StatefulSnippet is very similar to a normal snippet, with the addition
+ of a few mechanisms.
+ First, the StatefulSnippet trait defines a dispatch method of type PartialFunct
+ion[String, () => NodeSeq].
+ This lets you define which methods handle which snippets.
+ Because the def dispatch in the base DispatchSnippet can be overridden
+ with a var, it also lets you redefine this behavior as a result of snippet
+ processing.
+ 
+\end_layout
+
+\begin_layout Standard
+Another key to using StatefulSnippets is that when you render a form, a
+ hidden field is added to that form that causes the same instance to be
+ used on the page that is the target of the form submission.
+ If you need to link to a different page, but would like the same snippet
+ instance to handle snippets on that page, use the StatefulSnippet.link method
+ (instead of SHtml.link); likewise, if you need to redirect to a different
+ page, the StatefulSnippet trait defines a redirectTo method.
+ In either of these cases a function map is added to the link or redirect,
+ respectively, that cause the instance to be reattached.
+\end_layout
+
+\begin_layout Standard
+As an example of when you might use a stateful snippet, consider a graph
+ that shows your spending for some time period and also allows you to specify
+ criteria for selecting the data to graph.
+ Say you've changed the time span from the default 1 month to 3 months.
+ Now you'd like to limit the expense categories to show only 
+\begin_inset Quotes eld
+\end_inset
+
+Food.
+\begin_inset Quotes erd
+\end_inset
+
+ More than likely, you'll want the application to respect the change in
+ time-span as well.
+ This is a case where keeping a bit of state around will allow you to do
+ this.
+ Using a StatefulSnippet instance greatly simplifies writing the snippet
+ because you can keep all of your pertinent information around as instance
+ variables instead of having to insert and extract them from every request,
+ link, etc.
+\end_layout
+
+\begin_layout Standard
+Below is an example of a stateful snippet that handles the above example.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Write and then steal from PocketChange
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Eager Evaluation
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Eager-Eval"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+As we mentioned in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Snippets"
+
+\end_inset
+
+, Lift processes the contents of a snippet tag after it processes the tag
+ itself.
+ If you want the contents of a snippet tag to be processed 
+\emph on
+before
+\emph default
+ the snippet, then you need to specify the 
+\family typewriter
+eager_eval
+\family default
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+eager eval
+\end_layout
+
+\end_inset
+
+ attribute on the tag:
+\end_layout
+
+\begin_layout LyX-Code
+<lift:Hello.world eager_eval=
+\begin_inset Quotes erd
+\end_inset
+
+true
+\begin_inset Quotes erd
+\end_inset
+
+>...</lift:Hello.world>
+\end_layout
+
+\begin_layout Standard
+This is especially useful if you're using an embedded template (section
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:embed-tag"
+
+\end_inset
+
+); without the eager_eval attribute your snippet just sees the <lift:embed>
+ tag, but with eager_eval set to true you can put 
+\emph on
+bindable
+\emph default
+ common snippet content into a single embedded template instead of copying
+ it between templates.
+\end_layout
+
+\begin_layout Section
 URL Rewriting 
 \begin_inset CommandInset label
 LatexCommand label
@@ -1748,21 +3256,8 @@ name "sec:URL-Rewriting"
 \end_layout
 
 \begin_layout Standard
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-I don't see anything about dispatch in this section
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Now that we've gone over Templates and Views and how the dispatching of
- a request to a Class.method works we can discuss how to intercept requests
+Now that we've gone over Templates, Views, Snippets, and how the dispatching
+ of a request to a Class.method works we can discuss how to intercept requests
  and handle them any way we want.
  URL rewriting is the mechanism that allows you to modify the incoming request
  so that it dispatches to a different URL.
@@ -1770,12 +3265,20 @@ Now that we've gone over Templates and Views and how the dispatching of
 \end_layout
 
 \begin_layout Itemize
-Use user-friendly URLs like www.example.com/user/joe instead of www.example.com/admi
-n/users/88
+Use user-friendly, bookmarkable URLs like 
+\family typewriter
+http://www.example.com/budget/2008
 \end_layout
 
 \begin_layout Itemize
-Use short URLs instead of long, hard to remember ones, similar to tinyurl.com
+Use short URLs instead of long, hard to remember ones, similar to 
+\begin_inset CommandInset href
+LatexCommand href
+target "http://tinyurl.com"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Itemize
@@ -2306,737 +3809,21 @@ SiteMap
 
 \end_inset
 
- 
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Cross-ref
-\end_layout
-
-\end_inset
-
-provides a mechanism for doing rewrites combined with menu entries.
-\end_layout
-
-\begin_layout Section
-Dispatch functions 
-\begin_inset CommandInset label
-LatexCommand label
-name "sec:Dispatch-functions"
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-TBC
-\end_layout
-
-\begin_layout Section
-Tags
-\begin_inset CommandInset label
-LatexCommand label
-name "sec:ArchTags"
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-This needs an intro paragraph
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-We introduced you to a couple of Lift Tags earlier in the the Templates
- section 
+ (chapter 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "sec:Templates"
+reference "cha:SiteMap"
 
 \end_inset
 
-, namely 
-\family typewriter
-surround
-\family default
- and 
-\family typewriter
-snippet
-\family default
-.
- We mentioned that these are reserved tags that Lift uses internally.
- We'll revisit 
-\family typewriter
-surround
-\family default
- and 
-\family typewriter
-snippet
-\family default
- and explain a few others.
-\end_layout
-
-\begin_layout Subsection
-surround
-\begin_inset CommandInset label
-LatexCommand label
-name "sub:surround-tag"
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-
-\emph on
-Example:
-\family typewriter
-\emph default
- <lift:surround with="template_name">children</lift:surround>
-\end_layout
-
-\begin_layout Standard
-Surrounds the child nodes with a named template (located in the <app_root>/webap
-p/templates-hidden).
- It is used to apply a unified template to all the pages in a site.
- 
-\end_layout
-
-\begin_layout Standard
-Demo example:<lift:surround with="default"> <b>Dude</b>...
- this is my page...
- but it'll appear in your browser in a template.
- </lift:surround> 
-\end_layout
-
-\begin_layout Standard
-In the target template there must be a <lift:bind /> tag to indicate where
- the contents should be bound.
- Note that you can use multiple surround templates by adding them to the
- /templates-hidden directory.
- For example, you might want to have a separate template for your administrative
- pages.
- In that case, you might add that template as admin.html in the /templates-hidden
- directory and then call it from your other pages using:<lift:surround with="adm
-in">page code here</lift:surround>
-\end_layout
-
-\begin_layout Standard
-Notes: You cannot have a hidden template with the same name as a sub-directory
- of your webapp directory.
- For example, if you had an admin.html template in /templates-hidden, you
- could not also have an admin directory.
- 
-\end_layout
-
-\begin_layout Subsection
-snippet
-\begin_inset CommandInset label
-LatexCommand label
-name "sub:snippet-tag"
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-
-\emph on
-Example:
-\family typewriter
-\emph default
- <lift:snippet form="METHOD" type="ClassName:method" multipart="true" />
-\end_layout
-
-\begin_layout Standard
-The 
-\family typewriter
-form
-\family default
- and 
-\family typewriter
-multipart
-\family default
- attributes are optional.
- If 
-\family typewriter
-form
-\family default
- is included the attribute options are 
-\family typewriter
-GET
-\family default
- and 
-\family typewriter
-POST.
-
-\family default
- The 
-\family typewriter
-type
-\family default
- attribute resolves to the method call 
-\family typewriter
-ClassName.method
-\family default
-.
- The 
-\family typewriter
-multipart
-\family default
- attribute is a boolean.
-\end_layout
-
-\begin_layout Standard
-Demo example:
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-lstparams "basicstyle={\footnotesize},numbers=left,numberstyle={\tiny}"
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-Snippet that generates a NodeSeq
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-class Entry {
-\end_layout
-
-\begin_layout Plain Layout
-
-def add(xhtml: Group): NodeSeq =     
-\end_layout
-
-\begin_layout Plain Layout
-
-  selectedUser.is.openOr(new User).toForm(Empty, saveUser _) ++ 
-\end_layout
-
-\begin_layout Plain Layout
-
-  <tr>     
-\end_layout
-
-\begin_layout Plain Layout
-
-    <td><a href="/simple/index.html">Cancel</a></td>     
-\end_layout
-
-\begin_layout Plain Layout
-
-    <td><input type="submit" value="Create"/></td>     
-\end_layout
-
-\begin_layout Plain Layout
-
-  </tr>
-\end_layout
-
-\begin_layout Plain Layout
-
-}
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Y ou could use this snippet in the following manner:
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-...
-\end_layout
-
-\begin_layout Plain Layout
-
-<lift:Entry.add form="POST"/>
-\end_layout
-
-\begin_layout Plain Layout
-
-or
-\end_layout
-
-\begin_layout Plain Layout
-
-<lift:snippet type="Entry.add" form="POST" />
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-lstparams "basicstyle={\footnotesize},numbers=left,numberstyle={\tiny}"
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-Snippet that generates Nodes to bind...
- TODO: Explain the difference better...
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-class Entry {
-\end_layout
-
-\begin_layout Plain Layout
-
-  def showCount(in: NodeSeq): NodeSeq = {     
-\end_layout
-
-\begin_layout Plain Layout
-
-    val attr: String = S.attr("name").openOr("N/A")     
-\end_layout
-
-\begin_layout Plain Layout
-
-    val value = CountHolder.is(attr)
-\end_layout
-
-\begin_layout Plain Layout
-
-    bind("count", in, "value" -> value, 
-\end_layout
-
-\begin_layout Plain Layout
-
-      "incr" -> link("/count", () => CountHolder.is(attr) = value + 1, Text("++")
-),     
-\end_layout
-
-\begin_layout Plain Layout
-
-      "decr" -> link("/count", () => CountHolder.is(attr) = 0 max (value
- - 1), Text("--")))   
-\end_layout
-
-\begin_layout Plain Layout
-
-  } 
-\end_layout
-
-\begin_layout Plain Layout
-
-}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-You would then use this snippet like this:
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-...
-\end_layout
-
-\begin_layout Plain Layout
-
-<lift:Entry.showCount>
-\end_layout
-
-\begin_layout Plain Layout
-
-  Click this to increse the counter: <count:incr /><br />
-\end_layout
-
-\begin_layout Plain Layout
-
-  Click this to decrease the counter: <count:decr />
-\end_layout
-
-\begin_layout Plain Layout
-
-</lift:Entry.showCount>
-\end_layout
-
-\begin_layout Plain Layout
-
-...
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Subsection
-embed
-\begin_inset CommandInset label
-LatexCommand label
-name "sub:embed-tag"
-
-\end_inset
-
- 
-\end_layout
-
-\begin_layout Standard
-
-\emph on
-Example:
-\family typewriter
-\emph default
- <lift:embed what="template" />
-\end_layout
-
-\begin_layout Standard
-Uses: Allows you to embed a template within another template (or to access
- a template from a JsCmd such as SetHtml, ModalDialog, etc.)
-\end_layout
-
-\begin_layout Standard
-Note that incoming requests that contain *-hidden in the request will not
- be serviced, but you can access templates in directories named *-hidden.
- So, you can put AJAX templates in /ajax-templates-hidden in webapps.
-\end_layout
-
-\begin_layout Standard
-Also, lift's i18n support extends to templates as well, so you can specify
- "/ajax-templates-hidden/welcome" and lift will serve the appropriate localized
- template.
- For example, if the current locale is set to French Canadian lift will
- look for /ajax-templates-hidden/welcome_fr_CA.html, /ajax-templates-hidden/welco
-me_fr.html, and /ajax-templates-hidden/welcome.html 
-\end_layout
-
-\begin_layout Standard
-Demo example:
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-Embedding Templates within Templates
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-<lift:embed what="/templates-hidden/supersecret-template"/>
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-<lift:embed what="/ajax-templates-hidden/welcome" />
-\end_layout
-
-\begin_layout Standard
-<lift:embed what="/templates-hidden/ajax"/>
-\end_layout
-
-\begin_layout Standard
-Caveats: JavaScript contained in templates rendered via JsCmd (sent in response
- to AJAX requests) will not be executed.
- This includes Comet Widgets.
- 
-\end_layout
-
-\begin_layout Subsection
-comet 
-\end_layout
-
-\begin_layout Standard
-
-\emph on
-Example:
-\family typewriter
-\emph default
- <lift:comet type="ClassName" name="optional"/>
-\end_layout
-
-\begin_layout Standard
-Uses: Defines a block of the XML document that is to be con
-\end_layout
-
-\begin_layout Standard
-Example:
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-lstparams "basicstyle={\footnotesize},language=Java,numbers=left,numberstyle={\tiny}"
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-Comet Html template
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-<div class="widget">
-\end_layout
-
-\begin_layout Plain Layout
-
-  <lift:comet type="Clock">Current Time: 
-\end_layout
-
-\begin_layout Plain Layout
-
-    <clk:time>Missing Clock</clk:time>
-\end_layout
-
-\begin_layout Plain Layout
-
-  </lift:comet>
-\end_layout
-
-\begin_layout Plain Layout
-
-</div>
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Will turn into this after processing:
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-lstparams "basicstyle={\footnotesize},numbers=left,numberstyle={\tiny}"
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-Comet as rendered in the browser
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-<div style="text-align: center" class="widget">   
-\end_layout
-
-\begin_layout Plain Layout
-
-<span id="LCHVVTE3H5CHZ31L1C2ZEQ_outer">     
-\end_layout
-
-\begin_layout Plain Layout
-
-<span id="LCHVVTE3H5CHZ31L1C2ZEQ" lift:when="12">
-\end_layout
-
-\begin_layout Plain Layout
-
-  Current Time: 
-\end_layout
-
-\begin_layout Plain Layout
-
-  <span id="LCHVVTE3H5CHZ31L1C2ZEQ_timespan">Fri Nov 14 17:29:53 EST 2008</span>
-     
-\end_layout
-
-\begin_layout Plain Layout
-
-<script>     
-\end_layout
-
-\begin_layout Plain Layout
-
-// <![CDATA[     /* JSON Func clk $$ F1226701773224999000_BBP */     
-\end_layout
-
-\begin_layout Plain Layout
-
-function F1226701773224999000_BBP(obj) {
-\end_layout
-
-\begin_layout Plain Layout
-
-  lift_ajaxHandler('F1226701773224999000_BBP='+ encodeURIComponent(JSON.stringify
-(obj)), 
-\end_layout
-
-\begin_layout Plain Layout
-
-  null, null);
-\end_layout
-
-\begin_layout Plain Layout
-
-}     
-\end_layout
-
-\begin_layout Plain Layout
-
-// ]]>     
-\end_layout
-
-\begin_layout Plain Layout
-
-</script>
-\end_layout
-
-\begin_layout Plain Layout
-
-</span>
-\end_layout
-
-\begin_layout Plain Layout
-
-<script>     
-\end_layout
-
-\begin_layout Plain Layout
-
-// <![CDATA[     
-\end_layout
-
-\begin_layout Plain Layout
-
-var destroy_LCHVVTE3H5CHZ31L1C2ZEQ = function() {}     
-\end_layout
-
-\begin_layout Plain Layout
-
-// ]]>     
-\end_layout
-
-\begin_layout Plain Layout
-
-</script>     
-\end_layout
-
-\begin_layout Plain Layout
-
-</span>     
-\end_layout
-
-\begin_layout Plain Layout
-
-</div>  
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Caveats: if you have a <lift:comet /> tag and you're using the tag from
- within sending AJAX stuff back, things might not work well.
- 
-\end_layout
-
-\begin_layout Standard
-More in section 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "sec:Snippets"
-
-\end_inset
-
-
+) provides a mechanism for doing rewrites combined with menu entries.
 \end_layout
 
 \begin_layout Section
-Snippets
+Custom Dispatch functions 
 \begin_inset CommandInset label
 LatexCommand label
-name "sec:Snippets"
+name "sec:Custom-dispatch-func"
 
 \end_inset
 
@@ -3044,455 +3831,111 @@ name "sec:Snippets"
 \end_layout
 
 \begin_layout Standard
-A snippet method takes a single Scala.xml.NodeSeq
+Once the rewriting phase is complete (whether we pass through or are redirected)
+, the next phase is to determine if there should be a custom dispatch for
+ the request.
+ A custom dispatch allows you to handle a matching request directly by a
+ method instead of going through the template lookup system; because it
+ bypasses templating, you're responsible for the full content of the response.
+ A typical use case would be a web service
 \begin_inset Index
 status collapsed
 
 \begin_layout Plain Layout
-NodeSeq
+web service
 \end_layout
 
 \end_inset
 
- argument and is expected to return a NodeSeq.
- The argument passed to the method is the XML contents of the snippet tag;
- because Lift processes from the outside in, the contents are not processed
- by default before being passed to the snippet method.
- For our current example, we could simply have a method that looks like
- this:
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-lstparams "frame=single"
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-Hello World snippet
-\begin_inset CommandInset label
-LatexCommand label
-name "lst:Hello-World-snippet"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-class Hello {
-\end_layout
-
-\begin_layout Plain Layout
-
-  def world (content : NodeSeq) : NodeSeq = 
-\end_layout
-
-\begin_layout Plain Layout
-
-    Text("Hello, world!")
-\end_layout
-
-\begin_layout Plain Layout
-
-}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-We simply return an XML Text node with our greeting.
- Note that the XML that a snippet returns is further processed from the
- outside in, so if your snippet instead looked like
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-Returning tags from a snippet
-\begin_inset CommandInset label
-LatexCommand label
-name "lst:Returning-tags-snippet"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-class Hello {
-\end_layout
-
-\begin_layout Plain Layout
-
-  def world (content : NodeSeq) : NodeSeq = 
-\end_layout
-
-\begin_layout Plain Layout
-
-    <p>{"Hello, "}<lift:User.name /></p>
-\end_layout
-
-\begin_layout Plain Layout
-
-}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-then the lift:User.name snippet will be processed as well after our snippet
- method returns.
- It is this hierarchical processing of template tags that makes Lift so
- flexible.
-\end_layout
-
-\begin_layout Subsection
-Stateless Snippets
-\end_layout
-
-\begin_layout Standard
-All of the above examples showed Stateless snippets, those that execute
- and render a block of XML and send it back to the broswer.
- The life This is the default type of snippet
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-This appears to be an incomplete edit/sentence.
- Also expand to give an idea of the limitations and scope of a stateless
- snippet
-\end_layout
-
-\end_inset
-
-.
+ returning XML or a service to return, say, a generated image or PDF.
+ In that sense, the custom dispatch mechanism allows you to write your own
  
-\end_layout
-
-\begin_layout Subsection
-Stateful Snippets
-\end_layout
-
-\begin_layout Standard
-Lift also has a the concept of a stateful snippet.
- All of our previous examples, while simple, were stateless.
- That is to say, from request to request, there is no saved state on the
- server-side.
- Stateless snippets are useful in the sense that many requirements for a
- web applications need no state to be preserved as the user moves from page
- to page.
- There are a similar number of cases where we would like to preserve some
- state as the user navigates.
- For example, if you think about a graph that shows your spending for the
- last 3 months.
- You've changed the time span from the default 1 month to 3 months.
- Now you'd like to limit the exspense categories to show only 
 \begin_inset Quotes eld
 \end_inset
 
-Food.
+sub-servlets
 \begin_inset Quotes erd
 \end_inset
 
- More than likely, you'll want the application to respect the change in
- time-span as well.
- This is a case where keeping a bit of state around will allow you to do
- this.
- The same StatefulSnippet instance is used across a given page rendering.
- If you use a StatefulSnippet to render a form, a hidden field is added
- to that form that causes the same instance to be used on the page that
- is the target of the form submission.
- 
-\end_layout
-
-\begin_layout Standard
-Below is an example of a stateful snippet that handles the above example.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Write and then steal from PocketChange
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Subsection
-Default Snippet Method
-\end_layout
-
-\begin_layout Standard
-If you define a snippet as 
-\family typewriter
-<lift:CSS />
-\family default
- rather than 
-\family typewriter
-<lift:CSS.show /> 
-\family default
-Lift will look for the method named 
-\family typewriter
-render
-\family default
- in the class 
-\family typewriter
-CSS
-\family default
-.
-\end_layout
-
-\begin_layout Section
-Eager Eval
-\end_layout
-
-\begin_layout Standard
-If you want the contents of a snippet tag to be processed 
-\emph on
-before
-\emph default
- the snippet, then you would specify the 
-\family typewriter
-eager_eval
-\family default
-
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Add index entry
-\end_layout
-
-\end_inset
-
- attribute on the tag:
-\end_layout
-
-\begin_layout LyX-Code
-<lift:Hello.world eager_eval=
-\begin_inset Quotes erd
-\end_inset
-
-true
-\begin_inset Quotes erd
-\end_inset
-
->...</lift:Hello.world>
-\end_layout
-
-\begin_layout Standard
-This is especially useful if you're using a 
-\family typewriter
-lift:embed
-\family default
- 
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Add index entry
-\end_layout
-
-\end_inset
-
-tag; without the eager_eval attribute your snippet just sees the <lift:embed>
- tag, but with eager_eval set to true you can put 
-\emph on
-bindable
-\emph default
- common snippet content into a single embedded template instead of copying
- it between templates.
- In addition to eager_eval, there are attributes such as 
-\family typewriter
-form
-\family default
- and 
-\family typewriter
-multipart
-\family default
- which we will cover in extensive detail in section 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "sub:snippet-tag"
-
-\end_inset
-
-.
- 
-\end_layout
-
-\begin_layout Section
-Head Merge
-\begin_inset CommandInset label
-LatexCommand label
-name "sec:Head-Merge"
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Another feature of Lift's template processing is the ability to merge the
- HTML 
-\family typewriter
-head
-\family default
-
+ without all the mess of implementing the interface and configuring them
+ in web.xml
 \begin_inset Index
 status collapsed
 
 \begin_layout Plain Layout
-head
+web.xml
 \end_layout
 
 \end_inset
 
- tag from within a template.
- In our example listing 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "lst:Sample-template"
+.
+\end_layout
 
-\end_inset
-
-, notice that we've specified a 
+\begin_layout Standard
+Custom dispatch is realized, like rewriting, via a partial function.
+ In this case, it's a function of type 
 \family typewriter
-head
+PartialFunction[Req, () => Can[LiftResponse]]
 \family default
- tag inside the template.
- Without the head merge, this head tag would show up in the default template
- where our template gets bound.
- Lift is smart about this, though, and instead takes the contents of the
- head tag and merges it into the outer template's head tag.
- This means that you can use a surround tag to keep a uniform default template,
- but still change things like the title of the tag, add in scripts or special
- CSS, etc.
- For example, if you have a table in a page that you'd like to style with
- jQuery's TableSorter, you would add a Lift tag:
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-<lift:tohead><script src="/scripts/tablesorter.js" type="text/javascript"
- /></lift:tohead>
-\end_layout
-
+ that will do the work.
+ The 
+\family typewriter
+Req
+\family default
+ is similar to the the RewriteRequest case class; it provides the path as
+ a List[String], the suffix of the request, and the RequestType.
+ If you attach the dispatch function via 
+\family typewriter
+LiftRules.dispatch
+\family default
+ then you'll have full access to the S object and LiftSession; if you use
+ 
+\family typewriter
+LiftRules.statelessDispatchTable
+\family default
+ instead then these aren't available.
+ The result of the dispatch should be a function that returns a 
+\family typewriter
+Can[LiftResponse]
+\family default
+.
+ If the function returns 
+\family typewriter
+Empty
+\family default
+ then Lift returns a 
+\begin_inset Quotes eld
 \end_inset
 
+404 not found
+\begin_inset Quotes erd
+\end_inset
 
+ response.
 \end_layout
 
 \begin_layout Standard
-And just for this snippet, you'll import TableSorter.
-\end_layout
-
-\begin_layout Standard
+As a concrete example, let's look at returning a generated chart image from
+ our application
 \begin_inset Note Note
 status open
 
 \begin_layout Plain Layout
-Better example: Head merge looks like it's gone...
- WARN - Snippet Failure: SnippetFailure(/index -> ParsePath(List(index),,true,fa
-lse),Full(tohead),Class Not Found)
+Modify as appropriate for PocketChange
 \end_layout
 
 \end_inset
 
-
-\end_layout
-
-\begin_layout Section
-S object
-\begin_inset CommandInset label
-LatexCommand label
-name "sec:S-object"
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Section
-SHtml
-\begin_inset CommandInset label
-LatexCommand label
-name "sec:SHtml"
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-The SHtml object is where most of the form element methods are defined.
- If you browse through the source you'll see what convenience functions
- are defined.
- There are a lot so we won't list them here, but throughout the book you'll
- see them appear in the example application we're building.
-\end_layout
-
-\begin_layout Standard
-Some of the functions are text, button, select, checkbox, there are a lot
- more helper functions, so take a look at the ScalaDocs and at net/liftweb/http/
-SHtml.scala.
-\end_layout
-
-\begin_layout Standard
-Here's a short snippet for generating a form:
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Add the tag in the template as well? Add the output that lift generates?
-\end_layout
-
-\end_inset
-
-
+.
+ There are several libraries for charting, but we'll take a look at JFreeChart
+ in particular.
+ First, let's write a method that will chart our account balances by month
+ for the last year:
 \end_layout
 
 \begin_layout Standard
 \begin_inset listings
+lstparams "basicstyle={\scriptsize},frame=single"
 inline false
 status open
 
@@ -3501,7 +3944,14 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-SHtml Example - Snippet
+Charting method
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Charting-method"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -3511,52 +3961,42 @@ SHtml Example - Snippet
 
 \begin_layout Plain Layout
 
-class Ajax {
+def chart (endDate : String) : Can[LiftResponse] = {
 \end_layout
 
 \begin_layout Plain Layout
 
-  def addForm = {     
+  // Query, set up chart, etc...
 \end_layout
 
 \begin_layout Plain Layout
 
-    <div>
+  val buffered = balanceChart.createBufferedImage(width,height)
 \end_layout
 
 \begin_layout Plain Layout
 
-     {SHtml.text("Date", println _)}      
+  val chartImage = ChartUtilities.encodeAsPNG(buffered)
 \end_layout
 
 \begin_layout Plain Layout
 
-     {SHtml.textarea("Description", println _)}     
+  Full(InMemoryResponse(chartImage, 
 \end_layout
 
 \begin_layout Plain Layout
 
-     {SHtml.text("Tags", println _)}     
+                        (Content-Type -> image/png) :: Nil,
 \end_layout
 
 \begin_layout Plain Layout
 
-     {SHtml.text("Value", println _)}     
+                        Nil,
 \end_layout
 
 \begin_layout Plain Layout
 
-     {SHtml.submit("Submit", () => S.notice("Submitted"))}
-\end_layout
-
-\begin_layout Plain Layout
-
-    </div>   
-\end_layout
-
-\begin_layout Plain Layout
-
-  }
+                        200))
 \end_layout
 
 \begin_layout Plain Layout
@@ -3570,326 +4010,154 @@ class Ajax {
 \end_layout
 
 \begin_layout Standard
-And the template would be:
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
+Once we've set up the chart, we use the ChartUtilities helper class from
+ JFreeChart to encode the chart into a PNG byte array.
+ We can then use Lift's InMemoryResponse
+\begin_inset Index
+status collapsed
 
 \begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-SHtml Example - Template
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-...
-\end_layout
-
-\begin_layout Plain Layout
-
-<body>
-\end_layout
-
-\begin_layout Plain Layout
-
-  <lift:Ajax.addForm form="POST" />
-\end_layout
-
-\begin_layout Plain Layout
-
-</body>
-\end_layout
-
-\begin_layout Plain Layout
-
-...
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Which generates the markup:
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-SHtml Example - Generated Markup
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-<form method="post" action="/ajax">
-\end_layout
-
-\begin_layout Plain Layout
-
-  <div>     
-\end_layout
-
-\begin_layout Plain Layout
-
-    <input name="F1228357378876744000_D3J" type="text" value="Date" /><br
- />     
-\end_layout
-
-\begin_layout Plain Layout
-
-    <textarea name="F1228357378876890000_GXL">Description</textarea><br
- />     
-\end_layout
-
-\begin_layout Plain Layout
-
-    <input name="F1228357378876940000_BLK" type="text" value="Tags" /><br
- />     
-\end_layout
-
-\begin_layout Plain Layout
-
-    <input name="F1228357378877015000_RED" type="text" value="Value" /><br
- />
-\end_layout
-
-\begin_layout Plain Layout
-
-    <input name="F1228357378877116000_SZF" type="submit" value="Submit"
- /><br />     
-\end_layout
-
-\begin_layout Plain Layout
-
-  </div>
-\end_layout
-
-\begin_layout Plain Layout
-
-</form>
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Section
-SiteMap
-\begin_inset CommandInset label
-LatexCommand label
-name "sec:SiteMap"
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-We're only going to touch on SiteMap here as we have a whole chapter dedicated
- to it due to it's size, but an introduction, we think, is required.
- 
-\end_layout
-
-\begin_layout Standard
-SiteMap has a number of roles and they all build off the main goal, which
- is acting as a URL whitelist, arbitrating a users access to resources.
- And because it acts like the gatekeeper of resources, it can automatically
- generate your menu items.
- SiteMap can use all of the URL rewriting methods we discussed above as
- well.
-\end_layout
-
-\begin_layout Standard
-Take a look at the SiteMap chapter to get a better feel of what it can do.
-\end_layout
-
-\begin_layout Section
-Lift Responses
-\begin_inset CommandInset label
-LatexCommand label
-name "sec:Lift-reponses"
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Lift framework makes a lot of things really easy and it provides extremly
- useful abstractions as you may have already discovered.
- Responses to clients are also abstacted by LiftResponse trait.
- There are numerous response types and here is the simplified vieew of the
- class hierarchy:
-\end_layout
-
-\begin_layout Itemize
-LiftResponse
-\end_layout
-
-\begin_deeper
-\begin_layout Itemize
-BasicResponse
-\end_layout
-
-\begin_deeper
-\begin_layout Itemize
 InMemoryResponse
 \end_layout
 
-\begin_layout Itemize
-StreamingResponse
+\end_inset
+
+ to pass the encoded data back to the client with the appropriate Content-Type
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+Type
 \end_layout
 
-\end_deeper
-\begin_layout Itemize
-JSonResponse
-\end_layout
+\end_inset
 
-\begin_layout Itemize
-RedirectResponse
-\end_layout
+ header.
+ Now we just need to hook the request into the dispatch table from the Boot
+ class as shown in listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Hooking-dispatch-into-Boot"
 
-\begin_deeper
-\begin_layout Itemize
-RedirectWithState
-\end_layout
+\end_inset
 
-\end_deeper
-\begin_layout Itemize
-ToResponse
-\end_layout
+.
+ In this case, we want state so that we can get the current user's chart,
+ so we use LiftRules.dispatch
+\begin_inset listings
+lstparams "basicstyle={\footnotesize},frame=single"
+inline false
+status open
 
-\begin_deeper
-\begin_layout Itemize
-XhtmlRespomse
-\end_layout
+\begin_layout Plain Layout
 
-\begin_layout Itemize
-XmlResponse
-\end_layout
+\begin_inset Caption
 
-\begin_layout Itemize
-XmlMimeResponse
-\end_layout
-
-\begin_layout Itemize
-AtomResponse
-\end_layout
-
-\begin_layout Itemize
-OpenSearchResponse
-\end_layout
-
-\begin_layout Itemize
-AtomCreatedResponse
-\end_layout
-
-\begin_layout Itemize
-AtomCategoryResponse
-\end_layout
-
-\begin_layout Itemize
-AtomServiceResponse
-\end_layout
-
-\begin_layout Itemize
-CreatedResponse
-\end_layout
-
-\end_deeper
-\begin_layout Itemize
-OkResponse
-\end_layout
-
-\begin_layout Itemize
-PermRedirectResponse
-\end_layout
-
-\begin_layout Itemize
-BadResponse
-\end_layout
-
-\begin_layout Itemize
-UnauthorizedResponse
-\end_layout
-
-\begin_layout Itemize
-UnauthorizedDigestResponse
-\end_layout
-
-\begin_layout Itemize
-NotFoundResponse
-\end_layout
-
-\begin_layout Itemize
-MethodNotAllowedResponse
-\end_layout
-
-\begin_layout Itemize
-GoneResponse
-\end_layout
-
-\end_deeper
-\begin_layout Standard
-We won't get into details right now oh what exactly each and every class/object
- does, although their purpose is somehow intuitive.
- It is important to know that whenever you need to return a LiftResponse
- reference from one of your functions, for example LiftRules.dispatch you
- can you can use one of these classes.
- So ultimatelly Lift doesn;t really provide you the HttpServletResponse
- object instead all Lift responses are impersonated by a LiftResponse instance
- and it content (the actual payload, http headers, content-type, cookies
- etc.) is written internally by Lift to the container's output stream.
-\end_layout
-
-\begin_layout Section
-Comet
+\begin_layout Plain Layout
+Hooking dispatch into Boot
 \begin_inset CommandInset label
 LatexCommand label
-name "sec:Comet"
+name "lst:Hooking-dispatch-into-Boot"
 
 \end_inset
 
 
 \end_layout
 
-\begin_layout Standard
-Wikipedia: 
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+LiftRules.dispatch.append {
+\end_layout
+
+\begin_layout Plain Layout
+
+  case Req(
 \begin_inset Quotes eld
 \end_inset
 
-Comet is a relatively new term to describe a web application model in which
- a long-held HTTP request allows a web server to push data to a browser,
- without the browser explicitly requesting it.
+chart
 \begin_inset Quotes erd
 \end_inset
 
+ :: 
+\begin_inset Quotes eld
+\end_inset
 
+balances
+\begin_inset Quotes erd
+\end_inset
+
+ :: endDate :: Nil, _, _) =>
+\end_layout
+
+\begin_layout Plain Layout
+
+    Charting.chart(endDate) _
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+As you can see, we capture the endDate parameter from the path and pass
+ it into our chart method.
+ This means we can use a URL like 
+\family typewriter
+http://foo.com/chart/balances/20080401
+\family default
+ to obtain the image.
+ Since the dispatch function has an associated lift session, we can also
+ use the S.param method to get query string parameters, in case we wanted
+ to allow someone to send an optional width and height:
+\end_layout
+
+\begin_layout LyX-Code
+val width = S.param(
+\begin_inset Quotes eld
+\end_inset
+
+width
+\begin_inset Quotes erd
+\end_inset
+
+).map(_.toInt) openOr 400
+\end_layout
+
+\begin_layout LyX-Code
+val height = S.param(
+\begin_inset Quotes eld
+\end_inset
+
+height
+\begin_inset Quotes erd
+\end_inset
+
+).map(_.toInt) openOr 300
+\end_layout
+
+\begin_layout Standard
+There are a number of other ListResponse subclasses to cover your needs,
+ including responses for XHTML, XML, Atom, Javascript, CSS, and JSON.
+ We cover these in more detail in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:LiftResponse-in-Detail"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Section
@@ -3904,38 +4172,69 @@ name "sec:HTTP-redirects"
 \end_layout
 
 \begin_layout Standard
-HTTP redirects are pretty important artifacts that many web application
- uses.
- In Lift there you can use at least two ways of sending a redirect to the
- client:
+HTTP redirects are an important part of many web applications.
+ In Lift there are two main ways of sending a redirect to the client:
 \end_layout
 
 \begin_layout Enumerate
 Call S.redirectTo.
- When you do this internally Lift is throwing an exception and catches it
- later on thus shortcircuiting the rest of the application logic
+ When you do this, Lift throws an exception and catches it later on; that
+ means that any of your code following the redirect is skipped
 \end_layout
 
 \begin_layout Enumerate
-When you need to return a LiftResponse you can actually return a RedirectRespons
-e or a RedirectWithState response.
+When you need to return a LiftResponse you can just return a RedirectResponse
+ or a RedirectWithState response.
 \end_layout
 
 \begin_layout Standard
-The idea with RedirectWithState is that you can spacify a function to be
- executed when the browser sends the request upon the redirect response
- and you can also sent Lift notices (see S.notice, S.warning, S.error) that
- would be rendered in the redirectd page.
- Similarly if you want to execute a function when you call S.redirectTo there
- is an overloaded version of this function that allows you to also specify
- a function to be executed.
+The RedirectWithState allows you to specify a function to be executed when
+ the redirected request is processed.
+ You can also sent Lift notices (see S.notice, S.warning, S.error) that would
+ be rendered in the redirected page, as well as cookies to be set on the
+ redirect.
+ Similarly, there is an overloaded version of S.redirectTo that allows you
+ to specify a function to be executed when the redirect is processed.
 \end_layout
 
 \begin_layout Section
-Session Management 
+Cookies
 \begin_inset CommandInset label
 LatexCommand label
-name "sec:Session-Management"
+name "sec:Cookies"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Session and Request Variables
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Session-and-Request"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+More Useful Objects
+\end_layout
+
+\begin_layout Standard
+In addition to what we've covered so far, there a few more objects that
+ are important to understand.
+ We're going to cover these in detail in later sections, but we want to
+ briefly mention each one here just so you're aware of them.
+\end_layout
+
+\begin_layout Subsection
+S object
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:S-object"
 
 \end_inset
 
@@ -3943,234 +4242,78 @@ name "sec:Session-Management"
 \end_layout
 
 \begin_layout Standard
-Lift is in essence a stateful framework and naturally state needs to be
- managed.
- You may be already familiar with HttpSession and and how a J(2)EE web container
- identifies an HttpSession; either by JSESSIONID cookie or by JSESSIONID
- URI sequence (in case of URL rewriting).
- Well Lift uses a LiftSession reference which is is not actually 
-\begin_inset Quotes eld
+The S object represents the state of the current request.
+ As such, it is used to retrieve information about the request and modify
+ information that is sent in the response.
+ Among other things, it can be used for notices (section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "cha:Message-Handling"
+
 \end_inset
 
-persisted
-\begin_inset Quotes erd
+) , cookie management (section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Cookies"
+
 \end_inset
 
- in HttpSession.
- As a matter of fact Lift does not really use the HttpSession provided by
- the web container to maintain conversational state but rather uses a 
-\begin_inset Quotes eld
+), localization (chapter 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "cha:Internationalization"
+
 \end_inset
 
-bridge
-\begin_inset Quotes erd
+) and redirection (section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:HTTP-redirects"
+
 \end_inset
 
- between the HttpSession and the LiftSession.
- This 
-\begin_inset Quotes eld
+).
+\end_layout
+
+\begin_layout Subsection
+SHtml
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:SHtml"
+
 \end_inset
 
-bridge
-\begin_inset Quotes erd
+
+\end_layout
+
+\begin_layout Standard
+The SHtml object's main purpose is to define HTML generation functions,
+ particularly those having to do with form elements.
+ We cover forms in detail in chapter 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "cha:Forms-in-Lift"
+
 \end_inset
 
- is impersonated by SessionToServletBridge class which implements 
-\emph on
-javax.servlet.http.HttpSessionBindingListener
-\emph default
+).
+ In addition to normal form elements, SHtml defines functions for Ajax and
+ JSON form elements (chapters 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "cha:AJAX-and-COMET"
+
+\end_inset
+
  and 
-\emph on
-javax.servlet.http.HttpSessionActivationListener
-\emph default
-.
- The way it works is:
-\end_layout
-
-\begin_layout Enumerate
-When receiving an HTTP Request and there was no stateless disptach function
- to execute Lift does the statefull processing.
- But before doing that it checks to see if there is a LiftSession associated
- with this http sssion ID.
- This mapping is kept on a SessionMaster Scala actor.
- 
-\end_layout
-
-\begin_layout Enumerate
-If there is no LiftSession in SessionMaster actor, create it and add a SessionTo
-ServletBridge attribute on HttpSession.
- This will make Lift to be aware when container terminates the HttpSession
- or when the http session is about to be passivated or activated.
-\end_layout
-
-\begin_layout Enumerate
-When the container terminates the http session SessionToServletBridge sends
- a message to the SessionMaster actor to terminate the LiftSession.
- Basically the following is taking place:
-\end_layout
-
-\begin_deeper
-\begin_layout Enumerate
-Call LiftSession.onAboutToShutdownSession hooks
-\end_layout
-
-\begin_layout Enumerate
-Sends ShutDown message to all Comet actors pertaining to this session
-\end_layout
-
-\begin_layout Enumerate
-Cleanup internal LiftSession state
-\end_layout
-
-\begin_layout Enumerate
-Call LiftSession.onShutdownSession hooks
-\end_layout
-
-\end_deeper
-\begin_layout Standard
-SessionMaster actor is also protected another watcher actor.
- In essense this watcher actor receives the Exit messages of the watched
- actors.
- When it receives an Exit message it will call the users' failure functions
- and restart the watched actor (Please see ActorWatcher.failureFuncs).
- 
-\end_layout
-
-\begin_layout Standard
-Even so Lift in essence is doing its own session management you still have
- the freedom to manually add attributes to the HttpSession object.
- Still we do not recommend this unless you really have to.
- If you want to keep your own session variables, you can use SessionVar's.
- Here is an example:
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-SessionVar example
-\end_layout
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "cha:JSON-Handling"
 
 \end_inset
 
-
-\end_layout
-
-\begin_layout Plain Layout
-
-object count extends SessionVar(0);
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-// later in your code you can increment the count by calling
-\end_layout
-
-\begin_layout Plain Layout
-
-count(count + 1)
-\end_layout
-
-\begin_layout Plain Layout
-
-// or obtain the value
-\end_layout
-
-\begin_layout Plain Layout
-
-var theCountValue: Int = count
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-As you've noticed SessionVar-s are typesafe representation of http session
- attributes (actually they are kept in LiftSession and not directly in HttpSessi
-on).
- There are implicit conversion functions to convert a SessionVar to its
- underlying type.
-\end_layout
-
-\begin_layout Standard
-The next question would be 
-\begin_inset Quotes eld
-\end_inset
-
-So we have internal session management, how do we cope with that in a clustered
- environment? ...
- how sessions are replicated?
-\begin_inset Quotes erd
-\end_inset
-
- ...
- well, in short we're are not.
- There is no intentions to use the web container's session replication as
- these technologies appears to be inferior to other solutions on the market.
- Relying on Java serialization brings a lot of performance concerns and
- alternative technologies have been investigated and they are still under
- investigation.
- Until there is a 
-\begin_inset Quotes eld
-\end_inset
-
-standard
-\begin_inset Quotes erd
-\end_inset
-
- advocated session replication technology you can still cluster you application
- using 
-\begin_inset Quotes eld
-\end_inset
-
-sticky session
-\begin_inset Quotes erd
-\end_inset
-
-.
- Essentially this meas that all requests pertaining to a HTTP session must
- be processed by the same cluster node.
- This can be done by load balancers (even hardware load balancer) so they
- would dispatch the requests based on JSESSIONID cookie.
- Other approaches are that dispatching is done based on some URI or query
- parameters.
- For example a query parameter like serverid=1 is configured in the load
- balancer to always be dispatched to the node 1 of the cluster, and so on.
- There are some downsides for the sticky session approach.
- For instance you are logged in the application and do your stuff.
- Suddenly the node designated to your session crashes.
- At this moment essentially you lost your session.
- The next subsequent request would be automatically dispatched by the load
- balancer to another cluster node and depending how your application is
- built this may mean that you need to log in again or if part of the state
- was persisted in DB you may resume your work from some point avoiding re-login
- ...
- but this is application specific behavior that is beyond the scope of this
- discussion.
- The advantages of sticky sessions are related with application performance
- since in this model the state does not need to be replicated in all cluster
- nodes which for significant state information can be quite time/resources
- consuming.
+, respectively).
 \end_layout
 
 \begin_layout Section
@@ -4178,9 +4321,9 @@ Conclusion
 \end_layout
 
 \begin_layout Standard
-We just gave you a detailed view of Lift's architecture.
- This is important material, so you'll want to understand it before moving
- on.
+We've covered a lot of material and we still have a lot more to go.
+ Hopefully this chapter provides a firm basis to start from when exploring
+ the rest of the book.
 \end_layout
 
 \end_body

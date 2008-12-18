@@ -3,7 +3,7 @@
 \begin_document
 \begin_header
 \textclass book
-\use_default_options false
+\use_default_options true
 \language english
 \inputencoding auto
 \font_roman default
@@ -43,55 +43,32 @@
 \begin_body
 
 \begin_layout Chapter
-Lift and Javascript
+Forms in Lift
 \begin_inset CommandInset label
 LatexCommand label
-name "cha:Lift-and-Javascript"
+name "cha:Forms-in-Lift"
 
 \end_inset
 
 
 \end_layout
 
-\begin_layout Standard
-11.
- JsCommands 
+\begin_layout Section
+Standard Form Elements
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Standard-Form-Elements"
+
+\end_inset
+
+
 \end_layout
 
-\begin_layout Itemize
-Integrated javascript handling without hard-coding it in templates 
-\end_layout
-
-\begin_layout Itemize
-Further the goal of pushing logic out of templates
-\end_layout
-
-\begin_layout Itemize
-jQuery intro: Steal from this: http://docs.jquery.com/How_jQuery_Works
-\end_layout
-
-\begin_layout Itemize
-Utility library that makes IE6 less ugly ;) 
-\end_layout
-
-\begin_layout Itemize
-Powerful support for dynamic attributing of elements 
-\end_layout
-
-\begin_layout Itemize
-Based on CSS selectors 
-\end_layout
-
-\begin_layout Itemize
-Talk about Marius JS abstraction for YUI and jQuery 
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-I know nothing about YUI, except that v3 is supposed to be good.
- :) jQuery for me.
- -Ty
-\end_layout
+\begin_layout Section
+File Uploads
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:File-Uploads"
 
 \end_inset
 

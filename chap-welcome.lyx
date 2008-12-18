@@ -1,8 +1,9 @@
-#LyX 1.5.3 created this file. For more info see http://www.lyx.org/
-\lyxformat 276
+#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
 \begin_document
 \begin_header
 \textclass book
+\use_default_options false
 \language english
 \inputencoding auto
 \font_roman default
@@ -13,9 +14,11 @@
 \font_osf false
 \font_sf_scale 100
 \font_tt_scale 100
+
 \graphics default
 \paperfontsize default
 \spacing single
+\use_hyperref false
 \papersize default
 \use_geometry false
 \use_amsmath 1
@@ -41,7 +44,8 @@
 
 \begin_layout Chapter
 Welcome to Lift!
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "cha:Welcome-to-Lift!"
 
 \end_inset
@@ -118,7 +122,7 @@ basic configuration
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 TODO: cross-ref
 \end_layout
 
@@ -136,8 +140,12 @@ TODO: cross-ref
 \begin_layout Standard
 One of the key strengths of Lift is the clean separation of presentation
  content and logic, based on the bedrock concept of the Model-View-Controller
-\begin_inset LatexCommand index
-name "MVC"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+MVC
+\end_layout
 
 \end_inset
 
@@ -145,9 +153,14 @@ name "MVC"
 \begin_inset Foot
 status collapsed
 
-\begin_layout Standard
-\begin_inset LatexCommand htmlurl
-target "http://heim.ifi.uio.no/~trygver/1979/mvc-2/1979-12-MVC.pdf"
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://heim.ifi.uio.no/~trygver/1979/mvc-2/1979-12-MVC.pdf
+\end_layout
 
 \end_inset
 
@@ -162,9 +175,14 @@ target "http://heim.ifi.uio.no/~trygver/1979/mvc-2/1979-12-MVC.pdf"
 \begin_inset Foot
 status collapsed
 
-\begin_layout Standard
-\begin_inset LatexCommand htmlurl
-target "http://java.sun.com/products/jsp/"
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://java.sun.com/products/jsp/
+\end_layout
 
 \end_inset
 
@@ -192,9 +210,14 @@ target "http://java.sun.com/products/jsp/"
 \begin_inset Foot
 status collapsed
 
-\begin_layout Standard
-\begin_inset LatexCommand htmlurl
-target "http://wicket.apache.org/"
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://wicket.apache.org/
+\end_layout
 
 \end_inset
 
@@ -209,7 +232,7 @@ target "http://wicket.apache.org/"
 \begin_inset Foot
 status collapsed
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Not only does Scala have some extensive library support for XML, but XML
  syntax is actually part of the language.
  We'll cover this in more detail as we go through the book
@@ -227,8 +250,12 @@ Not only does Scala have some extensive library support for XML, but XML
 \begin_layout Standard
 Lift has another advantage that no other web framework currently shares:
  the Scala
-\begin_inset LatexCommand index
-name "Scala"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+Scala
+\end_layout
 
 \end_inset
 
@@ -237,7 +264,7 @@ name "Scala"
 \begin_inset Foot
 status collapsed
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Martin wrote the original 
 \family typewriter
 javac
@@ -245,8 +272,13 @@ javac
  compiler for Sun, and more recently led the Pizza and GJ projects that
  eventually became Java Generics.
  His home page is at 
-\begin_inset LatexCommand htmlurl
-target "http://lamp.epfl.ch/~odersky/"
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://lamp.epfl.ch/~odersky/
+\end_layout
 
 \end_inset
 
@@ -277,9 +309,14 @@ the statically typed dynamic language
 \begin_inset Foot
 status collapsed
 
-\begin_layout Standard
-\begin_inset LatexCommand htmlurl
-target "http://scala-blogs.org/2007/12/scala-statically-typed-dynamic-language.html"
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://scala-blogs.org/2007/12/scala-statically-typed-dynamic-language.html
+\end_layout
 
 \end_inset
 
@@ -316,7 +353,7 @@ d manner.
 \begin_inset Foot
 status collapsed
 
-\begin_layout Standard
+\begin_layout Plain Layout
 A trait is a Scala construct that's essentially like a Java interface.
  The main difference is that traits are allowed to provide method bodies
  and may have variables.
@@ -340,7 +377,8 @@ A trait is a Scala construct that's essentially like a Java interface.
 
 \begin_layout Section
 For more information
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "sec:For-more-information"
 
 \end_inset
@@ -356,9 +394,14 @@ Lift has a very active community of users and developers.
 \begin_inset Foot
 status collapsed
 
-\begin_layout Standard
-\begin_inset LatexCommand htmlurl
-target "http://blog.lostlake.org/"
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://blog.lostlake.org/
+\end_layout
 
 \end_inset
 
@@ -377,8 +420,13 @@ is constantly attending to the mailing list, answering questions and taking
 
 \begin_layout Enumerate
 The first place to look is the Wiki at 
-\begin_inset LatexCommand htmlurl
-target "http://liftweb.net/index.php/Main_Page"
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://liftweb.net/index.php/Main_Page
+\end_layout
 
 \end_inset
 
@@ -394,8 +442,13 @@ target "http://liftweb.net/index.php/Main_Page"
 
 \begin_layout Enumerate
 The mailing list at 
-\begin_inset LatexCommand htmlurl
-target "http://groups.google.com/group/liftweb"
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://groups.google.com/group/liftweb
+\end_layout
 
 \end_inset
 
@@ -406,7 +459,7 @@ target "http://groups.google.com/group/liftweb"
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Should we set up our own google group?
 \end_layout
 
@@ -417,8 +470,13 @@ Should we set up our own google group?
 
 \begin_layout Enumerate
 Lift has an IRC channel at 
-\begin_inset LatexCommand htmlurl
-target "irc://irc.freenode.net/lift"
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+irc://irc.freenode.net/lift
+\end_layout
 
 \end_inset
 
@@ -437,13 +495,23 @@ We've talked a lot about Lift and its capabilities, so now let's get hands-on
 \end_layout
 
 \begin_layout Description
-Java\InsetSpace ~
-1.5\InsetSpace ~
-JDK Lift runs on Scala, which runs on top of the JVM; the first thing
- you'll need to install is a modern version of the Java SE JVM, available
- at 
-\begin_inset LatexCommand htmlurl
-target "http://java.sun.com/"
+Java
+\begin_inset space ~
+\end_inset
+
+1.5
+\begin_inset space ~
+\end_inset
+
+JDK Lift runs on Scala, which runs on top of the JVM; the first thing you'll
+ need to install is a modern version of the Java SE JVM, available at 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://java.sun.com/
+\end_layout
 
 \end_inset
 
@@ -457,7 +525,7 @@ target "http://java.sun.com/"
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Should we include brief blurbs on platform-specific installation?
 \end_layout
 
@@ -467,16 +535,24 @@ Should we include brief blurbs on platform-specific installation?
 \end_layout
 
 \begin_layout Description
-Maven\InsetSpace ~
+Maven
+\begin_inset space ~
+\end_inset
+
 2 Maven
-\begin_inset LatexCommand index
-name "Maven"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+Maven
+\end_layout
 
 \end_inset
 
  is a project management tool which we'll cover in more detail in chapter
  
-\begin_inset LatexCommand vref
+\begin_inset CommandInset ref
+LatexCommand vref
 reference "cha:Maven"
 
 \end_inset
@@ -491,16 +567,26 @@ make
 \family default
  for now.
  You can download the latest version of Maven from 
-\begin_inset LatexCommand htmlurl
-target "http://maven.apache.org/"
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://maven.apache.org/
+\end_layout
 
 \end_inset
 
 .
  Brief installation instructions (enough to get us started) are on the download
  page, at 
-\begin_inset LatexCommand htmlurl
-target "http://maven.apache.org/download.html"
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://maven.apache.org/download.html
+\end_layout
 
 \end_inset
 
@@ -508,15 +594,23 @@ target "http://maven.apache.org/download.html"
 \end_layout
 
 \begin_layout Description
-Programming\InsetSpace ~
-editor This isn't a strict requirement for this example, but
- when we start getting into coding it's very helpful to have something a
- little more capable than notepad.
+Programming
+\begin_inset space ~
+\end_inset
+
+editor This isn't a strict requirement for this example, but when we start
+ getting into coding it's very helpful to have something a little more capable
+ than notepad.
  If you'd like a full-blown IDE, with support for things like debugging,
  continuous compile checking, etc, there are plugins available on the Scala
  website at 
-\begin_inset LatexCommand htmlurl
-target "http://www.scala-lang.org/node/91"
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://www.scala-lang.org/node/91
+\end_layout
 
 \end_inset
 
@@ -527,9 +621,14 @@ target "http://www.scala-lang.org/node/91"
 \begin_deeper
 \begin_layout List
 \labelwidthstring 00.00.0000
-\begin_inset LatexCommand htmlurl
-name "Eclipse"
-target "http://www.eclipse.org/"
+Eclipse 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://www.eclipse.org/
+\end_layout
 
 \end_inset
 
@@ -542,9 +641,14 @@ Eclipse Classic
 
 \begin_layout List
 \labelwidthstring 00.00.0000
-\begin_inset LatexCommand htmlurl
-name "NetBeans"
-target "http://www.netbeans.org"
+NetBeans 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://www.netbeans.org
+\end_layout
 
 \end_inset
 
@@ -553,9 +657,14 @@ target "http://www.netbeans.org"
 
 \begin_layout List
 \labelwidthstring 00.00.0000
-\begin_inset LatexCommand htmlurl
-name "IntelliJ IDEA"
-target "http://www.jetbrains.com/idea/index.html"
+IntelliJ IDEA 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://www.jetbrains.com/idea/index.html
+\end_layout
 
 \end_inset
 
@@ -566,8 +675,13 @@ target "http://www.jetbrains.com/idea/index.html"
 If you'd like something more lightweight, the Scala language distribution
  comes with plugins for editors like VIM, Emacs, jedit, etc.
  You can either download the full Scala distribution from 
-\begin_inset LatexCommand htmlurl
-target "http://www.scala-lang.org/"
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://www.scala-lang.org/
+\end_layout
 
 \end_inset
 
@@ -577,8 +691,13 @@ misc/scala-tool-support
 \family default
 , or you can directly access the latest versions via the SVN (Subversion)
  interface at 
-\begin_inset LatexCommand htmlurl
-target "https://lampsvn.epfl.ch/trac/scala/browser/scala-tool-support/trunk/src"
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+https://lampsvn.epfl.ch/trac/scala/browser/scala-tool-support/trunk/src
+\end_layout
 
 \end_inset
 
@@ -594,7 +713,7 @@ Now that we have the prerequisites out of the way, it's time to get started.
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 TODO: Need a cross-reference to the section on archetypes
 \end_layout
 
@@ -700,9 +819,14 @@ This means that you now have a web server (Jetty
 \begin_inset Foot
 status collapsed
 
-\begin_layout Standard
-\begin_inset LatexCommand htmlurl
-target "http://www.mortbay.org/jetty/"
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://www.mortbay.org/jetty/
+\end_layout
 
 \end_inset
 
@@ -713,8 +837,13 @@ target "http://www.mortbay.org/jetty/"
 
 ) running on port 8080 of your machine.
  Just go to 
-\begin_inset LatexCommand htmlurl
-target "http://localhost:8080/"
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://localhost:8080/
+\end_layout
 
 \end_inset
 
@@ -737,14 +866,14 @@ Hello world!
 \begin_inset Foot
 status collapsed
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Technically, it also searches for some variations on index.html, including
  any localized versions of the page, but we'll cover that later in section
  
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 TODO: Need a cross reference here
 \end_layout
 
@@ -782,22 +911,22 @@ lstparams "basicstyle={\small\ttfamily},frame=lines,language=XML"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 <lift:surround with="default" at="content">
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   <h2>Welcome to your project!</h2>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   <p><lift:helloWorld.howdy /></p>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 </lift:surround>
 \end_layout
@@ -842,7 +971,7 @@ lift
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 TODO: Need a cross reference here
 \end_layout
 
@@ -850,8 +979,12 @@ TODO: Need a cross reference here
 
 .
  When lift processes an XML template
-\begin_inset LatexCommand index
-name "template"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+template
+\end_layout
 
 \end_inset
 
@@ -908,8 +1041,12 @@ filling in the blanks
 binding
 \emph default
 
-\begin_inset LatexCommand index
-name "binding"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+binding
+\end_layout
 
 \end_inset
 
@@ -957,83 +1094,83 @@ lstparams "basicstyle={\scriptsize},breaklines=true,frame=lines,language=XML"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:lift="http://liftweb.net/">
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   <head>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     <meta name="description" content="" />
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     <meta name="keywords" content="" />
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
                 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     <title>demo.helloworld:helloworld:1.0-SNAPSHOT</title>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     <script id="jquery" src="/classpath/jquery.js" type="text/javascript"></scrip
 t>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   </head>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   <body>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     <lift:bind name="content" />
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     <lift:Menu.builder />
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     <lift:msgs/>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   </body>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 </html>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
@@ -1107,8 +1244,12 @@ The
 <lift:Menu.builder />
 \family default
  element is a special element that builds a menu based on the SiteMap
-\begin_inset LatexCommand index
-name "SiteMap"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+SiteMap
+\end_layout
 
 \end_inset
 
@@ -1116,7 +1257,7 @@ name "SiteMap"
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 TODO: Cross ref
 \end_layout
 
@@ -1195,26 +1336,26 @@ lstparams "basicstyle={\scriptsize},frame=lines"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 package demo.helloworld.snippet
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 class HelloWorld {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def howdy = <span>Welcome to helloworld at {new java.util.Date}</span>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 }
 \end_layout
@@ -1244,8 +1385,12 @@ Now that we've covered all of the actual content elements, the final piece
  of the puzzle is the 
 \family typewriter
 Boot
-\begin_inset LatexCommand index
-name "Boot"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+Boot
+\end_layout
 
 \end_inset
 
@@ -1280,111 +1425,111 @@ lstparams "basicstyle={\scriptsize},firstline=13,frame=lines"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 package bootstrap.liftweb
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 import net.liftweb.util._
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 import net.liftweb.http._
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 import net.liftweb.sitemap._
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 import net.liftweb.sitemap.Loc._
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 import Helpers._
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
  
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 /**
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   * A class that's instantiated early and run.
   It allows the application
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   * to modify lift's environment
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   */
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 class Boot {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def boot {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     // where to search snippet
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     LiftRules.addToPackages("demo.helloworld")     
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     // Build SiteMap
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     val entries = Menu(Loc("Home", "/", "Home")) :: Nil 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     LiftRules.setSiteMap(SiteMap(entries:_*))
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   }
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 }
 \end_layout
@@ -1418,7 +1563,7 @@ demo.helloworld.snippets
 \begin_inset Note Note
 status collapsed
 
-\begin_layout Standard
+\begin_layout Plain Layout
 TODO: Cross-ref
 \end_layout
 
@@ -1441,7 +1586,7 @@ addToPackages
 \begin_inset Note Note
 status collapsed
 
-\begin_layout Standard
+\begin_layout Plain Layout
 TODO: Cross-ref
 \end_layout
 
@@ -1494,7 +1639,7 @@ Lift's ORM layer,
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 TODO: Record or Mapper?
 \end_layout
 

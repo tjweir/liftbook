@@ -1,8 +1,9 @@
-#LyX 1.5.6 created this file. For more info see http://www.lyx.org/
-\lyxformat 276
+#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
 \begin_document
 \begin_header
 \textclass book
+\use_default_options false
 \language english
 \inputencoding auto
 \font_roman default
@@ -13,9 +14,11 @@
 \font_osf false
 \font_sf_scale 100
 \font_tt_scale 100
+
 \graphics default
 \paperfontsize default
 \spacing single
+\use_hyperref false
 \papersize default
 \use_geometry false
 \use_amsmath 1
@@ -41,6 +44,13 @@
 
 \begin_layout Chapter
 AJAX and COMET
+\begin_inset CommandInset label
+LatexCommand label
+name "cha:AJAX-and-COMET"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Itemize
@@ -118,25 +128,47 @@ wide false
 sideways false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 \align center
-\begin_inset Graphics
-	filename images/ajax.png
-	lyxscale 50
-	height 4in
-	subcaption
-	subcaptionText "AJAX Application Model"
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+AJAX Application Model
+\end_layout
 
 \end_inset
 
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename images/ajax.png
+	lyxscale 50
+	height 4in
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
 \begin_inset Caption
 
-\begin_layout Standard
-\begin_inset LatexCommand label
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
 name "fig:ajaxarch"
 
 \end_inset
@@ -150,7 +182,7 @@ AJAX Architecture
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Copyright Check Required
 \end_layout
 
@@ -182,25 +214,47 @@ wide false
 sideways false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 \align center
-\begin_inset Graphics
-	filename images/Comet.png
-	lyxscale 50
-	height 4in
-	subcaption
-	subcaptionText "COMET Application Model"
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+COMET Application Model
+\end_layout
 
 \end_inset
 
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename images/Comet.png
+	lyxscale 50
+	height 4in
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
 \begin_inset Caption
 
-\begin_layout Standard
-\begin_inset LatexCommand label
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
 name "fig:cometarch"
 
 \end_inset
@@ -213,11 +267,11 @@ COMET Architecture
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Copyright Check Required
 \end_layout
 
