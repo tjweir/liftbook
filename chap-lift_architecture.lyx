@@ -1,4 +1,4 @@
-#LyX 1.6.0 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -43,40 +43,23 @@
 \begin_body
 
 \begin_layout Chapter
-Lift Architecture
-\end_layout
-
-\begin_layout Section
-Introduction
+Lift Architecture and Fundamentals
 \end_layout
 
 \begin_layout Standard
-This chapter will walk you through Lift's architecture and how it processes
- requests.
- During the explanation of the rendering pipeline, you'll see how you can
+In this chapter we will cover some of the fundamental aspects of writing
+ a lift application, including the architecture of the Lift library and
+ how it processes requests.
+ We will cover the rendering pipeline in detail, and show you how you can
  add your own code to be a part of that processing.
  
 \end_layout
 
 \begin_layout Section
 Entry into Lift
-\end_layout
-
-\begin_layout Standard
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Todo:
-\end_layout
-
-\begin_layout Plain Layout
-- We need a high level summary of section 4.5
-\end_layout
-
-\begin_layout Plain Layout
-- Fix up references
-\end_layout
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Entry-into-Lift"
 
 \end_inset
 
@@ -122,12 +105,19 @@ web.xml
 
 \end_inset
 
- should specify the filter and not the servlet:
+ should specify the filter and not the servlet, as shown in listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:LiftFilter-setup-in-web.xml"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
 \begin_inset listings
-lstparams "basicstyle={\scriptsize},frame=single,language=XML,numbers=left,numberstyle={\tiny}"
+lstparams "language=XML,numbers=left,numberstyle={\tiny}"
 inline false
 status open
 
@@ -252,8 +242,8 @@ reference "lst:JPA-web.xml"
 \end_inset
 
 .
- In particular, the filter-mapping specifies that the Filter is responsible
- for everything.
+ In particular, the filter-mapping (lines 13-16) specifies that the Filter
+ is responsible for everything.
  When the filter receives the request, it checks a set of rules to see if
  it can handle it.
  If the request is one that Lift handles, it passes it on to an internal
@@ -263,13 +253,36 @@ reference "lst:JPA-web.xml"
 
 \begin_layout Section
 Bootstrap
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Bootstrap"
+
+\end_inset
+
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Bootstrap
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
 When Lift starts up there are a number of things that you'll want to set
  up before any requests are processed.
- These things include setting up a SiteMenu, URL rewriting, custom dispatch,
- classpath search and pretty much all what LiftRules object has to offer.
+ These things include setting up a SiteMap (chapter 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "cha:SiteMap"
+
+\end_inset
+
+), URL rewriting, custom dispatch, and classpath search.
  The Lift servlet looks for the bootstrap.liftweb.Boot
 \begin_inset Index
 status collapsed
@@ -281,9 +294,27 @@ Boot
 \end_inset
 
  class and executes the boot method in the class.
- You can also specify your own Boot instance by using the following context
- param in web.xml
-\begin_inset Quotes erd
+ You can also specify your own Boot instance by using the 
+\family typewriter
+bootloader
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+
+\family typewriter
+bootloader
+\end_layout
+
+\end_inset
+
+
+\family default
+ context param as shown in listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Overriding-bootloader"
+
 \end_inset
 
 
@@ -291,16 +322,23 @@ Boot
 
 \begin_layout Standard
 \begin_inset listings
+lstparams "language=XML"
 inline false
 status open
 
 \begin_layout Plain Layout
 
- 
 \begin_inset Caption
 
 \begin_layout Plain Layout
-web.xml Boot param
+Overriding the Boot loader class
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Overriding-bootloader"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -334,64 +372,52 @@ web.xml Boot param
 \end_layout
 
 \begin_layout Standard
-Your MyBoot class needs to be a Bootable
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-inline false
+Your MyBoot class must subclass Bootable
+\begin_inset Foot
 status open
 
 \begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-Bootable class
+net.liftweb.http.Bootable
 \end_layout
 
 \end_inset
 
-
-\end_layout
-
-\begin_layout Plain Layout
-
-abstract class Bootable {   
-\end_layout
-
-\begin_layout Plain Layout
-
-	def boot() : Unit; 
-\end_layout
-
-\begin_layout Plain Layout
-
-} 
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-The boot method will only be run once, so you can place any initialization
+ and implement the 
+\family typewriter
+boot
+\family default
+ method.
+ The boot method will only be run once, so you can place any initialization
  calls for other libraries here as well.
- 
+\end_layout
+
+\begin_layout Subsection
+A Note on LiftRules
 \end_layout
 
 \begin_layout Standard
-It is important to note that a lot of aspects related with Lift's behavior
- can be customized from boot by using LiftRules object.
- 
+Most of your configuration in your Boot class will be done via the LiftRules
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+LiftRules
 \end_layout
 
-\begin_layout Section
+\end_inset
+
+ object; LiftRules serves as a common location for almost everything configurabl
+e about Lift.
+ Because LiftRules spans such a diverse range of functionality, we're not
+ going to cover it directly; rather, we will mention it as we cover each
+ of the aspects that it controls.
+\end_layout
+
+\begin_layout Subsection
 Class Resolution
 \begin_inset CommandInset label
 LatexCommand label
-name "sec:Class-Resolution"
+name "sub:Class-Resolution"
 
 \end_inset
 
@@ -399,48 +425,38 @@ name "sec:Class-Resolution"
 \end_layout
 
 \begin_layout Standard
-As part of our discussion of the Boot class, it's important to cover a small
- detail of how Lift determines where to find classes for Views and Snippet
- rendering.
- The LiftRules.addToPackages method tells lift what Scala packages to look
- in for a given class.
+As part of our discussion of the Boot class, it's also important to cover
+ a small detail of how Lift determines where to find classes for Views and
+ Snippet rendering.
+ The 
+\family typewriter
+LiftRules.addToPackages
+\family default
+ method tells lift what Scala packages to look in for a given class.
  Lift has implicit extensions to the paths you enter; in particular, if
  you tell Lift to use the 
-\begin_inset Quotes eld
-\end_inset
-
+\family typewriter
 com.pocketchangeapp
-\begin_inset Quotes erd
-\end_inset
-
+\family default
  package, Lift will look for View classes under 
-\begin_inset Quotes eld
-\end_inset
-
+\family typewriter
 com.pocketchangeapp.view
-\begin_inset Quotes erd
-\end_inset
-
+\family default
  and will look for Snippet classes under 
-\begin_inset Quotes eld
-\end_inset
-
+\family typewriter
 com.pocketchangeapp.snippet
-\begin_inset Quotes erd
-\end_inset
-
+\family default
 .
- Typically the 
+ The 
 \family typewriter
 addToPackages
 \family default
- method is excuted in your Boot class.
- A minimal Boot class would look like
+ method should almost always be executed in your Boot class.
+ A minimal Boot class would look like:
 \end_layout
 
 \begin_layout Standard
 \begin_inset listings
-lstparams "basicstyle={\footnotesize},frame=single"
 inline false
 status open
 
@@ -496,49 +512,101 @@ class Boot {
 
 \begin_layout Section
 Request/Response Lifecycle
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Request/Response-Lifecycle"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
-We just explained what happens as Lift starts up, now we'll discuss what
- happens when a Request comes in.
- We'll describe the entire process to sending the Response back to the browser.
- 
+Now that we've explained what happens as Lift starts up, we're ready to
+ discuss what happens when a Request comes in.
+ The rendering pipeline is a non-trivial process, but we feel that it's
+ important that you understand it at least at a high level.
+ Going through it now should save some confusion later on when you actually
+ use all of the functionality we mention here.
+ One important thing we'd like to mention before digging into the details
+ is that most of the configurable properties on LiftRules are of the type
+ RulesSeq.
+ With a RulesSeq you essentially have a list of functions or values that
+ are applied in order.
+ RulesSeq defines a prepend and append method that allows you to add new
+ configuration items at the beginning or end of the configuration, respectively.
+ This allows you to prioritize things like partial functions and compose
+ various methods together to control Lift's behavior.
 \end_layout
 
 \begin_layout Standard
-As this is the main part of Lift, it is a non-trivial process, but it's
- imperative that you understand the bulk of it.
- You'll be much better off knowing how the rendering pipeline works.
- There are a quite a few steps to mention in order have a clear picture
- how and where certain things are happening.
- So let's get started!
+The following list outlines, in order, the process of transforming a request
+ into a response:
 \end_layout
 
 \begin_layout Enumerate
-Execute early functions.
- See 
+Execute early functions: this is a mechanism that allows a user function
+ to be called before the request enters the normal processing chain.
+ This can be used for, for example, to set the XHTML output to UTF-8.
+ This is controlled through 
 \family typewriter
-LiftRules.appendEarly
-\family default
-.
- This is a mechanism that allows a user function to be called before the
- request enters the normal processing chain.
- This can be used for setting the XHTML output to UTF-8.
+LiftRules.early
 \end_layout
 
 \begin_layout Enumerate
-URL Rewriting, see 
-\family typewriter
-LiftRules.prependRewrite/appendRewrite,
-\family default
- this is useful when you want to transform a URI path into something else
- such as query paramters etc.
- The result of the transformation will be passed to futher processing.
- You would use this for creating user-friendly URLs.
- For more information, please see 
+Perform URL Rewriting, which we cover in detail in section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:URL-Rewriting"
+
+\end_inset
+
+.
+ Controlled via 
+\family typewriter
+LiftRules.rewrite
+\family default
+, this is useful for creating user-friendly URLs, among other things.
+ The result of the transformation will be checked for possible rewrites
+ until there are no more matches or it is explictly stopped
+\end_layout
+
+\begin_layout Enumerate
+Call 
+\family typewriter
+LiftRules.onBeginServicing
+\family default
+ hooks.
+ This is a mechanism that allows you to add your own hook functions that
+ will be called when Lift is starting to process the request.
+ You could set up logging here.
+\end_layout
+
+\begin_layout Enumerate
+Check for user-defined stateless dispatch in 
+\family typewriter
+LiftRules.statelessDispatchTable
+\family default
+.
+ If the partial functions defined in this table match the request then they
+ are used to create LiftResponse that is sent to the user, bypassing any
+ further processing.
+ These are very useful for building things like REST API's.
+ The term stateless refers to the fact that at the time the dispatch function
+ is called, the stateful object, called 
+\family typewriter
+S
+\family default
+, is not available and the LiftSession is not created yet.
+\end_layout
+
+\begin_layout Enumerate
+Create a LiftSession.
+ The LiftSession holds various bits of state for the request, and is covered
+ in more detail in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Session-Management"
 
 \end_inset
 
@@ -546,44 +614,15 @@ reference "sec:URL-Rewriting"
 \end_layout
 
 \begin_layout Enumerate
-Call LiftRules.onBeginServicing hooks.
- This is a mechanism that allows you to add your own hook functions that
- will be called when Lift is starting to procss the request.
- You could set up logging here.
-\end_layout
-
-\begin_layout Enumerate
-Check for user-defined stateless dispatch (See 
-\family typewriter
-LiftRules.prependStatelessDispatchPF/appendStatelessDispatchPF
-\family default
-).
- These are partial functions that if they are defined for a given HTTP request
- they will return a LiftResponse which internally is turned in the bytes
- stream that is sent to client.
- These are very useful to build REST API's.
- The term stateless means that when the DispatchPF function is called the
- stateful object, called 
-\family typewriter
-S
-\family default
-, is not available and LiftSession not created/obtained yet.
-\end_layout
-
-\begin_layout Enumerate
-Create a Lift session if there is no applicable stateless dispatch function.
-\end_layout
-
-\begin_layout Enumerate
 Call 
 \family typewriter
 LiftSession.onSetupSession
 \family default
- when the HTTP session is activated by container.
+.
  This is a mechanism for adding hook functions that will be called when
- LiftSession is created.
- We'll get into more details when talking about Lift's session management.
- Please see 
+ the LiftSession is created.
+ We'll get into more details when we discuss Lift's session management in
+ section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Session-Management"
@@ -598,39 +637,40 @@ Initialize the
 \family typewriter
 S
 \family default
- object
+ object (section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:S-object"
+
+\end_inset
+
+).
+ The S object represents the current state of the request and response.
 \end_layout
 
 \begin_layout Enumerate
-Call 
+Call any 
 \family typewriter
 LoanWrapper
 \family default
--s (See 
+ instances that you've added through 
 \family typewriter
 S.addAround
 \family default
-).
+.
  Essentially a 
 \family typewriter
 LoanWrapper
 \family default
- is a way of wrapping the Lift's processing logic by your own code.
- This means that when your LoanWrapper implementation is called, Lift is
- also passing you a function impersonating the entire processing logic.
- Therefore you have the opportunity to as pre and post conditions to Lift's
- processing code.
- 
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Example of why you would use LoanWrapper needes
-\end_layout
-
-\end_inset
-
-
+ is a way to insert your own processing into the render pipeline, similar
+ to how Filter works in the Servlet API.
+ This means that when your LoanWrapper implementation is called, Lift passes
+ you a function allowing you to chain the processing of the request.
+ With this functionality you can execute your own pre- and post-condition
+ code.
+ A simple example of this would be if you need to make sure that something
+ is configured at the start of processing and cleanly shut down when processing
+ terminates
 \end_layout
 
 \begin_layout Enumerate
@@ -639,14 +679,17 @@ Process the stateful request
 
 \begin_deeper
 \begin_layout Enumerate
-Check the stateful dispatch functions (See 
+Check the stateful dispatch functions defined in 
 \family typewriter
-LiftRules.prependDispath/appendDispatch
+LiftRules.dispatch
 \family default
-).
- Similar with what was described on step #4 except that these functions
- are executed in the context of a LiftSession and very important in the
- context of S object (See 
+.
+ This is similar to the stateless dispatch in step #4 except that these
+ functions are executed in the context of a LiftSession and an 
+\family typewriter
+S
+\family default
+ object (section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:S-object"
@@ -654,9 +697,10 @@ reference "sec:S-object"
 \end_inset
 
 ).
- Of course the first function defined for this request is called and the
- LiftResponse is returned.
- For an overview of Diaptch functions please see 
+ The first matching partial function is used to generate a LiftReponse that
+ is returned to the client.
+ If none of the dispatch functions match then processing continues.
+ Dispatch functions are covered in section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Dispatch-functions"
@@ -671,11 +715,53 @@ If this is a
 \series bold
 Comet
 \series default
- request, then process it.
- For an overview of what Comet is, please see 
+ request, then process it and return the response.
+ Comet is a method for performing asynchronous updates of the user's page
+ without a reload.
+ We cover Comet techniques in section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Comet"
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Call 
+\family typewriter
+LiftSession.onBeginServicing
+\family default
+.
+ This differs from 
+\family typewriter
+LiftRules.onBeginServicing
+\family default
+ because at this point we have a stateful request (
+\family typewriter
+S
+\family default
+ and 
+\family typewriter
+LiftSession
+\family default
+), so the hook function takes a 
+\family typewriter
+LiftSession
+\family default
+ arg in addition to the 
+\family typewriter
+Req
+\family default
+ arg.
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Is this really done after Comet and before Ajax?
+\end_layout
 
 \end_inset
 
@@ -687,27 +773,20 @@ If this is an
 \series bold
 Ajax
 \series default
- request, then:
-\end_layout
-
-\begin_deeper
-\begin_layout Enumerate
-Call 
+ request, execute the user's callback function; the specific function is
+ mapped via a request parameter (essentially a token).
+ The result of the callback is returned as the response to the user.
+ The response can be a JavaScript snippet, an XML construct or virtually
+ any 
 \family typewriter
-LiftSession.onBeginServicing
+LiftResponse
 \family default
 .
- Lift comes again with hooking functions.
- Note that we have LiftRules.onBeginServicing and LiftSession.onBeginServicing.
- The differences are when these hooks are called.
- In this case when Lift is about to process the stateful request.
-\end_layout
-
-\begin_layout Enumerate
-Execute the user's function mapped with that specific request token (impersonate
-d by a request parameter) and return the response which can be a JavaScript,
- an XML construct or virtually any LiftResponse.
- For an overview of LiftResponse please see 
+ For an overview of 
+\family typewriter
+LiftResponse
+\family default
+ please see 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Lift-reponses"
@@ -718,33 +797,22 @@ reference "sec:Lift-reponses"
 \end_layout
 
 \begin_layout Enumerate
-Call 
-\family typewriter
-LiftSession.onEndServicing
-\family default
-.
- It's probably very intuitive what this does.
- It calls the hooks when finishing process the Ajax request.
-\end_layout
-
-\end_deeper
-\begin_layout Enumerate
 If this is a regular HTTP request, then:
 \end_layout
 
 \begin_deeper
 \begin_layout Enumerate
-Call 
-\family typewriter
-LiftSession.onBeginServicing
-\family default
- hooks.
- Similar with an Ajax request, processing hooks are called for normal HTTP
- requests.
+Check the user-defined dispatch functions that are set per-session
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Where? Do you mean the callbacks for form elements, etc?
 \end_layout
 
-\begin_layout Enumerate
-Check the user-defined dispatch functions that are set per-session.
+\end_inset
+
+.
  If there is a function applicable, execute it and return its response.
  If there is no per-session dispatch function, process the request by executing
  the Scala function that user set up for specific events (such as when clicking
@@ -758,18 +826,11 @@ reference "sec:SHtml"
 \end_inset
 
 
-\end_layout
-
-\begin_layout Enumerate
-Check the SiteMap and Loc functions.
- SiteMap is a big part of Lift, and as such, there is an entire chapter
- dedicated to it.
- 
 \begin_inset Note Note
 status open
 
 \begin_layout Plain Layout
-SiteMap Chapter Lookup
+TODO: Rewrite this item once we're clear on what it means
 \end_layout
 
 \end_inset
@@ -778,25 +839,53 @@ SiteMap Chapter Lookup
 \end_layout
 
 \begin_layout Enumerate
-Lookup the template based on the Request path.
+Check the SiteMap and Loc functions.
+ We cover SiteMap extensively in chapter 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "cha:SiteMap"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Lookup the template based on the Req path.
  Lift will locate the templates using various aproaches:
 \end_layout
 
 \begin_deeper
 \begin_layout Enumerate
-Check for ViewDispatchPF functions.
- If there is a function defined for this path invoke it and return an Either
+Check the partial functions defined in 
+\family typewriter
+LiftRules.viewDispatch
+\family default
+.
+ If there is a function defined for this path invoke it and return an Either[
+\begin_inset Formula $()\Rightarrow Can[NodeSeq]$
+\end_inset
+
+,LiftView].
+ This allows you to either return the function for handling the view directly,
+ or delegate to a LiftView subclass.
+ LiftView is covered in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Views"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Enumerate
-If there is no ViewDispatchPF look for the template in the path specified
- in the request.
- This is a very interesting mechanism that allows you toplugin your own
- templates or views.
- Nomally you markup templates are found in templates-hidden folder of your
- web application.
- But again Lift provides excellents means for extending so you can provide
- your markup templates virtually from anywhere.
+If no viewDispatch functions match, then look for the template using the
+ ServletContext's 
+\family typewriter
+getResourceAsStream
+\family default
+.
 \end_layout
 
 \end_deeper
@@ -806,24 +895,45 @@ Process the templates by executing snippets combining templates etc.
 
 \begin_deeper
 \begin_layout Enumerate
-Merge <head> elements
+Merge <head> elements, as described in section e
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Head-Merge"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Enumerate
 Update the internal functions map.
- Basically associate user's scala functions with tokens that are impersonated
- in subsequent requests by HTTP parameters
+ Basically this associates the user's scala functions with tokens that are
+ passed around in subsequent requests using HTTP query parameters
 \end_layout
 
 \begin_layout Enumerate
 Clean up notices (see S.error, S.warning, S.notice) since they were already
  rendered
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+We need to detail messages somewhere
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Enumerate
-Call LiftRules.convertResponse.
+Call 
+\family typewriter
+LiftRules.convertResponse
+\family default
+.
  Basically this glues together different pieces if information such as the
- actual markup, the response headers, cookies etc.
+ actual markup, the response headers, cookies, etc into a LiftResponse instance
 \end_layout
 
 \begin_layout Enumerate
@@ -845,7 +955,9 @@ Call
 \family typewriter
 LiftSession.onEndServicing
 \family default
- and any end-servicing hooks.
+ hooks, the counterparts to 
+\family typewriter
+LiftSession.onBeginServicing
 \end_layout
 
 \begin_layout Enumerate
@@ -854,31 +966,41 @@ Call
 LiftRules.performTransform
 \family default
 .
- See 
+ This is actually configured via the 
 \family typewriter
 LiftRules.responseTransformers
 \family default
+ 
+\family typewriter
+RulesSeq
+\family default
 .
- Essentially this is a list of functions that allows the user to make certain
- changes to the LiftResponse before being send to client.
+ Essentially, this is a list of functions on 
+\begin_inset Formula $LiftResponse\Rightarrow LiftResponse$
+\end_inset
+
+ that allows the user to modify the response before it's sent to the client
 \end_layout
 
 \end_deeper
 \begin_layout Enumerate
-Call LiftRules.onEndServicing hooks.
- These are the outer end-servicing hooks called after the S object context
- was destroyed.
+Call 
+\family typewriter
+LiftRules.onEndServicing
+\family default
+ hooks.
+ These are the stateless end-servicing hooks, called after the S object
+ context is destroyed.
 \end_layout
 
 \begin_layout Enumerate
-Call any before-send functions.
- You may have seen this coming, we have hooks that are called right before
- sending the response down to the pipe line.
- See 
+Call any functions defined in 
 \family typewriter
-LiftRules.appendBeforeSend
+LiftRules.beforeSend
 \family default
 .
+ This is the last place where you can modify the response before it's sent
+ to the user
 \end_layout
 
 \begin_layout Enumerate
@@ -887,138 +1009,21 @@ Convert the LiftResponse to a raw byte stream and send it to client as an
 \end_layout
 
 \begin_layout Enumerate
-Call any after-send functions.
- See 
+Call any functions defined in 
 \family typewriter
-LiftRules.appendAfterSend.
+LiftRules.afterSend
+\family default
+.
+ Typically these would be used for cleanup
 \end_layout
 
 \begin_layout Standard
-At a first glance certain things of this flow may seem unclear but after
- you're familiar with Lift framework and start using it is really important
- to know when certain things are happening so you can use the Lift goodies
- in the right place.
-\end_layout
-
-\begin_layout Standard
-For more details regarding LiftRules object please see 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "sec:LiftRules-object"
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Section
-LiftRules 
-\begin_inset CommandInset label
-LatexCommand label
-name "sec:LiftRules-object"
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-The LiftRules object is the main way for configuring Lift's behavior which
- is typically done at startup in Boot.
- For more details of the LiftRules API please see 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "sec:LiftRules"
-
-\end_inset
-
- or take a look at 
-\family typewriter
-liftweb/lift/src/main/scala/net/liftweb/http/LiftRules.scala
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-LiftRules example
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-class Boot {
-\end_layout
-
-\begin_layout Plain Layout
-
-  def boot {
-\end_layout
-
-\begin_layout Plain Layout
-
-    // where to search snippet
-\end_layout
-
-\begin_layout Plain Layout
-
-    LiftRules.addToPackages("demo.helloworld")     
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-    LiftRules.browserResponseToException = {
-\end_layout
-
-\begin_layout Plain Layout
-
-	  // If there is an unexpected exception in your application during the
- processing of a request
-\end_layout
-
-\begin_layout Plain Layout
-
-      // this anonymous function is called and you can redirect to the error
- page
-\end_layout
-
-\begin_layout Plain Layout
-
-      case (mode, state, ex) => {ex.printStackTrace();RedirectResponse("/error")}
-\end_layout
-
-\begin_layout Plain Layout
-
-	}  
-\end_layout
-
-\begin_layout Plain Layout
-
-  }
-\end_layout
-
-\begin_layout Plain Layout
-
-}  
-\end_layout
-
-\end_inset
-
-
+We realize that this is a lot of information to digest in one pass, so as
+ we continue to cover the specific details of the rendering pipeline you
+ may want to keep a bookmark here so that you can come back and process
+ the new information in the greater context of how Lift is working.
+ Now that we've gone through to overview, let's get started on some of the
+ actual mechanics!
 \end_layout
 
 \begin_layout Section
@@ -1049,7 +1054,7 @@ Templates
  There are a number of built-in XML tags that Lift uses for specific reasons,
  these are of the form 
 \family typewriter
-<lift:name />
+<lift:name/>
 \family default
 .
  Lift also allows you to create your own tags, which are called 
@@ -1066,16 +1071,30 @@ snippets
 
 \end_inset
 
-.
+ (section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Snippets"
+
+\end_inset
+
+).
  These user-defined tags are linked directly to Scala methods and these
- methods can process the contents of the snippet tag, or can generate their
- own content from scratch.
- Below is a simple template:
+ methods can process the XML contents of the snippet tag, or can generate
+ their own content from scratch.
+ A simple template is shown in listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Sample-template"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
 \begin_inset listings
-lstparams "basicstyle={\footnotesize},frame=single,language=XML"
+lstparams "language=XML"
 inline false
 status open
 
@@ -1111,7 +1130,7 @@ name "lst:Sample-template"
 
 \begin_layout Plain Layout
 
-  <lift:snippet type="Hello.world" />
+  <lift:Hello.world />
 \end_layout
 
 \begin_layout Plain Layout
@@ -1139,7 +1158,7 @@ Notice the tags that are of the form
  
 \family default
 These are two examples of Lift-specific tags.
- We'll discuss all of the tags that users will use in section Tags 
+ We'll discuss all of the tags that users will use in section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:ArchTags"
@@ -1161,7 +1180,14 @@ lift:surround
 
 
 \family default
- tag to make Lift embed our current template inside the 
+ tag (section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:surround-tag"
+
+\end_inset
+
+) to make Lift embed our current template inside the 
 \begin_inset Quotes eld
 \end_inset
 
@@ -1178,7 +1204,7 @@ default
 \family typewriter
 <lift:snippet>
 \family default
- to execute a snippet that we defined.
+ tag (aliased to Hello.world) to execute a snippet that we defined.
  In this case we execute the method 
 \family typewriter
 world
@@ -1192,18 +1218,17 @@ to generate some content.
 \end_layout
 
 \begin_layout Standard
-Following rewriting and custom dispatch, Lift checks to see if it can find
- a file in the WAR tree that matches the request
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-WAR Tree, or is it classpath?
-\end_layout
+Templates are handled following rewriting and custom dispatch as we showed
+ in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Request/Response-Lifecycle"
 
 \end_inset
 
 .
+ During template processing, Lift tries to locate a file in the WAR tree
+ that matches the request.
  Lift tries several suffixes (html, xhtml, htm, and no suffix) and also
  tries to match based on the client's Accept-Language header.
  The pattern Lift uses is
@@ -1273,13 +1298,20 @@ WEB-XML
  They can, however, be used by other templates through mechanisms like the
  
 \family typewriter
-lift:surround
+<lift:surround>
 \family default
  and 
 \family typewriter
-lift:embed
+<lift:embed>
 \family default
- tags.
+ tags (section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:embed-tag"
+
+\end_inset
+
+).
  If Lift cannot locate an appropriate template based on the request path
  then it will return a 404 to the user.
 \end_layout
@@ -1350,63 +1382,46 @@ render
 \end_layout
 
 \begin_layout Standard
-So templates are a nice way of setting up your layout and then writing a
- few methods to fill in the XML fragments that make up your web applications.
- They provide a simple way to generate a uniform look for your site.
+As you can see, templates are a nice way of setting up your layout and then
+ writing a few methods to fill in the XML fragments that make up your web
+ applications.
+ They provide a simple way to generate a uniform look for your site, paritcularl
+y if you composite your templates using the surround and embed tags.
  If you'd like more control or don't need a template for a certain section,
  you'll want to use a View, which is coming up in the next section.
 \end_layout
 
+\begin_layout Standard
+\begin_inset Note Greyedout
+status open
+
 \begin_layout Subparagraph
 
 \series medium
+If you inspect the API documentation closely, you might be tempted to manually
+ load a template (from a snippet for example) using 
+\family typewriter
+LiftSession.processSurroundAndInclude
+\family default
+.
+ Even though Lift will merge your templates and invoke snippets if you use
+ this method, we 
 \emph on
-Sometimes it might be tempted to load manually a template (from a snippet
- for example) using LiftSession.processSurroundAndInclude.
- Even if Lift will merge your templates and invoke snippets it is HIGHLY
- recommended to NOT use this as the processing functions will not be invoked
- as the functions mapping will not happen as this is called 
-\bar under
-outside 
-\bar default
-of normal rendering pipeline.
- So in other words let's say that in a cetain point in your application
- you want to return another page then the one that was supposed to be served
- normally.
- One classic example would be that when un unnexpected exception is thrown
- you want toreturn an error page.
- Let's also say that this error page has 
+strongly
 \emph default
-a form allowing the user to submit 
+ recommend against this technique.
+ The basic issue is that Lift's function mappings are not properly updated
+ because you're running this method 
 \emph on
-comments about the failure.
- There is a way of 
-\begin_inset Quotes eld
-\end_inset
-
-catching
-\begin_inset Quotes erd
-\end_inset
-
- soch failure by using LiftRules.browserResponseToException which willbe
- called by Lift and you can return your own LiftResponse.
- But most certainly you do not want to hardcode the response so you want
- to use an existent error.html page.
- So you can loda this from disk using LiftRules.loadResourceAsXml and the
- call the LiftSession.processSurroundAndInclude so that Lift will process
- the <lift:xxx> tags, call your snippets etc.
- Once you have this done you can return your own LiftResponse by using XhtmlResp
-onse.
- When you test it you'll be surprised to see that your form is not processed
- by lift; your functions are not called.
- That's because you did these things manully but your functions set through
- SHtml object (most likely) are not seen by Lift.
- In othertems you did these things outside of Lift's rendering pipeline.
- To solve this it is recommended that youdo not manually process templates
- in your own function unless you really know what you're doing.
- In this particular case instead of doing all this, you can just use a RedirectR
-esponse object.
- Please see 
+outside
+\emph default
+ of the normal rendering pipeline.
+ That means that whatever callbacks you have in the page you'd like to return
+ won't get called when the page is submitted.
+ In general, we've never found a case where we required this functionality;
+ usually you can accomplish the same thing by using a RedirectResponse and
+ attaching your state to it via the Map parameter.
+ For more details, see section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:HTTP-redirects"
@@ -1416,8 +1431,20 @@ reference "sec:HTTP-redirects"
 
 \end_layout
 
+\end_inset
+
+
+\end_layout
+
 \begin_layout Section
 Views
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Views"
+
+\end_inset
+
+
 \begin_inset Note Note
 status collapsed
 
@@ -1432,9 +1459,10 @@ Convert examples to PocketChange...
 \end_layout
 
 \begin_layout Standard
-We just discussed Templates and we saw how through a combination of an XML
+We just discussed Templates and saw that through a combination of an XML
  file, Lift tags, and Scala code we can respond to requests made by a user.
  You can also generate those responses entirely in code by using Views.
+ 
 \end_layout
 
 \begin_layout Standard
@@ -1448,12 +1476,11 @@ Views
 
 \end_inset
 
- are implicitly defined custom dispatch methods.
- We'll cover Dispatch in more depth in the next section.
- 
+ are implicitly defined custom dispatch methods; we'll cover explicit custom
+ dispatch in more depth in section 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "sub:Custom-Dispatch"
+reference "sec:Dispatch-functions"
 
 \end_inset
 
@@ -1471,19 +1498,13 @@ NodeSeq
 ; the main difference is that with custom dispatch we explicitly define
  the path that will lead to the method via LiftRules, whereas in a view,
  the class itself defines the path.
- In either case, View lookup and dispatch is done after template resolution
- (to be covered later), so templates take priority
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-TODO: Confirm this!
+ In either case, View lookup and dispatch is done after template resolution,
+ so templates take priority.
+ 
 \end_layout
 
-\end_inset
-
-.
- There are two options for implementing a view class: one is to extend the
+\begin_layout Standard
+There are two options for implementing a view class: one is to extend the
  LiftView
 \begin_inset Index
 status collapsed
@@ -1520,7 +1541,7 @@ MyStuff
  in the view subpackage (class resolution is covered in section 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "sec:Class-Resolution"
+reference "sub:Class-Resolution"
 
 \end_inset
 
@@ -1539,8 +1560,11 @@ reflection
 
 \end_inset
 
- to get the method, so it can access any method in the class, even ones
- marked private.
+ to get the method, so it can access any method in the class, 
+\emph on
+even ones marked private
+\emph default
+.
  A better way to do it is to use the LiftView trait, which defines a dispatch
  partial function.
  This dispatch function maps a string (the 
@@ -1573,7 +1597,6 @@ reference "lst:Dispatch-in-LiftView"
 
 \begin_layout Standard
 \begin_inset listings
-lstparams "frame=single"
 inline false
 status open
 
@@ -1691,7 +1714,7 @@ Confirm this!
 
 \end_inset
 
-, just like snippets.
+, just like snippets; dispatch methods, on the other hand, expect a LiftResponse.
  That means that you can use the full power of the templating system from
  within your View, as shown in listing 
 \begin_inset CommandInset ref
@@ -1709,9 +1732,8 @@ doEnumerate
 
 \begin_layout Standard
 Since you can choose to not include any of the pre-defined template XHTML,
- you generate Atom or RSS feeds using a View.
- Resources of that nature, such as XML responses, or JSON, or an image response,
- would most likely be handled by a View.
+ you can easily generate any XML-based content such as Atom or RSS feeds
+ using a View.
 \end_layout
 
 \begin_layout Section
@@ -2367,7 +2389,14 @@ snippet
 \end_layout
 
 \begin_layout Subsection
-surround 
+surround
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:surround-tag"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -2695,7 +2724,14 @@ status open
 \end_layout
 
 \begin_layout Subsection
-embed 
+embed
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:embed-tag"
+
+\end_inset
+
+ 
 \end_layout
 
 \begin_layout Standard
@@ -2998,6 +3034,13 @@ reference "sec:Snippets"
 
 \begin_layout Section
 Snippets
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Snippets"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -3314,6 +3357,13 @@ reference "sub:snippet-tag"
 
 \begin_layout Section
 Head Merge
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Head-Merge"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
