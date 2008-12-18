@@ -1,7 +1,9 @@
-## Book for the Lift Webframework
+## Book for the Lift Web Framework
 
-Derek and I, with the help of the community, will be putting together a comprehensive 
+Derek, Marius and I, with the help of the community, will be putting together a comprehensive 
 book for using Lift.
+
+We have set up a Google Group for topic discussion here: http://groups.google.com/group/the-lift-book
 
 The work will be licensed under the Creative Commons "Attribution-No Derivatives" found here:
 http://creativecommons.org/license/results-one?license_code=by-nd
