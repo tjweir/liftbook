@@ -287,7 +287,7 @@ http://lamp.epfl.ch/~odersky/
 
 \end_inset
 
- and his group of fearless rogues at EPFL Switzerland.
+ and his group at EPFL Switzerland.
  It compiles to Java bytecode and runs on the JVM, which means that you
  can leverage the vast ecosystem of Java libraries just as you would with
  any other java web framework.
@@ -369,10 +369,10 @@ A trait is a Scala construct that's essentially like a Java interface.
  with a few keystrokes.
  In order to preform all of this client-side goodness, Lift has a class
  hierarchy for encapsulating Javascript calls via direct Javascript, jQuery
- and now YUI.
+ and YUI.
  The nice part is that you, too, can utilize these support classes so that
- you can generate the code and don't have to put Javascript (i.e.
- logic) into your templates.
+ you can generate the code and don't have to put Javascript logic into your
+ templates.
 \end_layout
 
 \begin_layout Section
@@ -455,17 +455,18 @@ http://groups.google.com/group/liftweb
  is very active and if there are things that this book doesn't cover you
  can feel free to ask questions there; there are plenty of very knowledgeable
  people on the list that should be able to answer your questions.
- Please send specific questions about the book to ...
-\begin_inset Note Note
-status open
+ Please post specific questions about the book to the Lift Book Google Group
+ found 
+\begin_inset Flex URL
+status collapsed
 
 \begin_layout Plain Layout
-Should we set up our own google group?
+http://groups.google.com/group/the-lift-book
 \end_layout
 
 \end_inset
 
-, but anything else Lift-specific is fair game for the mailing list.
+, anything else that is Lift-specific is fair game for the mailing list.
 \end_layout
 
 \begin_layout Enumerate
@@ -652,7 +653,7 @@ http://www.netbeans.org
 
 \end_inset
 
- Requires using the NetBeans 6.5 Beta (at the time of writing)
+ Requires using the NetBeans 6.5
 \end_layout
 
 \begin_layout List
@@ -782,7 +783,7 @@ mvn archetype:generate -U
 \end_layout
 
 \begin_layout Standard
-Maven should dump several page's worth of output.
+Maven should output several page's worth of text.
  It may stop and ask you to confirm the properties configuration, in which
  case you can just hit 
 \family typewriter
@@ -1090,7 +1091,6 @@ default.html
 
 \begin_layout Standard
 \begin_inset listings
-lstparams "basicstyle={\scriptsize},breaklines=true,frame=lines,language=XML"
 inline false
 status open
 
@@ -1168,10 +1168,6 @@ t>
 \begin_layout Plain Layout
 
 </html>
-\end_layout
-
-\begin_layout Plain Layout
-
 \end_layout
 
 \end_inset
@@ -1352,7 +1348,7 @@ class HelloWorld {
 
 \begin_layout Plain Layout
 
-  def howdy = <span>Welcome to helloworld at {new java.util.Date}</span>
+  def howdy: NodeSeq = <span>Welcome to helloworld at {new java.util.Date}</span>
 \end_layout
 
 \begin_layout Plain Layout
@@ -1546,6 +1542,10 @@ boot
 \family default
 method.
  The first is the 
+\end_layout
+
+\begin_layout Standard
+
 \family typewriter
 LiftRules.addToPackages
 \family default
@@ -1603,7 +1603,7 @@ s, but what we've shown here is already a big step.
  In roughly 10 lines of Scala code and about 30 in XML we have a functional
  site.
  If we wanted to add more pages we've already got our default template set
- up so we don't need to write the same boilerplate HTML over and over.
+ up so we don't need to write the same boilerplate HTML multiple times.
  In our example we're directly generating the content for our 
 \family typewriter
 helloWorld.howdy
@@ -1650,10 +1650,6 @@ TODO: Record or Mapper?
 
 \begin_layout Itemize
 Advanced AJAX and COMET support in Lift for Web 2.0 style applications
-\end_layout
-
-\begin_layout Itemize
-Deployment on a range of platforms
 \end_layout
 
 \begin_layout Standard

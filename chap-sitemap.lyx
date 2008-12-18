@@ -144,45 +144,55 @@ A help page
 
 \begin_layout Standard
 We'll assume that we have the corresponding pages, 
-\begin_inset Quotes eld
-\end_inset
+"
 
+
+\family typewriter
 homepage
-\begin_inset Quotes erd
-\end_inset
+\family default
+
+"
 
 , 
-\begin_inset Quotes eld
-\end_inset
+"
 
+
+\family typewriter
 login
-\begin_inset Quotes erd
-\end_inset
+\family default
+
+"
 
 , 
-\begin_inset Quotes eld
-\end_inset
+"
 
+
+\family typewriter
 logout
-\begin_inset Quotes erd
-\end_inset
+\family default
+
+"
 
 , and 
-\begin_inset Quotes eld
-\end_inset
+"
 
+
+\family typewriter
 profile
-\begin_inset Quotes erd
-\end_inset
+\family default
+
+"
 
  written and functional.
  We'll also assume that the help page(s) reside under the 
-\begin_inset Quotes eld
-\end_inset
+"
 
+
+\family typewriter
 help
-\begin_inset Quotes erd
-\end_inset
+\family default
+
+"
 
  subdirectory to keep things neat, and that the entry to help is 
 \family typewriter
@@ -216,16 +226,22 @@ net.liftweb.sitemap.Loc.Link
 \end_inset
 
  is a fundamental part of Menu definitions.
- The Link class contains two parameters: a List[String] of path components,
- and a boolean value that controls whether prefix matching is enabled.
+ The 
+\family typewriter
+Link 
+\family default
+class contains two parameters: a 
+\family typewriter
+List[String]
+\family default
+ of path components, and a boolean value that controls whether prefix matching
+ is enabled.
  The path components represent the portion of the URI following your web
  context, split on the 
-\begin_inset Quotes eld
-\end_inset
+"
 
 /
-\begin_inset Quotes erd
-\end_inset
+"
 
  character.
  Listing 
@@ -236,12 +252,10 @@ reference "lst:Link-Path-Components"
 \end_inset
 
  shows how you would use Link to represent the 
-\begin_inset Quotes eld
-\end_inset
+"
 
 /utils/index
-\begin_inset Quotes erd
-\end_inset
+"
 
  page.
  
@@ -274,23 +288,7 @@ name "lst:Link-Path-Components"
 
 \begin_layout Plain Layout
 
-val myUtilsIndex = new Link(
-\begin_inset Quotes eld
-\end_inset
-
-utils
-\begin_inset Quotes erd
-\end_inset
-
- :: 
-\begin_inset Quotes eld
-\end_inset
-
-index
-\begin_inset Quotes erd
-\end_inset
-
- :: Nil, false)
+val myUtilsIndex = new Link("utils" :: "index" :: Nil, false)
 \end_layout
 
 \end_inset
@@ -344,15 +342,7 @@ name "lst:Link-Prefix-Matching"
 
 \begin_layout Plain Layout
 
-val allUtilPages = new Link(
-\begin_inset Quotes eld
-\end_inset
-
-utils
-\begin_inset Quotes erd
-\end_inset
-
- :: Nil, true)
+val allUtilPages = new Link("utils" :: Nil, true)
 \end_layout
 
 \end_inset
@@ -419,41 +409,17 @@ name "lst:Using-ExtLink"
 
 \begin_layout Plain Layout
 
-val goodReference = Menu(Loc(
-\begin_inset Quotes eld
-\end_inset
-
-reference
-\begin_inset Quotes erd
-\end_inset
-
-,
+val goodReference = Menu(Loc("reference",
 \end_layout
 
 \begin_layout Plain Layout
 
-                             ExtLink(
-\begin_inset Quotes eld
-\end_inset
-
-http://www.liftweb.net/
-\begin_inset Quotes erd
-\end_inset
-
-),
+                             ExtLink("http://www.liftweb.net/"),
 \end_layout
 
 \begin_layout Plain Layout
 
-                             
-\begin_inset Quotes eld
-\end_inset
-
-LiftWeb
-\begin_inset Quotes erd
-\end_inset
-
-))
+                             "LiftWeb"))
 \end_layout
 
 \end_inset
@@ -644,15 +610,7 @@ val helpMenu = Menu(Loc("helpHome",
 
 \begin_layout Plain Layout
 
-                        ("help" :: 
-\begin_inset Quotes eld
-\end_inset
-
-
-\begin_inset Quotes erd
-\end_inset
-
- :: Nil) -> true,
+                        ("help" :: "" :: Nil) -> true,
 \end_layout
 
 \begin_layout Plain Layout
@@ -667,16 +625,17 @@ val helpMenu = Menu(Loc("helpHome",
 
 \begin_layout Standard
 For our example we've named this menu item 
-\begin_inset Quotes eld
-\end_inset
+"
 
 helpHome
-\begin_inset Quotes erd
-\end_inset
+"
 
 .
- The second parameter is a Pair[List[String],Boolean] which converts directly
- to a Link class with the given parameters.
+ The second parameter is a 
+\family typewriter
+Pair[List[String],Boolean]
+\family default
+ which converts directly to a Link class with the given parameters.
  In our case, by passing in true, we're saying that anything under the help
  directory will also match.
  If you just use a List[String], the implicit conversion is to a Link with
@@ -695,12 +654,10 @@ emphasize
 , so by doing this we're allowing full access to all of the help files without
  having to specify a menu entry for each.
  The final parameter, 
-\begin_inset Quotes eld
-\end_inset
+"
 
 Help
-\begin_inset Quotes erd
-\end_inset
+"
 
 , is the text for the menu link.
  
@@ -721,12 +678,10 @@ name "sub:Nested-Menus"
 The Menu class supports child menus simply by passing them in as final construct
 or parameters.
  For instance, if we wanted to have an 
-\begin_inset Quotes eld
-\end_inset
+"
 
 about
-\begin_inset Quotes erd
-\end_inset
+"
 
  menu under Help, we could define the menu as shown in listing 
 \begin_inset CommandInset ref
@@ -765,39 +720,7 @@ name "lst:Nested-Menu-Definition"
 
 \begin_layout Plain Layout
 
-val aboutMenu = Menu(Loc(
-\begin_inset Quotes eld
-\end_inset
-
-about
-\begin_inset Quotes erd
-\end_inset
-
-, 
-\begin_inset Quotes eld
-\end_inset
-
-help
-\begin_inset Quotes erd
-\end_inset
-
- :: 
-\begin_inset Quotes eld
-\end_inset
-
-about
-\begin_inset Quotes erd
-\end_inset
-
- :: Nil, 
-\begin_inset Quotes eld
-\end_inset
-
-About
-\begin_inset Quotes erd
-\end_inset
-
-))
+val aboutMenu = Menu(Loc("about", "help" :: "about" :: Nil, "About"))
 \end_layout
 
 \begin_layout Plain Layout
@@ -815,21 +738,23 @@ When the menu is rendered it will have a child menu for About.
  Child menus are only rendered by default when the current page matches
  their parent's Loc.
  That means that, for instance the following links would show an 
-\begin_inset Quotes eld
-\end_inset
+"
 
 About
-\begin_inset Quotes erd
-\end_inset
+"
 
  child menu item:
 \end_layout
 
 \begin_layout Itemize
+
+\family typewriter
 /help/index
 \end_layout
 
 \begin_layout Itemize
+
+\family typewriter
 /help/usage
 \end_layout
 
@@ -838,10 +763,14 @@ But the following would not:
 \end_layout
 
 \begin_layout Itemize
+
+\family typewriter
 /index
 \end_layout
 
 \begin_layout Itemize
+
+\family typewriter
 /site/example
 \end_layout
 
@@ -944,31 +873,7 @@ Using List[Menu] for SiteMap
 
 \begin_layout Plain Layout
 
-val menus = Menu(Loc(
-\begin_inset Quotes eld
-\end_inset
-
-HomePage
-\begin_inset Quotes erd
-\end_inset
-
-, 
-\begin_inset Quotes eld
-\end_inset
-
-
-\begin_inset Quotes erd
-\end_inset
-
-, 
-\begin_inset Quotes eld
-\end_inset
-
-Home
-\begin_inset Quotes erd
-\end_inset
-
-),...) ::
+val menus = Menu(Loc("HomePage", "", "Home"),...) ::
 \end_layout
 
 \begin_layout Plain Layout
@@ -994,12 +899,10 @@ LiftRules.setSiteMap(SiteMap(menus : _*))
 \begin_layout Standard
 The key to using List for your menus is to explicitly define the type of
  the parameter as 
-\begin_inset Quotes eld
-\end_inset
+"
 
 _*
-\begin_inset Quotes erd
-\end_inset
+"
 
  so that it's treated as a set of varargs instead of a single argument of
  type List[Menu].
@@ -1090,41 +993,17 @@ val receiptImages =
 
 \begin_layout Plain Layout
 
-  Menu(Loc(
-\begin_inset Quotes eld
-\end_inset
-
-receipts
-\begin_inset Quotes erd
-\end_inset
-
-, 
+  Menu(Loc("receipts", 
 \end_layout
 
 \begin_layout Plain Layout
 
-          (
-\begin_inset Quotes eld
-\end_inset
-
-receipts
-\begin_inset Quotes erd
-\end_inset
-
- :: Nil) -> true,
+          ("receipts" :: Nil) -> true,
 \end_layout
 
 \begin_layout Plain Layout
 
-          
-\begin_inset Quotes eld
-\end_inset
-
-Receipts
-\begin_inset Quotes erd
-\end_inset
-
-,
+          "Receipts",
 \end_layout
 
 \begin_layout Plain Layout
@@ -1138,14 +1017,23 @@ Receipts
 \end_layout
 
 \begin_layout Standard
-Note that in this example we've used the implicit conversion from Pair[String,Bo
-olean] to Link to make this Menu apply to everything under the 
-\begin_inset Quotes eld
-\end_inset
+Note that in this example we've used the implicit conversion from 
+\family typewriter
+Pair[String,Boolean]
+\family default
+ to 
+\family typewriter
+Link
+\family default
+ to make this Menu apply to everything under the 
+"
 
+
+\family typewriter
 receipts
-\begin_inset Quotes erd
-\end_inset
+\family default
+
+"
 
  directory.
 \end_layout
@@ -1162,24 +1050,37 @@ name "sub:menu-LinkText"
 \end_layout
 
 \begin_layout Standard
-The LinkText class is what defines the function that will return the text
- to display for a given menu item.
+The 
+\family typewriter
+LinkText
+\family default
+ class is what defines the function that will return the text to display
+ for a given menu item.
  As we've shown, this can easily be set using the implicit conversion for
  string
 \begin_inset Formula $\rightarrow$
 \end_inset
 
-LinkText from Loc.
- As an added bonus, the implicit conversion actually takes a by-name String
+
+\family typewriter
+LinkText
+\family default
+ from 
+\family typewriter
+Loc
+\family default
+.
+ As an added bonus, the implicit conversion actually takes a by-name 
+\family typewriter
+String
+\family default
  for the parameter; that means you can just as easily pass in a function
  to generate the link text as a static string.
  For example, with our profile link we may want to make the link say 
-\begin_inset Quotes eld
-\end_inset
+"
 
 <username>'s profile
-\begin_inset Quotes erd
-\end_inset
+"
 
 .
  Listing 
@@ -1191,7 +1092,11 @@ reference "lst:Customizing-Link-Text"
 
  shows how we can do it by defining a helper method, assuming that there's
  another method that will return the current user's name (we use the ubiquitous
- Foo object here).
+ 
+\family typewriter
+Foo
+\family default
+ object here).
 \end_layout
 
 \begin_layout Standard
@@ -1221,41 +1126,17 @@ name "lst:Customizing-Link-Text"
 
 \begin_layout Plain Layout
 
-def profileText = Foo.currentUser + 
-\begin_inset Quotes eld
-\end_inset
-
-'s profile
-\begin_inset Quotes erd
-\end_inset
-
-
+def profileText = Foo.currentUser + "'s profile"
 \end_layout
 
 \begin_layout Plain Layout
 
-val profileMenu = Menu(Loc(
-\begin_inset Quotes eld
-\end_inset
-
-Profile
-\begin_inset Quotes erd
-\end_inset
-
-, 
+val profileMenu = Menu(Loc("Profile", 
 \end_layout
 
 \begin_layout Plain Layout
 
-                           
-\begin_inset Quotes eld
-\end_inset
-
-profile
-\begin_inset Quotes erd
-\end_inset
-
- :: Nil,
+                           "profile" :: Nil,
 \end_layout
 
 \begin_layout Plain Layout
@@ -1269,10 +1150,22 @@ profile
 \end_layout
 
 \begin_layout Standard
-Of course, if you want you can construct the LinkText instance directly,
- just passing in a constructor function that returns a NodeSeq.
- The function that you use with LinkText takes a type-safe input parameter,
- which we'll discuss in more detail in section 
+Of course, if you want you can construct the 
+\family typewriter
+LinkText
+\family default
+ instance directly, just passing in a constructor function that returns
+ a 
+\family typewriter
+NodeSeq
+\family default
+.
+ The function that you use with 
+\family typewriter
+LinkText
+\family default
+ takes a type-safe input parameter, which we'll discuss in more detail in
+ section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sub:Type-Safe-Params"
@@ -1295,7 +1188,11 @@ name "sub:Using-lift-Menu"
 
 \begin_layout Standard
 So far we've covered the Scala side of things.
- The other half of the magic is the special <lift:Menu> tag.
+ The other half of the magic is the special 
+\family typewriter
+<lift:Menu>
+\family default
+ tag.
  It's this tag that handles the rendering of your menus into XHTML.
  The Menu tag uses a built-in snippet
 \begin_inset Foot
@@ -1308,8 +1205,15 @@ net.liftweb.builtin.snippet.Menu
 \end_inset
 
  to handle several rendering functions.
- The most commonly used method is the Menu.builder snippet.
- This snippet renders your entire menu structure as an unordered list (<ul>
+ The most commonly used method is the 
+\family typewriter
+Menu.builder
+\family default
+ snippet.
+ This snippet renders your entire menu structure as an unordered list (
+\family typewriter
+<ul>
+\family default
  in XHTML).
  Listing 
 \begin_inset CommandInset ref
@@ -1350,15 +1254,7 @@ name "lst:Rendering-with-Menu.title"
 
 \begin_layout Plain Layout
 
-<div class=
-\begin_inset Quotes erd
-\end_inset
-
-menu
-\begin_inset Quotes erd
-\end_inset
-
->
+<div class="menu">
 \end_layout
 
 \begin_layout Plain Layout
@@ -1385,21 +1281,43 @@ s directly to the menu elements.
 \end_layout
 
 \begin_layout Itemize
-ul - Adds the specified attribute to the <ul> element that makes up the
- menu
+
+\family typewriter
+ul
+\family default
+ - Adds the specified attribute to the 
+\family typewriter
+<ul>
+\family default
+ element that makes up the menu
 \end_layout
 
 \begin_layout Itemize
-li - Adds the specified attribute to each <li> element for the menu
+
+\family typewriter
+li
+\family default
+ - Adds the specified attribute to each 
+\family typewriter
+<li>
+\family default
+ element for the menu
 \end_layout
 
 \begin_layout Itemize
-li_item - Adds the specified attribute to the current page's menu item
+
+\family typewriter
+li_item
+\family default
+ - Adds the specified attribute to the current page's menu item
 \end_layout
 
 \begin_layout Itemize
-li_path - Adds the specified attribute to the current page's breadcrumb
- path.
+
+\family typewriter
+li_path
+\family default
+ - Adds the specified attribute to the current page's breadcrumb path.
  The breadcrumb path is the set of menu items leading to this one.
 \begin_inset Note Note
 status open
@@ -1470,41 +1388,17 @@ name "lst:Using-Attribues-with-Menu.builder"
 
 \begin_layout Plain Layout
 
-  li:class=
-\begin_inset Quotes erd
-\end_inset
-
-menuitem
-\begin_inset Quotes erd
-\end_inset
-
-
+  li:class="menuitem"
 \end_layout
 
 \begin_layout Plain Layout
 
-  li_item:class=
-\begin_inset Quotes erd
-\end_inset
-
-selectedMenu
-\begin_inset Quotes erd
-\end_inset
-
-
+  li_item:class="selectedMenu"
 \end_layout
 
 \begin_layout Plain Layout
 
-  li_item:onclick=
-\begin_inset Quotes erd
-\end_inset
-
-javascript:alert('Already selected!');
-\begin_inset Quotes erd
-\end_inset
-
- />
+  li_item:onclick="javascript:alert('Already selected!');" />
 \end_layout
 
 \end_inset
@@ -1515,7 +1409,11 @@ javascript:alert('Already selected!');
 \begin_layout Standard
 In addition to rendering the menu itself, the Menu class has a few other
  tricks.
- The Menu.title
+ The 
+\family typewriter
+Menu.title
+\family default
+
 \begin_inset Index
 status open
 
@@ -1544,7 +1442,11 @@ Title
 
 \end_inset
 
- LocParam (section 
+ 
+\family typewriter
+LocParam
+\family default
+ (section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sub:menu-Title"
@@ -1559,14 +1461,20 @@ reference "lst:Rendering-the-Title"
 
 \end_inset
 
- shows how you use Menu.title.
+ shows how you use 
+\family typewriter
+Menu.title
+\family default
+.
  In this particular example the title will be rendered as 
-\begin_inset Quotes eld
-\end_inset
+"
 
+
+\family typewriter
 Home Page
-\begin_inset Quotes erd
-\end_inset
+\family default
+
+"
 
 .
 \end_layout
@@ -1603,29 +1511,11 @@ name "lst:Rendering-the-Title"
 
 \begin_layout Plain Layout
 
-val MyMenu = Menu(Loc(
-\begin_inset Quotes eld
-\end_inset
-
-Home Page
-\begin_inset Quotes erd
-\end_inset
-
-, 
-\begin_inset Quotes eld
-\end_inset
-
-index
-\begin_inset Quotes erd
-\end_inset
-
- :: Nil, 
-\begin_inset Quotes eld
-\end_inset
+val MyMenu = Menu(Loc("Home Page", "index" :: Nil, 
+"
 
 Home
-\begin_inset Quotes erd
-\end_inset
+"
 
 ))
 \end_layout
@@ -1647,18 +1537,28 @@ Home
 
 \begin_layout Standard
 The next snippet in the Menu class is item.
- The Menu.item snippet allows you to render a particular menu item by specifying
- the name attribute (matching the first parameter to Loc).
- Like Menu.builder, it allows you to specify additional prefixed attributes
- for the link to be passed to the emitted item.
+ The 
+\family typewriter
+Menu.item
+\family default
+ snippet allows you to render a particular menu item by specifying the name
+ attribute (matching the first parameter to Loc).
+ Like 
+\family typewriter
+Menu.builder
+\family default
+, it allows you to specify additional prefixed attributes for the link to
+ be passed to the emitted item.
  Because it applies these attributes to the link itself, the only valid
  prefix is 
-\begin_inset Quotes eld
-\end_inset
+"
 
+
+\family typewriter
 a
-\begin_inset Quotes erd
-\end_inset
+\family default
+
+"
 
 .
  Additionally, if you specify child elements for the snippet tag, it will
@@ -1671,12 +1571,14 @@ reference "lst:Using-Menu.item"
 \end_inset
 
  shows an example using our 
-\begin_inset Quotes eld
-\end_inset
+"
 
+
+\family typewriter
 Home Page
-\begin_inset Quotes erd
-\end_inset
+\family default
+
+"
 
  menu item defined in listing 
 \begin_inset CommandInset ref
@@ -1727,28 +1629,12 @@ name "lst:Using-Menu.item"
 
 \begin_layout Plain Layout
 
-<lift:Menu.item name=
-\begin_inset Quotes erd
-\end_inset
-
-Home Page
-\begin_inset Quotes erd
-\end_inset
-
-
+<lift:Menu.item name="Home Page"
 \end_layout
 
 \begin_layout Plain Layout
 
-  a:class=
-\begin_inset Quotes erd
-\end_inset
-
-homeLink
-\begin_inset Quotes erd
-\end_inset
-
->
+  a:class="homeLink">
 \end_layout
 
 \begin_layout Plain Layout
@@ -1767,8 +1653,16 @@ homeLink
 \end_layout
 
 \begin_layout Standard
-The final snippet that the Menu class provides is the Menu.group method.
- We're going to cover the use of Menu.group in detail in section 
+The final snippet that the Menu class provides is the 
+\family typewriter
+Menu.group
+\family default
+ method.
+ We're going to cover the use of 
+\family typewriter
+Menu.group
+\family default
+ in detail in section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sub:LocGroup"
@@ -1796,31 +1690,42 @@ So far we've covered how to control the display side of Menus, so now we
  in your app; if no Menus match a given request then the user gets a 404
  (not found) error.
  Other than this binary control of 
-\begin_inset Quotes eld
-\end_inset
+"
 
 matches
 \begin_inset Formula $\rightarrow$
 \end_inset
 
 display
-\begin_inset Quotes erd
-\end_inset
+"
 
  and 
-\begin_inset Quotes eld
-\end_inset
+"
 
 doesn't match
 \begin_inset Formula $\rightarrow$
 \end_inset
 
 don't display
-\begin_inset Quotes erd
-\end_inset
+"
 
-, SiteMap provides for arbitrary access checks through the If and Unless
- LocParams.
+, 
+\family typewriter
+SiteMap
+\family default
+ provides for arbitrary access checks through the 
+\family typewriter
+If
+\family default
+ and 
+\family typewriter
+Unless
+\family default
+ 
+\family typewriter
+LocParams
+\family default
+.
 \end_layout
 
 \begin_layout Subsection
@@ -1835,7 +1740,11 @@ name "sub:menu-If"
 \end_layout
 
 \begin_layout Standard
-The If
+The 
+\family typewriter
+If
+\family default
+
 \begin_inset Index
 status open
 
@@ -1845,7 +1754,11 @@ If
 
 \end_inset
 
- LocParam takes a test function, 
+ 
+\family typewriter
+LocParam
+\family default
+ takes a test function, 
 \begin_inset Formula $()\Rightarrow Boolean$
 \end_inset
 
@@ -1854,12 +1767,31 @@ If
 \end_inset
 
 , as its arguments.
- When the Loc that uses the If clause matches a given path, the test function
- is executed, and if true then the page is displayed as normal.
+ When the 
+\family typewriter
+Loc
+\family default
+ that uses the 
+\family typewriter
+If
+\family default
+ clause matches a given path, the test function is executed, and if true
+ then the page is displayed as normal.
  If the function evaluates to false, then the failure message function is
  executed and its result is sent to the user.
- There's an implicit conversion in Loc from a String to a response which
- converts to a RedirectWithState
+ There's an implicit conversion in 
+\family typewriter
+Loc
+\family default
+ from a 
+\family typewriter
+String
+\family default
+ to a response which converts to a 
+\family typewriter
+RedirectWithState
+\family default
+
 \begin_inset Index
 status open
 
@@ -1880,18 +1812,26 @@ Cross-ref
 \end_inset
 
 ).
- The redirect is to the location specified by LiftRules.siteMapFailRedirectLocati
-on, which is the root of your webapp (
-\begin_inset Quotes eld
-\end_inset
+ The redirect is to the location specified by 
+\family typewriter
+LiftRules.siteMapFailRedirectLocation
+\family default
+, which is the root of your webapp (
+"
 
 /
-\begin_inset Quotes erd
-\end_inset
+"
 
 ) by default.
- If you want, you can change this in LiftRules for a global setting, or
- you can provide your own LiftResponse
+ If you want, you can change this in 
+\family typewriter
+LiftRules
+\family default
+ for a global setting, or you can provide your own 
+\family typewriter
+LiftResponse
+\family default
+
 \begin_inset Index
 status open
 
@@ -1952,41 +1892,17 @@ val loggedIn = If(() => User.loggedIn_?,
 
 \begin_layout Plain Layout
 
-                  () => RedirectResponse(
-\begin_inset Quotes eld
-\end_inset
-
-/login
-\begin_inset Quotes erd
-\end_inset
-
-))
+                  () => RedirectResponse("/login"))
 \end_layout
 
 \begin_layout Plain Layout
 
-val profileMenu = Menu(Loc(
-\begin_inset Quotes eld
-\end_inset
-
-Profile
-\begin_inset Quotes erd
-\end_inset
-
-, 
+val profileMenu = Menu(Loc("Profile", 
 \end_layout
 
 \begin_layout Plain Layout
 
-                           
-\begin_inset Quotes eld
-\end_inset
-
-profile
-\begin_inset Quotes erd
-\end_inset
-
- :: Nil,
+                           "profile" :: Nil,
 \end_layout
 
 \begin_layout Plain Layout
@@ -2011,7 +1927,11 @@ name "sub:menu-Unless"
 \end_layout
 
 \begin_layout Standard
-The Unless
+The 
+\family typewriter
+Unless
+\family default
+
 \begin_inset Index
 status open
 
@@ -2021,17 +1941,23 @@ Unless
 
 \end_inset
 
- LocParam is essentially the mirror of If.
+ 
+\family typewriter
+LocParam
+\family default
+ is essentially the mirror of 
+\family typewriter
+If
+\family default
+.
  The exact same rules apply, except that the page is displayed only if the
  test function returns false.
  The reason that there are two classes to represent this behavior is that
  it's generally clearer when a predicate is read as 
-\begin_inset Quotes eld
-\end_inset
+"
 
 working
-\begin_inset Quotes erd
-\end_inset
+"
 
  when it returns true.
 \end_layout
@@ -2048,8 +1974,12 @@ name "sec:Page-Specific-Rendering"
 \end_layout
 
 \begin_layout Standard
-Page specific rendering with SiteMap is an advanced technique that provides
- a lot of flexibility for making pages render differently depending on state.
+Page specific rendering with 
+\family typewriter
+SiteMap
+\family default
+ is an advanced technique that provides a lot of flexibility for making
+ pages render differently depending on state.
 \end_layout
 
 \begin_layout Subsection
@@ -2066,8 +1996,16 @@ name "sub:The-Template-Parameter"
 \begin_layout Standard
 Generally, the template that will be used for a page is derived from the
  path of the request.
- The Template LocParam, however, allows you to completely override this
- mechanism and provide any template you want by passing in a function 
+ The 
+\family typewriter
+Template
+\family default
+ 
+\family typewriter
+LocParam
+\family default
+, however, allows you to completely override this mechanism and provide
+ any template you want by passing in a function 
 \begin_inset Formula $()\Rightarrow NodeSeq$
 \end_inset
 
@@ -2089,8 +2027,16 @@ reference "lst:Override-Templates"
 \end_inset
 
 .
- In this example we create a Template class that generates the appropriate
- template and then bind it into the home page menu Loc.
+ In this example we create a 
+\family typewriter
+Template
+\family default
+ class that generates the appropriate template and then bind it into the
+ home page menu 
+\family typewriter
+Loc
+\family default
+.
  
 \end_layout
 
@@ -2126,23 +2072,7 @@ val homepageTempl = Template({ () =>
 
 \begin_layout Plain Layout
 
-  <lift:surround with=
-\begin_inset Quotes erd
-\end_inset
-
-default
-\begin_inset Quotes erd
-\end_inset
-
- at=
-\begin_inset Quotes erd
-\end_inset
-
-content
-\begin_inset Quotes erd
-\end_inset
-
->
+  <lift:surround with="default" at="content">
 \end_layout
 
 \begin_layout Plain Layout
@@ -2163,12 +2093,10 @@ content
 \begin_layout Plain Layout
 
       <lift:embed what=
-\begin_inset Quotes erd
-\end_inset
+"
 
 welcome
-\begin_inset Quotes erd
-\end_inset
+"
 
  />
 \end_layout
@@ -2195,41 +2123,17 @@ welcome
 
 \begin_layout Plain Layout
 
-val homeMenu = Menu(Loc(
-\begin_inset Quotes eld
-\end_inset
-
-Home Page
-\begin_inset Quotes erd
-\end_inset
-
-,
+val homeMenu = Menu(Loc("Home Page",
 \end_layout
 
 \begin_layout Plain Layout
 
-                        
-\begin_inset Quotes eld
-\end_inset
-
-
-\begin_inset Quotes erd
-\end_inset
-
- :: Nil,
+                        "" :: Nil,
 \end_layout
 
 \begin_layout Plain Layout
 
-                        
-\begin_inset Quotes eld
-\end_inset
-
-Home Page
-\begin_inset Quotes erd
-\end_inset
-
-, homepageTempl))
+                        "Home Page", homepageTempl))
 \end_layout
 
 \end_inset
@@ -2270,7 +2174,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Using the Snippet LocParam
 \begin_inset CommandInset label
 LatexCommand label
@@ -2288,15 +2191,7 @@ name "lst:Using-the-Snippet-locparam"
 
 \begin_layout Plain Layout
 
-val homeSnippet = Snippet(
-\begin_inset Quotes eld
-\end_inset
-
-homepage
-\begin_inset Quotes erd
-\end_inset
-
-,
+val homeSnippet = Snippet("homepage",
 \end_layout
 
 \begin_layout Plain Layout
@@ -2326,41 +2221,17 @@ homepage
 
 \begin_layout Plain Layout
 
-val homeMenu = Menu(Loc(
-\begin_inset Quotes eld
-\end_inset
-
-Home Page
-\begin_inset Quotes erd
-\end_inset
-
-,
+val homeMenu = Menu(Loc("Home Page",
 \end_layout
 
 \begin_layout Plain Layout
 
-                        
-\begin_inset Quotes eld
-\end_inset
-
-
-\begin_inset Quotes erd
-\end_inset
-
- :: Nil,
+                        "" :: Nil,
 \end_layout
 
 \begin_layout Plain Layout
 
-                        
-\begin_inset Quotes eld
-\end_inset
-
-Home Page
-\begin_inset Quotes erd
-\end_inset
-
-, homeSnippet))
+                        "Home Page", homeSnippet))
 \end_layout
 
 \end_inset
@@ -2407,7 +2278,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Using LocSnippets
 \begin_inset CommandInset label
 LatexCommand label
@@ -2435,26 +2305,13 @@ val entrySnippets = new DispatchLocSnippets {
 
 \begin_layout Plain Layout
 
-    case 
-\begin_inset Quotes eld
-\end_inset
-
-entries
-\begin_inset Quotes erd
-\end_inset
-
- => Entries.list _
+    case "entries" => Entries.list _
 \end_layout
 
 \begin_layout Plain Layout
 
-    case 
-\begin_inset Quotes eld
-\end_inset
-
-add
-\begin_inset Quotes erd
-\end_inset
+    case "add
+"
 
  => Entries.newEntry _
 \end_layout
@@ -2521,7 +2378,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Customizing the Title
 \begin_inset CommandInset label
 LatexCommand label
@@ -2550,12 +2406,10 @@ val userTitle = Title(() =>
 \begin_layout Plain Layout
 
     Text(User.name + 
-\begin_inset Quotes eld
-\end_inset
+"
 
 's Ledger
-\begin_inset Quotes erd
-\end_inset
+"
 
 )
 \end_layout
@@ -2568,12 +2422,10 @@ val userTitle = Title(() =>
 \begin_layout Plain Layout
 
     Text(
-\begin_inset Quotes eld
-\end_inset
+"
 
 Welcome to PocketChange
-\begin_inset Quotes erd
-\end_inset
+"
 
 )
 \end_layout
@@ -2586,12 +2438,10 @@ Welcome to PocketChange
 \begin_layout Plain Layout
 
 val homeMenu = Menu(Loc(
-\begin_inset Quotes eld
-\end_inset
+"
 
 Home Page
-\begin_inset Quotes erd
-\end_inset
+"
 
 ,
 \end_layout
@@ -2599,12 +2449,10 @@ Home Page
 \begin_layout Plain Layout
 
                         
-\begin_inset Quotes eld
-\end_inset
+"
 
 
-\begin_inset Quotes erd
-\end_inset
+"
 
  :: Nil,
 \end_layout
@@ -2612,12 +2460,10 @@ Home Page
 \begin_layout Plain Layout
 
                         
-\begin_inset Quotes eld
-\end_inset
+"
 
 Home Page
-\begin_inset Quotes erd
-\end_inset
+"
 
 , homepageTempl, userTitle))
 \end_layout
@@ -2698,7 +2544,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Testing the Request
 \begin_inset CommandInset label
 LatexCommand label
@@ -2722,28 +2567,22 @@ val onlyOpera = Test(req => req.isOpera)
 \begin_layout Plain Layout
 
 val operaMenu = Menu(Loc(
-\begin_inset Quotes eld
-\end_inset
+"
 
 Opera
-\begin_inset Quotes erd
-\end_inset
+"
 
 , 
-\begin_inset Quotes eld
-\end_inset
+"
 
 opera
-\begin_inset Quotes erd
-\end_inset
+"
 
  :: Nil, 
-\begin_inset Quotes eld
-\end_inset
+"
 
 Only Opera
-\begin_inset Quotes erd
-\end_inset
+"
 
 , onlyOpera))
 \end_layout
@@ -2796,7 +2635,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Categorizing your Menu
 \begin_inset CommandInset label
 LatexCommand label
@@ -2815,20 +2653,16 @@ name "lst:Categorizing-your-Menu"
 \begin_layout Plain Layout
 
 val siteMenu = Menu(Loc(...,LocGroup(
-\begin_inset Quotes eld
-\end_inset
+"
 
 admin
-\begin_inset Quotes erd
-\end_inset
+"
 
 , 
-\begin_inset Quotes eld
-\end_inset
+"
 
 site
-\begin_inset Quotes erd
-\end_inset
+"
 
 )))
 \end_layout
@@ -2859,12 +2693,10 @@ CSS
 \end_inset
 
  class of the links (
-\begin_inset Quotes eld
-\end_inset
+"
 
 a
-\begin_inset Quotes erd
-\end_inset
+"
 
  is the only valid prefix), and we've added some body XHTML for display.
  In particular, the <menu:bind> tag controls where the menu items are rendered.
@@ -2883,7 +2715,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Binding a Menu Group
 \begin_inset CommandInset label
 LatexCommand label
@@ -2902,12 +2733,10 @@ name "lst:Binding-a-Menu-group"
 \begin_layout Plain Layout
 
 <div class=
-\begin_inset Quotes erd
-\end_inset
+"
 
 site
-\begin_inset Quotes erd
-\end_inset
+"
 
 >
 \end_layout
@@ -2915,12 +2744,10 @@ site
 \begin_layout Plain Layout
 
   <lift:Menu.group group=
-\begin_inset Quotes erd
-\end_inset
+"
 
 site
-\begin_inset Quotes erd
-\end_inset
+"
 
 
 \end_layout
@@ -2928,12 +2755,10 @@ site
 \begin_layout Plain Layout
 
     a:class=
-\begin_inset Quotes erd
-\end_inset
+"
 
 siteLink
-\begin_inset Quotes erd
-\end_inset
+"
 
 >
 \end_layout
@@ -3234,20 +3059,16 @@ override title
 
 \begin_layout Plain Layout
 You can override 
-\begin_inset Quotes eld
-\end_inset
+"
 
 def title
-\begin_inset Quotes erd
-\end_inset
+"
 
  or 
-\begin_inset Quotes eld
-\end_inset
+"
 
 def title(in: ParamType)
-\begin_inset Quotes erd
-\end_inset
+"
 
  depending on whether you want to use type-safe parameters
 \end_layout
@@ -3370,12 +3191,10 @@ One of the nice features of Loc is that it allows you to rewrite requests
  of the parameter itself.
  For instance, let's expand the functionality of our app so that we have
  a page called 
-\begin_inset Quotes eld
-\end_inset
+"
 
 ledger
-\begin_inset Quotes erd
-\end_inset
+"
 
  that shows the ledger entries.
  We would like this page to normally only be viewable by the owner of the
@@ -3403,7 +3222,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Defining LedgerInfo
 \begin_inset CommandInset label
 LatexCommand label
@@ -3478,7 +3296,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Defining a Type-Safe Loc
 \begin_inset CommandInset label
 LatexCommand label
@@ -3517,12 +3334,10 @@ class LedgerLoc extends Loc[LedgerInfo] {
 \begin_layout Standard
 Assuming that a Ledger instance has a unique string ID, we would like to
  use URL rewriting so that we can access a ledger via 
-\begin_inset Quotes eld
-\end_inset
+"
 
 /ledger/<unique id>
-\begin_inset Quotes erd
-\end_inset
+"
 
 .
  Our rewrite function, shown in listing 
@@ -3560,7 +3375,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 The Rewrite Function
 \begin_inset CommandInset label
 LatexCommand label
@@ -3584,12 +3398,10 @@ def rewrite (req : RewriteRequest) = req match {
 \begin_layout Plain Layout
 
   case RewriteRequest(ParsePath(
-\begin_inset Quotes eld
-\end_inset
+"
 
 ledger
-\begin_inset Quotes erd
-\end_inset
+"
 
  :: lid :: Nil, _, _), _, _) => {
 \end_layout
@@ -3611,12 +3423,10 @@ ledger
 \begin_layout Plain Layout
 
       case (0, _) => (RewriteResponse(
-\begin_inset Quotes eld
-\end_inset
+"
 
 ledger
-\begin_inset Quotes erd
-\end_inset
+"
 
  :: Nil), NoSuchLedgerInfo)
 \end_layout
@@ -3624,28 +3434,22 @@ ledger
 \begin_layout Plain Layout
 
       case (_, false) => (RewriteResponse(
-\begin_inset Quotes eld
-\end_inset
+"
 
 login
-\begin_inset Quotes erd
-\end_inset
+"
 
  :: Nil, 
-\begin_inset Quotes eld
-\end_inset
+"
 
 origURI
-\begin_inset Quotes erd
-\end_inset
+"
 
  -> (
-\begin_inset Quotes eld
-\end_inset
+"
 
 /ledger/
-\begin_inset Quotes erd
-\end_inset
+"
 
  + lid)), NoPermsLedgerInfo)
 \end_layout
@@ -3686,12 +3490,10 @@ origURI
 \begin_layout Plain Layout
 
           (RewriteResponse(
-\begin_inset Quotes eld
-\end_inset
+"
 
 ledger
-\begin_inset Quotes erd
-\end_inset
+"
 
  :: Nil), FullLedgerInfo(ledger, owner, editor))
 \end_layout
@@ -3704,28 +3506,19 @@ ledger
 \begin_layout Plain Layout
 
           (RewriteResponse(
-\begin_inset Quotes eld
-\end_inset
+"
 
 
-\begin_inset Quotes erd
-\end_inset
+"
 
  :: Nil, 
-\begin_inset Quotes eld
-\end_inset
+"
 
 error
-\begin_inset Quotes erd
-\end_inset
+"
 
- -> 
-\begin_inset Quotes eld
-\end_inset
-
-You do not have permission to view this ledger
-\begin_inset Quotes erd
-\end_inset
+ -> "You do not have permission to view this ledger
+"
 
 ), NoPermsLedgerInfo)
 \end_layout
@@ -3787,7 +3580,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Defining Snippet Behavior
 \begin_inset CommandInset label
 LatexCommand label
@@ -3811,54 +3603,33 @@ def snippets = {
 \begin_layout Plain Layout
 
   case (
-\begin_inset Quotes eld
-\end_inset
+"
 
 ledger
-\begin_inset Quotes erd
-\end_inset
+"
 
-, NoSuchLedgerInfo) => {ignore => Text(
-\begin_inset Quotes eld
-\end_inset
-
-Could not find the requested ledger
-\begin_inset Quotes erd
-\end_inset
-
-)}
+, NoSuchLedgerInfo) => {ignore => Text("Could not find the requested ledger")}
 \end_layout
 
 \begin_layout Plain Layout
 
   case (
-\begin_inset Quotes eld
-\end_inset
+"
 
 ledger
-\begin_inset Quotes erd
-\end_inset
+"
 
-, NoPermsLedgerInfo) => {ignore => Text(
-\begin_inset Quotes eld
-\end_inset
-
-You don't haver permission to view this ledger
-\begin_inset Quotes erd
-\end_inset
-
-)}
+, NoPermsLedgerInfo) => {ignore => Text("You don't haver permission to view
+ this ledger")}
 \end_layout
 
 \begin_layout Plain Layout
 
   case (
-\begin_inset Quotes eld
-\end_inset
+"
 
 ledger
-\begin_inset Quotes erd
-\end_inset
+"
 
 , FullLedgerInfo(ledger, _, editor) => Ledger.show(ledger, editor) _
 \end_layout
@@ -3866,12 +3637,10 @@ ledger
 \begin_layout Plain Layout
 
   case (
-\begin_inset Quotes eld
-\end_inset
+"
 
 addEntry
-\begin_inset Quotes erd
-\end_inset
+"
 
 , FullLedgerInfo(ledger, _, true) => Ledger.add(ledger) _
 \end_layout
@@ -3879,33 +3648,21 @@ addEntry
 \begin_layout Plain Layout
 
   case (
-\begin_inset Quotes eld
-\end_inset
+"
 
 addEntry
-\begin_inset Quotes erd
-\end_inset
+"
 
-, _) => {ignore => Text(
-\begin_inset Quotes eld
-\end_inset
-
-
-\begin_inset Quotes erd
-\end_inset
-
-) }
+, _) => {ignore => Text("") }
 \end_layout
 
 \begin_layout Plain Layout
 
   case (
-\begin_inset Quotes eld
-\end_inset
+"
 
 ownerMenu
-\begin_inset Quotes erd
-\end_inset
+"
 
 , FullLedgerInfo(ledger, true, _) => Ledger.ownerOps(ledger) _
 \end_layout
@@ -3913,22 +3670,12 @@ ownerMenu
 \begin_layout Plain Layout
 
   case (
-\begin_inset Quotes eld
-\end_inset
+"
 
 ownerMenu
-\begin_inset Quotes erd
-\end_inset
+"
 
-, _) => {ignore => Text(
-\begin_inset Quotes eld
-\end_inset
-
-
-\begin_inset Quotes erd
-\end_inset
-
-) }
+, _) => {ignore => Text("") }
 \end_layout
 
 \begin_layout Plain Layout
@@ -3963,7 +3710,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Defining the Title
 \begin_inset CommandInset label
 LatexCommand label
@@ -3986,28 +3732,12 @@ def title (in : LedgerInfo) = in match {
 
 \begin_layout Plain Layout
 
-  case FullLedgerInfo(ledger, _, _) => Text(
-\begin_inset Quotes eld
-\end_inset
-
-Ledger 
-\begin_inset Quotes eld
-\end_inset
-
- + ledger.name)
+  case FullLedgerInfo(ledger, _, _) => Text("Ledger " + ledger.name)
 \end_layout
 
 \begin_layout Plain Layout
 
-  case _ => Text(
-\begin_inset Quotes eld
-\end_inset
-
-No ledger available
-\begin_inset Quotes erd
-\end_inset
-
-)
+  case _ => Text("No ledger available")
 \end_layout
 
 \begin_layout Plain Layout
@@ -4032,6 +3762,16 @@ As we've shown in this chapter, SiteMap offers a wide range of functionality
  rewriting of your URLs.
  Together these offer a rich set of tools for building your website exactly
  how you want.
+\end_layout
+
+\begin_layout Standard
+""
+"
+
+
+"
+
+
 \end_layout
 
 \end_body
