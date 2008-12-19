@@ -64,6 +64,134 @@ name "sec:LiftResponse-in-Detail"
 
 \end_layout
 
+\begin_layout Standard
+Lift framework makes a lot of things really easy and it provides extremly
+ useful abstractions as you may have already discovered.
+ Responses to clients are also abstacted by LiftResponse trait.
+ There are numerous response types and here is the simplified vieew of the
+ class hierarchy:
+\end_layout
+
+\begin_layout Itemize
+LiftResponse
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+BasicResponse
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+InMemoryResponse
+\end_layout
+
+\begin_layout Itemize
+StreamingResponse
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+JSonResponse
+\end_layout
+
+\begin_layout Itemize
+RedirectResponse
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+RedirectWithState
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+ToResponse
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+XhtmlRespomse
+\end_layout
+
+\begin_layout Itemize
+XmlResponse
+\end_layout
+
+\begin_layout Itemize
+XmlMimeResponse
+\end_layout
+
+\begin_layout Itemize
+AtomResponse
+\end_layout
+
+\begin_layout Itemize
+OpenSearchResponse
+\end_layout
+
+\begin_layout Itemize
+AtomCreatedResponse
+\end_layout
+
+\begin_layout Itemize
+AtomCategoryResponse
+\end_layout
+
+\begin_layout Itemize
+AtomServiceResponse
+\end_layout
+
+\begin_layout Itemize
+CreatedResponse
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+OkResponse
+\end_layout
+
+\begin_layout Itemize
+PermRedirectResponse
+\end_layout
+
+\begin_layout Itemize
+BadResponse
+\end_layout
+
+\begin_layout Itemize
+UnauthorizedResponse
+\end_layout
+
+\begin_layout Itemize
+UnauthorizedDigestResponse
+\end_layout
+
+\begin_layout Itemize
+NotFoundResponse
+\end_layout
+
+\begin_layout Itemize
+MethodNotAllowedResponse
+\end_layout
+
+\begin_layout Itemize
+GoneResponse
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+We won't get into details right now oh what exactly each and every class/object
+ does, although their purpose is somehow intuitive.
+ It is important to know that whenever you need to return a LiftResponse
+ reference from one of your functions, for example LiftRules.dispatch you
+ can you can use one of these classes.
+ So ultimatelly Lift doesn;t really provide you the HttpServletResponse
+ object instead all Lift responses are impersonated by a LiftResponse instance
+ and it content (the actual payload, http headers, content-type, cookies
+ etc.) is written internally by Lift to the container's output stream.
+\end_layout
+
 \begin_layout Section
 Session Management 
 \begin_inset CommandInset label

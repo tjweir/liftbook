@@ -725,15 +725,14 @@ Comet
  request, then process it and return the response.
  Comet is a method for performing asynchronous updates of the user's page
  without a reload.
- We cover Comet techniques in section 
+ We cover Comet techniques in chapter 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "sec:Comet"
+reference "cha:AJAX-and-COMET"
 
 \end_inset
 
-.
- 
+
 \end_layout
 
 \begin_layout Enumerate
@@ -762,7 +761,7 @@ LiftSession
 \family typewriter
 Req
 \family default
- arg.
+ arg
 \end_layout
 
 \begin_layout Enumerate
@@ -783,10 +782,10 @@ LiftResponse
 \family typewriter
 LiftResponse
 \family default
- please see 
+ please see section 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "sec:Lift-reponses"
+reference "sec:LiftResponse-in-Detail"
 
 \end_inset
 
@@ -1925,7 +1924,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Snippet tag equivalence
 \begin_inset CommandInset label
 LatexCommand label
@@ -2111,7 +2109,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Surrounding your page
 \begin_inset CommandInset label
 LatexCommand label
@@ -2189,7 +2186,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Adding an Admin Menu
 \begin_inset CommandInset label
 LatexCommand label
@@ -2325,7 +2321,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Binding in Templates
 \begin_inset CommandInset label
 LatexCommand label
@@ -2604,7 +2599,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Using Head Merge
 \begin_inset CommandInset label
 LatexCommand label
@@ -2860,7 +2854,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Snippet tag children
 \begin_inset CommandInset label
 LatexCommand label
@@ -2981,7 +2974,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Binding the ledger balance
 \begin_inset CommandInset label
 LatexCommand label
@@ -3083,8 +3075,10 @@ reference "sec:Cookies"
 \end_inset
 
 ).
- This has a few drawbacks, including having to manage the cookie as well
- as any security implications for the data stored in the cookie
+ This can be useful if you have data that you want persisted across sessions.
+ The down side is that you have to manage the cookie as well as deal with
+ any security implications for the data in the cookie since it's stored
+ on the user's machine
 \end_layout
 
 \begin_layout Itemize
@@ -3098,13 +3092,16 @@ reference "sec:Session-and-Request"
 ).
  This is a little easier to manage than cookies but you still have to manage
  adding and removing the session data if you don't want it around for the
- duration of the session
+ duration of the session.
+ Like a cookie, it's also global, which means that it will be the same for
+ all snippet instances
 \end_layout
 
 \begin_layout Itemize
 Use a StatefulSnippet subclass.
- This is ideal for small, conversational state, such as a form the spans
- multiple pages
+ This is ideal for small, conversational state, such as a form that spans
+ multiple pages or for a page where you have multiple variables that you
+ want to be able to tweak individually
 \end_layout
 
 \begin_layout Standard
@@ -4208,8 +4205,120 @@ name "sec:Cookies"
 
 \end_layout
 
+\begin_layout Standard
+Cookies
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+\begin_inset CommandInset href
+LatexCommand href
+target "http://java.sun.com/products/servlet/2.2/javadoc/javax/servlet/http/Cookie.html"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ are a useful tool when you want data persisted across user sessions.
+ Cookies are essentially a token of string data that is stored on the user's
+ machine.
+ While they can be quite useful, there are a few things that you should
+ be aware of:
+\end_layout
+
+\begin_layout Enumerate
+The user's browser may have cookies disabled, in which case you need to
+ be prepared to work without cookies or tell the user that they need to
+ enable them for your site
+\end_layout
+
+\begin_layout Enumerate
+Cookies are relatively insecure
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+See 
+\begin_inset CommandInset href
+LatexCommand href
+target "http://www.w3.org/Security/Faq/wwwsf2.html"
+
+\end_inset
+
+ (Q10) and 
+\begin_inset CommandInset href
+LatexCommand href
+target "http://www.cookiecentral.com/faq/"
+
+\end_inset
+
+ for details on cookies and their security issues
+\end_layout
+
+\end_inset
+
+; there have been a number of browser bugs related to data in cookies being
+ read by viruses or other sites
+\end_layout
+
+\begin_layout Enumerate
+Cookies are easy to fake, so you need to ensure that you validate any sensitive
+ cookie data
+\end_layout
+
+\begin_layout Standard
+Using Cookies in Lift is very easy.
+ In a stateful context, everything you need is covered by a few methods
+ on the S object:
+\end_layout
+
+\begin_layout Description
+addCookie Adds a cookie to be sent in the response
+\end_layout
+
+\begin_layout Description
+deleteCookie Deletes a cookie (technically, this adds a cookie with a maxage
+ of zero so that the browser removes it).
+ You can either delete a cookie by name, or with a Cookie object
+\end_layout
+
+\begin_layout Description
+findCookie Looks for a cookie with a given name and returns a Can[Cookie].
+ Empty means that the cookie doesn't exist
+\end_layout
+
+\begin_layout Description
+receivedCookies Returns a List[Cookie] of all of the cookies sent in the
+ request
+\end_layout
+
+\begin_layout Description
+responseCookies Returns a List[Cookie] of the cookies that will be sent
+ in the response
+\end_layout
+
+\begin_layout Standard
+If you need to work with cookies in a stateless context, many of the ListRespons
+e classes (section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:LiftResponse-in-Detail"
+
+\end_inset
+
+) include a List[Cookie] in their constructor or apply arguments.
+ Simply provide a list of the cookies you want set an they'll be sent in
+ the response.
+ If you want to delete a cookie in a LiftResponse you have to do it manually
+ by adding a cookie with the same name and a maxage of zero.
+ 
+\end_layout
+
 \begin_layout Section
-Session and Request Variables
+Session and Request State
 \begin_inset CommandInset label
 LatexCommand label
 name "sec:Session-and-Request"
@@ -4217,6 +4326,264 @@ name "sec:Session-and-Request"
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+Lift provides a very easy way to store per-session and per-request data
+ through the SessionVar and RequestVar classes.
+ In true Lift fashion, these classes provide:
+\end_layout
+
+\begin_layout Itemize
+Type-safe access to the data they hold
+\end_layout
+
+\begin_layout Itemize
+A mechanism for providing a default value if the session or request doesn't
+ exist yet
+\end_layout
+
+\begin_layout Itemize
+A mechanism for cleaning up the data when the variable's lifecycle ends
+\end_layout
+
+\begin_layout Standard
+Additionally, Lift provides easy access to HTTP request parameters
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+request parameters
+\end_layout
+
+\end_inset
+
+ via the S.param method, which returns a Can[String].
+ Note that HTTP request parameters (sent either via GET or POST) differ
+ from RequestVars in that query parameters are string values sent as part
+ of the request; RequestVars, by contrast, use an internal per-request Map
+ so that they can hold any type, and are initialized entirely in code.
+ At this point you might ask what RequestVars can be used for; a typical
+ example would be sharing state between different snippets, since there
+ is no connection between snippets other than at the template level.
+\end_layout
+
+\begin_layout Standard
+SessionVars and RequestVars are intended to be implemented as singleton
+ objects so that they're accessible from anywhere in your code.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Defining-a-RequestVar"
+
+\end_inset
+
+ shows an example definition of a RequestVar used to hold the number of
+ entries to show per page.
+ We start by defining the object as extending the RequestVar.
+ You must provide the type of the RequestVar so that Lift knows what to
+ accept and return.
+ The constructor argument is a by-name parameter which must evaluate to
+ the var's type; in our case, we attempt to use the HTTP request variable
+ 
+\begin_inset Quotes eld
+\end_inset
+
+pageSize
+\begin_inset Quotes erd
+\end_inset
+
+, and if that isn't present or isn't an integer we default to 25.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Defining a RequestVar
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Defining-a-RequestVar"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+class Ledger {
+\end_layout
+
+\begin_layout Plain Layout
+
+  object pageSize extends RequestVar[Int](S.param(
+\begin_inset Quotes eld
+\end_inset
+
+pageSize
+\begin_inset Quotes erd
+\end_inset
+
+).map(_.toInt) openOr 25)
+\end_layout
+
+\begin_layout Plain Layout
+
+  ...
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Accessing the value of the RequestVar is handled via the is method.
+ You can also set the value using the apply method:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Accessing the RequestVar
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Accessing-the-RequestVar"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+query.setMaxResults(Ledger.pageSize.is)
+\end_layout
+
+\begin_layout Plain Layout
+
+// Change the value
+\end_layout
+
+\begin_layout Plain Layout
+
+Ledger.pageSize(50)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In addition to taking a parameter that defines a default value for setup,
+ you can also handle cleaning up the value when the variable ends it lifecycle.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Defining-a-Cleanup"
+
+\end_inset
+
+ shows an example of opening a socket and closing it at the end of the request.
+ You can see that we override cleanupFunc and return a Full Can with the
+ cleanup function.
+ It's important to note that the cleanupFunc method is only used if the
+ default value is used; if you always set the value of the RequestVar before
+ you access it then you'll need to use the registerCleanupFunc instead.
+ Also remember that you're responsible for handling any exceptions that
+ might be thrown during either default initialization or cleanup.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Defining a Cleanup Function
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Defining-a-Cleanup"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+object mySocket extends RequestVar[Socket](new Socket(
+\begin_inset Quotes eld
+\end_inset
+
+localhost:23
+\begin_inset Quotes erd
+\end_inset
+
+)) {
+\end_layout
+
+\begin_layout Plain Layout
+
+  override def cleanupFunc = Full(() => this.is.close)
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The inormation we've covered here is equally applicable to SessionVars;
+ the only difference between them is the scope of their respective lifecycles.
 \end_layout
 
 \begin_layout Section

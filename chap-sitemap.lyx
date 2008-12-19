@@ -1,4 +1,4 @@
-#LyX 1.6.0 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -143,58 +143,28 @@ A help page
 \end_layout
 
 \begin_layout Standard
-We'll assume that we have the corresponding pages, 
-"
-
-
+We'll assume that we have the corresponding pages, "
 \family typewriter
 homepage
 \family default
-
-"
-
-, 
-"
-
-
+", "
 \family typewriter
 login
 \family default
-
-"
-
-, 
-"
-
-
+", "
 \family typewriter
 logout
 \family default
-
-"
-
-, and 
-"
-
-
+", and "
 \family typewriter
 profile
 \family default
-
-"
-
- written and functional.
- We'll also assume that the help page(s) reside under the 
-"
-
-
+" written and functional.
+ We'll also assume that the help page(s) reside under the "
 \family typewriter
 help
 \family default
-
-"
-
- subdirectory to keep things neat, and that the entry to help is 
+" subdirectory to keep things neat, and that the entry to help is 
 \family typewriter
 /help/index
 \family default
@@ -237,13 +207,7 @@ List[String]
  of path components, and a boolean value that controls whether prefix matching
  is enabled.
  The path components represent the portion of the URI following your web
- context, split on the 
-"
-
-/
-"
-
- character.
+ context, split on the "/" character.
  Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -251,13 +215,7 @@ reference "lst:Link-Path-Components"
 
 \end_inset
 
- shows how you would use Link to represent the 
-"
-
-/utils/index
-"
-
- page.
+ shows how you would use Link to represent the "/utils/index" page.
  
 \end_layout
 
@@ -624,13 +582,7 @@ val helpMenu = Menu(Loc("helpHome",
 \end_layout
 
 \begin_layout Standard
-For our example we've named this menu item 
-"
-
-helpHome
-"
-
-.
+For our example we've named this menu item "helpHome".
  The second parameter is a 
 \family typewriter
 Pair[List[String],Boolean]
@@ -653,13 +605,7 @@ emphasize
 
 , so by doing this we're allowing full access to all of the help files without
  having to specify a menu entry for each.
- The final parameter, 
-"
-
-Help
-"
-
-, is the text for the menu link.
+ The final parameter, "Help", is the text for the menu link.
  
 \end_layout
 
@@ -677,13 +623,8 @@ name "sub:Nested-Menus"
 \begin_layout Standard
 The Menu class supports child menus simply by passing them in as final construct
 or parameters.
- For instance, if we wanted to have an 
-"
-
-about
-"
-
- menu under Help, we could define the menu as shown in listing 
+ For instance, if we wanted to have an "about" menu under Help, we could
+ define the menu as shown in listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Nested-Menu-Definition"
@@ -737,12 +678,7 @@ val helpMenu = Menu(Loc(...as defined above...), aboutMenu)
 When the menu is rendered it will have a child menu for About.
  Child menus are only rendered by default when the current page matches
  their parent's Loc.
- That means that, for instance the following links would show an 
-"
-
-About
-"
-
+ That means that, for instance the following links would show an "About"
  child menu item:
 \end_layout
 
@@ -797,7 +733,14 @@ Once you have all of your menus items defined, you need to set them as your
 \family typewriter
 setSiteMap
 \family default
- method on LiftRules, as shown in listing ???.
+ method on LiftRules, as shown in listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Setting-the-SiteMap"
+
+\end_inset
+
+.
  The setSiteMap method takes a SiteMap object that can be constructed using
  your menu items as arguments.
 \end_layout
@@ -850,7 +793,14 @@ Should this be added to Mapper, or somehow folded in elsewhere?
 \end_inset
 
 ), then it can be more convenient to define List[Menu] and set that.
- Listing ??? shows this usage.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Using-List-Menu-for"
+
+\end_inset
+
+ shows this usage.
 \end_layout
 
 \begin_layout Standard
@@ -864,6 +814,13 @@ status open
 
 \begin_layout Plain Layout
 Using List[Menu] for SiteMap
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Using-List-Menu-for"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -898,14 +855,8 @@ LiftRules.setSiteMap(SiteMap(menus : _*))
 
 \begin_layout Standard
 The key to using List for your menus is to explicitly define the type of
- the parameter as 
-"
-
-_*
-"
-
- so that it's treated as a set of varargs instead of a single argument of
- type List[Menu].
+ the parameter as "_*" so that it's treated as a set of varargs instead
+ of a single argument of type List[Menu].
 \end_layout
 
 \begin_layout Section
@@ -1025,17 +976,11 @@ Pair[String,Boolean]
 \family typewriter
 Link
 \family default
- to make this Menu apply to everything under the 
-"
-
-
+ to make this Menu apply to everything under the "
 \family typewriter
 receipts
 \family default
-
-"
-
- directory.
+" directory.
 \end_layout
 
 \begin_layout Subsection
@@ -1076,13 +1021,8 @@ String
 \family default
  for the parameter; that means you can just as easily pass in a function
  to generate the link text as a static string.
- For example, with our profile link we may want to make the link say 
-"
-
-<username>'s profile
-"
-
-.
+ For example, with our profile link we may want to make the link say "<username>
+'s profile".
  Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -1466,17 +1406,11 @@ reference "lst:Rendering-the-Title"
 Menu.title
 \family default
 .
- In this particular example the title will be rendered as 
-"
-
-
+ In this particular example the title will be rendered as "
 \family typewriter
 Home Page
 \family default
-
-"
-
-.
+".
 \end_layout
 
 \begin_layout Standard
@@ -1511,13 +1445,7 @@ name "lst:Rendering-the-Title"
 
 \begin_layout Plain Layout
 
-val MyMenu = Menu(Loc("Home Page", "index" :: Nil, 
-"
-
-Home
-"
-
-))
+val MyMenu = Menu(Loc("Home Page", "index" :: Nil, "Home"))
 \end_layout
 
 \begin_layout Plain Layout
@@ -1550,17 +1478,11 @@ Menu.builder
 , it allows you to specify additional prefixed attributes for the link to
  be passed to the emitted item.
  Because it applies these attributes to the link itself, the only valid
- prefix is 
-"
-
-
+ prefix is "
 \family typewriter
 a
 \family default
-
-"
-
-.
+".
  Additionally, if you specify child elements for the snippet tag, it will
  be used instead of the default link text.
  Listing 
@@ -1570,17 +1492,11 @@ reference "lst:Using-Menu.item"
 
 \end_inset
 
- shows an example using our 
-"
-
-
+ shows an example using our "
 \family typewriter
 Home Page
 \family default
-
-"
-
- menu item defined in listing 
+" menu item defined in listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Rendering-the-Title"
@@ -1689,27 +1605,15 @@ So far we've covered how to control the display side of Menus, so now we
  One important function of Menus is that they control access to the pages
  in your app; if no Menus match a given request then the user gets a 404
  (not found) error.
- Other than this binary control of 
-"
-
-matches
+ Other than this binary control of "matches
 \begin_inset Formula $\rightarrow$
 \end_inset
 
-display
-"
-
- and 
-"
-
-doesn't match
+display" and "doesn't match
 \begin_inset Formula $\rightarrow$
 \end_inset
 
-don't display
-"
-
-, 
+don't display", 
 \family typewriter
 SiteMap
 \family default
@@ -1816,13 +1720,7 @@ Cross-ref
 \family typewriter
 LiftRules.siteMapFailRedirectLocation
 \family default
-, which is the root of your webapp (
-"
-
-/
-"
-
-) by default.
+, which is the root of your webapp ("/") by default.
  If you want, you can change this in 
 \family typewriter
 LiftRules
@@ -1953,13 +1851,8 @@ If
  The exact same rules apply, except that the page is displayed only if the
  test function returns false.
  The reason that there are two classes to represent this behavior is that
- it's generally clearer when a predicate is read as 
-"
-
-working
-"
-
- when it returns true.
+ it's generally clearer when a predicate is read as "working" when it returns
+ true.
 \end_layout
 
 \begin_layout Section
@@ -2092,13 +1985,7 @@ val homepageTempl = Template({ () =>
 
 \begin_layout Plain Layout
 
-      <lift:embed what=
-"
-
-welcome
-"
-
- />
+      <lift:embed what="welcome" />
 \end_layout
 
 \begin_layout Plain Layout
@@ -2310,10 +2197,7 @@ val entrySnippets = new DispatchLocSnippets {
 
 \begin_layout Plain Layout
 
-    case "add
-"
-
- => Entries.newEntry _
+    case "add" => Entries.newEntry _
 \end_layout
 
 \begin_layout Plain Layout
@@ -2365,7 +2249,14 @@ reference "sub:Type-Safe-Params"
 
 ).
  Generally you can ignore it if you want, which is what we do in listing
- ???.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Customizing-the-Title"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
@@ -2405,13 +2296,7 @@ val userTitle = Title(() =>
 
 \begin_layout Plain Layout
 
-    Text(User.name + 
-"
-
-'s Ledger
-"
-
-)
+    Text(User.name + "'s Ledger")
 \end_layout
 
 \begin_layout Plain Layout
@@ -2421,13 +2306,7 @@ val userTitle = Title(() =>
 
 \begin_layout Plain Layout
 
-    Text(
-"
-
-Welcome to PocketChange
-"
-
-)
+    Text("Welcome to PocketChange")
 \end_layout
 
 \begin_layout Plain Layout
@@ -2437,35 +2316,17 @@ Welcome to PocketChange
 
 \begin_layout Plain Layout
 
-val homeMenu = Menu(Loc(
-"
-
-Home Page
-"
-
-,
+val homeMenu = Menu(Loc("Home Page",
 \end_layout
 
 \begin_layout Plain Layout
 
-                        
-"
-
-
-"
-
- :: Nil,
+                        "" :: Nil,
 \end_layout
 
 \begin_layout Plain Layout
 
-                        
-"
-
-Home Page
-"
-
-, homepageTempl, userTitle))
+                        "Home Page", homepageTempl, userTitle))
 \end_layout
 
 \end_inset
@@ -2566,25 +2427,7 @@ val onlyOpera = Test(req => req.isOpera)
 
 \begin_layout Plain Layout
 
-val operaMenu = Menu(Loc(
-"
-
-Opera
-"
-
-, 
-"
-
-opera
-"
-
- :: Nil, 
-"
-
-Only Opera
-"
-
-, onlyOpera))
+val operaMenu = Menu(Loc("Opera", "opera" :: Nil, "Only Opera", onlyOpera))
 \end_layout
 
 \end_inset
@@ -2652,19 +2495,7 @@ name "lst:Categorizing-your-Menu"
 
 \begin_layout Plain Layout
 
-val siteMenu = Menu(Loc(...,LocGroup(
-"
-
-admin
-"
-
-, 
-"
-
-site
-"
-
-)))
+val siteMenu = Menu(Loc(...,LocGroup("admin", "site")))
 \end_layout
 
 \end_inset
@@ -2692,13 +2523,8 @@ CSS
 
 \end_inset
 
- class of the links (
-"
-
-a
-"
-
- is the only valid prefix), and we've added some body XHTML for display.
+ class of the links ("a" is the only valid prefix), and we've added some
+ body XHTML for display.
  In particular, the <menu:bind> tag controls where the menu items are rendered.
  If you don't provide body elements, or if you provide body elements without
  the <menu:bind> element, your body XHTML will be ignored and the menu will
@@ -2732,35 +2558,17 @@ name "lst:Binding-a-Menu-group"
 
 \begin_layout Plain Layout
 
-<div class=
-"
-
-site
-"
-
->
+<div class="site">
 \end_layout
 
 \begin_layout Plain Layout
 
-  <lift:Menu.group group=
-"
-
-site
-"
-
-
+  <lift:Menu.group group="site"
 \end_layout
 
 \begin_layout Plain Layout
 
-    a:class=
-"
-
-siteLink
-"
-
->
+    a:class="siteLink">
 \end_layout
 
 \begin_layout Plain Layout
@@ -3058,19 +2866,8 @@ override title
 \begin_inset Text
 
 \begin_layout Plain Layout
-You can override 
-"
-
-def title
-"
-
- or 
-"
-
-def title(in: ParamType)
-"
-
- depending on whether you want to use type-safe parameters
+You can override "def title" or "def title(in: ParamType)" depending on
+ whether you want to use type-safe parameters
 \end_layout
 
 \end_inset
@@ -3190,13 +2987,7 @@ One of the nice features of Loc is that it allows you to rewrite requests
  The reason that this is type-safe is that we define our Loc on the type
  of the parameter itself.
  For instance, let's expand the functionality of our app so that we have
- a page called 
-"
-
-ledger
-"
-
- that shows the ledger entries.
+ a page called "ledger" that shows the ledger entries.
  We would like this page to normally only be viewable by the owner of the
  ledger, but allow them to share it out to other members.
  We would also like to let the owner choose whether these other users can
@@ -3333,13 +3124,7 @@ class LedgerLoc extends Loc[LedgerInfo] {
 
 \begin_layout Standard
 Assuming that a Ledger instance has a unique string ID, we would like to
- use URL rewriting so that we can access a ledger via 
-"
-
-/ledger/<unique id>
-"
-
-.
+ use URL rewriting so that we can access a ledger via "/ledger/<unique id>".
  Our rewrite function, shown in listing 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -3397,13 +3182,8 @@ def rewrite (req : RewriteRequest) = req match {
 
 \begin_layout Plain Layout
 
-  case RewriteRequest(ParsePath(
-"
-
-ledger
-"
-
- :: lid :: Nil, _, _), _, _) => {
+  case RewriteRequest(ParsePath("ledger" :: lid :: Nil, _, _), _, _) =>
+ {
 \end_layout
 
 \begin_layout Plain Layout
@@ -3422,36 +3202,13 @@ ledger
 
 \begin_layout Plain Layout
 
-      case (0, _) => (RewriteResponse(
-"
-
-ledger
-"
-
- :: Nil), NoSuchLedgerInfo)
+      case (0, _) => (RewriteResponse("ledger" :: Nil), NoSuchLedgerInfo)
 \end_layout
 
 \begin_layout Plain Layout
 
-      case (_, false) => (RewriteResponse(
-"
-
-login
-"
-
- :: Nil, 
-"
-
-origURI
-"
-
- -> (
-"
-
-/ledger/
-"
-
- + lid)), NoPermsLedgerInfo)
+      case (_, false) => (RewriteResponse("login" :: Nil, "origURI" -> ("/ledger
+/" + lid)), NoPermsLedgerInfo)
 \end_layout
 
 \begin_layout Plain Layout
@@ -3489,13 +3246,8 @@ origURI
 
 \begin_layout Plain Layout
 
-          (RewriteResponse(
-"
-
-ledger
-"
-
- :: Nil), FullLedgerInfo(ledger, owner, editor))
+          (RewriteResponse("ledger" :: Nil), FullLedgerInfo(ledger, owner,
+ editor))
 \end_layout
 
 \begin_layout Plain Layout
@@ -3505,22 +3257,8 @@ ledger
 
 \begin_layout Plain Layout
 
-          (RewriteResponse(
-"
-
-
-"
-
- :: Nil, 
-"
-
-error
-"
-
- -> "You do not have permission to view this ledger
-"
-
-), NoPermsLedgerInfo)
+          (RewriteResponse("" :: Nil, "error" -> "You do not have permission
+ to view this ledger"), NoPermsLedgerInfo)
 \end_layout
 
 \begin_layout Plain Layout
@@ -3602,80 +3340,42 @@ def snippets = {
 
 \begin_layout Plain Layout
 
-  case (
-"
-
-ledger
-"
-
-, NoSuchLedgerInfo) => {ignore => Text("Could not find the requested ledger")}
+  case ("ledger", NoSuchLedgerInfo) => {ignore => Text("Could not find the
+ requested ledger")}
 \end_layout
 
 \begin_layout Plain Layout
 
-  case (
-"
-
-ledger
-"
-
-, NoPermsLedgerInfo) => {ignore => Text("You don't haver permission to view
- this ledger")}
+  case ("ledger", NoPermsLedgerInfo) => {ignore => Text("You don't haver
+ permission to view this ledger")}
 \end_layout
 
 \begin_layout Plain Layout
 
-  case (
-"
-
-ledger
-"
-
-, FullLedgerInfo(ledger, _, editor) => Ledger.show(ledger, editor) _
+  case ("ledger", FullLedgerInfo(ledger, _, editor) => Ledger.show(ledger,
+ editor) _
 \end_layout
 
 \begin_layout Plain Layout
 
-  case (
-"
-
-addEntry
-"
-
-, FullLedgerInfo(ledger, _, true) => Ledger.add(ledger) _
+  case ("addEntry", FullLedgerInfo(ledger, _, true) => Ledger.add(ledger)
+ _
 \end_layout
 
 \begin_layout Plain Layout
 
-  case (
-"
-
-addEntry
-"
-
-, _) => {ignore => Text("") }
+  case ("addEntry", _) => {ignore => Text("") }
 \end_layout
 
 \begin_layout Plain Layout
 
-  case (
-"
-
-ownerMenu
-"
-
-, FullLedgerInfo(ledger, true, _) => Ledger.ownerOps(ledger) _
+  case ("ownerMenu", FullLedgerInfo(ledger, true, _) => Ledger.ownerOps(ledger)
+ _
 \end_layout
 
 \begin_layout Plain Layout
 
-  case (
-"
-
-ownerMenu
-"
-
-, _) => {ignore => Text("") }
+  case ("ownerMenu", _) => {ignore => Text("") }
 \end_layout
 
 \begin_layout Plain Layout
@@ -3765,13 +3465,7 @@ As we've shown in this chapter, SiteMap offers a wide range of functionality
 \end_layout
 
 \begin_layout Standard
-""
-"
-
-
-"
-
-
+""""
 \end_layout
 
 \end_body

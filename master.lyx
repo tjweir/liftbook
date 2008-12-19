@@ -4,26 +4,7 @@
 \begin_header
 \textclass book
 \begin_preamble
-\usepackage[T1]{fontenc}
 \usepackage[notbib]{tocbibind}
-\usepackage{ifpdf} % part of the hyperref bundle
-\ifpdf % if pdflatex is used
-
- % link all cross references and URLs in pdf output
- \usepackage[colorlinks=true, bookmarks, bookmarksnumbered,
- linkcolor=black, citecolor=black, urlcolor=blue, filecolor=blue,
- pdfpagelayout=OneColumn, pdfnewwindow=true,
- pdfstartview=XYZ, plainpages=false, pdfpagelabels,
- pdfauthor={Derek Chen-Becker and Tyler Weir}, pdftex,
- pdftitle={Exploring Lift},pdfsubject={The Lift Web Framework},
- pdfkeywords={Lift Web}]{hyperref}
- 
-\else % if dvi or ps is produced
-
- % link all cross references and URLs in dvi output
- \usepackage[ps2pdf]{hyperref}
-
-\fi % end if pdflatex is used
 
 % redefine the \LyX macro for PDF bookmarks
 \def\LyX{\texorpdfstring{%
@@ -40,6 +21,9 @@ morestring=[b]"}
 
 % Default settings for code listings
 \lstset{frame=tb,language=scala,basicstyle=\small\ttfamily,aboveskip=3mm,belowskip=3mm,showstringspaces=false,columns=flexible}
+
+% Fix the List of Listings title
+\renewcommand{\lstlistlistingname}{List of Listings}
 \end_preamble
 \use_default_options false
 \language english
@@ -54,9 +38,23 @@ morestring=[b]"}
 \font_tt_scale 100
 
 \graphics default
-\paperfontsize default
+\paperfontsize 11
 \spacing single
-\use_hyperref false
+\use_hyperref true
+\pdf_title "Exploring Lift"
+\pdf_author "Derek Chen-Becker, Marius Danciu and Tyler Weir"
+\pdf_subject "The Lift Web Framework"
+\pdf_keywords "Lift Scala Web"
+\pdf_bookmarks true
+\pdf_bookmarksnumbered false
+\pdf_bookmarksopen false
+\pdf_bookmarksopenlevel 1
+\pdf_breaklinks false
+\pdf_pdfborder true
+\pdf_colorlinks true
+\pdf_backref false
+\pdf_pdfusetitle false
+\pdf_quoted_options "urlcolor=blue"
 \papersize letterpaper
 \use_geometry true
 \use_amsmath 1
@@ -100,6 +98,8 @@ frontmatter
 \end_layout
 
 \begin_layout Title
+
+\size giant
 Exploring Lift
 \end_layout
 
@@ -112,13 +112,33 @@ Derek Chen-Becker, Marius Danciu and Tyler Weir
 \end_layout
 
 \begin_layout Standard
+\noindent
 Copyright © 2008, Derek Chen-Becker, Marius Danciu and Tyler Weir.
- This work is licensed under the Creative Commons Attribution-No Derivative
+\begin_inset Newline newline
+\end_inset
+
+This work is licensed under the Creative Commons Attribution-No Derivative
  Works 3.0 Unported License.
 \end_layout
 
 \begin_layout Standard
 \begin_inset FloatList figure
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+lstlistoflistings
+\end_layout
 
 \end_inset
 
@@ -190,9 +210,14 @@ Dedication
 \begin_layout Standard
 Derek would like to thank his wife, Debbie, for her patience and support
  while writing this book.
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
+\noindent
 Tyler would like to thank his wife Laura, for encouraging him.
 \end_layout
 
