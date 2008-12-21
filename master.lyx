@@ -20,7 +20,7 @@ morecomment=[s]{/*}{*/},
 morestring=[b]"}
 
 % Default settings for code listings
-\lstset{frame=tb,language=scala,basicstyle=\small\ttfamily,aboveskip=3mm,belowskip=3mm,showstringspaces=false,columns=flexible}
+\lstset{frame=tb,language=scala,basicstyle=\small\ttfamily,aboveskip=3mm,belowskip=3mm,showstringspaces=false,columns=flexible,keywordstyle=\bfseries}
 
 % Fix the List of Listings title
 \renewcommand{\lstlistlistingname}{List of Listings}
@@ -351,7 +351,7 @@ part{Advanced Topics}
 \begin_layout Standard
 \begin_inset CommandInset include
 LatexCommand include
-filename "chap-req_resp_lifecycle.lyx"
+filename "chap-advanced.lyx"
 
 \end_inset
 

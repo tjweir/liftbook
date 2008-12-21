@@ -1,0 +1,975 @@
+#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
+\begin_document
+\begin_header
+\textclass book
+\use_default_options false
+\language english
+\inputencoding auto
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\cite_engine basic
+\use_bibtopic false
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\author "" 
+\author "" 
+\end_header
+
+\begin_body
+
+\begin_layout Chapter
+Advanced Lift Architecture
+\begin_inset CommandInset label
+LatexCommand label
+name "cha:Advanced-Lift-Guts"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Congratulations! You've either made it through the whole first section of
+ the book, or you feel adventurous enough to skip right by some (or all)
+ of it.
+ In this chapter we're going to dive into some of the advanced mechanics
+ and features of Lift so that you have a thorough understanding of what's
+ going on.
+\end_layout
+
+\begin_layout Section
+The Request/Response Lifecycle
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Request/Response-Lifecycle"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The first thing we'd like to revisit is the rendering pipeling from request
+ to response.
+ We briefly touched on this back in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:The-Rendering-Process"
+
+\end_inset
+
+, but before we get into all of the nitty gritty details we're going to
+ cover it in depth.
+ This will serve not only to familiarize you with the full processing power
+ of Lift, but also to introduce some of the other advanced topics we'll
+ be discussing in this and later chapters.
+ One important thing we'd like to mention before digging into the details
+ is that most of the configurable properties are in LiftRules, and are of
+ the type RulesSeq.
+ With a RulesSeq you essentially have a list of functions or values that
+ are applied in order.
+ RulesSeq defines a prepend and append method that allows you to add new
+ configuration items at the beginning or end of the configuration, respectively.
+ This allows you to prioritize things like partial functions and compose
+ various methods together to control Lift's behavior.
+ You can think of a RulesSeq as a Seq on steroids, tweaked for Lift's usage.
+\end_layout
+
+\begin_layout Standard
+The following list outlines, in order, the process of transforming a request
+ into a response.
+ We provide references to the sections of the book where we discuss each
+ step in case you want to branch off.
+\end_layout
+
+\begin_layout Enumerate
+Execute early functions: this is a mechanism that allows a user function
+ to be called before the request enters the normal processing chain.
+ This can be used for, for example, to set the XHTML output to UTF-8.
+ This is controlled through 
+\family typewriter
+LiftRules.early
+\end_layout
+
+\begin_layout Enumerate
+Perform URL Rewriting, which we cover in detail in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:URL-Rewriting"
+
+\end_inset
+
+.
+ Controlled via 
+\family typewriter
+LiftRules.rewrite
+\family default
+, this is useful for creating user-friendly URLs, among other things.
+ The result of the transformation will be checked for possible rewrites
+ until there are no more matches or it is explicitly stopped
+\end_layout
+
+\begin_layout Enumerate
+Call 
+\family typewriter
+LiftRules.onBeginServicing
+\family default
+ hooks.
+ This is a mechanism that allows you to add your own hook functions that
+ will be called when Lift is starting to process the request.
+ You could set up logging here.
+\end_layout
+
+\begin_layout Enumerate
+Check for user-defined stateless dispatch in 
+\family typewriter
+LiftRules.statelessDispatchTable
+\family default
+.
+ If the partial functions defined in this table match the request then they
+ are used to create LiftResponse that is sent to the user, bypassing any
+ further processing.
+ These are very useful for building things like REST APIs.
+ The term stateless refers to the fact that at the time the dispatch function
+ is called, the stateful object, called 
+\family typewriter
+S
+\family default
+, is not available and the LiftSession is not created yet.
+\end_layout
+
+\begin_layout Enumerate
+Create a LiftSession.
+ The LiftSession holds various bits of state for the request, and is covered
+ in more detail in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Session-Management"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Call 
+\family typewriter
+LiftSession.onSetupSession
+\family default
+.
+ This is a mechanism for adding hook functions that will be called when
+ the LiftSession is created.
+ We'll get into more details when we discuss Lift's session management in
+ section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Session-Management"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Initialize the 
+\family typewriter
+S
+\family default
+ object (section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:S-object"
+
+\end_inset
+
+).
+ The S object represents the current state of the request and response.
+\end_layout
+
+\begin_layout Enumerate
+Call any 
+\family typewriter
+LoanWrapper
+\family default
+ instances that you've added through 
+\family typewriter
+S.addAround
+\family default
+.
+ Essentially a 
+\family typewriter
+LoanWrapper
+\family default
+ is a way to insert your own processing into the render pipeline, similar
+ to how Filter works in the Servlet API.
+ This means that when your LoanWrapper implementation is called, Lift passes
+ you a function allowing you to chain the processing of the request.
+ With this functionality you can execute your own pre- and post-condition
+ code.
+ A simple example of this would be if you need to make sure that something
+ is configured at the start of processing and cleanly shut down when processing
+ terminates
+\end_layout
+
+\begin_layout Enumerate
+Process the stateful request
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Check the stateful dispatch functions defined in 
+\family typewriter
+LiftRules.dispatch
+\family default
+.
+ This is similar to the stateless dispatch in step #4 except that these
+ functions are executed in the context of a LiftSession and an 
+\family typewriter
+S
+\family default
+ object (section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:S-object"
+
+\end_inset
+
+).
+ The first matching partial function is used to generate a LiftResponse
+ that is returned to the client.
+ If none of the dispatch functions match then processing continues.
+ Dispatch functions are covered in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Custom-dispatch-func"
+
+\end_inset
+
+.
+ This flow is wrapped by LiftSession.onBeginServicing/onEndServicing calls
+\end_layout
+
+\begin_layout Enumerate
+If this is a 
+\series bold
+Comet
+\series default
+ request, then process it and return the response.
+ Comet is a method for performing asynchronous updates of the user's page
+ without a reload.
+ We cover Comet techniques in chapter 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "cha:AJAX-and-COMET"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+If this is an 
+\series bold
+Ajax
+\series default
+ request, execute the user's callback function; the specific function is
+ mapped via a request parameter (essentially a token).
+ The result of the callback is returned as the response to the user.
+ The response can be a JavaScript snippet, an XML construct or virtually
+ any 
+\family typewriter
+LiftResponse
+\family default
+.
+ For an overview of 
+\family typewriter
+LiftResponse
+\family default
+ please see section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:LiftResponse-in-Detail"
+
+\end_inset
+
+.
+ This flow is wrapped by LiftSession.onBeginServicing/onEndServicing calls.
+\end_layout
+
+\begin_layout Enumerate
+If this is a regular HTTP request, then:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Call 
+\family typewriter
+LiftSession.onBeginServicing
+\family default
+ hooks.
+ Mostly 
+\begin_inset Quotes eld
+\end_inset
+
+onBegin
+\begin_inset Quotes erd
+\end_inset
+
+/
+\begin_inset Quotes erd
+\end_inset
+
+onEnd
+\begin_inset Quotes erd
+\end_inset
+
+ functions are used for logging.
+ Note that LiftRules also have onBeginServicing and onEndServicing functions
+ but theae are 
+\begin_inset Quotes eld
+\end_inset
+
+wrapping
+\begin_inset Quotes erd
+\end_inset
+
+ more Lift processing not only statefull processing.
+\end_layout
+
+\begin_layout Enumerate
+Check the user-defined dispatch functions that are set per-session (
+\family typewriter
+see S.addHighLevelSessionDispatcher
+\family default
+).
+ Essentially this is similar with 
+\family typewriter
+LiftRules.dispatch
+\family default
+ except that you can have different functions set up for different session
+ depending on your application logic.
+ If there is a function applicable, execute it and return its response.
+ If there is no per-session dispatch function, process the request by executing
+ the Scala function that user set up for specific events (such as when clicking
+ a link, or pressing the submit button, or a function that will be executed
+ when a form field is set etc.).
+ Please see SHtml obejct 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:SHtml"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Check the SiteMap and Loc functions.
+ We cover SiteMap extensively in chapter 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "cha:SiteMap"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Lookup the template based on the Req path.
+ Lift will locate the templates using various approaches:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Check the partial functions defined in 
+\family typewriter
+LiftRules.viewDispatch
+\family default
+.
+ If there is a function defined for this path invoke it and return an Either[
+\begin_inset Formula $()\Rightarrow Can[NodeSeq]$
+\end_inset
+
+,LiftView].
+ This allows you to either return the function for handling the view directly,
+ or delegate to a LiftView subclass.
+ LiftView is covered in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Views"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+If no viewDispatch functions match, then look for the template using the
+ ServletContext's 
+\family typewriter
+getResourceAsStream
+\family default
+.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Process the templates by executing snippets combining templates etc.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Merge <head> elements, as described in section e
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Head-Merge"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Update the internal functions map.
+ Basically this associates the user's Scala functions with tokens that are
+ passed around in subsequent requests using HTTP query parameters
+\end_layout
+
+\begin_layout Enumerate
+Clean up notices (see S.error, S.warning, S.notice) since they were already
+ rendered.
+ Notices are covered in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "cha:Message-Handling"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Call 
+\family typewriter
+LiftRules.convertResponse
+\family default
+.
+ Basically this glues together different pieces if information such as the
+ actual markup, the response headers, cookies, etc into a LiftResponse instance
+\end_layout
+
+\begin_layout Enumerate
+Check to see if lift needs to send HTTP redirect.
+ For an overview please see 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:HTTP-redirects"
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Call 
+\family typewriter
+LiftSession.onEndServicing
+\family default
+ hooks, the counterparts to 
+\family typewriter
+LiftSession.onBeginServicing
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Call 
+\family typewriter
+LiftRules.performTransform
+\family default
+.
+ This is actually configured via the 
+\family typewriter
+LiftRules.responseTransformers
+\family default
+ 
+\family typewriter
+RulesSeq
+\family default
+.
+ Essentially, this is a list of functions on 
+\begin_inset Formula $LiftResponse\Rightarrow LiftResponse$
+\end_inset
+
+ that allows the user to modify the response before it's sent to the client
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Call 
+\family typewriter
+LiftRules.onEndServicing
+\family default
+ hooks.
+ These are the stateless end-servicing hooks, called after the S object
+ context is destroyed.
+\end_layout
+
+\begin_layout Enumerate
+Call any functions defined in 
+\family typewriter
+LiftRules.beforeSend
+\family default
+.
+ This is the last place where you can modify the response before it's sent
+ to the user
+\end_layout
+
+\begin_layout Enumerate
+Convert the LiftResponse to a raw byte stream and send it to client as an
+ HTTP response.
+\end_layout
+
+\begin_layout Enumerate
+Call any functions defined in 
+\family typewriter
+LiftRules.afterSend
+\family default
+.
+ Typically these would be used for cleanup
+\end_layout
+
+\begin_layout Standard
+We realize that this is a lot of information to digest in one pass, so as
+ we continue to cover the specific details of the rendering pipeline you
+ may want to keep a bookmark here so that you can come back and process
+ the new information in the greater context of how Lift is working.
+\end_layout
+
+\begin_layout Section
+LiftResponse in Detail
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:LiftResponse-in-Detail"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Lift framework makes a lot of things really easy and it provides extremly
+ useful abstractions as you may have already discovered.
+ Responses to clients are also abstacted by LiftResponse trait.
+ There are numerous response types and here is the simplified vieew of the
+ class hierarchy:
+\end_layout
+
+\begin_layout Itemize
+LiftResponse
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+BasicResponse
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+InMemoryResponse
+\end_layout
+
+\begin_layout Itemize
+StreamingResponse
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+JSonResponse
+\end_layout
+
+\begin_layout Itemize
+RedirectResponse
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+RedirectWithState
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+ToResponse
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+XhtmlRespomse
+\end_layout
+
+\begin_layout Itemize
+XmlResponse
+\end_layout
+
+\begin_layout Itemize
+XmlMimeResponse
+\end_layout
+
+\begin_layout Itemize
+AtomResponse
+\end_layout
+
+\begin_layout Itemize
+OpenSearchResponse
+\end_layout
+
+\begin_layout Itemize
+AtomCreatedResponse
+\end_layout
+
+\begin_layout Itemize
+AtomCategoryResponse
+\end_layout
+
+\begin_layout Itemize
+AtomServiceResponse
+\end_layout
+
+\begin_layout Itemize
+CreatedResponse
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+OkResponse
+\end_layout
+
+\begin_layout Itemize
+PermRedirectResponse
+\end_layout
+
+\begin_layout Itemize
+BadResponse
+\end_layout
+
+\begin_layout Itemize
+UnauthorizedResponse
+\end_layout
+
+\begin_layout Itemize
+UnauthorizedDigestResponse
+\end_layout
+
+\begin_layout Itemize
+NotFoundResponse
+\end_layout
+
+\begin_layout Itemize
+MethodNotAllowedResponse
+\end_layout
+
+\begin_layout Itemize
+GoneResponse
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+We won't get into details right now oh what exactly each and every class/object
+ does, although their purpose is somehow intuitive.
+ It is important to know that whenever you need to return a LiftResponse
+ reference from one of your functions, for example LiftRules.dispatch you
+ can you can use one of these classes.
+ So ultimatelly Lift doesn;t really provide you the HttpServletResponse
+ object instead all Lift responses are impersonated by a LiftResponse instance
+ and it content (the actual payload, http headers, content-type, cookies
+ etc.) is written internally by Lift to the container's output stream.
+\end_layout
+
+\begin_layout Section
+Session Management 
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Session-Management"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Lift is, in essence, a stateful framework and naturally state needs to be
+ managed.
+ You may already be familiar with HttpSession and and how a J(2)EE web container
+ identifies an HttpSession; either by JSESSIONID cookie or by JSESSIONID
+ URI sequence (in case of URL rewriting).
+ Similarly, Lift uses a LiftSession reference which is not actually 
+\begin_inset Quotes eld
+\end_inset
+
+persisted
+\begin_inset Quotes erd
+\end_inset
+
+ in HttpSession.
+ As a matter of fact Lift does not really use the HttpSession provided by
+ the web container to maintain conversational state but rather uses a 
+\begin_inset Quotes eld
+\end_inset
+
+bridge
+\begin_inset Quotes erd
+\end_inset
+
+ between the HttpSession and the LiftSession.
+ This 
+\begin_inset Quotes eld
+\end_inset
+
+bridge
+\begin_inset Quotes erd
+\end_inset
+
+ is impersonated by SessionToServletBridge class which implements 
+\emph on
+javax.servlet.http.HttpSessionBindingListener
+\emph default
+ and 
+\emph on
+javax.servlet.http.HttpSessionActivationListener
+\emph default
+.
+ The way it works is:
+\end_layout
+
+\begin_layout Enumerate
+When receiving an HTTP Request and there was no stateless disptach function
+ to execute Lift does the statefull processing.
+ But before doing that it checks to see if there is a LiftSession associated
+ with this http sssion ID.
+ This mapping is kept on a SessionMaster Scala actor.
+ 
+\end_layout
+
+\begin_layout Enumerate
+If there is no LiftSession in SessionMaster actor, create it and add a SessionTo
+ServletBridge attribute on HttpSession.
+ This will make Lift to be aware when container terminates the HttpSession
+ or when the http session is about to be passivated or activated.
+\end_layout
+
+\begin_layout Enumerate
+When the container terminates the http session SessionToServletBridge sends
+ a message to the SessionMaster actor to terminate the LiftSession.
+ Basically the following is taking place:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Call LiftSession.onAboutToShutdownSession hooks
+\end_layout
+
+\begin_layout Enumerate
+Sends ShutDown message to all Comet actors pertaining to this session
+\end_layout
+
+\begin_layout Enumerate
+Cleanup internal LiftSession state
+\end_layout
+
+\begin_layout Enumerate
+Call LiftSession.onShutdownSession hooks
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+SessionMaster actor is also protected another watcher actor.
+ In essense this watcher actor receives the Exit messages of the watched
+ actors.
+ When it receives an Exit message it will call the users' failure functions
+ and restart the watched actor (Please see ActorWatcher.failureFuncs).
+ 
+\end_layout
+
+\begin_layout Standard
+Even so Lift in essence is doing its own session management you still have
+ the freedom to manually add attributes to the HttpSession object.
+ Still we do not recommend this unless you really have to.
+ If you want to keep your own session variables, you can use SessionVar's.
+ Here is an example:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+SessionVar example
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+object count extends SessionVar(0);
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// later in your code you can increment the count by calling
+\end_layout
+
+\begin_layout Plain Layout
+
+count(count + 1)
+\end_layout
+
+\begin_layout Plain Layout
+
+// or obtain the value
+\end_layout
+
+\begin_layout Plain Layout
+
+var theCountValue: Int = count
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+As you've noticed SessionVar-s are typesafe representation of http session
+ attributes (actually they are kept in LiftSession and not directly in HttpSessi
+on).
+ There are implicit conversion functions to convert a SessionVar to its
+ underlying type.
+\end_layout
+
+\begin_layout Standard
+The next question would be 
+\begin_inset Quotes eld
+\end_inset
+
+So we have internal session management, how do we cope with that in a clustered
+ environment? ...
+ how sessions are replicated?
+\begin_inset Quotes erd
+\end_inset
+
+ ...
+ well, in short we're are not.
+ There is no intentions to use the web container's session replication as
+ these technologies appears to be inferior to other solutions on the market.
+ Relying on Java serialization brings a lot of performance concerns and
+ alternative technologies have been investigated and they are still under
+ investigation.
+ Until there is a 
+\begin_inset Quotes eld
+\end_inset
+
+standard
+\begin_inset Quotes erd
+\end_inset
+
+ advocated session replication technology you can still cluster you application
+ using 
+\begin_inset Quotes eld
+\end_inset
+
+sticky session
+\begin_inset Quotes erd
+\end_inset
+
+.
+ Essentially this meas that all requests pertaining to a HTTP session must
+ be processed by the same cluster node.
+ This can be done by load balancers (even hardware load balancer) so they
+ would dispatch the requests based on JSESSIONID cookie.
+ Other approaches are that dispatching is done based on some URI or query
+ parameters.
+ For example a query parameter like serverid=1 is configured in the load
+ balancer to always be dispatched to the node 1 of the cluster, and so on.
+ There are some downsides for the sticky session approach.
+ For instance you are logged in the application and do your stuff.
+ Suddenly the node designated to your session crashes.
+ At this moment essentially you lost your session.
+ The next subsequent request would be automatically dispatched by the load
+ balancer to another cluster node and depending how your application is
+ built this may mean that you need to log in again or if part of the state
+ was persisted in DB you may resume your work from some point avoiding re-login
+ ...
+ but this is application specific behavior that is beyond the scope of this
+ discussion.
+ The advantages of sticky sessions are related with application performance
+ since in this model the state does not need to be replicated in all cluster
+ nodes which for significant state information can be quite time/resources
+ consuming.
+\end_layout
+
+\begin_layout Standard
+* Additional topics 
+\end_layout
+
+\begin_layout Standard
+* S.addAround and LoanWrapper 
+\end_layout
+
+\begin_layout Standard
+* How S.attr works in conjunction with XML attributes on snippets, etc and
+ with Rewriting
+\end_layout
+
+\begin_layout Standard
+This is going to be super-helpful for the later chapters, like WebServices
+ and Rewriting.
+\end_layout
+
+\end_body
+\end_document

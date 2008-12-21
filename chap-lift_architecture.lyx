@@ -1,4 +1,4 @@
-#LyX 1.6.0 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -43,7 +43,7 @@
 \begin_body
 
 \begin_layout Chapter
-Lift Architecture and Fundamentals
+Lift Fundamentals
 \begin_inset CommandInset label
 LatexCommand label
 name "cha:Lift-Architecture"
@@ -518,10 +518,10 @@ class Boot {
 \end_layout
 
 \begin_layout Section
-Request/Response Lifecycle
+The Rendering Process
 \begin_inset CommandInset label
 LatexCommand label
-name "sec:Request/Response-Lifecycle"
+name "sec:The-Rendering-Process"
 
 \end_inset
 
@@ -529,341 +529,57 @@ name "sec:Request/Response-Lifecycle"
 \end_layout
 
 \begin_layout Standard
-Now that we've explained what happens as Lift starts up, we're ready to
- discuss what happens when a Request comes in.
- The rendering pipeline is a non-trivial process, but we feel that it's
- important that you understand it at least at a high level.
- Going through it now should save some confusion later on when you actually
- use all of the functionality we mention here.
- One important thing we'd like to mention before digging into the details
- is that most of the configurable properties on LiftRules are of the type
- RulesSeq.
- With a RulesSeq you essentially have a list of functions or values that
- are applied in order.
- RulesSeq defines a prepend and append method that allows you to add new
- configuration items at the beginning or end of the configuration, respectively.
- This allows you to prioritize things like partial functions and compose
- various methods together to control Lift's behavior.
+Before we move on, we want to give a brief overview of the processes involved
+ when Lift transforms a request into a response (AKA the rendering pipeline
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+rendering pipeline
 \end_layout
 
-\begin_layout Standard
-The following list outlines, in order, the process of transforming a request
- into a response:
-\end_layout
+\end_inset
 
-\begin_layout Enumerate
-Execute early functions: this is a mechanism that allows a user function
- to be called before the request enters the normal processing chain.
- This can be used for, for example, to set the XHTML output to UTF-8.
- This is controlled through 
-\family typewriter
-LiftRules.early
+).
+ We're only going to touch on the major points here; a much more detailed
+ tour of the pipeline is given in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Request/Response-Lifecycle"
+
+\end_inset
+
+.
+ The steps that we'll cover in this chapter are:
 \end_layout
 
 \begin_layout Enumerate
-Perform URL Rewriting, which we cover in detail in section 
+Perform any URL rewriting.
+ This is covered in section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:URL-Rewriting"
 
 \end_inset
 
-.
- Controlled via 
-\family typewriter
-LiftRules.rewrite
-\family default
-, this is useful for creating user-friendly URLs, among other things.
- The result of the transformation will be checked for possible rewrites
- until there are no more matches or it is explicitly stopped
-\end_layout
-
-\begin_layout Enumerate
-Call 
-\family typewriter
-LiftRules.onBeginServicing
-\family default
- hooks.
- This is a mechanism that allows you to add your own hook functions that
- will be called when Lift is starting to process the request.
- You could set up logging here.
-\end_layout
-
-\begin_layout Enumerate
-Check for user-defined stateless dispatch in 
-\family typewriter
-LiftRules.statelessDispatchTable
-\family default
-.
- If the partial functions defined in this table match the request then they
- are used to create LiftResponse that is sent to the user, bypassing any
- further processing.
- These are very useful for building things like REST APIs.
- The term stateless refers to the fact that at the time the dispatch function
- is called, the stateful object, called 
-\family typewriter
-S
-\family default
-, is not available and the LiftSession is not created yet.
-\end_layout
-
-\begin_layout Enumerate
-Create a LiftSession.
- The LiftSession holds various bits of state for the request, and is covered
- in more detail in section 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "sec:Session-Management"
-
-\end_inset
-
 
 \end_layout
 
 \begin_layout Enumerate
-Call 
-\family typewriter
-LiftSession.onSetupSession
-\family default
-.
- This is a mechanism for adding hook functions that will be called when
- the LiftSession is created.
- We'll get into more details when we discuss Lift's session management in
- section 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "sec:Session-Management"
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Enumerate
-Initialize the 
-\family typewriter
-S
-\family default
- object (section 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "sub:S-object"
-
-\end_inset
-
-).
- The S object represents the current state of the request and response.
-\end_layout
-
-\begin_layout Enumerate
-Call any 
-\family typewriter
-LoanWrapper
-\family default
- instances that you've added through 
-\family typewriter
-S.addAround
-\family default
-.
- Essentially a 
-\family typewriter
-LoanWrapper
-\family default
- is a way to insert your own processing into the render pipeline, similar
- to how Filter works in the Servlet API.
- This means that when your LoanWrapper implementation is called, Lift passes
- you a function allowing you to chain the processing of the request.
- With this functionality you can execute your own pre- and post-condition
- code.
- A simple example of this would be if you need to make sure that something
- is configured at the start of processing and cleanly shut down when processing
- terminates
-\end_layout
-
-\begin_layout Enumerate
-Process the stateful request
-\end_layout
-
-\begin_deeper
-\begin_layout Enumerate
-Check the stateful dispatch functions defined in 
-\family typewriter
-LiftRules.dispatch
-\family default
-.
- This is similar to the stateless dispatch in step #4 except that these
- functions are executed in the context of a LiftSession and an 
-\family typewriter
-S
-\family default
- object (section 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "sub:S-object"
-
-\end_inset
-
-).
- The first matching partial function is used to generate a LiftResponse
- that is returned to the client.
- If none of the dispatch functions match then processing continues.
- Dispatch functions are covered in section 
+Execute any matching custom dispatch functions.
+ This is covered in section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Custom-dispatch-func"
 
 \end_inset
 
-.
- This flow is wrapped by LiftSession.onBeginServicing/onEndServicing calls
-\end_layout
-
-\begin_layout Enumerate
-If this is a 
-\series bold
-Comet
-\series default
- request, then process it and return the response.
- Comet is a method for performing asynchronous updates of the user's page
- without a reload.
- We cover Comet techniques in chapter 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "cha:AJAX-and-COMET"
-
-\end_inset
-
 
 \end_layout
 
 \begin_layout Enumerate
-If this is an 
-\series bold
-Ajax
-\series default
- request, execute the user's callback function; the specific function is
- mapped via a request parameter (essentially a token).
- The result of the callback is returned as the response to the user.
- The response can be a JavaScript snippet, an XML construct or virtually
- any 
-\family typewriter
-LiftResponse
-\family default
-.
- For an overview of 
-\family typewriter
-LiftResponse
-\family default
- please see section 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "sec:LiftResponse-in-Detail"
-
-\end_inset
-
-.
- This flow is wrapped by LiftSession.onBeginServicing/onEndServicing calls.
-\end_layout
-
-\begin_layout Enumerate
-If this is a regular HTTP request, then:
-\end_layout
-
-\begin_deeper
-\begin_layout Enumerate
-Call 
-\family typewriter
-LiftSession.onBeginServicing
-\family default
- hooks.
- Mostly 
-\begin_inset Quotes eld
-\end_inset
-
-onBegin
-\begin_inset Quotes erd
-\end_inset
-
-/
-\begin_inset Quotes erd
-\end_inset
-
-onEnd
-\begin_inset Quotes erd
-\end_inset
-
- functions are used for logging.
- Note that LiftRules also have onBeginServicing and onEndServicing functions
- but theae are 
-\begin_inset Quotes eld
-\end_inset
-
-wrapping
-\begin_inset Quotes erd
-\end_inset
-
- more Lift processing not only statefull processing.
-\end_layout
-
-\begin_layout Enumerate
-Check the user-defined dispatch functions that are set per-session (
-\family typewriter
-see S.addHighLevelSessionDispatcher
-\family default
-).
- Essentially this is similar with 
-\family typewriter
-LiftRules.dispatch
-\family default
- except that you can have different functions set up for different session
- depending on your application logic.
- If there is a function applicable, execute it and return its response.
- If there is no per-session dispatch function, process the request by executing
- the Scala function that user set up for specific events (such as when clicking
- a link, or pressing the submit button, or a function that will be executed
- when a form field is set etc.).
- Please see SHtml obejct 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "sub:SHtml"
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Enumerate
-Check the SiteMap and Loc functions.
- We cover SiteMap extensively in chapter 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "cha:SiteMap"
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Enumerate
-Lookup the template based on the Req path.
- Lift will locate the templates using various approaches:
-\end_layout
-
-\begin_deeper
-\begin_layout Enumerate
-Check the partial functions defined in 
-\family typewriter
-LiftRules.viewDispatch
-\family default
-.
- If there is a function defined for this path invoke it and return an Either[
-\begin_inset Formula $()\Rightarrow Can[NodeSeq]$
-\end_inset
-
-,LiftView].
- This allows you to either return the function for handling the view directly,
- or delegate to a LiftView subclass.
- LiftView is covered in section 
+Check to see if the request should be handled by a View.
+ This is covered in section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Views"
@@ -874,148 +590,22 @@ reference "sec:Views"
 \end_layout
 
 \begin_layout Enumerate
-If no viewDispatch functions match, then look for the template using the
- ServletContext's 
-\family typewriter
-getResourceAsStream
-\family default
-.
-\end_layout
-
-\end_deeper
-\begin_layout Enumerate
-Process the templates by executing snippets combining templates etc.
-\end_layout
-
-\begin_deeper
-\begin_layout Enumerate
-Merge <head> elements, as described in section e
+If the request is not handled by a View, find a template that matches and
+ use it.
+ We'll cover templates in section 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "sec:Head-Merge"
+reference "sec:Templates"
 
 \end_inset
 
 
-\end_layout
-
-\begin_layout Enumerate
-Update the internal functions map.
- Basically this associates the user's Scala functions with tokens that are
- passed around in subsequent requests using HTTP query parameters
-\end_layout
-
-\begin_layout Enumerate
-Clean up notices (see S.error, S.warning, S.notice) since they were already
- rendered.
- Notices are covered in section 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "cha:Message-Handling"
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Enumerate
-Call 
-\family typewriter
-LiftRules.convertResponse
-\family default
-.
- Basically this glues together different pieces if information such as the
- actual markup, the response headers, cookies, etc into a LiftResponse instance
-\end_layout
-
-\begin_layout Enumerate
-Check to see if lift needs to send HTTP redirect.
- For an overview please see 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "sec:HTTP-redirects"
-
-\end_inset
-
-
-\end_layout
-
-\end_deeper
-\begin_layout Enumerate
-Call 
-\family typewriter
-LiftSession.onEndServicing
-\family default
- hooks, the counterparts to 
-\family typewriter
-LiftSession.onBeginServicing
-\end_layout
-
-\end_deeper
-\begin_layout Enumerate
-Call 
-\family typewriter
-LiftRules.performTransform
-\family default
-.
- This is actually configured via the 
-\family typewriter
-LiftRules.responseTransformers
-\family default
- 
-\family typewriter
-RulesSeq
-\family default
-.
- Essentially, this is a list of functions on 
-\begin_inset Formula $LiftResponse\Rightarrow LiftResponse$
-\end_inset
-
- that allows the user to modify the response before it's sent to the client
-\end_layout
-
-\end_deeper
-\begin_layout Enumerate
-Call 
-\family typewriter
-LiftRules.onEndServicing
-\family default
- hooks.
- These are the stateless end-servicing hooks, called after the S object
- context is destroyed.
-\end_layout
-
-\begin_layout Enumerate
-Call any functions defined in 
-\family typewriter
-LiftRules.beforeSend
-\family default
-.
- This is the last place where you can modify the response before it's sent
- to the user
-\end_layout
-
-\begin_layout Enumerate
-Convert the LiftResponse to a raw byte stream and send it to client as an
- HTTP response.
-\end_layout
-
-\begin_layout Enumerate
-Call any functions defined in 
-\family typewriter
-LiftRules.afterSend
-\family default
-.
- Typically these would be used for cleanup
 \end_layout
 
 \begin_layout Standard
-We realize that this is a lot of information to digest in one pass, so as
- we continue to cover the specific details of the rendering pipeline you
- may want to keep a bookmark here so that you can come back and process
- the new information in the greater context of how Lift is working.
- Now that we've gone through to overview, let's get started on some of the
- actual mechanics!
+In our experience Views and Templates will cover most of your needs, but
+ as we'll demonstrate in later chapters, Lift has plenty of ways to customize
+ the request handling.
 \end_layout
 
 \begin_layout Section
@@ -1210,16 +800,7 @@ to generate some content.
 \end_layout
 
 \begin_layout Standard
-Templates are handled following rewriting and custom dispatch as we showed
- in section 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "sec:Request/Response-Lifecycle"
-
-\end_inset
-
-.
- During template processing, Lift tries to locate a file in the WAR tree
+During template processing, Lift tries to locate a file in the WAR tree
  that matches the request.
  Lift tries several suffixes (html, xhtml, htm, and no suffix) and also
  tries to match based on the client's Accept-Language header.
@@ -1390,15 +971,31 @@ As you can see, templates are a nice way of setting up your layout and then
 y if you composite your templates using the surround and embed tags.
  If you'd like more control or don't need a template for a certain section,
  you'll want to use a View, which is coming up in the next section.
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
-\begin_inset Note Greyedout
-status open
-
-\begin_layout Subparagraph
+\align center
 
 \series medium
+\begin_inset Box Shadowbox
+position "c"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "75col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+
+\size small
 If you inspect the API documentation closely, you might be tempted to manually
  load a template (from a snippet for example) using 
 \family typewriter
@@ -1705,16 +1302,6 @@ surrounds
 \family typewriter
 includes
 \family default
- 
-\begin_inset Note Note
-status collapsed
-
-\begin_layout Plain Layout
-Confirm this!
-\end_layout
-
-\end_inset
-
 , just like snippets; dispatch methods, on the other hand, expect a LiftResponse.
  That means that you can use the full power of the templating system from
  within your View, as shown in listing 
@@ -1777,8 +1364,13 @@ name "sub:snippet-tag"
 \begin_layout LyX-Code
 
 \family typewriter
-Usage: <lift:snippet form="GET/POST" type="Class:method" multipart="true/false"
- />
+Usage: <lift:snippet form="GET/POST" type="Class:method" 
+\end_layout
+
+\begin_layout LyX-Code
+
+\family typewriter
+           multipart="true/false" />
 \end_layout
 
 \begin_layout LyX-Code
@@ -2023,7 +1615,19 @@ binding
 \begin_inset Quotes erd
 \end_inset
 
->children</lift:surround>
+>
+\end_layout
+
+\begin_layout LyX-Code
+
+\family typewriter
+         children
+\end_layout
+
+\begin_layout LyX-Code
+
+\family typewriter
+       </lift:surround>
 \end_layout
 
 \begin_layout Standard
@@ -2249,10 +1853,22 @@ content
 \end_layout
 
 \begin_layout Standard
-\begin_inset Note Greyedout
+\align center
+\begin_inset Box Shadowbox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "75col%"
+special "none"
+height "1in"
+height_special "totalheight"
 status open
 
 \begin_layout Plain Layout
+
+\size small
 You cannot have a hidden template with the same name as a sub-directory
  of your webapp directory.
  For example, if you had an admin.html template in /templates-hidden, you
@@ -2406,10 +2022,22 @@ reference "cha:Lift-and-Javascript"
 \end_layout
 
 \begin_layout Standard
-\begin_inset Note Greyedout
+\align center
+\begin_inset Box Shadowbox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "75col%"
+special "none"
+height "1in"
+height_special "totalheight"
 status open
 
 \begin_layout Plain Layout
+
+\size small
 Note that if you use the embed tag to access templates from within a JsCmd
  (typically an Ajax call), any javascript in the embedded template won't
  be executed.
@@ -2669,7 +2297,7 @@ name "sec:Snippets"
 \end_layout
 
 \begin_layout Standard
-A snippet is a function that takes a single Scala.xml.NodeSeq
+A snippet is a function that takes a single NodeSeq
 \begin_inset Index
 status collapsed
 
@@ -3054,6 +2682,13 @@ As you can see here, we actually gain a line of code over our previous effort,
 
 \begin_layout Subsection
 Stateless versus Stateful Snippets
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Stateless-versus-Stateful"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -3288,10 +2923,7 @@ http://someplace.com/user/derek
 
 \begin_layout Standard
 The mechanism is fairly simple to set up.
- We need to write a function of type 
-\family typewriter
-PartialFunction[RewriteRequest,RewriteResponse]
-\family default
+ We need to write a partial function from a RewriteRequest to a RewriteResponse
  to determine if and how we want to rewrite particular requests.
  The simplest way to do this is with a match statement which will allow
  us to selectively match on some or all of the request information.
@@ -3434,7 +3066,6 @@ Parsed Path
 
 \begin_layout Plain Layout
 
-\series bold
 \size footnotesize
 http://foo.com/myapp/home?test_this=true
 \end_layout
@@ -3446,7 +3077,6 @@ http://foo.com/myapp/home?test_this=true
 
 \begin_layout Plain Layout
 
-\series bold
 \size footnotesize
 List[String](
 \begin_inset Quotes eld
@@ -3468,7 +3098,6 @@ home
 
 \begin_layout Plain Layout
 
-\series bold
 \size footnotesize
 http://foo.com/myapp/user/derek
 \end_layout
@@ -3480,7 +3109,6 @@ http://foo.com/myapp/user/derek
 
 \begin_layout Plain Layout
 
-\series bold
 \size footnotesize
 List[String](
 \begin_inset Quotes eld
@@ -3510,7 +3138,6 @@ derek
 
 \begin_layout Plain Layout
 
-\series bold
 \size footnotesize
 http://foo.com/myapp/view/item/14592
 \end_layout
@@ -3522,7 +3149,6 @@ http://foo.com/myapp/view/item/14592
 
 \begin_layout Plain Layout
 
-\series bold
 \size footnotesize
 List[String](
 \begin_inset Quotes eld
@@ -3603,7 +3229,6 @@ Modify for PocketChange
 
 \begin_layout Standard
 \begin_inset listings
-lstparams "basicstyle={\scriptsize},frame=single"
 inline false
 status open
 
@@ -3728,7 +3353,6 @@ RESTful
 
 \begin_layout Standard
 \begin_inset listings
-lstparams "basicstyle={\scriptsize},frame=single"
 inline false
 status open
 
@@ -3870,7 +3494,11 @@ web.xml
 Custom dispatch is realized, like rewriting, via a partial function.
  In this case, it's a function of type 
 \family typewriter
-PartialFunction[Req, () => Can[LiftResponse]]
+PartialFunction[Req,
+\begin_inset Formula $()\Rightarrow Can[LiftResponse]$
+\end_inset
+
+]
 \family default
  that will do the work.
  The 
@@ -4174,11 +3802,19 @@ HTTP redirects are an important part of many web applications.
 \begin_layout Enumerate
 Call S.redirectTo.
  When you do this, Lift throws an exception and catches it later on; that
- means that any of your code following the redirect is skipped
-\end_layout
+ means that any of your code following the redirect is skipped.
+ If you're using a StatefulSnippet (section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Stateless-versus-Stateful"
 
-\begin_layout Enumerate
-From a StatefulSnippet call this.redirectTo
+\end_inset
+
+), use 
+\family typewriter
+this.redirectTo
+\family default
+ so that your snippet instance is used when the redirect is processed.
 \end_layout
 
 \begin_layout Enumerate
