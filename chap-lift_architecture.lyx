@@ -4178,6 +4178,10 @@ Call S.redirectTo.
 \end_layout
 
 \begin_layout Enumerate
+From a StatefulSnippet call this.redirectTo
+\end_layout
+
+\begin_layout Enumerate
 When you need to return a LiftResponse you can just return a RedirectResponse
  or a RedirectWithState response.
 \end_layout
