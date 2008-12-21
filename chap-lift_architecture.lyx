@@ -1,4 +1,4 @@
-#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.0 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -714,7 +714,8 @@ reference "sec:Custom-dispatch-func"
 
 \end_inset
 
-
+.
+ This flow is wrapped by LiftSession.onBeginServicing/onEndServicing calls
 \end_layout
 
 \begin_layout Enumerate
@@ -733,35 +734,6 @@ reference "cha:AJAX-and-COMET"
 \end_inset
 
 
-\end_layout
-
-\begin_layout Enumerate
-Call 
-\family typewriter
-LiftSession.onBeginServicing
-\family default
-.
- This differs from 
-\family typewriter
-LiftRules.onBeginServicing
-\family default
- because at this point we have a stateful request (
-\family typewriter
-S
-\family default
- and 
-\family typewriter
-LiftSession
-\family default
-), so the hook function takes a 
-\family typewriter
-LiftSession
-\family default
- arg in addition to the 
-\family typewriter
-Req
-\family default
- arg
 \end_layout
 
 \begin_layout Enumerate
@@ -789,7 +761,8 @@ reference "sec:LiftResponse-in-Detail"
 
 \end_inset
 
-
+.
+ This flow is wrapped by LiftSession.onBeginServicing/onEndServicing calls.
 \end_layout
 
 \begin_layout Enumerate
@@ -798,17 +771,52 @@ If this is a regular HTTP request, then:
 
 \begin_deeper
 \begin_layout Enumerate
-Check the user-defined dispatch functions that are set per-session
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Where? Do you mean the callbacks for form elements, etc?
-\end_layout
-
+Call 
+\family typewriter
+LiftSession.onBeginServicing
+\family default
+ hooks.
+ Mostly 
+\begin_inset Quotes eld
 \end_inset
 
-.
+onBegin
+\begin_inset Quotes erd
+\end_inset
+
+/
+\begin_inset Quotes erd
+\end_inset
+
+onEnd
+\begin_inset Quotes erd
+\end_inset
+
+ functions are used for logging.
+ Note that LiftRules also have onBeginServicing and onEndServicing functions
+ but theae are 
+\begin_inset Quotes eld
+\end_inset
+
+wrapping
+\begin_inset Quotes erd
+\end_inset
+
+ more Lift processing not only statefull processing.
+\end_layout
+
+\begin_layout Enumerate
+Check the user-defined dispatch functions that are set per-session (
+\family typewriter
+see S.addHighLevelSessionDispatcher
+\family default
+).
+ Essentially this is similar with 
+\family typewriter
+LiftRules.dispatch
+\family default
+ except that you can have different functions set up for different session
+ depending on your application logic.
  If there is a function applicable, execute it and return its response.
  If there is no per-session dispatch function, process the request by executing
  the Scala function that user set up for specific events (such as when clicking
@@ -818,16 +826,6 @@ Where? Do you mean the callbacks for form elements, etc?
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sub:SHtml"
-
-\end_inset
-
-
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-TODO: Rewrite this item once we're clear on what it means
-\end_layout
 
 \end_inset
 
@@ -943,7 +941,6 @@ reference "sec:HTTP-redirects"
 \end_layout
 
 \end_deeper
-\end_deeper
 \begin_layout Enumerate
 Call 
 \family typewriter
@@ -954,6 +951,7 @@ LiftSession.onEndServicing
 LiftSession.onBeginServicing
 \end_layout
 
+\end_deeper
 \begin_layout Enumerate
 Call 
 \family typewriter
@@ -4406,7 +4404,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Defining a RequestVar
 \begin_inset CommandInset label
 LatexCommand label
@@ -4470,7 +4467,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Accessing the RequestVar
 \begin_inset CommandInset label
 LatexCommand label
@@ -4537,7 +4533,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Defining a Cleanup Function
 \begin_inset CommandInset label
 LatexCommand label
