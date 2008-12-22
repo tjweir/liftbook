@@ -1,4 +1,4 @@
-#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.0 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -3768,6 +3768,51 @@ height
 \end_inset
 
 ).map(_.toInt) openOr 300
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+Or you can use a slightly different approach:
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+val width = S.param(
+\begin_inset Quotes eld
+\end_inset
+
+width
+\begin_inset Quotes erd
+\end_inset
+
+).dmap(400)(_.toInt)
+\end_layout
+
+\begin_layout LyX-Code
+val height = S.param(
+\begin_inset Quotes eld
+\end_inset
+
+height
+\begin_inset Quotes erd
+\end_inset
+
+).dmap(300)(_.toInt)
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+Where dmap is identical with map function except the first argument is the
+ default value applicable in case that the Can is Empty.
 \end_layout
 
 \begin_layout Standard
