@@ -9,4 +9,4 @@ master.tex	: master.lyx
 master.aux	: master.tex
 	pdflatex master.tex
 clean:
-	rm -f *.tex images/*.eps *.toc *.aux *.dvi *.idx *.lof *.log *.out *.toc
+	rm -f *.tex images/*.eps *.toc *.aux *.dvi *.idx *.lof *.log *.out *.toc *.lol

@@ -1,0 +1,8 @@
+\ProvidesFile{t1Inconsolata.fd}[Inconsolata Font]
+\DeclareFontFamily{T1}{Inconsolata}{}
+\DeclareFontShape{T1}{Inconsolata}{m}{n}{<-> Inconsolata}{}
+\DeclareFontShape{T1}{Inconsolata}{b}{n}{<-> Inconsolata}{}
+\DeclareFontShape{T1}{Inconsolata}{bx}{n}{<-> Inconsolata}{}
+\DeclareFontShape{T1}{Inconsolata}{m}{it}{<-> Inconsolata}{}
+\DeclareFontShape{T1}{Inconsolata}{b}{it}{<-> Inconsolata}{}
+\DeclareFontShape{T1}{Inconsolata}{bx}{it}{<-> Inconsolata}{}

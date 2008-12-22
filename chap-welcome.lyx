@@ -461,6 +461,7 @@ http://groups.google.com/group/liftweb
 status collapsed
 
 \begin_layout Plain Layout
+
 http://groups.google.com/group/the-lift-book
 \end_layout
 
@@ -1328,7 +1329,6 @@ src/main/scala/demo/helloworld/snippet/HelloWorld.scala
 
 \begin_layout Standard
 \begin_inset listings
-lstparams "basicstyle={\scriptsize},frame=lines"
 inline false
 status open
 
@@ -1417,7 +1417,7 @@ bootstrap.liftweb
 
 \begin_layout Standard
 \begin_inset listings
-lstparams "basicstyle={\scriptsize},firstline=13,frame=lines"
+lstparams "firstline=13"
 inline false
 status open
 

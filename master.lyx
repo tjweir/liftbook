@@ -19,8 +19,11 @@ morecomment=[l]{//},
 morecomment=[s]{/*}{*/},
 morestring=[b]"}
 
+%\font\ttfinconsolata Inconsolata
+%\renewcommand{\ttdefault}{Inconsolata}
+
 % Default settings for code listings
-\lstset{frame=tb,language=scala,basicstyle=\small\ttfamily,aboveskip=3mm,belowskip=3mm,showstringspaces=false,columns=flexible,keywordstyle=\bfseries}
+\lstset{frame=tb,language=scala,aboveskip=3mm,belowskip=3mm,showstringspaces=false,columns=flexible,basicstyle={\small\ttfamily}}
 
 % Fix the List of Listings title
 \renewcommand{\lstlistlistingname}{List of Listings}
@@ -30,7 +33,7 @@ morestring=[b]"}
 \inputencoding auto
 \font_roman palatino
 \font_sans default
-\font_typewriter default
+\font_typewriter courier
 \font_default_family default
 \font_sc false
 \font_osf false
