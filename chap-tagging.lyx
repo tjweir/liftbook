@@ -1,8 +1,9 @@
-#LyX 1.5.6 created this file. For more info see http://www.lyx.org/
-\lyxformat 276
+#LyX 1.6.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
 \begin_document
 \begin_header
 \textclass book
+\use_default_options false
 \language english
 \inputencoding auto
 \font_roman default
@@ -13,9 +14,11 @@
 \font_osf false
 \font_sf_scale 100
 \font_tt_scale 100
+
 \graphics default
 \paperfontsize default
 \spacing single
+\use_hyperref false
 \papersize default
 \use_geometry false
 \use_amsmath 1
@@ -44,22 +47,53 @@ Tagging Support
 \end_layout
 
 \begin_layout Standard
+\begin_inset Box Framed
+position "t"
+hor_pos "c"
+has_inner_box 0
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status collapsed
+
+\begin_layout Plain Layout
+This chapter is still under active development.
+ The contents will change.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
 Planning:
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 - What are tags?
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 - Why Tags?
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 - Go other the tag architecture
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 - Add Tagging to PocketChange
 \end_layout
 
@@ -93,6 +127,11 @@ Show an implementation that does it.
 
 AfterSave
 \begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
 \end_inset
 
 

@@ -1,8 +1,9 @@
-#LyX 1.5.3 created this file. For more info see http://www.lyx.org/
-\lyxformat 276
+#LyX 1.6.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
 \begin_document
 \begin_header
 \textclass book
+\use_default_options false
 \language english
 \inputencoding auto
 \font_roman default
@@ -13,9 +14,11 @@
 \font_osf false
 \font_sf_scale 100
 \font_tt_scale 100
+
 \graphics default
 \paperfontsize default
 \spacing single
+\use_hyperref false
 \papersize default
 \use_geometry false
 \use_amsmath 1
@@ -44,13 +47,41 @@ JPA Integration
 \end_layout
 
 \begin_layout Standard
+\begin_inset Box Framed
+position "t"
+hor_pos "c"
+has_inner_box 0
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status collapsed
+
+\begin_layout Plain Layout
+This chapter is still under active development.
+ The contents will change.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 The Java Persistence API
 \begin_inset Foot
 status collapsed
 
-\begin_layout Standard
-\begin_inset LatexCommand htmlurl
-target "http://java.sun.com/javaee/overview/faq/persistence.jsp"
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://java.sun.com/javaee/overview/faq/persistence.jsp
+\end_layout
 
 \end_inset
 
@@ -60,8 +91,12 @@ target "http://java.sun.com/javaee/overview/faq/persistence.jsp"
 \end_inset
 
 , or JPA
-\begin_inset LatexCommand index
-name "JPA"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+JPA
+\end_layout
 
 \end_inset
 
@@ -71,8 +106,12 @@ name "JPA"
  JPA was developed as part of the EJB3 specification, with the goal of simplifyi
 ng the persistence model.
  Prior versions had used the Container Managed Persistence (CMP
-\begin_inset LatexCommand index
-name "CMP"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+CMP
+\end_layout
 
 \end_inset
 
@@ -80,16 +119,24 @@ name "CMP"
  and XML descriptors.
  As part of the overarching theme of EJB3 to simplify and use configuration
  by convention, JPA uses annotations
-\begin_inset LatexCommand index
-name "annotations"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+annotations
+\end_layout
 
 \end_inset
 
  heavily, while allowing for targetted overrides of behavior via XML descriptors.
  JPA also does away with many of the interfaces used in CMP and provides
  a single EntityManager
-\begin_inset LatexCommand index
-name "EntityManager"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+EntityManager
+\end_layout
 
 \end_inset
 
@@ -97,20 +144,32 @@ name "EntityManager"
  An additional benefit is that JPA was designed so that it could be used
  both inside and outside of the Enterprise container, and several projects
  (Hibernate
-\begin_inset LatexCommand index
-name "Hibernate"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+Hibernate
+\end_layout
 
 \end_inset
 
 , TopLink
-\begin_inset LatexCommand index
-name "TopLink"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+TopLink
+\end_layout
 
 \end_inset
 
 , JPOX
-\begin_inset LatexCommand index
-name "JPOX"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+JPOX
+\end_layout
 
 \end_inset
 
@@ -119,7 +178,8 @@ name "JPOX"
 
 \begin_layout Standard
 As we've seen in chapter 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "cha:mapper_and_record"
 
 \end_inset
@@ -143,7 +203,7 @@ JPA gives you more flexibility with complex and/or large schemas.
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 TODO: is it Record or Mapper?
 \end_layout
 
@@ -164,7 +224,7 @@ accessed objects in memory so that you avoid hitting the database entirely
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 May need to remove this if it's not true by printing
 \end_layout
 
@@ -184,8 +244,12 @@ In order to provide a concrete example to build on while learning how to
  integrate JPA, we'll be building a small Lift app to manage a library of
  books.
  The completed example is available under the Lift Git
-\begin_inset LatexCommand index
-name "Git"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+Git
+\end_layout
 
 \end_inset
 
@@ -199,7 +263,8 @@ JPADemo
 
 .
  Basic coverage of the JPA operations is in section 
-\begin_inset LatexCommand vref
+\begin_inset CommandInset ref
+LatexCommand vref
 reference "sec:JPA-Examples"
 
 \end_inset
@@ -210,15 +275,25 @@ reference "sec:JPA-Examples"
 \begin_inset Foot
 status collapsed
 
-\begin_layout Standard
-\begin_inset LatexCommand htmlurl
-target "http://java.sun.com/developer/technicalArticles/J2EE/jpa/"
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://java.sun.com/developer/technicalArticles/J2EE/jpa/
+\end_layout
 
 \end_inset
 
 , 
-\begin_inset LatexCommand htmlurl
-target "http://www.jpox.org/docs/1_2/tutorials/jpa_tutorial.html"
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://www.jpox.org/docs/1_2/tutorials/jpa_tutorial.html
+\end_layout
 
 \end_inset
 
@@ -229,8 +304,12 @@ target "http://www.jpox.org/docs/1_2/tutorials/jpa_tutorial.html"
 
 .
  Our first step is to set up a master project
-\begin_inset LatexCommand index
-name "master project"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+master project
+\end_layout
 
 \end_inset
 
@@ -238,7 +317,7 @@ name "master project"
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Will the Maven chapter have a section on master/module projects?
 \end_layout
 
@@ -248,14 +327,19 @@ Will the Maven chapter have a section on master/module projects?
  This project will have two modules under it, one for the JPA library and
  one for the Lift application.
  The only thing we actually need for the master project is the pom.xml
-\begin_inset LatexCommand index
-name "pom.xml"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+pom.xml
+\end_layout
 
 \end_inset
 
 .
  The complete pom.xml is shown in section 
-\begin_inset LatexCommand vref
+\begin_inset CommandInset ref
+LatexCommand vref
 reference "lst:JPA-Master-pom.xml"
 
 \end_inset
@@ -271,8 +355,12 @@ reference "lst:JPA-Master-pom.xml"
 The master pom.xml sets up some basic dependencies and plugin configurations
  which the modules will inherit.
  Our next step will be to create the JPA module using an archetype
-\begin_inset LatexCommand index
-name "archetype"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+archetype
+\end_layout
 
 \end_inset
 
@@ -280,7 +368,7 @@ name "archetype"
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 I need to get the JPA archetype set up
 \end_layout
 
@@ -306,8 +394,12 @@ Scala JPA
 
 \begin_layout Subsection
 Entity Classes
-\begin_inset LatexCommand index
-name "entity class"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+entity class
+\end_layout
 
 \end_inset
 
@@ -319,7 +411,8 @@ The main components of a JPA library are the entity classes that comprise
  your data model.
  For our example application we need two primary entities: Author and Book.
  Let's take a look at the Author class first, shown in listing 
-\begin_inset LatexCommand vref
+\begin_inset CommandInset ref
+LatexCommand vref
 reference "lst:Author.scala"
 
 \end_inset
@@ -337,7 +430,7 @@ reference "lst:Author.scala"
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 I think this changes in 2.8
 \end_layout
 
@@ -353,9 +446,14 @@ I think this changes in 2.8
 \begin_inset Foot
 status open
 
-\begin_layout Standard
-\begin_inset LatexCommand htmlurl
-target "https://lampsvn.epfl.ch/trac/scala/ticket/294"
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+https://lampsvn.epfl.ch/trac/scala/ticket/294
+\end_layout
 
 \end_inset
 
@@ -369,14 +467,19 @@ target "https://lampsvn.epfl.ch/trac/scala/ticket/294"
 \end_layout
 
 \begin_layout Subsection
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "sub:Using-the-orm.xml"
 
 \end_inset
 
 Using the orm.xml
-\begin_inset LatexCommand index
-name "orm.xml"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+orm.xml
+\end_layout
 
 \end_inset
 
@@ -391,15 +494,20 @@ As we stated in the last section, there are some instances where the Scala
  column names, etc) should be separate from code.
  Because of that, JPA allows you to specify an external mapping descriptor
  to define and/or override the mappings for your entity classes
-\begin_inset LatexCommand index
-name "entity classes"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+entity classes
+\end_layout
 
 \end_inset
 
 .
  The basic orm.xml file starts with the DTD type declaration, as shown in
  listing 
-\begin_inset LatexCommand vref
+\begin_inset CommandInset ref
+LatexCommand vref
 reference "lst:orm.xml"
 
 \end_inset
@@ -412,8 +520,13 @@ reference "lst:orm.xml"
  Putting them in the orm.xml allows us to modify them without requiring a
  recompile.
  The complete XML Schema Definition can be found at 
-\begin_inset LatexCommand htmlurl
-target "http://java.sun.com/xml/ns/persistence/orm_1_0.xsd"
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://java.sun.com/xml/ns/persistence/orm_1_0.xsd
+\end_layout
 
 \end_inset
 
@@ -427,7 +540,8 @@ In this case we have used the orm.xml file to augment our entity classes.
  Suppose we wished to change the column name for the Author's name property.
  We can add (per the XSD) a section to the Author entity element as shown
  in listing 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "lst:JPA-Author-override"
 
 \end_inset
@@ -445,8 +559,12 @@ attribute-override
  This gives us an extremely powerful method for controlling our schema mapping
  outside of the source code.
  We can also add named queries
-\begin_inset LatexCommand index
-name "named queries"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+named queries
+\end_layout
 
 \end_inset
 
@@ -460,12 +578,13 @@ lstparams "basicstyle={\footnotesize},float,frame=single,language=XML"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
-\begin_inset LatexCommand label
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:JPA-Author-override"
 
 \end_inset
@@ -478,37 +597,37 @@ Author override
   <entity class="Author">
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     <named-query name="findAllAuthors">
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       <query><![CDATA[from Author a order by a.name]]></query>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     </named-query>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     <attribute-override name="name">
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       <column name="author_name" length="30" />
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     </attribute-override>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   </entity>
 \end_layout
@@ -537,7 +656,8 @@ persist
 merge
 \family default
  methods (section 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "sub:Persisting,-merging-and-removing"
 
 \end_inset
@@ -579,7 +699,7 @@ JPA can handle any Java primitive type, their corresponding Object versions
 \begin_inset Foot
 status collapsed
 
-\begin_layout Standard
+\begin_layout Plain Layout
 It can technically handle more; see the JPA spec, section 2.1.1 for details
 \end_layout
 
@@ -589,8 +709,12 @@ It can technically handle more; see the JPA spec, section 2.1.1 for details
  Occasionally, though, you may have a requirement for a type that doesn't
  fit directly with those specifications.
  One example in particular would be Scala's enumerations
-\begin_inset LatexCommand index
-name "enumerations"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+enumerations
+\end_layout
 
 \end_inset
 
@@ -612,7 +736,8 @@ Java
 We begin by implementing a few helper classes besides the Genre enumeration
  itself.
  First, we define an Enumv trait, shown in listing 
-\begin_inset LatexCommand vref
+\begin_inset CommandInset ref
+LatexCommand vref
 reference "lst:Enumv-Trait"
 
 \end_inset
@@ -640,7 +765,8 @@ valueOf
 In order to actually convert the Enumeration class into the proper database
  type (String, Int, etc), we need to implement the Hibernate UserType interface,
  shown in listing 
-\begin_inset LatexCommand vref
+\begin_inset CommandInset ref
+LatexCommand vref
 reference "lst:EnumvType"
 
 \end_inset
@@ -711,12 +837,13 @@ lstparams "basicstyle={\scriptsize},breaklines=true,firstline=3,float,frame=sing
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
-\begin_inset LatexCommand label
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:Genre-and-GenreType"
 
 \end_inset
@@ -729,45 +856,45 @@ Genre and GenreType
 package com.foo.jpaweb.model
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 object Genre extends Enumeration with Enumv {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   val Mystery = Value("Mystery", "Mystery")
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   val Science = Value("Science", "Science")
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   val Theater = Value("Theater", "Drama literature")
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   // more values here...
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 }
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 class GenreType extends EnumvType(Genre) {}
 \end_layout
@@ -780,7 +907,8 @@ class GenreType extends EnumvType(Genre) {}
 \begin_layout Standard
 Finally, the Genre object and the associated GenreType is shown in listing
  
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "lst:Genre-and-GenreType"
 
 \end_inset
@@ -795,7 +923,8 @@ reference "lst:Genre-and-GenreType"
 var
 \family default
  and annotate it with the @Type annotation, as shown in listing 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "lst:Using-the-@Type"
 
 \end_inset
@@ -818,12 +947,13 @@ lstparams "basicstyle={\scriptsize},float,frame=single"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
-\begin_inset LatexCommand label
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:Using-the-@Type"
 
 \end_inset
@@ -836,7 +966,7 @@ Using the @Type annotation
   @Type{val `type` = "com.foo.jpaweb.model.GenreType"}
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   var genre : Genre.Value = Genre.unknown
 \end_layout
@@ -851,7 +981,8 @@ Now that we have our objects defined, let's start using them.
 \end_layout
 
 \begin_layout Section
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "sec:Obtaining-an-EM"
 
 \end_inset
@@ -887,15 +1018,19 @@ Fortunately for us, Lift provides just such a mechanism.
 \begin_inset Foot
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Notably, S.addAround with the LoanWrapper
 \end_layout
 
 \end_inset
 
 , but for now we're going to focus on just one: the RequestVar
-\begin_inset LatexCommand index
-name "RequestVar"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+RequestVar
+\end_layout
 
 \end_inset
 
@@ -910,7 +1045,7 @@ name "RequestVar"
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 TODO: cross-ref
 \end_layout
 
@@ -925,13 +1060,15 @@ The initial setup of the entity manager is done through the RequestVar's
  constructor.
  We define a RequestVar as an object (as opposed to a class) as shown in
  listing 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "lst:Setting-up-EM"
 
 \end_inset
 
  (the full listing is in section 
-\begin_inset LatexCommand vref
+\begin_inset CommandInset ref
+LatexCommand vref
 reference "lst:ScalaEntityManager"
 
 \end_inset
@@ -940,7 +1077,8 @@ reference "lst:ScalaEntityManager"
  In our example we're using an abstraction of the EntityManager (and Query)
  interfaces as a template for our concrete implementation; we'll cover these
  in section 
-\begin_inset LatexCommand vref
+\begin_inset CommandInset ref
+LatexCommand vref
 reference "sec:ScalaEntityManager-and-ScalaQuery"
 
 \end_inset
@@ -961,12 +1099,13 @@ lstparams "basicstyle={\scriptsize},breaklines=true,firstline=1,float,frame=sing
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
-\begin_inset LatexCommand label
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:Setting-up-EM"
 
 \end_inset
@@ -979,41 +1118,41 @@ Setting up an EntityManager via RequestVar
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 abstract class ScalaEntityManager(val persistanceName: String) {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   // The concrete impl should provide these methods 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   protected def openEM () : EntityManager 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   protected def closeEM (em : EntityManager)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   private object emVar extends RequestVar(openEM()) {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     override def cleanupFunc : Can[() => Unit]= Full(() => closeEM(this.is))
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   }
 \end_layout
@@ -1031,8 +1170,12 @@ Now that we've defined the mechanism for setting up and tearing down our
 
 \begin_layout Enumerate
 Construct the EntityManagerFactory
-\begin_inset LatexCommand index
-name "EntityManagerFactory"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+EntityManagerFactory
+\end_layout
 
 \end_inset
 
@@ -1041,8 +1184,12 @@ name "EntityManagerFactory"
 
 \begin_layout Enumerate
 Obtain an EntityManager via JNDI
-\begin_inset LatexCommand index
-name "JNDI"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+JNDI
+\end_layout
 
 \end_inset
 
@@ -1052,8 +1199,12 @@ name "JNDI"
 \begin_layout Standard
 Of these two, JNDI offers a cleaner approach from the standpoint of deployment.
  Using JNDI acts as a form of IoC
-\begin_inset LatexCommand index
-name "Inversion of Control"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+Inversion of Control
+\end_layout
 
 \end_inset
 
@@ -1072,7 +1223,8 @@ Creating a factory directly
 Creating a factory directly is fairly simple, and is the use case for apps
  that will run under the Java SE without access to the JEE facilicities.
  As shown in listing 
-\begin_inset LatexCommand vref
+\begin_inset CommandInset ref
+LatexCommand vref
 reference "lst:Creating-the-EM-directly"
 
 \end_inset
@@ -1104,9 +1256,15 @@ java:comp/env/persistence/<module name>
 \begin_inset Foot
 status open
 
-\begin_layout Standard
-\begin_inset LatexCommand htmlurl
-target "http://database.in2p3.fr/doc/oracle/Oracle_Application_Server_10_Release_3/web.1013/b28221/servjndi010.htm"
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://database.in2p3.fr/doc/oracle/Oracle_Application_Server_10_Release_3/web.1013
+/b28221/servjndi010.htm
+\end_layout
 
 \end_inset
 
@@ -1118,7 +1276,8 @@ target "http://database.in2p3.fr/doc/oracle/Oracle_Application_Server_10_Release
 .
  We'll cover how to set up JNDI on lightweight containers like Tomcat and
  Jetty in section 
-\begin_inset LatexCommand vref
+\begin_inset CommandInset ref
+LatexCommand vref
 reference "sec:Setting-up-JNDI-jetty"
 
 \end_inset
@@ -1126,7 +1285,8 @@ reference "sec:Setting-up-JNDI-jetty"
 , but for now we'll concentrate on the client side of things.
  We define our openEM method using the javax.naming.InitialContext class to
  obtain the EM from JNDI, as shown in listing 
-\begin_inset LatexCommand vref
+\begin_inset CommandInset ref
+LatexCommand vref
 reference "lst:EM-Via-JNDI"
 
 \end_inset
@@ -1138,14 +1298,22 @@ reference "lst:EM-Via-JNDI"
  we open begin and end the transaction outsid of the EM's lifecycle.
  In a production application you would want to put these steps into a try/catch
  or use LiftRules.browserResponseToException
-\begin_inset LatexCommand index
-name "browserResponseToException"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+browserResponseToException
+\end_layout
 
 \end_inset
 
 
-\begin_inset LatexCommand index
-name "LiftRules"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+LiftRules
+\end_layout
 
 \end_inset
 
@@ -1153,7 +1321,7 @@ name "LiftRules"
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 TODO: cross-ref
 \end_layout
 
@@ -1179,8 +1347,12 @@ However you obtain the EM, the general principles of how you use the EM
 
 \begin_layout Subsection
 Transactions
-\begin_inset LatexCommand index
-name "Transactions"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+Transactions
+\end_layout
 
 \end_inset
 
@@ -1193,9 +1365,14 @@ We're not going to go into too much detail here; there are better documents
 \begin_inset Foot
 status open
 
-\begin_layout Standard
-\begin_inset LatexCommand htmlurl
-target "http://java.sun.com/developer/EJTechTips/2005/tt0125.html"
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://java.sun.com/developer/EJTechTips/2005/tt0125.html
+\end_layout
 
 \end_inset
 
@@ -1222,7 +1399,8 @@ In JPA, transactions are required.
  JTA.
  Resource local transactions are what you use if you are managing the EM
  factory yourself (section 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "lst:Creating-the-EM-directly"
 
 \end_inset
@@ -1232,7 +1410,8 @@ reference "lst:Creating-the-EM-directly"
  Choosing between the two is as simple as setting a property in your persistence.
 xml file (and changing the code to open and close the EM).
  Listing 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "lst:Setting-the-transaction-type"
 
 \end_inset
@@ -1259,12 +1438,13 @@ lstparams "basicstyle={\scriptsize},float,frame=single,language=XML"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
-\begin_inset LatexCommand label
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:Setting-the-transaction-type"
 
 \end_inset
@@ -1277,26 +1457,26 @@ Setting the transaction type
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 <persistence-unit name="jpaweb" transaction-type="RESOURCE_LOCAL">
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   <non-jta-datasource>myDS</non-jta-datasource>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 <persistence-unit name="jpaweb" transaction-type="JTA">
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   <non-jta-datasource>myDS</jta-datasource>
 \end_layout
@@ -1323,7 +1503,8 @@ jta-data-source
 non-jta-datasource
 \family default
  element or you can set the provider properties, as shown in listing 
-\begin_inset LatexCommand vref
+\begin_inset CommandInset ref
+LatexCommand vref
 reference "lst:Setting-resource-local-properties"
 
 \end_inset
@@ -1334,9 +1515,15 @@ reference "lst:Setting-resource-local-properties"
 \begin_inset Foot
 status open
 
-\begin_layout Standard
-\begin_inset LatexCommand htmlurl
-target "http://www.oracle.com/technology/products/ias/toplink/JPA/essentials/toplink-jpa-extensions.html"
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://www.oracle.com/technology/products/ias/toplink/JPA/essentials/toplink-jpa-e
+xtensions.html
+\end_layout
 
 \end_inset
 
@@ -1349,9 +1536,14 @@ target "http://www.oracle.com/technology/products/ias/toplink/JPA/essentials/top
 \begin_inset Foot
 status open
 
-\begin_layout Standard
-\begin_inset LatexCommand htmlurl
-target "http://www.jpox.org/docs/1_2/persistence_unit.html"
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://www.jpox.org/docs/1_2/persistence_unit.html
+\end_layout
 
 \end_inset
 
@@ -1381,12 +1573,13 @@ lstparams "basicstyle={\scriptsize},breaklines=true,float,frame=single,language=
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
-\begin_inset LatexCommand label
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:Setting-resource-local-properties"
 
 \end_inset
@@ -1399,60 +1592,60 @@ Setting resource-local properties for Hibernate
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 <persistence>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
    <persistence-unit name="jpaweb" transaction-type="RESOURCE_LOCAL">
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       <properties>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
          <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLD
 ialect"/>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
          <property name="hibernate.connection.driver_class" value="org.postgresql.Dr
 iver"/>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
          <property name="hibernate.connection.username" value="somUser"/>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
          <property name="hibernate.connection.password" value="somePass"/>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
          <property name="hibernate.connection.url" value="jdbc:postgresql:jpaweb"/
 >
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       </properties>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
    </persistence-unit>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 </persistence>
 \end_layout
@@ -1477,7 +1670,8 @@ javax.persistence.NonUniqueResultException
 \end_layout
 
 \begin_layout Section
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "sec:ScalaEntityManager-and-ScalaQuery"
 
 \end_inset
@@ -1493,9 +1687,14 @@ r
 \begin_inset Foot
 status collapsed
 
-\begin_layout Standard
-\begin_inset LatexCommand htmlurl
-target "http://java.sun.com/javaee/5/docs/api/javax/persistence/EntityManager.html"
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://java.sun.com/javaee/5/docs/api/javax/persistence/EntityManager.html
+\end_layout
 
 \end_inset
 
@@ -1508,9 +1707,14 @@ target "http://java.sun.com/javaee/5/docs/api/javax/persistence/EntityManager.ht
 \begin_inset Foot
 status collapsed
 
-\begin_layout Standard
-\begin_inset LatexCommand htmlurl
-target "http://java.sun.com/javaee/5/docs/api/javax/persistence/Query.html"
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://java.sun.com/javaee/5/docs/api/javax/persistence/Query.html
+\end_layout
 
 \end_inset
 
@@ -1524,7 +1728,8 @@ target "http://java.sun.com/javaee/5/docs/api/javax/persistence/Query.html"
  List instead of java.util.List) and generic signatures so that we can avoid
  explicit casting.
  Listing 
-\begin_inset LatexCommand vref
+\begin_inset CommandInset ref
+LatexCommand vref
 reference "lst:ScalaEntityManager"
 
 \end_inset
@@ -1532,7 +1737,8 @@ reference "lst:ScalaEntityManager"
  shows the ScalaEntityManager class.
  We start with the method and RequestVar definitions that we discussed in
  section 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "sec:Obtaining-an-EM"
 
 \end_inset
@@ -1546,7 +1752,8 @@ reference "sec:Obtaining-an-EM"
 
 \begin_layout Standard
 Next, we have the ScalaQuery class in listing 
-\begin_inset LatexCommand vref
+\begin_inset CommandInset ref
+LatexCommand vref
 reference "lst:ScalaQuery"
 
 \end_inset
@@ -1562,7 +1769,8 @@ reference "lst:ScalaQuery"
 \end_layout
 
 \begin_layout Section
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "sec:JPA-Examples"
 
 \end_inset
@@ -1577,7 +1785,8 @@ We find it helpful to solidify what we've discussed here with some concrete
 \end_layout
 
 \begin_layout Subsection
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "sub:Persisting,-merging-and-removing"
 
 \end_inset
@@ -1603,7 +1812,8 @@ Model.persist(myNewAuthor)
 This attaches the myNewAuthor object to the current persistence session.
  Once the object is attached it should be visible in any subsequent queries,
  although it may not be written to the database just yet (see section 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "sub:The-importance-of-flush"
 
 \end_inset
@@ -1677,7 +1887,8 @@ The passed entity is detached from the session immediately and will be removed
  If the entity has any associations on it (to collections or other entities),
  they will be cascaded as indicated by the entity mapping.
  An example of a cascade is shown in the Author listing on page 
-\begin_inset LatexCommand pageref
+\begin_inset CommandInset ref
+LatexCommand pageref
 reference "lst:Author.scala"
 
 \end_inset
@@ -1717,7 +1928,7 @@ find
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Jorge has pointed out that this may change: http://groups.google.com/group/liftweb
 /browse_thread/thread/874b38daa0d535f7
 \end_layout
@@ -1744,7 +1955,7 @@ find
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 TODO: cross-ref
 \end_layout
 
@@ -1899,19 +2110,28 @@ paramName
 
  -> value).
  Named queries
-\begin_inset LatexCommand index
-name "named queries"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+named queries
+\end_layout
 
 \end_inset
 
  can be defined in your orm.xml
-\begin_inset LatexCommand index
-name "orm.xml"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+orm.xml
+\end_layout
 
 \end_inset
 
 , as shown in section 
-\begin_inset LatexCommand vref
+\begin_inset CommandInset ref
+LatexCommand vref
 reference "sub:Using-the-orm.xml"
 
 \end_inset
@@ -1984,7 +2204,10 @@ In general we recommend that you use named queries throughout your code.
 
 \begin_layout List
 \labelwidthstring 00.00.0000
-Named\InsetSpace ~
+Named
+\begin_inset space ~
+\end_inset
+
 parameters 
 \family typewriter
 select user from User where (user.name like :searchString or user.email like
@@ -1993,7 +2216,10 @@ select user from User where (user.name like :searchString or user.email like
 
 \begin_layout List
 \labelwidthstring 00.00.0000
-Positional\InsetSpace ~
+Positional
+\begin_inset space ~
+\end_inset
+
 parameters 
 \family typewriter
 select user from User where (user.name like ? or user.email like ?) and user.widget
@@ -2027,8 +2253,13 @@ In any case, you should generally use the parameterized query types as opposed
  opens up your site to SQL injection attacks unless you're very careful.
  For more information on queries there's an excellent reference for the
  EJBQL on the Hibernate website at 
-\begin_inset LatexCommand htmlurl
-target "http://www.hibernate.org/hib_docs/entitymanager/reference/en/html/queryhql.html"
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://www.hibernate.org/hib_docs/entitymanager/reference/en/html/queryhql.html
+\end_layout
 
 \end_inset
 
@@ -2050,9 +2281,14 @@ scala.collection.jcl.BufferWrapper
 \begin_inset Foot
 status collapsed
 
-\begin_layout Standard
-\begin_inset LatexCommand htmlurl
-target "http://java.sun.com/docs/books/tutorial/collections/index.html"
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://java.sun.com/docs/books/tutorial/collections/index.html
+\end_layout
 
 \end_inset
 
@@ -2075,8 +2311,12 @@ under the hood
  Fortunately, Scala has a very nice framework for wrapping Java collections.
  In particular, the scala.collection.jcl.Conversions class contains a number
  of implicit conversions
-\begin_inset LatexCommand index
-name "implicit conversions"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+implicit conversions
+\end_layout
 
 \end_inset
 
@@ -2099,7 +2339,8 @@ val suspenseful = author.books.exists(_.genre = Genre.Mystery)
 \end_layout
 
 \begin_layout Subsection
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "sub:The-importance-of-flush"
 
 \end_inset
@@ -2117,7 +2358,8 @@ It's important to understand that in JPA the provider isn't required to
  violations.
  As a convenience, we've written methods to do persist, merge and remove
  with a subsequent flush, as shown in listing 
-\begin_inset LatexCommand vref
+\begin_inset CommandInset ref
+LatexCommand vref
 reference "lst:ScalaEntityManager"
 
 \end_inset

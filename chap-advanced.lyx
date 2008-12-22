@@ -54,6 +54,29 @@ name "cha:Advanced-Lift-Guts"
 \end_layout
 
 \begin_layout Standard
+\begin_inset Box Framed
+position "t"
+hor_pos "c"
+has_inner_box 0
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status collapsed
+
+\begin_layout Plain Layout
+This chapter is still under active development.
+ The contents will change.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 Congratulations! You've either made it through the whole first section of
  the book, or you feel adventurous enough to skip right by some (or all)
  of it.
@@ -1121,42 +1144,35 @@ reference "sec:Request/Response-Lifecycle"
  Therefore you'll see in the console the following output:
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Standard
 \begin_inset listings
 inline false
 status open
 
 \begin_layout Plain Layout
 
-X
-\lang english
- -> hello to the request!
+X -> hello to the request!
 \end_layout
 
 \begin_layout Plain Layout
 
-Y
-\lang english
- -> hello to the request!
+Y -> hello to the request!
 \end_layout
 
 \begin_layout Plain Layout
+
 <Lift's logic ...
  whatever is printed here>
 \end_layout
 
 \begin_layout Plain Layout
 
-Y
-\lang english
- -> goodbye!
+Y -> goodbye!
 \end_layout
 
 \begin_layout Plain Layout
 
-X
-\lang english
- -> goodbye!
+X -> goodbye!
 \end_layout
 
 \end_inset
@@ -1363,7 +1379,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Attribute snippet
 \end_layout
 
