@@ -1439,5 +1439,230 @@ The utility of this support is quite obvious in so many situations.
  of the page to be rtl quite easily.
 \end_layout
 
+\begin_layout Section
+Lift JavaScript support
+\end_layout
+
+\begin_layout Standard
+You may already noticed Lift comes with a rich client side functionality.
+ By default it uses JQuery (http://jquery.com/) javascript framework.
+ So a lot of JavaScript artifacts are there for you to use them from Scala
+ code.
+ For instance Lift is adding the JavaScript code for Ajax/Comet support.
+ When you're using Ajax for example many times you want to return a little
+ JavaScript code to be executed on client side.
+ So instead of rturning from your Ajax function a String containing the
+ JavaScript code you can return a Lift object ...
+ in essence a JsExp.
+ So yes Lift abstract away a JavaScript expression (JsExp) and JavaScript
+ command (JsCmd) etc.
+ But let's dig a bit deeper in this Lift JS API.
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+net.liftweb.http.js.JsExp 
+\family default
+is a trait that abstracts a JavaScript expression.
+ For instance JE.ValById(
+\begin_inset Quotes eld
+\end_inset
+
+sometextfield
+\begin_inset Quotes erd
+\end_inset
+
+) which will render the JavaScript code document.getElementById('sometextfield').v
+alue.
+ The next important class is 
+\family typewriter
+net.liftweb.http.js.JsCmd 
+\family default
+which impersonated a JavaScript command.
+ For instance a call to a function.
+ Here is an example:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Calling an anonymous function
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import JE._
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+AnonFunc(ValById(
+\begin_inset Quotes eld
+\end_inset
+
+sometextfield
+\begin_inset Quotes erd
+\end_inset
+
+))).applied
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+//which will render the following JavaScript code:
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+function(){document.getElementById('sometextfield').value}()
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If you dig into code you'll see that apply function of the AnonFunc object
+ takes a JsCmd parameter but here we passed a JsExp.
+ This is ok because there is an implicit conversion from JsExp to JsCmd.
+ Please see the Lift API for JsCmd and JsExp subclasses.
+ You may find some plain Scala objects that do not extends JsExp or JsCmd
+ and yet they are used in JsExp.
+ That's becasue their apply functions return a JsExp or JsCmd.
+ There are other implicit functions defined to convert from String, Int,
+ Long etc.
+ to JsExp instances to ese up the code writing.
+\end_layout
+
+\begin_layout Standard
+Another important class is JsCommands.
+ It is actually used to chain JsCmd instances and construct a JavaScript
+ LiftResponse.
+ For example we can have:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+JsCommands example
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+(JsCommands.create & Alert(
+\begin_inset Quotes eld
+\end_inset
+
+Hello
+\begin_inset Quotes erd
+\end_inset
+
+) & Alert(
+\begin_inset Quotes eld
+\end_inset
+
+Lift
+\begin_inset Quotes erd
+\end_inset
+
+)).toResponse
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The above will create the LiftResponse having text/javascript content-type
+ and calls subsequently JavaScript alert(
+\begin_inset Quotes eld
+\end_inset
+
+Hello
+\begin_inset Quotes erd
+\end_inset
+
+) and then alert(
+\begin_inset Quotes eld
+\end_inset
+
+Lift
+\begin_inset Quotes erd
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Standard
+We barely scratched th surface of the JavaScript Scala API that Lift offers
+ and presented the fundamental classes.
+ It is not the scope of this book to discuss each ad every class but to
+ provide an understanding of the API.
+ If you have a large JavaScript code to build using Lift abstractions would
+ lead to more code to type so we recommend putting your code into a .js file
+ and include it in your page.
+ But for simple things Lift JS abstractions can be very useful.
+\end_layout
+
+\begin_layout Subsection
+JQuery and other JavaScript frameworks
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
 \end_body
 \end_document
