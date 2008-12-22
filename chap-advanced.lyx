@@ -1,4 +1,4 @@
-#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.0 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -705,7 +705,7 @@ We won't get into details right now oh what exactly each and every class/object
  It is important to know that whenever you need to return a LiftResponse
  reference from one of your functions, for example LiftRules.dispatch you
  can you can use one of these classes.
- So ultimatelly Lift doesn;t really provide you the HttpServletResponse
+ So ultimatelly Lift doesn't really provide you the HttpServletResponse
  object instead all Lift responses are impersonated by a LiftResponse instance
  and it content (the actual payload, http headers, content-type, cookies
  etc.) is written internally by Lift to the container's output stream.
@@ -953,22 +953,475 @@ sticky session
  consuming.
 \end_layout
 
-\begin_layout Standard
-* Additional topics 
+\begin_layout Section
+Wrapping Lift's processing logic
 \end_layout
 
 \begin_layout Standard
-* S.addAround and LoanWrapper 
+Lift provides so much fexibility to your application by allowing user's
+ functions to be part of processing lifecycle.
+ In this cases Lift allows you to provide your own function(s) and the actual
+ Lift's processing function is passed to you.
+ This means that calling Lift's logic is your responsability to call the
+ function provided by Lift and of course you can have code before and after
+ calling Lift's function.
 \end_layout
 
 \begin_layout Standard
-* How S.attr works in conjunction with XML attributes on snippets, etc and
- with Rewriting
+But let's see how exactly you can do this and we do that by starting with
+ a code snippet:
 \end_layout
 
 \begin_layout Standard
-This is going to be super-helpful for the later chapters, like WebServices
- and Rewriting.
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+LoanWrapper example
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+ class Boot {   
+\end_layout
+
+\begin_layout Plain Layout
+
+  def boot {    
+\end_layout
+
+\begin_layout Plain Layout
+
+    ...
+   
+\end_layout
+
+\begin_layout Plain Layout
+
+    S.addAround(new LoanWrapper { // Y   
+\end_layout
+
+\begin_layout Plain Layout
+
+      def apply[T](f: => T): T = {   
+\end_layout
+
+\begin_layout Plain Layout
+
+        println("Y -> hello to the request!")  
+\end_layout
+
+\begin_layout Plain Layout
+
+        val result = f // Let lift do normal request processing.
+   
+\end_layout
+
+\begin_layout Plain Layout
+
+		println("Y -> goodbye!")  
+\end_layout
+
+\begin_layout Plain Layout
+
+        result   
+\end_layout
+
+\begin_layout Plain Layout
+
+      }   
+\end_layout
+
+\begin_layout Plain Layout
+
+    })   
+\end_layout
+
+\begin_layout Plain Layout
+
+    S.addAround(new LoanWrapper { // X   
+\end_layout
+
+\begin_layout Plain Layout
+
+      def apply[T](f: => T): T = {   
+\end_layout
+
+\begin_layout Plain Layout
+
+        println("X -> hello to the request!")   
+\end_layout
+
+\begin_layout Plain Layout
+
+        val result = f // Let lift do normal request processing.
+   
+\end_layout
+
+\begin_layout Plain Layout
+
+        println("X -> goodbye!")   
+\end_layout
+
+\begin_layout Plain Layout
+
+        result
+\end_layout
+
+\begin_layout Plain Layout
+
+      }   
+\end_layout
+
+\begin_layout Plain Layout
+
+    })   
+\end_layout
+
+\begin_layout Plain Layout
+
+ }  
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Actually the code looks pretty straight forward in the sense that we add
+ two LoanWrapper instances to the S object.
+ Note that we're using S object not LiftRules meaning that LoanWrapper-s
+ are applicable only for stateful processing.
+ See at 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Request/Response-Lifecycle"
+
+\end_inset
+
+ when exactly LoanWrapper-s are invoked.
+ But so far we added our code so what will happen when a request is sent
+ from clinet? In a glance the invocation sequence will be X(Y(f)) where
+ f is the Lift's function that actually impersonates the core processing.
+ Therefore you'll see in the console the following output:
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+X
+\lang english
+ -> hello to the request!
+\end_layout
+
+\begin_layout Plain Layout
+
+Y
+\lang english
+ -> hello to the request!
+\end_layout
+
+\begin_layout Plain Layout
+<Lift's logic ...
+ whatever is printed here>
+\end_layout
+
+\begin_layout Plain Layout
+
+Y
+\lang english
+ -> goodbye!
+\end_layout
+
+\begin_layout Plain Layout
+
+X
+\lang english
+ -> goodbye!
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The utility of this feature is when you want to open/acquire some resources
+ before Lift does its job and release them after Lift processed the stateful
+ request and LiftResponse object is constructed.
+\end_layout
+
+\begin_layout Section
+More on snippets
+\end_layout
+
+\begin_layout Standard
+By now you already have a fairly good idea how snippets work, how you can
+ use them etc.
+ There are a few things that were not revealed yet to you, such as:
+\end_layout
+
+\begin_layout Enumerate
+Ability to pass parameters to snippets
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Snippet attributes
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<lift:Ledger.balance default=
+\begin_inset Quotes erd
+\end_inset
+
+10
+\begin_inset Quotes erd
+\end_inset
+
+>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <ledger:balance/> as of <ledger:time />
+\end_layout
+
+\begin_layout Plain Layout
+
+</lift:Ledger.balance>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+How do we read the 
+\emph on
+default
+\emph default
+ attribute from the snippet code? Actualy it is only about calling S.attr
+ function.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Snippet attributes
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+class Ledger {
+\end_layout
+
+\begin_layout Plain Layout
+
+  def balance (content : NodeSeq ) : NodeSeq = {
+\end_layout
+
+\begin_layout Plain Layout
+
+	val dflt = S.attr(
+\begin_inset Quotes eld
+\end_inset
+
+default
+\begin_inset Quotes erd
+\end_inset
+
+) openOr 
+\begin_inset Quotes eld
+\end_inset
+
+0
+\begin_inset Quotes erd
+\end_inset
+
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+    bind (
+\begin_inset Quotes eld
+\end_inset
+
+ledger
+\begin_inset Quotes erd
+\end_inset
+
+, content,
+\end_layout
+
+\begin_layout Plain Layout
+
+          
+\begin_inset Quotes eld
+\end_inset
+
+balance
+\begin_inset Quotes erd
+\end_inset
+
+ -> Text(currentLegdger.formattedBalance),
+\end_layout
+
+\begin_layout Plain Layout
+
+          
+\begin_inset Quotes eld
+\end_inset
+
+time
+\begin_inset Quotes erd
+\end_inset
+
+ -> Text((new java.util.Date).toString))
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Use snippets for tag attributes
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Attribute snippet
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// In your page you can have
+\end_layout
+
+\begin_layout Plain Layout
+
+<div lift:snippet="MyDivThing:calcDir"> ...
+ </div>
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+...
+\end_layout
+
+\begin_layout Plain Layout
+
+// Your snippet
+\end_layout
+
+\begin_layout Plain Layout
+
+class MyDivThing {   
+\end_layout
+
+\begin_layout Plain Layout
+
+  def calcDir = new UnprefixedAttribute("dir", "rtl", Null)
+\end_layout
+
+\begin_layout Plain Layout
+
+} 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+The utility of this support is quite obvious in so many situations.
+ For instance when supporting right-to-left languages you can add the direction
+ of the page to be rtl quite easily.
 \end_layout
 
 \end_body
