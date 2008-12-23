@@ -43,7 +43,7 @@
 \begin_body
 
 \begin_layout Chapter
-Advanced Lift Architecture
+Lift Architecture and advanced topics
 \begin_inset CommandInset label
 LatexCommand label
 name "cha:Advanced-Lift-Guts"
@@ -136,6 +136,8 @@ The diagram above highlights the main Lift components and how a Lift application
 \end_layout
 
 \begin_layout Standard
+
+\series bold
 Components description synopsis
 \end_layout
 
@@ -209,7 +211,7 @@ Utils - contains a lot of helper functions that Lift internally uses but
  your application can as well.
 \end_layout
 
-\begin_layout Section
+\begin_layout Subsection
 The Request/Response Lifecycle
 \begin_inset CommandInset label
 LatexCommand label
@@ -514,7 +516,7 @@ Check the user-defined dispatch functions that are set per-session (
 see S.addHighLevelSessionDispatcher
 \family default
 ).
- Essentially this is similar with 
+ This is similar with 
 \family typewriter
 LiftRules.dispatch
 \family default
@@ -670,7 +672,7 @@ LiftRules.responseTransformers
 RulesSeq
 \family default
 .
- Essentially, this is a list of functions on 
+ This is a list of functions on 
 \begin_inset Formula $LiftResponse\Rightarrow LiftResponse$
 \end_inset
 
@@ -719,7 +721,7 @@ We realize that this is a lot of information to digest in one pass, so as
  the new information in the greater context of how Lift is working.
 \end_layout
 
-\begin_layout Section
+\begin_layout Subsection
 LiftResponse in Detail
 \begin_inset CommandInset label
 LatexCommand label
@@ -858,7 +860,7 @@ We won't get into details right now oh what exactly each and every class/object
  etc.) is written internally by Lift to the container's output stream.
 \end_layout
 
-\begin_layout Section
+\begin_layout Subsection
 Session Management 
 \begin_inset CommandInset label
 LatexCommand label
@@ -1075,8 +1077,8 @@ sticky session
 \end_inset
 
 .
- Essentially this meas that all requests pertaining to a HTTP session must
- be processed by the same cluster node.
+ This meas that all requests pertaining to a HTTP session must be processed
+ by the same cluster node.
  This can be done by load balancers (even hardware load balancer) so they
  would dispatch the requests based on JSESSIONID cookie.
  Other approaches are that dispatching is done based on some URI or query
@@ -1101,14 +1103,23 @@ sticky session
 \end_layout
 
 \begin_layout Section
+Miscellaneous Lift goodies
+\end_layout
+
+\begin_layout Standard
+In this section we'll be discussing about various features that can prove
+ very helpful in building rich Lift applications.
+\end_layout
+
+\begin_layout Subsection
 Wrapping Lift's processing logic
 \end_layout
 
 \begin_layout Standard
-Lift provides so much fexibility to your application by allowing user's
+Lift provides so much flexibility to your application by allowing user's
  functions to be part of processing lifecycle.
- In this cases Lift allows you to provide your own function(s) and the actual
- Lift's processing function is passed to you.
+ In these cases Lift allows you to provide your own function(s) and the
+ actual Lift's processing function is passed to you.
  This means that calling Lift's logic is your responsability to call the
  function provided by Lift and of course you can have code before and after
  calling Lift's function.
@@ -1310,7 +1321,7 @@ The utility of this feature is when you want to open/acquire some resources
  request and LiftResponse object is constructed.
 \end_layout
 
-\begin_layout Section
+\begin_layout Subsection
 More on snippets
 \end_layout
 
@@ -1561,6 +1572,10 @@ class MyDivThing {
 The utility of this support is quite obvious in so many situations.
  For instance when supporting right-to-left languages you can add the direction
  of the page to be rtl quite easily.
+\end_layout
+
+\begin_layout Subsection
+Notices/Warnings/Errors messages
 \end_layout
 
 \end_body
