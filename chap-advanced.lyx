@@ -86,6 +86,130 @@ Congratulations! You've either made it through the whole first section of
 \end_layout
 
 \begin_layout Section
+Lift architecture
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/LiftArch.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Architcture diagram
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The diagram above highlights the main Lift components and how a Lift application
+ ecosystem looks like.
+ As you already know it runs on Java Virtual Machine since a Scala program
+ compiles to Java bytecode and of course we need a J(2)EE web container
+ (Jetty, Tomcat etc.) to deploy a lift application.
+ Lift is bounded as a web application through Filter component (as explained
+ in earlier chapters) and this is the entry point to Lift world.
+ From here as you've already seen we have a specific Lift application structure,
+ we've seen how we configure Lift from Boot, how snippets are used etc.
+\end_layout
+
+\begin_layout Standard
+Components description synopsis
+\end_layout
+
+\begin_layout Enumerate
+SiteMap - contains the web pages for a Lift application.
+ 
+\end_layout
+
+\begin_layout Enumerate
+LiftRules - allows you to configure Lift
+\end_layout
+
+\begin_layout Enumerate
+LiftSession - the session state representation
+\end_layout
+
+\begin_layout Enumerate
+S - the stateful object impersonating the state context for a given request/resp
+onse lifecycle
+\end_layout
+
+\begin_layout Enumerate
+SHtml - contains helper functions for XHtml artifacts (form fields, links,
+ Ajax links, buttons, etc.)
+\end_layout
+
+\begin_layout Enumerate
+Views - LiftView objects impersonating a view as a XML content.
+ Thus pages can be composed from other sources not only from html files.
+\end_layout
+
+\begin_layout Enumerate
+LiftResponse - represents the abstraction of a response that will be propagated
+ to the client.
+\end_layout
+
+\begin_layout Enumerate
+LiftCore - The engine of the framework responsible for request/response
+ lifecycle, rendering pipeline, invoking user's functions etc.
+\end_layout
+
+\begin_layout Enumerate
+Comet - represents the Comet actors layer.
+ As you already know, comet actors are capable of sending asynchronous content
+ to the browser.
+\end_layout
+
+\begin_layout Enumerate
+Mapper/Record (ORM) framework - The lightweight ORM library proposed by
+ Lift.
+ Mapper framework is the proposed ORM framework for Lift 1.0 and Record framework
+ will be for next releases.
+\end_layout
+
+\begin_layout Enumerate
+HTTP Auth - You can use HTTP authentication (Basic and Digest models) in
+ your lift application.
+ This provides you more control as opposed to web-container's HTTP authenticatio
+n model.
+\end_layout
+
+\begin_layout Enumerate
+JS API - The JavaScript abstraction layer.
+ Fundamentally these are Scala classes/objects that abstract JavaScript
+ artifacts.
+ Such objects can be combined to build JavaScript code.
+\end_layout
+
+\begin_layout Enumerate
+Utils - contains a lot of helper functions that Lift internally uses but
+ your application can as well.
+\end_layout
+
+\begin_layout Section
 The Request/Response Lifecycle
 \begin_inset CommandInset label
 LatexCommand label
