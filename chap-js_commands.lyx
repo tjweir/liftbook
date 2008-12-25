@@ -277,7 +277,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 JSArtifacts trait
 \end_layout
 
@@ -595,7 +594,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Lift YUI scripts 
 \end_layout
 
@@ -626,8 +624,7 @@ Lift YUI scripts
 
 \begin_layout Plain Layout
 
- <script src="/classpath/yui/json.js" type="text/javascript"></script>  
- 
+ <script src="/classpath/yui/json.js" type="text/javascript"/>   
 \end_layout
 
 \begin_layout Plain Layout
@@ -660,7 +657,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Configuring Lift YUI
 \end_layout
 
@@ -744,6 +740,560 @@ If you do not necessary need YUI widgets or if you can find similar funcionality
 
 \begin_layout Enumerate
 Do not mix JQuery and YUI unless you really know what you are doing.
+\end_layout
+
+\begin_layout Subsection
+XML and JavaScript
+\end_layout
+
+\begin_layout Standard
+There are situations when you need to build dynamic DOM elements from JavaScript
+ code and build dynamic lists, for example.
+ Lift has a really interesting way of dealing with such situation and with
+ a few lines of code you are achieving quite a lot.
+ For instance there are a set of classes (we call them Jx classes) that
+ you can use to transform a scala.xml.NodeSeq into javascript code that generates
+ dynamically the nodes on the client side.
+ But let's see a few examples and comment them.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Jx trivial example
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+ ...
+\end_layout
+
+\begin_layout Plain Layout
+
+ import net.liftweb.http.js._ 
+\end_layout
+
+\begin_layout Plain Layout
+
+ import JE._
+\end_layout
+
+\begin_layout Plain Layout
+
+ ...
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+ val div = Jx(<div>Hi there</div>)      
+\end_layout
+
+\begin_layout Plain Layout
+
+ println(div.toJs) 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+ /* This will print out:
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+ function(it) {var df = document.createDocumentFragment();
+\end_layout
+
+\begin_layout Plain Layout
+
+ var vINIJ1YTZG5 = document.createElement('div');
+\end_layout
+
+\begin_layout Plain Layout
+
+ df.appendChild(vINIJ1YTZG5);
+\end_layout
+
+\begin_layout Plain Layout
+
+ vINIJ1YTZG5.appendChild(document.createTextNode('Hi there'));
+\end_layout
+
+\begin_layout Plain Layout
+
+ return df;}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+So Lift took our XML code and transfomed it into a JavaScript function that
+ dynamically creates a document fragment containing the same node.
+ The it parameter can be any JavaScript object that you can exploit.
+\end_layout
+
+\begin_layout Standard
+But of course this is not all there is to it.
+ Let's take a look on a more complex example.
+ Assume we have a JSON structure that contains an array of objects containing
+ firstName and lastName properties.
+ Such JSON structure could look something like:
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+var list = {
+\end_layout
+
+\begin_layout Plain Layout
+
+	persons: [
+\end_layout
+
+\begin_layout Plain Layout
+
+		{name: 
+\begin_inset Quotes eld
+\end_inset
+
+Thor
+\begin_inset Quotes erd
+\end_inset
+
+, race: 
+\begin_inset Quotes eld
+\end_inset
+
+Asgard
+\begin_inset Quotes erd
+\end_inset
+
+}, 
+\end_layout
+
+\begin_layout Plain Layout
+
+		{name: 
+\begin_inset Quotes eld
+\end_inset
+
+Todd
+\begin_inset Quotes erd
+\end_inset
+
+, race: 
+\begin_inset Quotes eld
+\end_inset
+
+Wraith
+\begin_inset Quotes erd
+\end_inset
+
+}, 
+\end_layout
+
+\begin_layout Plain Layout
+
+		{name: 
+\begin_inset Quotes eld
+\end_inset
+
+Rodney
+\begin_inset Quotes erd
+\end_inset
+
+, race: 
+\begin_inset Quotes eld
+\end_inset
+
+Human
+\begin_inset Quotes erd
+\end_inset
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+	]
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+// Guess what I've been watching lately ?
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now assume that we want to render this content as an HTML dynamic list:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+...
+\end_layout
+
+\begin_layout Plain Layout
+
+def renderPerson = Jx(<li class="item_header"> {JsVar("it", "name")} is
+ {JsVar("it", "race")}</li>) 
+\end_layout
+
+\begin_layout Plain Layout
+
+...
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+Jx(<ul>{JxMap(JsVar("it.persons"), renderPerson)}</ul>)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Well whay this code does is this
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Construct an <ul> list that contains a bunch of elements
+\end_layout
+
+\begin_layout Enumerate
+JxMap takes a JavaScript object, in this case it.persons (remember it is
+ the parameter of the generated function), and iterate for each element
+ of the array and apply the renderPerson function.
+ Of course each element of the array will be a JSON object containing name
+ and race properties.
+\end_layout
+
+\begin_layout Enumerate
+renderPerson function also generates a JavaScript function as we've seen
+ above and renders the JavaScript code that generts the <li> elements containing
+ the name value followed by 
+\begin_inset Quotes eld
+\end_inset
+
+is
+\begin_inset Quotes erd
+\end_inset
+
+ followed by the race value.
+\end_layout
+
+\begin_layout Enumerate
+If we send this generated JavaScript function to client and calling it by
+ passs the 
+\emph on
+list
+\emph default
+ variable above It will create the following document fragment:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+<ul>
+\end_layout
+
+\begin_layout Plain Layout
+
+ <li class=
+\begin_inset Quotes erd
+\end_inset
+
+item_header
+\begin_inset Quotes erd
+\end_inset
+
+>Thor is Asgard</li>
+\end_layout
+
+\begin_layout Plain Layout
+
+ <li class=
+\begin_inset Quotes erd
+\end_inset
+
+item_header
+\begin_inset Quotes erd
+\end_inset
+
+>Todd is Wraith</li>
+\end_layout
+
+\begin_layout Plain Layout
+
+ <li class=
+\begin_inset Quotes erd
+\end_inset
+
+item_header
+\begin_inset Quotes erd
+\end_inset
+
+>Rodney is Human</li>
+\end_layout
+
+\begin_layout Plain Layout
+
+</ul>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+So with a couple of lines of code we manaed to generate the JavaScript code
+ that creates document fragments dynamically.
+\end_layout
+
+\begin_layout Standard
+Here is the list of JX classes that you may find interesting:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="7" columns="2">
+<features>
+<column alignment="left" valignment="top" width="0">
+<column alignment="left" valignment="top" width="0">
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+JxBase
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+The parent trait for all other Jx classes
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+JxMap
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Iterates over a JavaScript array and applies a function on each element
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+JxMatch
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Match a JsExp against a sequence of JsCase
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+JxCase
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Contains a JsExp for matching purposes and the NodeSeq tobe applied in cas
+ the matching succeeds
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+JxIf
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Contains a JsExp and a NodeSeq to be applied only if JsExp is evaluated
+ to true
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+JxIfElse
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Similar with JxIf but it contains the else branch
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Jx
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+The basic application of the transformation from a NodeSeq to the JavaScript
+ code
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
 \end_layout
 
 \end_body
