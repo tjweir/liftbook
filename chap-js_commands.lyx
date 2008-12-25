@@ -61,9 +61,8 @@ JavaScript high level abstractions
 You may already noticed that Lift comes with a rich client side functionality.
  By default it uses JQuery (http://jquery.com/) javascript framework.
  So a lot of JavaScript artifacts are there for you to use them from Scala
- code.
- For instance Lift is adding the JavaScript code for Ajax/Comet support.
- When you're using Ajax for example many times you want to return a little
+ code; for instance Lift is adding the JavaScript code for Ajax/Comet support.
+ When you are using Ajax, for example, many times you want to return a little
  JavaScript code to be executed on client side.
  So instead of returning from your Ajax function a String containing the
  JavaScript code you can return a Lift object ...
@@ -339,7 +338,12 @@ trait JSArtifacts {
 
 \begin_layout Plain Layout
 
-   */   def hide(id: String): JsExp
+   */
+\end_layout
+
+\begin_layout Plain Layout
+
+  def hide(id: String): JsExp
 \end_layout
 
 \begin_layout Plain Layout
@@ -575,7 +579,7 @@ net.liftweb.http.js.jquery
 
 \begin_layout Standard
 Changing one implementation or another can be done from LiftRules.jsArtifacts
- variable which bydefault points to JQueryArtifacts.
+ variable which by default points to JQueryArtifacts.
  However each JavaScript framework comes with its own JS scripts and perhaps
  its own dependencies.
  For YUI you need to include the following scripts (at minimum):
@@ -639,7 +643,11 @@ Lift YUI scripts
 \begin_layout Standard
 ..
  of course you can probably lint them into a single JS file for optimizations.
- Of course in Boot we need to configure YUIArtifacts:
+ 
+\end_layout
+
+\begin_layout Standard
+Now in Boot we need to configure YUIArtifacts:
 \end_layout
 
 \begin_layout Standard
@@ -663,7 +671,7 @@ Configuring Lift YUI
 
 \begin_layout Plain Layout
 
-...
+ ...
 \end_layout
 
 \begin_layout Plain Layout
@@ -727,8 +735,8 @@ Recommendations
 \end_layout
 
 \begin_layout Enumerate
-If you do not necessary need YUI widgets or if you can find then as JQuery
- plugins we recommend using JQuery framewok.
+If you do not necessary need YUI widgets or if you can find similar funcionality
+ in JQuery plugins, we recommend using JQuery framewok.
  One of the reasons (besides the fact that we like JQuery more) is that
  Lift comes with a great deal of JsCmd and JsExp classes/objects for abstracting
  JQuery goodies.
