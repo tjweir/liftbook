@@ -65,10 +65,10 @@ You may already noticed that Lift comes with a rich client side functionality.
  For instance Lift is adding the JavaScript code for Ajax/Comet support.
  When you're using Ajax for example many times you want to return a little
  JavaScript code to be executed on client side.
- So instead of rturning from your Ajax function a String containing the
+ So instead of returning from your Ajax function a String containing the
  JavaScript code you can return a Lift object ...
- in essence a JsExp.
- So yes Lift abstract away a JavaScript expression (JsExp) and JavaScript
+ in essence a JsExp or JsCmd.
+ So yes Lift abstracts away a JavaScript expression (JsExp) and JavaScript
  command (JsCmd) etc.
  But let's dig a bit deeper in this Lift JS API.
 \end_layout
@@ -93,7 +93,7 @@ alue.
 \family typewriter
 net.liftweb.http.js.JsCmd 
 \family default
-which impersonated a JavaScript command.
+which impersonates a JavaScript command.
  For instance a call to a function.
  Here is an example:
 \end_layout
@@ -135,7 +135,7 @@ sometextfield
 \begin_inset Quotes erd
 \end_inset
 
-))).applied
+)))
 \end_layout
 
 \begin_layout Plain Layout
@@ -145,7 +145,7 @@ sometextfield
 
 \begin_layout Plain Layout
 
-function(){document.getElementById('sometextfield').value}()
+function(){document.getElementById('sometextfield').value}
 \end_layout
 
 \end_inset
@@ -155,7 +155,7 @@ function(){document.getElementById('sometextfield').value}()
 
 \begin_layout Standard
 If you dig into code you'll see that apply function of the AnonFunc object
- takes a JsCmd parameter but here we passed a JsExp.
+ takes a JsCmd parameter but here we've passed a JsExp.
  This is ok because there is an implicit conversion from JsExp to JsCmd.
  Please see the Lift API for JsCmd and JsExp subclasses.
  You may find some plain Scala objects that do not extends JsExp or JsCmd
@@ -247,18 +247,495 @@ Lift
 \end_layout
 
 \begin_layout Standard
-We barely scratched th surface of the JavaScript Scala API that Lift offers
+We barely scratched the surface of the JavaScript Scala API that Lift offers
  and presented the fundamental classes.
  It is not the scope of this book to discuss each ad every class but to
  provide an understanding of the API.
  If you have a large JavaScript code to build using Lift abstractions would
  lead to more code to type so we recommend putting your code into a .js file
  and include it in your page.
- But for simple things Lift JS abstractions can be very useful.
+ But for simple things Lift JS abstractions can be extremely useful.
 \end_layout
 
 \begin_layout Subsection
 JQuery and other JavaScript frameworks
+\end_layout
+
+\begin_layout Standard
+We've mentioned earlier hat Lift comes together with JQuery JS framework
+ (which is a great framework btw) but Lift is tightly coupled with Query.
+ In fact you can plugin any JavaScript framework or your own framework for
+ that matter by implementing JSArtifacts trait.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+JSArtifacts trait
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Abstracted JavaScript artifacts used by lift core.
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+trait JSArtifacts {
+\end_layout
+
+\begin_layout Plain Layout
+
+  /**
+\end_layout
+
+\begin_layout Plain Layout
+
+   * Toggles between current JS object and the object denominated by id
+\end_layout
+
+\begin_layout Plain Layout
+
+   */
+\end_layout
+
+\begin_layout Plain Layout
+
+  def toggle(id: String): JsExp
+\end_layout
+
+\begin_layout Plain Layout
+
+  /**
+\end_layout
+
+\begin_layout Plain Layout
+
+   * Hides the element denominated by id
+\end_layout
+
+\begin_layout Plain Layout
+
+   */   def hide(id: String): JsExp
+\end_layout
+
+\begin_layout Plain Layout
+
+  /**
+\end_layout
+
+\begin_layout Plain Layout
+
+   * Shows the element denominated by this id
+\end_layout
+
+\begin_layout Plain Layout
+
+   */
+\end_layout
+
+\begin_layout Plain Layout
+
+  def show(id: String): JsExp
+\end_layout
+
+\begin_layout Plain Layout
+
+  /**
+\end_layout
+
+\begin_layout Plain Layout
+
+   * Shows the element denoinated by id and puts the focus on it
+\end_layout
+
+\begin_layout Plain Layout
+
+   */
+\end_layout
+
+\begin_layout Plain Layout
+
+  def showAndFocus(id: String): JsExp
+\end_layout
+
+\begin_layout Plain Layout
+
+  /**
+\end_layout
+
+\begin_layout Plain Layout
+
+   * Serializes a form denominated by the id.
+ It returns a query string
+\end_layout
+
+\begin_layout Plain Layout
+
+   * containing the fields that are to be submitted
+\end_layout
+
+\begin_layout Plain Layout
+
+   */
+\end_layout
+
+\begin_layout Plain Layout
+
+  def serialize(id: String): JsExp
+\end_layout
+
+\begin_layout Plain Layout
+
+  /**
+\end_layout
+
+\begin_layout Plain Layout
+
+   * Sets the inner HTML of the element denominated by the id
+\end_layout
+
+\begin_layout Plain Layout
+
+   */
+\end_layout
+
+\begin_layout Plain Layout
+
+  def setHtml(id: String, xml: NodeSeq): JsCmd
+\end_layout
+
+\begin_layout Plain Layout
+
+  /**
+\end_layout
+
+\begin_layout Plain Layout
+
+   * Sets the JavaScript that will be executed when document is ready
+\end_layout
+
+\begin_layout Plain Layout
+
+   * for processing
+\end_layout
+
+\begin_layout Plain Layout
+
+   */
+\end_layout
+
+\begin_layout Plain Layout
+
+  def onLoad(cmd: JsCmd): JsCmd
+\end_layout
+
+\begin_layout Plain Layout
+
+  /**
+\end_layout
+
+\begin_layout Plain Layout
+
+   * Makes an Ajax request using lift's Ajax path and the request
+\end_layout
+
+\begin_layout Plain Layout
+
+   * attributes described by data parameter
+\end_layout
+
+\begin_layout Plain Layout
+
+   */
+\end_layout
+
+\begin_layout Plain Layout
+
+  def ajax(data: AjaxInfo): String
+\end_layout
+
+\begin_layout Plain Layout
+
+  /**
+\end_layout
+
+\begin_layout Plain Layout
+
+   * Makes a Ajax comet request using lift's Comet path and the request
+\end_layout
+
+\begin_layout Plain Layout
+
+   * attributes described by data parameter
+\end_layout
+
+\begin_layout Plain Layout
+
+   */
+\end_layout
+
+\begin_layout Plain Layout
+
+  def comet(data: AjaxInfo): String
+\end_layout
+
+\begin_layout Plain Layout
+
+  /**
+\end_layout
+
+\begin_layout Plain Layout
+
+   * Trabsforms a JSON object intoits string representation
+\end_layout
+
+\begin_layout Plain Layout
+
+   */
+\end_layout
+
+\begin_layout Plain Layout
+
+  def jsonStringify(in: JsExp) : JsExp
+\end_layout
+
+\begin_layout Plain Layout
+
+  /**
+\end_layout
+
+\begin_layout Plain Layout
+
+   * Converts a form denominated by formId into a JSON object
+\end_layout
+
+\begin_layout Plain Layout
+
+   */
+\end_layout
+
+\begin_layout Plain Layout
+
+  def formToJSON(formId: String): JsExp
+\end_layout
+
+\begin_layout Plain Layout
+
+}  
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+These functions are called by Lift core framework.
+ Currently we have two implementations 
+\family typewriter
+net.liftweb.http.js.jquery.JQueryArtifacacts
+\family default
+ and 
+\family typewriter
+net.liftweb.http.js.yui.YUIArtifacts
+\family default
+.
+ For JQuery implementation there is also a handful of JSExp-s and JsCmd-s
+ in 
+\family typewriter
+net.liftweb.http.js.jquery
+\family default
+ package.
+ They abstract away lots of JQuery goodies but we'll let you discover them.
+\end_layout
+
+\begin_layout Standard
+Changing one implementation or another can be done from LiftRules.jsArtifacts
+ variable which bydefault points to JQueryArtifacts.
+ However each JavaScript framework comes with its own JS scripts and perhaps
+ its own dependencies.
+ For YUI you need to include the following scripts (at minimum):
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Lift YUI scripts 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+ <script src="/classpath/yui/yahoo.js" type="text/javascript"/>
+\end_layout
+
+\begin_layout Plain Layout
+
+ <script src="/classpath/yui/event.js" type="text/javascript"/>   
+\end_layout
+
+\begin_layout Plain Layout
+
+ <script src="/classpath/yui/dom.js" type="text/javascript"/>   
+\end_layout
+
+\begin_layout Plain Layout
+
+ <script src="/classpath/yui/connection.js" type="text/javascript"/>   
+\end_layout
+
+\begin_layout Plain Layout
+
+ <script src="/classpath/yui/json.js" type="text/javascript"></script>  
+ 
+\end_layout
+
+\begin_layout Plain Layout
+
+ <script src="/classpath/liftYUI.js" type="text/javascript"/>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+..
+ of course you can probably lint them into a single JS file for optimizations.
+ Of course in Boot we need to configure YUIArtifacts:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Configuring Lift YUI
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+...
+\end_layout
+
+\begin_layout Plain Layout
+
+ import net.liftweb.http.js.yui.YUIArtifacts
+\end_layout
+
+\begin_layout Plain Layout
+
+ ...
+      
+\end_layout
+
+\begin_layout Plain Layout
+
+       
+\end_layout
+
+\begin_layout Plain Layout
+
+ class Boot {      
+\end_layout
+
+\begin_layout Plain Layout
+
+   def boot = {      
+\end_layout
+
+\begin_layout Plain Layout
+
+     ...
+      
+\end_layout
+
+\begin_layout Plain Layout
+
+     LiftRules.jsArtifacts = YUIArtifacts      
+\end_layout
+
+\begin_layout Plain Layout
+
+     ...
+     
+\end_layout
+
+\begin_layout Plain Layout
+
+ }  
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+\bar under
+Recommendations
+\end_layout
+
+\begin_layout Enumerate
+If you do not necessary need YUI widgets or if you can find then as JQuery
+ plugins we recommend using JQuery framewok.
+ One of the reasons (besides the fact that we like JQuery more) is that
+ Lift comes with a great deal of JsCmd and JsExp classes/objects for abstracting
+ JQuery goodies.
+\end_layout
+
+\begin_layout Enumerate
+Do not mix JQuery and YUI unless you really know what you are doing.
 \end_layout
 
 \end_body
