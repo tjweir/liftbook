@@ -870,6 +870,11 @@ Jx trivial example
 So Lift took our XML code and transfomed it into a JavaScript function that
  dynamically creates a document fragment containing the same node.
  The it parameter can be any JavaScript object that you can exploit.
+ The name of the 
+\emph on
+var
+\emph default
+ is automatically and randomly generated to ensure uniqueness.
 \end_layout
 
 \begin_layout Standard
