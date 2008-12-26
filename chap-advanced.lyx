@@ -1576,6 +1576,14 @@ The utility of this support is quite obvious in so many situations.
 \end_layout
 
 \begin_layout Subsection
+S object
+\end_layout
+
+\begin_layout Standard
+/*marius - TODO - write it up*/
+\end_layout
+
+\begin_layout Subsubsection
 Notices/Warnings/Errors messages
 \end_layout
 
@@ -1912,14 +1920,6 @@ There are no records to render
 \end_inset
 
 ).
-\end_layout
-
-\begin_layout Subsection
-S object
-\end_layout
-
-\begin_layout Standard
-/*marius - TODO - write it up*/
 \end_layout
 
 \begin_layout Subsection
