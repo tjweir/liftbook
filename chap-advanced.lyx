@@ -1914,5 +1914,21 @@ There are no records to render
 ).
 \end_layout
 
+\begin_layout Subsection
+S object
+\end_layout
+
+\begin_layout Standard
+/*marius - TODO - write it up*/
+\end_layout
+
+\begin_layout Subsection
+SHtml object
+\end_layout
+
+\begin_layout Standard
+/*marius - TODO - write it up*/
+\end_layout
+
 \end_body
 \end_document
