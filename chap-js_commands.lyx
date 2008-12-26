@@ -256,7 +256,7 @@ We barely scratched the surface of the JavaScript Scala API that Lift offers
  But for simple things Lift JS abstractions can be extremely useful.
 \end_layout
 
-\begin_layout Subsection
+\begin_layout Section
 JQuery and other JavaScript frameworks
 \end_layout
 
@@ -742,7 +742,7 @@ If you do not necessary need YUI widgets or if you can find similar funcionality
 Do not mix JQuery and YUI unless you really know what you are doing.
 \end_layout
 
-\begin_layout Subsection
+\begin_layout Section
 XML and JavaScript
 \end_layout
 
@@ -1294,6 +1294,550 @@ The basic application of the transformation from a NodeSeq to the JavaScript
 \end_inset
 
 
+\end_layout
+
+\begin_layout Section
+JSON
+\end_layout
+
+\begin_layout Standard
+JSON (Java Script Object Notation - http://www.json.org) is (as you may well
+ know) a way of structuring information in JavaScript code.
+ It is also use to represent structured information on the wire.
+ One example would be a JavaScript Ajax API where server response is in
+ fact a JSON construct.
+ Let's take an example first.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Ajax JSON response
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+ class SimpleSnippet {
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  def ajaxFunc : JsCmd = {
+\end_layout
+
+\begin_layout Plain Layout
+
+	JsCrVar("myObject", JsObj(("persons", JsArray(
+\end_layout
+
+\begin_layout Plain Layout
+
+		JsObj(("name", "Thor"), ("race", "Asgard")),
+\end_layout
+
+\begin_layout Plain Layout
+
+		JsObj(("name", "Todd"), ("race", "Wraith")),
+\end_layout
+
+\begin_layout Plain Layout
+
+		JsObj(("name", "Rodney"), ("race", "Human"))
+\end_layout
+
+\begin_layout Plain Layout
+
+	)))) & JsRaw("alert(myObject.persons[0].name)")
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  def renderAjaxButton(xhtml: Group): NodeSeq = {
+\end_layout
+
+\begin_layout Plain Layout
+
+    bind("ex", xhtml,         
+\end_layout
+
+\begin_layout Plain Layout
+
+			"button" -> SHtml.ajaxButton(Text(
+\begin_inset Quotes eld
+\end_inset
+
+Press me
+\begin_inset Quotes erd
+\end_inset
+
+), ajaxFunc))
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+ }
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+ /* And in your template the code ould be:
+\end_layout
+
+\begin_layout Plain Layout
+
+    ...
+\end_layout
+
+\begin_layout Plain Layout
+
+	<lift:SimpleSnippet.renderAjaxButton>
+\end_layout
+
+\begin_layout Plain Layout
+
+		<ex:button/>
+\end_layout
+
+\begin_layout Plain Layout
+
+	</lift:SimpleSnippet.renderAjaxButton>
+\end_layout
+
+\begin_layout Plain Layout
+
+	...
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+First of all we have a simple snippet functions called 
+\family typewriter
+renderAjaxButton
+\family default
+.
+ Here we're binding the ex:button tag and render a XHTML button tag that
+ when it is pressed it will send an Ajax request to server.
+ When this request is received, the 
+\family typewriter
+ajaxFunc
+\family default
+ is executes and the JsCmd response is turned into a JavaScript content
+ type response.
+ In 
+\family typewriter
+ajaxFunc 
+\family default
+that we are constructing a JSON object in fact the same one we used previously
+ for persons object.
+ We declare the JavaScript variable myObject being assigned to the JSON
+ structure and them call alert on the first element on the persons object.
+ The rendered JavaScript code that will be send down the wire will be:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+var myObject = {'persons': [{'name': 'Thor', 'race': 'Asgard'}, 
+\end_layout
+
+\begin_layout Plain Layout
+
+                            {'name': 'Todd', 'race': 'Wraith'} , 
+\end_layout
+
+\begin_layout Plain Layout
+
+							{'name': 'Rodney', 'race': 'Human'}]}; 
+\end_layout
+
+\begin_layout Plain Layout
+
+alert(myObject.persons[0].name);
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+So in your page when you are presing the button you'llget an alert dialog
+ saying 
+\begin_inset Quotes eld
+\end_inset
+
+Thor
+\begin_inset Quotes erd
+\end_inset
+
+.
+ You see we used JsRaw class which basically renders the exact thing you
+ are passing to it; which is raw JavaScript code.
+\end_layout
+
+\begin_layout Subsection
+JSON forms
+\end_layout
+
+\begin_layout Standard
+This feature is about sending the fields of a forms to the server.
+ The data sent to the server is a JSON object which is the form content
+ representation formatted as a JSON structure.
+ Then next question is how are we going to easily process this JSON string
+ on server side? ...
+ well Lift has these artifacts called JsonHandler.
+ But let's first see an example:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+JSON form
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// Assume we have this template
+\end_layout
+
+\begin_layout Plain Layout
+
+<lift:surround with="default" at="content">      
+\end_layout
+
+\begin_layout Plain Layout
+
+	<lift:JSONForm.head />      
+\end_layout
+
+\begin_layout Plain Layout
+
+	<lift:JSONForm.show>
+\end_layout
+
+\begin_layout Plain Layout
+
+	  <input type="text" name="name" />
+\end_layout
+
+\begin_layout Plain Layout
+
+	  <br />
+\end_layout
+
+\begin_layout Plain Layout
+
+	  <input type="text" name="value" /> 
+\end_layout
+
+\begin_layout Plain Layout
+
+	  <br />  
+\end_layout
+
+\begin_layout Plain Layout
+
+	  <input type="radio" name="vehicle" value="Bike" /> 
+\end_layout
+
+\begin_layout Plain Layout
+
+	  <input type="radio" name="vehicle" value="Car" /> 
+\end_layout
+
+\begin_layout Plain Layout
+
+	  <input type="radio" name="vehicle" value="Airplane" /> 
+\end_layout
+
+\begin_layout Plain Layout
+
+	  <br /> 
+\end_layout
+
+\begin_layout Plain Layout
+
+	  <select name="cars">
+\end_layout
+
+\begin_layout Plain Layout
+
+	    <option value="volvo">Volvo</option> 
+\end_layout
+
+\begin_layout Plain Layout
+
+		<option value="saab">Saab</option> 
+\end_layout
+
+\begin_layout Plain Layout
+
+		<option value="opel">Opel</option>  
+\end_layout
+
+\begin_layout Plain Layout
+
+	    <option value="audi">Audi</option>  
+\end_layout
+
+\begin_layout Plain Layout
+
+	  </select>
+\end_layout
+
+\begin_layout Plain Layout
+
+	  <button type="submit">Submit</button>
+\end_layout
+
+\begin_layout Plain Layout
+
+	</lift:JSONForm.show>
+\end_layout
+
+\begin_layout Plain Layout
+
+	<div id="json_result"></div> 
+\end_layout
+
+\begin_layout Plain Layout
+
+</lift:surround>  
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// And the Snippet code
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+class JSONForm {      
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	def show(html: Group): NodeSeq = {
+\end_layout
+
+\begin_layout Plain Layout
+
+		jsonForm(json, html) // we just wrap the snippet content into relevant
+ form code 
+\end_layout
+
+\begin_layout Plain Layout
+
+	} 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	import JsCmds._ 
+\end_layout
+
+\begin_layout Plain Layout
+
+	object json extends JsonHandler {
+\end_layout
+
+\begin_layout Plain Layout
+
+		def apply(in: Any): JsCmd = SetHtml("json_result", in match { 
+\end_layout
+
+\begin_layout Plain Layout
+
+			case j @ JsonCmd("processForm", _, p: Map[String, _], _) => {
+\end_layout
+
+\begin_layout Plain Layout
+
+				// process the form or whatever 
+\end_layout
+
+\begin_layout Plain Layout
+
+				println("Cars = " + urlDecode(p("cars"))) 
+\end_layout
+
+\begin_layout Plain Layout
+
+				println("Name = " + urlDecode(p("name"))) 
+\end_layout
+
+\begin_layout Plain Layout
+
+				<b>{p}</b> 
+\end_layout
+
+\begin_layout Plain Layout
+
+			}
+\end_layout
+
+\begin_layout Plain Layout
+
+			case x => <b>Problem...
+ didn't handle JSON message {x}</b>
+\end_layout
+
+\begin_layout Plain Layout
+
+		})
+\end_layout
+
+\begin_layout Plain Layout
+
+	}
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\end_layout
+
+\begin_layout Plain Layout
+
+	def head = <head>{Script(json.jsCmd)}</head> 
+\end_layout
+
+\begin_layout Plain Layout
+
+}  
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+First of all the XHTML template is preety straight forward.
+ It calls the JSONForm.head function which returns the JavaScript code that
+ basically declares the function that is sending the Ajax JSON requst.
+ The show function basically wraps the content of the snippet between <form>
+ tag and sets the onsubmit event such as when the submit button is pressed,
+ instead of submitting the form an Ajax call is set to server containing
+ the JSON object that contains the form information.
+ On server side Lif is automatically parsing the JSON construct and calls
+ the apply function of our 
+\family typewriter
+json
+\family default
+ object (which is a JsonHandler).
+ The apply function needs to return a JsCmd (JavaScript code) ehich in this
+ case it sets the HTML content of the 
+\family typewriter
+json_result
+\family default
+ div element.
+ When the form is strinigified into its JSON representation Lift uses a
+ command property indicating the action that needs to be done on server
+ and the actual JSON data.
+ In the case of JSON forms the command is always 
+\begin_inset Quotes eld
+\end_inset
+
+processForm
+\begin_inset Quotes erd
+\end_inset
+
+ as this is important for pattern matching as seen above.
+ The actuall form content is a Map object that can be easily use toobtain
+ the values for each form field.
 \end_layout
 
 \end_body
