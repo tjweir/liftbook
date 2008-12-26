@@ -767,7 +767,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Jx trivial example
 \end_layout
 
@@ -885,7 +884,7 @@ But of course this is not all there is to it.
  Such JSON structure could look something like:
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Standard
 \begin_inset listings
 inline false
 status open
@@ -1035,11 +1034,7 @@ Jx(<ul>{JxMap(JsVar("it.persons"), renderPerson)}</ul>)
 \end_layout
 
 \begin_layout Standard
-Well whay this code does is this
-\begin_inset Quotes erd
-\end_inset
-
-
+Well what this code does is this:
 \end_layout
 
 \begin_layout Enumerate
