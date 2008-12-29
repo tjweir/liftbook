@@ -58,7 +58,8 @@ JavaScript high level abstractions
 \end_layout
 
 \begin_layout Standard
-You may already noticed that Lift comes with a rich client side functionality.
+You may have already noticed that Lift comes with a rich client side functionali
+ty.
  By default it uses JQuery (http://jquery.com/) javascript framework.
  So a lot of JavaScript artifacts are there for you to use them from Scala
  code; for instance Lift is adding the JavaScript code for Ajax/Comet support.

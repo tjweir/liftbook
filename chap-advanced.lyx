@@ -77,10 +77,14 @@ This chapter is still under active development.
 \end_layout
 
 \begin_layout Standard
-Congratulations! You've either made it through the whole first section of
- the book, or you feel adventurous enough to skip right by some (or all)
- of it.
- In this chapter we're going to dive into some of the advanced mechanics
+Congratulations! You've made it through the introduction to Lift.
+ Or maybe you skipped the Basics and jumped right to Advanced, either way,
+ the next section will be exciting.
+ 
+\end_layout
+
+\begin_layout Standard
+In this chapter we're going to dive into some of the advanced mechanics
  and features of Lift so that you have a thorough understanding of what's
  going on.
 \end_layout
@@ -124,15 +128,15 @@ Architecture diagram
 \end_layout
 
 \begin_layout Standard
-The diagram above highlights the main Lift components and how a Lift application
- ecosystem looks like.
- As you already know it runs on Java Virtual Machine since a Scala program
- compiles to Java bytecode and of course we need a J(2)EE web container
- (Jetty, Tomcat etc.) to deploy a lift application.
- Lift is bounded as a web application through Filter component (as explained
- in earlier chapters) and this is the entry point to Lift world.
- From here as you've already seen we have a specific Lift application structure,
- we've seen how we configure Lift from Boot, how snippets are used etc.
+The diagram above highlights the main Lift components and how where they
+ live in the ecosystem.
+ Scala compiles down to Java bytecode, so we sit on top of the JVM.
+ Lift Applications are typically run in a J(2)EE web container, such as
+ Jetty or Tomcat.
+ As we explained in the introduction, Lift is set up to act as a Filter
+ component (REF) and this acts as the entry point.
+ The rest of the component layout varies from application to application,
+ and how you've implemented a specific feature.
 \end_layout
 
 \begin_layout Standard
@@ -144,46 +148,50 @@ Diagram synopsis
 
 \begin_layout Enumerate
 SiteMap - contains the web pages for a Lift application.
- 
+ REF
 \end_layout
 
 \begin_layout Enumerate
-LiftRules - allows you to configure Lift
+LiftRules - allows you to configure Lift REF
 \end_layout
 
 \begin_layout Enumerate
-LiftSession - the session state representation
+LiftSession - the session state representation REF
 \end_layout
 
 \begin_layout Enumerate
 S - the stateful object impersonating the state context for a given request/resp
-onse lifecycle
+onse lifecycle REF
 \end_layout
 
 \begin_layout Enumerate
 SHtml - contains helper functions for XHtml artifacts (form fields, links,
- Ajax links, buttons, etc.)
+ Ajax links, buttons, etc.) REF
 \end_layout
 
 \begin_layout Enumerate
 Views - LiftView objects impersonating a view as a XML content.
  Thus pages can be composed from other sources not only from html files.
+ REF
 \end_layout
 
 \begin_layout Enumerate
 LiftResponse - represents the abstraction of a response that will be propagated
  to the client.
+ REF
 \end_layout
 
 \begin_layout Enumerate
 LiftCore - The engine of the framework responsible for request/response
  lifecycle, rendering pipeline, invoking user's functions etc.
+ REF
 \end_layout
 
 \begin_layout Enumerate
 Comet - represents the Comet actors layer.
  As you already know, comet actors are capable of sending asynchronous content
  to the browser.
+ REF
 \end_layout
 
 \begin_layout Enumerate
@@ -191,6 +199,7 @@ Mapper/Record (ORM) framework - The lightweight ORM library proposed by
  Lift.
  Mapper framework is the proposed ORM framework for Lift 1.0 and Record framework
  will be for next releases.
+ REF
 \end_layout
 
 \begin_layout Enumerate
@@ -198,6 +207,7 @@ HTTP Auth - You can use HTTP authentication (Basic and Digest models) in
  your lift application.
  This provides you more control as opposed to web-container's HTTP authenticatio
 n model.
+ REF
 \end_layout
 
 \begin_layout Enumerate
@@ -205,11 +215,13 @@ JS API - The JavaScript abstraction layer.
  Fundamentally these are Scala classes/objects that abstract JavaScript
  artifacts.
  Such objects can be combined to build JavaScript code.
+ REF
 \end_layout
 
 \begin_layout Enumerate
 Utils - contains a lot of helper functions that Lift internally uses but
  your application can as well.
+ REF
 \end_layout
 
 \begin_layout Subsection
