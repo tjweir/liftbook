@@ -60,16 +60,42 @@ JavaScript high level abstractions
 \begin_layout Standard
 You may have already noticed that Lift comes with a rich client side functionali
 ty.
- By default it uses JQuery (http://jquery.com/) javascript framework.
+ By default it uses JQuery
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+\begin_inset CommandInset href
+LatexCommand href
+name "http://jquery.com/"
+target "http://jquery.com/"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ javascript framework.
  So a lot of JavaScript artifacts are there for you to use them from Scala
- code; for instance Lift is adding the JavaScript code for Ajax/Comet support.
- When you are using Ajax, for example, many times you want to return a little
- JavaScript code to be executed on client side.
+ code.
+ For example, Lift automatically includes the JavaScript code for Ajax and
+ Comet support.
+ When you are using Ajax many times you want to return a little JavaScript
+ code to be executed on client side.
  So instead of returning from your Ajax function a String containing the
  JavaScript code you can return a Lift object ...
  in essence a JsExp or JsCmd.
- So yes Lift abstracts away a JavaScript expression (JsExp) and JavaScript
- command (JsCmd) etc.
+ So yes Lift abstracts away a JavaScript expression (
+\family typewriter
+JsExp
+\family default
+) and JavaScript command (
+\family typewriter
+JsCmd
+\family default
+) etc.
  But let's dig a bit deeper in this Lift JS API.
 \end_layout
 
@@ -79,7 +105,9 @@ ty.
 net.liftweb.http.js.JsExp 
 \family default
 is a trait that abstracts a JavaScript expression.
- For instance JE.ValById(
+ For instance 
+\family typewriter
+JE.ValById(
 \begin_inset Quotes eld
 \end_inset
 
@@ -87,8 +115,13 @@ sometextfield
 \begin_inset Quotes erd
 \end_inset
 
-) which will render the JavaScript code document.getElementById('sometextfield').v
-alue.
+)
+\family default
+ which will render the JavaScript code 
+\family typewriter
+document.getElementById('sometextfield').value
+\family default
+.
  The next important class is 
 \family typewriter
 net.liftweb.http.js.JsCmd 
@@ -154,12 +187,50 @@ function(){document.getElementById('sometextfield').value}
 \end_layout
 
 \begin_layout Standard
-If you dig into code you'll see that apply function of the AnonFunc object
- takes a JsCmd parameter but here we've passed a JsExp.
- This is ok because there is an implicit conversion from JsExp to JsCmd.
- Please see the Lift API for JsCmd and JsExp subclasses.
- You may find some plain Scala objects that do not extends JsExp or JsCmd
- and yet they are used in JsExp.
+If you dig into code you'll see that apply function of the 
+\family typewriter
+AnonFunc
+\family default
+ object takes a 
+\family typewriter
+JsCmd
+\family default
+ parameter but here we've passed a 
+\family typewriter
+JsExp
+\family default
+.
+ This is ok because there is an implicit conversion from 
+\family typewriter
+JsExp
+\family default
+ to 
+\family typewriter
+JsCmd
+\family default
+.
+ Please see the Lift API for 
+\family typewriter
+JsCmd
+\family default
+ and 
+\family typewriter
+JsExp
+\family default
+ subclasses.
+ You may find some plain Scala objects that do not extends 
+\family typewriter
+JsExp
+\family default
+ or 
+\family typewriter
+JsCmd
+\family default
+ and yet they are used in 
+\family typewriter
+JsExp
+\family default
+.
  That's becasue their apply functions return a JsExp or JsCmd.
  There are other implicit functions defined to convert from String, Int,
  Long etc.
@@ -226,8 +297,13 @@ Lift
 \end_layout
 
 \begin_layout Standard
-The above will create the LiftResponse having text/javascript content-type
- and calls subsequently JavaScript alert(
+The above will create the 
+\family typewriter
+LiftResponse
+\family default
+ having text/javascript content-type and calls subsequently JavaScript 
+\family typewriter
+alert(
 \begin_inset Quotes eld
 \end_inset
 
@@ -235,7 +311,11 @@ Hello
 \begin_inset Quotes erd
 \end_inset
 
-) and then alert(
+)
+\family default
+ and then 
+\family typewriter
+alert(
 \begin_inset Quotes eld
 \end_inset
 
@@ -243,14 +323,16 @@ Lift
 \begin_inset Quotes erd
 \end_inset
 
-).
+)
+\family default
+.
 \end_layout
 
 \begin_layout Standard
-We barely scratched the surface of the JavaScript Scala API that Lift offers
- and presented the fundamental classes.
- It is not the scope of this book to discuss each ad every class but to
- provide an understanding of the API.
+We have barely scratched the surface of the JavaScript Scala API that Lift
+ offers.
+ It is not the scope of this book to discuss each and every class, rather
+ to provide an understanding of the API.
  If you have a large JavaScript code to build using Lift abstractions would
  lead to more code to type so we recommend putting your code into a .js file
  and include it in your page.
@@ -263,7 +345,7 @@ JQuery and other JavaScript frameworks
 
 \begin_layout Standard
 We've mentioned earlier hat Lift comes together with JQuery JS framework
- (which is a great framework btw) but Lift is tightly coupled with Query.
+ but Lift is tightly coupled with JQuery.
  In fact you can plugin any JavaScript framework or your own framework for
  that matter by implementing JSArtifacts trait.
 \end_layout
@@ -741,6 +823,7 @@ If you do not necessary need YUI widgets or if you can find similar funcionality
 
 \begin_layout Enumerate
 Do not mix JQuery and YUI unless you really know what you are doing.
+ Getting both of them together leads to a number of collisions.
 \end_layout
 
 \begin_layout Section
