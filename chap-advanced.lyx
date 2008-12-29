@@ -2945,7 +2945,7 @@ admin
 
 \begin_layout Plain Layout
 
-	    userRoles(Full(AuthRole(
+	    userRoles(AuthRole(
 \begin_inset Quotes eld
 \end_inset
 
@@ -2953,7 +2953,7 @@ admin
 \begin_inset Quotes erd
 \end_inset
 
-))) 
+)) 
 \end_layout
 
 \begin_layout Plain Layout
@@ -3296,7 +3296,7 @@ Romania-Admin
 
 \begin_layout Plain Layout
 
-	    userRoles(Full(AuthRole("User-Admin"))) 
+	    userRoles(AuthRole("User-Admin")) 
 \end_layout
 
 \begin_layout Plain Layout
@@ -3561,7 +3561,7 @@ Romania-Admin
 
 \begin_layout Plain Layout
 
-        userRoles(Full(AuthRole("useradmin")))
+        userRoles(AuthRole("useradmin"))
 \end_layout
 
 \begin_layout Plain Layout
@@ -3685,7 +3685,7 @@ It is important to know that a user can be assigned with multiple roles,
 \begin_layout Standard
 
 \family typewriter
-userRoles(Full(AuthRole("US-Admin", 
+userRoles(AuthRole("US-Admin", 
 \begin_inset Quotes eld
 \end_inset
 
@@ -3693,7 +3693,7 @@ Site-Admin
 \begin_inset Quotes erd
 \end_inset
 
-))) // AuthRole take a repeated parameter.
+)) // AuthRole overloaded apply function takes a repeated parameter.
 \end_layout
 
 \begin_layout Standard
