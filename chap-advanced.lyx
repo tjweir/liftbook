@@ -3681,7 +3681,7 @@ Site-Admin
 \begin_inset Quotes erd
 \end_inset
 
-))) // AuthRole take a repeated parameter.
+))) // AuthRole overloaded apply function takes a repeated parameter.
 \end_layout
 
 \begin_layout Standard
