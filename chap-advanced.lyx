@@ -110,7 +110,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Architcture diagram
+Architecture diagram
 \end_layout
 
 \end_inset
@@ -2088,7 +2088,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Ajax Button example
 \end_layout
 
@@ -2818,6 +2817,885 @@ We basically told Lift here to allow any resource found in css folder under
 ResourceServer.baseResourceLocation
 \family default
  which can be changed.
+\end_layout
+
+\begin_layout Subsection
+HTTP Authentication
+\end_layout
+
+\begin_layout Standard
+HTTP authentication is described by RFC 2617 http://www.isi.edu/in-notes/rfc2617.tx
+t.
+ It describes the means of protecting server resources and allowing access
+ only to authorized entities.As you may know any J(2)EE web container provides
+ HTTP authentication support moslty using JAAS (Java Authentication and
+ Authorization Service.
+ More informations can be found here http://java.sun.com/javase/6/docs/technotes/g
+uides/security/jaas/JAASRefGuide.html) .
+ But this appoach is not without caveats.
+ For instance if you provide your own LoginModule or CallbackHandler implementat
+ion this will not be loaded by the web application classloader but instead
+ by the container classloader (..
+ at least in tomcat).
+ This means that if your code has other dependencies that you can not use
+ these dependencies from your web application since web application classloader
+ sits below container's classloader in the delgation chain.
+ Besides al these Using Scala's power the developer experience of protecting
+ server resources using HTTP authentication can be simplified a lot.
+ Lift supports both basic and digest authentications so let's see how it's
+ done
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+HTTP Authentication example
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import auth._
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+class Boot {
+\end_layout
+
+\begin_layout Plain Layout
+
+  def boot = {
+\end_layout
+
+\begin_layout Plain Layout
+
+    ...
+\end_layout
+
+\begin_layout Plain Layout
+
+    LiftRules.protectedResource.append {    
+\end_layout
+
+\begin_layout Plain Layout
+
+      case (ParsePath("users" :: _, _, _, _)) => Full(AuthRole(
+\begin_inset Quotes eld
+\end_inset
+
+admin
+\begin_inset Quotes erd
+\end_inset
+
+))
+\end_layout
+
+\begin_layout Plain Layout
+
+    }
+\end_layout
+
+\begin_layout Plain Layout
+
+   
+\end_layout
+
+\begin_layout Plain Layout
+
+    LiftRules.authentication = HttpBasicAuthentication("lift") {  
+\end_layout
+
+\begin_layout Plain Layout
+
+      case ("John", "12test34", req) => 
+\end_layout
+
+\begin_layout Plain Layout
+
+	    println("John is authenticated !")
+\end_layout
+
+\begin_layout Plain Layout
+
+	    userRoles(Full(AuthRole(
+\begin_inset Quotes eld
+\end_inset
+
+admin
+\begin_inset Quotes erd
+\end_inset
+
+))) 
+\end_layout
+
+\begin_layout Plain Layout
+
+	    true    
+\end_layout
+
+\begin_layout Plain Layout
+
+    }  
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+   ...
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+Here we just told Lift that /users path is a protected resource and only
+ by users that have the Role admin.
+ So here we have both authentication and authorization.
+ If this function returns an Emptybox it means that this resource is not
+ bound to any Role meaning that only authorization will be performed, only
+ authentication.
+ Secondly using 
+\family typewriter
+LiftRules.authentication
+\family default
+ we told Lift that we want BasicAuthentication and of course we are passing
+ the function that actually does the authentication.
+ This function is actually a PartialFunction[(String, String, Req), Boolean].
+ First two members of the tuple are username and password, then the Req
+ object.
+ In the above example we're basically saying that if user is authenticating
+ itself as 
+\begin_inset Quotes eld
+\end_inset
+
+John
+\begin_inset Quotes erd
+\end_inset
+
+ and password is 
+\begin_inset Quotes eld
+\end_inset
+
+12test34
+\begin_inset Quotes erd
+\end_inset
+
+ the accesstothe protected resource will be granted (since our function
+ returns true).
+ But in our authentication function we also specify the role for user 
+\begin_inset Quotes eld
+\end_inset
+
+John
+\begin_inset Quotes erd
+\end_inset
+
+ as being 
+\begin_inset Quotes eld
+\end_inset
+
+admin
+\begin_inset Quotes erd
+\end_inset
+
+.
+ 
+\family typewriter
+userRole
+\family default
+ is a RequestVar that will be used later on by Lift.
+\end_layout
+
+\begin_layout Standard
+So at runtime when user tries to access /users Lift knows that this is a
+ protected resource and only an admin can access it.
+ Therefore Lift is sending down to client a 401 HTTP status (unauthorized
+ response).
+ User will enter the credentials and if they match with username John and
+ password 12test34 we got a successful authentication and because the role
+ we set is admin which matches with the role assigned to the protected resource,
+ the /users resource is served to client.
+ 
+\end_layout
+
+\begin_layout Standard
+A Role is an n-ary tree structure.
+ So when we assign a Role to a protectedResource we can actually provide
+ an entire tree such as:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/roles.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Roles hierarchy example
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Assume that your application uses a roles structure as above.
+ The Admin is the all mighty role for admins that can do what any sub-role
+ can do and more.
+ Then we have the Site-Admin that can monitor the application, the User-Admin
+ that can manage users, then Romania-Admin that can manage users from Romania,
+ US-Admin that can manage users from US and UK-Admin that can only manage
+ users from UK.
+ Now a User-Admin can manage users from anywhere but a Site-Admin can not
+ manage any users.
+ Neither a Romania-Admin has the priviledges of User-Admin or Admin, nor
+ it can manage the US or UK users.
+ You got the picture here; the idea is that the lower a Role is in the hierarchy
+ the less priviledged it is.
+ Let'see how the code looks like based on the above figure:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+HTTP Authentication multi-roles example
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import auth._
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+class Boot {
+\end_layout
+
+\begin_layout Plain Layout
+
+  def boot = {
+\end_layout
+
+\begin_layout Plain Layout
+
+    ...
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	val roles = AuthRole(
+\begin_inset Quotes eld
+\end_inset
+
+Admin
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\end_layout
+
+\begin_layout Plain Layout
+
+		AuthRole(
+\begin_inset Quotes eld
+\end_inset
+
+Site-Admin
+\begin_inset Quotes erd
+\end_inset
+
+),
+\end_layout
+
+\begin_layout Plain Layout
+
+		AuthRole(
+\begin_inset Quotes eld
+\end_inset
+
+User-Admin
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\end_layout
+
+\begin_layout Plain Layout
+
+			AuthRole(
+\begin_inset Quotes eld
+\end_inset
+
+Romania-Admin
+\begin_inset Quotes erd
+\end_inset
+
+),
+\end_layout
+
+\begin_layout Plain Layout
+
+			AuthRole(
+\begin_inset Quotes eld
+\end_inset
+
+US-Admin
+\begin_inset Quotes erd
+\end_inset
+
+),
+\end_layout
+
+\begin_layout Plain Layout
+
+			AuthRole(
+\begin_inset Quotes eld
+\end_inset
+
+UK-Admin
+\begin_inset Quotes erd
+\end_inset
+
+),
+\end_layout
+
+\begin_layout Plain Layout
+
+		)
+\end_layout
+
+\begin_layout Plain Layout
+
+	)
+\end_layout
+
+\begin_layout Plain Layout
+
+    LiftRules.protectedResource.append {    
+\end_layout
+
+\begin_layout Plain Layout
+
+      case (ParsePath("users" :: _, _, _, _)) => roles.getRoleByName(
+\begin_inset Quotes eld
+\end_inset
+
+Romania-Admin
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Plain Layout
+
+    }
+\end_layout
+
+\begin_layout Plain Layout
+
+   
+\end_layout
+
+\begin_layout Plain Layout
+
+    LiftRules.authentication = HttpBasicAuthentication("lift") {  
+\end_layout
+
+\begin_layout Plain Layout
+
+      case ("John", "12test34", req) => 
+\end_layout
+
+\begin_layout Plain Layout
+
+	    println("John is authenticated !")
+\end_layout
+
+\begin_layout Plain Layout
+
+	    userRoles(Full(AuthRole("User-Admin"))) 
+\end_layout
+
+\begin_layout Plain Layout
+
+	    true    
+\end_layout
+
+\begin_layout Plain Layout
+
+    }  
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+   ...
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In this case if user is authenticated authorization will also succeed because
+ the user's Role is User-Admin and it is a parent of 
+\begin_inset Quotes eld
+\end_inset
+
+Romani-Admin
+\begin_inset Quotes erd
+\end_inset
+
+.
+ If the /users resource would have been assigned with 
+\begin_inset Quotes eld
+\end_inset
+
+User-Admin
+\begin_inset Quotes erd
+\end_inset
+
+ role and user John would have 
+\begin_inset Quotes eld
+\end_inset
+
+Romania-Admin
+\begin_inset Quotes erd
+\end_inset
+
+ role that even if credentials are correct the authorization fails hence
+ a 401 HTTP status is still sent to client.
+\end_layout
+
+\begin_layout Standard
+In conclusion you have a simple authentication and authorization mechanism
+ and of course authentication function would typically validate the credentials
+ agains a database and fetch the role from there.
+\end_layout
+
+\begin_layout Subsubsection
+HTTP Digest Authentication
+\end_layout
+
+\begin_layout Standard
+So far we talked about basic authentication and authorization.
+ Lift also support HTTP Digest authentication.
+ This means that the password information that user enters in the browser
+ is never propagated on the server.
+ Here is how we use it:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+HTTP Digest Authentication multi-roles example
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import auth._
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+class Boot {
+\end_layout
+
+\begin_layout Plain Layout
+
+  def boot = {
+\end_layout
+
+\begin_layout Plain Layout
+
+    ...
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	val roles = AuthRole(
+\begin_inset Quotes eld
+\end_inset
+
+Admin
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\end_layout
+
+\begin_layout Plain Layout
+
+		AuthRole(
+\begin_inset Quotes eld
+\end_inset
+
+Site-Admin
+\begin_inset Quotes erd
+\end_inset
+
+),
+\end_layout
+
+\begin_layout Plain Layout
+
+		AuthRole(
+\begin_inset Quotes eld
+\end_inset
+
+User-Admin
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\end_layout
+
+\begin_layout Plain Layout
+
+			AuthRole(
+\begin_inset Quotes eld
+\end_inset
+
+Romania-Admin
+\begin_inset Quotes erd
+\end_inset
+
+),
+\end_layout
+
+\begin_layout Plain Layout
+
+			AuthRole(
+\begin_inset Quotes eld
+\end_inset
+
+US-Admin
+\begin_inset Quotes erd
+\end_inset
+
+),
+\end_layout
+
+\begin_layout Plain Layout
+
+			AuthRole(
+\begin_inset Quotes eld
+\end_inset
+
+UK-Admin
+\begin_inset Quotes erd
+\end_inset
+
+),
+\end_layout
+
+\begin_layout Plain Layout
+
+		)
+\end_layout
+
+\begin_layout Plain Layout
+
+	)
+\end_layout
+
+\begin_layout Plain Layout
+
+    LiftRules.protectedResource.append {    
+\end_layout
+
+\begin_layout Plain Layout
+
+      case (ParsePath("users" :: _, _, _, _)) => roles.getRoleByName(
+\begin_inset Quotes eld
+\end_inset
+
+Romania-Admin
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Plain Layout
+
+    }
+\end_layout
+
+\begin_layout Plain Layout
+
+   
+\end_layout
+
+\begin_layout Plain Layout
+
+    LiftRules.authentication = HttpDigestAuthentication("lift") {
+\end_layout
+
+\begin_layout Plain Layout
+
+      case ("John", req, func) => if (func("12test34")) {
+\end_layout
+
+\begin_layout Plain Layout
+
+        println("John is authenticated !")
+\end_layout
+
+\begin_layout Plain Layout
+
+        userRoles(Full(AuthRole("useradmin")))
+\end_layout
+
+\begin_layout Plain Layout
+
+        true
+\end_layout
+
+\begin_layout Plain Layout
+
+      } else {
+\end_layout
+
+\begin_layout Plain Layout
+
+        println("Not verified")
+\end_layout
+
+\begin_layout Plain Layout
+
+        false
+\end_layout
+
+\begin_layout Plain Layout
+
+      }
+\end_layout
+
+\begin_layout Plain Layout
+
+    } 
+\end_layout
+
+\begin_layout Plain Layout
+
+   ...
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Eveything we talked about Roles is still valid.
+ However we're now using digest authentication.
+ Note that in this case wer not provided with a password anymore but our
+ function is provided with the user name, the Req object and a callback
+ function.
+ Because digest authentication implies checksum calculations there is no
+ need to burden the user with such things.
+ However our code calls this callback function by providing the password
+ (which can be retrieved from database as we know the user name).
+ If this function returns true it means that the digest that client sent
+ andthe one that Lift calculated matches so we have a successful authentication.
+ 
+\end_layout
+
+\begin_layout Standard
+There is also important to know that diget authentication mechanism uses
+ a nonce sequence.
+ This sequence is generated by the server when sending down the authentication
+ challenge down to client (401 HTTP status).
+ In order to avoid replay attacks this nonce is valid only for a period
+ of time.
+ By default this is set to 30 seconds but you can change this by setting:
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+HttpDigestAuthentication.nonceValidityPeriod = <a value in milliseconds>
+\end_layout
+
+\begin_layout Standard
+If you use Lift's TimeHelpers you can say:
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+HttpDigestAuthentication.nonceValidityPeriod = 50 seconds 
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+// where seconds is a function and there are implicit conversion functions
+ from 
+\begin_inset Quotes eld
+\end_inset
+
+primitives
+\begin_inset Quotes erd
+\end_inset
+
+ to TimeSpans type.
+\end_layout
+
+\begin_layout Standard
+If this period expires even if the authentication and authorization succeed
+ Lift will challenge it again by returning 401 HTTP status and a new nonce.
+ So the resource is not served yet.
+\end_layout
+
+\begin_layout Standard
+It is important to know that a user can be assigned with multiple roles,
+ not just one.
+ This can be done by calling:
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+userRoles(Full(AuthRole("US-Admin", 
+\begin_inset Quotes eld
+\end_inset
+
+Site-Admin
+\begin_inset Quotes erd
+\end_inset
+
+))) // AuthRole take a repeated parameter.
+\end_layout
+
+\begin_layout Standard
+This is pretty much it as far as HTTP authentication and authorization goes
+ but there is one more thing that is worth to be mentioned.
+ If your application does not persist the user's password and only a digest
+ internally calculated, the HTTP digest authentication can not really be
+ used.
+ The reason is that in order to match the client's digest, server needs
+ to calculate it and for that it needs the password in clear but becasue
+ that application stores a digest the user's password can not be recovered
+ hence the HTTP digest can no be calculated.
+ This is a missmatch betwen the two concepts: HTTP digest authentication
+ given by RFC 2617 and the unrecoverable password storage.
 \end_layout
 
 \end_body
