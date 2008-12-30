@@ -78,8 +78,8 @@ This chapter is still under active development.
 
 \begin_layout Standard
 Congratulations! You've made it through the introduction to Lift.
- Or maybe you skipped the Basics and jumped right to Advanced, either way,
- the next section will be exciting.
+ Or maybe you've skipped Basics and jumped right to here to Advanced, either
+ way, the next section will be exciting.
  
 \end_layout
 
@@ -128,15 +128,15 @@ Architecture diagram
 \end_layout
 
 \begin_layout Standard
-The diagram above highlights the main Lift components and how where they
- live in the ecosystem.
+The diagram above highlights the main Lift components and where they live
+ in the ecosystem.
  Scala compiles down to Java bytecode, so we sit on top of the JVM.
  Lift Applications are typically run in a J(2)EE web container, such as
  Jetty or Tomcat.
  As we explained in the introduction, Lift is set up to act as a Filter
  component (REF) and this acts as the entry point.
  The rest of the component layout varies from application to application,
- and how you've implemented a specific feature.
+ and how you've implemented your Snippets and Templates.
 \end_layout
 
 \begin_layout Standard
@@ -195,7 +195,7 @@ Comet - represents the Comet actors layer.
 \end_layout
 
 \begin_layout Enumerate
-Mapper/Record (ORM) framework - The lightweight ORM library proposed by
+ORM - Either Mapper or Record - The lightweight ORM library proposed by
  Lift.
  Mapper framework is the proposed ORM framework for Lift 1.0 and Record framework
  will be for next releases.
@@ -212,15 +212,14 @@ n model.
 
 \begin_layout Enumerate
 JS API - The JavaScript abstraction layer.
- Fundamentally these are Scala classes/objects that abstract JavaScript
- artifacts.
+ These are Scala classes/objects that abstract JavaScript artifacts.
  Such objects can be combined to build JavaScript code.
  REF
 \end_layout
 
 \begin_layout Enumerate
-Utils - contains a lot of helper functions that Lift internally uses but
- your application can as well.
+Utils - contains a lot of helper functions that Lift uses internally that
+ are also available to your application.
  REF
 \end_layout
 
@@ -236,8 +235,8 @@ name "sec:Request/Response-Lifecycle"
 \end_layout
 
 \begin_layout Standard
-The first thing we'd like to revisit is the rendering pipeling from request
- to response.
+We would like to revisit the rendering pipeling that takes a Request and
+ generates a Response.
  We briefly touched on this back in section 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -245,14 +244,13 @@ reference "sec:The-Rendering-Process"
 
 \end_inset
 
-, but before we get into all of the nitty gritty details we're going to
+, ??but before we get into all of the nitty gritty details we're going to
  cover it in depth.
  This will serve not only to familiarize you with the full processing power
  of Lift, but also to introduce some of the other advanced topics we'll
  be discussing in this and later chapters.
- One important thing we'd like to mention before digging into the details
- is that most of the configurable properties are in LiftRules, and are of
- the type RulesSeq.
+ One important thing we'd like to mention is that most of the configurable
+ properties are in LiftRules, and are of the type RulesSeq.
  With a RulesSeq you essentially have a list of functions or values that
  are applied in order.
  RulesSeq defines a prepend and append method that allows you to add new
@@ -263,8 +261,8 @@ reference "sec:The-Rendering-Process"
 \end_layout
 
 \begin_layout Standard
-The following list outlines, in order, the process of transforming a request
- into a response.
+The following list outlines, in order, the process of transforming a Request
+ into a Response.
  We provide references to the sections of the book where we discuss each
  step in case you want to branch off.
 \end_layout
@@ -314,28 +312,43 @@ LiftRules.statelessDispatchTable
 \family default
 .
  If the partial functions defined in this table match the request then they
- are used to create LiftResponse that is sent to the user, bypassing any
- further processing.
+ are used to create a 
+\family typewriter
+LiftResponse
+\family default
+ that is sent to the user, bypassing any further processing.
  These are very useful for building things like REST APIs.
  The term stateless refers to the fact that at the time the dispatch function
  is called, the stateful object, called 
 \family typewriter
 S
 \family default
-, is not available and the LiftSession is not created yet.
+, is not available and the 
+\family typewriter
+LiftSession
+\family default
+ is not created yet.
 \end_layout
 
 \begin_layout Enumerate
-Create a LiftSession.
- The LiftSession holds various bits of state for the request, and is covered
- in more detail in section 
+Create a 
+\family typewriter
+LiftSession
+\family default
+.
+ The 
+\family typewriter
+LiftSession
+\family default
+ holds various bits of state for the request, and is covered in more detail
+ in section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Session-Management"
 
 \end_inset
 
-
+.
 \end_layout
 
 \begin_layout Enumerate
@@ -354,7 +367,7 @@ reference "sec:Session-Management"
 
 \end_inset
 
-
+.
 \end_layout
 
 \begin_layout Enumerate
@@ -370,7 +383,11 @@ reference "sub:S-object"
 \end_inset
 
 ).
- The S object represents the current state of the request and response.
+ The 
+\family typewriter
+S
+\family default
+ object represents the current state of the Request and Response.
 \end_layout
 
 \begin_layout Enumerate
@@ -383,19 +400,23 @@ LoanWrapper
 S.addAround
 \family default
 .
- Essentially a 
+ A 
 \family typewriter
 LoanWrapper
 \family default
  is a way to insert your own processing into the render pipeline, similar
  to how Filter works in the Servlet API.
- This means that when your LoanWrapper implementation is called, Lift passes
- you a function allowing you to chain the processing of the request.
+ This means that when your 
+\family typewriter
+LoanWrapper
+\family default
+ implementation is called, Lift passes you a function allowing you to chain
+ the processing of the request.
  With this functionality you can execute your own pre- and post-condition
  code.
  A simple example of this would be if you need to make sure that something
  is configured at the start of processing and cleanly shut down when processing
- terminates
+ terminates.
 \end_layout
 
 \begin_layout Enumerate
@@ -422,7 +443,10 @@ reference "sub:S-object"
 \end_inset
 
 ).
- The first matching partial function is used to generate a LiftResponse
+ The first matching partial function is used to generate a 
+\family typewriter
+LiftResponse
+\family default
  that is returned to the client.
  If none of the dispatch functions match then processing continues.
  Dispatch functions are covered in section 
@@ -529,11 +553,11 @@ Check the user-defined dispatch functions that are set per-session (
 see S.addHighLevelSessionDispatcher
 \family default
 ).
- This is similar with 
+ This is similar to 
 \family typewriter
 LiftRules.dispatch
 \family default
- except that you can have different functions set up for different session
+ except that you can have different functions set up for a different session
  depending on your application logic.
  If there is a function applicable, execute it and return its response.
  If there is no per-session dispatch function, process the request by executing
@@ -547,7 +571,7 @@ reference "sub:SHtml"
 
 \end_inset
 
-
+.
 \end_layout
 
 \begin_layout Enumerate
@@ -559,11 +583,11 @@ reference "cha:SiteMap"
 
 \end_inset
 
-
+.
 \end_layout
 
 \begin_layout Enumerate
-Lookup the template based on the Req path.
+Lookup the template based on the Req?? path.
  Lift will locate the templates using various approaches:
 \end_layout
 
@@ -620,12 +644,12 @@ reference "sec:Head-Merge"
 \begin_layout Enumerate
 Update the internal functions map.
  Basically this associates the user's Scala functions with tokens that are
- passed around in subsequent requests using HTTP query parameters
+ passed around in subsequent requests using HTTP query parameters??
 \end_layout
 
 \begin_layout Enumerate
 Clean up notices (see S.error, S.warning, S.notice) since they were already
- rendered.
+ rendered they are no longer needed.
  Notices are covered in section 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -633,7 +657,7 @@ reference "cha:Message-Handling"
 
 \end_inset
 
-
+.
 \end_layout
 
 \begin_layout Enumerate
@@ -643,11 +667,11 @@ LiftRules.convertResponse
 \family default
 .
  Basically this glues together different pieces if information such as the
- actual markup, the response headers, cookies, etc into a LiftResponse instance
+ actual markup, the response headers, cookies, etc into a LiftResponse instance.
 \end_layout
 
 \begin_layout Enumerate
-Check to see if lift needs to send HTTP redirect.
+Check to see if Lift needs to send HTTP redirect.
  For an overview please see 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -714,8 +738,11 @@ LiftRules.beforeSend
 \end_layout
 
 \begin_layout Enumerate
-Convert the LiftResponse to a raw byte stream and send it to client as an
- HTTP response.
+Convert the 
+\family typewriter
+LiftResponse
+\family default
+ to a raw byte stream and send it to client as an HTTP response.
 \end_layout
 
 \begin_layout Enumerate
@@ -724,7 +751,7 @@ Call any functions defined in
 LiftRules.afterSend
 \family default
 .
- Typically these would be used for cleanup
+ Typically these would be used for cleanup.
 \end_layout
 
 \begin_layout Standard
@@ -746,10 +773,14 @@ name "sec:LiftResponse-in-Detail"
 \end_layout
 
 \begin_layout Standard
-Lift framework makes a lot of things really easy and it provides extremly
+The Lift framework makes a lot of things really easy and it provides extremly
  useful abstractions as you may have already discovered.
- Responses to clients are also abstacted by LiftResponse trait.
- There are numerous response types and here is the simplified vieew of the
+ Responses to clients are also abstacted by 
+\family typewriter
+LiftResponse
+\family default
+ trait.
+ There are numerous response types and here is the simplified view of the
  class hierarchy:
 \end_layout
 
@@ -862,7 +893,7 @@ GoneResponse
 
 \end_deeper
 \begin_layout Standard
-We won't get into details right now oh what exactly each and every class/object
+We won't get into details right now on what exactly each and every class/object
  does, although their purpose is somehow intuitive.
  It is important to know that whenever you need to return a LiftResponse
  reference from one of your functions, for example LiftRules.dispatch you
@@ -1990,7 +2021,7 @@ warningClass
 errorClass 
 \emph default
 allowing the possibility to specify your own CSS classes.
- Again you can style you message using ID-s in the CSS file as well.
+ Again you can style you message using IDs in the CSS file as well.
  This snippet is very usefull when you want to render error messages for
  examples in different parts of the page such as near by a form field.
 \end_layout
