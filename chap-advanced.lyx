@@ -2256,7 +2256,7 @@ Here is a quick description of other SHtml functions:
 
 \begin_layout Standard
 \begin_inset Tabular
-<lyxtabular version="3" rows="22" columns="2">
+<lyxtabular version="3" rows="23" columns="2">
 <features>
 <column alignment="left" valignment="top" width="0">
 <column alignment="left" valignment="top" width="0">
@@ -2427,6 +2427,26 @@ Renders an input text element that will send an Ajax request onblur.
 \begin_inset Text
 
 \begin_layout Plain Layout
+jsonText
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Renders an input type text element the will send a JSON request on-blur.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
 ajaxCheckbox
 \end_layout
 
@@ -2562,7 +2582,7 @@ text
 \begin_inset Text
 
 \begin_layout Plain Layout
-Renders a input type text that will be bound with the function provided
+Renders an input type text that will be bound with the function provided
 \end_layout
 
 \end_inset
@@ -2582,7 +2602,7 @@ password
 \begin_inset Text
 
 \begin_layout Plain Layout
-Renders a input type password that will be bound with the function provided
+Renders an input type password that will be bound with the function provided
 \end_layout
 
 \end_inset
@@ -2602,7 +2622,7 @@ submit
 \begin_inset Text
 
 \begin_layout Plain Layout
-Renders a input type submit that will be bound with the function provided
+Renders an input type submit that will be bound with the function provided
 \end_layout
 
 \end_inset
