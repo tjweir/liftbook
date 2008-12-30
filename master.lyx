@@ -374,16 +374,6 @@ filename "chap-url_rewrite.lyx"
 \begin_layout Standard
 \begin_inset CommandInset include
 LatexCommand include
-filename "chap-json.lyx"
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset CommandInset include
-LatexCommand include
 filename "chap-js_commands.lyx"
 
 \end_inset
