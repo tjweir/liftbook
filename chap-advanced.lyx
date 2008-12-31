@@ -90,41 +90,7 @@ In this chapter we're going to dive into some of the advanced mechanics
 \end_layout
 
 \begin_layout Section
-Lift architecture
-\end_layout
-
-\begin_layout Standard
-\align center
-\begin_inset Float figure
-wide false
-sideways false
-status open
-
-\begin_layout Plain Layout
-\align center
-\begin_inset Graphics
-	filename images/LiftArch.png
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Caption
-
-\begin_layout Plain Layout
-Architecture diagram
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
+Lift Architecture
 \end_layout
 
 \begin_layout Standard
@@ -136,65 +102,117 @@ The diagram above highlights the main Lift components and where they live
  As we explained in the introduction, Lift is set up to act as a Filter
  component (REF) and this acts as the entry point.
  The rest of the component layout varies from application to application,
- and how you've implemented your Snippets and Templates.
+ and how you've implemented your Snippets and Templates amongst other things.
 \end_layout
 
 \begin_layout Standard
+\align center
+\begin_inset Float figure
+wide false
+sideways false
+status open
 
-\series bold
-\bar under
-Diagram synopsis
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Architecture
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Architecture-diagram"
+
+\end_inset
+
+
 \end_layout
 
-\begin_layout Enumerate
-SiteMap - contains the web pages for a Lift application.
- REF
+\end_inset
+
+
 \end_layout
 
-\begin_layout Enumerate
-LiftRules - allows you to configure Lift REF
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/LiftArch.png
+
+\end_inset
+
+
 \end_layout
 
-\begin_layout Enumerate
-LiftSession - the session state representation REF
+\end_inset
+
+
 \end_layout
 
-\begin_layout Enumerate
-S - the stateful object impersonating the state context for a given request/resp
-onse lifecycle REF
+\begin_layout Standard
+In Figure
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Architecture-diagram"
+
+\end_inset
+
+ we've broken Lift up into it's major components, which are described below:
 \end_layout
 
-\begin_layout Enumerate
-SHtml - contains helper functions for XHtml artifacts (form fields, links,
+\begin_layout Description
+SiteMap Contains the web pages for a Lift application.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "cha:SiteMap"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+LiftRules Allows you to configure Lift REF
+\end_layout
+
+\begin_layout Description
+LiftSession The session state representation REF
+\end_layout
+
+\begin_layout Description
+S The stateful object impersonating the state context for a given request/respon
+se lifecycle REF
+\end_layout
+
+\begin_layout Description
+SHtml Contains helper functions for XHtml artifacts (form fields, links,
  Ajax links, buttons, etc.) REF
 \end_layout
 
-\begin_layout Enumerate
-Views - LiftView objects impersonating a view as a XML content.
+\begin_layout Description
+Views LiftView objects impersonating a view as a XML content.
  Thus pages can be composed from other sources not only from html files.
  REF
 \end_layout
 
-\begin_layout Enumerate
-LiftResponse - represents the abstraction of a response that will be propagated
+\begin_layout Description
+LiftResponse Represents the abstraction of a response that will be propagated
  to the client.
  REF
 \end_layout
 
-\begin_layout Enumerate
-LiftCore - The engine of the framework responsible for request/response
- lifecycle, rendering pipeline, invoking user's functions etc.
+\begin_layout Description
+LiftCore The engine of the framework responsible for request/response lifecycle,
+ rendering pipeline, invoking user's functions etc.
  REF
 \end_layout
 
-\begin_layout Enumerate
-Comet - represents the Comet actors layer.
+\begin_layout Description
+Comet Represents the Comet Actors layer.
  As you already know, comet actors are capable of sending asynchronous content
  to the browser.
  REF
 \end_layout
 
-\begin_layout Enumerate
+\begin_layout Description
 ORM - Either Mapper or Record - The lightweight ORM library proposed by
  Lift.
  Mapper framework is the proposed ORM framework for Lift 1.0 and Record framework
@@ -202,7 +220,7 @@ ORM - Either Mapper or Record - The lightweight ORM library proposed by
  REF
 \end_layout
 
-\begin_layout Enumerate
+\begin_layout Description
 HTTP Auth - You can use HTTP authentication (Basic and Digest models) in
  your lift application.
  This provides you more control as opposed to web-container's HTTP authenticatio
@@ -210,15 +228,15 @@ n model.
  REF
 \end_layout
 
-\begin_layout Enumerate
-JS API - The JavaScript abstraction layer.
+\begin_layout Description
+JSAPI The JavaScript abstraction layer.
  These are Scala classes/objects that abstract JavaScript artifacts.
  Such objects can be combined to build JavaScript code.
  REF
 \end_layout
 
-\begin_layout Enumerate
-Utils - contains a lot of helper functions that Lift uses internally that
+\begin_layout Description
+Utils contains a lot of helper functions that Lift uses internally that
  are also available to your application.
  REF
 \end_layout
@@ -579,7 +597,7 @@ Check the SiteMap and Loc functions.
  We cover SiteMap extensively in chapter 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "cha:SiteMap"
+reference "cha:SiteMap-1"
 
 \end_inset
 
@@ -927,7 +945,7 @@ name "sec:Session-Management"
 \begin_layout Standard
 Lift is a stateful framework and naturally this state needs to be managed.
  You may already be familiar with HttpSession and and how a J(2)EE web container
- identifies an HttpSession; either by JSESSIONID cookie or by JSESSIONID
+ identifies an HttpSession; either by a JSESSIONID cookie or by a JSESSIONID
  URI sequence (in case of URL rewriting).
  Similarly, Lift uses a LiftSession reference which is not actually 
 \begin_inset Quotes eld
@@ -965,7 +983,7 @@ javax.servlet.http.HttpSessionActivationListener
 \end_layout
 
 \begin_layout Enumerate
-When receiving an HTTP Request and there was no stateless disptach function
+When receiving an HTTP Request and there was no stateless dispatch function
  to execute, Lift does the stateful processing.
  But before doing that it checks to see if there is a 
 \family typewriter
@@ -985,7 +1003,7 @@ ServletBridge attribute on HttpSession.
 
 \begin_layout Enumerate
 When the container terminates the http session SessionToServletBridge sends
- a message to the SessionMaster actor to terminate the LiftSession.
+ a message to the SessionMaster Anctor to terminate the LiftSession.
  Basically the following is taking place:??
 \end_layout
 
@@ -995,7 +1013,7 @@ Call LiftSession.onAboutToShutdownSession hooks
 \end_layout
 
 \begin_layout Enumerate
-Sends ShutDown message to all Comet actors pertaining to this session
+Sends ShutDown message to all Comet Actors pertaining to this session
 \end_layout
 
 \begin_layout Enumerate
@@ -1008,7 +1026,7 @@ Call LiftSession.onShutdownSession hooks
 
 \end_deeper
 \begin_layout Standard
-SessionMaster actor is also protected another watcher actor.
+The SessionMaster Actor is also protected another watcher actor.
  In essense this watcher actor receives the Exit messages of the watched
  actors.
  When it receives an Exit message it will call the users' failure functions
@@ -1017,8 +1035,8 @@ SessionMaster actor is also protected another watcher actor.
 \end_layout
 
 \begin_layout Standard
-Even so Lift in essence is doing its own session management you still have
- the freedom to manually add attributes to the HttpSession object.
+Even so Lift is doing its own session management you still have the freedom
+ to manually add attributes to the HttpSession object.
  Still we do not recommend this unless you really have to.
  If you want to keep your own session variables, you can use SessionVar's.
  Here is an example:
@@ -1085,9 +1103,12 @@ var theCountValue: Int = count
 \end_layout
 
 \begin_layout Standard
-As you've noticed SessionVar-s are typesafe representation of http session
- attributes (actually they are kept in LiftSession and not directly in HttpSessi
-on).
+As you've noticed 
+\family typewriter
+SessionVar
+\family default
+s are typesafe representation of http session attributes (they are kept
+ in LiftSession and not directly in HttpSession).
  There are implicit conversion functions to convert a SessionVar to its
  underlying type.
 \end_layout
@@ -1099,27 +1120,18 @@ The next question would be
 
 So we have internal session management, how do we cope with that in a clustered
  environment? ...
- how sessions are replicated?
+ how are sessions replicated?
 \begin_inset Quotes erd
 \end_inset
 
- ...
- well, in short we're are not.
- There is no intentions to use the web container's session replication as
+ the answer is, they aren't.
+ There is no intention to use the web container's session replication as
  these technologies appears to be inferior to other solutions on the market.
  Relying on Java serialization brings a lot of performance concerns and
  alternative technologies have been investigated and they are still under
  investigation.
- Until there is a 
-\begin_inset Quotes eld
-\end_inset
-
-standard
-\begin_inset Quotes erd
-\end_inset
-
- advocated session replication technology you can still cluster you application
- using 
+ Until there is a standard session replication technology you can still
+ cluster you application using 
 \begin_inset Quotes eld
 \end_inset
 
@@ -1130,11 +1142,11 @@ sticky session
 .
  This meas that all requests pertaining to a HTTP session must be processed
  by the same cluster node.
- This can be done by load balancers (even hardware load balancer) so they
- would dispatch the requests based on JSESSIONID cookie.
- Other approaches are that dispatching is done based on some URI or query
- parameters.
- For example a query parameter like serverid=1 is configured in the load
+ This can be done by software or hardware load balancers, as they would
+ dispatch the requests based on JSESSIONID cookie.
+ Another approache is that the dispatching is done based on some URI or
+ query parameters.
+ For example, a query parameter like serverid=1 is configured in the load
  balancer to always be dispatched to the node 1 of the cluster, and so on.
  There are some downsides for the sticky session approach.
  For instance you are logged in the application and do your stuff.
@@ -1154,7 +1166,7 @@ sticky session
 \end_layout
 
 \begin_layout Section
-Miscellaneous Lift goodies
+Miscellaneous Lift Features
 \end_layout
 
 \begin_layout Standard
@@ -1633,13 +1645,17 @@ The utility of this support is quite obvious in so many situations.
 \end_layout
 
 \begin_layout Subsection
-S object
+S Object
 \end_layout
 
 \begin_layout Standard
-S object is a very important part of lift.
+The 
+\family typewriter
+S
+\family default
+ object is a very important part of Lift.
  As you may already know S states for Stateful.
- S context is created by Lift when receiving a client request that needs
+ The S context is created by Lift when receiving a client request that needs
  to be handled as a stateful reuest.
  Please see 
 \begin_inset CommandInset ref
@@ -1773,12 +1789,10 @@ name "sub:Notices/Warnings/Errors-messages"
 \end_layout
 
 \begin_layout Standard
-Many times an application needs to provide error messages or some notices
- to the end user that something happened, such as a form field is not valid
- or a record could not be saved etc.
- Of course there are multiple ways to do this but still Lift provides a
- unified model for such messages that can be used for static pages asa well
- as for Ajax calls and even Comet.
+Feedback for the user is required for modern applications, error messages
+ for issues, status messages for update and general notifications.
+ Lift provides a unified model for such messages that can be used for static
+ pages asa well as for Ajax calls and even Comet.
  The S object provide three functions (each of them overloaded) S.notice,
  S.warning, S.error.
  So e have a classification of messages where notices are just informative
@@ -1810,7 +1824,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Notices example
+S.notice example
 \end_layout
 
 \end_inset
@@ -1876,7 +1890,7 @@ There are no records to render
 \end_layout
 
 \begin_layout Standard
-In your templated you just need to add this Lift tag: 
+In your template you would use this Lift Tag: 
 \end_layout
 
 \begin_layout Standard
@@ -1927,7 +1941,7 @@ msgs tag
 \end_layout
 
 \begin_layout Standard
-This is a built in snippet that will render all message (notice/warning/error)
+This is a built in snippet that will render all messages (notice/warning/error)
  but here we provided additionl information for notices.
  the notice_msg specifies the label of the message and notice_class the
  CSS class to be used.
@@ -2912,8 +2926,7 @@ ion this will not be loaded by the web application classloader but instead
  sits below container's classloader in the delgation chain.
  Besides al these Using Scala's power the developer experience of protecting
  server resources using HTTP authentication can be simplified a lot.
- Lift supports both basic and digest authentications so let's see how it's
- done
+ Lift supports both basic and digest authentications, Basic is shown below:
 \end_layout
 
 \begin_layout Standard
@@ -2998,7 +3011,7 @@ admin
 
 \begin_layout Plain Layout
 
-	    println("John is authenticated !")
+	    println("John is authenticated!")
 \end_layout
 
 \begin_layout Plain Layout
@@ -3077,7 +3090,7 @@ John
 \begin_inset Quotes erd
 \end_inset
 
- the accesstothe protected resource will be granted (since our function
+ the access to the protected resource will be granted (since our function
  returns true).
  But in our authentication function we also specify the role for user 
 \begin_inset Quotes eld
@@ -3146,10 +3159,6 @@ Roles hierarchy example
 
 \end_inset
 
-
-\end_layout
-
-\begin_layout Plain Layout
 
 \end_layout
 
