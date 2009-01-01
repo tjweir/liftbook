@@ -3770,9 +3770,9 @@ This is pretty much it as far as HTTP authentication and authorization goes
  internally calculated, the HTTP digest authentication can not really be
  used.
  The reason is that in order to match the client's digest, server needs
- to calculate it and for that it needs the password in clear but becasue
- that application stores a digest the user's password can not be recovered
- hence the HTTP digest can no be calculated.
+ to calculate it and for that it needs the password in clear but because
+ the application stores a digest, the user's password can not be recovered.
+ Hence the HTTP digest can no be calculated.
  This is a missmatch betwen the two concepts: HTTP digest authentication
  given by RFC 2617 and the unrecoverable password storage.
 \end_layout
