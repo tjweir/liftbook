@@ -1,4 +1,4 @@
-#LyX 1.6.0 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -134,7 +134,9 @@ name "fig:Architecture-diagram"
 \begin_layout Plain Layout
 \align center
 \begin_inset Graphics
-	filename images/LiftArch.png
+	filename images/LiftArchDiagram.pdf
+	BoundingBox 0bp 5.75in 5in 792bp
+	clip
 
 \end_inset
 
