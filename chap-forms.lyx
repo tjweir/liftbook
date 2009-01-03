@@ -144,7 +144,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 An example form template
 \begin_inset CommandInset label
 LatexCommand label
@@ -263,7 +262,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 An example form snippet
 \begin_inset CommandInset label
 LatexCommand label
@@ -482,7 +480,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Using RequestVars with forms
 \begin_inset CommandInset label
 LatexCommand label
@@ -621,8 +618,8 @@ The next thing to look at is how the form elements are generated.
  later in this section.
  Generally, an element generator takes an argument for the initial value
  as well as a function to process the submitted value.
- Usually both of these arguments will be related to a variable, but there's
- nothing stopping you from doing something like
+ Usually both of these arguments will use a variable, but there's nothing
+ stopping you from doing something like
 \end_layout
 
 \begin_layout LyX-Code
@@ -664,8 +661,16 @@ processEntryAdd
 \begin_layout Standard
 Now that we've covered the basics of forms, we're going to go into a little
  more detail for each form element generator method on SHtml.
- The a method (all 3 variants) as well as the ajax* methods are specific
- to Ajax forms, which are covered in detail in chapter 
+ The 
+\family typewriter
+a
+\family default
+ method (all 3 variants) as well as the 
+\family typewriter
+ajax
+\family default
+* methods are specific to Ajax forms, which are covered in detail in chapter
+ 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "cha:AJAX-and-COMET"
@@ -681,6 +686,16 @@ reference "sec:File-Uploads"
 \end_inset
 
 .
+ One final note before we dive in is that most generator methods have an
+ overload with a trailing asterisk (i.e.
+ 
+\family typewriter
+hidden_*
+\family default
+); these are generally equivalent to the overloads without an asterisk except
+ that where a function argument is required they take one of Lift's internal
+ AFuncHolder instances.
+ In other words, you probably shouldn't use these versions.
 \end_layout
 
 \begin_layout Subsection
@@ -688,12 +703,16 @@ checkbox
 \end_layout
 
 \begin_layout Standard
-The checkbox method generates a checkbox form element, taking an initial
- Boolean value as well as a function 
+The 
+\family typewriter
+checkbox
+\family default
+ method generates a checkbox form element, taking an initial Boolean value
+ as well as a function 
 \begin_inset Formula $(Boolean)\Rightarrow Any$
 \end_inset
 
- that is called if the checkbox is submitted.
+ that is called when the checkbox is submitted.
  If you've done a lot of HTML form processing you might wonder how this
  actually occurs, since 
 \emph on
@@ -707,7 +726,7 @@ an unchecked checkbox is not actually submitted as part of a form
 \end_layout
 
 \begin_layout Standard
-Because more than one element is returned by the generator, you can't just
+Because more than one XML node is returned by the generator, you can't just
  use the 
 \begin_inset Quotes eld
 \end_inset
@@ -728,9 +747,17 @@ cross-ref?
 
  to set attributes on the checkbox element.
  Instead, Lift provides a checkbox_id generator that takes an additional
- Box[String] parameter that will add an id attribute to the form element.
+ 
+\family typewriter
+Box[String]
+\family default
+ parameter that will add an id attribute to the form element.
  Additionally, both overloads for checkbox take a final varargs sequence
- of (String,String) so that you can provide any other attributes you'd like.
+ of 
+\family typewriter
+Pair(String,String)
+\family default
+ so that you can provide any other attributes you'd like.
  For example, listing 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -759,7 +786,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 A checkbox example
 \begin_inset CommandInset label
 LatexCommand label
@@ -785,7 +811,7 @@ snazzy
 \begin_inset Quotes erd
 \end_inset
 
-), (
+), 
 \begin_inset Quotes eld
 \end_inset
 
@@ -793,11 +819,95 @@ class
 \begin_inset Quotes erd
 \end_inset
 
-, 
+ -> 
 \begin_inset Quotes eld
 \end_inset
 
 woohoo
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+hidden
+\end_layout
+
+\begin_layout Standard
+The 
+\family typewriter
+hidden
+\family default
+ method generates a hidden form field.
+ Unlike the HTML hidden field, the hidden tag is not intended to hold a
+ plain value; rather, in Lift it takes a function 
+\begin_inset Formula $()\Rightarrow Any$
+\end_inset
+
+ argument that is called when the form is submitted.
+ As with most of the other generators it also takes a final varargs sequence
+ of 
+\family typewriter
+Pair[String,String]
+\family default
+ attributes to be added to the XML node.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:A-hidden-example"
+
+\end_inset
+
+ shows an example of using a hidden field to 
+\begin_inset Quotes eld
+\end_inset
+
+log
+\begin_inset Quotes erd
+\end_inset
+
+ information.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+A hidden example
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:A-hidden-example"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+SHtml.hidden(() => println(
+\begin_inset Quotes eld
+\end_inset
+
+Form was submitted
 \begin_inset Quotes erd
 \end_inset
 
