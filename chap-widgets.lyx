@@ -46,63 +46,825 @@
 Lift Widgets
 \end_layout
 
-\begin_layout Standard
-\begin_inset Box Framed
-position "t"
-hor_pos "c"
-has_inner_box 0
-inner_pos "t"
-use_parbox 0
-width "100col%"
-special "none"
-height "1in"
-height_special "totalheight"
-status collapsed
-
-\begin_layout Plain Layout
-This chapter is still under active development.
- The contents will change.
+\begin_layout Section
+Introduction
 \end_layout
 
+\begin_layout Standard
+In essence a Lift widget is a class that constructs XHTML fragmets built
+ based on dynamic information that we can easily integrate in our pages.
+ But it is not only about XHTML but also the JavaScript code in order to
+ make the widget very dynamic and the stylesheet in order to theme the widget.
+ Many web frameworks out there come with a rich set of artifacts, sometimes
+ called components, sometimes widgets or perhaps something else.
+ These generates lots of attraction because these re-usable entities can
+ be easily integrated in your applications.
+ Of course the term 
+\begin_inset Quotes eld
 \end_inset
 
+easily
+\begin_inset Quotes erd
+\end_inset
 
+ is used loosely here as you maybe very well aware of the pains you had
+ to endure to develop your own widgets in one framework or another.
+ Perhaps too excessive use of XML (see JSF 1.1, 1.2), too many specific interfaces
+ to implement so that the framework can do the necessary wiring and so on.
+ With Lift, things are a quite different as after lots of discussions we
+ adopted a more loosely approach.
+ There is no trait that you need to implement and no XML descriptors because
+ the main idea is to make it as simple as possible for the users to create
+ widgets.
+ In fact Lift's design facilitates this a lot by using snippets and JavaScript
+ abstractions.
+ Of course Scala's support for embedded XML.
+\end_layout
+
+\begin_layout Section
+Existent Lift widgets
 \end_layout
 
 \begin_layout Standard
+Lift framework comes with a set of widgets existent in the lift-widgets
+ sub-project.
+ This list of widget is expect to grow in time providing a rich set of widgets
+ that you can just use in your application.
+ We also encourge you towrite your own widgets but we'll see in a bit how
+ you can create your own widget, or better yet what is the approach that
+ we chose for building Lift widgets.
+\end_layout
 
+\begin_layout Section
+Calendar widgets
 \end_layout
 
 \begin_layout Standard
-\begin_inset Note Note
+There are three calendar widgets: Month-View, Week-View and Day-View built
+ somehow similar with what Microsoft Outlook provides or Google Calendar.They
+ provide basic functionality so you maybe able to extend or easily customize
+ based on your application needs.
+\end_layout
+
+\begin_layout Subsection
+Calendar Month-View
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
 status open
 
 \begin_layout Plain Layout
-Planning:
-\end_layout
+\align center
+\begin_inset Graphics
+	filename images/month-view.png
 
-\begin_layout Itemize
-Create and extend the Sparklines widget from Marius
-\end_layout
-
-\begin_deeper
-\begin_layout Itemize
-General Strategy for developing widgets
-\end_layout
-
-\begin_layout Itemize
-Pushing the right <head> includes (location of the JS file)
-\end_layout
-
-\begin_layout Itemize
-Figure out how to get your data in there and what you can about controlling
- and wrap it the loving embrace of lift.
-\end_layout
-
-\end_deeper
 \end_inset
 
 
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Calendar Month-View
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This widget allows you to create month view calendars in your web page,
+ manage your calendar events etc.
+\end_layout
+
+\begin_layout Standard
+How to use it:
+\end_layout
+
+\begin_layout Enumerate
+In you Boot call 
+\family typewriter
+CalendarMonthView init
+\family default
+; This will do necessary initialization mainly telling Lift's 
+\family typewriter
+ResourceServer
+\family default
+ about the paths to JavaScripts and stylesheets needed by this widget as
+ these dependencies are embedded in the same jar file.
+\end_layout
+
+\begin_layout Enumerate
+Here is a snippet example:
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Calendar Month-View example
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/*
+\end_layout
+
+\begin_layout Plain Layout
+
+The template markup:
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<lift:surround with="default" at="content">
+\end_layout
+
+\begin_layout Plain Layout
+
+    <h2>Calendar Month View Demo</h2>
+\end_layout
+
+\begin_layout Plain Layout
+
+    <lift:CalendarMonthViewDemo.render> 
+\end_layout
+
+\begin_layout Plain Layout
+
+   		<cal:widget/>
+\end_layout
+
+\begin_layout Plain Layout
+
+    </lift:CalendarMonthViewDemo.render>
+\end_layout
+
+\begin_layout Plain Layout
+
+</lift:surround> 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+*/
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+class CalendarMonthViewDemo {
+\end_layout
+
+\begin_layout Plain Layout
+
+  def render(html: Group) : NodeSeq = {
+\end_layout
+
+\begin_layout Plain Layout
+
+    val c = Calendar getInstance;
+\end_layout
+
+\begin_layout Plain Layout
+
+    c.set(MONTH, 0)     
+\end_layout
+
+\begin_layout Plain Layout
+
+	bind("cal", html,
+\end_layout
+
+\begin_layout Plain Layout
+
+         "widget" -> CalendarMonthView(c, makeCals, itemClick, dayClick,
+ weekClick)
+\end_layout
+
+\begin_layout Plain Layout
+
+    )
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+  import JE._
+\end_layout
+
+\begin_layout Plain Layout
+
+  import JsCmds._
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\end_layout
+
+\begin_layout Plain Layout
+
+  // These are the JavaScript functions that will be executed when you click
+ a calendar item,
+\end_layout
+
+\begin_layout Plain Layout
+
+  // a cell header or the week number.
+ You can take any actions you desire here.
+ 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  /* The JS parameters you are provided with in your callback function are:
+ the element that 
+\end_layout
+
+\begin_layout Plain Layout
+
+   * you clicked and the id of the clicked calendar item
+\end_layout
+
+\begin_layout Plain Layout
+
+   */
+\end_layout
+
+\begin_layout Plain Layout
+
+  def itemClick = Full(AnonFunc("elem, param", JsRaw("alert(param + ' -
+ ' + elem.nodeName)")))
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\end_layout
+
+\begin_layout Plain Layout
+
+  /* The JS parameters you are provided with in your callback function are:
+ the element that 
+\end_layout
+
+\begin_layout Plain Layout
+
+   * you clicked and the date as a string of the form yyyy/MM/DD
+\end_layout
+
+\begin_layout Plain Layout
+
+   */
+\end_layout
+
+\begin_layout Plain Layout
+
+  def dayClick = Full(AnonFunc("elem, param", JsRaw("alert(param + ' - '
+ + elem.nodeName)")))
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\end_layout
+
+\begin_layout Plain Layout
+
+  /* The JS parameters you are provided with in your callback function are:
+ the element that 
+\end_layout
+
+\begin_layout Plain Layout
+
+   * you clicked and the week of year.
+\family typewriter
+\lang english
+/classpath/calendars/monthview/style.css
+\end_layout
+
+\begin_layout Plain Layout
+
+   */
+\end_layout
+
+\begin_layout Plain Layout
+
+  def weekClick = Full(AnonFunc("elem, param", JsRaw("alert(param + ' -
+ ' + elem.nodeName)")))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  /* This function cre
+\lang english
+langua
+ated the calendar items that will be rendered in the Month-View widget.
+\end_layout
+
+\begin_layout Plain Layout
+
+   */
+\end_layout
+
+\begin_layout Plain Layout
+
+  private def makeCals = {
+\end_layout
+
+\begin_layout Plain Layout
+
+    val c1 = Calendar getInstance
+\end_layout
+
+\begin_layout Plain Layout
+
+    val c2 = Calendar getInstance
+\end_layout
+
+\begin_layout Plain Layout
+
+    val c2End = Calendar getInstance
+\end_layout
+
+\begin_layout Plain Layout
+
+    val c3 = Calendar getInstance
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\end_layout
+
+\begin_layout Plain Layout
+
+	c2.set(DAY_OF_MONTH, 29)
+\end_layout
+
+\begin_layout Plain Layout
+
+    c2.set(MONTH, 3)
+\end_layout
+
+\begin_layout Plain Layout
+
+    c2End.set(DAY_OF_MONTH, 2)
+\end_layout
+
+\begin_layout Plain Layout
+
+    c2End.set(MONTH, 5)
+\end_layout
+
+\begin_layout Plain Layout
+
+    c3.set(DAY_OF_MONTH, 2)
+\end_layout
+
+\begin_layout Plain Layout
+
+    c3.set(MONTH, 4)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    val item1 = CalendarItem("1", c1, CalendarType.MEETING) optional (
+\end_layout
+
+\begin_layout Plain Layout
+
+        _ end(c1),
+\end_layout
+
+\begin_layout Plain Layout
+
+        _ subject("Meet me"),
+\end_layout
+
+\begin_layout Plain Layout
+
+        _ description("We really need to meet to settle things down.
+ This is just a dumb comment to have something in it."))
+\end_layout
+
+\begin_layout Plain Layout
+
+    val item2 = CalendarItem("2", c2, CalendarType.MEETING) optional (
+\end_layout
+
+\begin_layout Plain Layout
+
+        _ end(c2End),
+\end_layout
+
+\begin_layout Plain Layout
+
+        _ subject("Meet me again"))
+\end_layout
+
+\begin_layout Plain Layout
+
+    val item3 = CalendarItem("4", c3, CalendarType.MEETING) optional (
+\end_layout
+
+\begin_layout Plain Layout
+
+        _ end(c3),
+\end_layout
+
+\begin_layout Plain Layout
+
+        _ subject("Other month"))
+\end_layout
+
+\begin_layout Plain Layout
+
+    item1 :: item2 :: item3 ::  Nil
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+} 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+The CalendarItem abstacts that information for calendar elements that will
+ be rendered in the widgets.
+ There are three mandatory parameters: the calendar ID, the start date and
+ the type of the calendar.
+ The rest are optional parameter as they re expressed as repeted higher
+ order function parameters to the optional function.
+ 
+\end_layout
+
+\begin_layout Standard
+We can also pass a 
+\family typewriter
+MonthViewMeta
+\family default
+ to the 
+\family typewriter
+CalendarMonthView
+\family default
+ object.
+ Here we can specify the first day of week that should be rendered (Sunday,
+ Monday etc.) and the Locale that will be used for internationalization.
+\end_layout
+
+\begin_layout Standard
+The widget is rendring its JavaScript dependencies as well as the default
+ stylesheet rendered with the 
+\family typewriter
+/classpath/calendars/monthview/style.css
+\family default
+ path.
+ The widget itsself is rendering the <head/> element that will be merged
+ into the top head element by Lift.
+ To use your own stylesheet you can create this path in WEB-INF/classes
+ folder as it will be first search ed here.
+ Hence you can overwrite the defautl stylesheet with your own one so you
+ can easily change the theme.
+\end_layout
+
+\begin_layout Subsection
+Calendar Week-View
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/week-view.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Calendar Week-View
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The same paradigms applied for month view are also applied for week view.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+ 
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Week View example
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+class CalendarWeekViewDemo {
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+ def render(html: Group) : NodeSeq = {
+\end_layout
+
+\begin_layout Plain Layout
+
+	val c = Calendar getInstance;
+\end_layout
+
+\begin_layout Plain Layout
+
+	c.set(DAY_OF_MONTH, 17)
+\end_layout
+
+\begin_layout Plain Layout
+
+	c.set(MONTH, 4)
+\end_layout
+
+\begin_layout Plain Layout
+
+    bind("cal", html,
+\end_layout
+
+\begin_layout Plain Layout
+
+         "widget" -> CalendarWeekView(c, WeekViewMeta(MONDAY, Locale.getDefault()
+), list, itemClick))
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Same as Month View We need to initialize the WeekView component in Boot
+ by calling 
+\family typewriter
+CalendarWeekView init
+\family default
+;.
+ In this case we're using CalendarViewMeta object to create the actual component.
+ We are passing as arguments a Calendar object that tells the widget which
+ week of year it needs to render.
+ Basically it renders the week that contains the date specified by the Calendar
+ object.
+ Then we are passing a WeekViewMeta containin information about first day
+ of week (Monday,Sunday etc.) and the Locale that is used for internationalizatio
+n.
+ The 
+\family typewriter
+list
+\family default
+ parameter is a List[CalendarItem] which of course contains that calendar
+ items that will be rendered by this widget.
+ The 
+\family typewriter
+itemClick
+\family default
+ isthe JavaScript function that willbe called when you click on the calendar
+ item itself.
+\end_layout
+
+\begin_layout Subsection
+Calendar Day-View
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/day-view.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Calendar Day-View 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+CalendarDayView widget renders the calendars that start in the same day.
+ The usage is very similar with CalendarWeekView widget:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+CalendarDayView example
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+class CalendarDayViewDemo {
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+ def render(html: Group) : NodeSeq = {    val c = Calendar getInstance;
+\end_layout
+
+\begin_layout Plain Layout
+
+    c.set(DAY_OF_MONTH, 17)
+\end_layout
+
+\begin_layout Plain Layout
+
+    c.set(MONTH, 4)
+\end_layout
+
+\begin_layout Plain Layout
+
+    bind("cal", html,
+\end_layout
+
+\begin_layout Plain Layout
+
+         "widget" -> CalendarDayView(c, DayViewMeta(Locale.getDefault()),
+ list, itemClick)
+\end_layout
+
+\begin_layout Plain Layout
+
+    )
+\end_layout
+
+\begin_layout Plain Layout
+
+  } 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The parameters have pretty much the same meaning as for CalendarWeekView
+ except that the Calndar object pass represents the day that we want to
+ render and we are now passing a DayViewMeta containing the Locale for internati
+onalization purposes.
+ 
 \end_layout
 
 \end_body
