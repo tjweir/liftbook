@@ -1342,10 +1342,17 @@ reference "sec:Request/Response-Lifecycle"
 
 \end_inset
 
- when exactly LoanWrapper-s are invoked.
+ when exactly 
+\family typewriter
+LoanWrapper
+\family default
+s are invoked.
  But so far we added our code so what will happen when a request is sent
- from clinet? In a glance the invocation sequence will be X(Y(f)) where
- f is the Lift's function that actually impersonates the core processing.
+ from clinet? In a glance the invocation sequence will be 
+\family typewriter
+X(Y(f))
+\family default
+ where f is the Lift's function that actually impersonates the core processing.
  Therefore you'll see in the console the following output:
 \end_layout
 
@@ -1405,7 +1412,6 @@ By now you already have a fairly good idea how snippets work, how you can
 Ability to pass parameters to snippets
 \end_layout
 
-\begin_deeper
 \begin_layout Standard
 \begin_inset listings
 inline false
@@ -1568,12 +1574,10 @@ time
 
 \end_layout
 
-\end_deeper
 \begin_layout Enumerate
 Use snippets for tag attributes
 \end_layout
 
-\begin_deeper
 \begin_layout Standard
 \begin_inset listings
 inline false
@@ -1584,7 +1588,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Attribute snippet
+Attribute Snippet
 \end_layout
 
 \end_inset
@@ -1637,7 +1641,6 @@ class MyDivThing {
 
 \end_layout
 
-\end_deeper
 \begin_layout Standard
 The utility of this support is quite obvious in so many situations.
  For instance when supporting right-to-left languages you can add the direction
