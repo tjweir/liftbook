@@ -1064,7 +1064,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 TreeView example
 \end_layout
 
@@ -1210,7 +1209,7 @@ The Tree class is declared as:
 \end_layout
 
 \begin_deeper
-\begin_layout Plain Layout
+\begin_layout Standard
 
 \family typewriter
 \begin_inset listings
@@ -1219,37 +1218,32 @@ status open
 
 \begin_layout Plain Layout
 
-\family typewriter
-case class Tree(text:String,
- // The node text
+case class Tree(text:String, // The node text
 \end_layout
 
 \begin_layout Plain Layout
 
-\family typewriter
-				id: Box[String], 
-// The node ID
+				id: Box[String], // The node ID
 \end_layout
 
 \begin_layout Plain Layout
 
-\family typewriter
-				classes: Box[String], 
-// The CSS classes applied to this node
+				classes: Box[String], // The CSS classes applied to this node
 \end_layout
 
 \begin_layout Plain Layout
 
-\family typewriter
-				expanded: Boolean, 
-// The node is expanded or not
+				expanded: Boolean, // The node is expanded or not
 \end_layout
 
 \begin_layout Plain Layout
 
-\family typewriter
-				children: Box[List[Tree]])
- // The node's children
+				hasChildren: Boolean, // Indicates if this node has choldern of not.
+\end_layout
+
+\begin_layout Plain Layout
+
+				children: List[Tree]) // The node's children
 \end_layout
 
 \end_inset
@@ -1260,6 +1254,15 @@ case class Tree(text:String,
 \end_deeper
 \begin_layout Standard
 There is also a companion module providing different overloaded apply functions.
+ As you've noticed we have a List of choldern which can be empty (Nil) but
+ we also have a hasChildren flag.
+ The reason is that hasChildren semantic is beyond the scope of an empty
+ childern list.
+ For instance for Ajax nodes we can have 
+\family typewriter
+hasChildren = true
+\family default
+ but the actual children list will be fetched dynamically using Ajax call.
 \end_layout
 
 \end_body
