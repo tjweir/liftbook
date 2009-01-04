@@ -1,4 +1,4 @@
-#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.0 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -631,12 +631,18 @@ Templates
 \end_inset
 
  form the backbone of Lift's flexibility and power.
- A template is essentially an XML file that contains Lift-specific tags
+ A template is an XML file that contains Lift-specific tags, see 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:ArchTags"
+
+\end_inset
+
  as well as whatever content you want returned to the user.
- There are a number of built-in XML tags that Lift uses for specific reasons,
- these are of the form 
+ Lift includes built-in Tags for specific actions and these are of the form
+ 
 \family typewriter
-<lift:name/>
+<lift:snippet_name/>
 \family default
 .
  Lift also allows you to create your own tags, which are called 
