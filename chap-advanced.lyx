@@ -1,4 +1,4 @@
-#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.0 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -43,7 +43,7 @@
 \begin_body
 
 \begin_layout Chapter
-Lift Architecture and advanced topics
+Architecture and Advanced Topics
 \begin_inset CommandInset label
 LatexCommand label
 name "cha:Advanced-Lift-Guts"
@@ -90,7 +90,7 @@ In this chapter we're going to dive into some of the advanced mechanics
 \end_layout
 
 \begin_layout Section
-Lift Architecture
+Architecture
 \end_layout
 
 \begin_layout Standard
@@ -231,7 +231,11 @@ n model.
 \end_layout
 
 \begin_layout Description
-JSAPI The JavaScript abstraction layer.
+JS
+\series bold
+-
+\series default
+API The JavaScript abstraction layer.
  These are Scala classes/objects that abstract JavaScript artifacts.
  Such objects can be combined to build JavaScript code.
  REF
@@ -991,35 +995,35 @@ When receiving an HTTP Request and there was no stateless dispatch function
 \family typewriter
 LiftSession
 \family default
- associated with this http sssion ID.
+ associated with this HTTP session ID.
  This mapping is kept on a SessionMaster Scala actor.
  
 \end_layout
 
 \begin_layout Enumerate
-If there is no LiftSession in SessionMaster actor, create it and add a SessionTo
-ServletBridge attribute on HttpSession.
- This will make Lift to be aware when container terminates the HttpSession
- or when the http session is about to be passivated or activated.??
+If there is no associated LiftSession in the SessionMaster actor, create
+ it and add a SessionToServletBridge attribute on HttpSession.
+ This will make Lift aware of the session when the container terminates
+ the HttpSession or when the HTTP session is about to be passivated or activated.
 \end_layout
 
 \begin_layout Enumerate
-When the container terminates the http session SessionToServletBridge sends
- a message to the SessionMaster Anctor to terminate the LiftSession.
- Basically the following is taking place:??
+When the container terminates the HTTP session, SessionToServletBridge sends
+ a message to the SessionMaster Actor to terminate the LiftSession, which
+ includes the following steps:
 \end_layout
 
 \begin_deeper
 \begin_layout Enumerate
-Call LiftSession.onAboutToShutdownSession hooks
+Call any defined LiftSession.onAboutToShutdownSession hooks
 \end_layout
 
 \begin_layout Enumerate
-Sends ShutDown message to all Comet Actors pertaining to this session
+Send a ShutDown message to all Comet Actors pertaining to this session
 \end_layout
 
 \begin_layout Enumerate
-Cleanup internal LiftSession state
+Clean up any internal LiftSession state
 \end_layout
 
 \begin_layout Enumerate
@@ -1028,19 +1032,22 @@ Call LiftSession.onShutdownSession hooks
 
 \end_deeper
 \begin_layout Standard
-The SessionMaster Actor is also protected another watcher actor.
- In essense this watcher actor receives the Exit messages of the watched
- actors.
+The SessionMaster Actor is also protected by another watcher Actor.
+ This watcher Actor receives the Exit messages of the watched Actors.
  When it receives an Exit message it will call the users' failure functions
  and restart the watched actor (Please see ActorWatcher.failureFuncs).
  
 \end_layout
 
 \begin_layout Standard
-Even so Lift is doing its own session management you still have the freedom
+Even while Lift is handling session management you still have the ability
  to manually add attributes to the HttpSession object.
- Still we do not recommend this unless you really have to.
- If you want to keep your own session variables, you can use SessionVar's.
+ We do not recommend this unless you really must.
+ A simpler way to keep your own session variables, is to use 
+\family typewriter
+SessionVar
+\family default
+s.
  Here is an example:
 \end_layout
 
@@ -1105,18 +1112,21 @@ var theCountValue: Int = count
 \end_layout
 
 \begin_layout Standard
-As you've noticed 
+
 \family typewriter
 SessionVar
 \family default
-s are typesafe representation of http session attributes (they are kept
+s are typesafe representation of HTTP session attributes (they are kept
  in LiftSession and not directly in HttpSession).
- There are implicit conversion functions to convert a SessionVar to its
- underlying type.
+ There are implicit conversion utility functions to convert a 
+\family typewriter
+SessionVar
+\family default
+ to its underlying type.
 \end_layout
 
 \begin_layout Standard
-The next question would be 
+??The next question would be 
 \begin_inset Quotes eld
 \end_inset
 
@@ -1172,8 +1182,8 @@ Miscellaneous Lift Features
 \end_layout
 
 \begin_layout Standard
-In this section we'll be discussing about various features that can prove
- very helpful in building rich Lift applications.
+In this section we will discuss various features that can prove helpful
+ in building rich Lift applications.
 \end_layout
 
 \begin_layout Subsection
@@ -1188,18 +1198,18 @@ name "sub:Wrapping-Lift's-processing"
 \end_layout
 
 \begin_layout Standard
-Lift provides so much flexibility to your application by allowing user's
- functions to be part of processing lifecycle.
- In these cases Lift allows you to provide your own function(s) and the
- actual Lift's processing function is passed to you.
- This means that calling Lift's logic is your responsability to call the
- function provided by Lift and of course you can have code before and after
- calling Lift's function.
+Lift provides the ability to allow user functions to be part of processing
+ lifecycle.
+ In these cases Lift allows you to provide your own functions and the actual
+ Lift's processing function is passed to you??.
+ This means that calling Lift's logic is your responsability.
+ to call the function provided by Lift and of course you can have code before
+ and after calling Lift's function.
 \end_layout
 
 \begin_layout Standard
 But let's see how exactly you can do this and we do that by starting with
- a code snippet:
+ a code snippet:??????
 \end_layout
 
 \begin_layout Standard
@@ -1253,7 +1263,7 @@ LoanWrapper example
 
 \begin_layout Plain Layout
 
-        val result = f // Let lift do normal request processing.
+        val result = f // Let Lift do normal request processing.
    
 \end_layout
 
@@ -1294,7 +1304,7 @@ LoanWrapper example
 
 \begin_layout Plain Layout
 
-        val result = f // Let lift do normal request processing.
+        val result = f // Let Lift do normal request processing.
    
 \end_layout
 
@@ -1333,29 +1343,51 @@ LoanWrapper example
 \end_layout
 
 \begin_layout Standard
-Actually the code looks pretty straight forward in the sense that we add
- two LoanWrapper instances to the S object.
- Note that we're using S object not LiftRules meaning that LoanWrapper-s
- are applicable only for stateful processing.
- See at 
+The code looks pretty straight-forward in the sense that we add two 
+\family typewriter
+LoanWrapper
+\family default
+ instances to the 
+\family typewriter
+S
+\family default
+ object.
+ (Note that we're using the 
+\family typewriter
+S
+\family default
+ object not 
+\family typewriter
+LiftRules
+\family default
+ meaning that 
+\family typewriter
+LoanWrapper
+\family default
+s are applicable only for stateful processing.
+ See 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Request/Response-Lifecycle"
 
 \end_inset
 
- when exactly 
+ for when exactly 
 \family typewriter
 LoanWrapper
 \family default
-s are invoked.
- But so far we added our code so what will happen when a request is sent
- from clinet? In a glance the invocation sequence will be 
+s are invoked.) 
+\end_layout
+
+\begin_layout Standard
+So let's see what happens when the above code processess a request from
+ a client.
+ You can think of the invocation sequence as 
 \family typewriter
 X(Y(f))
 \family default
- where f is the Lift's function that actually impersonates the core processing.
- Therefore you'll see in the console the following output:
+ where f is the Lift function that impersonates the core processing.
+ Therefore you'll see the following output in the console:
 \end_layout
 
 \begin_layout Standard
@@ -1395,9 +1427,9 @@ X -> goodbye!
 \end_layout
 
 \begin_layout Standard
-The utility of this feature is when you want to open/acquire some resources
- before Lift does its job and release them after Lift processed the stateful
- request and LiftResponse object is constructed.
+This feature allows you use a resource before Lift does and release them
+ after Lift has finished processing the stateful request and before the
+ LiftResponse object is constructed.
 \end_layout
 
 \begin_layout Subsection
@@ -1411,9 +1443,10 @@ By now you already have a fairly good idea how snippets work, how you can
 \end_layout
 
 \begin_layout Enumerate
-Ability to pass parameters to snippets
+Ability to pass parameters to snippets:
 \end_layout
 
+\begin_deeper
 \begin_layout Standard
 \begin_inset listings
 inline false
@@ -1576,10 +1609,12 @@ time
 
 \end_layout
 
+\end_deeper
 \begin_layout Enumerate
-Use snippets for tag attributes
+Use snippets for tag attributes:
 \end_layout
 
+\begin_deeper
 \begin_layout Standard
 \begin_inset listings
 inline false
@@ -1649,6 +1684,7 @@ The utility of this support is quite obvious in so many situations.
  of the page to be rtl quite easily.
 \end_layout
 
+\end_deeper
 \begin_layout Subsection
 S Object
 \end_layout
@@ -1658,8 +1694,7 @@ The
 \family typewriter
 S
 \family default
- object is a very important part of Lift.
- As you may already know S states for Stateful.
+ or Stateful, object is a very important part of Lift.
  The S context is created by Lift when receiving a client request that needs
  to be handled as a stateful reuest.
  Please see 
