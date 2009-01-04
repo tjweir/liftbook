@@ -2998,17 +2998,21 @@ xml
 \end_layout
 
 \begin_layout Enumerate
-Whether the path is absolute 
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Clarification needed on what this means
-\end_layout
-
+Whether the path is absolute.
+ Actually it indicates if this path is root relative path.
+ It starts with /<context-path> and then followed by the other path parts.
+ For example assume you application is deployed on the app context path
+ (
+\begin_inset Quotes eld
 \end_inset
 
+/app
+\begin_inset Quotes erd
+\end_inset
 
+) and we want to reference the file <webapp-folder>/pages/index.html is /app/page
+s/index.html.
+ 
 \end_layout
 
 \begin_layout Enumerate
