@@ -1000,11 +1000,266 @@ This will rendere a
 \end_layout
 
 \begin_layout Subsection
-Tree widget
+TreeView widget
 \end_layout
 
 \begin_layout Standard
+Tree widgets renders a tree like structure using TreeView JQuery plugin
+ (http://docs.jquery.com/Plugins/Treeview) for managing the tree structure.
+\end_layout
 
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/treeview.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+TreeView widget
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+To use this widget you need to callin your Boot 
+\family typewriter
+TreeView.init
+\family default
+ function as this widgets has javascript, CSS and images dependencies.
+ Then your snippet can look something like:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+TreeView example
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/*
+\end_layout
+
+\begin_layout Plain Layout
+
+The markup:
+\end_layout
+
+\begin_layout Plain Layout
+
+<lift:surround with="default" at="content"> 
+\end_layout
+
+\begin_layout Plain Layout
+
+   <lift:TreeViewDemo.render />
+\end_layout
+
+\begin_layout Plain Layout
+
+   <ul id="example" class="filetree">...</ul>
+\end_layout
+
+\begin_layout Plain Layout
+
+</lift:surround>
+\end_layout
+
+\begin_layout Plain Layout
+
+*/
+\end_layout
+
+\begin_layout Plain Layout
+
+class TreeViewDemo {
+\end_layout
+
+\begin_layout Plain Layout
+
+  def render(xhtml: Group): NodeSeq = {
+\end_layout
+
+\begin_layout Plain Layout
+
+    TreeView("example", JsObj(("animated" -> 90)))
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In the TreeView call we are providing the ID of the <ul> element and a JSON
+ structure containing configuration attributes the TreeView JQuery plugin
+ supports.
+ In this case we are using an animation effect with 90 milliseconds delay.
+ The example above renders basically transforms a static <ul> ..
+ <li> structure in the tree view where you can expand/colapse nodes etc.
+\end_layout
+
+\begin_layout Standard
+The TreeView widget also supporst loading the tree asynchronously and even
+ loading individual nodes asynchronously.
+ The differences from then above example are:
+\end_layout
+
+\begin_layout Enumerate
+The <ul> element is an empty element acting as a real-estate where the fetched
+ tree will be placed.
+ The tree of course if fetched using Ajax
+\end_layout
+
+\begin_layout Enumerate
+The TreeView call looks like 
+\family typewriter
+TreeView("async", JsObj(("animated" -> 20)), loadTree _, loadNode _) 
+\family default
+where 
+\family typewriter
+loadTree
+\family default
+ and 
+\family typewriter
+loadNode
+\family default
+ are functions that return a List[Tree].
+ 
+\family typewriter
+loadTree
+\family default
+ is used for loading the initial tree and 
+\family typewriter
+loadNode
+\family default
+ used for loading individual nodes.
+ The functions provided needs to conform with:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\family typewriter
+() => List[Tree]
+\family default
+ for loading the entire tree
+\end_layout
+
+\begin_layout Enumerate
+
+\family typewriter
+(String) => List[Tree])
+\family default
+ for loading a specific node.
+ The node ID is passed to your function so you can distinguish which node
+ you need to load
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+The Tree class is declared as:
+\end_layout
+
+\begin_deeper
+\begin_layout Plain Layout
+
+\family typewriter
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\family typewriter
+case class Tree(text:String,
+ // The node text
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+				id: Box[String], 
+// The node ID
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+				classes: Box[String], 
+// The CSS classes applied to this node
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+				expanded: Boolean, 
+// The node is expanded or not
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+				children: Box[List[Tree]])
+ // The node's children
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+There is also a companion module providing different overloaded apply functions.
 \end_layout
 
 \end_body
