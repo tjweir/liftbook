@@ -95,7 +95,7 @@ Lift framework comes with a set of widgets existent in the lift-widgets
  we chose for building Lift widgets.
 \end_layout
 
-\begin_layout Section
+\begin_layout Subsection
 Calendar widgets
 \end_layout
 
@@ -106,7 +106,7 @@ There are three calendar widgets: Month-View, Week-View and Day-View built
  based on your application needs.
 \end_layout
 
-\begin_layout Subsection
+\begin_layout Paragraph
 Calendar Month-View
 \end_layout
 
@@ -184,7 +184,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Calendar Month-View example
 \end_layout
 
@@ -379,16 +378,13 @@ class CalendarMonthViewDemo {
 
 \begin_layout Plain Layout
 
-  /* The JS parameters you are provided with in your callback function are:
+  /* The JS parameters you are provided to your JS callback function are:
  the element that 
 \end_layout
 
 \begin_layout Plain Layout
 
    * you clicked and the week of year.
-\family typewriter
-\lang english
-/classpath/calendars/monthview/style.css
 \end_layout
 
 \begin_layout Plain Layout
@@ -408,120 +404,54 @@ class CalendarMonthViewDemo {
 
 \begin_layout Plain Layout
 
-  /* This function cre
-\lang english
-langua
-ated the calendar items that will be rendered in the Month-View widget.
 \end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+
+\family typewriter
+makeCals
+\family default
+ function just returns a 
+\family typewriter
+List[CalendarItem]
+\family default
+.
+ The CalendarItem abstacts that information for calendar elements that will
+ be rendered in the widgets.
+ There are three mandatory parameters: the calendar ID, the start date and
+ the type of the calendar.
+ The rest are optional parameter as they re expressed as repeted higher
+ order function parameters to the optional function.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
 
 \begin_layout Plain Layout
 
-   */
-\end_layout
+\begin_inset Caption
 
 \begin_layout Plain Layout
-
-  private def makeCals = {
+CalendarItem example
 \end_layout
 
-\begin_layout Plain Layout
+\end_inset
 
-    val c1 = Calendar getInstance
-\end_layout
-
-\begin_layout Plain Layout
-
-    val c2 = Calendar getInstance
-\end_layout
-
-\begin_layout Plain Layout
-
-    val c2End = Calendar getInstance
-\end_layout
-
-\begin_layout Plain Layout
-
-    val c3 = Calendar getInstance
-\end_layout
-
-\begin_layout Plain Layout
-
-    
-\end_layout
-
-\begin_layout Plain Layout
-
-	c2.set(DAY_OF_MONTH, 29)
-\end_layout
-
-\begin_layout Plain Layout
-
-    c2.set(MONTH, 3)
-\end_layout
-
-\begin_layout Plain Layout
-
-    c2End.set(DAY_OF_MONTH, 2)
-\end_layout
-
-\begin_layout Plain Layout
-
-    c2End.set(MONTH, 5)
-\end_layout
-
-\begin_layout Plain Layout
-
-    c3.set(DAY_OF_MONTH, 2)
-\end_layout
-
-\begin_layout Plain Layout
-
-    c3.set(MONTH, 4)
-\end_layout
-
-\begin_layout Plain Layout
 
 \end_layout
 
 \begin_layout Plain Layout
 
-    val item1 = CalendarItem("1", c1, CalendarType.MEETING) optional (
-\end_layout
-
-\begin_layout Plain Layout
-
-        _ end(c1),
-\end_layout
-
-\begin_layout Plain Layout
-
-        _ subject("Meet me"),
-\end_layout
-
-\begin_layout Plain Layout
-
-        _ description("We really need to meet to settle things down.
- This is just a dumb comment to have something in it."))
-\end_layout
-
-\begin_layout Plain Layout
-
-    val item2 = CalendarItem("2", c2, CalendarType.MEETING) optional (
-\end_layout
-
-\begin_layout Plain Layout
-
-        _ end(c2End),
-\end_layout
-
-\begin_layout Plain Layout
-
-        _ subject("Meet me again"))
-\end_layout
-
-\begin_layout Plain Layout
-
-    val item3 = CalendarItem("4", c3, CalendarType.MEETING) optional (
+val item3 = CalendarItem("4", c3, CalendarType.MEETING) optional (
 \end_layout
 
 \begin_layout Plain Layout
@@ -534,35 +464,9 @@ ated the calendar items that will be rendered in the Month-View widget.
         _ subject("Other month"))
 \end_layout
 
-\begin_layout Plain Layout
-
-    item1 :: item2 :: item3 ::  Nil
-\end_layout
-
-\begin_layout Plain Layout
-
-  }
-\end_layout
-
-\begin_layout Plain Layout
-
-} 
-\end_layout
-
 \end_inset
 
 
-\end_layout
-
-\end_deeper
-\begin_layout Standard
-The CalendarItem abstacts that information for calendar elements that will
- be rendered in the widgets.
- There are three mandatory parameters: the calendar ID, the start date and
- the type of the calendar.
- The rest are optional parameter as they re expressed as repeted higher
- order function parameters to the optional function.
- 
 \end_layout
 
 \begin_layout Standard
@@ -589,12 +493,12 @@ The widget is rendring its JavaScript dependencies as well as the default
  The widget itsself is rendering the <head/> element that will be merged
  into the top head element by Lift.
  To use your own stylesheet you can create this path in WEB-INF/classes
- folder as it will be first search ed here.
- Hence you can overwrite the defautl stylesheet with your own one so you
+ folder as it will be first searched here.
+ Hence you can overwrite the default stylesheet with your own one so you
  can easily change the theme.
 \end_layout
 
-\begin_layout Subsection
+\begin_layout Paragraph
 Calendar Week-View
 \end_layout
 
@@ -647,7 +551,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Week View example
 \end_layout
 
@@ -740,7 +643,7 @@ itemClick
  item itself.
 \end_layout
 
-\begin_layout Subsection
+\begin_layout Paragraph
 Calendar Day-View
 \end_layout
 
@@ -796,7 +699,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 CalendarDayView example
 \end_layout
 
@@ -865,6 +767,244 @@ The parameters have pretty much the same meaning as for CalendarWeekView
  render and we are now passing a DayViewMeta containing the Locale for internati
 onalization purposes.
  
+\end_layout
+
+\begin_layout Subsection
+RSS Feed widget
+\end_layout
+
+\begin_layout Standard
+The name of the widget pretty much expresses what the widget does.
+ It renders RSS feeds.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/rssfeed.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+RSSFeed widget
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This widget does not need initialization in Boot since it has no dependencies
+ JS, CSS, images etc.
+ In your snippet you can just have:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+RSSFeed example
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/*
+\end_layout
+
+\begin_layout Plain Layout
+
+The template:
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<lift:surround with="default" at="content">     
+\end_layout
+
+\begin_layout Plain Layout
+
+	<lift:RSSFeedDemo.render/>
+\end_layout
+
+\begin_layout Plain Layout
+
+</lift:surround>
+\end_layout
+
+\begin_layout Plain Layout
+
+*/
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+class RSSFeedDemo {
+\end_layout
+
+\begin_layout Plain Layout
+
+  def render(xhtml: NodeSeq): NodeSeq = {
+\end_layout
+
+\begin_layout Plain Layout
+
+    <xml:group>
+\end_layout
+
+\begin_layout Plain Layout
+
+      {RSSFeed("http://www.praytothemachine.com/evil/index.php/feed/")}
+\end_layout
+
+\begin_layout Plain Layout
+
+    </xml:group>
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+} 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Gravatar widget
+\end_layout
+
+\begin_layout Standard
+Gravatars are 
+\series bold
+g
+\series default
+lobally 
+\series bold
+r
+\series default
+ecognized 
+\series bold
+avatars
+\series default
+.
+ Please see http://gravatar.com.
+ You can add you picture here and you ravarat will be displayed in sites
+ that interact with gravatar.
+ Now you can build a Lift application that is able to fetch your avatar
+ and render it on your page.
+ Here is a snippet code:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Gravatar example
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+class GravatarDemo {
+\end_layout
+
+\begin_layout Plain Layout
+
+  def render(xhtml: NodeSeq) :NodeSeq = {
+\end_layout
+
+\begin_layout Plain Layout
+
+   Gravatar("marius.danciu@gmail.com")
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This will rendere a 
+\family typewriter
+<div>
+\family default
+ element containin the avatar picture.
+\end_layout
+
+\begin_layout Subsection
+Tree widget
+\end_layout
+
+\begin_layout Standard
+
 \end_layout
 
 \end_body
