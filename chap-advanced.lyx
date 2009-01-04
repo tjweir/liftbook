@@ -1,4 +1,4 @@
-#LyX 1.6.0 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -134,7 +134,9 @@ name "fig:Architecture-diagram"
 \begin_layout Plain Layout
 \align center
 \begin_inset Graphics
-	filename images/LiftArch.png
+	filename images/LiftArchDiagram.pdf
+	BoundingBox 0bp 5.75in 5in 792bp
+	clip
 
 \end_inset
 
@@ -3773,9 +3775,9 @@ This is pretty much it as far as HTTP authentication and authorization goes
  internally calculated, the HTTP digest authentication can not really be
  used.
  The reason is that in order to match the client's digest, server needs
- to calculate it and for that it needs the password in clear but becasue
- that application stores a digest the user's password can not be recovered
- hence the HTTP digest can no be calculated.
+ to calculate it and for that it needs the password in clear but because
+ the application stores a digest, the user's password can not be recovered.
+ Hence the HTTP digest can no be calculated.
  This is a missmatch betwen the two concepts: HTTP digest authentication
  given by RFC 2617 and the unrecoverable password storage.
 \end_layout

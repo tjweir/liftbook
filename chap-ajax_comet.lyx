@@ -1,4 +1,4 @@
-#LyX 1.6.0 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -64,7 +64,7 @@ width "100col%"
 special "none"
 height "1in"
 height_special "totalheight"
-status collapsed
+status open
 
 \begin_layout Plain Layout
 This chapter is still under active development.
@@ -75,6 +75,10 @@ This chapter is still under active development.
 
 
 \end_layout
+
+\begin_layout Plain Layout
+\begin_inset Note Note
+status open
 
 \begin_layout Itemize
 This is probably the place for the Spreadsheet example
@@ -95,6 +99,11 @@ http://en.wikipedia.org/wiki/AJAX_(programming)
 
 \begin_layout Itemize
 Jorge gave us permission to use his scala-blogs.com example
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section

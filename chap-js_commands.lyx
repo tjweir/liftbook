@@ -1,4 +1,4 @@
-#LyX 1.6.0 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -43,7 +43,7 @@
 \begin_body
 
 \begin_layout Chapter
-Lift and Javascript
+Lift and JavaScript
 \begin_inset CommandInset label
 LatexCommand label
 name "cha:Lift-and-Javascript"
@@ -53,14 +53,13 @@ name "cha:Lift-and-Javascript"
 
 \end_layout
 
-\begin_layout Section
-JavaScript high level abstractions
-\end_layout
-
 \begin_layout Standard
-You may have already noticed that Lift comes with a rich client side functionali
-ty.
- By default it uses JQuery
+In this chapter we'll be discussing some of the techniques that Lift provides
+ for simplifying and abstracting access to JavaScript on the client side.
+ Using these facilities follows Lift's model of separating code from presentatio
+n by allowing you to essentially write JavaScript code in Scala.
+ Lift also provides a layer that allows you to use advanced JavaScript functiona
+lity via either the JQuery
 \begin_inset Foot
 status open
 
@@ -77,58 +76,187 @@ target "http://jquery.com/"
 
 \end_inset
 
- javascript framework.
- So a lot of JavaScript artifacts are there for you to use them from Scala
- code.
- For example, Lift automatically includes the JavaScript code for Ajax and
- Comet support.
- When you are using Ajax many times you want to return a little JavaScript
- code to be executed on client side.
- So instead of returning from your Ajax function a String containing the
- JavaScript code you can return a Lift object ...
- in essence a JsExp or JsCmd.
- So yes Lift abstracts away a JavaScript expression (
+ or YUI
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+\begin_inset CommandInset href
+LatexCommand href
+target "http://developer.yahoo.com/yui/"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ user interface libraries.
+\end_layout
+
+\begin_layout Section
+JavaScript high level abstractions
+\end_layout
+
+\begin_layout Standard
+You may have noticed that Lift already comes with rich client side functionality
+ in the form of AJAX and COMET support (chapter 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "cha:AJAX-and-COMET"
+
+\end_inset
+
+).
+ Whenever you use this support, Lift automatically generates the proper
+ 
 \family typewriter
-JsExp
+<script>
 \family default
-) and JavaScript command (
+ elements in the returned page so that the libraries are included.
+ Lift goes one step further, however, by providing a class hierarchy representin
+g JavaScript expressions.
+ For example, with an AJAX form element in Lift the callback method must
+ return JavaScript code to update the client side.
+ Instead of just returning a raw JavaScript string to be interpreted by
+ the client, you return an instance of the 
 \family typewriter
 JsCmd
 \family default
-) etc.
- But let's dig a bit deeper in this Lift JS API.
+
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+net.liftweb.http.js.JsCmd
+\end_layout
+
+\end_inset
+
+ trait (either directly or via implicit conversion) that is transformed
+ into the proper JavaScript for the client.
 \end_layout
 
 \begin_layout Standard
 
 \family typewriter
-net.liftweb.http.js.JsExp 
+JsCmd
 \family default
-is a trait that abstracts a JavaScript expression.
- For instance 
-\family typewriter
-JE.ValById(
+ represents a JavaScript command that can be executed on the client.
+ There is an additional 
 \begin_inset Quotes eld
 \end_inset
 
-sometextfield
+base
 \begin_inset Quotes erd
 \end_inset
 
-)
-\family default
- which will render the JavaScript code 
+ trait called 
 \family typewriter
-document.getElementById('sometextfield').value
+JsExp
+\family default
+ that represents a JavaScript expression.The differences between them are
+ not usually important to the developer, since a 
+\family typewriter
+JsExp
+\family default
+ instance is implicitly converted to a 
+\family typewriter
+JsCmd
 \family default
 .
- The next important class is 
+ Also note that while Lift's JavaScript classes attempt to keep things type-safe
+ there are some limitations; in particular, Lift can't check semantic things
+ like whether the variable you're trying to access from a given 
 \family typewriter
-net.liftweb.http.js.JsCmd 
+JsCmd
 \family default
-which impersonates a JavaScript command.
- For instance a call to a function.
- Here is an example:
+ actually exists.
+ Besides the obvious use in techniques like AJAX and COMET, Lift also makes
+ it simple to attach JavaScript to regular Scala XML objects, such as form
+ fields.
+\end_layout
+
+\begin_layout Standard
+As a simple example, let's look at how we might add a simple alert to a
+ form if it doesn't validate.
+ In this example, we'll assume we have a 
+\family typewriter
+name
+\family default
+ form field that shouldn't be blank.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Simple-Form-Validation"
+
+\end_inset
+
+ shows a possible binding from our form snippet.
+ Let's break this down a bit: the first thing is that in order to reference
+ form elements (or any elements for that matter) from JavaScript, they need
+ to have an 
+\family typewriter
+id
+\family default
+ attribute.
+ We add the id attribute to our text field via the standard 
+\begin_inset Quotes eld
+\end_inset
+
+%
+\begin_inset Quotes erd
+\end_inset
+
+ mechanism
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Cross-ref
+\end_layout
+
+\end_inset
+
+.
+ Next, we need to define our actual validation.
+ We do this by adding some javascript to the 
+\family typewriter
+onclick
+\family default
+ attribute of our submit button.
+ The onclick attribute evaluates whatever javascript is assigned when the
+ button is clicked; if the javascript evaluates to true then submission
+ continues.
+ If it evaluates to false then submission is aborted.
+ In our case, we use the JsIf case class to check to see if the value of
+ our myName field is equal to an empty string.
+ In this case the JE object holds an implicit conversion from a Scala string
+ to a Str (JavaScript string) instance.
+ The second argument to JsIf is the body to be executed if the condition
+ is true.
+ In our case we want to pop up an alert to the user and stop form submission.
+ The JsCmd trait (which Alert mixes in) provides a 
+\begin_inset Quotes eld
+\end_inset
+
+&
+\begin_inset Quotes erd
+\end_inset
+
+ operator which allows you to chain multiple commands together.
+ Here we follow the Alert with a JsReturn, which returns the specified value;
+ again, there's an implicit conversion from Boolean to JsExp, so we can
+ simply provide the 
+\begin_inset Quotes eld
+\end_inset
+
+false
+\begin_inset Quotes erd
+\end_inset
+
+ value.
 \end_layout
 
 \begin_layout Standard
@@ -141,12 +269,24 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-JsExp example
+Simple Form Validation
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Simple-Form-Validation"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
 
 
+\end_layout
+
+\begin_layout Plain Layout
+
+import JsCmds._
 \end_layout
 
 \begin_layout Plain Layout
@@ -160,25 +300,122 @@ import JE._
 
 \begin_layout Plain Layout
 
-AnonFunc(ValById(
+var myName = 
 \begin_inset Quotes eld
 \end_inset
 
-sometextfield
+
 \begin_inset Quotes erd
 \end_inset
 
-)))
+
 \end_layout
 
 \begin_layout Plain Layout
 
-//which will render the following JavaScript code:
+bind(...
 \end_layout
 
 \begin_layout Plain Layout
 
-function(){document.getElementById('sometextfield').value}
+  
+\begin_inset Quotes eld
+\end_inset
+
+name
+\begin_inset Quotes erd
+\end_inset
+
+ -> text(myName, myName = _) % (
+\begin_inset Quotes eld
+\end_inset
+
+id
+\begin_inset Quotes erd
+\end_inset
+
+ -> 
+\begin_inset Quotes eld
+\end_inset
+
+myName
+\begin_inset Quotes erd
+\end_inset
+
+),
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\begin_inset Quotes eld
+\end_inset
+
+submit
+\begin_inset Quotes erd
+\end_inset
+
+ -> submit(
+\begin_inset Quotes eld
+\end_inset
+
+Save
+\begin_inset Quotes erd
+\end_inset
+
+, ...) % (
+\begin_inset Quotes eld
+\end_inset
+
+onclick
+\begin_inset Quotes erd
+\end_inset
+
+ -> 
+\end_layout
+
+\begin_layout Plain Layout
+
+    JsIf(JsEq(ValById(
+\begin_inset Quotes eld
+\end_inset
+
+myName
+\begin_inset Quotes erd
+\end_inset
+
+), 
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+), 
+\end_layout
+
+\begin_layout Plain Layout
+
+      Alert(
+\begin_inset Quotes eld
+\end_inset
+
+You must provide a name
+\begin_inset Quotes erd
+\end_inset
+
+) & JsReturn(false))
+\end_layout
+
+\begin_layout Plain Layout
+
+    )
+\end_layout
+
+\begin_layout Plain Layout
+
+)
 \end_layout
 
 \end_inset
@@ -187,156 +424,35 @@ function(){document.getElementById('sometextfield').value}
 \end_layout
 
 \begin_layout Standard
-If you dig into code you'll see that apply function of the 
+If you peruse the Lift API docs you'll find a large number of traits and
+ classes under the JsCmds and JE objects; these provide the vast majority
+ of the functionality you would need to write simple JavaScript code directly
+ in Lift.
+ Having said that, however, it's important to realize that the Lift classes
+ are intended to be used for small code fragments.
+ If you need to write large portions of JavaScript code for your pages,
+ we recommend writing that code in 
+\emph on
+pure
+\emph default
+ JavaScript in an external file and then including that file in your pages.
+ In particular, if you write your code as JavaScript functions, you can
+ use the 
 \family typewriter
-AnonFunc
+JE.Call
 \family default
- object takes a 
-\family typewriter
-JsCmd
-\family default
- parameter but here we've passed a 
-\family typewriter
-JsExp
-\family default
-.
- This is ok because there is an implicit conversion from 
-\family typewriter
-JsExp
-\family default
- to 
-\family typewriter
-JsCmd
-\family default
-.
- Please see the Lift API for 
-\family typewriter
-JsCmd
-\family default
- and 
-\family typewriter
-JsExp
-\family default
- subclasses.
- You may find some plain Scala objects that do not extends 
-\family typewriter
-JsExp
-\family default
- or 
-\family typewriter
-JsCmd
-\family default
- and yet they are used in 
-\family typewriter
-JsExp
-\family default
-.
- That's becasue their apply functions return a JsExp or JsCmd.
- There are other implicit functions defined to convert from String, Int,
- Long etc.
- to JsExp instances to ese up the code writing.
-\end_layout
-
-\begin_layout Standard
-Another important class is JsCommands.
- It is actually used to chain JsCmd instances and construct a JavaScript
- LiftResponse.
- For example we can have:
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-inline false
+ class to execute those functions from your Lift code.
+\begin_inset Note Note
 status open
 
 \begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-JsCommands example
+Should we add a small table of commonly used classes? Maybe a brief overview
+ of the top-level ones?
 \end_layout
 
 \end_inset
 
 
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-(JsCommands.create & Alert(
-\begin_inset Quotes eld
-\end_inset
-
-Hello
-\begin_inset Quotes erd
-\end_inset
-
-) & Alert(
-\begin_inset Quotes eld
-\end_inset
-
-Lift
-\begin_inset Quotes erd
-\end_inset
-
-)).toResponse
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-The above will create the 
-\family typewriter
-LiftResponse
-\family default
- having text/javascript content-type and calls subsequently JavaScript 
-\family typewriter
-alert(
-\begin_inset Quotes eld
-\end_inset
-
-Hello
-\begin_inset Quotes erd
-\end_inset
-
-)
-\family default
- and then 
-\family typewriter
-alert(
-\begin_inset Quotes eld
-\end_inset
-
-Lift
-\begin_inset Quotes erd
-\end_inset
-
-)
-\family default
-.
-\end_layout
-
-\begin_layout Standard
-We have barely scratched the surface of the JavaScript Scala API that Lift
- offers.
- It is not the scope of this book to discuss each and every class, rather
- to provide an understanding of the API.
- If you have a large JavaScript code to build using Lift abstractions would
- lead to more code to type so we recommend putting your code into a .js file
- and include it in your page.
- But for simple things Lift JS abstractions can be extremely useful.
 \end_layout
 
 \begin_layout Section
@@ -344,390 +460,77 @@ JQuery and other JavaScript frameworks
 \end_layout
 
 \begin_layout Standard
-We've mentioned earlier hat Lift comes together with JQuery JS framework
- but Lift is tightly coupled with JQuery.
- In fact you can plugin any JavaScript framework or your own framework for
- that matter by implementing JSArtifacts trait.
-\end_layout
+We've mentioned earlier that Lift uses the JQuery JavaScript framework by
+ default.
+ Lift wouldn't be Lift, however, if it didn't provide a mechanism for using
+ other frameworks.
+ The way that lift determines which JavaScript framework to use is via the
+ 
+\family typewriter
+JSArtifacts
+\family default
 
-\begin_layout Standard
-\begin_inset listings
-inline false
+\begin_inset Foot
 status open
 
 \begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-JSArtifacts trait
+net.liftweb.http.js.JSArtifacts
 \end_layout
 
 \end_inset
 
-
-\end_layout
-
-\begin_layout Plain Layout
-
-/**
-\end_layout
-
-\begin_layout Plain Layout
-
- * Abstracted JavaScript artifacts used by lift core.
-\end_layout
-
-\begin_layout Plain Layout
-
- */
-\end_layout
-
-\begin_layout Plain Layout
-
-trait JSArtifacts {
-\end_layout
-
-\begin_layout Plain Layout
-
-  /**
-\end_layout
-
-\begin_layout Plain Layout
-
-   * Toggles between current JS object and the object denominated by id
-\end_layout
-
-\begin_layout Plain Layout
-
-   */
-\end_layout
-
-\begin_layout Plain Layout
-
-  def toggle(id: String): JsExp
-\end_layout
-
-\begin_layout Plain Layout
-
-  /**
-\end_layout
-
-\begin_layout Plain Layout
-
-   * Hides the element denominated by id
-\end_layout
-
-\begin_layout Plain Layout
-
-   */
-\end_layout
-
-\begin_layout Plain Layout
-
-  def hide(id: String): JsExp
-\end_layout
-
-\begin_layout Plain Layout
-
-  /**
-\end_layout
-
-\begin_layout Plain Layout
-
-   * Shows the element denominated by this id
-\end_layout
-
-\begin_layout Plain Layout
-
-   */
-\end_layout
-
-\begin_layout Plain Layout
-
-  def show(id: String): JsExp
-\end_layout
-
-\begin_layout Plain Layout
-
-  /**
-\end_layout
-
-\begin_layout Plain Layout
-
-   * Shows the element denoinated by id and puts the focus on it
-\end_layout
-
-\begin_layout Plain Layout
-
-   */
-\end_layout
-
-\begin_layout Plain Layout
-
-  def showAndFocus(id: String): JsExp
-\end_layout
-
-\begin_layout Plain Layout
-
-  /**
-\end_layout
-
-\begin_layout Plain Layout
-
-   * Serializes a form denominated by the id.
- It returns a query string
-\end_layout
-
-\begin_layout Plain Layout
-
-   * containing the fields that are to be submitted
-\end_layout
-
-\begin_layout Plain Layout
-
-   */
-\end_layout
-
-\begin_layout Plain Layout
-
-  def serialize(id: String): JsExp
-\end_layout
-
-\begin_layout Plain Layout
-
-  /**
-\end_layout
-
-\begin_layout Plain Layout
-
-   * Sets the inner HTML of the element denominated by the id
-\end_layout
-
-\begin_layout Plain Layout
-
-   */
-\end_layout
-
-\begin_layout Plain Layout
-
-  def setHtml(id: String, xml: NodeSeq): JsCmd
-\end_layout
-
-\begin_layout Plain Layout
-
-  /**
-\end_layout
-
-\begin_layout Plain Layout
-
-   * Sets the JavaScript that will be executed when document is ready
-\end_layout
-
-\begin_layout Plain Layout
-
-   * for processing
-\end_layout
-
-\begin_layout Plain Layout
-
-   */
-\end_layout
-
-\begin_layout Plain Layout
-
-  def onLoad(cmd: JsCmd): JsCmd
-\end_layout
-
-\begin_layout Plain Layout
-
-  /**
-\end_layout
-
-\begin_layout Plain Layout
-
-   * Makes an Ajax request using lift's Ajax path and the request
-\end_layout
-
-\begin_layout Plain Layout
-
-   * attributes described by data parameter
-\end_layout
-
-\begin_layout Plain Layout
-
-   */
-\end_layout
-
-\begin_layout Plain Layout
-
-  def ajax(data: AjaxInfo): String
-\end_layout
-
-\begin_layout Plain Layout
-
-  /**
-\end_layout
-
-\begin_layout Plain Layout
-
-   * Makes a Ajax comet request using lift's Comet path and the request
-\end_layout
-
-\begin_layout Plain Layout
-
-   * attributes described by data parameter
-\end_layout
-
-\begin_layout Plain Layout
-
-   */
-\end_layout
-
-\begin_layout Plain Layout
-
-  def comet(data: AjaxInfo): String
-\end_layout
-
-\begin_layout Plain Layout
-
-  /**
-\end_layout
-
-\begin_layout Plain Layout
-
-   * Trabsforms a JSON object intoits string representation
-\end_layout
-
-\begin_layout Plain Layout
-
-   */
-\end_layout
-
-\begin_layout Plain Layout
-
-  def jsonStringify(in: JsExp) : JsExp
-\end_layout
-
-\begin_layout Plain Layout
-
-  /**
-\end_layout
-
-\begin_layout Plain Layout
-
-   * Converts a form denominated by formId into a JSON object
-\end_layout
-
-\begin_layout Plain Layout
-
-   */
-\end_layout
-
-\begin_layout Plain Layout
-
-  def formToJSON(formId: String): JsExp
-\end_layout
-
-\begin_layout Plain Layout
-
-}  
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-These functions are called by Lift core framework.
- Currently we have two implementations 
+ trait along with the LiftRules.jsArtifacts var.
+ Lift comes with two default implementations of JSArtifacts: 
 \family typewriter
-net.liftweb.http.js.jquery.JQueryArtifacacts
+JQueryArtifacts
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+net.liftweb.http.js.jquery.JQueryArtifacts
+\end_layout
+
+\end_inset
+
+
 \family default
  and 
 \family typewriter
-net.liftweb.http.js.yui.YUIArtifacts
+YUIArtifacts
 \family default
+
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+net.liftweb.http.js.yui.YUIArtifacts
+\end_layout
+
+\end_inset
+
 .
- For JQuery implementation there is also a handful of JSExp-s and JsCmd-s
- in 
+ If you want to use a different framework, you must provide a concrete implement
+ation of the JSArtifacts trait specific to that framework.
+ The JQuery support in Lift extends beyond just the JSArtifacts, support;
+ there are also a number of JSExp and JsCmd traits and classes in the 
 \family typewriter
 net.liftweb.http.js.jquery
 \family default
- package.
- They abstract away lots of JQuery goodies but we'll let you discover them.
+ package that provide JQuery specific implementations for standard expressions
+ and commands.
 \end_layout
 
 \begin_layout Standard
 Changing one implementation or another can be done from LiftRules.jsArtifacts
- variable which by default points to JQueryArtifacts.
- However each JavaScript framework comes with its own JS scripts and perhaps
- its own dependencies.
- For YUI you need to include the following scripts (at minimum):
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-Lift YUI scripts 
-\end_layout
+ variable, which by default points to JQueryArtifacts.
+ Typically this is done in Boot, as shown in listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Configuring-Lift-YUI"
 
 \end_inset
 
-
-\end_layout
-
-\begin_layout Plain Layout
-
- <script src="/classpath/yui/yahoo.js" type="text/javascript"/>
-\end_layout
-
-\begin_layout Plain Layout
-
- <script src="/classpath/yui/event.js" type="text/javascript"/>   
-\end_layout
-
-\begin_layout Plain Layout
-
- <script src="/classpath/yui/dom.js" type="text/javascript"/>   
-\end_layout
-
-\begin_layout Plain Layout
-
- <script src="/classpath/yui/connection.js" type="text/javascript"/>   
-\end_layout
-
-\begin_layout Plain Layout
-
- <script src="/classpath/yui/json.js" type="text/javascript"/>   
-\end_layout
-
-\begin_layout Plain Layout
-
- <script src="/classpath/liftYUI.js" type="text/javascript"/>
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-..
- of course you can probably lint them into a single JS file for optimizations.
- 
-\end_layout
-
-\begin_layout Standard
-Now in Boot we need to configure YUIArtifacts:
+.
 \end_layout
 
 \begin_layout Standard
@@ -741,6 +544,13 @@ status open
 
 \begin_layout Plain Layout
 Configuring Lift YUI
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Configuring-Lift-YUI"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -750,18 +560,7 @@ Configuring Lift YUI
 
 \begin_layout Plain Layout
 
- ...
-\end_layout
-
-\begin_layout Plain Layout
-
- import net.liftweb.http.js.yui.YUIArtifacts
-\end_layout
-
-\begin_layout Plain Layout
-
- ...
-      
+ import net.liftweb.http.js.yui.YUIArtifacts      
 \end_layout
 
 \begin_layout Plain Layout
@@ -807,18 +606,87 @@ Configuring Lift YUI
 \end_layout
 
 \begin_layout Standard
+In addition to changing LiftRules, you also need to take into account that
+ other frameworks have their own scripts and dependencies that you'll need
+ to include in your pages.
+ For YUI you would need to include the following scripts (at minimum):
+\end_layout
 
-\series bold
-\bar under
-Recommendations
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Lift YUI scripts
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Lift-YUI-scripts"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+ <script src="/classpath/yui/yahoo.js" type="text/javascript"/>
+\end_layout
+
+\begin_layout Plain Layout
+
+ <script src="/classpath/yui/event.js" type="text/javascript"/>   
+\end_layout
+
+\begin_layout Plain Layout
+
+ <script src="/classpath/yui/dom.js" type="text/javascript"/>   
+\end_layout
+
+\begin_layout Plain Layout
+
+ <script src="/classpath/yui/connection.js" type="text/javascript"/>   
+\end_layout
+
+\begin_layout Plain Layout
+
+ <script src="/classpath/yui/json.js" type="text/javascript"/>   
+\end_layout
+
+\begin_layout Plain Layout
+
+ <script src="/classpath/liftYUI.js" type="text/javascript"/>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Of course, to keep things simple you could either place all of these items
+ in a template that you could embed, or you could combine the files into
+ a single JavaScript source file.
+\end_layout
+
+\begin_layout Standard
+We have some simple recommendations on using different JavaScript frameworks
+ from within Lift:
 \end_layout
 
 \begin_layout Enumerate
-If you do not necessary need YUI widgets or if you can find similar funcionality
- in JQuery plugins, we recommend using JQuery framewok.
- One of the reasons (besides the fact that we like JQuery more) is that
- Lift comes with a great deal of JsCmd and JsExp classes/objects for abstracting
- JQuery goodies.
+If you don't necessarily need YUI widgets or if you can find similar functionali
+ty in JQuery plugins, we recommend using the JQuery framework.
+ Lift provides much better support out-of-the-box for JQuery
 \end_layout
 
 \begin_layout Enumerate
@@ -831,14 +699,34 @@ XML and JavaScript
 \end_layout
 
 \begin_layout Standard
-There are situations when you need to build dynamic DOM elements from JavaScript
- code and build dynamic lists, for example.
- Lift has a really interesting way of dealing with such situation and with
- a few lines of code you are achieving quite a lot.
- For instance there are a set of classes (we call them Jx classes) that
- you can use to transform a scala.xml.NodeSeq into javascript code that generates
- dynamically the nodes on the client side.
- But let's see a few examples and comment them.
+What we've covered so far is pretty much standard JavaScript behind some
+ Lift facades.
+ There are situations, however, when you want to do things that are complicated
+ or outside the scope of typical JavaScript functionality.
+ One example of this is when you need to build dynamic DOM elements from
+ JavaScript code, say to build an HTML list.
+ Lift has a very nice way of dealing with such situation; with a few lines
+ of code you can achieve quite a lot.
+ The main functionality for this is provided via the Jx* classes
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+net.liftweb.http.js.Jx, etc
+\end_layout
+
+\end_inset
+
+, which you can use to transform a scala.xml.NodeSeq into javascript code
+ that generates the corresponding nodes on the client side.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Jx-trivial-example"
+
+\end_inset
+
+ shows a simple example of emitting a div on a page via JavaScript
 \end_layout
 
 \begin_layout Standard
@@ -852,16 +740,18 @@ status open
 
 \begin_layout Plain Layout
 Jx trivial example
-\end_layout
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Jx-trivial-example"
 
 \end_inset
 
 
 \end_layout
 
-\begin_layout Plain Layout
+\end_inset
 
- ...
+
 \end_layout
 
 \begin_layout Plain Layout
@@ -876,72 +766,11 @@ Jx trivial example
 
 \begin_layout Plain Layout
 
- ...
 \end_layout
 
 \begin_layout Plain Layout
 
-\end_layout
-
-\begin_layout Plain Layout
-
- val div = Jx(<div>Hi there</div>)      
-\end_layout
-
-\begin_layout Plain Layout
-
- println(div.toJs) 
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
- /* This will print out:
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
- function(it) {var df = document.createDocumentFragment();
-\end_layout
-
-\begin_layout Plain Layout
-
- var vINIJ1YTZG5 = document.createElement('div');
-\end_layout
-
-\begin_layout Plain Layout
-
- df.appendChild(vINIJ1YTZG5);
-\end_layout
-
-\begin_layout Plain Layout
-
- vINIJ1YTZG5.appendChild(document.createTextNode('Hi there'));
-\end_layout
-
-\begin_layout Plain Layout
-
- return df;}
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
- */
-\end_layout
-
-\begin_layout Plain Layout
-
+ val div = Jx(<div>Hi there</div>)
 \end_layout
 
 \end_inset
@@ -950,9 +779,84 @@ Jx trivial example
 \end_layout
 
 \begin_layout Standard
-So Lift took our XML code and transfomed it into a JavaScript function that
- dynamically creates a document fragment containing the same node.
- The it parameter can be any JavaScript object that you can exploit.
+This code generates the following HTML:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Jx Emitted Code
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Jx-Emitted-Code"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+function(it) {
+\end_layout
+
+\begin_layout Plain Layout
+
+  var df = document.createDocumentFragment();
+\end_layout
+
+\begin_layout Plain Layout
+
+  var vINIJ1YTZG5 = document.createElement('div');
+\end_layout
+
+\begin_layout Plain Layout
+
+  df.appendChild(vINIJ1YTZG5);
+\end_layout
+
+\begin_layout Plain Layout
+
+  vINIJ1YTZG5.appendChild(document.createTextNode('Hi there'));
+\end_layout
+
+\begin_layout Plain Layout
+
+  return df;
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+As you can see, Lift took our XML code and transformed it into a JavaScript
+ function that dynamically creates a document fragment containing the given
+ NodeSeq.
+ The 
+\family typewriter
+it
+\family default
+ parameter can be any JavaScript object; we'll cover how you use it in a
+ moment.
  The name of the 
 \emph on
 var
@@ -961,8 +865,10 @@ var
 \end_layout
 
 \begin_layout Standard
-But of course this is not all there is to it.
- Let's take a look on a more complex example.
+Of course, if that was all Lift was doing that's not much help.
+ At this point we've only generated a function that generates XML.
+ Let's take a look on a more complex example that shows the real power of
+ the Jx classes.
  Assume we have a JSON structure that contains an array of objects containing
  firstName and lastName properties.
  Such JSON structure could look something like:
@@ -972,6 +878,26 @@ But of course this is not all there is to it.
 \begin_inset listings
 inline false
 status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Sample JSON Structure
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Sample-JSON-Structure"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
 
 \begin_layout Plain Layout
 
@@ -1067,7 +993,8 @@ Human
 \end_layout
 
 \begin_layout Standard
-Now assume that we want to render this content as an HTML dynamic list:
+Now we can use a combination of Jx classes to render this content as an
+ HTML dynamic list:
 \end_layout
 
 \begin_layout Standard
@@ -1077,22 +1004,28 @@ status open
 
 \begin_layout Plain Layout
 
-\end_layout
+\begin_inset Caption
 
 \begin_layout Plain Layout
+Rendering a JSON List Via Jx
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Rendering-a-JSON-list"
 
-...
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Plain Layout
 
 def renderPerson = Jx(<li class="item_header"> {JsVar("it", "name")} is
- {JsVar("it", "race")}</li>) 
-\end_layout
-
-\begin_layout Plain Layout
-
-...
+ {JsVar("it", "race")}</li>)
 \end_layout
 
 \begin_layout Plain Layout
@@ -1102,14 +1035,6 @@ def renderPerson = Jx(<li class="item_header"> {JsVar("it", "name")} is
 \begin_layout Plain Layout
 
 Jx(<ul>{JxMap(JsVar("it.persons"), renderPerson)}</ul>)
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
 \end_layout
 
 \end_inset
@@ -1126,17 +1051,28 @@ Construct an <ul> list that contains a bunch of elements
 \end_layout
 
 \begin_layout Enumerate
-JxMap takes a JavaScript object, in this case it.persons (remember it is
- the parameter of the generated function), and iterate for each element
+JxMap takes a JavaScript object, in this case 
+\family typewriter
+it.persons
+\family default
+ (remember 
+\family typewriter
+it
+\family default
+ is the parameter of the generated function), and iterate for each element
  of the array and apply the renderPerson function.
  Of course each element of the array will be a JSON object containing name
  and race properties.
 \end_layout
 
 \begin_layout Enumerate
-renderPerson function also generates a JavaScript function as we've seen
- above and renders the JavaScript code that generts the <li> elements containing
- the name value followed by 
+The 
+\family typewriter
+renderPerson
+\family default
+ function generates a JavaScript function as we've already shown, and renders
+ the JavaScript code that generates the <li> elements containing the name
+ value followed by 
 \begin_inset Quotes eld
 \end_inset
 
@@ -1149,7 +1085,7 @@ is
 
 \begin_layout Enumerate
 If we send this generated JavaScript function to client and calling it by
- passs the 
+ pass the 
 \emph on
 list
 \emph default
@@ -1216,8 +1152,8 @@ item_header
 \end_layout
 
 \begin_layout Standard
-So with a couple of lines of code we manaed to generate the JavaScript code
- that creates document fragments dynamically.
+With a couple of lines of code we've managed to generate the JavaScript
+ code that creates document fragments dynamically.
 \end_layout
 
 \begin_layout Standard
@@ -1304,8 +1240,8 @@ JxCase
 \begin_inset Text
 
 \begin_layout Plain Layout
-Contains a JsExp for matching purposes and the NodeSeq tobe applied in cas
- the matching succeeds
+Contains a JsExp for matching purposes and the NodeSeq to be applied in
+ case the matching succeeds
 \end_layout
 
 \end_inset
@@ -1385,13 +1321,36 @@ JSON
 \end_layout
 
 \begin_layout Standard
-JSON (Java Script Object Notation - http://www.json.org) is (as you may well
- know) a way of structuring information in JavaScript code.
- It is also use to represent structured information on the wire.
- One example would be a JavaScript Ajax API where server response is in
- fact a JSON construct.
- Let's take an example first.
- 
+JSON
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+Java Script Object Notation - 
+\begin_inset CommandInset href
+LatexCommand href
+target "http://www.json.org"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ is a way of structuring information in JavaScript code.
+ One of its most common uses is to represent structured information on the
+ wire.
+ One example would be a JavaScript AJAX API where the server response is
+ in fact a JSON construct.
+ Let's look at an example first in listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Ajax-JSON-response"
+
+\end_inset
+
+:
 \end_layout
 
 \begin_layout Standard
@@ -1405,6 +1364,13 @@ status open
 
 \begin_layout Plain Layout
 Ajax JSON response
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Ajax-JSON-response"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -1415,10 +1381,6 @@ Ajax JSON response
 \begin_layout Plain Layout
 
  class SimpleSnippet {
-\end_layout
-
-\begin_layout Plain Layout
-
 \end_layout
 
 \begin_layout Plain Layout
@@ -1493,13 +1455,45 @@ Press me
  }
 \end_layout
 
-\begin_layout Plain Layout
+\end_inset
+
 
 \end_layout
 
+\begin_layout Standard
+Your template would look like listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:AJAX-Template"
+
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
 \begin_layout Plain Layout
 
- /* And in your template the code ould be:
+\begin_inset Caption
+
+\begin_layout Plain Layout
+AJAX Template
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:AJAX-Template"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Plain Layout
@@ -1527,42 +1521,36 @@ Press me
 	...
 \end_layout
 
-\begin_layout Plain Layout
-
- */
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
 \end_inset
 
 
 \end_layout
 
 \begin_layout Standard
-First of all we have a simple snippet functions called 
+First off, we have a simple snippet function called 
 \family typewriter
 renderAjaxButton
 \family default
 .
  Here we're binding the ex:button tag and render a XHTML button tag that
- when it is pressed it will send an Ajax request to server.
+ when pressed will send an Ajax request to server.
  When this request is received, the 
 \family typewriter
 ajaxFunc
 \family default
- is executes and the JsCmd response is turned into a JavaScript content
+ is executed and the JsCmd response is turned into a JavaScript content
  type response.
  In 
 \family typewriter
-ajaxFunc 
+ajaxFunc
 \family default
-that we are constructing a JSON object in fact the same one we used previously
- for persons object.
- We declare the JavaScript variable myObject being assigned to the JSON
- structure and them call alert on the first element on the persons object.
+ we construct a JSON object (the same one we used previously for the persons
+ object).
+ We assign the JSON structure to the JavaScript variable 
+\family typewriter
+myObject
+\family default
+ and them call alert on the first element on the persons object.
  The rendered JavaScript code that will be send down the wire will be:
 \end_layout
 
@@ -1572,6 +1560,22 @@ inline false
 status open
 
 \begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Generated JavaScript
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Generated-JavaScript"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
 
 \end_layout
 
@@ -1601,8 +1605,8 @@ alert(myObject.persons[0].name);
 \end_layout
 
 \begin_layout Standard
-So in your page when you are presing the button you'llget an alert dialog
- saying 
+So in your page when you press the button you'll get an alert dialog saying
+ 
 \begin_inset Quotes eld
 \end_inset
 
@@ -1611,22 +1615,41 @@ Thor
 \end_inset
 
 .
- You see we used JsRaw class which basically renders the exact thing you
- are passing to it; which is raw JavaScript code.
+ Here we used the JsRaw class which basically renders the exact thing you
+ passed to it: raw JavaScript code.
 \end_layout
 
 \begin_layout Subsection
 JSON forms
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:JSON-forms"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
-This feature is about sending the fields of a forms to the server.
- The data sent to the server is a JSON object which is the form content
- representation formatted as a JSON structure.
- Then next question is how are we going to easily process this JSON string
- on server side? ...
- well Lift has these artifacts called JsonHandler.
- But let's first see an example:
+Now that we've covered sending JSON from the server to the client, let's
+ look at going in the opposite direction.
+ Lift provides a mechanism for sending form data to the server encapsulated
+ in a JSON object.
+ In and of itself sending the data in JSON format is relatively simple;
+ where Lift really adds value is via the JsonHandler
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+net.liftweb.http.JsonHandler
+\end_layout
+
+\end_inset
+
+ class.
+ This class provides a framework for simplifying processing of submitted
+ JSON data.
+ To start, let's look at some example template code for a JSON form:
 \end_layout
 
 \begin_layout Standard
@@ -1639,17 +1662,19 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-JSON form
-\end_layout
+A Simple JSON form
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:A-Simple-JSON-form"
 
 \end_inset
 
 
 \end_layout
 
-\begin_layout Plain Layout
+\end_inset
 
-// Assume we have this template
+
 \end_layout
 
 \begin_layout Plain Layout
@@ -1754,29 +1779,50 @@ JSON form
 
 \begin_layout Plain Layout
 
-</lift:surround>  
+</lift:surround>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+A you can see, the XHTML template is relatively straightforward.
+ The Snippet code is where things really get interesting:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+JSON Form Snippet Code
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Plain Layout
 
+class JSONForm {  	
 \end_layout
 
 \begin_layout Plain Layout
 
-// And the Snippet code
+	def head = <head>{Script(json.jsCmd)}</head> 
 \end_layout
 
 \begin_layout Plain Layout
 
-\end_layout
-
-\begin_layout Plain Layout
-
-class JSONForm {      
-\end_layout
-
-\begin_layout Plain Layout
-
+   
 \end_layout
 
 \begin_layout Plain Layout
@@ -1786,8 +1832,7 @@ class JSONForm {
 
 \begin_layout Plain Layout
 
-		jsonForm(json, html) // we just wrap the snippet content into relevant
- form code 
+		SHtml.jsonForm(json, html) 
 \end_layout
 
 \begin_layout Plain Layout
@@ -1862,25 +1907,7 @@ class JSONForm {
 
 \begin_layout Plain Layout
 
-	
-\end_layout
-
-\begin_layout Plain Layout
-
-	def head = <head>{Script(json.jsCmd)}</head> 
-\end_layout
-
-\begin_layout Plain Layout
-
 }  
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
 \end_layout
 
 \end_inset
@@ -1889,28 +1916,52 @@ class JSONForm {
 \end_layout
 
 \begin_layout Standard
-First of all the XHTML template is preety straight forward.
- It calls the JSONForm.head function which returns the JavaScript code that
- basically declares the function that is sending the Ajax JSON requst.
- The show function basically wraps the content of the snippet between <form>
- tag and sets the onsubmit event such as when the submit button is pressed,
- instead of submitting the form an Ajax call is set to server containing
- the JSON object that contains the form information.
- On server side Lif is automatically parsing the JSON construct and calls
- the apply function of our 
+The first thing we define is the 
 \family typewriter
-json
+head
 \family default
- object (which is a JsonHandler).
- The apply function needs to return a JsCmd (JavaScript code) ehich in this
- case it sets the HTML content of the 
+ function.
+ Its purpose is simply to generate the JavaScript functions that set up
+ the form handling on the client side.
+ That means that when the submit button is clicked, the contents of the
+ form are turned into JSON and submitted via an Ajax call to the server.
+ The 
+\family typewriter
+show
+\family default
+ function defines the connection between the concrete JsonHandler instance
+ that will process the form and the template HTML that contains the form.
+ We perform this binding with the 
+\family typewriter
+SHtml.jsonForm
+\family default
+ method.
+ This wraps the HTML with a 
+\family typewriter
+<form>
+\family default
+ tag and sets the 
+\family typewriter
+onsubmit
+\family default
+ event to do JSON bundling.
+\end_layout
+
+\begin_layout Standard
+The key part of the equation is our JsonHandler object.
+ The apply method is what will be called when the JSON object is submitted
+ to the server.
+ If the JSON is properly parsed then you'll get a JsonCmd instance which
+ you can use Scala's matching to pick apart.
+ The apply function needs to return a JsCmd (JavaScript code), which in
+ this case sets the HTML content of the 
 \family typewriter
 json_result
 \family default
  div element.
- When the form is strinigified into its JSON representation Lift uses a
- command property indicating the action that needs to be done on server
- and the actual JSON data.
+ When the form is stringified into its JSON representation Lift uses a command
+ property indicating the action that needs to be done on server and the
+ actual JSON data.
  In the case of JSON forms the command is always 
 \begin_inset Quotes eld
 \end_inset
@@ -1920,7 +1971,7 @@ processForm
 \end_inset
 
  as this is important for pattern matching as seen above.
- The actuall form content is a Map object that can be easily use toobtain
+ The actual form content is a Map object that can be easily use to obtain
  the values for each form field.
 \end_layout
 
