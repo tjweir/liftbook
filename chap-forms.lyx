@@ -87,10 +87,10 @@ CGI
 \end_layout
 
 \begin_layout Section
-Standard Form Elements
+Form Fundamentals
 \begin_inset CommandInset label
 LatexCommand label
-name "sec:Standard-Form-Elements"
+name "sec:Form-Fundamentals"
 
 \end_inset
 
@@ -379,7 +379,7 @@ Add
 \begin_inset Quotes erd
 \end_inset
 
-, processEntryAdd _))
+, processEntryAdd))
 \end_layout
 
 \begin_layout Plain Layout
@@ -398,7 +398,7 @@ First, you may be wondering why we use vars defined inside the method.
  discarded as soon as the method returns.
  The beauty of Scala and Lift is that the right hand argument of each of
  the SHtml functions is actually a function itself.
- Because these anonymous closures
+ Because these functions, also known as anonymous closures
 \begin_inset Index
 status open
 
@@ -408,7 +408,7 @@ closure
 
 \end_inset
 
- reference variables in local scope, Scala magically transforms them to
+, reference variables in local scope, Scala magically transforms them to
  heap variables behind the scenes.
  Lift, in turn, adds the function callbacks for each form element into its
  session state so that when the form is submitted the appropriate closure
@@ -468,6 +468,25 @@ reference "lst:Using-RequestVars-with-forms"
 \end_inset
 
 .
+ In this case, we set an error message (more in chapter 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "cha:Message-Handling"
+
+\end_inset
+
+).
+ Since we don't explicitly redirect, the same page is loaded (the default
+ 
+\begin_inset Quotes eld
+\end_inset
+
+action
+\begin_inset Quotes erd
+\end_inset
+
+ for a page in Lift is the page itself) and the current request var value
+ of description is used as the default value of the text box.
 \end_layout
 
 \begin_layout Standard
@@ -556,7 +575,13 @@ Invalid amount
 
 \begin_layout Plain Layout
 
-      // process Add
+      // ...
+ process Add ...
+\end_layout
+
+\begin_layout Plain Layout
+
+      redirectTo(...)
 \end_layout
 
 \begin_layout Plain Layout
@@ -674,6 +699,18 @@ ajax
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "cha:AJAX-and-COMET"
+
+\end_inset
+
+.
+ The 
+\family typewriter
+json*
+\family default
+ methods are covered in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:JSON-forms"
 
 \end_inset
 
@@ -885,7 +922,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 A hidden example
 \begin_inset CommandInset label
 LatexCommand label
@@ -917,6 +953,581 @@ Form was submitted
 \end_inset
 
 
+\end_layout
+
+\begin_layout Subsection
+link
+\end_layout
+
+\begin_layout Standard
+The link method generates a standard HTML link to a page (an <a> tag, or
+ anchor
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+anchor
+\end_layout
+
+\end_inset
+
+), but also ensures that a given function is executed when the link is clicked.
+ The first argument is the web context relative link path, the second argument
+ is the 
+\begin_inset Formula $()\Rightarrow Any$
+\end_inset
+
+ function that will be executed when the link is clicked, and the third
+ argument is a NodeSeq that will make up the body of the link.
+ You may optionally pass one or more Pair[String,String] attributes to be
+ added to the link element.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:A-link-example"
+
+\end_inset
+
+ shows using a link to load a ledger entry for editing from within a table.
+ In this case we're using a RequestVar to hold the entry to edit, so the
+ link function is a closure that loads the current ledger entry.
+ This combination of link and RequestVars is a common pattern for passing
+ objects between different pages.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+A link example
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:A-link-example"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+object currentLedgerEntry extends RequestVar[Box[LedgerEntry]](Empty)
+\end_layout
+
+\begin_layout Plain Layout
+
+def list (xhtml : Group) : NodeSeq = {
+\end_layout
+
+\begin_layout Plain Layout
+
+  ...
+\end_layout
+
+\begin_layout Plain Layout
+
+  val entriesXml = entries.map( entry => 
+\end_layout
+
+\begin_layout Plain Layout
+
+                     bind(
+\begin_inset Quotes eld
+\end_inset
+
+entry
+\begin_inset Quotes erd
+\end_inset
+
+, chooseTemplate(
+\begin_inset Quotes eld
+\end_inset
+
+ledger
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+entries
+\begin_inset Quotes erd
+\end_inset
+
+, xhtml),
+\end_layout
+
+\begin_layout Plain Layout
+
+                     ...
+\end_layout
+
+\begin_layout Plain Layout
+
+                     
+\begin_inset Quotes eld
+\end_inset
+
+edit
+\begin_inset Quotes erd
+\end_inset
+
+ -> SHtml.link(
+\begin_inset Quotes eld
+\end_inset
+
+/editLedger
+\begin_inset Quotes erd
+\end_inset
+
+, () => currentLedgerEntry(Full(entry)), Text(
+\begin_inset Quotes eld
+\end_inset
+
+Edit
+\begin_inset Quotes erd
+\end_inset
+
+)))
+\end_layout
+
+\begin_layout Plain Layout
+
+  )
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+text and password
+\end_layout
+
+\begin_layout Standard
+The text and password methods generate standard text and password input
+ fields, respectively.
+ While both take string default values and 
+\begin_inset Formula $(String)\Rightarrow Any$
+\end_inset
+
+ functions to process the return, the password text field masks typed characters
+ and doesn't allow copying the value from the box on the client side.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:A-text-field"
+
+\end_inset
+
+ shows an example of using both text and password for a login page.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+A text field example
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:A-text-field"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def login(xhtml : Group) : NodeSeq = {
+\end_layout
+
+\begin_layout Plain Layout
+
+  var user = 
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+; var pass = 
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+  def auth () = { ...
+ }
+\end_layout
+
+\begin_layout Plain Layout
+
+  bind(
+\begin_inset Quotes eld
+\end_inset
+
+login
+\begin_inset Quotes erd
+\end_inset
+
+, xhtml,
+\end_layout
+
+\begin_layout Plain Layout
+
+       
+\begin_inset Quotes eld
+\end_inset
+
+user
+\begin_inset Quotes erd
+\end_inset
+
+ -> SHtml.text(user, user = _, 
+\begin_inset Quotes eld
+\end_inset
+
+maxlength
+\begin_inset Quotes erd
+\end_inset
+
+ -> 
+\begin_inset Quotes eld
+\end_inset
+
+40
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Plain Layout
+
+       
+\begin_inset Quotes eld
+\end_inset
+
+pass
+\begin_inset Quotes erd
+\end_inset
+
+ -> SHtml.password(pass, pass = _)
+\end_layout
+
+\begin_layout Plain Layout
+
+       
+\begin_inset Quotes eld
+\end_inset
+
+submit
+\begin_inset Quotes erd
+\end_inset
+
+ -> SHtml.submit(
+\begin_inset Quotes eld
+\end_inset
+
+Login
+\begin_inset Quotes erd
+\end_inset
+
+, auth))
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+textarea
+\end_layout
+
+\begin_layout Standard
+The textarea method generates a textare HTML form element.
+ Generally the functionality mirrors that of 
+\family typewriter
+text
+\family default
+, although you can add attributes to control textarea width and height as
+ shown in listing ???.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+A textarea example
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:A-textarea-example"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+var noteText = 
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+val notes = SHtml.textarea(noteText, noteText = _, 
+\begin_inset Quotes eld
+\end_inset
+
+cols
+\begin_inset Quotes erd
+\end_inset
+
+ -> 
+\begin_inset Quotes eld
+\end_inset
+
+80
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+rows
+\begin_inset Quotes erd
+\end_inset
+
+ -> 
+\begin_inset Quotes eld
+\end_inset
+
+8
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+submit
+\end_layout
+
+\begin_layout Standard
+Submit generates the submit form element (typically a button).
+ It requires two parameters: a String value to use as the button label,
+ and a function 
+\begin_inset Formula $()\Rightarrow Any$
+\end_inset
+
+ that can be used to process your form results.
+ One important thing to note about submit is that form elements are processed
+ in the order that they appear in the HTML document.
+ This means that you should put your submit element last in your forms;
+ any items after the submit element won't have been 
+\begin_inset Quotes eld
+\end_inset
+
+set
+\begin_inset Quotes erd
+\end_inset
+
+ by the time the submit function is called.
+\end_layout
+
+\begin_layout Subsection
+multiselect
+\end_layout
+
+\begin_layout Standard
+Up to this point we've covered some fairly simple form elements; multiselect
+ is a bit more complex in that it doesn't just process single values.
+ Instead, it allows you to select multiple elements out of an initial Seq
+ and then process each selected element individually.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Using-multiselect"
+
+\end_inset
+
+ shows using a multiselect to allow the user to select multiple categories
+ for a ledger entry.
+ We assume that a Category entity has an id synthetic key as well as a String
+ name value.
+ The first thing we do is map the collection of all categories into pairs
+ of (
+\family typewriter
+value
+\family default
+, 
+\family typewriter
+display
+\family default
+) strings.
+ The value is what will be returned to our processing function, while the
+ display string is what will be shown in the select box for the user.
+ Next, we turn the current entry's categories into a Seq of just value strings;
+ we also set up a Set variable to hold the returned values.
+ Finally, we do our form binding.
+ In this example we use a helper function (not defined here) that takes
+ a String representing a Category's primary key and returns the category.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Using multiselect
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Using-multiselect"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import scala.collection.mutable.Set
+\end_layout
+
+\begin_layout Plain Layout
+
+val possible = allCategories.map(c => (c.id.toString, c.name))
+\end_layout
+
+\begin_layout Plain Layout
+
+val current = currentEntry.categories.map(c => c.id.toString)
+\end_layout
+
+\begin_layout Plain Layout
+
+var updated = Set.empty[Category]
+\end_layout
+
+\begin_layout Plain Layout
+
+bind (..., 
+\begin_inset Quotes eld
+\end_inset
+
+categories
+\begin_inset Quotes erd
+\end_inset
+
+ -> SHtml.multiselect(possible, current, updated + loadCategory(_)))
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+radio
+\end_layout
+
+\begin_layout Subsection
+select
+\end_layout
+
+\begin_layout Subsection
+selectObj
+\end_layout
+
+\begin_layout Subsection
+untrustedSelect
+\end_layout
+
+\begin_layout Subsection
+span
 \end_layout
 
 \begin_layout Section
