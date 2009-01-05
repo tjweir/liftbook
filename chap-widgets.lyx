@@ -161,7 +161,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 TableSorter example
 \end_layout
 
@@ -234,7 +233,7 @@ class TableSorterDemo {
 
 \begin_layout Plain Layout
 
-    TableSorter.render("table-id")
+    TableSorter("table-id")
 \end_layout
 
 \begin_layout Plain Layout
