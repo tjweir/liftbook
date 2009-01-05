@@ -98,6 +98,192 @@ Lift framework comes with a set of widgets existent in the lift-widgets
 \end_layout
 
 \begin_layout Subsection
+TableSorter widget
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/tablesorter.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+TableSorter widget
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Table sorter widget is based on http://tablesorter.com/docs/ script.
+ You can use it to make your table more flexible as you are able to sort
+ the elements by each column.
+ First you need tocall 
+\family typewriter
+TableSorter.init 
+\family default
+function in your Boot to make Lift aware about the path of the resources
+ used by this widget.
+ Then, you can have your snippet:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+TableSorter example
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/*
+\end_layout
+
+\begin_layout Plain Layout
+
+Template example:
+\end_layout
+
+\begin_layout Plain Layout
+
+<lift:surround with="default" at="content">
+\end_layout
+
+\begin_layout Plain Layout
+
+	<lift:TableSorterDemo/>
+\end_layout
+
+\begin_layout Plain Layout
+
+    <table id=
+\begin_inset Quotes erd
+\end_inset
+
+table-id
+\begin_inset Quotes erd
+\end_inset
+
+ class=
+\begin_inset Quotes erd
+\end_inset
+
+tablesorter
+\begin_inset Quotes erd
+\end_inset
+
+> ...
+ </table>
+\end_layout
+
+\begin_layout Plain Layout
+
+</lift:surround>
+\end_layout
+
+\begin_layout Plain Layout
+
+*/
+\end_layout
+
+\begin_layout Plain Layout
+
+class TableSorterDemo {
+\end_layout
+
+\begin_layout Plain Layout
+
+ def render(xhtml: NodeSeq): NodeSeq = {
+\end_layout
+
+\begin_layout Plain Layout
+
+    TableSorter.render("table-id")
+\end_layout
+
+\begin_layout Plain Layout
+
+ }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In your page somewhere you need to have a regular HTML Table having 
+\begin_inset Quotes eld
+\end_inset
+
+table-id
+\begin_inset Quotes erd
+\end_inset
+
+ id and 
+\begin_inset Quotes eld
+\end_inset
+
+tablesorter
+\begin_inset Quotes erd
+\end_inset
+
+ class.
+ Such as 
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+<table id="myTable" class="tablesorter">...</table>
+\end_layout
+
+\begin_layout Subsection
 Calendar widgets
 \end_layout
 
@@ -1278,7 +1464,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Tree example
 \end_layout
 
@@ -1389,7 +1574,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Sparklines example
 \end_layout
 
