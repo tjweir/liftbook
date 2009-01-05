@@ -90,9 +90,11 @@ Lift framework comes with a set of widgets existent in the lift-widgets
  sub-project.
  This list of widget is expect to grow in time providing a rich set of widgets
  that you can just use in your application.
- We also encourge you towrite your own widgets but we'll see in a bit how
- you can create your own widget, or better yet what is the approach that
- we chose for building Lift widgets.
+ This also means that this is not a complete list of Lift widgets as by
+ the time you read this book more widgets might be available.We also encourge
+ you to write your own widgets but we'll see in a bit how you can create
+ your own widget, or better yet what is the approach that we chose for building
+ Lift widgets.
 \end_layout
 
 \begin_layout Subsection
@@ -1238,7 +1240,7 @@ case class Tree(text:String, // The node text
 
 \begin_layout Plain Layout
 
-				hasChildren: Boolean, // Indicates if this node has choldern of not.
+				hasChildren: Boolean, // Indicates if this node has children of not.
 \end_layout
 
 \begin_layout Plain Layout
@@ -1254,15 +1256,385 @@ case class Tree(text:String, // The node text
 \end_deeper
 \begin_layout Standard
 There is also a companion module providing different overloaded apply functions.
- As you've noticed we have a List of choldern which can be empty (Nil) but
- we also have a hasChildren flag.
+ As you've noticed we have a List of Tree which can be empty (Nil) but we
+ also have a hasChildren flag.
  The reason is that hasChildren semantic is beyond the scope of an empty
- childern list.
+ Tree list.
  For instance for Ajax nodes we can have 
 \family typewriter
 hasChildren = true
 \family default
  but the actual children list will be fetched dynamically using Ajax call.
+ Here is an example of building a tree:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Tree example
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+Tree("1.
+ Pre Lunch (120 min)", "folder", false, false,
+\end_layout
+
+\begin_layout Plain Layout
+
+         Tree("1.1 The State of the Powerdome (30 min)", "file") ::
+\end_layout
+
+\begin_layout Plain Layout
+
+         Tree("1.2 The Future of jQuery (30 min)", "file") ::
+\end_layout
+
+\begin_layout Plain Layout
+
+         Tree("1.2 jQuery UI - A step to richnessy (60 min)", "file") ::
+\end_layout
+
+\begin_layout Plain Layout
+
+         Nil)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Sparklines widget
+\end_layout
+
+\begin_layout Standard
+The sparklines widget is baed on http://www.willarson.com/code/sparklines/sparklin
+es.html script.
+ It renders charts using HTML canvas.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/sparklines.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Sparklines widget
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Similarly with other widgets you need to initialize the widget in Boot by
+ calling 
+\family typewriter
+Sparklines.init
+\family default
+.
+ Here is a snippet code example:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Sparklines example
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/*
+\end_layout
+
+\begin_layout Plain Layout
+
+The template example:
+\end_layout
+
+\begin_layout Plain Layout
+
+<lift:surround with="default" at="content">
+\end_layout
+
+\begin_layout Plain Layout
+
+	<lift:SparklinesDemo.renderOnLoad />
+\end_layout
+
+\begin_layout Plain Layout
+
+	<canvas id="bar" style="width: 500px; height: 200px;"></canvas>
+\end_layout
+
+\begin_layout Plain Layout
+
+</lift:surround>
+\end_layout
+
+\begin_layout Plain Layout
+
+*/
+\end_layout
+
+\begin_layout Plain Layout
+
+class SparklinesDemo {
+\end_layout
+
+\begin_layout Plain Layout
+
+  def renderOnLoad(html: NodeSeq): NodeSeq = {
+\end_layout
+
+\begin_layout Plain Layout
+
+    val data = JsArray(100,500,300,200,400,500,400,400,100,200, 345, 412,
+ 111, 234, 490);
+\end_layout
+
+\begin_layout Plain Layout
+
+    val opts = JsObj(("percentage_lines" -> JsArray(0.5, 0.75)),
+\end_layout
+
+\begin_layout Plain Layout
+
+                     ("fill_between_percentage_lines" -> true),
+\end_layout
+
+\begin_layout Plain Layout
+
+                     ("extend_markings" -> false));
+\end_layout
+
+\begin_layout Plain Layout
+
+    Sparklines.onLoad("bar", SparklineStyle.BAR, data, opts);
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+First of all in the template we are including our SparklinesDemo snippet
+ and then add a canvas element.
+ This element will contain the actual chart.
+ In our little snippet we have the chart data as a JsArray (that abstracts
+ a JavaScript array) then the JSON object containing configuration options
+ that the sparklines script will use.
+ Then calling Sparklines.onLoad will render a JavaScript function that when
+ DOM document is ready for processing will render the actual chart.
+\end_layout
+
+\begin_layout Section
+How to build a widget
+\end_layout
+
+\begin_layout Standard
+As explained before there is no magic formula as with Lift & Scala there
+ are so many ways of building widgets.
+ But here are some guidelines that we use for building widgets in Lift:
+\end_layout
+
+\begin_layout Enumerate
+Assume that you want to package the widget in a single .jar file.
+ Also the widget's resources (scripts, stylesheets, images) are incorporated
+ in the same jar file.
+\end_layout
+
+\begin_layout Enumerate
+Because the resources are embedded in your jar you need to help lift find
+ them when the browser is requesting them.
+ Here the init function that we call in the application Boot comes into
+ picture.
+ Here i an example of init function:
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+ import _root_.net.liftweb.http.ResourceServer
+\end_layout
+
+\begin_layout Plain Layout
+
+ def init() {     
+\end_layout
+
+\begin_layout Plain Layout
+
+    ResourceServer.allow{
+\end_layout
+
+\begin_layout Plain Layout
+
+      case "sparklines" :: _ => true     
+\end_layout
+
+\begin_layout Plain Layout
+
+	}
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+This tells Lift that it is OK to load the resources from /classpath/sparklines
+ folder.
+ Actually 
+\family typewriter
+classpath
+\family default
+ is given by 
+\family typewriter
+LiftRules.resourceServerPath
+\family default
+ variable that of course you can change.
+\end_layout
+
+\begin_layout Enumerate
+Now you can build your own classes/object containing various functions.
+ These functions usually return the actual widget markup rendered based
+ on the information that user provides but it also can render <head> elements.
+ Not to worry because Lift will automatically merge any <head> element found
+ in HTML body into the top level head.
+ This is a very handy feature.
+ For instance Sparkilines.onLoad function would render:
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+ <head>
+\end_layout
+
+\begin_layout Plain Layout
+
+   <script type="text/javascript" src="/classpath/sparklines/sparklines.min.js"/>
+\end_layout
+
+\begin_layout Plain Layout
+
+   ...
+\end_layout
+
+\begin_layout Plain Layout
+
+ </head>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Note the path we used: /classpath/sparklines.
+ It is recommended to not hardcode /classpath there instead use 
+\family typewriter
+LiftRules.resourceServerPath 
+\family default
+variable.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+After you defined your functions you can simply use them from regular snippets,
+ just as we did for the widgets presented above.
+\end_layout
+
+\begin_layout Standard
+That is pretty much it as far as Lift widgets go.
+ As you can see we did not really have to build a rich design (or over-design
+ it) because Lift framework itself facilitates lots of things for us.
 \end_layout
 
 \end_body
