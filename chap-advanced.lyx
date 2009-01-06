@@ -1687,9 +1687,8 @@ The utility of this support is quite obvious in so many situations.
 \end_deeper
 \begin_layout Standard
 Now we have seen how we can pass xml parameters to snippets bt what id we
- want to pass parameters to the bound nodes.
- For instance in Listing 1.3 we also want to pass the format te time format
- like:
+ want to pass parameters to the nodes thatwill be bound? For instance in
+ Listing 1.3 we also want to pass the amppm information:
 \end_layout
 
 \begin_layout Standard
@@ -1706,7 +1705,7 @@ true
 /> 
 \family default
 where the time will be displayed in AM-PM format as opposed to 24h format.
- But how we can accee the ampm parameter?
+ But how can we access the ampm parameter?
 \end_layout
 
 \begin_layout Standard
@@ -1794,7 +1793,7 @@ time
 \begin_inset Quotes erd
 \end_inset
 
- -> {node: NodeSeq => println(BindHelpers.curAttr(
+ -> {node: NodeSeq => println(BindHelpers.attr(
 \begin_inset Quotes eld
 \end_inset
 
@@ -1828,7 +1827,7 @@ ampm
 The key aspect here is the BindHelpers object.
  You can use it for obtaining information about node attributes.
  This context is maintained internally using ThreadLocals and closures.
- This context is cleared after bind method is executed.
+ Note that the context is cleared after bind method is executed.
  In our example above for 
 \begin_inset Quotes eld
 \end_inset
@@ -1843,8 +1842,15 @@ time
 <ledger:time>
 \family default
  node.
- When our function is called by Lift we can access the BindHelpers,such
+ When our function is called by Lift we can access the BindHelpers, such
  ass the attributes of the current node.
+ The sequence 
+\family typewriter
+<string> -> <right-hand-side-expression>
+\family default
+ is turned into a BindParam object using implicit conversions.
+ It is important to note that BindParam.calcValue function is called in the
+ correct context so that BindHelpers can be safely used.
 \end_layout
 
 \begin_layout Subsection
