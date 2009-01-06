@@ -1005,7 +1005,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 A link example
 \begin_inset CommandInset label
 LatexCommand label
@@ -1152,7 +1151,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 A text field example
 \begin_inset CommandInset label
 LatexCommand label
@@ -1310,7 +1308,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 A textarea example
 \begin_inset CommandInset label
 LatexCommand label
@@ -1442,8 +1439,26 @@ display
  Next, we turn the current entry's categories into a Seq of just value strings;
  we also set up a Set variable to hold the returned values.
  Finally, we do our form binding.
- In this example we use a helper function (not defined here) that takes
- a String representing a Category's primary key and returns the category.
+ In this example we use a helper function, 
+\family typewriter
+loadCategory
+\family default
+ (not defined here), that takes a String representing a Category's primary
+ key and returns the category.
+ We then use this helper method to update the Set that we created earlier.
+ Note that the callback function will be executed 
+\emph on
+for each selected item
+\emph default
+ in the multiselect, which is why the callback takes a String argument instead
+ of a 
+\family typewriter
+Set[String]
+\family default
+.
+ This is also why we have to use our own set to manage the values.
+ Depending on your use case you may or may not need to store the returned
+ values in a collection.
 \end_layout
 
 \begin_layout Standard
@@ -1456,7 +1471,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Using multiselect
 \begin_inset CommandInset label
 LatexCommand label
@@ -1489,7 +1503,7 @@ val current = currentEntry.categories.map(c => c.id.toString)
 
 \begin_layout Plain Layout
 
-var updated = Set.empty[Category]
+val updated = Set.empty[Category]
 \end_layout
 
 \begin_layout Plain Layout
@@ -1502,7 +1516,7 @@ categories
 \begin_inset Quotes erd
 \end_inset
 
- -> SHtml.multiselect(possible, current, updated + loadCategory(_)))
+ -> SHtml.multiselect(possible, current, updated += loadCategory(_)))
 \end_layout
 
 \end_inset
@@ -1514,20 +1528,315 @@ categories
 radio
 \end_layout
 
+\begin_layout Standard
+The radio method generates a set of radio buttons that take String values
+ and return a single String (the selected button) on form submission.
+ The values are used as labels for the Radio buttons, so you may need to
+ set up a Map to translate back into useful values.
+ The radio method also takes a Box[String] that can be used to pre-select
+ one of the buttons; the value of the Box must match one of the option values,
+ or if you pass Empty no buttons will be selected.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Using-radio-for"
+
+\end_inset
+
+ shows an example of using radio to select a color.
+ In this example we use a Map from color names to the actual color values
+ for the translation.
+ To minimize errors, we use the 
+\family typewriter
+keys
+\family default
+ property of the Map to generate the list of options.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Using radio for colors
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Using-radio-for"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import java.awt.Color
+\end_layout
+
+\begin_layout Plain Layout
+
+var myColor : Color = _
+\end_layout
+
+\begin_layout Plain Layout
+
+val colorMap = Map(
+\begin_inset Quotes eld
+\end_inset
+
+Red
+\begin_inset Quotes erd
+\end_inset
+
+ -> Color.red,
+\end_layout
+
+\begin_layout Plain Layout
+
+                   
+\begin_inset Quotes eld
+\end_inset
+
+White
+\begin_inset Quotes erd
+\end_inset
+
+ -> Color.white,
+\end_layout
+
+\begin_layout Plain Layout
+
+                   
+\begin_inset Quotes eld
+\end_inset
+
+Blue
+\begin_inset Quotes erd
+\end_inset
+
+ -> Color.blue)
+\end_layout
+
+\begin_layout Plain Layout
+
+val colors = SHtml.radio(colorMap.keys.toList, Empty, myColor = colorMap(_))
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Subsection
 select
+\end_layout
+
+\begin_layout Standard
+The select method is very similar to the multiselect method except that
+ only one item may be selected from the list of options.
+ That also means that the default option is a 
+\family typewriter
+Box[String]
+\family default
+ instead of a Seq[String].
+ As with multiselect, you pass a sequence of (value,display) pairs as the
+ options for the select, and process the return with a 
+\begin_inset Formula $(String)\Rightarrow Any$
+\end_inset
+
+ function.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:A-select-example"
+
+\end_inset
+
+ shows an example of using a select to choose an account to view.
+ 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Need a better example
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+A select example
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:A-select-example"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+var selectedAccount : Account = _
+\end_layout
+
+\begin_layout Plain Layout
+
+val accounts = User.accounts.map(acc => (acc.id.toString, acc.name))
+\end_layout
+
+\begin_layout Plain Layout
+
+val chooseAccount = SHtml.select(accounts, Empty, selectedAccount = loadAccount(_
+))
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+An important thing to note is that Lift will verify that the value submitted
+ in the form matches one of the options that was passed in; if you need
+ to do dynamic updating of the list you'll need to use untrustedSelect (section
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:untrustedSelect"
+
+\end_inset
+
+).
 \end_layout
 
 \begin_layout Subsection
 selectObj
 \end_layout
 
-\begin_layout Subsection
-untrustedSelect
+\begin_layout Standard
+One of the drawbacks with the select and multiselect generators is that
+ they deal only in Strings; if you want to select objects you need to provide
+ your own code for mapping from the strings.
+ The selectObj generator method handles all of this for you by .
+ Instead of passing a sequence of (value string, display string) pairs,
+ you pass in a sequence of (object,display string) pairs.
+ Similarly, the default value is a Box[T] and the callback function is 
+\begin_inset Formula $(T)\Rightarrow Any$
+\end_inset
+
+ , where T is the type of the object (selectObj is a generic function).
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Using-selectObj-for"
+
+\end_inset
+
+ shows a reworking of our radio example (listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Using-radio-for"
+
+\end_inset
+
+) to select Colors directly.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Using selectObj for Colors
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Using-selectObj-for"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import java.awt.Color
+\end_layout
+
+\begin_layout Plain Layout
+
+var myColor : Color = _
+\end_layout
+
+\begin_layout Plain Layout
+
+val options = List(Color.red, Color.white, Color.blue)
+\end_layout
+
+\begin_layout Plain Layout
+
+val colors = SHtml.selectObj(options, Empty, myColor = _)
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
-span
+untrustedSelect
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:untrustedSelect"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The untrustedSelect generator is essentially the same as the select generator,
+ except that the value returned in the form isn't validated against the
+ original option sequence.
+ This can be useful if you want to update the selection on the client side
+ using JavaScript.
 \end_layout
 
 \begin_layout Section
@@ -1539,6 +1848,255 @@ name "sec:File-Uploads"
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+File uploads are a special case of form submission that allows the client
+ to send a local file to the server.
+ This is accomplished by using multipart forms; you can enable this by setting
+ the 
+\family typewriter
+multipart
+\family default
+ attribute on your snippet tag to true.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:File-upload-template"
+
+\end_inset
+
+ shows an example snippet tag using file uploads.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+File upload template
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:File-upload-template"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<lift:MyForm.file form=
+\begin_inset Quotes erd
+\end_inset
+
+POST
+\begin_inset Quotes erd
+\end_inset
+
+ multipart=
+\begin_inset Quotes erd
+\end_inset
+
+true
+\begin_inset Quotes erd
+\end_inset
+
+>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <form:file /> <form:submit />
+\end_layout
+
+\begin_layout Plain Layout
+
+</lift:MyForm.file>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In this example we've set up binding tags for the file itself (this will
+ be shown as a text input with a browse button, typically) as well as the
+ submit button.
+ On the server side, listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:File-upload-snippet"
+
+\end_inset
+
+ shows the corresponding snippet.
+ The callback for the fileUpload generator takes a 
+\family typewriter
+FileParamHolder
+\family default
+, a special case class that contains information about the uploaded file.
+ Unlike some other web frameworks, Lift doesn't store the file on the local
+ system and then give you the filename; instead, Lift reads the whole file
+ into memory and gives you the array of bytes to work with.
+ Usually this isn't an issue, since the web server itself will have meaningful
+ limits on POST sizes.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+File upload snippet
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:File-upload-snippet"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import java.io.{File,FileOutputStream}
+\end_layout
+
+\begin_layout Plain Layout
+
+def storeFile (xhtml : Group) : NodeSeq = {
+\end_layout
+
+\begin_layout Plain Layout
+
+  var file : FileParamHolder = _
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\end_layout
+
+\begin_layout Plain Layout
+
+  def saveFile () {
+\end_layout
+
+\begin_layout Plain Layout
+
+    val dir = new File(tmpDir, file.fileName)
+\end_layout
+
+\begin_layout Plain Layout
+
+    val output = new FileOutputStream(dir)
+\end_layout
+
+\begin_layout Plain Layout
+
+    output.write(file.file)
+\end_layout
+
+\begin_layout Plain Layout
+
+    output.close()
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  bind(
+\begin_inset Quotes eld
+\end_inset
+
+form
+\begin_inset Quotes erd
+\end_inset
+
+, xhtml,
+\end_layout
+
+\begin_layout Plain Layout
+
+       
+\begin_inset Quotes eld
+\end_inset
+
+file
+\begin_inset Quotes erd
+\end_inset
+
+ -> SHtml.fileUpload(file = _)
+\end_layout
+
+\begin_layout Plain Layout
+
+       
+\begin_inset Quotes eld
+\end_inset
+
+submit
+\begin_inset Quotes erd
+\end_inset
+
+ -> SHtml.submit(
+\begin_inset Quotes eld
+\end_inset
+
+Upload
+\begin_inset Quotes erd
+\end_inset
+
+, saveFile))
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In our example, we want to save the file data to a temporary location, so
+ we open a FileOutputStream and write the data to disk; you could just as
+ easily process the data in place using a scala.io.Source or java.io.ByteArrayInputS
+tream.
 \end_layout
 
 \end_body
