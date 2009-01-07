@@ -1,4 +1,4 @@
-#LyX 1.6.0 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -43,6 +43,15 @@
 \begin_body
 
 \begin_layout Chapter
+Third Party Integrations
+\end_layout
+
+\begin_layout Standard
+In this chapter we'll explore how you can integrate Lift with some well-known
+ third party libraries and applications
+\end_layout
+
+\begin_layout Section
 OpenID Integration
 \end_layout
 
@@ -69,7 +78,7 @@ This chapter is still under active development.
 
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Standard
 \begin_inset Note Note
 status open
 
@@ -122,7 +131,7 @@ How?
 
 \end_layout
 
-\begin_layout Section
+\begin_layout Subsection
 What is OpenID?
 \end_layout
 
@@ -191,6 +200,55 @@ OpenID is still in the adoption phase and is becoming more and more popular,
  Today it is estimated that there are over 160-million OpenID enabled URIs
  with nearly ten-thousand sites supporting OpenID logins.
 \begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Lucene/Compass Integration
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Framed
+position "t"
+hor_pos "c"
+has_inner_box 0
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status collapsed
+
+\begin_layout Plain Layout
+This chapter is still under active development.
+ The contents will change.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Search is a requirement for any app
+\end_layout
+
+\begin_layout Plain Layout
+Dave has some code in ESME for this, I'll ask if we can pinch it as a starting
+ point.
+\end_layout
+
 \end_inset
 
 
