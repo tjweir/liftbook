@@ -1,5 +1,5 @@
-#LyX 1.5.6 created this file. For more info see http://www.lyx.org/
-\lyxformat 276
+#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
 \begin_document
 \begin_header
 \textclass book
@@ -12,6 +12,7 @@ morestring=[b]"}
 % Default settings for code listings
 \lstset{frame=single,frameround=tttt,language=scala}
 \end_preamble
+\use_default_options false
 \language english
 \inputencoding auto
 \font_roman default
@@ -22,9 +23,11 @@ morestring=[b]"}
 \font_osf false
 \font_sf_scale 100
 \font_tt_scale 100
+
 \graphics default
 \paperfontsize default
 \spacing single
+\use_hyperref false
 \papersize default
 \use_geometry false
 \use_amsmath 1
@@ -50,7 +53,8 @@ morestring=[b]"}
 
 \begin_layout Chapter
 The Mapper and Record Frameworks
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "cha:mapper_and_record"
 
 \end_inset
@@ -62,11 +66,11 @@ name "cha:mapper_and_record"
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 TODO:Link types to Java/ScalaDoc with footnotes where possible
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Update Mapper section with IdPk (make sure I'm doing PK setup correctly
  even when not using IdPk)
 \end_layout
@@ -80,8 +84,12 @@ Update Mapper section with IdPk (make sure I'm doing PK setup correctly
 Usually we find that most webapps end up wanting to store user data somewhere.
  Once you start working with user data, though, you start dealing with issues
  like coding up input forms, validation
-\begin_inset LatexCommand index
-name "validation"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+validation
+\end_layout
 
 \end_inset
 
@@ -101,10 +109,19 @@ name "validation"
 \end_layout
 
 \begin_layout Standard
-\begin_inset Note Framed
+\begin_inset Box Framed
+position "t"
+hor_pos "c"
+has_inner_box 0
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Unless we note otherwise, functionality for each framework is the same.
  We will point out minor differences like method names inline, while major
  differences will be covered in their own sections.
@@ -121,26 +138,42 @@ Introduction to Mapper and MetaMapper
 
 \begin_layout Standard
 Let's start by discussing the relationship between the Mapper
-\begin_inset LatexCommand index
-name "Mapper"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+Mapper
+\end_layout
 
 \end_inset
 
  and MetaMapper
-\begin_inset LatexCommand index
-name "MetaMapper"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+MetaMapper
+\end_layout
 
 \end_inset
 
  traits (and the corresponding Record
-\begin_inset LatexCommand index
-name "Record"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+Record
+\end_layout
 
 \end_inset
 
  and MetaRecord
-\begin_inset LatexCommand index
-name "MetaRecord"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+MetaRecord
+\end_layout
 
 \end_inset
 
@@ -190,7 +223,8 @@ DBVendor
  implement two methods: newConnection and releaseConnection.
  You can make this as sophisticated as you want, with pooling, caching,
  etc, but for now, listing 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "lst:Setting-up-the-database"
 
 \end_inset
@@ -204,13 +238,14 @@ lstparams "breaklines=true,numbers=left,numberstyle={\tiny}"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Setting up the Database
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:Setting-up-the-database"
 
 \end_inset
@@ -223,86 +258,86 @@ name "lst:Setting-up-the-database"
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 object DBVendor extends ConnectionManager {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   // Force load the driver
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   Class.forName("org.postgresql.Driver")
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   // define methods
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def newConnection(name : ConnectionIdentifier) = {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     try {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       Full(DriverManager.getConnection(
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
            "jdbc:postgresql://localhost/mydatabase",
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
            "root", "secret"))
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     } catch {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       case e : Exception => e.printStackTrace; Empty
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     }
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   }
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def releaseConnection (conn : Connection) { conn.close }
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 }
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 DB.defineConnectionManager(DefaultConnectionIdentifier, DBVendor)
 \end_layout
@@ -322,7 +357,8 @@ The name parameter for newConnection can be used in case you need to have
  One specialized case of this is when you're doing DB sharding (horizontal
  scaling).
  Multiple database usage is covered in more depth in section 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "sub:Multiple-Databases"
 
 \end_inset
@@ -372,7 +408,8 @@ Amount, a decimal value with a precsion of two places.
 
 \begin_layout Standard
 The first thing we do is declare our Entry class, as shown in listing 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "lst:Entry-class-mapper"
 
 \end_inset
@@ -386,13 +423,14 @@ lstparams "showstringspaces=false"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Entry class in Mapper
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:Entry-class-mapper"
 
 \end_inset
@@ -405,47 +443,47 @@ name "lst:Entry-class-mapper"
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 class MapEntry extends KeyedMapper[Long,MapEntry] {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def getSingleton = MapEntryMeta
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def primaryKeyField = id
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   object id extends MappedLongIndex(this)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   object date extends MappedDateTime(this)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   object description extends MappedString(this,100)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   // 2 digits to the right
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   object amount extends MappedDecimal(this,2)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 }
 \end_layout
@@ -457,7 +495,8 @@ class MapEntry extends KeyedMapper[Long,MapEntry] {
 
 \begin_layout Standard
 The Record version is shown in listing 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "lst:Entry-class-record"
 
 \end_inset
@@ -480,13 +519,14 @@ lstparams "showstringspaces=false"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Entry class in Record
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:Entry-class-record"
 
 \end_inset
@@ -499,47 +539,47 @@ name "lst:Entry-class-record"
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 class Entry extends KeyedRecord[Entry,Long] {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def meta = EntryMeta
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def primaryKey = id
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   object id extends LongField(this) with KeyField[Long,Entry]
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   object date extends DateTimeField(this)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   object description extends StringField(this, 100)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   // 2 digits to the right
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   object amount extends DecimalField(this, 2)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 }
 \end_layout
@@ -554,14 +594,22 @@ As you can see, we've set Entry to extend the KeyedMapper trait (we need
  to tell Mapper what the subtype is) and we've added the fields required
  by our class.
  We need to provide a primary key on the entity, so we use the KeyedMapper
-\begin_inset LatexCommand index
-name "KeyedMapper"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+KeyedMapper
+\end_layout
 
 \end_inset
 
  trait instead of Mapper (or, correspondingly, KeyedRecord
-\begin_inset LatexCommand index
-name "KeyedRecord"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+KeyedRecord
+\end_layout
 
 \end_inset
 
@@ -569,8 +617,12 @@ name "KeyedRecord"
  When you use the KeyedMapper trait you need to provide an implementation
  for the primaryKeyField def, which must match the type of the KeyedMapper
  trait and be a subtype of IndexedField
-\begin_inset LatexCommand index
-name "IndexedField"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+IndexedField
+\end_layout
 
 \end_inset
 
@@ -578,7 +630,8 @@ name "IndexedField"
  Currently, Mapper supports both indexed Longs and Strings, so if you want
  to use some other type for your primary key you'll need to roll your own
  (section 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "sub:Defining-Custom-Field-types-mapper"
 
 \end_inset
@@ -588,7 +641,8 @@ reference "sub:Defining-Custom-Field-types-mapper"
  trait for an Int foreign key.
  That means that if you use an Int for the primary key you may not be able
  to do a relationship with other objects (section 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "sub:Object-Relationships"
 
 \end_inset
@@ -598,15 +652,23 @@ reference "sub:Object-Relationships"
  in effect, a marker trait (KeyField) to indicate that a particular field
  is a key field.
  One thing to note is that in Mapper, the table name
-\begin_inset LatexCommand index
-name "table name"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+table name
+\end_layout
 
 \end_inset
 
  foryour entity defaults to the name of the class (Entry in our case).
  If you want to change this then you just need to override the dbTableName
-\begin_inset LatexCommand index
-name "dbTableName"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+dbTableName
+\end_layout
 
 \end_inset
 
@@ -622,7 +684,8 @@ Looking at these examples, you've probably noticed that the fields are defined
  on each instance since a MetaMapper instance is itself an object.
  Also note that DecimalField is a custom field type, which we will cover
  in section 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "sub:Defining-Custom-Field-types-record"
 
 \end_inset
@@ -633,13 +696,18 @@ reference "sub:Defining-Custom-Field-types-record"
 \begin_layout Standard
 In order to tie all of this together, we need to define a matching KeyedMetaMapp
 er
-\begin_inset LatexCommand index
-name "KeyedMetaMapper"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+KeyedMetaMapper
+\end_layout
 
 \end_inset
 
  object as the singleton for our entity, as shown in listing 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "lst:EntryMeta-object"
 
 \end_inset
@@ -654,13 +722,14 @@ reference "lst:EntryMeta-object"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 EntryMeta object
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:EntryMeta-object"
 
 \end_inset
@@ -673,17 +742,17 @@ name "lst:EntryMeta-object"
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 object EntryMeta extends Entry with KeyedMetaMapper[Long,Entry] {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   override def fieldOrder = List(date, description, amount)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 }
 \end_layout
@@ -696,14 +765,22 @@ object EntryMeta extends Entry with KeyedMetaMapper[Long,Entry] {
 \begin_layout Standard
 In our case we're simply defining the order of fields as they'll be displayed
  in XHTML
-\begin_inset LatexCommand index
-name "XHTML"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+XHTML
+\end_layout
 
 \end_inset
 
  and forms
-\begin_inset LatexCommand index
-name "form"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+form
+\end_layout
 
 \end_inset
 
@@ -720,8 +797,12 @@ fieldOrder
  since this is not very useful.
  If you don't want a particular field to show up in forms or XHTML output,
  simply omit it from the fieldOrder
-\begin_inset LatexCommand index
-name "fieldOrder"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+fieldOrder
+\end_layout
 
 \end_inset
 
@@ -734,7 +815,8 @@ Since fields aren't actually instance members, operations on them are slightly
  The biggest difference is in how we set fields: we use the apply method.
  In addition, field access can be chained so that you can set multiple field
  values in one statement, as shown in listing 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "lst:Setting-field-values"
 
 \end_inset
@@ -747,13 +829,14 @@ reference "lst:Setting-field-values"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Setting field values
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:Setting-field-values"
 
 \end_inset
@@ -766,12 +849,12 @@ name "lst:Setting-field-values"
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 myEntry.date(new Date).description("A sample entry")
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 myEntry.amount("127.20")
 \end_layout
@@ -791,7 +874,8 @@ is
 value
 \family default
  method in Record) as shown in listing 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "lst:Accessing-field-values"
 
 \end_inset
@@ -804,13 +888,14 @@ reference "lst:Accessing-field-values"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Accessing field values in Record
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:Accessing-field-values"
 
 \end_inset
@@ -823,47 +908,47 @@ name "lst:Accessing-field-values"
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 // mapper
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 val tenthOfAmount = myEntry.amount.is / 10
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 val formatted = String.format("%s : %s",
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
                               myEntry.description.is,
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
                               myEntry.amount.is.toString)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 // record
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 if (myEntry.description.value == "Doughnuts") {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   println("Diet ruined!")
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 }
 \end_layout
@@ -875,7 +960,8 @@ if (myEntry.description.value == "Doughnuts") {
 
 \begin_layout Subsection
 Object Relationships
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "sub:Object-Relationships"
 
 \end_inset
@@ -893,7 +979,8 @@ Often it's appropriate to have relationships between different entities.
  To give an example, our ledger entries should be owned by a particular
  user.
  Listing 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "lst:Foreign-Key-Definition"
 
 \end_inset
@@ -908,13 +995,14 @@ gnKey field on our existing Ledger class to specify a one-to-many from User
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Foreign Key Definition
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:Foreign-Key-Definition"
 
 \end_inset
@@ -927,51 +1015,51 @@ name "lst:Foreign-Key-Definition"
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 class User extends KeyedMapper[Long,User] {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def getSingleton = UserMeta // not shown here
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def primaryKeyField = id
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   object id extends MappedLongIndex(this)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 }
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 class Entry extends KeyedMapper[Long,Entry] {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   ...
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   object owner extends MappedLongForeignKey(this,UserMeta)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 }
 \end_layout
@@ -985,7 +1073,8 @@ class Entry extends KeyedMapper[Long,Entry] {
 Once we have this defined, accessing the object via the relationship is
  achieved by using the obj method on the foreign key field, as shown in
  listing 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "lst:Accessing-Foreign-Objects"
 
 \end_inset
@@ -998,13 +1087,14 @@ reference "lst:Accessing-Foreign-Objects"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Accessing Foreign Objects
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:Accessing-Foreign-Objects"
 
 \end_inset
@@ -1017,22 +1107,22 @@ name "lst:Accessing-Foreign-Objects"
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 class Entry extends KeyedMapper[Long,Entry] {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
  ...
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
  def parentName = Text("My parent is " + owner.obj.name.is)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 }
 \end_layout
@@ -1060,7 +1150,8 @@ join
  you purchase a book for your mother's birthday, so it has the categories
  Gift, Mom and Books).
  First we define the category entity, as shown in listing
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "lst:Category-Entity"
 
 \end_inset
@@ -1073,13 +1164,14 @@ reference "lst:Category-Entity"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Category Entity
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:Category-Entity"
 
 \end_inset
@@ -1092,48 +1184,48 @@ name "lst:Category-Entity"
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 class Category extends KeyedMapper[Long,Category] {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def getSingleton = CategoryMeta
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def primaryKeyField = id
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   object id extends MappedLongIndex(this)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   object name extends MappedString(this,100)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 }
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 object CategoryMeta extends Category with KeyedMetaMapper[Long,Category]
  {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   override def fieldOrder = List(name)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 }
 \end_layout
@@ -1154,13 +1246,14 @@ Next, we define our join entity, as shown in listing .
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Join Entity
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:Join-Entity"
 
 \end_inset
@@ -1173,73 +1266,73 @@ name "lst:Join-Entity"
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 class CategoryEntry extends KeyedMapper[Long,CategoryEntry] {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   ...
  singleton, primary key defs here ...
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   object entry extends MappedLongForeignKey(this,EntryMeta)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   object category extends MappedLongForeignKey(this,CategoryMeta)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 }
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 object CategoryEntryMeta extends CategoryEntry with KeyedMetaMapper[Long,Categor
 yEntryMeta] {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def join (category : Category, entry : Entry) = {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     val joiner = this.create
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     joiner.entry(entry)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     joiner.category(category)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     joiner
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   }
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 }
 \end_layout
@@ -1256,7 +1349,8 @@ To use the join entity, you'll need to create a new instance and set the
  object to do just that.
  To make the many-to-many accessible as a field on our entities, we can
  use the HasManyThrough trait, as shown in listing 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "lst:HasManyThrough-for-Many-to-Many"
 
 \end_inset
@@ -1269,13 +1363,14 @@ reference "lst:HasManyThrough-for-Many-to-Many"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 HasManyThrough for Many-to-Many Relationships
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:HasManyThrough-for-Many-to-Many"
 
 \end_inset
@@ -1288,32 +1383,32 @@ name "lst:HasManyThrough-for-Many-to-Many"
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 object categories extends 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   HasManyThrough(this,
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
                  CategoryMeta,
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
                  CategoryEntryMeta,
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
                  CategoryEntryMeta.entry,
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
                  CategoryEntryMeta.category)
 \end_layout
@@ -1345,7 +1440,8 @@ Although the field is defined as a query, the field is actually lazy and
 If you want a way to retrieve the joined results such that it pulls fresh
  from the database each time, you can instead define a helper method as
  shown in listing 
-\begin_inset LatexCommand vref
+\begin_inset CommandInset ref
+LatexCommand vref
 reference "lst:Convenience-methods"
 
 \end_inset
@@ -1379,7 +1475,8 @@ delete Deletes the given entity instance
 find* A whole host of means for locating entities, by primary key, typesafe
  queries, raw SQL queries, etc.
  These will be covered in detail in their own section, 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "sub:Querying-for-Entities"
 
 \end_inset
@@ -1395,7 +1492,8 @@ In general these operations will be supported in both Record and Mapper.
  For this reason, this section will deal specifically with Mapper's persistence
  operations; Record's backends and their supported operations are covered
  in section 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "sec:Record-Backends"
 
 \end_inset
@@ -1412,8 +1510,12 @@ Once we have the KeyedMetaMapper object defined we can use it to create
  objects using the 
 \family typewriter
 create
-\begin_inset LatexCommand index
-name "create"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+create
+\end_layout
 
 \end_inset
 
@@ -1457,7 +1559,8 @@ save
 
 \begin_layout Subsubsection*
 Deleting an Instance
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "sub:Deleting-an-Instance"
 
 \end_inset
@@ -1493,13 +1596,15 @@ bulkDelete_!!
  method on MetaMapper.This method allows you to specify query parameters
  to control which entities are deleted.
  We will cover query parameters in section 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "sub:Querying-for-Entities"
 
 \end_inset
 
  (an example is in listing 
-\begin_inset LatexCommand vref
+\begin_inset CommandInset ref
+LatexCommand vref
 reference "lst:Bulk-Deletion"
 
 \end_inset
@@ -1509,7 +1614,8 @@ reference "lst:Bulk-Deletion"
 
 \begin_layout Subsection
 Querying for Entities
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "sub:Querying-for-Entities"
 
 \end_inset
@@ -1525,8 +1631,12 @@ There are a variety of methods on MetaMapper for querying for instances
 findAll
 \family default
 
-\begin_inset LatexCommand index
-name "findAll"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+findAll
+\end_layout
 
 \end_inset
 
@@ -1548,7 +1658,8 @@ findAll
  Note that each findAll...
  method has a corresponding method that takes a database connection for
  sharding or multiple database usage (see sharding in section 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "sub:Multiple-Databases"
 
 \end_inset
@@ -1588,7 +1699,8 @@ Although Mapper provides a large amount of the functionality in SQL, some
  features are not covered directly or at all.
  In some cases we can define helper methods to make querying easier, particularl
 y for joins (section 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "sub:helper-joins"
 
 \end_inset
@@ -1598,8 +1710,12 @@ reference "sub:helper-joins"
 
 \begin_layout Standard
 The simplest QueryParam to refine your query is the By
-\begin_inset LatexCommand index
-name "By"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+By
+\end_layout
 
 \end_inset
 
@@ -1616,7 +1732,8 @@ name "By"
  in SQL.
  For instance, to get an instance of our ledger entry by its primary key,
  we use findAll as shown in listing 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "lst:Retrieving-by-Primary-key"
 
 \end_inset
@@ -1629,13 +1746,14 @@ reference "lst:Retrieving-by-Primary-key"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Retrieving by Primary Key
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:Retrieving-by-Primary-key"
 
 \end_inset
@@ -1648,7 +1766,7 @@ name "lst:Retrieving-by-Primary-key"
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 val myEntry = EntryMeta.findAll(By(Entry.id, myId)).firstOption
 \end_layout
@@ -1669,8 +1787,12 @@ As you can see, we use the firstOption to convert from a List to an Option.
 
 \begin_layout Itemize
 NotBy
-\begin_inset LatexCommand index
-name "NotBy"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+NotBy
+\end_layout
 
 \end_inset
 
@@ -1682,7 +1804,7 @@ By_>
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Add index entry
 \end_layout
 
@@ -1696,7 +1818,7 @@ By_<
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Add index entry
 \end_layout
 
@@ -1707,8 +1829,12 @@ Add index entry
 
 \begin_layout Itemize
 ByList
-\begin_inset LatexCommand index
-name "ByList"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+ByList
+\end_layout
 
 \end_inset
 
@@ -1727,8 +1853,12 @@ field IN (x,y,z)
 
 \begin_layout Itemize
 NullRef
-\begin_inset LatexCommand index
-name "NullRef"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+NullRef
+\end_layout
 
 \end_inset
 
@@ -1737,8 +1867,12 @@ name "NullRef"
 
 \begin_layout Itemize
 NotNullRef
-\begin_inset LatexCommand index
-name "NotNullRef"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+NotNullRef
+\end_layout
 
 \end_inset
 
@@ -1747,8 +1881,12 @@ name "NotNullRef"
 
 \begin_layout Itemize
 Like
-\begin_inset LatexCommand index
-name "Like"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+Like
+\end_layout
 
 \end_inset
 
@@ -1760,8 +1898,12 @@ name "Like"
 In addition to the basic clauses there are some slightly more complex ways
  to control the query.
  The first of these is ByRef
-\begin_inset LatexCommand index
-name "ByRef"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+ByRef
+\end_layout
 
 \end_inset
 
@@ -1775,7 +1917,7 @@ on the same entity
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Is there an example?
 \end_layout
 
@@ -1787,8 +1929,12 @@ Is there an example?
 
 \begin_layout Standard
 Getting slightly more complex, we come to the In
-\begin_inset LatexCommand index
-name "In"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+In
+\end_layout
 
 \end_inset
 
@@ -1805,7 +1951,7 @@ IN
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Can we think of a better one?
 \end_layout
 
@@ -1822,7 +1968,8 @@ c
 
 .
  Listing 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "lst:Using-In"
 
 \end_inset
@@ -1835,13 +1982,14 @@ reference "lst:Using-In"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Using In
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:Using-In"
 
 \end_inset
@@ -1854,27 +2002,27 @@ name "lst:Using-In"
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 EntryMeta.findAll(
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   ByRef(EntryMeta.id, CategoryJoinMeta.entry),
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   In(CategoryJoinMeta.category,
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
      CategoryMeta.id,
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
      Like(CategoryMeta.name, "c%")))
 \end_layout
@@ -1888,8 +2036,12 @@ EntryMeta.findAll(
 We use the ByRef params to do the join between the many-to-many entity on
  the query.
  Related to In is InRaw
-\begin_inset LatexCommand index
-name "InRaw"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+InRaw
+\end_layout
 
 \end_inset
 
@@ -1903,7 +2055,8 @@ IN
 
  portion of the where clause.
  An example in listing 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "lst:Using-InRaw"
 
 \end_inset
@@ -1918,13 +2071,14 @@ lstparams "breaklines=true,numbers=left,numberstyle={\tiny}"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Using InRaw
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:Using-InRaw"
 
 \end_inset
@@ -1937,38 +2091,38 @@ name "lst:Using-InRaw"
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 def recentCategories = {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   val joins = CategoryJoinMeta.findAll(
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     InRaw(CategoryJoinMeta.entry,
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
           "select id from Entry where Entry.date > (CURRENT_DATE - interval
  '30 days')",
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
           IHaveValidatedThisSQL("dchenbecker", "2008-12-03"))
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   joins.map(_.category.obj).sort(_.id < _.id).removeDuplicates
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 }
 \end_layout
@@ -1983,7 +2137,7 @@ Here things are starting to get a little hairy
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Is there a better way to do this?
 \end_layout
 
@@ -1995,7 +2149,8 @@ Is there a better way to do this?
  If you want to do this in the query itself you'll have to use the findAllByInse
 cureSql or findAllByPreparedStatement methods, which are covered later in
  this section on page 
-\begin_inset LatexCommand pageref
+\begin_inset CommandInset ref
+LatexCommand pageref
 reference "sub:SQL-based-queries"
 
 \end_inset
@@ -2014,7 +2169,8 @@ The next QueryParam we'll cover is BySql, which lets you use a complete
  SQL fragment that gets put into the where clause.
  An example of this would be if we want to find all ledger entries within
  the last 30 days, as shown in listing 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "lst:Using-BySql"
 
 \end_inset
@@ -2029,13 +2185,14 @@ reference "lst:Using-BySql"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Using BySql
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:Using-BySql"
 
 \end_inset
@@ -2048,17 +2205,17 @@ name "lst:Using-BySql"
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 val recentEntries = EntryMeta.findAll(
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   BySql("Entry.date > (CURRENT_DATE - interval '30 days')",
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
         IHaveValidatedThisSQL("dchenbecker","2008-12-03"))
 \end_layout
@@ -2072,7 +2229,8 @@ val recentEntries = EntryMeta.findAll(
 The tradeoff with using BySql is that you need to be careful with what you
  allow into the query string.
  BySql supports parameterized queries as shown in listing 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "lst:Parameterized-BySql"
 
 \end_inset
@@ -2087,13 +2245,14 @@ reference "lst:Parameterized-BySql"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Parameterized BySql
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:Parameterized-BySql"
 
 \end_inset
@@ -2106,12 +2265,12 @@ name "lst:Parameterized-BySql"
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 val amountRange = EntryMeta.findAll(
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   BySql("Entry.amount between ? and ?", lowVal, highVal))
 \end_layout
@@ -2123,7 +2282,8 @@ val amountRange = EntryMeta.findAll(
 
 \begin_layout Standard
 As we mentioned in section 
-\begin_inset LatexCommand vref
+\begin_inset CommandInset ref
+LatexCommand vref
 reference "sub:Deleting-an-Instance"
 
 \end_inset
@@ -2136,7 +2296,7 @@ reference "sub:Deleting-an-Instance"
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Will the delete work, though?
 \end_layout
 
@@ -2144,7 +2304,8 @@ Will the delete work, though?
 
 .
  Listing 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "lst:Bulk-Deletion"
 
 \end_inset
@@ -2157,13 +2318,14 @@ reference "lst:Bulk-Deletion"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Bulk Deletion
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:Bulk-Deletion"
 
 \end_inset
@@ -2176,12 +2338,12 @@ name "lst:Bulk-Deletion"
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 def deleteBefore (date : Date) = 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   EntryMeta.bulkDelete_!!(By_<(EntryMeta.date, date))
 \end_layout
@@ -2198,7 +2360,8 @@ Now that we've covered the selection and comparison QueryParams, we can
  This operates exactly like the order by clause in SQL, and allows you to
  order on a given field in either ascending or descending order.
  Listing 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "lst:OrderBy-Clause"
 
 \end_inset
@@ -2215,13 +2378,14 @@ reference "lst:OrderBy-Clause"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 OrderBy Clause
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:OrderBy-Clause"
 
 \end_inset
@@ -2234,32 +2398,32 @@ name "lst:OrderBy-Clause"
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 val cheapestFirst = 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   EntryMeta.findAll(OrderBy(EntryMeta.amount,Ascending))
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 // or
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 val cheapestFirst = 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   EntryMeta.findAll(OrdeBySql("Entry.amount asc"),
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     IHaveValidatedThisSQL("dchenbecker", "2008-12-03"))
 \end_layout
@@ -2273,7 +2437,8 @@ val cheapestFirst =
 Pagination of results is another feature that people often want to use,
  and Mapper provides a simple means for controlling it with two more QueryParam
  classes: StartAt and MaxRows, as shown in listing 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "lst:Pagination-of-Results"
 
 \end_inset
@@ -2288,13 +2453,14 @@ reference "lst:Pagination-of-Results"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Pagination of Results
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:Pagination-of-Results"
 
 \end_inset
@@ -2307,12 +2473,12 @@ name "lst:Pagination-of-Results"
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 val offset = S.param("offset").map(_.toLong) openOr 0
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 EntryMeta.findAll(StartAt(offset), MaxRows(20))
 \end_layout
@@ -2326,7 +2492,8 @@ EntryMeta.findAll(StartAt(offset), MaxRows(20))
 An important feature of the methods that take QueryParams is that they can
  take multiple params, as shown in this example.
  A more complex example is shown in listing 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "lst:Multiple-QueryParams"
 
 \end_inset
@@ -2341,13 +2508,14 @@ reference "lst:Multiple-QueryParams"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Multiple QueryParams
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:Multiple-QueryParams"
 
 \end_inset
@@ -2360,22 +2528,22 @@ name "lst:Multiple-QueryParams"
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 EntryMeta.findAll(Like(EntryMeta.description, "Gift for%"),
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
                   OrderBy(EntryMeta.date,Descending),
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
                   StartAt(offset),
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
                   MaxRows(pageSize))
 \end_layout
@@ -2397,8 +2565,12 @@ control
 \end_inset
 
  QueryParam that we'll cover is PreCache
-\begin_inset LatexCommand index
-name "PreCache"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+PreCache
+\end_layout
 
 \end_inset
 
@@ -2411,7 +2583,8 @@ name "PreCache"
  loaded that you need to access, so the PreCache parameter forces Mapper
  to preload the foreign objects as part of the query.
  Listing 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "lst:Using-PreCache"
 
 \end_inset
@@ -2426,13 +2599,14 @@ reference "lst:Using-PreCache"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Using PreCache
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:Using-PreCache"
 
 \end_inset
@@ -2445,17 +2619,17 @@ name "lst:Using-PreCache"
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 def loadEntry (id : Long) =
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   EntryMeta.findAll(By(EntryMeta.id, id),
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
                     PreCache(EntryMeta.owner))
 \end_layout
@@ -2467,7 +2641,8 @@ def loadEntry (id : Long) =
 
 \begin_layout Subsection
 Making Joins a Little Friendlier
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "sub:helper-joins"
 
 \end_inset
@@ -2481,7 +2656,8 @@ In case you would prefer to keep your queries type-safe but you want a little
  methods on your entities.
  One example would be finding all of the Categories for a given Entry, as
  shown in listing 
-\begin_inset LatexCommand pageref
+\begin_inset CommandInset ref
+LatexCommand pageref
 reference "lst:Join-Convenience-Method"
 
 \end_inset
@@ -2497,13 +2673,14 @@ reference "lst:Join-Convenience-Method"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Join Convenience Method
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:Join-Convenience-Method"
 
 \end_inset
@@ -2516,12 +2693,12 @@ name "lst:Join-Convenience-Method"
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 def categoriesPull = CategoryEntryMeta.
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   findAll(By(CategoryEntryMeta.entry, this.id)).map(_.category.obj)
 \end_layout
@@ -2545,12 +2722,17 @@ In addition to the first-class persistence support in Mapper and Record,
 \begin_inset Foot
 status collapsed
 
-\begin_layout Standard
+\begin_layout Plain Layout
 An abbreviation (Create, Read, Update and Delete) representing the standard
  operations that are performed on database records.
  Taken from 
-\begin_inset LatexCommand htmlurl
-target "http://provost.uiowa.edu/maui/Glossary.html"
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://provost.uiowa.edu/maui/Glossary.html
+\end_layout
 
 \end_inset
 
@@ -2596,13 +2778,14 @@ asHtml
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Custom field display
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:Custom-field-display"
 
 \end_inset
@@ -2615,37 +2798,37 @@ name "lst:Custom-field-display"
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 import java.util.DateFormat
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 ...
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 object date extends MappedDateTime(this) {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   final val dateFormat = 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     DateFormat.getDateInstance(DateFormat.SHORT)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   override def asHtml = Text(dateFormat.format(value.getTime))
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 }
 \end_layout
@@ -2673,7 +2856,7 @@ asJSON
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Still in flux and not implemented in Record
 \end_layout
 
@@ -2684,14 +2867,19 @@ Still in flux and not implemented in Record
 
 \begin_layout Subsection
 Form generation
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "sub:Form-generation"
 
 \end_inset
 
 
-\begin_inset LatexCommand index
-name "Forms"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+Forms
+\end_layout
 
 \end_inset
 
@@ -2704,8 +2892,12 @@ One of the biggest pieces of functionality in the Mapper framework is the
  The 
 \family typewriter
 toForm
-\begin_inset LatexCommand index
-name "toForm"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+toForm
+\end_layout
 
 \end_inset
 
@@ -2733,7 +2925,8 @@ toForm
 \family default
  method simply takes a function to process the submitted form and returns
  the XHTML as shown in listing 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "lst:Default-toForm-method"
 
 \end_inset
@@ -2746,13 +2939,14 @@ reference "lst:Default-toForm-method"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Default toForm method
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:Default-toForm-method"
 
 \end_inset
@@ -2765,7 +2959,7 @@ name "lst:Default-toForm-method"
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 myEntry.toForm(Full("Save"), { _.save })
 \end_layout
@@ -2787,7 +2981,7 @@ toForm
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 for now
 \end_layout
 
@@ -2795,7 +2989,8 @@ for now
 
 ).
  This can be used for something like a login form, as shown in listing 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "lst:Custom-form-redirect"
 
 \end_inset
@@ -2808,13 +3003,14 @@ reference "lst:Custom-form-redirect"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Custom submit button
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:Custom-form-redirect"
 
 \end_inset
@@ -2827,7 +3023,7 @@ name "lst:Custom-form-redirect"
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 myEntry.toForm (Full("Login"), "/member/profile")
 \end_layout
@@ -2854,7 +3050,7 @@ redo
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Not yet in Record
 \end_layout
 
@@ -2867,14 +3063,22 @@ Not yet in Record
 The Record framework allows for a little more flexibility in controlling
  form output.
  The MetaRecord object allows you to change the default template
-\begin_inset LatexCommand index
-name "Override form template"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+Override form template
+\end_layout
 
 \end_inset
 
  that the form uses by setting the formTemplate
-\begin_inset LatexCommand index
-name "formTemplate"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+formTemplate
+\end_layout
 
 \end_inset
 
@@ -2887,7 +3091,10 @@ toForm
 \end_layout
 
 \begin_layout Description
-<lift:field_label\InsetSpace ~
+<lift:field_label
+\begin_inset space ~
+\end_inset
+
 name=
 \begin_inset Quotes eld
 \end_inset
@@ -2896,12 +3103,18 @@ name=
 \begin_inset Quotes erd
 \end_inset
 
-\InsetSpace ~
+
+\begin_inset space ~
+\end_inset
+
 /> The label for the field with the given name will be rendered here.
 \end_layout
 
 \begin_layout Description
-<lift:field\InsetSpace ~
+<lift:field
+\begin_inset space ~
+\end_inset
+
 name=
 \begin_inset Quotes eld
 \end_inset
@@ -2910,7 +3123,10 @@ name=
 \begin_inset Quotes erd
 \end_inset
 
-\InsetSpace ~
+
+\begin_inset space ~
+\end_inset
+
 /> The field itself (specified by the given name) will be rendered here.
  Typically this will be an input field, although it can be anything type-appropr
 iate.
@@ -2918,7 +3134,10 @@ iate.
 \end_layout
 
 \begin_layout Description
-<lift:field_msg\InsetSpace ~
+<lift:field_msg
+\begin_inset space ~
+\end_inset
+
 name=
 \begin_inset Quotes eld
 \end_inset
@@ -2927,7 +3146,10 @@ name=
 \begin_inset Quotes erd
 \end_inset
 
-\InsetSpace ~
+
+\begin_inset space ~
+\end_inset
+
 /> Any messages, such as from validation, for the field with the given name
  will be rendered here.
 \end_layout
@@ -2935,7 +3157,8 @@ name=
 \begin_layout Standard
 As an example, if we wanted to use tables to lay out the form for our ledger
  entry, the row for the description field could look like listing 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "lst:Custom-form-template"
 
 \end_inset
@@ -2949,13 +3172,14 @@ lstparams "basicstyle={\scriptsize},language=XML"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Custom form template
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:Custom-form-template"
 
 \end_inset
@@ -2968,23 +3192,23 @@ name "lst:Custom-form-template"
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 <tr>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   <th><lift:field_label name="description" /></th>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   <td><lift:field name="description" /> <lift:field_msg name="description"
  /></td>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 </tr>
 \end_layout
@@ -2999,7 +3223,7 @@ Technically, the field_msg binding looks up lift messages (section
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Cross-ref
 \end_layout
 
@@ -3008,7 +3232,8 @@ Cross-ref
 ) based on the field's uniqueId, so you can set your own messages outside
  of validation using the S.{error,notice,warning} methods as shown in listing
  
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "lst:Setting-messages-via-S"
 
 \end_inset
@@ -3021,13 +3246,14 @@ reference "lst:Setting-messages-via-S"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Setting messages via S
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:Setting-messages-via-S"
 
 \end_inset
@@ -3040,17 +3266,17 @@ name "lst:Setting-messages-via-S"
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 S.warning(myEntry.amount.uniqueFieldId, 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
           "You have entered a negative amount!")
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 S.warning("amount_id", "This is brittle")
 \end_layout
@@ -3068,8 +3294,12 @@ For most purposes, though, using the validation mechanism discussed in the
 
 \begin_layout Subsection
 Validation
-\begin_inset LatexCommand index
-name "Validation"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+Validation
+\end_layout
 
 \end_inset
 
@@ -3107,15 +3337,20 @@ FieldErrors
  entry in the future.
  First, we need to define a function for our date field that takes a Date
  as an input (For Record, java.util.Calendar
-\begin_inset LatexCommand index
-name "Calendar"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+Calendar
+\end_layout
 
 \end_inset
 
  and not Date is the actual value type of DateTimeField) and returns the
  proper List.
  We show a simple function in listing 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "lst:Date-validation"
 
 \end_inset
@@ -3138,13 +3373,14 @@ now
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Date validation
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:Date-validation"
 
 \end_inset
@@ -3157,37 +3393,37 @@ name "lst:Date-validation"
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 def noFutureDates (time : java.util.Calendar) = {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   if (time.getTimeInMillis > System.currentTimeMillis) {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     List(FieldError(this, "You cannot make future ledger entries"))
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   } else {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     List[FieldError]()
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   }
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 }
 \end_layout
@@ -3204,7 +3440,8 @@ The next step is to tie the validation into the field itself.
 date
 \family default
  to set our list of validators as shown in listing 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "lst:Setting-validators"
 
 \end_inset
@@ -3217,13 +3454,14 @@ reference "lst:Setting-validators"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Setting validators
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:Setting-validators"
 
 \end_inset
@@ -3236,12 +3474,12 @@ name "lst:Setting-validators"
 object date extends DateTimeField[Entry](this) {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   override def validations = noFutureDates _ :: Nil
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 }
 \end_layout
@@ -3269,7 +3507,8 @@ Adding CRUD support to your Mapper classes is very simple.
  We just mix in the CRUDify trait to our class and it provides a full set
  of add, edit, list, delete and view pages automatically.
  Listing 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "lst:Mixing-in-CRUDify"
 
 \end_inset
@@ -3282,13 +3521,14 @@ reference "lst:Mixing-in-CRUDify"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Mixing in CRUDify
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:Mixing-in-CRUDify"
 
 \end_inset
@@ -3301,28 +3541,28 @@ name "lst:Mixing-in-CRUDify"
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 class Entry extends KeyedMapper[Long,Entry] with CRUDify[Long,Entry] {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   ...
  normal def here ...
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   // disable delete functionality
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   override def deleteMenuLoc = Empty
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 }
 \end_layout
@@ -3340,7 +3580,7 @@ The CRUDify behavior is very flexible, with plenty of defs you can override
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 cross-ref
 \end_layout
 
@@ -3348,7 +3588,8 @@ cross-ref
 
 ) that we can use by appending them onto the rest of our menus as shown
  in listing 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "lst:Using-CRUDify-Menus"
 
 \end_inset
@@ -3361,13 +3602,14 @@ reference "lst:Using-CRUDify-Menus"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Using CRUDify Menus
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:Using-CRUDify-Menus"
 
 \end_inset
@@ -3380,13 +3622,13 @@ name "lst:Using-CRUDify-Menus"
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 val menus = ...
  Menu(Loc(...)) :: Entry.menus :: Nil
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 LiftRules.setSiteMap(SiteMap(menus : _*))
 \end_layout
@@ -3402,8 +3644,12 @@ Mutable vs Immutable on Record
 
 \begin_layout Standard
 Immutability
-\begin_inset LatexCommand index
-name "Immutability"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+Immutability
+\end_layout
 
 \end_inset
 
@@ -3428,7 +3674,8 @@ mutable_?
  a new instance that copies over the original instances values and uses
  the new value for the given field.
  An example of using immutable fields is shown in listing 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "lst:Immutable-fields"
 
 \end_inset
@@ -3441,13 +3688,14 @@ reference "lst:Immutable-fields"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Immutable fields
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:Immutable-fields"
 
 \end_inset
@@ -3460,22 +3708,22 @@ name "lst:Immutable-fields"
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 val firstDesc = myEntry.description("one")
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 val secondDesc = firstDesc("two")
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 println(firstDesc.value) // prints "one"
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 println(secondDesc.value) // prints "two"
 \end_layout
@@ -3503,7 +3751,8 @@ Mapper and Record provide for a set of callbacks that allow you to perform
  and mapper pacakges, so make sure that you import the correct one.
  For example, if we wanted to notify a comet actor whenever a new ledger
  entry is saved, we could change our Entry as shown in listing 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "lst:Lifecycle-Callbacks"
 
 \end_inset
@@ -3516,13 +3765,14 @@ reference "lst:Lifecycle-Callbacks"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Lifecycle callbacks
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:Lifecycle-Callbacks"
 
 \end_inset
@@ -3535,22 +3785,22 @@ name "lst:Lifecycle-Callbacks"
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 object Entry extends Mapper[Entry] with LifecycleCallbacks {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   ...
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   override def afterSave { myActor ! this }
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 }
 \end_layout
@@ -3604,43 +3854,43 @@ The Record and Mapper frameworks define several basic field types.
 \begin_inset Tabular
 <lyxtabular version="3" rows="28" columns="3">
 <features islongtable="true">
-<column alignment="center" valignment="top" leftline="true" width="0">
-<column alignment="center" valignment="top" leftline="true" width="0">
-<column alignment="left" valignment="top" leftline="true" rightline="true" width="3.75in">
-<row topline="true" bottomline="true" endhead="true" endfirsthead="true">
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<column alignment="left" valignment="top" width="3.75in">
+<row endhead="true" endfirsthead="true">
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Mapper
 \end_layout
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Record
 \end_layout
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Notes
 \end_layout
 
 \end_inset
 </cell>
 </row>
-<row topline="true">
+<row>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 MappedBinary
 \end_layout
 
@@ -3649,7 +3899,7 @@ MappedBinary
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 BinaryField
 \end_layout
 
@@ -3658,7 +3908,7 @@ BinaryField
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Represents a byte array.
  You must provide your own overrides for toForm and asXHtml/asHtml for input
  and display
@@ -3667,11 +3917,11 @@ Represents a byte array.
 \end_inset
 </cell>
 </row>
-<row topline="true">
+<row>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 MappedBirthYear
 \end_layout
 
@@ -3680,7 +3930,7 @@ MappedBirthYear
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 N/A
 \end_layout
 
@@ -3689,7 +3939,7 @@ N/A
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Holds an Int that represents a birth year.
  The constructor takes a minAge parameter that is used for validation
 \end_layout
@@ -3697,11 +3947,11 @@ Holds an Int that represents a birth year.
 \end_inset
 </cell>
 </row>
-<row topline="true">
+<row>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 MappedBoolean
 \end_layout
 
@@ -3710,7 +3960,7 @@ MappedBoolean
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 BooleanField
 \end_layout
 
@@ -3719,7 +3969,7 @@ BooleanField
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Represents a Boolean value.
  The default form representation is a checkbox
 \end_layout
@@ -3727,11 +3977,11 @@ Represents a Boolean value.
 \end_inset
 </cell>
 </row>
-<row topline="true">
+<row>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 MappedCountry
 \end_layout
 
@@ -3740,7 +3990,7 @@ MappedCountry
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 CountryField
 \end_layout
 
@@ -3749,7 +3999,7 @@ CountryField
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Represents a choice from an enumeration of country phone codes as provided
  by the net.liftweb.mapper.Countries.I18NCountry class.
  The default form representation is a select
@@ -3758,11 +4008,11 @@ Represents a choice from an enumeration of country phone codes as provided
 \end_inset
 </cell>
 </row>
-<row topline="true">
+<row>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 MappedDateTime
 \end_layout
 
@@ -3771,7 +4021,7 @@ MappedDateTime
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 DateTimeField
 \end_layout
 
@@ -3780,7 +4030,7 @@ DateTimeField
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Represents a timestamp (java.util.Calender for Record, java.util.Date for Mapper).
  The default form representation is a text input
 \end_layout
@@ -3788,11 +4038,11 @@ Represents a timestamp (java.util.Calender for Record, java.util.Date for Mapper
 \end_inset
 </cell>
 </row>
-<row topline="true">
+<row>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 MappedDouble
 \end_layout
 
@@ -3801,7 +4051,7 @@ MappedDouble
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 DoubleField
 \end_layout
 
@@ -3810,18 +4060,18 @@ DoubleField
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Represents a Double value
 \end_layout
 
 \end_inset
 </cell>
 </row>
-<row topline="true">
+<row>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 MappedEmail
 \end_layout
 
@@ -3830,7 +4080,7 @@ MappedEmail
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 EmailField
 \end_layout
 
@@ -3839,18 +4089,18 @@ EmailField
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Represents an email address with a maximum length
 \end_layout
 
 \end_inset
 </cell>
 </row>
-<row topline="true">
+<row>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 MappedEnum
 \end_layout
 
@@ -3859,7 +4109,7 @@ MappedEnum
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 EnumField
 \end_layout
 
@@ -3868,7 +4118,7 @@ EnumField
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Represents a choice from a given scala.Enumeration.
  The default form representation is a select
 \end_layout
@@ -3876,11 +4126,11 @@ Represents a choice from a given scala.Enumeration.
 \end_inset
 </cell>
 </row>
-<row topline="true">
+<row>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 MappedEnumList
 \end_layout
 
@@ -3889,7 +4139,7 @@ MappedEnumList
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 N/A
 \end_layout
 
@@ -3898,7 +4148,7 @@ N/A
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Represents a choice of multiple Enumerations.
  The default form representation is a set of checkboxes, one for each enum
  value
@@ -3907,11 +4157,11 @@ Represents a choice of multiple Enumerations.
 \end_inset
 </cell>
 </row>
-<row topline="true">
+<row>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 MappedFakeClob
 \end_layout
 
@@ -3920,7 +4170,7 @@ MappedFakeClob
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 N/A
 \end_layout
 
@@ -3929,18 +4179,18 @@ N/A
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Fakes a CLOB value (really stores String bytes to a BINARY column)
 \end_layout
 
 \end_inset
 </cell>
 </row>
-<row topline="true">
+<row>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 MappedGender
 \end_layout
 
@@ -3949,7 +4199,7 @@ MappedGender
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 N/A
 \end_layout
 
@@ -3958,14 +4208,14 @@ N/A
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Represents a Gender enumeration.
  Display values are localized via the I18NGenders.
  
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Cross-ref to I18N section
 \end_layout
 
@@ -3977,11 +4227,11 @@ Cross-ref to I18N section
 \end_inset
 </cell>
 </row>
-<row topline="true">
+<row>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 MappedInt
 \end_layout
 
@@ -3990,7 +4240,7 @@ MappedInt
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 IntField
 \end_layout
 
@@ -3999,18 +4249,18 @@ IntField
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Represents an Int value
 \end_layout
 
 \end_inset
 </cell>
 </row>
-<row topline="true">
+<row>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 MappedIntIndex
 \end_layout
 
@@ -4019,7 +4269,7 @@ MappedIntIndex
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 N/A
 \end_layout
 
@@ -4028,7 +4278,7 @@ N/A
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Represents an indexed Int field (typically a primary key).
  In Record this is achieved with the KeyField trait
 \end_layout
@@ -4036,11 +4286,11 @@ Represents an indexed Int field (typically a primary key).
 \end_inset
 </cell>
 </row>
-<row topline="true">
+<row>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 MappedLocale
 \end_layout
 
@@ -4049,7 +4299,7 @@ MappedLocale
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 LocaleField
 \end_layout
 
@@ -4058,7 +4308,7 @@ LocaleField
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Represents a locale as selected from the java.util.Locale.getAvailableLocales
  method.
  The default form representation is a select
@@ -4067,11 +4317,11 @@ Represents a locale as selected from the java.util.Locale.getAvailableLocales
 \end_inset
 </cell>
 </row>
-<row topline="true">
+<row>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 MappedLong
 \end_layout
 
@@ -4080,7 +4330,7 @@ MappedLong
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 LongField
 \end_layout
 
@@ -4089,18 +4339,18 @@ LongField
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Represents a Long value
 \end_layout
 
 \end_inset
 </cell>
 </row>
-<row topline="true">
+<row>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 MappedLongForeignKey
 \end_layout
 
@@ -4109,7 +4359,7 @@ MappedLongForeignKey
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 N/A
 \end_layout
 
@@ -4118,14 +4368,14 @@ N/A
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Represents a mapping to another entity via the other entities Long primary
  key.
  This functionality in Record is not yet supported 
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Keep this up-to-date as things progress
 \end_layout
 
@@ -4137,11 +4387,11 @@ Keep this up-to-date as things progress
 \end_inset
 </cell>
 </row>
-<row topline="true">
+<row>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 MappedLongIndex
 \end_layout
 
@@ -4150,7 +4400,7 @@ MappedLongIndex
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 N/A
 \end_layout
 
@@ -4159,7 +4409,7 @@ N/A
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Represents an indexed Long field (typically a primary key).
  In Record this is achieved with the KeyField trait
 \end_layout
@@ -4167,11 +4417,11 @@ Represents an indexed Long field (typically a primary key).
 \end_inset
 </cell>
 </row>
-<row topline="true">
+<row>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 MappedPassword
 \end_layout
 
@@ -4180,7 +4430,7 @@ MappedPassword
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 PasswordField
 \end_layout
 
@@ -4189,7 +4439,7 @@ PasswordField
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Represents a password string.
  The default form representation is a password input (obscured text)
 \end_layout
@@ -4197,11 +4447,11 @@ Represents a password string.
 \end_inset
 </cell>
 </row>
-<row topline="true">
+<row>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 MappedPoliteString
 \end_layout
 
@@ -4210,7 +4460,7 @@ MappedPoliteString
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 N/A
 \end_layout
 
@@ -4219,7 +4469,7 @@ N/A
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Just like MappedString, but the default value is an empty string and the
  input is automatically truncated to fit the database column size
 \end_layout
@@ -4227,11 +4477,11 @@ Just like MappedString, but the default value is an empty string and the
 \end_inset
 </cell>
 </row>
-<row topline="true">
+<row>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 MappedPostalCode
 \end_layout
 
@@ -4240,7 +4490,7 @@ MappedPostalCode
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 PostalCodeField
 \end_layout
 
@@ -4249,7 +4499,7 @@ PostalCodeField
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Represents a validated postal code string.
  The field takes a reference to a MappedCountry (CountryField in Record)
  at definition and validates the input string against the selected country's
@@ -4259,11 +4509,11 @@ Represents a validated postal code string.
 \end_inset
 </cell>
 </row>
-<row topline="true">
+<row>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 MappedString
 \end_layout
 
@@ -4272,7 +4522,7 @@ MappedString
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 StringField
 \end_layout
 
@@ -4281,18 +4531,18 @@ StringField
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Represents a string value with a maximum length and optional default value
 \end_layout
 
 \end_inset
 </cell>
 </row>
-<row topline="true">
+<row>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 MappedStringForeignKey
 \end_layout
 
@@ -4301,7 +4551,7 @@ MappedStringForeignKey
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 N/A
 \end_layout
 
@@ -4310,14 +4560,14 @@ N/A
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Represents a mapping to another entity via the other entities String primary
  key.
  This functionality in Record is not yet supported 
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Keep this up-to-date as things progress
 \end_layout
 
@@ -4329,11 +4579,11 @@ Keep this up-to-date as things progress
 \end_inset
 </cell>
 </row>
-<row topline="true">
+<row>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 MappedStringIndex
 \end_layout
 
@@ -4342,7 +4592,7 @@ MappedStringIndex
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 N/A
 \end_layout
 
@@ -4351,7 +4601,7 @@ N/A
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Represents an indexed String field (typically a primary key).
  In Record this is achieved with the KeyField trait
 \end_layout
@@ -4359,11 +4609,11 @@ Represents an indexed String field (typically a primary key).
 \end_inset
 </cell>
 </row>
-<row topline="true">
+<row>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 MappedText
 \end_layout
 
@@ -4372,7 +4622,7 @@ MappedText
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 N/A
 \end_layout
 
@@ -4381,7 +4631,7 @@ N/A
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Represents a String field that stores to a CLOB column in the database.
  This can be used for large volumes of text.
 \end_layout
@@ -4389,11 +4639,11 @@ Represents a String field that stores to a CLOB column in the database.
 \end_inset
 </cell>
 </row>
-<row topline="true">
+<row>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 MappedTextArea
 \end_layout
 
@@ -4402,7 +4652,7 @@ MappedTextArea
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 TextAreaField
 \end_layout
 
@@ -4411,7 +4661,7 @@ TextAreaField
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Represents a String field that will use an HTML textarea element for its
  form display.
  When you define the field you can override the textareaCols and textareaRows
@@ -4421,11 +4671,11 @@ Represents a String field that will use an HTML textarea element for its
 \end_inset
 </cell>
 </row>
-<row topline="true">
+<row>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 MappedTimeZone
 \end_layout
 
@@ -4434,7 +4684,7 @@ MappedTimeZone
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 TimeZoneField
 \end_layout
 
@@ -4443,7 +4693,7 @@ TimeZoneField
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Represents a time zone selected from java.util.TimeZone.getAvailableIDs.
  The default form representation is a select
 \end_layout
@@ -4451,36 +4701,36 @@ Represents a time zone selected from java.util.TimeZone.getAvailableIDs.
 \end_inset
 </cell>
 </row>
-<row topline="true" bottomline="true">
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 MappedUniqueId
 \end_layout
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 N/A
 \end_layout
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Represents a unique string of a specified length that is randomly generated.
  The implementation doesn't allow the user to write new values to the field.
  This can be thought of as a GUID field.
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Update if Record ends up with this
 \end_layout
 
@@ -4501,7 +4751,8 @@ Update if Record ends up with this
 
 \begin_layout Subsection
 Defining Custom Field Types in Mapper
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "sub:Defining-Custom-Field-types-mapper"
 
 \end_inset
@@ -4513,7 +4764,7 @@ name "sub:Defining-Custom-Field-types-mapper"
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Add optional precision to this class
 \end_layout
 
@@ -4530,9 +4781,15 @@ The basic MappedField types cover a wide range of needs, but sometimes you
 \begin_inset Foot
 status collapsed
 
-\begin_layout Standard
-\begin_inset LatexCommand htmlurl
-target "http://stephan.reposita.org/archives/2008/01/11/once-and-for-all-do-not-use-double-for-money/"
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://stephan.reposita.org/archives/2008/01/11/once-and-for-all-do-not-use-double
+-for-money/
+\end_layout
 
 \end_inset
 
@@ -4544,7 +4801,8 @@ target "http://stephan.reposita.org/archives/2008/01/11/once-and-for-all-do-not-
 , so instead we base it on BigDecimal.
  Our first task is to specify the class signature and constructors, as shown
  in listing 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "lst:MappedDecimal-constructors"
 
 \end_inset
@@ -4558,13 +4816,14 @@ reference "lst:MappedDecimal-constructors"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 MappedDecimal constructors
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:MappedDecimal-constructors"
 
 \end_inset
@@ -4577,42 +4836,42 @@ name "lst:MappedDecimal-constructors"
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 class MappedDecimal[OwnerType <: MappedField[T]]
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     (val owner : OwnerType, scale : Int)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     extends MappedField[BigDecimal,T] {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def this(rec : OwnerType, newVal : BigDecimal) = {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     this(rec, newVal.scale)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     set(newVal)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   }
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   var rounding = RoundingMode.HALF_EVEN
 \end_layout
@@ -4640,7 +4899,7 @@ owns
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Should we reference type bounds somewhere?
 \end_layout
 
@@ -4677,7 +4936,8 @@ dbFieldClass
 \family default
  method.
  Listing 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "lst:Setting-a-default-value"
 
 \end_inset
@@ -4697,13 +4957,14 @@ reference "lst:Setting-a-default-value"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Setting a default value
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:Setting-a-default-value"
 
 \end_inset
@@ -4716,71 +4977,71 @@ name "lst:Setting-a-default-value"
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def defaultValue = (new BigDecimal("0")).setScale(scale)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def dbFieldClass = classOf[BigDecimal]
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   private var data : BigDecimal = defaultValue
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   private var orgData : BigDecimal = defaultValue
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   private def st (in : BigDecimal) {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     data = in
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     orgData = in
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   }
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   protected def i_is_! = data
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   protected def i_was_! = orgData
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   override def doneWithSave() {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     orgData = data
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   }
 \end_layout
@@ -4794,7 +5055,8 @@ name "lst:Setting-a-default-value"
 The next set of methods we need to provide deal with when and how we can
  access the data.
  Listing 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "lst:Access-Control"
 
 \end_inset
@@ -4812,13 +5074,14 @@ reference "lst:Access-Control"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Access Control
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:Access-Control"
 
 \end_inset
@@ -4831,52 +5094,52 @@ name "lst:Access-Control"
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   override def readPermission_? = true
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   override def writePermission_? = true
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   protected def i_obscure_!(in : BigDecimal) = defaultValue
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   protected def real_i_set_!(value : BigDecimal): BigDecimal = {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     if (value != data) {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       data = value
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       dirty_?(true)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     }
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     data
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   }
 \end_layout
@@ -4920,7 +5183,8 @@ BigDecimal
 \family default
 .
  Our implementation of these two methods is shown in listing 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "lst:setFrom...-Methods"
 
 \end_inset
@@ -4936,14 +5200,15 @@ lstparams "numbers=left,numberstyle={\tiny},stepnumber=2"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 setFrom...
  Methods
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:setFrom...-Methods"
 
 \end_inset
@@ -4956,70 +5221,70 @@ name "lst:setFrom...-Methods"
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def setFromAny (in : Any) : BigDecimal =
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     in match {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       case n :: _ => setFromString(n.toString)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       case Some(n) => setFromString(n.toString)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       case Full(n) => setFromString(n.toString)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       case None | Empty | Failure(_, _, _) | null => setFromString("0")
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       case n => setFromString(n.toString)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     }
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def setFromString (in : String) : BigDecimal = {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     this.setAll(new BigDecimal(in))
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   }
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   protected def setAll (in : BigDecimal) = set(in.setScale(scale, rounding))
 \end_layout
@@ -5043,7 +5308,8 @@ Our implementations are relatively straightforward.
 \begin_layout Standard
 Our final step is to define the database-specific methods for our field,
  as shown in listing 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "lst:Database-Specific-Methods"
 
 \end_inset
@@ -5068,7 +5334,7 @@ i_is_!
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Need to modify to specify precision or change definition
 \end_layout
 
@@ -5083,13 +5349,14 @@ lstparams "breaklines=true,numbers=left,numberstyle={\tiny}"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Database-Specific Methods
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:Database-Specific-Methods"
 
 \end_inset
@@ -5102,29 +5369,29 @@ name "lst:Database-Specific-Methods"
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 def targetSQLType = Types.DECIMAL
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 def jdbcFriendly(field : String) = i_is_!
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 def buildSetBooleanValue(accessor : Method, columnName : String) : (T, Boolean,
  Boolean) => Unit = null
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 def buildSetDateValue(accessor : Method, columnName : String) : (T, Date)
  => Unit =
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   (inst, v) => doField(inst, accessor, {case f: MappedDecimal[T] => f.st(if
  (v == null) defaultValue else (new BigDecimal(v.getTime).setScale(scale)))})
@@ -5132,19 +5399,19 @@ def buildSetDateValue(accessor : Method, columnName : String) : (T, Date)
  String) => Unit =
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   (inst, v) => doField(inst, accessor, {case f: MappedDecimal[T] => f.st(new
  BigDecimal(v).setScale(scale))})
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 def buildSetLongValue(accessor: Method, columnName : String) : (T, Long,
  Boolean) =>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   Unit = (inst, v, isNull) => doField(inst, accessor, {case f: MappedDecimal[T]
  => f.st(if (isNull) defaultValue else (new BigDecimal(v).setScale(scale)))})
@@ -5152,13 +5419,13 @@ def buildSetLongValue(accessor: Method, columnName : String) : (T, Long,
  String) : (T, AnyRef) =>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   Unit = (inst, v) => doField(inst, accessor, {case f: MappedDecimal[T]
  => f.st(new BigDecimal(v.toString).setScale(scale))})
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 def fieldCreatorString(dbType: DriverType, colName: String): String = colName
  + " DECIMAL(20," + scale + ")" 
@@ -5180,13 +5447,14 @@ To make the field a little more useful, we can also specify some convenience
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Convenience methods
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:Convenience-methods"
 
 \end_inset
@@ -5199,36 +5467,36 @@ name "lst:Convenience-methods"
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def += (other : BigDecimal) = setAll(data.add(other))
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def -= (other : BigDecimal) = setAll(data.subtract(other))
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def *= (other : BigDecimal) = setAll(data.multiply(other))
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def /= (other : BigDecimal) = setAll(data.divide(other))
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   // Use in practice:
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   myEntry.amount *= BigDecimal.valueOf(2)
 \end_layout
@@ -5245,7 +5513,8 @@ You could expand on the convenience methods as you wish to cover Ints, Longs,
 
 \begin_layout Subsection
 Defining Custom Field Types in Record
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "sub:Defining-Custom-Field-types-record"
 
 \end_inset
@@ -5255,7 +5524,8 @@ name "sub:Defining-Custom-Field-types-record"
 
 \begin_layout Standard
 Similar to the example in section 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "sub:Defining-Custom-Field-types-mapper"
 
 \end_inset
@@ -5264,7 +5534,8 @@ reference "sub:Defining-Custom-Field-types-mapper"
  amounts.
  Our implementation starts off looking very similar to the Mapper version,
  as shown in listing 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "lst:DecimalField-constructors"
 
 \end_inset
@@ -5279,13 +5550,14 @@ reference "lst:DecimalField-constructors"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 DecimalField Constructors
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:DecimalField-constructors"
 
 \end_inset
@@ -5298,42 +5570,42 @@ name "lst:DecimalField-constructors"
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 class DecimalField[OwnerType <: Record[OwnerType]]
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     (rec : OwnerType, scale : Int)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     extends Field[BigDecimal,OwnerType] {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def this(rec : OwnerType, newVal : BigDecimal) = {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     this(rec, newVal.scale)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     set(newVal)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   }
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   var rounding = RoundingMode.HALF_EVEN
 \end_layout
@@ -5348,7 +5620,8 @@ The next step is to start defining the methods that are left abstract on
  Field.
  Our first set deals with some basic housekeeping and presentation layer
  details, shown in listing 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "lst:DecimalField-Methods"
 
 \end_inset
@@ -5367,13 +5640,14 @@ reference "lst:DecimalField-Methods"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 DecimalField Methods
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:DecimalField-Methods"
 
 \end_inset
@@ -5386,22 +5660,22 @@ name "lst:DecimalField-Methods"
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 def defaultValue = (new BigDecimal("0")).setScale(scale)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 def owner = rec
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 def asXHtml = Text(value.toString)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 def toForm = text(value.toString, this.setFromString) 
 \end_layout
@@ -5414,7 +5688,8 @@ def toForm = text(value.toString, this.setFromString)
 \begin_layout Standard
 Our final set of methods deals with setting the value of the field, shown
  in listing 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "lst:DecimalField-Set-Methods"
 
 \end_inset
@@ -5426,7 +5701,7 @@ reference "lst:DecimalField-Set-Methods"
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Is that correct?
 \end_layout
 
@@ -5445,13 +5720,14 @@ alue to set a flag for validation.
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 DecimalField Set Methods
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:DecimalField-Set-Methods"
 
 \end_inset
@@ -5464,87 +5740,87 @@ name "lst:DecimalField-Set-Methods"
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 def setFromAny (in : Any) : Can[BigDecimal] =
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   in match {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     case n :: _ => setFromString(n.toString)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     case Some(n) => setFromString(n.toString)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     case Full(n) => setFromString(n.toString)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     case None | Empty | Failure(_, _, _) | null => setFromString("0")
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     case n => setFromString(n.toString)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   }
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 def setFromString (in : String) : Can[BigDecimal] = {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   try {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     Full(this.setAll(new BigDecimal(in)))
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   } catch {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     case e : Exception => couldNotSetValue; Empty
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   }
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 }
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 /** Set the value along with proper scale and rounding */
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 protected def setAll (in : BigDecimal) = set(in.setScale(scale,rounding))
  
@@ -5567,7 +5843,7 @@ ing method is relatively easy to implement.
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Confirm change in behavior from Mapper to not save the original value
 \end_layout
 
@@ -5578,7 +5854,8 @@ Confirm change in behavior from Mapper to not save the original value
 
 \begin_layout Section
 Record Backends
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "sec:Record-Backends"
 
 \end_inset
@@ -5594,7 +5871,7 @@ JDBC Records
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 This part of the library hasn't been finished yet
 \end_layout
 
@@ -5611,7 +5888,7 @@ JPA Records
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 This part of the library hasn't been finished yet
 \end_layout
 
@@ -5630,7 +5907,8 @@ In this section we'll cover some of the advanced features of Mapper
 
 \begin_layout Subsection
 Using Multiple Databases 
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "sub:Multiple-Databases"
 
 \end_inset
@@ -5656,7 +5934,8 @@ lift
 , so it's recommended that you use something else.
  Let's say we have two databases: sales and employees.
  Listing 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "lst:Defining-Connection-Identifiers"
 
 \end_inset
@@ -5669,13 +5948,14 @@ reference "lst:Defining-Connection-Identifiers"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Defining Connection Identifiers
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:Defining-Connection-Identifiers"
 
 \end_inset
@@ -5688,36 +5968,36 @@ name "lst:Defining-Connection-Identifiers"
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 object SalesDB extends ConnectionIdentifier {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def jndiName = "sales"
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 }
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 object EmployeeDB extends ConnectionIdentifier {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def jndiName = "employees"
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 }
 \end_layout
@@ -5732,7 +6012,8 @@ Simple enough.
  Now, we need to create connection managers for each one, or we can combine
  the functionality into a single manager.
  To keep things clean we'll use a single manager, as shown in listing 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "lst:Multi-database-Connection-Manager"
 
 \end_inset
@@ -5742,7 +6023,7 @@ reference "lst:Multi-database-Connection-Manager"
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Validate this code
 \end_layout
 
@@ -5756,13 +6037,14 @@ Validate this code
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Multi-database Connection Manager
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:Multi-database-Connection-Manager"
 
 \end_inset
@@ -5775,102 +6057,102 @@ name "lst:Multi-database-Connection-Manager"
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 object DBVendor extends ConnectionManager {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   Class.forName("org.postgresql.Driver")
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
  
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def newConnection(name : ConnectionIdentifier) = {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     try {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       name match {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
         case SalesDB =>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
           Full(DriverManager.getConnection(
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
             "jdbc:postgresql://localhost/sales",
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
             "root", "secret"))
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
         case EmployeeDB =>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
           Full(DriverManager.getConnection(
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
             "jdbc:postgresql://server/employees",
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
             "root", "hidden"))
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     } catch {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       case e : Exception => e.printStackTrace; Empty
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     }
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   }
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def releaseConnection (conn : Connection) { conn.close }
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 }
 \end_layout
@@ -5889,10 +6171,15 @@ sharding
 \begin_inset Foot
 status collapsed
 
-\begin_layout Standard
+\begin_layout Plain Layout
 For more information on sharding, see this article: 
-\begin_inset LatexCommand htmlurl
-target "http://highscalability.com/unorthodox-approach-database-design-coming-shard"
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://highscalability.com/unorthodox-approach-database-design-coming-shard
+\end_layout
 
 \end_inset
 
@@ -5944,7 +6231,7 @@ Mapper provides a handy feature
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Or does it? Confirm whether or not this is supported.
 \end_layout
 
@@ -5971,7 +6258,8 @@ dbCalculateConnectionIdentifier
  We want to place new instances in SalesA if the amount is > $100 and SalesB
  otherwise.
  Listing 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "lst:Sharding-in-Action"
 
 \end_inset
@@ -5984,13 +6272,14 @@ reference "lst:Sharding-in-Action"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Sharding in Action
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:Sharding-in-Action"
 
 \end_inset
@@ -6003,42 +6292,42 @@ name "lst:Sharding-in-Action"
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 class Entry extends Mapper[Entry] {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   ...
  fields, etc ...
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   override def dbCalculateConnectionIdentifier = {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     case n if n.amount.is > 100 => SalesA
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     case _ => SalesB
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   }
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 }
 \end_layout
@@ -6052,7 +6341,7 @@ class Entry extends Mapper[Entry] {
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 This needs to be revised and expanded once sharding is truly figured out
 \end_layout
 
@@ -6063,7 +6352,8 @@ This needs to be revised and expanded once sharding is truly figured out
 
 \begin_layout Subsection
 SQL-based Queries
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "sub:SQL-based-queries"
 
 \end_inset
@@ -6081,9 +6371,14 @@ reparedStatement and findAllByInsecureSql.
 \begin_inset Foot
 status collapsed
 
-\begin_layout Standard
-\begin_inset LatexCommand htmlurl
-target "http://java.sun.com/javase/6/docs/api/java/sql/PreparedStatement.html"
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://java.sun.com/javase/6/docs/api/java/sql/PreparedStatement.html
+\end_layout
 
 \end_inset
 
@@ -6098,10 +6393,16 @@ target "http://java.sun.com/javase/6/docs/api/java/sql/PreparedStatement.html"
 \begin_inset Foot
 status collapsed
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Essentially a thin wrapper on java.sql.Connection, 
-\begin_inset LatexCommand htmlurl
-target "http://scala-tools.org/mvnsites/liftweb/lift-webkit/scaladocs/net/liftweb/mapper/SuperConnection.html"
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://scala-tools.org/mvnsites/liftweb/lift-webkit/scaladocs/net/liftweb/mapper/
+SuperConnection.html
+\end_layout
 
 \end_inset
 
@@ -6112,7 +6413,8 @@ target "http://scala-tools.org/mvnsites/liftweb/lift-webkit/scaladocs/net/liftwe
 
  and return a PreparedStatement instance.
  Listing 
-\begin_inset LatexCommand ref
+\begin_inset CommandInset ref
+LatexCommand ref
 reference "lst:Using-findAllByPreparedStatement"
 
 \end_inset
@@ -6122,7 +6424,7 @@ reference "lst:Using-findAllByPreparedStatement"
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Validate this SQL
 \end_layout
 
@@ -6147,13 +6449,14 @@ select *
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Using findAllByPreparedStatement
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:Using-findAllByPreparedStatement"
 
 \end_inset
@@ -6166,43 +6469,43 @@ name "lst:Using-findAllByPreparedStatement"
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 def recentCategories = CategoryMeta.findAllByPreparedStatement({ superconn
  =>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   superconn.connection.prepareStatement(
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     "select distinct category.id, category.name " +
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     "from Category category " +
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     "join CategoryJoin cj on category.id = cj.category " +
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     "join Entry entry on entry.id = cj.entry " +
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     "where entry.date > (CURRENT_DATE - interval '30 days')")
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 })
 \end_layout
