@@ -79,7 +79,7 @@ This chapter is still under active development.
 \begin_layout Standard
 Congratulations! You've made it through the introduction to Lift.
  Or maybe you've skipped Basics and jumped right to here to Advanced, either
- way, the next section will be exciting.
+ way, the next group of chapters will be exciting.
  
 \end_layout
 
@@ -94,8 +94,14 @@ Architecture
 \end_layout
 
 \begin_layout Standard
-The diagram above highlights the main Lift components and where they live
- in the ecosystem.
+Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Architecture-diagram"
+
+\end_inset
+
+ highlights the main Lift components and where they live in the ecosystem.
  Scala compiles down to Java bytecode, so we sit on top of the JVM.
  Lift Applications are typically run in a J(2)EE web container, such as
  Jetty or Tomcat.
@@ -208,23 +214,26 @@ LiftCore The engine of the framework responsible for request/response lifecycle,
 \end_layout
 
 \begin_layout Description
-Comet Represents the Comet Actors layer.
- As you already know, comet actors are capable of sending asynchronous content
- to the browser.
+Comet Represents the Comet Actors layer which allows the sending of asynchronous
+ content to the browser.
  REF
 \end_layout
 
 \begin_layout Description
-ORM - Either Mapper or Record - The lightweight ORM library proposed by
+ORM - Either Mapper or Record - The lightweight ORM library provided by
  Lift.
- Mapper framework is the proposed ORM framework for Lift 1.0 and Record framework
- will be for next releases.
+ The Mapper framework is the proposed ORM framework for Lift 1.0 and the
+ Record framework will be out for next releases.
  REF
 \end_layout
 
 \begin_layout Description
-HTTP Auth - You can use HTTP authentication (Basic and Digest models) in
- your lift application.
+HTTP
+\begin_inset space ~
+\end_inset
+
+Auth - You can use either Basic or Digest HTTP authentication in your Lift
+ application.
  This provides you more control as opposed to web-container's HTTP authenticatio
 n model.
  REF
@@ -232,9 +241,9 @@ n model.
 
 \begin_layout Description
 JS
-\series bold
--
-\series default
+\begin_inset space ~
+\end_inset
+
 API The JavaScript abstraction layer.
  These are Scala classes/objects that abstract JavaScript artifacts.
  Such objects can be combined to build JavaScript code.
@@ -242,8 +251,8 @@ API The JavaScript abstraction layer.
 \end_layout
 
 \begin_layout Description
-Utils contains a lot of helper functions that Lift uses internally that
- are also available to your application.
+Utils Contains a number of helper functions that Lift uses internally and
+ are available to your application.
  REF
 \end_layout
 
@@ -259,26 +268,39 @@ name "sec:Request/Response-Lifecycle"
 \end_layout
 
 \begin_layout Standard
-We would like to revisit the rendering pipeling that takes a Request and
- generates a Response.
- We briefly touched on this back in section 
+We briefly discussed the Request/Response Liftcycle in section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:The-Rendering-Process"
 
 \end_inset
 
-, ??but before we get into all of the nitty gritty details we're going to
- cover it in depth.
+, and now we're going to cover it in depth.
  This will serve not only to familiarize you with the full processing power
  of Lift, but also to introduce some of the other advanced topics we'll
  be discussing in this and later chapters.
  One important thing we'd like to mention is that most of the configurable
- properties are in LiftRules, and are of the type RulesSeq.
- With a RulesSeq you essentially have a list of functions or values that
- are applied in order.
- RulesSeq defines a prepend and append method that allows you to add new
- configuration items at the beginning or end of the configuration, respectively.
+ properties are in 
+\family typewriter
+LiftRules
+\family default
+, and are of type 
+\family typewriter
+RulesSeq
+\family default
+.
+ With a 
+\family typewriter
+RulesSeq
+\family default
+ you essentially have a list of functions or values that are applied in
+ order.
+ 
+\family typewriter
+RulesSeq
+\family default
+ defines a prepend and append method that allows you to add new configuration
+ items at the beginning or end of the configuration, respectively.
  This allows you to prioritize things like partial functions and compose
  various methods together to control Lift's behavior.
  You can think of a RulesSeq as a Seq on steroids, tweaked for Lift's usage.
@@ -1433,7 +1455,7 @@ This feature allows you use a resource before Lift does and release them
 \end_layout
 
 \begin_layout Subsection
-More on snippets
+Addition Snippet Features
 \end_layout
 
 \begin_layout Standard
@@ -2362,8 +2384,7 @@ SHtml object
 \end_layout
 
 \begin_layout Standard
-SHtml is derived from S object and it used to be only S.
- However SHtml contains only functions that helps us constuct HTML 
+The SHtml object contains functions that help you constuct HTML 
 \begin_inset Quotes eld
 \end_inset
 
@@ -2371,9 +2392,9 @@ primitives
 \begin_inset Quotes erd
 \end_inset
 
- (input element, select, links, buttons etc.).
+ (input elements, select, links and buttons, etc.).
  But it is not only about constructing these primitives but allowing user
- to pass functions that will process this field when a requst is made on
+ to pass functions that will process this field when a request is made on
  server side.
  For example let's see how we build an ajax button:
 \end_layout
@@ -2502,13 +2523,30 @@ That's it
 \begin_layout Standard
 You are already used to snippets and binding so we won't reiterate them
  now.
- But the interersting part here is that <hello:button> tag willbe replaced
- by the output of ajaxButton function which is a <button ...>Press me</button>
+ But the interersting part here is that 
+\family typewriter
+<hello:button>
+\family default
+ tag will be replaced by the output of 
+\family typewriter
+ajaxButton
+\family default
+ function which is a 
+\family typewriter
+<button ...>Press me</button>
+\family default
  tag.
- But more then that Lift adds the onclick attribute for us and adds the
- JavaScript ajax call in there.
- To ajaxButton function we also added an anonimous function that will be
- called by Lift when the Ajax request is sent from browser.
+ Lift also adds the 
+\family typewriter
+onclick
+\family default
+ attribute and the JavaScript Ajax call in there.
+ To 
+\family typewriter
+ajaxButton
+\family default
+ function we also added an anonymous function that will be called by Lift
+ when the Ajax request is sent from browser.
  It will print out to console 
 \begin_inset Quotes eld
 \end_inset
@@ -2539,7 +2577,9 @@ That's it
 \end_layout
 
 \begin_layout Standard
-Here is a quick description of other SHtml functions:
+There is a focused discussion on building forms using SHtml in the Forms
+ chapter.
+ Here is a quick description of other SHtml functions:
 \end_layout
 
 \begin_layout Standard
