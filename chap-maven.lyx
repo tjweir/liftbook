@@ -495,7 +495,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Defining a repository
 \begin_inset CommandInset label
 LatexCommand label
@@ -821,6 +820,13 @@ name "lst:Adding-a-Dependency"
 
 \begin_layout Subsection
 Adding a Dependency
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Adding-a-Dependency"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -877,7 +883,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Adding the Configgy repo
 \begin_inset CommandInset label
 LatexCommand label
@@ -942,7 +947,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Adding the Configgy dependency
 \begin_inset CommandInset label
 LatexCommand label

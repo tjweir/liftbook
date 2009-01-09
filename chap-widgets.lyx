@@ -44,61 +44,99 @@
 
 \begin_layout Chapter
 Lift Widgets
-\end_layout
+\begin_inset CommandInset label
+LatexCommand label
+name "cha:Lift-Widgets"
 
-\begin_layout Section
-Introduction
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
-In essence a Lift widget is a class that constructs XHTML fragmets built
- based on dynamic information that we can easily integrate in our pages.
- But it is not only about XHTML but also the JavaScript code in order to
- make the widget very dynamic and the stylesheet in order to theme the widget.
- Many web frameworks out there come with a rich set of artifacts, sometimes
- called components, sometimes widgets or perhaps something else.
- These generates lots of attraction because these re-usable entities can
- be easily integrated in your applications.
- Of course the term 
-\begin_inset Quotes eld
+In this chapter we're going to discuss widgets in Lift.
+ A widget is essentially a library of Scala and JavaScript code that together
+ provide packaged XHTML fragments for display on the client browser.
+ In other web frameworks (JSF, Struts, etc) these are sometimes called component
+s.
+ An example of a widget would be small library that automatically embeds
+ a Calendar instance (section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Calendar-widgets"
+
 \end_inset
 
-easily
-\begin_inset Quotes erd
+), or a helper library to sort HTML tables (section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:TableSorter-widget"
+
 \end_inset
 
- is used loosely here as you maybe very well aware of the pains you had
- to endure to develop your own widgets in one framework or another.
- Perhaps too excessive use of XML (see JSF 1.1, 1.2), too many specific interfaces
- to implement so that the framework can do the necessary wiring and so on.
- With Lift, things are a quite different as after lots of discussions we
- adopted a more loosely approach.
- There is no trait that you need to implement and no XML descriptors because
- the main idea is to make it as simple as possible for the users to create
- widgets.
- In fact Lift's design facilitates this a lot by using snippets and JavaScript
- abstractions.
- Of course Scala's support for embedded XML.
-\end_layout
-
-\begin_layout Section
-Existent Lift widgets
+).
+ Typically widgets embody dynamic behavior on the client side, which is
+ what makes them so attractive; static client-side content is already dead
+ simple to generate in Lift with snippets, so the extra sauce of JavaScript
+ binding and Ajax callbacks really makes advanced functionality easy.
 \end_layout
 
 \begin_layout Standard
-Lift framework comes with a set of widgets existent in the lift-widgets
- sub-project.
- This list of widget is expect to grow in time providing a rich set of widgets
- that you can just use in your application.
- This also means that this is not a complete list of Lift widgets as by
- the time you read this book more widgets might be available.We also encourge
- you to write your own widgets but we'll see in a bit how you can create
- your own widget, or better yet what is the approach that we chose for building
- Lift widgets.
+Lift's widgets are intended to minimize effort on your part.
+ Unlike some other frameworks where widgets/components require the use of
+ specific traits or special XML binding, Lift (and Scala's) inherent flexibility
+ with XML, JavaScript abstraction, and snippet generators make using widgets
+ as simple as dropping in a few lines of code to your existing snippets
+ or views.
+\end_layout
+
+\begin_layout Section
+Current Lift Widgets
+\end_layout
+
+\begin_layout Standard
+To start, we'll cover the current set of widgets included in Lift at the
+ time of writing this book.
+ These widgets are contained in the lift-widgets module, which means you'll
+ need to add the dependency to your pom.xml if you want to use them (section
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Adding-a-Dependency"
+
+\end_inset
+
+).
+ While this list will likely grow over time, remember that widgets are based
+ on the fundamentals of Scala's XML functionality as well as Lift's JavaScript
+ support (chapter 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "cha:Lift-and-Javascript"
+
+\end_inset
+
+), so the same general rules apply to all of them.
+ At the end of the chapter we'll cover writing your own widgets (section
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:How-to-build-widgets"
+
+\end_inset
+
+).
 \end_layout
 
 \begin_layout Subsection
 TableSorter widget
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:TableSorter-widget"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -111,6 +149,7 @@ status open
 \align center
 \begin_inset Graphics
 	filename images/tablesorter.png
+	width 5in
 
 \end_inset
 
@@ -129,30 +168,52 @@ TableSorter widget
 
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
 \end_inset
 
 
 \end_layout
 
 \begin_layout Standard
-Table sorter widget is based on http://tablesorter.com/docs/ script.
- You can use it to make your table more flexible as you are able to sort
- the elements by each column.
- First you need tocall 
+The TableSorter widget is based on the TableSorter jQuery plugin
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+\begin_inset CommandInset href
+LatexCommand href
+target "http://tablesorter.com/docs/"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+.
+ Basically, the TableSorter widget allows you to take an existing HTML table
+ (THEAD and TBODY tags are required) and add sorting to columns in the table.
+ By default, the widget handles sorting of numeric, currency, and other
+ value types automatically.
+ The full capabilities of the plugin are beyond the scope of the widget,
+ however; if you need more features you'll have to set up the JavaScript
+ yourself instead of using the widget.
+\end_layout
+
+\begin_layout Standard
+The first step in using the widget is to call the 
 \family typewriter
 TableSorter.init 
 \family default
-function in your Boot to make Lift aware about the path of the resources
- used by this widget.
- Then, you can have your snippet:
+function in your Boot class to make Lift aware of the resources used by
+ this widget.
+ Then, you need to set up a table in your page (either statically in the
+ template or via a snippet):
 \end_layout
 
 \begin_layout Standard
 \begin_inset listings
+lstparams "language=XML"
 inline false
 status open
 
@@ -161,22 +222,13 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-TableSorter example
+
+TableSorter Template
 \end_layout
 
 \end_inset
 
 
-\end_layout
-
-\begin_layout Plain Layout
-
-/*
-\end_layout
-
-\begin_layout Plain Layout
-
-Template example:
 \end_layout
 
 \begin_layout Plain Layout
@@ -216,9 +268,40 @@ tablesorter
 </lift:surround>
 \end_layout
 
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Note that you need to have an 
+\family typewriter
+id
+\family default
+ attribute on the table and add the 
+\family typewriter
+tablesorter
+\family default
+ class to the table element.
+ Next you simply call the TableSorter widget from a snippet:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
 \begin_layout Plain Layout
 
-*/
+\begin_inset Caption
+
+\begin_layout Plain Layout
+TableSorter Snippet
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Plain Layout
@@ -228,17 +311,7 @@ class TableSorterDemo {
 
 \begin_layout Plain Layout
 
- def render(xhtml: NodeSeq): NodeSeq = {
-\end_layout
-
-\begin_layout Plain Layout
-
-    TableSorter("table-id")
-\end_layout
-
-\begin_layout Plain Layout
-
- }
+ def render(xhtml: NodeSeq): NodeSeq = TableSorter("table-id")
 \end_layout
 
 \begin_layout Plain Layout
@@ -256,41 +329,39 @@ class TableSorterDemo {
 \end_layout
 
 \begin_layout Standard
-In your page somewhere you need to have a regular HTML Table having 
-\begin_inset Quotes eld
-\end_inset
-
-table-id
-\begin_inset Quotes erd
-\end_inset
-
- id and 
-\begin_inset Quotes eld
-\end_inset
-
-tablesorter
-\begin_inset Quotes erd
-\end_inset
-
- class.
- Such as 
-\end_layout
-
-\begin_layout Standard
-
+The argument to TableSorter is the HTML element 
 \family typewriter
-<table id="myTable" class="tablesorter">...</table>
+id
+\family default
+ of the table you want sorted.
+ The TableSorter code relies on head merge (section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Head-Merge"
+
+\end_inset
+
+) to put the appropriate JavaScript and jQuery functions into the returned
+ page.
 \end_layout
 
 \begin_layout Subsection
 Calendar widgets
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Calendar-widgets"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
-There are three calendar widgets: Month-View, Week-View and Day-View built
- somehow similar with what Microsoft Outlook provides or Google Calendar.They
- provide basic functionality so you maybe able to extend or easily customize
- based on your application needs.
+There are three calendar widgets corresponding to month, week and day views.
+ These widgets display calendars with a similar look and feel to Microsoft
+ Outlook or Google Calendar.They provide basic functionality for display,
+ but you can easily customize CSS and JavaScript hooks for calendar items
+ to fit your application requirements.
 \end_layout
 
 \begin_layout Paragraph
@@ -307,6 +378,7 @@ status open
 \align center
 \begin_inset Graphics
 	filename images/month-view.png
+	width 5in
 
 \end_inset
 
@@ -337,32 +409,43 @@ Calendar Month-View
 \begin_layout Standard
 This widget allows you to create month view calendars in your web page,
  manage your calendar events etc.
-\end_layout
-
-\begin_layout Standard
-How to use it:
-\end_layout
-
-\begin_layout Enumerate
-In you Boot call 
+ The first thing you need to do is call the 
 \family typewriter
-CalendarMonthView init
+CalendarMonthView.init
 \family default
-; This will do necessary initialization mainly telling Lift's 
+ function in your Boot class; this performs initialization by telling Lift's
+ 
 \family typewriter
 ResourceServer
 \family default
- about the paths to JavaScripts and stylesheets needed by this widget as
- these dependencies are embedded in the same jar file.
+ about the paths to JavaScripts and stylesheets needed by this widget since
+ these dependencies are embedded in the same jar file (we'll cover this
+ topic more in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:How-to-build-widgets"
+
+\end_inset
+
+).
 \end_layout
 
-\begin_layout Enumerate
-Here is a snippet example:
+\begin_layout Standard
+The template for our widget example is relatively straightforward, as shown
+ in listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Month-view-template"
+
+\end_inset
+
+.
+ Basically, we provide a binding element where the calendar will be rendered.
 \end_layout
 
-\begin_deeper
 \begin_layout Standard
 \begin_inset listings
+lstparams "language=XML"
 inline false
 status open
 
@@ -371,25 +454,19 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Calendar Month-View example
-\end_layout
+
+Month view template
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Month-view-template"
 
 \end_inset
 
 
 \end_layout
 
-\begin_layout Plain Layout
+\end_inset
 
-/*
-\end_layout
-
-\begin_layout Plain Layout
-
-The template markup:
-\end_layout
-
-\begin_layout Plain Layout
 
 \end_layout
 
@@ -405,7 +482,7 @@ The template markup:
 
 \begin_layout Plain Layout
 
-    <lift:CalendarMonthViewDemo.render> 
+    <lift:CalendarMonthViewDemo> 
 \end_layout
 
 \begin_layout Plain Layout
@@ -415,7 +492,7 @@ The template markup:
 
 \begin_layout Plain Layout
 
-    </lift:CalendarMonthViewDemo.render>
+    </lift:CalendarMonthViewDemo>
 \end_layout
 
 \begin_layout Plain Layout
@@ -423,16 +500,54 @@ The template markup:
 </lift:surround> 
 \end_layout
 
-\begin_layout Plain Layout
+\end_inset
+
 
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Standard
+In our snippet code, listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Month-view-snippet"
 
-*/
+\end_inset
+
+, we first perform some setup of the widget.
+ The Calendar widget takes a 
+\family typewriter
+java.util.Calendar
+\family default
+ instance telling it which month to display.
+ Additionally, it takes a Seq[CalendarItem] of items to be displayed on
+ the calendar.
+ Finally, it takes three arguments containing optional JavaScript functions
+ to be called when an item, day, or week is clicked, respectively.
+ In our example we're not showing any events or setting up any callbacks.
 \end_layout
 
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
 \begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Month view snippet
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Month-view-snippet"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
 
 \end_layout
 
@@ -448,7 +563,7 @@ class CalendarMonthViewDemo {
 
 \begin_layout Plain Layout
 
-    val c = Calendar getInstance;
+    val c = Calendar.getInstance;
 \end_layout
 
 \begin_layout Plain Layout
@@ -463,8 +578,7 @@ class CalendarMonthViewDemo {
 
 \begin_layout Plain Layout
 
-         "widget" -> CalendarMonthView(c, makeCals, itemClick, dayClick,
- weekClick)
+         "widget" -> CalendarMonthView(c, Nil, Empty, Empty, Empty)
 \end_layout
 
 \begin_layout Plain Layout
@@ -477,120 +591,37 @@ class CalendarMonthViewDemo {
   }
 \end_layout
 
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In addition, CalendarMonthView can also take a MonthViewMeta instance as
+ the second argument so that you can control the first day of the week and
+ the locale used for formatting dates and times.
+ For instance, we could set the calendar to use Monday as the first day
+ of the week:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
 \begin_layout Plain Layout
 
-  import JE._
+"widget" -> CalendarMonthView(c, 
 \end_layout
 
 \begin_layout Plain Layout
 
-  import JsCmds._
+              MonthViewMeta(Calendar.MONDAY, Locale.getDefault),
 \end_layout
 
 \begin_layout Plain Layout
 
-  
-\end_layout
-
-\begin_layout Plain Layout
-
-  // These are the JavaScript functions that will be executed when you click
- a calendar item,
-\end_layout
-
-\begin_layout Plain Layout
-
-  // a cell header or the week number.
- You can take any actions you desire here.
- 
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-  /* The JS parameters you are provided with in your callback function are:
- the element that 
-\end_layout
-
-\begin_layout Plain Layout
-
-   * you clicked and the id of the clicked calendar item
-\end_layout
-
-\begin_layout Plain Layout
-
-   */
-\end_layout
-
-\begin_layout Plain Layout
-
-  def itemClick = Full(AnonFunc("elem, param", JsRaw("alert(param + ' -
- ' + elem.nodeName)")))
-\end_layout
-
-\begin_layout Plain Layout
-
-  
-\end_layout
-
-\begin_layout Plain Layout
-
-  /* The JS parameters you are provided with in your callback function are:
- the element that 
-\end_layout
-
-\begin_layout Plain Layout
-
-   * you clicked and the date as a string of the form yyyy/MM/DD
-\end_layout
-
-\begin_layout Plain Layout
-
-   */
-\end_layout
-
-\begin_layout Plain Layout
-
-  def dayClick = Full(AnonFunc("elem, param", JsRaw("alert(param + ' - '
- + elem.nodeName)")))
-\end_layout
-
-\begin_layout Plain Layout
-
-  
-\end_layout
-
-\begin_layout Plain Layout
-
-  /* The JS parameters you are provided to your JS callback function are:
- the element that 
-\end_layout
-
-\begin_layout Plain Layout
-
-   * you clicked and the week of year.
-\end_layout
-
-\begin_layout Plain Layout
-
-   */
-\end_layout
-
-\begin_layout Plain Layout
-
-  def weekClick = Full(AnonFunc("elem, param", JsRaw("alert(param + ' -
- ' + elem.nodeName)")))
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
+              Nil, Empty, Empty, Empty)
 \end_layout
 
 \end_inset
@@ -598,24 +629,36 @@ class CalendarMonthViewDemo {
 
 \end_layout
 
-\end_deeper
 \begin_layout Standard
-
-\family typewriter
-makeCals
-\family default
- function just returns a 
-\family typewriter
-List[CalendarItem]
-\family default
-.
- The CalendarItem abstacts that information for calendar elements that will
- be rendered in the widgets.
- There are three mandatory parameters: the calendar ID, the start date and
- the type of the calendar.
- The rest are optional parameter as they re expressed as repeted higher
- order function parameters to the optional function.
+Of course, without anything to display or do this isn't very useful, so
+ let's look at how you create CalendarItems.
  
+\end_layout
+
+\begin_layout Standard
+Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:CalendarItem-example"
+
+\end_inset
+
+ shows how we can create a calendar item for a meeting on June 5th at 2:30
+ pm.
+ We have to set up another Calendar instance to hold the time of the meeting,
+ then we use the CalendarItem helper object to set up the actual item instance.
+ The first parameter is the id of the div that will be created for the item.
+ This can be used from other scripts if needed.
+ The second argument is the time of the event.
+ The third argument is the CalendarType of the event, in this case, a meeting.
+ The optional method on CalendarItem allows you to set optional attributes
+ essentially via a sequence of 
+\begin_inset Formula $(CalendarItem)\Rightarrow CalendarItem$
+\end_inset
+
+ functions.
+ This technique is used since CalendarItems are immutable and modifying
+ them returns new instances.
 \end_layout
 
 \begin_layout Standard
@@ -629,6 +672,13 @@ status open
 
 \begin_layout Plain Layout
 CalendarItem example
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:CalendarItem-example"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -638,17 +688,27 @@ CalendarItem example
 
 \begin_layout Plain Layout
 
-val item3 = CalendarItem("4", c3, CalendarType.MEETING) optional (
+val time = Calendar.getInstance
 \end_layout
 
 \begin_layout Plain Layout
 
-        _ end(c3),
+time.setTime(DateFormat.pars("2009-06-05 2:30pm"))
 \end_layout
 
 \begin_layout Plain Layout
 
-        _ subject("Other month"))
+val meeting = CalendarItem("4", time, CalendarType.MEETING) optional (
+\end_layout
+
+\begin_layout Plain Layout
+
+        _ end(time),
+\end_layout
+
+\begin_layout Plain Layout
+
+        _ subject("Important Meeting!"))
 \end_layout
 
 \end_inset
@@ -657,32 +717,182 @@ val item3 = CalendarItem("4", c3, CalendarType.MEETING) optional (
 \end_layout
 
 \begin_layout Standard
-We can also pass a 
+The widget renders not only the XHTML to display the calendar, but it generates
+ the 
 \family typewriter
-MonthViewMeta
+<script>
 \family default
- to the 
+ and CSS tags using head merge to control display.
+ One common customization of the widget would be to override the CSS used;
+ to do this, provide your own 
 \family typewriter
-CalendarMonthView
+style.css
 \family default
- object.
- Here we can specify the first day of week that should be rendered (Sunday,
- Monday etc.) and the Locale that will be used for internationalization.
+ file under the WEB-INF/classes/calendars/monthview directory in your project.
+ Because Lift uses the classpath to load resources, your style.css file will
+ be 
+\begin_inset Quotes eld
+\end_inset
+
+found
+\begin_inset Quotes erd
+\end_inset
+
+ before the default one bundled in the lift-widgets jar file.
+ You can use the default 
+\family typewriter
+style.css
+\family default
+ as a starting point
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+\begin_inset CommandInset href
+LatexCommand href
+target "http://github.com/dpp/liftweb/tree/master/lift-widgets/src/main/resources/toserve/calendars/monthview/style.css"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
-The widget is rendring its JavaScript dependencies as well as the default
- stylesheet rendered with the 
-\family typewriter
-/classpath/calendars/monthview/style.css
-\family default
- path.
- The widget itsself is rendering the <head/> element that will be merged
- into the top head element by Lift.
- To use your own stylesheet you can create this path in WEB-INF/classes
- folder as it will be first searched here.
- Hence you can overwrite the default stylesheet with your own one so you
- can easily change the theme.
+The final thing we'd like to cover for the Month view is the JavaScript
+ callbacks.
+ These callbacks are constructed using the AnonFunc JavaScript artifact,
+ which essentially constructs an anonymous function on the client side.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Calendar-callback-example"
+
+\end_inset
+
+ shows an example of using the callbacks to redirect to an event view page
+ for the given event when the item is clicked.
+ In this example we assume that the id of each calendar item is its unique
+ id in the ORM (section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Object-Relationships"
+
+\end_inset
+
+) and that we have a rewrite rule set up to handle item viewing (section
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:URL-Rewriting"
+
+\end_inset
+
+).
+ 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Does this example really work? I spitballed it...
+ Derek
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Calendar callback example
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Calendar-callback-example"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import JsCmds._
+\end_layout
+
+\begin_layout Plain Layout
+
+val ctxt = S.contextPath
+\end_layout
+
+\begin_layout Plain Layout
+
+val itemClick = Full(
+\end_layout
+
+\begin_layout Plain Layout
+
+  AnonFunc(
+\begin_inset Quotes eld
+\end_inset
+
+elem,param
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\end_layout
+
+\begin_layout Plain Layout
+
+    JsRaw(
+\begin_inset Quotes eld
+\end_inset
+
+window.location = 
+\begin_inset Quotes eld
+\end_inset
+
+ + ctxt) + Str(
+\begin_inset Quotes eld
+\end_inset
+
+/view/event/
+\begin_inset Quotes erd
+\end_inset
+
+) + JsVar(
+\begin_inset Quotes eld
+\end_inset
+
+param
+\begin_inset Quotes erd
+\end_inset
+
+)))
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Paragraph
@@ -699,6 +909,7 @@ status open
 \align center
 \begin_inset Graphics
 	filename images/week-view.png
+	width 5in
 
 \end_inset
 
@@ -723,8 +934,36 @@ Calendar Week-View
 \end_layout
 
 \begin_layout Standard
-The same paradigms applied for month view are also applied for week view.
+The CalendarWeekView widget provides a weekly view of the calendar.
+ The same general principles apply as for month view.
+ Again, you need to initialize the CalendarWeekView by calling the 
+\family typewriter
+CalendarWeekView.init
+\family default
+ function in your Boot class.
  
+\end_layout
+
+\begin_layout Standard
+Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Week-View-example"
+
+\end_inset
+
+ shows a snippet returning a week view.
+ As you can see, we still use a Calendar instance to set the time, and we
+ also provide a WeekViewMeta in this example to set the first day of the
+ week and the locale.
+ The 
+\family typewriter
+list
+\family default
+ argument is a Seq[CalendarItem], constructed exactly the same as for a
+ month view.
+ Finally, we provide a JavaScript item callback.
+ Note that there aren't day or week callbacks available.
 \end_layout
 
 \begin_layout Standard
@@ -738,7 +977,14 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Week View example
+Week view example
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Week-View-example"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -749,10 +995,6 @@ Week View example
 \begin_layout Plain Layout
 
 class CalendarWeekViewDemo {
-\end_layout
-
-\begin_layout Plain Layout
-
 \end_layout
 
 \begin_layout Plain Layout
@@ -782,8 +1024,22 @@ class CalendarWeekViewDemo {
 
 \begin_layout Plain Layout
 
-         "widget" -> CalendarWeekView(c, WeekViewMeta(MONDAY, Locale.getDefault()
-), list, itemClick))
+         "widget" -> CalendarWeekView(c, 
+\end_layout
+
+\begin_layout Plain Layout
+
+                WeekViewMeta(MONDAY, Locale.getDefault()),
+\end_layout
+
+\begin_layout Plain Layout
+
+                list,
+\end_layout
+
+\begin_layout Plain Layout
+
+                itemClick))
 \end_layout
 
 \begin_layout Plain Layout
@@ -801,35 +1057,6 @@ class CalendarWeekViewDemo {
 
 \end_layout
 
-\begin_layout Standard
-Same as Month View We need to initialize the WeekView component in Boot
- by calling 
-\family typewriter
-CalendarWeekView init
-\family default
-;.
- In this case we're using CalendarViewMeta object to create the actual component.
- We are passing as arguments a Calendar object that tells the widget which
- week of year it needs to render.
- Basically it renders the week that contains the date specified by the Calendar
- object.
- Then we are passing a WeekViewMeta containin information about first day
- of week (Monday,Sunday etc.) and the Locale that is used for internationalizatio
-n.
- The 
-\family typewriter
-list
-\family default
- parameter is a List[CalendarItem] which of course contains that calendar
- items that will be rendered by this widget.
- The 
-\family typewriter
-itemClick
-\family default
- isthe JavaScript function that willbe called when you click on the calendar
- item itself.
-\end_layout
-
 \begin_layout Paragraph
 Calendar Day-View
 \end_layout
@@ -844,6 +1071,7 @@ status open
 \align center
 \begin_inset Graphics
 	filename images/day-view.png
+	width 5in
 
 \end_inset
 
@@ -862,18 +1090,22 @@ Calendar Day-View
 
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
 \end_inset
 
 
 \end_layout
 
 \begin_layout Standard
-CalendarDayView widget renders the calendars that start in the same day.
- The usage is very similar with CalendarWeekView widget:
+The CalendarDayView widget renders a calendar for a single day.
+ The usage is essentially the same as for the month and week views, as shown
+ in listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Day-view-example"
+
+\end_inset
+
+:
 \end_layout
 
 \begin_layout Standard
@@ -886,7 +1118,14 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-CalendarDayView example
+Day view example
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Day-view-example"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -897,10 +1136,6 @@ CalendarDayView example
 \begin_layout Plain Layout
 
 class CalendarDayViewDemo {
-\end_layout
-
-\begin_layout Plain Layout
-
 \end_layout
 
 \begin_layout Plain Layout
@@ -925,8 +1160,17 @@ class CalendarDayViewDemo {
 
 \begin_layout Plain Layout
 
-         "widget" -> CalendarDayView(c, DayViewMeta(Locale.getDefault()),
- list, itemClick)
+         "widget" -> CalendarDayView(c, 
+\end_layout
+
+\begin_layout Plain Layout
+
+           DayViewMeta(Locale.getDefault()),
+\end_layout
+
+\begin_layout Plain Layout
+
+           list, itemClick)
 \end_layout
 
 \begin_layout Plain Layout
@@ -949,11 +1193,10 @@ class CalendarDayViewDemo {
 \end_layout
 
 \begin_layout Standard
-The parameters have pretty much the same meaning as for CalendarWeekView
- except that the Calndar object pass represents the day that we want to
- render and we are now passing a DayViewMeta containing the Locale for internati
-onalization purposes.
- 
+The parameters are essentially the same, except that the Calendar object
+ represents the day that we want to render and we pass a DayViewMeta containing
+ just the Locale for internationalization purposes.
+ Again, only an item click callback is available.
 \end_layout
 
 \begin_layout Subsection
@@ -961,12 +1204,8 @@ RSS Feed widget
 \end_layout
 
 \begin_layout Standard
-The name of the widget pretty much expresses what the widget does.
- It renders RSS feeds.
-\end_layout
-
-\begin_layout Standard
 \begin_inset Float figure
+placement H
 wide false
 sideways false
 status open
@@ -975,6 +1214,7 @@ status open
 \align center
 \begin_inset Graphics
 	filename images/rssfeed.png
+	width 4in
 
 \end_inset
 
@@ -999,9 +1239,21 @@ RSSFeed widget
 \end_layout
 
 \begin_layout Standard
-This widget does not need initialization in Boot since it has no dependencies
- JS, CSS, images etc.
- In your snippet you can just have:
+The RSS feed widget, like its name implies, simply renders RSS feeds.
+ This widget does not need initialization in Boot since it has no dependencies
+ on JavaScript, CSS, etc.
+ In your snippet you simply use the RSSFeed helper object with the RSS feed
+ URL:
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Is the xml:group necessary?
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -1019,48 +1271,6 @@ RSSFeed example
 
 \end_inset
 
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-/*
-\end_layout
-
-\begin_layout Plain Layout
-
-The template:
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-<lift:surround with="default" at="content">     
-\end_layout
-
-\begin_layout Plain Layout
-
-	<lift:RSSFeedDemo.render/>
-\end_layout
-
-\begin_layout Plain Layout
-
-</lift:surround>
-\end_layout
-
-\begin_layout Plain Layout
-
-*/
-\end_layout
-
-\begin_layout Plain Layout
 
 \end_layout
 
@@ -1096,12 +1306,32 @@ class RSSFeedDemo {
 
 \begin_layout Plain Layout
 
-} 
+}
 \end_layout
 
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+Although the RSSFeed widget doesn't provide its own CSS, the generated elements
+ do have CSS classes attached to them that you can provide styling for:
+\end_layout
+
+\begin_layout Description
+rsswidget This class is attached to the outer div that contains all of the
+ feed elements
+\end_layout
+
+\begin_layout Description
+rsswidgettitle This class is attached to the <li> that holds the title of
+ the feed
+\end_layout
+
+\begin_layout Description
+rsswidgetitem This class is attached to each <li> element that holds an
+ RSS item
 \end_layout
 
 \begin_layout Subsection
@@ -1121,13 +1351,52 @@ ecognized
 \series bold
 avatars
 \series default
+
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+\begin_inset CommandInset href
+LatexCommand href
+target "http://gravatar.com"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
 .
- Please see http://gravatar.com.
- You can add you picture here and you ravarat will be displayed in sites
- that interact with gravatar.
- Now you can build a Lift application that is able to fetch your avatar
- and render it on your page.
- Here is a snippet code:
+ You can add your picture at the Gravatar website and associate it with
+ one or more email addresses.
+ Sites that interact with Gravatar can fetch your picture and display it,
+ which is what the Gravatar widget does.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Gravatar-example"
+
+\end_inset
+
+ shows an example snippet that will render the Gravatar for the currentUser
+ into a 
+\family typewriter
+<div>
+\family default
+, if available.
+ The default size of the Gravatar is 42x42 pixels, but you can override
+ this with additional parameters on the Gravatar.apply method.
+ Additionally, you can filter the Gravatar based on its rating (the default
+ rating is 
+\begin_inset Quotes eld
+\end_inset
+
+G
+\begin_inset Quotes erd
+\end_inset
+
+ only).
 \end_layout
 
 \begin_layout Standard
@@ -1141,6 +1410,13 @@ status open
 
 \begin_layout Plain Layout
 Gravatar example
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Gravatar-example"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -1160,7 +1436,7 @@ class GravatarDemo {
 
 \begin_layout Plain Layout
 
-   Gravatar("marius.danciu@gmail.com")
+   Gravatar(currentUser.email)
 \end_layout
 
 \begin_layout Plain Layout
@@ -1178,21 +1454,41 @@ class GravatarDemo {
 
 \end_layout
 
-\begin_layout Standard
-This will rendere a 
-\family typewriter
-<div>
-\family default
- element containin the avatar picture.
-\end_layout
-
 \begin_layout Subsection
 TreeView widget
 \end_layout
 
 \begin_layout Standard
-Tree widgets renders a tree like structure using TreeView JQuery plugin
- (http://docs.jquery.com/Plugins/Treeview) for managing the tree structure.
+The TreeView widget transforms an unordered list (
+\family typewriter
+<ul>
+\family default
+) into a tree-like structure using the TreeView JQuery plugin 
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+\begin_inset CommandInset href
+LatexCommand href
+target "http://docs.jquery.com/Plugins/Treeview"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+.
+ Each nested unordered list gets decorated with a +/- sign that allows you
+ to collapse or expand the entire sublist, as shown in figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:TreeView-widget"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
@@ -1205,6 +1501,7 @@ status open
 \align center
 \begin_inset Graphics
 	filename images/treeview.png
+	width 3.5in
 
 \end_inset
 
@@ -1216,6 +1513,13 @@ status open
 
 \begin_layout Plain Layout
 TreeView widget
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:TreeView-widget"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -1233,12 +1537,27 @@ TreeView widget
 \end_layout
 
 \begin_layout Standard
-To use this widget you need to callin your Boot 
+To use this widget you first need to initialize the widget by calling the
+ 
 \family typewriter
 TreeView.init
 \family default
- function as this widgets has javascript, CSS and images dependencies.
- Then your snippet can look something like:
+ function in your Boot class.
+ For basic usage, your snippet looks like listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:TreeView-snippet"
+
+\end_inset
+
+.
+ The first argument is the id of the unordered list that you want transformed
+ into a tree.
+ The second argument is a JSON object that is used to configure the tree
+ view.
+ In our example, we're setting the treeview to animate opening and closing
+ of nodes with a 90 millisecond delay; for more options see the treeview
+ jQuery documentation page.
 \end_layout
 
 \begin_layout Standard
@@ -1251,47 +1570,19 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-TreeView example
-\end_layout
+TreeView snippet
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:TreeView-snippet"
 
 \end_inset
 
 
 \end_layout
 
-\begin_layout Plain Layout
+\end_inset
 
-/*
-\end_layout
 
-\begin_layout Plain Layout
-
-The markup:
-\end_layout
-
-\begin_layout Plain Layout
-
-<lift:surround with="default" at="content"> 
-\end_layout
-
-\begin_layout Plain Layout
-
-   <lift:TreeViewDemo.render />
-\end_layout
-
-\begin_layout Plain Layout
-
-   <ul id="example" class="filetree">...</ul>
-\end_layout
-
-\begin_layout Plain Layout
-
-</lift:surround>
-\end_layout
-
-\begin_layout Plain Layout
-
-*/
 \end_layout
 
 \begin_layout Plain Layout
@@ -1325,130 +1616,88 @@ class TreeViewDemo {
 \end_layout
 
 \begin_layout Standard
-In the TreeView call we are providing the ID of the <ul> element and a JSON
- structure containing configuration attributes the TreeView JQuery plugin
- supports.
- In this case we are using an animation effect with 90 milliseconds delay.
- The example above renders basically transforms a static <ul> ..
- <li> structure in the tree view where you can expand/colapse nodes etc.
+In addition to transforming static lists into trees, the TreeView widget
+ also supports asynchronous loading of trees and nodes via Ajax calls.
+ In order to do this, you still need to provide an empty 
+\family typewriter
+<ul>
+\family default
+ element with an id attribute; this is essentially modified in place as
+ portions of the tree are loaded.
+ Next, you provide two functions that are used to retrieve the Tree data:
+\end_layout
+
+\begin_layout Enumerate
+A function 
+\begin_inset Formula $()\Rightarrow List[Tree]$
+\end_inset
+
+ to load the initial view of the tree.
+ This is what will be displayed to the client when the page loads, so if
+ you want some nodes to be available without having to make an Ajax call
+ this is where you define it.We will explain the Tree class in a moment.
+\end_layout
+
+\begin_layout Enumerate
+A function 
+\begin_inset Formula $(String)\Rightarrow List[Tree]$
+\end_inset
+
+ to load the children of a given node (the String argument is the node's
+ id)
 \end_layout
 
 \begin_layout Standard
-The TreeView widget also supporst loading the tree asynchronously and even
- loading individual nodes asynchronously.
- The differences from then above example are:
+The Tree class defines each node in the tree and contains several values
+ that define the appearance and behavior of the node:
 \end_layout
 
-\begin_layout Enumerate
-The <ul> element is an empty element acting as a real-estate where the fetched
- tree will be placed.
- The tree of course if fetched using Ajax
-\end_layout
-
-\begin_layout Enumerate
-The TreeView call looks like 
-\family typewriter
-TreeView("async", JsObj(("animated" -> 20)), loadTree _, loadNode _) 
-\family default
-where 
-\family typewriter
-loadTree
-\family default
- and 
-\family typewriter
-loadNode
-\family default
- are functions that return a List[Tree].
+\begin_layout Description
+text The text to be displayed in the list item.
  
-\family typewriter
-loadTree
-\family default
- is used for loading the initial tree and 
-\family typewriter
-loadNode
-\family default
- used for loading individual nodes.
- The functions provided needs to conform with:
 \end_layout
 
-\begin_deeper
-\begin_layout Enumerate
-
-\family typewriter
-() => List[Tree]
-\family default
- for loading the entire tree
+\begin_layout Description
+id The optional HTML id of the element
 \end_layout
 
-\begin_layout Enumerate
-
-\family typewriter
-(String) => List[Tree])
-\family default
- for loading a specific node.
- The node ID is passed to your function so you can distinguish which node
- you need to load
+\begin_layout Description
+classes An optional string defining CSS classes to be assigned to the element
 \end_layout
 
-\end_deeper
-\begin_layout Enumerate
-The Tree class is declared as:
+\begin_layout Description
+expanded A boolean controlling whether the element will be expanded initially
+ (only valid if the haschildren is true or if the children list is populated)
 \end_layout
 
-\begin_deeper
+\begin_layout Description
+hasChildren If this is set to true but the children value is Nil, then the
+ TreeView widget will dynamically load the children of this node as described
+ in item #2 above
+\end_layout
+
+\begin_layout Description
+children A List[Tree] defining the children of this element.
+ Setting this value will prevent Ajax from being used to retrieve the list
+ of children from the server on expansion
+\end_layout
+
 \begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-case class Tree(text:String, // The node text
+The Tree companion object has a number of overloaded apply methods that
+ make it easy to set one or more of these values without having to set all
+ of them.
 \end_layout
 
-\begin_layout Plain Layout
-
-				id: Box[String], // The node ID
-\end_layout
-
-\begin_layout Plain Layout
-
-				classes: Box[String], // The CSS classes applied to this node
-\end_layout
-
-\begin_layout Plain Layout
-
-				expanded: Boolean, // The node is expanded or not
-\end_layout
-
-\begin_layout Plain Layout
-
-				hasChildren: Boolean, // Indicates if this node has children of not.
-\end_layout
-
-\begin_layout Plain Layout
-
-				children: List[Tree]) // The node's children
-\end_layout
+\begin_layout Standard
+To provide a concrete example, listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Tree-example"
 
 \end_inset
 
-
-\end_layout
-
-\end_deeper
-\begin_layout Standard
-There is also a companion module providing different overloaded apply functions.
- As you've noticed we have a List of Tree which can be empty (Nil) but we
- also have a hasChildren flag.
- The reason is that hasChildren semantic is beyond the scope of an empty
- Tree list.
- For instance for Ajax nodes we can have 
-\family typewriter
-hasChildren = true
-\family default
- but the actual children list will be fetched dynamically using Ajax call.
- Here is an example of building a tree:
+ shows implementations of the loadTree and loadNode functions corresponding
+ to the two Ajax functions used to dynamically construct the tree.
 \end_layout
 
 \begin_layout Standard
@@ -1462,6 +1711,13 @@ status open
 
 \begin_layout Plain Layout
 Tree example
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Tree-example"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -1471,37 +1727,148 @@ Tree example
 
 \begin_layout Plain Layout
 
+def loadTree () = {
 \end_layout
 
 \begin_layout Plain Layout
 
-Tree("1.
- Pre Lunch (120 min)", "folder", false, false,
+  Tree(
+\begin_inset Quotes eld
+\end_inset
+
+No children
+\begin_inset Quotes erd
+\end_inset
+
+) :: 
 \end_layout
 
 \begin_layout Plain Layout
 
-         Tree("1.1 The State of the Powerdome (30 min)", "file") ::
+  Tree(
+\begin_inset Quotes eld
+\end_inset
+
+One static child
+\begin_inset Quotes erd
+\end_inset
+
+, Tree(
+\begin_inset Quotes eld
+\end_inset
+
+Lone child
+\begin_inset Quotes erd
+\end_inset
+
+) : Nil) ::
 \end_layout
 
 \begin_layout Plain Layout
 
-         Tree("1.2 The Future of jQuery (30 min)", "file") ::
+  Tree(
+\begin_inset Quotes eld
+\end_inset
+
+Dynamic node
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+myDynamic
+\begin_inset Quotes erd
+\end_inset
+
+, true) :: Nil
 \end_layout
 
 \begin_layout Plain Layout
 
-         Tree("1.2 jQuery UI - A step to richnessy (60 min)", "file") ::
+}
 \end_layout
 
 \begin_layout Plain Layout
 
-         Nil)
+\end_layout
+
+\begin_layout Plain Layout
+
+def loadNode (id : String) : List[Tree] = id match {
+\end_layout
+
+\begin_layout Plain Layout
+
+  case 
+\begin_inset Quotes eld
+\end_inset
+
+myDynamic
+\begin_inset Quotes erd
+\end_inset
+
+ => 
+\end_layout
+
+\begin_layout Plain Layout
+
+    Tree(
+\begin_inset Quotes eld
+\end_inset
+
+Child one
+\begin_inset Quotes erd
+\end_inset
+
+) ::
+\end_layout
+
+\begin_layout Plain Layout
+
+    Tree(
+\begin_inset Quotes eld
+\end_inset
+
+Child two
+\begin_inset Quotes erd
+\end_inset
+
+) :: Nil
+\end_layout
+
+\begin_layout Plain Layout
+
+  case _ => Nil
+\end_layout
+
+\begin_layout Plain Layout
+
+}
 \end_layout
 
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+In this example the initial view will show three nodes; the third node (
+\begin_inset Quotes eld
+\end_inset
+
+Dynamic node
+\begin_inset Quotes erd
+\end_inset
+
+) will fetch its children via an Ajax call when expanded.
+ The 
+\family typewriter
+loadNode
+\family default
+ method will then handle this call by adding two static leaf nodes to the
+ tree.
 \end_layout
 
 \begin_layout Subsection
@@ -1509,9 +1876,51 @@ Sparklines widget
 \end_layout
 
 \begin_layout Standard
-The sparklines widget is baed on http://www.willarson.com/code/sparklines/sparklin
-es.html script.
- It renders charts using HTML canvas.
+The Sparklines widget is based on Will Larson's excellent Sparklines JavaScript
+ library
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+\begin_inset CommandInset href
+LatexCommand href
+target "http://www.willarson.com/code/sparklines/sparklines.html"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+.
+ Sparklines are essentially small, high resolution charts embedded in text
+ that provide a wealth of information in a compact representation
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+The term 
+\begin_inset Quotes eld
+\end_inset
+
+Sparkline
+\begin_inset Quotes erd
+\end_inset
+
+ was introduced by Edward Tufte in his book 
+\emph on
+Beautiful Evidence
+\emph default
+.
+ Dr.
+ Tufte's work is a must read for anyone who si working with visualizing
+ large volumes of data.
+\end_layout
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
@@ -1524,6 +1933,7 @@ status open
 \align center
 \begin_inset Graphics
 	filename images/sparklines.png
+	width 3.5in
 
 \end_inset
 
@@ -1534,7 +1944,14 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Sparklines widget
+Sparklines bar chart
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Sparklines-bar-chart"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -1552,13 +1969,51 @@ Sparklines widget
 \end_layout
 
 \begin_layout Standard
-Similarly with other widgets you need to initialize the widget in Boot by
- calling 
+As with our other widgets, you need to initialize the widget in your Boot
+ class by calling 
 \family typewriter
 Sparklines.init
 \family default
 .
- Here is a snippet code example:
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Sparklines-snippet"
+
+\end_inset
+
+ shows a simple snippet utilizing the widget to produce the graph shown
+ in figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Sparklines-bar-chart"
+
+\end_inset
+
+.
+ In your template you need to provide a canvas element with an 
+\family typewriter
+id
+\family default
+ attribute that will be used by the widget for its content.
+ In our example weprovide a JsArray (an abstracted JavaScript array) with
+ our data, as well as a JSON object containing options for the chart
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+More options can be found on Will Larson's Sparklines web page
+\end_layout
+
+\end_inset
+
+.
+ We've set our options to draw percentage lines for the bar chart as well
+ as filling in the area between the percentage lines.
+ Finally, we call the Sparklines.onLoad method to generate the chart drawing
+ code (the chart will be drawn when the page is loaded).
+ The Sparklines library currently handles bar and line charts, which are
+ chosen via the SparklineStyle enumeration.
 \end_layout
 
 \begin_layout Standard
@@ -1571,7 +2026,14 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Sparklines example
+Sparklines snippet
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Sparklines-snippet"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -1581,53 +2043,22 @@ Sparklines example
 
 \begin_layout Plain Layout
 
-/*
-\end_layout
-
-\begin_layout Plain Layout
-
-The template example:
-\end_layout
-
-\begin_layout Plain Layout
-
-<lift:surround with="default" at="content">
-\end_layout
-
-\begin_layout Plain Layout
-
-	<lift:SparklinesDemo.renderOnLoad />
-\end_layout
-
-\begin_layout Plain Layout
-
-	<canvas id="bar" style="width: 500px; height: 200px;"></canvas>
-\end_layout
-
-\begin_layout Plain Layout
-
-</lift:surround>
-\end_layout
-
-\begin_layout Plain Layout
-
-*/
-\end_layout
-
-\begin_layout Plain Layout
-
 class SparklinesDemo {
 \end_layout
 
 \begin_layout Plain Layout
 
-  def renderOnLoad(html: NodeSeq): NodeSeq = {
+  def render(html: NodeSeq): NodeSeq = {
 \end_layout
 
 \begin_layout Plain Layout
 
-    val data = JsArray(100,500,300,200,400,500,400,400,100,200, 345, 412,
- 111, 234, 490);
+    val data = JsArray(100,500,300,200,400,500,400,400,
+\end_layout
+
+\begin_layout Plain Layout
+
+                       100,200, 345, 412, 111, 234, 490);
 \end_layout
 
 \begin_layout Plain Layout
@@ -1665,42 +2096,74 @@ class SparklinesDemo {
 
 \end_layout
 
-\begin_layout Standard
-First of all in the template we are including our SparklinesDemo snippet
- and then add a canvas element.
- This element will contain the actual chart.
- In our little snippet we have the chart data as a JsArray (that abstracts
- a JavaScript array) then the JSON object containing configuration options
- that the sparklines script will use.
- Then calling Sparklines.onLoad will render a JavaScript function that when
- DOM document is ready for processing will render the actual chart.
-\end_layout
-
 \begin_layout Section
 How to build a widget
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:How-to-build-widgets"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
-As explained before there is no magic formula as with Lift & Scala there
- are so many ways of building widgets.
- But here are some guidelines that we use for building widgets in Lift:
+As we explained in the introduction, there is no magic formula when building
+ a widget since Lift and Scala provide so much base functionality without
+ having to resort to restrictions like traits or static XML binding.
+ However, there are a few items to note if you want to design your own widgets
 \end_layout
 
-\begin_layout Enumerate
-Assume that you want to package the widget in a single .jar file.
- Also the widget's resources (scripts, stylesheets, images) are incorporated
- in the same jar file.
+\begin_layout Standard
+Generally it's useful to make your widget a self-contained JAR file to simplify
+ dependency management and deployment.
+ Including things like style sheets and javascript libraries in your package
+ is quite straightforward if you're using Maven, but the question then becomes
+ how do you access these resources from a Lift application.
+ Fortunately, Lift provides some very simple mechanisms for using class
+ loaders to retrieve resources.
+ The basic functionality is handled through the 
+\family typewriter
+ResourceServer
+\family default
+ object
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+net.liftweb.http.ResourceServer
 \end_layout
 
-\begin_layout Enumerate
-Because the resources are embedded in your jar you need to help lift find
- them when the browser is requesting them.
- Here the init function that we call in the application Boot comes into
- picture.
- Here i an example of init function:
+\end_inset
+
+.
+ This object controls resource loading, and in particular handles where
+ resources can be loaded from.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Adding-ResourceServer-permissions"
+
+\end_inset
+
+ shows an example init method (similar to those that we've previously used
+ for the existing widgets) that tells the ResourceServer that it can load
+ resources from the path 
+\begin_inset Quotes eld
+\end_inset
+
+/classpath/mywidget
+\begin_inset Quotes erd
+\end_inset
+
+.
+ You would locate these resources under the 
+\family typewriter
+mywidget
+\family default
+ package in your widget project.
 \end_layout
 
-\begin_deeper
 \begin_layout Standard
 \begin_inset listings
 inline false
@@ -1708,27 +2171,38 @@ status open
 
 \begin_layout Plain Layout
 
- import _root_.net.liftweb.http.ResourceServer
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Adding ResourceServer permissions
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Adding-ResourceServer-permissions"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+import _root_.net.liftweb.http.ResourceServer
 \end_layout
 
 \begin_layout Plain Layout
 
- def init() {     
+def init() {     
 \end_layout
 
 \begin_layout Plain Layout
 
-    ResourceServer.allow{
+  ResourceServer.allow{
 \end_layout
 
 \begin_layout Plain Layout
 
-      case "sparklines" :: _ => true     
-\end_layout
-
-\begin_layout Plain Layout
-
-	}
+    case "iframewidget" :: _ => true     
 \end_layout
 
 \begin_layout Plain Layout
@@ -1736,37 +2210,31 @@ status open
   }
 \end_layout
 
+\begin_layout Plain Layout
+
+}
+\end_layout
+
 \end_inset
 
 
 \end_layout
 
-\end_deeper
-\begin_layout Enumerate
-This tells Lift that it is OK to load the resources from /classpath/sparklines
- folder.
- Actually 
-\family typewriter
-classpath
-\family default
- is given by 
-\family typewriter
-LiftRules.resourceServerPath
-\family default
- variable that of course you can change.
+\begin_layout Standard
+Once you've set up the appropriate permissions, your widget can generate
+ links or scripts that load from within the classpath, as shown in listing
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Sample-widget-rendering"
+
+\end_inset
+
+.
+ In this example we've defined a simple (and slightly ridiculous) widget
+ that renders a given URL into an IFrame element.
 \end_layout
 
-\begin_layout Enumerate
-Now you can build your own classes/object containing various functions.
- These functions usually return the actual widget markup rendered based
- on the information that user provides but it also can render <head> elements.
- Not to worry because Lift will automatically merge any <head> element found
- in HTML body into the top level head.
- This is a very handy feature.
- For instance Sparkilines.onLoad function would render:
-\end_layout
-
-\begin_deeper
 \begin_layout Standard
 \begin_inset listings
 inline false
@@ -1774,22 +2242,99 @@ status open
 
 \begin_layout Plain Layout
 
- <head>
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Sample widget rendering
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Sample-widget-rendering"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Plain Layout
 
-   <script type="text/javascript" src="/classpath/sparklines/sparklines.min.js"/>
+class IFrameWidget {
 \end_layout
 
 \begin_layout Plain Layout
 
-   ...
+  def render(url : String) = 
 \end_layout
 
 \begin_layout Plain Layout
 
- </head>
+    <head>
+\end_layout
+
+\begin_layout Plain Layout
+
+      <link type="text/css" rel=
+\begin_inset Quotes erd
+\end_inset
+
+stylesheet
+\begin_inset Quotes erd
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Plain Layout
+
+         href={LiftRules.resourceServerPath + "/iframewidget/style.css"/>
+\end_layout
+
+\begin_layout Plain Layout
+
+    </head>
+\end_layout
+
+\begin_layout Plain Layout
+
+    <div class=
+\begin_inset Quotes erd
+\end_inset
+
+iframeDiv
+\begin_inset Quotes erd
+\end_inset
+
+>
+\end_layout
+
+\begin_layout Plain Layout
+
+      <iframe src={url}>
+\end_layout
+
+\begin_layout Plain Layout
+
+        <p>Your browser doesn't support IFrames</p>
+\end_layout
+
+\begin_layout Plain Layout
+
+      </iframe>
+\end_layout
+
+\begin_layout Plain Layout
+
+    </div>
+\end_layout
+
+\begin_layout Plain Layout
+
+}
 \end_layout
 
 \end_inset
@@ -1798,24 +2343,30 @@ status open
 \end_layout
 
 \begin_layout Standard
-Note the path we used: /classpath/sparklines.
- It is recommended to not hardcode /classpath there instead use 
+Note the path that we used uses the 
 \family typewriter
 LiftRules.resourceServerPath 
 \family default
 variable.
-\end_layout
+ It's preferable to use this mechanism instead of hardcoding 
+\begin_inset Quotes eld
+\end_inset
 
-\end_deeper
-\begin_layout Enumerate
-After you defined your functions you can simply use them from regular snippets,
- just as we did for the widgets presented above.
+/classpath
+\begin_inset Quotes erd
+\end_inset
+
+ to allow for end-user flexibility.
+ We also use head merge to make sure the proper stylesheet is loaded for
+ the page.
 \end_layout
 
 \begin_layout Standard
-That is pretty much it as far as Lift widgets go.
- As you can see we did not really have to build a rich design (or over-design
- it) because Lift framework itself facilitates lots of things for us.
+As you can see, defining your own widget is not much different than writing
+ a snippet.
+ The major difference is in making resources accessible while bundling and
+ making sure that you avoid hardcoding properties that are configurable
+ by the end-users of your widget.
 \end_layout
 
 \end_body
