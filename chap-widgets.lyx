@@ -1,4 +1,4 @@
-#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.0 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -222,7 +222,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 TableSorter Template
 \end_layout
 
@@ -454,7 +453,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Month view template
 \begin_inset CommandInset label
 LatexCommand label
@@ -794,17 +792,6 @@ reference "sec:URL-Rewriting"
 
 ).
  
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Does this example really work? I spitballed it...
- Derek
-\end_layout
-
-\end_inset
-
-
 \end_layout
 
 \begin_layout Standard
@@ -817,7 +804,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Calendar callback example
 \begin_inset CommandInset label
 LatexCommand label
@@ -840,11 +826,6 @@ import JsCmds._
 
 \begin_layout Plain Layout
 
-val ctxt = S.contextPath
-\end_layout
-
-\begin_layout Plain Layout
-
 val itemClick = Full(
 \end_layout
 
@@ -854,40 +835,19 @@ val itemClick = Full(
 \begin_inset Quotes eld
 \end_inset
 
-elem,param
+elem, param
 \begin_inset Quotes erd
 \end_inset
 
-, 
-\end_layout
-
-\begin_layout Plain Layout
-
-    JsRaw(
+, JsRaw(
 \begin_inset Quotes eld
 \end_inset
 
-window.location = 
-\begin_inset Quotes eld
-\end_inset
-
- + ctxt) + Str(
-\begin_inset Quotes eld
-\end_inset
-
-/view/event/
+alert(elem);
 \begin_inset Quotes erd
 \end_inset
 
-) + JsVar(
-\begin_inset Quotes eld
-\end_inset
-
-param
-\begin_inset Quotes erd
-\end_inset
-
-)))
+)
 \end_layout
 
 \end_inset
@@ -1140,47 +1100,52 @@ class CalendarDayViewDemo {
 
 \begin_layout Plain Layout
 
- def render(html: Group) : NodeSeq = {    val c = Calendar getInstance;
+ def render(html: Group) : NodeSeq = {
 \end_layout
 
 \begin_layout Plain Layout
 
-    c.set(DAY_OF_MONTH, 17)
+   val c = Calendar getInstance;
 \end_layout
 
 \begin_layout Plain Layout
 
-    c.set(MONTH, 4)
+   c.set(DAY_OF_MONTH, 17)
 \end_layout
 
 \begin_layout Plain Layout
 
-    bind("cal", html,
+   c.set(MONTH, 4)
 \end_layout
 
 \begin_layout Plain Layout
 
-         "widget" -> CalendarDayView(c, 
+   bind("cal", html,
 \end_layout
 
 \begin_layout Plain Layout
 
-           DayViewMeta(Locale.getDefault()),
+        "widget" -> CalendarDayView(c, 
 \end_layout
 
 \begin_layout Plain Layout
 
-           list, itemClick)
+          DayViewMeta(Locale.getDefault()),
 \end_layout
 
 \begin_layout Plain Layout
 
-    )
+          list, itemClick)
 \end_layout
 
 \begin_layout Plain Layout
 
-  } 
+   )
+\end_layout
+
+\begin_layout Plain Layout
+
+ } 
 \end_layout
 
 \begin_layout Plain Layout
@@ -1218,6 +1183,7 @@ status open
 
 \end_inset
 
+
 \end_layout
 
 \begin_layout Plain Layout
@@ -1243,16 +1209,6 @@ The RSS feed widget, like its name implies, simply renders RSS feeds.
  on JavaScript, CSS, etc.
  In your snippet you simply use the RSSFeed helper object with the RSS feed
  URL:
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Is the xml:group necessary?
-\end_layout
-
-\end_inset
-
-
 \end_layout
 
 \begin_layout Standard
@@ -1285,17 +1241,7 @@ class RSSFeedDemo {
 
 \begin_layout Plain Layout
 
-    <xml:group>
-\end_layout
-
-\begin_layout Plain Layout
-
-      {RSSFeed("http://www.praytothemachine.com/evil/index.php/feed/")}
-\end_layout
-
-\begin_layout Plain Layout
-
-    </xml:group>
+    RSSFeed("http://www.praytothemachine.com/evil/index.php/feed/")
 \end_layout
 
 \begin_layout Plain Layout
@@ -1503,6 +1449,7 @@ status open
 	width 3.5in
 
 \end_inset
+
 
 \end_layout
 
@@ -2172,7 +2119,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Adding ResourceServer permissions
 \begin_inset CommandInset label
 LatexCommand label
@@ -2243,7 +2189,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Sample widget rendering
 \begin_inset CommandInset label
 LatexCommand label
