@@ -2578,7 +2578,14 @@ That's it
 
 \begin_layout Standard
 There is a focused discussion on building forms using SHtml in the Forms
- chapter.
+ chapter 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "cha:Forms-in-Lift"
+
+\end_inset
+
+.
  Here is a quick description of other SHtml functions:
 \end_layout
 
@@ -3090,7 +3097,7 @@ ResourceServer
 \begin_layout Standard
 ResourceServer is a Lift component that manages the serving of resources
  like JS, CSS etc.
- Well the web container can do that righ? ...
+ Well the web container can do that right? ...
  still container does not serve these resources if they are inside jar files.
  The default URI path for serving such resources is given by
 \family typewriter
@@ -3979,7 +3986,7 @@ There is also important to know that diget authentication mechanism uses
  challenge down to client (401 HTTP status).
  In order to avoid replay attacks this nonce is valid only for a period
  of time.
- By default this is set to 30 seconds but you can change this by setting:
+ By default this is set to 30 seconds but you can change this by setting:!
 \end_layout
 
 \begin_layout Standard
