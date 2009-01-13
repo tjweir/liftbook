@@ -57,7 +57,7 @@ morestring=[b]"}
 \pdf_colorlinks true
 \pdf_backref false
 \pdf_pdfusetitle false
-\pdf_quoted_options "urlcolor=blue"
+\pdf_quoted_options "urlcolor=blue,linkcolor=blue"
 \papersize letterpaper
 \use_geometry true
 \use_amsmath 1
@@ -122,6 +122,15 @@ Copyright © 2008, Derek Chen-Becker, Marius Danciu and Tyler Weir.
 
 This work is licensed under the Creative Commons Attribution-No Derivative
  Works 3.0 Unported License.
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
