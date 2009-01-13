@@ -1,4 +1,4 @@
-#LyX 1.6.0 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -53,52 +53,275 @@ name "cha:AJAX-and-COMET"
 
 \end_layout
 
+\begin_layout Standard
+In this chapter we're going to discuss AJAX and COMET, two approaches to
+ improving the user experience through dynamic web pages.
+ While a full treatment of the techniques and technologies behind these
+ approaches is beyond the scope of this book
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+There are a number of good resources on the web that you can find by searching
+ for 
+\begin_inset Quotes eld
+\end_inset
+
+AJAX
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+, we're going to cover the basics of how AJAX and COMET work.
+ In particular, we're going to look at how Lift handles them behind the
+ scenes to simplify your work.
+\end_layout
+
 \begin_layout Section
-Traditional Browser/Server Interaction 
+What are AJAX and COMET, really?
 \end_layout
 
 \begin_layout Standard
-AJAX and Comet are variations on the traditional model of web application
- interaction.
- The traditional model starts with the user making a request for a page,
- the server doing some amount of processing and then sending the appropriate
- response.
- This model is common today but models are evolving to include AJAX and
- Comet.
- AJAX and Comet differ in implementation of the traditional model.
- AJAX adds the concept of asynchronisity.
- This translates into a more responsive User Interface for a web application.
- 
+AJAX and Comet are variations on the traditional model of the web application
+ request/response lifecycle.
+ In the traditional model, the user starts by making a request for a page.
+ The server receives this request, performs processing, then sends a response
+ back to the user.
+ The response is then rendered by the user's browser.
+ At this point there are no further interactions between the user and the
+ server until the user clicks on a link or performs some other action that
+ starts a completely new request/response lifecycle.
+ AJAX and COMET extend this model to allow for asynchronous updates from
+ either the user to the server (AJAX), or from the server back to the user
+ (COMET).
 \end_layout
 
 \begin_layout Standard
 If we take the example of adding a comment to a blog post, the traditional
- model has the user fill in a form, hit the submit button to send the request
- to the server, the server processes and adds the comment, and finally sends
- the updated blog post with the newly added comment.
- The AJAX model of this session would change such that the display of the
- new comment is not tied to the response from the server.
- After the user hits submit, the request is sent to the server and while
- it's being processed, the User Interface has responded by added the comment
- without the need of a full page reload.
+ model has the user fill in a form, hit the submit button, and send the
+ request to the server.
+ The server processes and adds the comment and then sends the updated blog
+ post back to the user with the newly added comment.
+ At the same time, if other people are viewing the blog post, they won't
+ see the new comment until they reload the page.
+\end_layout
+
+\begin_layout Standard
+The AJAX model of this session changes such that the display of the new
+ comment is not tied to the response from the server.
+ When the user hits submit, the request to add the comment is sent to the
+ server 
+\emph on
+in the background
+\emph default
+.
+ While it's being processed by the server, a JavaScript fragment (the 
+\begin_inset Quotes eld
+\end_inset
+
+J
+\begin_inset Quotes erd
+\end_inset
+
+ in AJAX) updates the user's page via DOM
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+Document Object Model.
+ More information can be found at 
+\begin_inset CommandInset href
+LatexCommand href
+target "http://www.w3.org/DOM/"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ and adds the comment without the need for a full page reload.
  
 \end_layout
 
 \begin_layout Standard
-Comet extends the AJAX model using a long-polling HTTP request that allows
- the server to push data to the browser without requiring additional requests.
+COMET changes the traditional model by using a long-polling HTTP request
+ in the background that allows the server to push data to the browser without
+ requiring additional requests.
+ Essentially this is like AJAX, except in the opposite direction.
  While the AJAX model increases the richness of the User Experience for
  a single client at a time, Comet can do the same for multiple users.
- If we think about the previous example but then add another person viewing
- the same page, they will not see the new comment until they refresh the
- post.
- Comet changes this by enabling the server to push new data, in this case
- the comment, to multiple clients.
+ Going back to our example of a blog post, COMET would enable the server
+ to notify anyone viewing the current blog post to automatically have their
+ pages updated when the new comment is added.
 \end_layout
 
 \begin_layout Standard
-Lift offers methods to ease both AJAX and Comet-based features to your applicati
-ons.
+Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:model-comparisons"
+
+\end_inset
+
+ shows a graphical representation of how the modesl differ in terms of timeline
+ and server interaction.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Traditional Application Model
+\begin_inset CommandInset label
+LatexCommand label
+name "subfig:Traditional-Application-Model"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename images/Traditional Model.pdf
+	width 3in
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+AJAX Application Model
+\begin_inset CommandInset label
+LatexCommand label
+name "subfig:AJAX-Application-Model"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename images/Ajax Model.pdf
+	width 3in
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+COMET Application Model
+\begin_inset CommandInset label
+LatexCommand label
+name "subfig:COMET-Application-Model"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename images/COMET Model.pdf
+	width 3in
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:model-comparisons"
+
+\end_inset
+
+Application Model Comparisons
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section
@@ -130,81 +353,6 @@ Looking at the source page generated by Lift we are seeing:
 \begin_layout Standard
 This will actually load the JavaScript code used by Lift to properly manage
  Ajax requests and responses.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Float figure
-wide false
-sideways false
-status open
-
-\begin_layout Plain Layout
-\align center
-\begin_inset Float figure
-wide false
-sideways false
-status open
-
-\begin_layout Plain Layout
-\begin_inset Caption
-
-\begin_layout Plain Layout
-AJAX Application Model
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\align center
-\begin_inset Graphics
-	filename images/ajax.png
-	lyxscale 50
-	height 4in
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Caption
-
-\begin_layout Plain Layout
-\begin_inset CommandInset label
-LatexCommand label
-name "fig:ajaxarch"
-
-\end_inset
-
-AJAX Architecture
-\end_layout
-
-\end_inset
-
-
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Copyright Check Required
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
 \end_layout
 
 \begin_layout Standard
@@ -251,84 +399,6 @@ Using Ajax in Lift is really a trivial thing to do as Lift provides the
 
 \begin_layout Section
 COMET in Lift
-\end_layout
-
-\begin_layout Standard
-\begin_inset Float figure
-wide false
-sideways false
-status open
-
-\begin_layout Plain Layout
-\align center
-\begin_inset Float figure
-wide false
-sideways false
-status open
-
-\begin_layout Plain Layout
-\begin_inset Caption
-
-\begin_layout Plain Layout
-COMET Application Model
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\align center
-\begin_inset Graphics
-	filename images/Comet.png
-	lyxscale 50
-	height 4in
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Caption
-
-\begin_layout Plain Layout
-\begin_inset CommandInset label
-LatexCommand label
-name "fig:cometarch"
-
-\end_inset
-
-COMET Architecture
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Copyright Check Required
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
 \end_layout
 
 \begin_layout Standard
