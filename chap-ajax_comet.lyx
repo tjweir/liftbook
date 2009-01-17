@@ -423,7 +423,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Ajax comparison example
 \end_layout
 
@@ -1261,6 +1260,34 @@ When Lift gets the resumed request from Jetty container it provides back
 Note that CometActors work even if you are not using Jetty container the
  only thing is that you won;t benefit ofthe suspend/resume mechanism offered
  by Jetty Container and this may affect th scallability of your application.
+\end_layout
+
+\begin_layout Subsection
+Scallability concerns
+\end_layout
+
+\begin_layout Standard
+If you are thinking to use Comet into your application one of your primary
+ concenrs would be scallability.
+ Because of the HTTP nature in order to be able to push data from server
+ to client we nobviously need a communication channel.
+ And this channel is an opened HTTP connection such as the HTTP client sent
+ a request and waits for it for a resonabily long period of time (minutes).
+ When this time elapses the client iss probably timing out and retries the
+ request.
+ Because we have these long-term connections typically the web container
+ wioll allocate a thread to manage that and as explained above having threads
+ waiting for the application to actaully provide a response back is a scallabili
+ty killer.
+ Non-Blocking IO support solves this problem because when a client sends
+ the request and waits for a response there is no thread waiting fr anything,
+ hence other parallel requests can be served.
+ Most containrs nowadays provides support for Non-Blocking IO but this is
+ more or less easy to work with in real applications.
+ We prefer the suspend-resume model that Jetty container provides because
+ of its clarity and ease of use.
+ Most likely for Servlet 3.0 when the syspend/resume mechanims would likely
+ be standardized Lift framework will standardize this support.
 \end_layout
 
 \end_body
