@@ -1,4 +1,4 @@
-#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.0 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -337,7 +337,9 @@ In previous chapters we've shown how to use AJAX in Lift through SHtml functions
  underlying JS framework to submit Ajax resquests and process the responses.
  It adds functionality such as failsafe, retry mechanisms, graceful degradation
  etc.
- [TK This is confusing]
+ This actually means that when an Ajax request is use Lift script contains
+ a retry mechanism before it actually yields a failure.
+ The retry count is given by LiftRules.ajaxRetryCount variable.
 \end_layout
 
 \begin_layout Standard
@@ -381,7 +383,7 @@ In terms of Lift API it is also possible to submit AJax request on more
 SHtml.ajaxCall 
 \family default
 to simply submit an AjaxRequest.
- You are passing tothis function the actual data that needs to be submitted
+ You are passing to this function the actual data that needs to be submitted
  as a JsExp and the Scala function that will be called when this Ajax request
  will be submitted.
  This callback function has the form 
@@ -397,12 +399,235 @@ Using Ajax in Lift is really a trivial thing to do as Lift provides the
  to do this even with a single line of code.
 \end_layout
 
-\begin_layout Section
-COMET in Lift
+\begin_layout Subsection
+AJAX example
 \end_layout
 
 \begin_layout Standard
-The diagam above describes that Comet model.
+Let's take a look on a comparison example.
+ We've seen how to use SHtml.ajaxButton and let's see how can we achieve
+ the same effect using SHtml.ajaxCall and SHtml.ajaxInvoke
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Ajax comparison example
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+class SimpleSnippet {
+\end_layout
+
+\begin_layout Plain Layout
+
+  def ajaxFunc1() : JsCmd = JsRaw("alert('Button1 clicked')")
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  def ajaxFunc2(str: String) : JsCmd = {
+\end_layout
+
+\begin_layout Plain Layout
+
+	println(
+\begin_inset Quotes eld
+\end_inset
+
+Received 
+\begin_inset Quotes erd
+\end_inset
+
+ + str)
+\end_layout
+
+\begin_layout Plain Layout
+
+	JsRaw("alert('Button2 clicked')")
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  def ajaxFunc3() : JsCmd = JsRaw("alert('Button3 clicked')")
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  def renderAjaxButtons(xhtml: Group): NodeSeq = {
+\end_layout
+
+\begin_layout Plain Layout
+
+    bind("ex", xhtml,         
+\end_layout
+
+\begin_layout Plain Layout
+
+			"button1" -> SHtml.ajaxButton(
+\begin_inset Quotes eld
+\end_inset
+
+Press me
+\begin_inset Quotes erd
+\end_inset
+
+, ajaxFunc1 _),
+\end_layout
+
+\begin_layout Plain Layout
+
+			"button2" -> <button onclick={SHtml.ajaxCall(Str(
+\begin_inset Quotes eld
+\end_inset
+
+Button-2
+\begin_inset Quotes erd
+\end_inset
+
+), ajaxFunc2 _)}>Press me 2</button>,
+\end_layout
+
+\begin_layout Plain Layout
+
+			"button3" -> <button onclick={SHtml.ajaxInvoke(ajaxFunc3 _)}>Press me
+ 3</button>)
+\end_layout
+
+\begin_layout Plain Layout
+
+ }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Basically here we made a trivial example how to create three Ajax buttons
+ using three different SHtml functions.
+ The difference between ajaxCall and ajaxInvoke is that for ajaxCall you
+ can specify a parameter that will be sent to server.
+ This parameter is te result of the JsExp computation.
+ For an overview of SHtml functions please see 
+\begin_inset Quotes eld
+\end_inset
+
+SHtml object
+\begin_inset Quotes erd
+\end_inset
+
+ section.
+ 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+How to make a cross reference here to this section from another lyx?
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Behind the scenes
+\end_layout
+
+\begin_layout Standard
+As mentioned earlier Lift is identifying Ajax requests based on the path
+ used.
+ This path is given by 
+\family typewriter
+LuftRules.ajaxPath.
+
+\family default
+ When the request is received Lift will execute the functions bound to the
+ query string parameter(s) (remember function mapping in Lift) and then
+ the result ofthese functions is converted to a LiftResponse.
+ The following types are considered as a result type for ajax functions:
+\end_layout
+
+\begin_layout Itemize
+JsCmd 
+\end_layout
+
+\begin_layout Itemize
+NodeSeq 
+\end_layout
+
+\begin_layout Itemize
+JsCommands 
+\end_layout
+
+\begin_layout Itemize
+LiftResponse
+\end_layout
+
+\begin_layout Standard
+You can of course return a JsExp as well since there is an implicit conversion
+ from JsExp to JsCmd.
+ The reason for this is that the user function that we are providing th
+ SHtml functions for example are kept as AFuncHolder.
+ So the user functions user for subclasses of AFuncHolder return an Any.
+ Therefore for Ajax requests the result (Any) is checked against the above
+ types.
+ Of course by returning a LiftResponse you can rturn whatever you like,
+ basically any content that makes sense for your application.
+\end_layout
+
+\begin_layout Section
+COMET
+\end_layout
+
+\begin_layout Standard
+The diagram above describes that Comet model.
  You can also find relevant information about Comet here: http://en.wikipedia.org/
 wiki/Comet_(programming).
  In essence Comet is not a technology but a technique which allows a web
@@ -440,9 +665,9 @@ Of course things are more complicated then that.
  reasons and the client should be smart enough to re-establish the connection
  automatically.
  But there is another problem: scallability.
- If we have these long term connections the server would typically put the
- processing threads into a waiting state until messages are available to
- actually respond to client.
+ If we have these long term connections, the server would typically put
+ the processing threads into a waiting state until messages are available
+ to actually respond to client.
  This is of course a scallability killer because the threads from the web
  container's thread pool will mostly in wait state doing nothing but 
 \begin_inset Quotes eld
@@ -468,7 +693,7 @@ wait
  This has major impact on scallability because the threads are returned
  to the thread pool very fast being able to be re-used for processing other
  requests.
- IN this model th threads are allocated to connections only when data is
+ In this model the threads are allocated to connections only when data is
  available for processing this inherently leading the a better threads managemen
 t system.
 \end_layout
@@ -480,16 +705,16 @@ So having non-blocking IO enabled by the web container has a major impact
  But his is not all there is to it.
  Lift framework has support for Jetty Continuations.
  Jetty is a very nice J(2)EE web container (http://www.mortbay.org/jetty/).
- It has a so called Jetty Continuation mecahnism which in fact it not about
- pure web continuations mechanism.
- It based on the suspent-resume mechanism (which BTW will be introduced
+ It has a so called Jetty Continuation mechanism which in fact it's not
+ about pure web continuations mechanism.
+ It's based on the suspent-resume mechanism (which BTW will be introduced
  in th Servlet 3.0 specifications).
  In a glance how it works is:
 \end_layout
 
 \begin_layout Enumerate
-You application receives a reuest and wants to hold of the response as there
- is no message yet.
+You application receives a request and wants to hold of the response as
+ there is no message yet.
 \end_layout
 
 \begin_layout Enumerate
@@ -499,7 +724,7 @@ suspend
 \family default
  on the Jetty continuation object.
  Here Jetty will throw a special exception that will be caught in the container.
- Current thread is immediately retrned to the thread pool being able to
+ Current thread is immediately returned to the thread pool being able to
  process other requests.
 \end_layout
 
@@ -511,7 +736,7 @@ resume
 \family default
  on the same continuation object.
  Here Jetty will actually replay the initial HTTP request and your servlet
- behaves like that request was just recived from client and of course returns
+ behaves like that request was just received from client and of course returns
  the appropriate response.
 \end_layout
 
@@ -994,6 +1219,48 @@ As described earlier It is also possible to use notices (notice/warning/error)
 \end_inset
 
 
+\end_layout
+
+\begin_layout Subsection
+Behind the scenes
+\end_layout
+
+\begin_layout Standard
+Lift is first identifying a Comet request by the path given by 
+\family typewriter
+LiftRules.cometPath
+\family default
+ variable.
+ Essentially the flow is this:
+\end_layout
+
+\begin_layout Enumerate
+Lift gets a Comet request
+\end_layout
+
+\begin_layout Enumerate
+It checks the CometActors if there are any messages.
+ If there are no messages to be sent to this client and the application
+ is running on Jetty container the Jetty-Continuation is suspended but no
+ response is actually sent to client
+\end_layout
+
+\begin_layout Enumerate
+Later on when your Comet actor is asked to render or partialUpdate (this
+ is typically happening by using your own actors that sends messages to
+ your CometActor) the response is calculated and the Jetty-Continuation
+ is resumed.
+\end_layout
+
+\begin_layout Enumerate
+When Lift gets the resumed request from Jetty container it provides back
+ the response calculated by the CometActor and sent back to client.
+\end_layout
+
+\begin_layout Standard
+Note that CometActors work even if you are not using Jetty container the
+ only thing is that you won;t benefit ofthe suspend/resume mechanism offered
+ by Jetty Container and this may affect th scallability of your application.
 \end_layout
 
 \end_body
