@@ -1,4 +1,4 @@
-#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.0 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -551,16 +551,6 @@ filename "chap-deployment.lyx"
 \begin_inset CommandInset include
 LatexCommand include
 filename "apdx-code_listings.lyx"
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset CommandInset include
-LatexCommand include
-filename "apdx-lift_api.lyx"
 
 \end_inset
 
