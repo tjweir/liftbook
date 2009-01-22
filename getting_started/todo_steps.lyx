@@ -75,13 +75,13 @@ What we're going to cover
 \end_layout
 
 \begin_layout Standard
-We're going to build a basic to do application in Lift.
- The application will allow you to create and account, log in, and enter/edit
- to do items.
+We're going to build a basic to-do application in Lift.
+ The application will allow you to create an account, log in, and then enter
+ and modify to-do items.
 \end_layout
 
 \begin_layout Standard
-This example will show you:
+The goal is to show you:
 \end_layout
 
 \begin_layout Itemize
@@ -108,8 +108,8 @@ Creating a new project
 \begin_layout Standard
 The first thing to do is create a new project.
  We do this with a build tool called Maven.
- Maven manages compile and test phases of development as well as managing
- dependencies by downloading required code from servers on the Internet.
+ Maven manages the compile and test phases of development as well as managing
+ any dependencies by downloading resources from Internet.
 \end_layout
 
 \begin_layout Standard
@@ -194,7 +194,7 @@ Create a new project
 \end_layout
 
 \begin_layout Standard
-Change directories into the newly created todo directory with: 
+Now change directories into the newly created todo directory with: 
 \family typewriter
 cd todo
 \end_layout
@@ -204,7 +204,7 @@ Type:
 \family typewriter
 mvn jetty:run
 \family default
- and from your browser, go to 
+ and in your browser, go to 
 \begin_inset Flex URL
 status collapsed
 
@@ -215,7 +215,7 @@ http://localhost:8080
 
 \end_inset
 
- You can see that your application is running.
+ You will see that your application is running.
  Switch back to your terminal window and type 
 \family typewriter
 ctrl-c
@@ -228,7 +228,7 @@ Adding a model
 \end_layout
 
 \begin_layout Standard
-Now that we've got a basic running application, we're going to add some
+Now that we've got a basic application running, we're going to add some
  custom code.
  Create the file 
 \family typewriter
@@ -398,9 +398,9 @@ LongKeyedMapper
 \family typewriter
 [ToDo]
 \family default
- part declares that the Mapper is mapping a ToDo...
- yes, this should be inferred by the compiler, but sometimes the compiler
- needs some extra hints.
+ part declares that the Mapper is mapping a ToDo.
+ You may be thinking that should be inferred by the compiler, but sometimes
+ the compiler needs some extra hints.
 \end_layout
 
 \begin_layout Standard
@@ -413,7 +413,7 @@ with IdPK
 ToDo
 \family default
 .
- A trait is like a Java interface, but it also defines methods.
+ A trait is like a Java interface, that also defines methods.
  Many traits can be mixed into a single class.
  Traits can define rules about what kind of classes they can be mixed into.
  Traits are similar to Ruby mixins.
@@ -444,7 +444,11 @@ ToDo
 \end_layout
 
 \begin_layout Standard
-Within the ToDo class, 
+Within the 
+\family typewriter
+ToDo
+\family default
+ class, 
 \family typewriter
 def getSingleton = ToDo
 \family default
@@ -886,7 +890,7 @@ The above code adds the
 \family typewriter
 ToDo
 \family default
- model to the list of models that Schemifier checks for in the database.
+ model to the list of models that Schemifier looks for in the database.
 \end_layout
 
 \begin_layout Standard
@@ -920,15 +924,15 @@ Boot
 \end_layout
 
 \begin_layout Section
-Snippets: Bridging view to logic
+Snippets: Bridging View and Logic
 \end_layout
 
 \begin_layout Standard
 Web applications present information to the user primarily using HTML or
  XHTML.
  HTML designers are good at creating HTML and CSS, but writing code that
- involves looping, branching, fields, methods, etc.
- is not what HTML designers do.
+ involves looping, branching, fields, methods or logic is not what HTML
+ designers do.
  Lift bridges between the XHTML markup and the logic that creates the dynamic
  content with XML 
 \family typewriter
@@ -1447,7 +1451,7 @@ User
  browser session.
  In Scala, every statement has a return type.
  Thus, if/else is like the Java ternary operator.
- Thus, if a user is logged in, we return the child XHTML, otherwise we return
+ If a user is logged in, we return the child XHTML, otherwise we return
  an empty sequence of nodes, XHTML.
  Scala does not require an explicit 
 \family typewriter
@@ -1474,7 +1478,7 @@ View First
 \end_layout
 
 \begin_layout Standard
-A philosophical digression.
+A philosophical digression into a major architectural decision.
 \end_layout
 
 \begin_layout Standard
@@ -1510,7 +1514,7 @@ foreign
 \end_layout
 
 \begin_layout Standard
-So, the static templates in Lift are strictly display only.
+So, the static templates in Lift are strictly for display only.
  They can be manipulated with standard design tools (e.g., Dreamweaver).
  They can never contain program logic.
 \end_layout

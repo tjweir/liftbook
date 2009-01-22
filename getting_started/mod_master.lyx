@@ -37,6 +37,7 @@
 \tracking_changes false
 \output_changes false
 \author "" 
+\author "" 
 \end_header
 
 \begin_body
@@ -71,7 +72,7 @@ This work is licensed under the Creative Commons Attribution-No Derivative
 \begin_layout Standard
 \begin_inset CommandInset include
 LatexCommand include
-filename "g/liftbook/getting_started/chap-welcome.lyx"
+filename "chap-welcome.lyx"
 
 \end_inset
 
@@ -81,7 +82,7 @@ filename "g/liftbook/getting_started/chap-welcome.lyx"
 \begin_layout Standard
 \begin_inset CommandInset include
 LatexCommand include
-filename "g/liftbook/getting_started/todo_steps.lyx"
+filename "todo_steps.lyx"
 
 \end_inset
 
