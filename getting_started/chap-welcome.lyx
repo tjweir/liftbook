@@ -1,0 +1,1538 @@
+#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
+\begin_document
+\begin_header
+\textclass book
+\use_default_options false
+\language english
+\inputencoding auto
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\cite_engine basic
+\use_bibtopic false
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\author "" 
+\author "" 
+\end_header
+
+\begin_body
+
+\begin_layout Chapter
+Welcome to Lift!
+\begin_inset CommandInset label
+LatexCommand label
+name "cha:Welcome-to-Lift!"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Lift is designed to make powerful techniques easily accessible, while keeping
+ the overall framework simple and flexible.
+ It may sound like a clich
+\family roman
+\series medium
+\shape up
+\emph off
+\bar no
+\noun off
+\color none
+é
+\family default
+\series default
+\shape default
+\emph default
+\bar default
+\noun default
+\color inherit
+, but in our experience Lift makes it fun to develop because it lets you
+ focus on the interesting parts of coding.
+ Our goal for this book is that by the end, you'll be able to create and
+ extend any web application you can think of.
+\end_layout
+
+\begin_layout Section
+Why Lift?
+\end_layout
+
+\begin_layout Standard
+For those of you have experience with other web frameworks such as Struts,
+ Tapestry, Rails, et cetera, you must be asking yourself "Why another framework?
+ Does Lift really solve problems any differently or more effectively than
+ the ones I've used before?" Based on our experience (and of others in the
+ growing Lift community), the answer is an emphatic "Yes!" Lift has cherry-picke
+d the best ideas from a number of other frameworks, while creating some
+ novel ideas of its own.
+ It's this combination of solid foundation and new techniques that makes
+ Lift so powerful.
+ At the same time, Lift has been able to avoid the mistakes made in the
+ past by other frameworks.
+ In the spirit of 
+\begin_inset Quotes eld
+\end_inset
+
+configuration by convention
+\begin_inset Quotes erd
+\end_inset
+
+, Lift has sensible defaults for everything, while making it easy to customize
+ precisely what you need to; no more and no less.
+ Gone are the days of XML file after XML file providing 
+\emph on
+basic configuration
+\emph default
+ for your application.
+ Instead, a basic Lift app only requires that you add the LiftFilter to
+ your web.xml and add one or more lines telling Lift what package your classes
+ sit in.
+ The methods you code aren't required to implement a specific interface
+ (called a trait), although there are support traits that make things that
+ much simpler.
+ In short, you don't need to write anything that isn't explicitly necessary
+ for the task at hand; Lift is intended to work out of the box, and to make
+ you as efficient and productive as possible.
+\end_layout
+
+\begin_layout Standard
+One of the key strengths of Lift is the clean separation of presentation
+ content and logic, based on the bedrock concept of the Model-View-Controller
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+MVC
+\end_layout
+
+\end_inset
+
+ pattern
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://heim.ifi.uio.no/~trygver/1979/mvc-2/1979-12-MVC.pdf
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+.
+ One of the original Java web application technologies that's still in use
+ today is JSP, or Java Server Pages
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://java.sun.com/products/jsp/
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+.
+ JSP allows you to mix HTML and Java code directly within the page.
+ While this may have seemed like a good idea at the start, it has proven
+ to be painful in practice.
+ Putting code in your presentation layer makes it more difficult to debug
+ and understand what is going on within a page, and makes it more difficult
+ for the people writing the HTML portion because the contents aren't valid
+ HTML.
+ While many modern programming and HTML editors have been modified to accomodate
+ this mess, proper syntax highlighting and validation don't make up for
+ the fact that you still have to switch back and forth between one or more
+ files to follow the page flow.
+ Lift takes the approach that there should be no code in the presentation
+ layer, but that the presentation layer has to be flexible enough to accomodate
+ any conceivable uses.
+ To that end, Lift uses a powerful templating system, a la Wicket
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://wicket.apache.org/
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+, to bind user-generated data into the presentation layer.
+ Lift's templating is built on the XML processing capabilities of the Scala
+ Language
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+Not only does Scala have some extensive library support for XML, but XML
+ syntax is actually part of the language.
+ We'll cover this in more detail as we go through the book
+\end_layout
+
+\end_inset
+
+, and allows things such as nested templates, simple injection of user-generated
+ content, and advanced data binding capabilities.
+ For those coming from JSP, Lift's advanced template and XML processing
+ allows you to essentially write custom tag libraries at a fraction of the
+ cost in time and effort.
+\end_layout
+
+\begin_layout Standard
+Lift has another advantage that no other web framework currently shares:
+ the Scala
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+Scala
+\end_layout
+
+\end_inset
+
+ programming language.
+ Scala is a relatively new language developed by Martin Odersky
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+Martin wrote the original 
+\family typewriter
+javac
+\family default
+ compiler for Sun, and more recently led the Pizza and GJ projects that
+ eventually became Java Generics.
+ His home page is at 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://lamp.epfl.ch/~odersky/
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ and his group at EPFL Switzerland.
+ It compiles to Java bytecode and runs on the JVM, which means that you
+ can leverage the vast ecosystem of Java libraries just as you would with
+ any other java web framework.
+ At the same time, Scala introduces some very powerful features designed
+ to make you, the developer, more productive.
+ Among these features are an extremely rich type system along with powerful
+ type inference, native XML processing, full support for closures and functions
+ as objects, and an extensive high-level library.
+ The power of the type system along with its type inferencing has led people
+ to call it 
+\begin_inset Quotes eld
+\end_inset
+
+the statically typed dynamic language
+\begin_inset Quotes erd
+\end_inset
+
+
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://scala-blogs.org/2007/12/scala-statically-typed-dynamic-language.html
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+.
+ That means you can write code as quickly as you could with dynamically
+ typed languages (Python, Ruby, etc.), but you have the compile-time type
+ safety of a statically typed language like Java.
+ Scala is also a hybrid functional and Object-oriented language, which means
+ you can get the power of the higher-level functional (or FP) languages
+ (such as Haskell, Scheme, etc) while retaining the modularity and reusability
+ of OO components.
+ In particular, the FP concept of immutability is well represented in Scala,
+ and is one of the simplest means to high throughput scalability.
+ The hybrid model also means that if you haven't touched FP before, you
+ can gradually ease into it.
+ In our experience, Scala allows you to do more in Lift with less lines
+ of code; remember, Lift is all about making you more productive!
+\end_layout
+
+\begin_layout Standard
+Lift strives to encompass advanced features in a very concise and straightforwar
+d manner.
+ Lift's powerful support for AJAX and COMET allow you to use Web 2.0 features
+ with very little effort.
+ Lift leverages Scala's Actor library to provide a message-driven framework
+ for COMET updates.
+ In most cases, adding COMET support to a page just involves extending a
+ trait
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+A trait is a Scala construct that's essentially like a Java interface.
+ The main difference is that traits are allowed to provide method bodies
+ and may have variables.
+\end_layout
+
+\end_inset
+
+ to define the rendering method of your page and adding an extra function
+ call to your links to dispatch the update message; Lift handles all of
+ the backend and page-side coding to effect the COMET polling.
+ AJAX support includes special handlers for doing AJAX form submission via
+ JSON, and almost any link function can easily be turned into an AJAX version
+ with a few keystrokes.
+ In order to preform all of this client-side goodness, Lift has a class
+ hierarchy for encapsulating Javascript calls via direct Javascript, jQuery
+ and YUI.
+ The nice part is that you, too, can utilize these support classes so that
+ you can generate the code and don't have to put Javascript logic into your
+ templates.
+\end_layout
+
+\begin_layout Section
+For more information
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:For-more-information"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Lift has a very active community of users and developers.
+ Since its inception in early 2007 the community has grown to hundreds of
+ members from all over the world.
+ The project's leader, David Pollak
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://blog.lostlake.org/
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+is constantly attending to the mailing list, answering questions and taking
+ feature requests.
+ There is a core group of developers who work on the project, but submissions
+ are taken from anyone who makes a good case and can turn in good code.
+ While we strive to cover everything you'll need to know in this book, here
+ are several additional resources available for information on Lift:
+\end_layout
+
+\begin_layout Enumerate
+The first place to look is the Wiki at 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://liftweb.net/index.php/Main_Page
+\end_layout
+
+\end_inset
+
+.
+ The Wiki is maintained not only by David, but by many active members of
+ the Lift community (including the authors).
+ Portions of this book as inspired by and borrow from content on the Wiki.
+ In particular, it has links to all of the generated documentation not only
+ for the stable branch, but for the unstable head if you're feeling adventurous.
+ There's also an extensive section of HowTos and articles on advanced topics
+ that covers a wealth of information.
+\end_layout
+
+\begin_layout Enumerate
+The mailing list at 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://groups.google.com/group/liftweb
+\end_layout
+
+\end_inset
+
+ is very active and if there are things that this book doesn't cover you
+ can feel free to ask questions there; there are plenty of very knowledgeable
+ people on the list that should be able to answer your questions.
+ Please post specific questions about the book to the Lift Book Google Group
+ found 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://groups.google.com/group/the-lift-book
+\end_layout
+
+\end_inset
+
+, anything else that is Lift-specific is fair game for the mailing list.
+\end_layout
+
+\begin_layout Enumerate
+Lift has an IRC channel at 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+irc://irc.freenode.net/lift
+\end_layout
+
+\end_inset
+
+ that usually has several people on at any given time.
+ It's a great place to chat about issues and ideas concerning Lift.
+\end_layout
+
+\begin_layout Section
+Your first Lift application
+\end_layout
+
+\begin_layout Standard
+We've talked a lot about Lift and its capabilities, so now let's get hands-on
+ and try out an application.
+ Before we start, though, we need to take care of some prerequisites:
+\end_layout
+
+\begin_layout Description
+Java
+\begin_inset space ~
+\end_inset
+
+1.5
+\begin_inset space ~
+\end_inset
+
+JDK Lift runs on Scala, which runs on top of the JVM; the first thing you'll
+ need to install is a modern version of the Java SE JVM, available at 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://java.sun.com/
+\end_layout
+
+\end_inset
+
+.
+ Please install JDK 1.5 or newer.
+ If you're using a Mac, the JDK is already installed.
+\end_layout
+
+\begin_layout Description
+Maven
+\begin_inset space ~
+\end_inset
+
+2 Maven
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+Maven
+\end_layout
+
+\end_inset
+
+ is a project management tool.
+ Maven has extensive capabilities for building, dependency management, testing
+ and reporting.
+ If you haven't used Maven before you can think of it as an incredibly powerful
+ version of 
+\family typewriter
+make
+\family default
+ for now.
+ You can download the latest version of Maven from 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://maven.apache.org/
+\end_layout
+
+\end_inset
+
+.
+ Brief installation instructions (enough to get us started) are on the download
+ page, at 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://maven.apache.org/download.html
+\end_layout
+
+\end_inset
+
+.
+ You must have Maven 2.0.9 or greater installed.
+ Mac OS X has Maven 2.0.6 installed.
+ Please install 2.0.9 and make sure that the version that you installed is
+ the first version accessed in the PATH.
+\end_layout
+
+\begin_layout Description
+Programming
+\begin_inset space ~
+\end_inset
+
+editor This isn't a strict requirement for this example, but when we start
+ getting into coding it's very helpful to have something a little more capable
+ than notepad.
+ If you'd like a full-blown IDE, with support for things like debugging,
+ continuous compile checking, etc, there are plugins available on the Scala
+ website at 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://www.scala-lang.org/node/91
+\end_layout
+
+\end_inset
+
+.
+ The plugins support:
+\end_layout
+
+\begin_deeper
+\begin_layout List
+\labelwidthstring 00.00.0000
+Eclipse 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://www.eclipse.org/
+\end_layout
+
+\end_inset
+
+ The Scala plugin developer recommends using the 
+\emph on
+Eclipse Classic
+\emph default
+ version of the IDE
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+NetBeans 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://www.netbeans.org
+\end_layout
+
+\end_inset
+
+ Requires using the NetBeans 6.5
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+IntelliJ IDEA 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://www.jetbrains.com/idea/index.html
+\end_layout
+
+\end_inset
+
+ Requires version 8 beta
+\end_layout
+
+\begin_layout Standard
+If you'd like something more lightweight, the Scala language distribution
+ comes with plugins for editors like VIM, Emacs, jedit, etc.
+ You can either download the full Scala distribution from 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://www.scala-lang.org/
+\end_layout
+
+\end_inset
+
+ and use the files under 
+\family typewriter
+misc/scala-tool-support
+\family default
+, or you can directly access the latest versions via the SVN (Subversion)
+ interface at 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+https://lampsvn.epfl.ch/trac/scala/browser/scala-tool-support/trunk/src
+\end_layout
+
+\end_inset
+
+.
+ Getting these plugins to work in your IDE or editor of choice is beyond
+ the scope of this book.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+Now that we have the prerequisites out of the way, it's time to get started.
+ We're going to leverage Maven's archetypes to do 99% of the work for us
+ in this example.
+ First, change to whatever directory you'd like to work in:
+\end_layout
+
+\begin_layout LyX-Code
+cd work
+\end_layout
+
+\begin_layout Standard
+Next, we use Maven's 
+\family typewriter
+archetype:generate
+\family default
+ command to create the skeleton of our project:
+\end_layout
+
+\begin_layout LyX-Code
+mvn archetype:generate -U 
+\backslash
+
+\end_layout
+
+\begin_layout LyX-Code
+  -DarchetypeGroupId=net.liftweb 
+\backslash
+
+\end_layout
+
+\begin_layout LyX-Code
+  -DarchetypeArtifactId=lift-archetype-blank 
+\backslash
+
+\end_layout
+
+\begin_layout LyX-Code
+  -DarchetypeVersion=0.10 
+\backslash
+
+\end_layout
+
+\begin_layout LyX-Code
+  -DremoteRepositories=http://scala-tools.org/repo-releases 
+\backslash
+
+\end_layout
+
+\begin_layout LyX-Code
+  -DgroupId=demo.helloworld 
+\backslash
+
+\end_layout
+
+\begin_layout LyX-Code
+  -DartifactId=helloworld 
+\backslash
+
+\end_layout
+
+\begin_layout LyX-Code
+  -Dversion=1.0-SNAPSHOT
+\end_layout
+
+\begin_layout Standard
+Maven should output several page's worth of text.
+ It may stop and ask you to confirm the properties configuration, in which
+ case you can just hit 
+\family typewriter
+<enter>
+\family default
+.
+ At the end you should get a message that says 
+\family typewriter
+BUILD SUCCESSFUL
+\family default
+.
+ You've now successfully created your first project! Don't believe us? Let's
+ run it to confirm:
+\end_layout
+
+\begin_layout LyX-Code
+cd helloworld
+\end_layout
+
+\begin_layout LyX-Code
+mvn jetty:run
+\end_layout
+
+\begin_layout Standard
+Maven should produce more output, ending with
+\end_layout
+
+\begin_layout LyX-Code
+[INFO] Starting scanner at interval of 5 seconds.
+\end_layout
+
+\begin_layout Standard
+This means that you now have a web server (Jetty
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://www.mortbay.org/jetty/
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+) running on port 8080 of your machine.
+ Just go to 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://localhost:8080/
+\end_layout
+
+\end_inset
+
+ and you'll see your first Lift page, the standard 
+\begin_inset Quotes eld
+\end_inset
+
+Hello world!
+\begin_inset Quotes erd
+\end_inset
+
+.
+ With just a few simple commands we've built a functional (albeit limited)
+ web app.
+ Let's go into a little more detail and see exactly how these pieces fit
+ together.
+ First, let's examine the index page.
+ Whenever Lift serves up a request where the URL ends in a forward slash,
+ Lift automatically looks for a file called index.html
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+Technically, it also searches for some variations on index.html, including
+ any localized versions of the page, but we'll cover that later in section
+ 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+TODO: Need a cross reference here
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ in that directory.
+ For instance, if you tried to go to 
+\family typewriter
+http://localhost:8080/test/
+\family default
+, Lift would look for index.html under the 
+\family typewriter
+test/
+\family default
+ directory in your project.
+ The HTML sources will be located under 
+\family typewriter
+src/main/webapp/
+\family default
+ in your project directory Here's the 
+\family typewriter
+index.html
+\family default
+ file from our Hello World project:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "basicstyle={\small\ttfamily},frame=lines,language=XML"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+<lift:surround with="default" at="content">
+\end_layout
+
+\begin_layout Plain Layout
+
+  <h2>Welcome to your project!</h2>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <p><lift:helloWorld.howdy /></p>
+\end_layout
+
+\begin_layout Plain Layout
+
+</lift:surround>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This may look a little strange at first.
+ For those with some XML experience you may recognize the use of prefixed
+ elements here.
+ For those who don't know what that is, a prefixed element is an XML element
+ of the form
+\end_layout
+
+\begin_layout LyX-Code
+<prefix:element>
+\end_layout
+
+\begin_layout Standard
+In our case we have two elements in use: 
+\family typewriter
+<lift:surround>
+\family default
+ and 
+\family typewriter
+<lift:helloWorld.howdy/>
+\family default
+.
+ Lift assigns special meaning to elements that use the 
+\begin_inset Quotes eld
+\end_inset
+
+lift
+\begin_inset Quotes erd
+\end_inset
+
+ prefix; they form the basis of lift's extensive templating support.
+ When Lift processes an XML template
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+template
+\end_layout
+
+\end_inset
+
+, it does so from the outermost element inward.
+ In our case, the outermost element is 
+\family typewriter
+<lift:surround with=
+\begin_inset Quotes erd
+\end_inset
+
+default
+\begin_inset Quotes erd
+\end_inset
+
+ at=
+\begin_inset Quotes erd
+\end_inset
+
+content
+\begin_inset Quotes erd
+\end_inset
+
+>
+\family default
+.
+ The 
+\family typewriter
+<lift:surround>
+\family default
+ element basically tells Lift to find the template named by the 
+\emph on
+with
+\emph default
+ attribute (
+\emph on
+default
+\emph default
+, in our case) and to put the contents of our element inside of that template.
+ The 
+\emph on
+at
+\emph default
+ attribute tells Lift where in the template to place our content.
+ In Lift, this 
+\begin_inset Quotes eld
+\end_inset
+
+filling in the blanks
+\begin_inset Quotes erd
+\end_inset
+
+ is called 
+\emph on
+binding
+\emph default
+
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+binding
+\end_layout
+
+\end_inset
+
+, and it's a fundamental concept of Lift's template system.
+ Just about everything at the HTML/XML level can be thought of as a series
+ of nested binds.
+ Before we move on to the 
+\family typewriter
+<lift:helloWorld.howdy/>
+\family default
+ element, let's recurse and look at the default template.
+ You can find it in the 
+\family typewriter
+templates-hidden
+\family default
+ directory of the web app.
+ Much like the 
+\family typewriter
+WEB-INF
+\family default
+ and 
+\family typewriter
+META-INF
+\family default
+ directories in a Java web application, the contents of 
+\family typewriter
+templates-hidden
+\family default
+ cannot be accessed directly by clients; they can, however be accessed when
+ they're referenced by a 
+\family typewriter
+<lift:surround>
+\family default
+ element.
+ Here is the 
+\family typewriter
+default.html
+\family default
+ file:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:lift="http://liftweb.net/">
+\end_layout
+
+\begin_layout Plain Layout
+
+  <head>
+\end_layout
+
+\begin_layout Plain Layout
+
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+\end_layout
+
+\begin_layout Plain Layout
+
+    <meta name="description" content="" />
+\end_layout
+
+\begin_layout Plain Layout
+
+    <meta name="keywords" content="" />
+\end_layout
+
+\begin_layout Plain Layout
+
+                
+\end_layout
+
+\begin_layout Plain Layout
+
+    <title>demo.helloworld:helloworld:1.0-SNAPSHOT</title>
+\end_layout
+
+\begin_layout Plain Layout
+
+    <script id="jquery" src="/classpath/jquery.js" type="text/javascript"></scrip
+t>
+\end_layout
+
+\begin_layout Plain Layout
+
+  </head>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <body>
+\end_layout
+
+\begin_layout Plain Layout
+
+    <lift:bind name="content" />
+\end_layout
+
+\begin_layout Plain Layout
+
+    <lift:Menu.builder />
+\end_layout
+
+\begin_layout Plain Layout
+
+    <lift:msgs/>
+\end_layout
+
+\begin_layout Plain Layout
+
+  </body>
+\end_layout
+
+\begin_layout Plain Layout
+
+</html>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+As you can see in the listing, this is a proper XHTML file, with 
+\family typewriter
+<html>
+\family default
+, 
+\family typewriter
+<head>
+\family default
+, and 
+\family typewriter
+<body>
+\family default
+ tags.
+ This is required since Lift doesn't add these itself; Lift simply processes
+ the XML from each template it encounters.
+ The 
+\family typewriter
+<head>
+\family default
+ element and its contents are boilerplate; the interesting things happen
+ inside the 
+\family typewriter
+<body>
+\family default
+ element.
+ There are three elements here:
+\end_layout
+
+\begin_layout Enumerate
+The 
+\family typewriter
+<lift:bind name=
+\begin_inset Quotes erd
+\end_inset
+
+content
+\begin_inset Quotes erd
+\end_inset
+
+ />
+\family default
+ element determines where the contents of our index.html file are bound (inserted
+).
+ The 
+\emph on
+name
+\emph default
+ attribute should match the corresponding 
+\emph on
+at
+\emph default
+ attribute from our 
+\family typewriter
+<lift:surround>
+\family default
+ element.
+\end_layout
+
+\begin_layout Enumerate
+The 
+\family typewriter
+<lift:Menu.builder />
+\family default
+ element is a special element that builds a menu based on the SiteMap
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+SiteMap
+\end_layout
+
+\end_inset
+
+.
+ The SiteMap is a high-level site directory component that not only provides
+ a centralized place to define a site menu, but allows you to control when
+ certain links are displayed (based on, say, whether a user is logged in
+ or what roles they have) and provides a page-level access control mechanism.
+\end_layout
+
+\begin_layout Enumerate
+The 
+\family typewriter
+<lift:msgs/>
+\family default
+ element allows Lift (or your code) to display messages on a page as it's
+ rendered.
+ These could be status messages, error messages, etc.
+ Lift has facilities to set one or more messages from inside your logic
+ code.
+\end_layout
+
+\begin_layout Standard
+Now let's look back at the 
+\family typewriter
+<lift:helloWorld.howdy/>
+\family default
+ element from the 
+\family typewriter
+index.html
+\family default
+ file.
+ This element (and the 
+\family typewriter
+<lift:Menu.builder />
+\family default
+ element, actually) is called a 
+\emph on
+snippet
+\emph default
+, and it's of the form
+\end_layout
+
+\begin_layout LyX-Code
+<lift:class.method>
+\end_layout
+
+\begin_layout Standard
+Where 
+\family typewriter
+class
+\family default
+ is the name of a Scala class defined in our project in the 
+\family typewriter
+demo.helloworld.snippets
+\family default
+ package and 
+\family typewriter
+method
+\family default
+ is a method defined on that class.
+ Lift does a little translation on the class name to change camel-case back
+ into title-case and then locates the class.
+ In our demo the class is located under 
+\family typewriter
+src/main/scala/demo/helloworld/snippet/HelloWorld.scala
+\family default
+, and is shown here:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+package demo.helloworld.snippet
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+class HelloWorld {
+\end_layout
+
+\begin_layout Plain Layout
+
+  def howdy: NodeSeq = <span>Welcome to helloworld at {new java.util.Date}</span>
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+As you can see, the howdy method is pretty straightforward.
+ Lift binds the result of executing the method into the location of the
+ snippet element (in this case a span).
+ It's interesting to note that a method may itself return other 
+\family typewriter
+<lift:...>
+\family default
+ elements in its content and they will be processed as well.
+ This recursive nature of template composition is part of the fundamental
+ power of Lift; it means that reusing snippets and template pieces across
+ your application is essentially free.
+ You should never have to write the same functionality more than once.
+\end_layout
+
+\begin_layout Standard
+Now that we've covered all of the actual content elements, the final piece
+ of the puzzle is the 
+\family typewriter
+Boot
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+Boot
+\end_layout
+
+\end_inset
+
+
+\family default
+ class.
+ The 
+\family typewriter
+Boot
+\family default
+ class is responsible for the configuration and setup of the Lift framework.
+ As we've stated earlier in the chapter, most of Lift has sensible defaults,
+ so the 
+\family typewriter
+Boot
+\family default
+ class generally contains only the extras that you need.
+ The 
+\family typewriter
+Boot
+\family default
+ class is always located in the 
+\family typewriter
+bootstrap.liftweb
+\family default
+ package and is shown here (we've skipped imports, etc):
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "firstline=13"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+package bootstrap.liftweb
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import net.liftweb.util._
+\end_layout
+
+\begin_layout Plain Layout
+
+import net.liftweb.http._
+\end_layout
+
+\begin_layout Plain Layout
+
+import net.liftweb.sitemap._
+\end_layout
+
+\begin_layout Plain Layout
+
+import net.liftweb.sitemap.Loc._
+\end_layout
+
+\begin_layout Plain Layout
+
+import Helpers._
+\end_layout
+
+\begin_layout Plain Layout
+
+ 
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+  * A class that's instantiated early and run.
+  It allows the application
+\end_layout
+
+\begin_layout Plain Layout
+
+  * to modify lift's environment
+\end_layout
+
+\begin_layout Plain Layout
+
+  */
+\end_layout
+
+\begin_layout Plain Layout
+
+class Boot {
+\end_layout
+
+\begin_layout Plain Layout
+
+  def boot {
+\end_layout
+
+\begin_layout Plain Layout
+
+    // where to search snippet
+\end_layout
+
+\begin_layout Plain Layout
+
+    LiftRules.addToPackages("demo.helloworld")     
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    // Build SiteMap
+\end_layout
+
+\begin_layout Plain Layout
+
+    val entries = Menu(Loc("Home", "/", "Home")) :: Nil 
+\end_layout
+
+\begin_layout Plain Layout
+
+    LiftRules.setSiteMap(SiteMap(entries:_*))
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+There are two basic configuration elements, placed in the 
+\family typewriter
+boot 
+\family default
+method.
+ The first is the 
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+LiftRules.addToPackages
+\family default
+ method.
+ It tells lift to base its searches in the 
+\family typewriter
+demo.helloworld
+\family default
+ package.
+ That means that snippets would be located in the 
+\family typewriter
+demo.helloworld.snippets
+\family default
+ package, views would be located in the 
+\family typewriter
+demo.helloworld.views
+\family default
+ package, etc.
+ If you have more than one hierarchy (multiple packages) you can just call
+ 
+\family typewriter
+addToPackages
+\family default
+ multiple times.
+ The second item in the Boot class is the SiteMenu setup.
+ 
+\end_layout
+
+\begin_layout Standard
+Now that we've covered a basic example we hope you're beginning to see why
+ Lift is so powerful and can make you more productive.
+ We've barely scratched the surface on Lift's templating and binding capabilitie
+s, but what we've shown here is already a big step.
+ In roughly 10 lines of Scala code and about 30 in XML we have a functional
+ site.
+ If we wanted to add more pages we've already got our default template set
+ up so we don't need to write the same boilerplate HTML multiple times.
+ In our example we're directly generating the content for our 
+\family typewriter
+helloWorld.howdy
+\family default
+ snippet, but in later examples we'll show just how easy it is to actually
+ pull content 
+\emph on
+from the template itself
+\emph default
+ into the snippet and modify it as needed.
+\end_layout
+
+\begin_layout Standard
+We hope you're as excited about getting started with Lift as we are!
+\end_layout
+
+\end_body
+\end_document

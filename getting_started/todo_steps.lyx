@@ -1,0 +1,4230 @@
+#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
+\begin_document
+\begin_header
+\textclass book
+\begin_preamble
+% "define" Scala
+\lstdefinelanguage{scala}{morekeywords={class,object,trait,extends,with,new,if,while,for,def,val,var,this,package,import},
+otherkeywords={->,=>},
+sensitive=true,
+morecomment=[l]{//},
+morecomment=[s]{/*}{*/},
+morestring=[b]"}
+
+% Default settings for code listings
+\lstset{frame=single,language=scala,basicstyle=\footnotesize\ttfamily,aboveskip=3mm,belowskip=3mm,showstringspaces=false}
+
+% \renewcommand{\ttdefault}{pcr}{2}
+\DeclareTextFontCommand{\texttt}{\small\ttfamily}
+\renewcommand{\url}{\texttt}
+\end_preamble
+\use_default_options false
+\language english
+\inputencoding auto
+\font_roman newcent
+\font_sans default
+\font_typewriter courier
+\font_default_family default
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 20
+
+\graphics default
+\float_placement H
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize letterpaper
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\cite_engine basic
+\use_bibtopic false
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 2
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\author "" 
+\author "" 
+\end_header
+
+\begin_body
+
+\begin_layout Chapter
+Basic Lift
+\end_layout
+
+\begin_layout Section
+What we're going to cover
+\end_layout
+
+\begin_layout Standard
+We're going to build a basic to do application in Lift.
+ The application will allow you to create and account, log in, and enter/edit
+ to do items.
+\end_layout
+
+\begin_layout Standard
+This example will show you:
+\end_layout
+
+\begin_layout Itemize
+How to create a basic Lift web application
+\end_layout
+
+\begin_layout Itemize
+How to create a model that maps to a relational database
+\end_layout
+
+\begin_layout Itemize
+How to create web pages that correspond to back end logic
+\end_layout
+
+\begin_layout Itemize
+How to bind the elements on the web page to dynamically created content
+ 
+\end_layout
+
+\begin_layout Section
+Creating a new project
+\end_layout
+
+\begin_layout Standard
+The first thing to do is create a new project.
+ We do this with a build tool called Maven.
+ Maven manages compile and test phases of development as well as managing
+ dependencies by downloading required code from servers on the Internet.
+\end_layout
+
+\begin_layout Standard
+From a command prompt, type:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+mvn archetype:generate -U  
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+ -DarchetypeGroupId=net.liftweb 
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+ -DarchetypeArtifactId=lift-archetype-basic 
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+ -DarchetypeVersion=0.10 
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+ -DremoteRepositories=http://scala-tools.org/repo-releases 
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+ -DgroupId=com.liftworkshop 
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+ -DartifactId=todo 
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+ -Dversion=0.1-SNAPSHOT
+\end_layout
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Create a new project
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Change directories into the newly created todo directory with: 
+\family typewriter
+cd todo
+\end_layout
+
+\begin_layout Standard
+Type: 
+\family typewriter
+mvn jetty:run
+\family default
+ and from your browser, go to 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://localhost:8080
+\end_layout
+
+\end_inset
+
+ You can see that your application is running.
+ Switch back to your terminal window and type 
+\family typewriter
+ctrl-c
+\family default
+ to stop the Jetty web server.
+\end_layout
+
+\begin_layout Section
+Adding a model
+\end_layout
+
+\begin_layout Standard
+Now that we've got a basic running application, we're going to add some
+ custom code.
+ Create the file 
+\family typewriter
+src/main/scala/com/liftworkshop/model/ToDo.scala
+\family default
+ Put the following code into the file:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+package com.liftworkshop.model
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import net.liftweb._
+\end_layout
+
+\begin_layout Plain Layout
+
+import mapper._
+\end_layout
+
+\begin_layout Plain Layout
+
+import http._
+\end_layout
+
+\begin_layout Plain Layout
+
+import SHtml._
+\end_layout
+
+\begin_layout Plain Layout
+
+import util._
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+class ToDo extends LongKeyedMapper[ToDo] with IdPK {
+\end_layout
+
+\begin_layout Plain Layout
+
+  def getSingleton = ToDo
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  object done extends MappedBoolean(this)
+\end_layout
+
+\begin_layout Plain Layout
+
+  object owner extends MappedLongForeignKey(this, User)
+\end_layout
+
+\begin_layout Plain Layout
+
+  object priority extends MappedInt(this)  {
+\end_layout
+
+\begin_layout Plain Layout
+
+    override def defaultValue = 5
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+  object desc extends MappedPoliteString(this, 128)
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+object ToDo extends ToDo with LongKeyedMetaMapper[ToDo] 
+\end_layout
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+The ToDo model
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Let's explore the file.
+\end_layout
+
+\begin_layout Standard
+The 
+\family typewriter
+package
+\family default
+ statement tells the Scala compiler what package, or code hierarchy, these
+ classes are associated with.
+\end_layout
+
+\begin_layout Standard
+The 
+\family typewriter
+import
+\family default
+ statements tell the compiler that we're going to be using resources from
+ other packages and 
+\family typewriter
+object
+\family default
+ singletons.
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+class ToDo extends LongKeyedMapper[ToDo]
+\family default
+ creates a class which is a subclass of the 
+\family typewriter
+LongKeyedMapper
+\family default
+ class.
+ This class maps objects, models, to a relational database.
+ The class requires that the table has a primary key.
+ The 
+\family typewriter
+[ToDo]
+\family default
+ part declares that the Mapper is mapping a ToDo...
+ yes, this should be inferred by the compiler, but sometimes the compiler
+ needs some extra hints.
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+with IdPK
+\family default
+ mixes a trait into 
+\family typewriter
+ToDo
+\family default
+.
+ A trait is like a Java interface, but it also defines methods.
+ Many traits can be mixed into a single class.
+ Traits can define rules about what kind of classes they can be mixed into.
+ Traits are similar to Ruby mixins.
+\end_layout
+
+\begin_layout Standard
+In this case, the 
+\family typewriter
+IdPK
+\family default
+ trait adds an 
+\family typewriter
+id
+\family default
+ field to the 
+\family typewriter
+ToDo
+\family default
+ and makes the 
+\family typewriter
+id
+\family default
+ field the primary key of 
+\family typewriter
+ToDo
+\family default
+.
+\end_layout
+
+\begin_layout Standard
+Within the ToDo class, 
+\family typewriter
+def getSingleton = ToDo
+\family default
+ defines the singleton or meta object that is associated with the model
+ class.
+ Huh? Each instance of 
+\family typewriter
+ToDo
+\family default
+ class represents a row in the database.
+ There may be many instances of the 
+\family typewriter
+ToDo
+\family default
+ class.
+ There is a single object that represents the database table itself.
+ It has factory methods that will vend new instances of 
+\family typewriter
+ToDo
+\family default
+s or allow queries that will return a set of 
+\family typewriter
+ToDo
+\family default
+s.
+ The 
+\family typewriter
+ToDo
+\family default
+ object singleton is like Smalltalk and Ruby class objects.
+ It is not like Java static methods as the singleton is an instance rather
+ than a collection of static methods on a class.
+ 
+\family typewriter
+getSingleton
+\family default
+ associates the 
+\family typewriter
+ToDo
+\family default
+ instance with the 
+\family typewriter
+ToDo
+\family default
+ singleton.
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+object done extends MappedBoolean(this)
+\family default
+ defines a Boolean 
+\family typewriter
+done
+\family default
+ field on the 
+\family typewriter
+ToDo
+\family default
+ model.
+ 
+\family typewriter
+object done
+\family default
+ declares that there is a field on the 
+\family typewriter
+ToDo
+\family default
+ model.
+ The field is represented as a singleton, a single instance of a class,
+ per 
+\family typewriter
+ToDo
+\family default
+ model instance.
+ The 
+\family typewriter
+done
+\family default
+ field 
+\family typewriter
+extends MappedBoolean(this)
+\family default
+ extends the 
+\family typewriter
+MappedBoolean
+\family default
+ class and is associated with this instance of the 
+\family typewriter
+ToDo
+\family default
+ model.
+ This is the pattern for defining fields that map between model objects
+ and relations databases.
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+object owner extends MappedLongForeignKey(this, User)
+\family default
+ defines an 
+\family typewriter
+owner
+\family default
+ field on the 
+\family typewriter
+ToDo
+\family default
+ model.
+ The 
+\family typewriter
+owner
+\family default
+ field is a foreign key reference to the 
+\family typewriter
+User
+\family default
+ model/table.
+\end_layout
+
+\begin_layout Standard
+We declare the priority field as a 
+\family typewriter
+MappedInt
+\family default
+.
+ We subclass 
+\family typewriter
+MappedInt
+\family default
+ and change the default value of the priority field to 5.
+ The ability to subclass fields and change behavior such as default values,
+ validation rules, etc.
+ is a very powerful construct.
+ It keeps the business logic right where the field is defined.
+ It's also using Scala rather than some annotations.
+ Because it's written in Scala, developers need not learn a separate annotations
+ 
+\begin_inset Quotes eld
+\end_inset
+
+language
+\begin_inset Quotes erd
+\end_inset
+
+ in order to describe properties of a field.
+ Additionally, the tools used to develop the application don't need to know
+ about or validate a separate set of annotations.
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+object desc extends MappedPoliteString(this, 128)
+\family default
+ defines the 
+\family typewriter
+desc
+\family default
+ field as a 
+\family typewriter
+String
+\family default
+ on the 
+\family typewriter
+ToDo
+\family default
+ model.
+ The 
+\family typewriter
+desc
+\family default
+ field is the description of the to do item.
+ A 
+\family typewriter
+MappedPoliteString
+\family default
+ maps a 
+\family typewriter
+String
+\family default
+ in Scala to a 
+\family typewriter
+VARCHAR
+\family default
+ column in the database.
+ It's 
+\begin_inset Quotes eld
+\end_inset
+
+polite
+\begin_inset Quotes erd
+\end_inset
+
+ because it will automatically truncate the string to the maximum column
+ size, in this case 128 characters, before storing it in the database.
+\end_layout
+
+\begin_layout Standard
+Fields have a type beyond 
+\family typewriter
+String
+\family default
+, 
+\family typewriter
+Int
+\family default
+, 
+\family typewriter
+Boolean
+\family default
+.
+ Lift comes with a number of helper field types including 
+\family typewriter
+MappedEmail
+\family default
+, 
+\family typewriter
+MappedUniqueId
+\family default
+, 
+\family typewriter
+MappedTimeZone
+\family default
+, 
+\family typewriter
+MappedPostalCode
+\family default
+, etc.
+ The fields can have their own presentation logic for display and form generatio
+n.
+ They can have validation and conversion rules.
+ For example, 
+\family typewriter
+MappedEmail
+\family default
+ validates the entry against a regular expression for email addresses as
+ well as converting all input to lower case.
+ The conversion to lower case also applies to queries against the field.
+ This means that the logic of 
+\begin_inset Quotes eld
+\end_inset
+
+all email addresses are in lower case
+\begin_inset Quotes erd
+\end_inset
+
+ is encapsulated in a single location in your program, rather than at each
+ location that does a query against the database.
+ Mapped fields also have read and write access control rules.
+ Thus, you could create a 
+\family typewriter
+MappedTaxpayerId
+\family default
+ that would obscure itself on display except if it's being presented to
+ the owner.
+ Encapsulation of the business and presentation logic of the fields like
+ this makes for more secure applications that also have lower defects.
+ Keeping the semantic meaning (it's an email address, not just a 
+\family typewriter
+String
+\family default
+), with the fields for as long as possible helps everyone on the project
+ better understand the code.
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+object ToDo extends ToDo with LongKeyedMetaMapper[ToDo]
+\family default
+ creates a singleton object which provides the meta functionality to the
+ 
+\family typewriter
+ToDo
+\family default
+ class.
+ The 
+\family typewriter
+ToDo
+\family default
+ object is a singleton.
+ One instance will be created the first time the object is referenced in
+ your program.
+ It extends the 
+\family typewriter
+ToDo
+\family default
+ class that we've defined with 
+\family typewriter
+LongKeyedMetaMapper[ToDo]
+\family default
+.
+ The 
+\family typewriter
+LongKeyedMetaMapper
+\family default
+ trait extends the class with the methods to create instances of 
+\family typewriter
+ToDo
+\family default
+, perform queries, and do general housekeeping.
+ For example, the 
+\family typewriter
+ToDo
+\family default
+ object has a 
+\family typewriter
+findAll()
+\family default
+ method that returns a 
+\family typewriter
+List[ToDo]
+\family default
+.
+ The 
+\family typewriter
+findAll()
+\family default
+ method is supplied by 
+\family typewriter
+LongKeyedMetaMapper
+\family default
+.
+\end_layout
+
+\begin_layout Section
+Boot and Schemifier
+\end_layout
+
+\begin_layout Standard
+Next, let's update the 
+\family typewriter
+Boot
+\family default
+ file so that Lift's Schemifier will manage the 
+\family typewriter
+ToDo
+\family default
+ table.
+ Open 
+\family typewriter
+src/main/scala/bootstrap/liftweb/Boot.scala
+\family default
+ and change the line:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+Schemifier.schemify(true, Log.infoF _, User)
+\end_layout
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Original Schemifier line
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+To:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+Schemifier.schemify(true, Log.infoF _, User, ToDo)
+\end_layout
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Updated Schemifier line
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Scala is a statically typed language.
+ That means at compile time, the types of all parameters and variables is
+ known.
+ This allows the compiler to perform many checks that one would otherwise
+ have to write tests for.
+ It also allows new team members to better understand code because the type
+ of parameters to method calls must be declared.
+ Further, a powerful typing system such as Scala's allows you to reason
+ about the program's behavior.
+\end_layout
+
+\begin_layout Standard
+Because the Lift model classes define the columns they expect to be in the
+ database and the types and rules associated with those columns, Lift provides
+ a mechanism to update the database to reflect the schema that the model
+ expects.
+ That mechanism is Schemifier which takes a collection of models, inspects
+ the database and makes sure the right tables, right columns, right indexes,
+ and right constraints are in the database.
+ Schemifier has lots of different modes and hooks.
+ It can inspect the database and recommend changes or make the changes for
+ you.
+ It can invoke code on table and column creation, allowing for migration
+ of table data.
+\end_layout
+
+\begin_layout Standard
+The above code adds the 
+\family typewriter
+ToDo
+\family default
+ model to the list of models that Schemifier checks for in the database.
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+Boot.scala
+\family default
+ is the first code that's executed when the Lift servlet gets loaded into
+ the servlet container.
+ For those non-J2EE sorts, it means that 
+\family typewriter
+Boot
+\family default
+ is run early and run only once.
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+Boot
+\family default
+ is where you wire your application together.
+ You define rules that route URLs to code.
+ You define how the database connections are generated, which, by default,
+ looks to JNDI.
+ You define how database transactions related to the HTTP request/response
+ life-cycle, site navigation and access control rules, how to determine
+ locale if browser headers are not good enough, etc.
+ For the ToDo application, we'll only change Schemifier as the rest of the
+ settings are correct.
+\end_layout
+
+\begin_layout Section
+Snippets: Bridging view to logic
+\end_layout
+
+\begin_layout Standard
+Web applications present information to the user primarily using HTML or
+ XHTML.
+ HTML designers are good at creating HTML and CSS, but writing code that
+ involves looping, branching, fields, methods, etc.
+ is not what HTML designers do.
+ Lift bridges between the XHTML markup and the logic that creates the dynamic
+ content with XML 
+\family typewriter
+<lift:xxx/>
+\family default
+ tags.
+ These tags refer to Lift snippets...
+ snippets of code that handle snippets of display logic.
+ Some Lift tag behavior is predefined.
+ Tags such as 
+\family typewriter
+<lift:surround/>
+\family default
+ have a default behavior.
+ However, you can create your own 
+\family typewriter
+<lift:xxx/>
+\family default
+ tags.
+ We're going to create the snippet code for 
+\family typewriter
+<lift:Util.in/>
+\family default
+ and 
+\family typewriter
+<lift:Util.out/>
+\family default
+ tags.
+ The 
+\family typewriter
+<lift:Util.in/>
+\family default
+ will only display its sub-children if a User is logged in.
+ The 
+\family typewriter
+<lift:Util.out/>
+\family default
+ tag will only display its content if no User is logged in.
+ Thus:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=XML"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+<lift:Util.out>
+\end_layout
+
+\begin_layout Plain Layout
+
+  Please Log In <b>Dude</b>
+\end_layout
+
+\begin_layout Plain Layout
+
+</lift:Util.out>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Will only display 
+\begin_inset Quotes eld
+\end_inset
+
+Please Log In 
+\series bold
+Dude
+\series default
+
+\begin_inset Quotes erd
+\end_inset
+
+ if nobody is logged in.
+\end_layout
+
+\begin_layout Standard
+Create the file 
+\family typewriter
+src/main/scala/com/liftworkshop/snippet/Util.scala
+\family default
+.
+ Populate the file with:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Util snippet
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+package com.liftworkshop.snippet
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import scala.xml.{NodeSeq}
+\end_layout
+
+\begin_layout Plain Layout
+
+import com.liftworkshop._
+\end_layout
+
+\begin_layout Plain Layout
+
+import model._
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+class Util {
+\end_layout
+
+\begin_layout Plain Layout
+
+  def in(html: NodeSeq) = 
+\end_layout
+
+\begin_layout Plain Layout
+
+    if (User.loggedIn_?) html else NodeSeq.Empty
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  def out(html: NodeSeq) =
+\end_layout
+
+\begin_layout Plain Layout
+
+    if (!User.loggedIn_?) html else NodeSeq.Empty
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+package com.liftworkshop.snippet
+\family default
+ defines the package for the code.
+ Lift looks for classes in the 
+\begin_inset Quotes eld
+\end_inset
+
+snippet
+\begin_inset Quotes erd
+\end_inset
+
+ package of your project.
+ If you look back in 
+\family typewriter
+Boot
+\family default
+, you'll see 
+\family typewriter
+LiftRules.addToPackages("com.liftworkshop")
+\family default
+ line.
+ This line tells Lift that your project package starts with 
+\begin_inset Quotes eld
+\end_inset
+
+com.liftworkshop
+\begin_inset Quotes erd
+\end_inset
+
+.
+ Lift uses this base package name to look up snippets in the 
+\begin_inset Quotes eld
+\end_inset
+
+snippet
+\begin_inset Quotes erd
+\end_inset
+
+ sub-package, view code in the 
+\begin_inset Quotes eld
+\end_inset
+
+view
+\begin_inset Quotes erd
+\end_inset
+
+ sub-package, and comet code in the 
+\begin_inset Quotes eld
+\end_inset
+
+comet
+\begin_inset Quotes erd
+\end_inset
+
+ sub-package.
+\end_layout
+
+\begin_layout Standard
+The 
+\family typewriter
+import
+\family default
+ lines tell Scala which other packages we're using.
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+class Util
+\family default
+ defines the name of the class.
+ By default, Lift looks for a class named 
+\begin_inset Quotes eld
+\end_inset
+
+Util
+\begin_inset Quotes erd
+\end_inset
+
+ when it encounters the 
+\family typewriter
+<lift:Util.xxx/>
+\family default
+ tag.
+ Lift will convert underscore separated names to CamelCase names when it
+ looks up classes.
+ Lift then looks for a public method named what comes after the period in
+ the tag name.
+ In Scala, unless you define a method's protection level, it's public.
+ Lift also only looks for methods defined in the class, not on super-classes.
+ This is to avoid any accidental access to methods from view tags.
+ You can also define custom mapping rules for snippets.
+ Also, Lift will look for a method called 
+\family typewriter
+render
+\family default
+ on the class if there's no period in the tag name.
+ Thus, 
+\family typewriter
+<lift:Util/>
+\family default
+ will map to 
+\family typewriter
+Util.render
+\family default
+.
+\end_layout
+
+\begin_layout Standard
+Some examples:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="5" columns="3">
+<features>
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+View code
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Class
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Method
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+<lift:foo/>
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+Foo
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+render
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+<lift:FooBar/>
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+FooBar
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+render
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+<lift:foo_bar/>
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+FooBar
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+render
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+<lift:foo_bar.baz/>
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+FooBar
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+baz
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+def in(html: NodeSeq) =
+\family default
+ defines a method that takes a parameter named 
+\family typewriter
+html
+\family default
+ with has 
+\family typewriter
+NodeSeq
+\family default
+ as the type.
+ We do not need to declare the return type as the compiler will infer it.
+ For any methods that are moderately complex, it's good citizenship to explicitl
+y declare the return type so someone can look at the code and understand
+ what it's doing.
+\end_layout
+
+\begin_layout Standard
+The body of the method 
+\family typewriter
+if (User.loggedIn_?) html else NodeSeq.Empty
+\family default
+ returns 
+\family typewriter
+html
+\family default
+, the child tags of the XHTML in the view.
+ 
+\family typewriter
+User.loggedIn_?
+\family default
+ is a method on the 
+\family typewriter
+User
+\family default
+ object.
+ It returns true if a user is logged into the application for the current
+ browser session.
+ In Scala, every statement has a return type.
+ Thus, if/else is like the Java ternary operator.
+ Thus, if a user is logged in, we return the child XHTML, otherwise we return
+ an empty sequence of nodes, XHTML.
+ Scala does not require an explicit 
+\family typewriter
+return
+\family default
+ statement as Scala returns the last expression evaluated in the method.
+\end_layout
+
+\begin_layout Standard
+The out method works similarly, but returns the child nodes if no user is
+ logged in.
+\end_layout
+
+\begin_layout Section
+Lift's 
+\begin_inset Quotes eld
+\end_inset
+
+View First
+\begin_inset Quotes erd
+\end_inset
+
+ design
+\end_layout
+
+\begin_layout Standard
+A philosophical digression.
+\end_layout
+
+\begin_layout Standard
+My first design goal with Lift was to make sure that no programming logic
+ and no programming symbols make it into the static display templates.
+\end_layout
+
+\begin_layout Standard
+ERB and JSP and ASP all have the fatal flaw of allowing code in the view.
+ This is bad for a bunch of reasons.
+ First, it makes editing the templates difficult with HTML layout tools
+ unless those tools are familiar with the syntax being used.
+ Second, there are 
+\begin_inset Quotes eld
+\end_inset
+
+foreign
+\begin_inset Quotes erd
+\end_inset
+
+ symbols in the layout, which tends to be less than optimal for the HTML
+ designers.
+ (On the Rails side of things, every Rails team I've seen has a Ruby coder
+ that also does the design.
+ While this is the norm in the Rails community, it is the exception when
+ team sizes are more than 2 or 3.) Third, every single Rails, JSP, and ASP
+ project I've ever seen (and I've been seeing them for a very long time)
+ has some non-trivial amount of business logic creep into the display.
+ Fourth, Scala has a very nice type system and when the type system is used
+ correctly, the compiler finds a lot of program errors, but when the code
+ is buried in templates, one has a much more difficult time using the powerful
+ Scala compiler tools.
+\end_layout
+
+\begin_layout Standard
+So, the static templates in Lift are strictly display only.
+ They can be manipulated with standard design tools (e.g., Dreamweaver).
+ They can never contain program logic.
+\end_layout
+
+\begin_layout Standard
+Rails' 
+\begin_inset Quotes eld
+\end_inset
+
+controller first
+\begin_inset Quotes erd
+\end_inset
+
+ dispatch mechanism makes the assumption that there is only one piece of
+ 
+\begin_inset Quotes eld
+\end_inset
+
+logic
+\begin_inset Quotes erd
+\end_inset
+
+ on the page and the rest is decoration.
+ My experience doing web work is just the opposite.
+ There are typically 3 or more of pieces of logic on a page (dynamic menu
+ bars, search boxes, shopping cart, real-time chat, etc.) and having to choose
+ which piece of logic make the 
+\begin_inset Quotes eld
+\end_inset
+
+controller
+\begin_inset Quotes erd
+\end_inset
+
+ is less than optimal.
+\end_layout
+
+\begin_layout Standard
+So, the quintessential use of lift's templates are as follows:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+<html>
+\end_layout
+
+\begin_layout Plain Layout
+
+ ...
+\end_layout
+
+\begin_layout Plain Layout
+
+<lift:Show.myForm form="POST">
+\end_layout
+
+\begin_layout Plain Layout
+
+  <tr>
+\end_layout
+
+\begin_layout Plain Layout
+
+    <td>Name</td>
+\end_layout
+
+\begin_layout Plain Layout
+
+    <td><f:name><input type="text"/></f:name></td>
+\end_layout
+
+\begin_layout Plain Layout
+
+  </tr> 
+\end_layout
+
+\begin_layout Plain Layout
+
+  <tr>
+\end_layout
+
+\begin_layout Plain Layout
+
+    <td>Birthyear</td>
+\end_layout
+
+\begin_layout Plain Layout
+
+    <td><f:year>
+\end_layout
+
+\begin_layout Plain Layout
+
+          <select><option>2007</option></select>
+\end_layout
+
+\begin_layout Plain Layout
+
+    </f:year></td>
+\end_layout
+
+\begin_layout Plain Layout
+
+  </tr>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <tr>
+\end_layout
+
+\begin_layout Plain Layout
+
+    <td>&nbsp;</td>
+\end_layout
+
+\begin_layout Plain Layout
+
+    <td><input type="submit" value="Add"/></td>
+\end_layout
+
+\begin_layout Plain Layout
+
+  </tr>
+\end_layout
+
+\begin_layout Plain Layout
+
+</lift:Show.myForm>
+\end_layout
+
+\begin_layout Plain Layout
+
+</html>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+So we've got a Lift snippet invocation with the valid HTML form and some
+ additional tags.
+ So far (with the proper name-space declarations) this page is valid XHTML.
+ This page can be viewed in a browser or opened and edited in Dreamweaver.
+\end_layout
+
+\begin_layout Standard
+In Lift, the snippet is the equivalent of a Rails controller: it is the
+ instantiation of a class and invocation of a method on the class.
+ Because you can have multiple snippets on a page, you can call out multiple
+ logic streams on a given page and there's no need to choose the primary
+ logic stream.
+\end_layout
+
+\begin_layout Standard
+The 
+\family typewriter
+form="post"
+\family default
+ attribute is a shortcut.
+ It automatically wraps the enclosed XHTML in a 
+\family typewriter
+<form method='post' target={current page...
+ it's a post-back}>...</form>
+\family default
+ tag.
+\end_layout
+
+\begin_layout Standard
+The 
+\family typewriter
+<f:xxx/>
+\family default
+ tags are bind points for the business logic.
+ They allow your snippet to easily replace the tag and its children with
+ what is supposed to be displayed.
+\end_layout
+
+\begin_layout Standard
+So, your Lift code will look like: 
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+class Show {
+\end_layout
+
+\begin_layout Plain Layout
+
+   def myForm(xhtml: NodeSeq) = {
+\end_layout
+
+\begin_layout Plain Layout
+
+     var name = ""
+\end_layout
+
+\begin_layout Plain Layout
+
+     def handleYear(year: String) {
+\end_layout
+
+\begin_layout Plain Layout
+
+       ...
+ the form's been submitted...
+ do something
+\end_layout
+
+\begin_layout Plain Layout
+
+     }
+\end_layout
+
+\begin_layout Plain Layout
+
+     bind("f", xhtml, "name" -> text(name, name = _),
+\end_layout
+
+\begin_layout Plain Layout
+
+                      "year" -> select((1900 to 2007).
+\end_layout
+
+\begin_layout Plain Layout
+
+                                toList.map(_.toString).
+\end_layout
+
+\begin_layout Plain Layout
+
+                                reverse.map(v => (v, v)), 
+\end_layout
+
+\begin_layout Plain Layout
+
+                                Empty, handleYear _))
+\end_layout
+
+\begin_layout Plain Layout
+
+   }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Note that no display code has crept into the snippet.
+ You've simply bound the XHTML created by 
+\family typewriter
+text()
+\family default
+ and 
+\family typewriter
+select()
+\family default
+ to the 
+\family typewriter
+<f:name/>
+\family default
+ and 
+\family typewriter
+<f:year/>
+\family default
+ tags in the incoming XHTML.
+\end_layout
+
+\begin_layout Standard
+Also, you've bound two functions (the anonymous function 
+\family typewriter
+name = _
+\family default
+ and 
+\family typewriter
+handleYear
+\family default
+) to the XHTML form elements.
+ When the form is posted, these functions (which are bound to local variables)
+ will be statefully invoked.
+\end_layout
+
+\begin_layout Standard
+If you are displaying a table rather than a form, then the same binding
+ logic still works.
+ For example: 
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+<table>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <lift:Show.users>
+\end_layout
+
+\begin_layout Plain Layout
+
+    <tr>
+\end_layout
+
+\begin_layout Plain Layout
+
+      <td><f:first_name>David</f:first_name></td>
+\end_layout
+
+\begin_layout Plain Layout
+
+      <td><f:last_name>Pollak</f:last_name></td>
+\end_layout
+
+\begin_layout Plain Layout
+
+    </tr>
+\end_layout
+
+\begin_layout Plain Layout
+
+  </lift:Show.users>
+\end_layout
+
+\begin_layout Plain Layout
+
+</table>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The snippet looks like:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+class Show {
+\end_layout
+
+\begin_layout Plain Layout
+
+   def users(xhtml: NodeSeq) = 
+\end_layout
+
+\begin_layout Plain Layout
+
+     Users.findAll.flatMap(user => bind("f", 
+\end_layout
+
+\begin_layout Plain Layout
+
+             xhtml, "first_name" -> user.firstName, 
+\end_layout
+
+\begin_layout Plain Layout
+
+                    "last_name" -> user.nameName))
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If you take the time to clearly define the bind points, then you can have
+ no display code at all in your snippets.
+\end_layout
+
+\begin_layout Standard
+Can display logic slip into a snippet? Yes.
+\end_layout
+
+\begin_layout Standard
+Has display logic ever crept into a method called from an ERB template?
+ Yes, and very often it's a source of a potential Cross Site Scripting vulnerabi
+lity.
+\end_layout
+
+\begin_layout Standard
+Has business logic ever crept into an ERB template? Yes.
+\end_layout
+
+\begin_layout Standard
+In Lift, display can creep into a snippet, but business logic cannot creep
+ into a the static display template.
+ Yes, your designers will still have to police putting display logic in
+ the snippet code, but the coders will not have to police business logic
+ in the templates.
+\end_layout
+
+\begin_layout Standard
+Back to our regularly scheduled code writing.
+\end_layout
+
+\begin_layout Section
+Updating the ToDo view
+\end_layout
+
+\begin_layout Standard
+We're going to add view code to our application.
+\end_layout
+
+\begin_layout Standard
+Open 
+\family typewriter
+src/main/webapp/index.html
+\family default
+ and replace the file with:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=XML"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+index.html
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<lift:surround with="default" at="content">
+\end_layout
+
+\begin_layout Plain Layout
+
+  <lift:Util.out>Please
+\end_layout
+
+\begin_layout Plain Layout
+
+    <lift:menu.item name="Login">Log In</lift:menu.item>
+\end_layout
+
+\begin_layout Plain Layout
+
+    </lift:Util.out>
+\end_layout
+
+\begin_layout Plain Layout
+
+</lift:surround>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+<lift:surround with="default" at="content">
+\family default
+ surrounds into child content with a template called 
+\family typewriter
+default
+\family default
+ and places the content of this file at a bind-point called 
+\family typewriter
+content
+\family default
+.
+ Your page can bind to multiple child items.
+ Thus your page can define main content, left side content, footer content,
+ etc.
+ Additionally, templates can be hierarchical and nested.
+ By convention, templates are located in the 
+\family typewriter
+src/main/webapp/templates-hidden
+\family default
+ directory.
+ Lift will not directly serve request for directories that have 
+\family typewriter
+-hidden
+\family default
+ in their name.
+\end_layout
+
+\begin_layout Standard
+We're using our 
+\family typewriter
+<lift:Util.out/>
+\family default
+ tag to display content only if there's no user logged in.
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+<lift:menu.item name="Login">Log In</lift:menu.item>
+\family default
+ tag accesses some Lift built in snippets to create an 
+\family typewriter
+<a href=
+\begin_inset Quotes erd
+\end_inset
+
+...
+\begin_inset Quotes erd
+\end_inset
+
+/>
+\family default
+ to the page in site navigation called 
+\begin_inset Quotes eld
+\end_inset
+
+Login
+\begin_inset Quotes erd
+\end_inset
+
+.
+ Thus, your application doesn't need to know the URL of the Login page in
+ order to access it and if site navigation changes, the URL will get updated.
+ Links will not be generated if page access control rules prohibit the user
+ from accessing the page.
+\end_layout
+
+\begin_layout Section
+Seeing if the snippet works
+\end_layout
+
+\begin_layout Standard
+Enter 
+\family typewriter
+mvn jetty:run
+\family default
+ on your terminal.
+ Note in the terminal output that Schemifier has created the 
+\family typewriter
+todo
+\family default
+ table:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+INFO - CREATE TABLE todo (priority INTEGER , ...
+\end_layout
+
+\begin_layout Plain Layout
+
+INFO - ALTER TABLE todo ADD CONSTRAINT todo_PK PRIMARY KEY(id)
+\end_layout
+
+\begin_layout Plain Layout
+
+INFO - CREATE INDEX todo_owner ON todo ( owner )
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Please navigate to 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://localhost:8080
+\end_layout
+
+\end_inset
+
+ You should see your application running and a message asking you to log
+ in.
+ Using the navigation on the left side of your browser, please click the
+ 
+\begin_inset Quotes eld
+\end_inset
+
+Sign Up
+\begin_inset Quotes erd
+\end_inset
+
+ link.
+ Once you've successfully completed the signup process, you'll be returned
+ to the home page.
+ There should no longer be a message prompting you to log in.
+\end_layout
+
+\begin_layout Standard
+So far, we've created a model to hold our to do items, written a snippet
+ to bridge between the view and business logic, and we've seen how to update
+ our view to access the snippet.
+\end_layout
+
+\begin_layout Standard
+Next, we'll create the view and snippet code that allows us to create a
+ to do item.
+\end_layout
+
+\begin_layout Section
+Creating a to do item
+\end_layout
+
+\begin_layout Standard
+Create a new snippet in src/main/scala/com/liftcode/snippet/TD.scala with
+ the following code:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+TD.scala
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+package com.liftworkshop.snippet
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import com.liftworkshop._
+\end_layout
+
+\begin_layout Plain Layout
+
+import model._
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import net.liftweb._
+\end_layout
+
+\begin_layout Plain Layout
+
+import http._
+\end_layout
+
+\begin_layout Plain Layout
+
+import SHtml._
+\end_layout
+
+\begin_layout Plain Layout
+
+import S._
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import js._
+\end_layout
+
+\begin_layout Plain Layout
+
+import JsCmds._
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import mapper._
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import util._
+\end_layout
+
+\begin_layout Plain Layout
+
+import Helpers._
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import scala.xml.{NodeSeq, Text}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+class TD {
+\end_layout
+
+\begin_layout Plain Layout
+
+  def add(form: NodeSeq) = {
+\end_layout
+
+\begin_layout Plain Layout
+
+    val todo = ToDo.create.owner(User.currentUser)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    def checkAndSave(): Unit =
+\end_layout
+
+\begin_layout Plain Layout
+
+    todo.validate match {
+\end_layout
+
+\begin_layout Plain Layout
+
+      case Nil => todo.save ; S.notice("Added "+todo.desc)
+\end_layout
+
+\begin_layout Plain Layout
+
+      case xs => S.error(xs) ; S.mapSnippet("TD.add", doBind)
+\end_layout
+
+\begin_layout Plain Layout
+
+    }
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    def doBind(form: NodeSeq) =
+\end_layout
+
+\begin_layout Plain Layout
+
+    bind("todo", form,
+\end_layout
+
+\begin_layout Plain Layout
+
+         "priority" -> todo.priority.toForm,
+\end_layout
+
+\begin_layout Plain Layout
+
+         "desc" -> todo.desc.toForm,
+\end_layout
+
+\begin_layout Plain Layout
+
+         "submit" -> submit("New", checkAndSave))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    doBind(form)
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+There's a single top level method: 
+\family typewriter
+def add(form: NodeSeq)
+\family default
+.
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+val todo = ToDo.create.owner(User.currentUser)
+\family default
+ creates an instance of our 
+\family typewriter
+ToDo
+\family default
+ model and sets the item's owner to the currently logged in user.
+ This instance will be visible for the lifespan of the creation task, not
+ the lifespan of the HTTP request.
+ This statefullness makes it easier to write very complex applications in
+ Lift because you don't have to repopulate object values each time you service
+ a request.
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+def checkAndSave(): Unit
+\family default
+ defines a method.
+ Scala allows you to create methods that live inside of other methods.
+ These inner methods have access to the variables inside the method scope.
+ 
+\family typewriter
+checkAndSave
+\family default
+ has a return type of 
+\family typewriter
+Unit
+\family default
+ which is like Java's 
+\family typewriter
+void
+\family default
+.
+ Because 
+\family typewriter
+checkAndSave
+\family default
+ is a recursive method, its return type must be explicitly defined.
+ 
+\family typewriter
+todo.validate
+\family default
+ checks the validation rules for each field in 
+\family typewriter
+todo
+\family default
+.
+ It returns a 
+\family typewriter
+List[FieldError]
+\family default
+ (pronounced 
+\begin_inset Quotes eld
+\end_inset
+
+List of FieldError
+\begin_inset Quotes erd
+\end_inset
+
+).
+ We 
+\family typewriter
+match
+\family default
+ the list against a pattern.
+ If the list is 
+\family typewriter
+Nil
+\family default
+ (it has no elements), save the 
+\family typewriter
+todo
+\family default
+ instance and display a notice telling the user that the item was saved.
+ If we have validation failures, display those as errors.
+ 
+\family typewriter
+S.mapSnippet("TD.add", doBind)
+\family default
+ tells Lift that during the current HTTP request servicing, when the 
+\family typewriter
+TD.add
+\family default
+ snippet is requested, call the 
+\family typewriter
+doBind
+\family default
+ method rather than looking up the snippet in the class/method manner.
+ This means that the current state (the current 
+\family typewriter
+todo
+\family default
+ instance) will be preserved.
+ Yep, it's kinda a weird way to think.
+ Please continue reading and it may make more sense.
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+def doBind(form: NodeSeq)
+\family default
+ defines a method that takes XHTML and binds it to business logic.
+ 
+\family typewriter
+"priority" -> todo.priority.toForm
+\family default
+ binds the 
+\family typewriter
+<todo:priority/>
+\family default
+ tag to a form element, in this case a 
+\family typewriter
+<select/>
+\family default
+, that the priority field generates.
+ 
+\family typewriter
+"desc" -> todo.desc.toForm
+\family default
+ does the same for the 
+\family typewriter
+desc
+\family default
+ field.
+ 
+\family typewriter
+"submit" -> submit("New", checkAndSave)
+\family default
+ creates a submit button with the value 
+\begin_inset Quotes eld
+\end_inset
+
+New
+\begin_inset Quotes erd
+\end_inset
+
+.
+ When the form is processed, the 
+\family typewriter
+checkAndSave
+\family default
+ method will be called.
+\end_layout
+
+\begin_layout Standard
+In Lift, you don't have to explicitly name HTML form elements.
+ You don't have to explicitly look for parameters of a POST or a GET.
+ Lift takes care of this work for you.
+ You specify the type of the form element, the default value of that element
+ and the chunk of code, the function, to invoke when the form is submitted.
+ Lift takes care of managing the form field names and the state for you.
+ This has a bunch of benefits.
+ First, you don't have to coordinate form field names across your team.
+ Second, only the form fields presented to users can be submitted back which
+ avoids form tampering.
+ Third, form field names are randomly generated making it very difficult
+ for a hacker to engage in replay attacks.
+ If you want, you can dive down to the HTTP bare metal and get the parameters.
+ If you want, you can name your own HTML form elements.
+ But Lift lets you abstract away the HTTP request/response cycle.
+\end_layout
+
+\begin_layout Standard
+In this code, 
+\family typewriter
+todo.priority
+\family default
+ and 
+\family typewriter
+todo.desc
+\family default
+ have taken care of generating their own form elements.
+ When the form is submitted, those fields will be updated in the instance
+ of 
+\family typewriter
+todo
+\family default
+ created at the top of the method.
+ The instance of 
+\family typewriter
+todo
+\family default
+ used in 
+\family typewriter
+checkAndSave
+\family default
+ is the same instance that have just its fields updated.
+ If validation fails, we map the 
+\family typewriter
+TD.add
+\family default
+ snippet to an instance of 
+\family typewriter
+doBind
+\family default
+ (the 
+\family typewriter
+doBind
+\family default
+ method is turned into a function instance which is an object that is bound
+ to the current variable scope) that refers to the same instance of 
+\family typewriter
+todo
+\family default
+.
+ If your head is spinning, don't worry.
+\end_layout
+
+\begin_layout Section
+Updating the priority and desc fields
+\end_layout
+
+\begin_layout Standard
+Please open the 
+\family typewriter
+ToDo.scala
+\family default
+ file in the model package.
+\end_layout
+
+\begin_layout Standard
+Update the 
+\family typewriter
+priority
+\family default
+ object so that it looks like:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Update ToDo.scala
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+object priority extends MappedInt(this) {
+\end_layout
+
+\begin_layout Plain Layout
+
+    override def defaultValue = 5
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    override def validations = validPriority _ :: super.validations
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    def validPriority(in: Int): List[FieldError] =
+\end_layout
+
+\begin_layout Plain Layout
+
+    if (in > 0 && in <= 10) Nil
+\end_layout
+
+\begin_layout Plain Layout
+
+    else List(FieldError(this, <b>Priority must be 1-10</b>))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    override def _toForm = Full(select(ToDo.priorityList,
+\end_layout
+
+\begin_layout Plain Layout
+
+                                      Full(is.toString),
+\end_layout
+
+\begin_layout Plain Layout
+
+                                      f => set(f.toInt)))
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+override def validations = validPriority _ :: super.validations
+\family default
+ adds the 
+\family typewriter
+validatePriority
+\family default
+ function to the list of validation functions for this field.
+ The validation functions are consulted for each field during validation.
+ They return either an empty list, 
+\family typewriter
+Nil
+\family default
+, indicating no validation problems, or they return a list of errors.
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+def validPriority(in: Int): List[FieldError]
+\family default
+ defines the method that validates the priority.
+ 
+\family typewriter
+if (in > 0 && in <= 10) Nil
+\family default
+ if the priority if valid, return no errors.
+ Otherwise, return a list of one error: 
+\family typewriter
+else List(FieldError(this, <b>Priority must be 1-10</b>))
+\family default
+.
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+override def _toForm
+\family default
+ override the default form generation for the 
+\family typewriter
+priority
+\family default
+ field.
+ 
+\family typewriter
+select(ToDo.priorityList,
+\family default
+ create an HTML 
+\family typewriter
+<select/>
+\family default
+ with a list of values.
+ Set the default value to the current priority field value (is), converted
+ to a String: 
+\family typewriter
+Full(is.toString)
+\family default
+.
+ When the form is submitted, call this function: 
+\family typewriter
+f => set(f.toInt)
+\family default
+.
+ The function takes a single parameter, 
+\family typewriter
+f
+\family default
+.
+ The compiler infers the type of 
+\family typewriter
+f
+\family default
+ to be 
+\family typewriter
+String
+\family default
+ by looking at the signature of the 
+\family typewriter
+select()
+\family default
+ method.
+ 
+\family typewriter
+f.toInt
+\family default
+ converts the 
+\family typewriter
+String
+\family default
+ to an 
+\family typewriter
+Integer
+\family default
+ and the 
+\family typewriter
+set()
+\family default
+ method is called on the 
+\family typewriter
+priority
+\family default
+ field.
+ We can safely call 
+\family typewriter
+toInt
+\family default
+ because our function will only be called with one of the values originally
+ supplied to the 
+\family typewriter
+select()
+\family default
+ function.
+ Lift will not call your function with another value, so you can be sure
+ that if someone tampers with the form parameters, your application will
+ not be called with a bogus value.
+\end_layout
+
+\begin_layout Standard
+Let's update the 
+\family typewriter
+desc
+\family default
+ field to add validators:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Update ToDo.scala
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+ object desc extends MappedPoliteString(this, 128) {
+\end_layout
+
+\begin_layout Plain Layout
+
+    override def validations =
+\end_layout
+
+\begin_layout Plain Layout
+
+      valMinLen(3, "Description must be 3 characters") _ :: 
+\end_layout
+
+\begin_layout Plain Layout
+
+        super.validations
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In this case, we're using the 
+\family typewriter
+valMinLen()
+\family default
+ validator method built into Lift's 
+\family typewriter
+MappedString
+\family default
+, the superclass of 
+\family typewriter
+MappedPoliteString
+\family default
+.
+ By default, 
+\family typewriter
+MappedString
+\family default
+ generates an 
+\family typewriter
+<input type=
+\begin_inset Quotes erd
+\end_inset
+
+text
+\begin_inset Quotes erd
+\end_inset
+
+/>
+\family default
+ form element, so we don't have to explicitly define a 
+\family typewriter
+_toForm
+\family default
+ method.
+\end_layout
+
+\begin_layout Standard
+Finally, let's add the 
+\family typewriter
+priorityList
+\family default
+ helper method to our 
+\family typewriter
+ToDo
+\family default
+ object:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Update ToDo.scala
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+object ToDo extends ToDo with LongKeyedMetaMapper[ToDo] {
+\end_layout
+
+\begin_layout Plain Layout
+
+  lazy val priorityList = (1 to 10).
+\end_layout
+
+\begin_layout Plain Layout
+
+        map(v => (v.toString, v.toString))
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+A 
+\family typewriter
+lazy val
+\family default
+ is calculated once, the first time it's accessed.
+ 
+\family typewriter
+(1 to 10)
+\family default
+ creates a Range of numbers from 1 to 10, inclusive.
+ 
+\family typewriter
+map
+\family default
+ passes each number to a function which converts the 
+\family typewriter
+Integer
+\family default
+ to a 
+\family typewriter
+Pair[String, String]
+\family default
+ (pronounced Pair of Strings).
+ This value has been calculated once and can be used by any 
+\family typewriter
+ToDo.priority
+\family default
+ for form generation.
+\end_layout
+
+\begin_layout Section
+Hooking up the view to the form
+\end_layout
+
+\begin_layout Standard
+Open 
+\family typewriter
+src/main/webapp/index.html
+\end_layout
+
+\begin_layout Standard
+Inside the 
+\family typewriter
+<lift:surround>....</lift:surround>
+\family default
+ tag, insert these tags:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Insert into index.html
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  <lift:Util.in>
+\end_layout
+
+\begin_layout Plain Layout
+
+    <lift:TD.add form="post">
+\end_layout
+
+\begin_layout Plain Layout
+
+      <table>
+\end_layout
+
+\begin_layout Plain Layout
+
+        <tr>
+\end_layout
+
+\begin_layout Plain Layout
+
+          <td>Description:</td>
+\end_layout
+
+\begin_layout Plain Layout
+
+          <td><todo:desc>To Do</todo:desc></td>
+\end_layout
+
+\begin_layout Plain Layout
+
+        </tr>
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+        <tr>
+\end_layout
+
+\begin_layout Plain Layout
+
+          <td>
+\end_layout
+
+\begin_layout Plain Layout
+
+            Priority
+\end_layout
+
+\begin_layout Plain Layout
+
+          </td>
+\end_layout
+
+\begin_layout Plain Layout
+
+          <td>
+\end_layout
+
+\begin_layout Plain Layout
+
+            <todo:priority>
+\end_layout
+
+\begin_layout Plain Layout
+
+              <select><option>1</option></select>
+\end_layout
+
+\begin_layout Plain Layout
+
+            </todo:priority>
+\end_layout
+
+\begin_layout Plain Layout
+
+         </td>
+\end_layout
+
+\begin_layout Plain Layout
+
+        </tr>
+\end_layout
+
+\begin_layout Plain Layout
+
+        <tr>
+\end_layout
+
+\begin_layout Plain Layout
+
+          <td>&nbsp;</td>
+\end_layout
+
+\begin_layout Plain Layout
+
+          <td>
+\end_layout
+
+\begin_layout Plain Layout
+
+            <todo:submit>
+\end_layout
+
+\begin_layout Plain Layout
+
+              <button>New</button>
+\end_layout
+
+\begin_layout Plain Layout
+
+            </todo:submit>
+\end_layout
+
+\begin_layout Plain Layout
+
+          </td>
+\end_layout
+
+\begin_layout Plain Layout
+
+        </tr>
+\end_layout
+
+\begin_layout Plain Layout
+
+      </table>
+\end_layout
+
+\begin_layout Plain Layout
+
+    </lift:TD.add>
+\end_layout
+
+\begin_layout Plain Layout
+
+  </lift:Util.in>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Inside the 
+\family typewriter
+<lift:Util.in/>
+\family default
+ snippet tag, we have the 
+\family typewriter
+<lift:TD.add form='post'/>
+\family default
+ snippet tag.
+ This tag invokes the 
+\family typewriter
+TD.add
+\family default
+ snippet which binds HTML form elements to the 
+\family typewriter
+<todo:priority/>
+\family default
+, 
+\family typewriter
+<todo:desc/>
+\family default
+, and 
+\family typewriter
+<todo:submit/>
+\family default
+ elements.
+ Because we've specified
+\family typewriter
+ form='post'
+\family default
+ attribute, Lift creates a post-back form and places it around the snippet.
+ Lift processes snippets outside-in.
+ Thus, the 
+\family typewriter
+<lift:TD.add/>
+\family default
+ snippet tag will only be processed if it is returned from the 
+\family typewriter
+<lift:Util.in/>
+\family default
+ tag.
+\end_layout
+
+\begin_layout Section
+Trying it out again
+\end_layout
+
+\begin_layout Standard
+At your terminal, stop the running todo app if it's still running.
+ Type 
+\family typewriter
+mvn jetty:run
+\family default
+ and point your browser to 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://localhost:8080
+\end_layout
+
+\end_inset
+
+ and then log in using the username/password you created when you tested
+ the app last time around.
+ Once you log in, you should see the form that lets you add a to do item.
+ It's nice to have a 
+\begin_inset Quotes eld
+\end_inset
+
+write only
+\begin_inset Quotes erd
+\end_inset
+
+ application.
+ Next, we'll let you view and edit to do items.
+\end_layout
+
+\begin_layout Section
+Display and Editting to do items
+\end_layout
+
+\begin_layout Standard
+Now that we've created a mechanism to add to do items, it's time to display
+ those items and allow Ajax-style editting of the items.
+\end_layout
+
+\begin_layout Standard
+First, let's define the view.
+ Insert the following code inside the 
+\family typewriter
+<lift:Util.in/>
+\family default
+ tag:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+index.html inside <lift:Util.in/>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<lift:TD.list all_id="all_todos">
+\end_layout
+
+\begin_layout Plain Layout
+
+  <div id="all_todos">
+\end_layout
+
+\begin_layout Plain Layout
+
+    <div>Exclude done <todo:exclude/></div>
+\end_layout
+
+\begin_layout Plain Layout
+
+    <ul>
+\end_layout
+
+\begin_layout Plain Layout
+
+      <todo:list>
+\end_layout
+
+\begin_layout Plain Layout
+
+        <li>
+\end_layout
+
+\begin_layout Plain Layout
+
+          <todo:check><input type="checkbox"/></todo:check>
+\end_layout
+
+\begin_layout Plain Layout
+
+          <todo:priority>
+\end_layout
+
+\begin_layout Plain Layout
+
+            <select><option>1</option></select>
+\end_layout
+
+\begin_layout Plain Layout
+
+          </todo:priority>
+\end_layout
+
+\begin_layout Plain Layout
+
+          <todo:desc>To Do</todo:desc>
+\end_layout
+
+\begin_layout Plain Layout
+
+        </li>
+\end_layout
+
+\begin_layout Plain Layout
+
+      </todo:list>
+\end_layout
+
+\begin_layout Plain Layout
+
+    </ul>
+\end_layout
+
+\begin_layout Plain Layout
+
+  </div>
+\end_layout
+
+\begin_layout Plain Layout
+
+</lift:TD.list>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Some things of note in the above code.
+ Our snippet tag, 
+\family typewriter
+<lift:TD.list all_id="all_todos">
+\family default
+, has an 
+\family typewriter
+all_id
+\family default
+ attribute.
+ This will pass information, the name of the 
+\family typewriter
+id
+\family default
+ attribute, the the snippet.
+ We can see the 
+\family typewriter
+id
+\family default
+ attribute on 
+\family typewriter
+<div id="all_todos">
+\family default
+.
+ This defines the section of the HTML that we're going to change each time
+ we service an Ajax request.
+ Finally, 
+\family typewriter
+<todo:list>
+\family default
+ has a single child 
+\family typewriter
+<li>
+\family default
+ which also has bind points.
+ Our snippet will iterate over the list of to do items, binding each to
+ the children of 
+\family typewriter
+<todo:list/>
+\family default
+.
+\end_layout
+
+\begin_layout Standard
+At the top level (
+\emph on
+not
+\emph default
+ inside the 
+\family typewriter
+class TD {...}
+\family default
+ definition) insert this code:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+TD.scala define object
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+object QueryNotDone extends SessionVar(false)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Lift has a type-safe mechanism for storing variables during the scope of
+ a given session.
+ In Java, you would do something like casting a value retrieved from the
+ 
+\family typewriter
+HttpSession
+\family default
+.
+ For example: 
+\family typewriter
+String myString = (String) httpSession.getAttribute(
+\begin_inset Quotes eld
+\end_inset
+
+Something
+\begin_inset Quotes erd
+\end_inset
+
+);
+\family default
+ The problem with this code is that a developer may not remember that 
+\family typewriter
+Something
+\family default
+ is support to be a 
+\family typewriter
+String
+\family default
+ and put a 
+\family typewriter
+String[]
+\family default
+ in it.
+ Additionally, there's no well defined logic for creating a default value
+ for the attribute.
+\end_layout
+
+\begin_layout Standard
+Lift's 
+\family typewriter
+SessionVar
+\family default
+ is type-safe.
+ You cannot put anything other than it's defined type into it and when something
+ comes out of it, it's the same type that was put in.
+ A 
+\family typewriter
+String
+\family default
+ is always a 
+\family typewriter
+String
+\family default
+ and a 
+\family typewriter
+Boolean
+\family default
+ is always a 
+\family typewriter
+Boolean
+\family default
+.
+ Additionally, the 
+\family typewriter
+SessionVar
+\family default
+ has a default value.
+ If the 
+\family typewriter
+SessionVar
+\family default
+ accessed, but it is not defined, it will calculate its default value and
+ set itself to the default value.
+\end_layout
+
+\begin_layout Standard
+The above code defines a 
+\family typewriter
+SessionVar
+\family default
+ named 
+\family typewriter
+QueryNotDone
+\family default
+ with a default value of 
+\family typewriter
+false
+\family default
+.
+ We do not need to explicitly define that type as Boolean as Scala infers
+ that from the default value.
+\end_layout
+
+\begin_layout Standard
+If 
+\family typewriter
+QueryNotDone
+\family default
+ is 
+\family typewriter
+true
+\family default
+, only the incomplete to do items will be displayed.
+\end_layout
+
+\begin_layout Standard
+Let's define the query that will retrieve the ToDo rows from the database.
+ Insert this method into the body of the TD class in TD.scala:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+toShow method on the TD class
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+private def toShow = 
+\end_layout
+
+\begin_layout Plain Layout
+
+  ToDo.findAll(By(ToDo.owner, User.currentUser),
+\end_layout
+
+\begin_layout Plain Layout
+
+               if (QueryNotDone) By(ToDo.done, false)
+\end_layout
+
+\begin_layout Plain Layout
+
+               else Ignore[ToDo],
+\end_layout
+
+\begin_layout Plain Layout
+
+               OrderBy(ToDo.done, Ascending), 
+\end_layout
+
+\begin_layout Plain Layout
+
+               OrderBy(ToDo.priority, Descending),
+\end_layout
+
+\begin_layout Plain Layout
+
+               OrderBy(ToDo.desc, Ascending))
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We're defining the 
+\family typewriter
+toShow
+\family default
+ method with returns a 
+\family typewriter
+List[ToDo]
+\family default
+.
+ This method calls the 
+\family typewriter
+findAll()
+\family default
+ method on the 
+\family typewriter
+ToDo
+\family default
+ object with a bunch of query parameters.
+ 
+\family typewriter
+By(ToDo.owner, User.currentUser)
+\family default
+ tells the query to only return the rows where 
+\family typewriter
+owner
+\family default
+ equals the 
+\family typewriter
+User
+\family default
+ who is currently logged in.
+ Next, we test 
+\family typewriter
+QueryNotDone
+\family default
+.
+ If it's 
+\family typewriter
+true
+\family default
+, we add an additional constraint: 
+\family typewriter
+done
+\family default
+ equals 
+\family typewriter
+false
+\family default
+, otherwise we have a dummy query parameter: 
+\family typewriter
+Ignore
+\family default
+.
+ Finally, we define how the to do items should be ordered.
+\end_layout
+
+\begin_layout Standard
+Next, we add a method to the TD class that will render the description field:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+desc method in TD class
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+private def desc(td: ToDo, reDraw: () => JsCmd) =
+\end_layout
+
+\begin_layout Plain Layout
+
+  swappable(<span>{td.desc}</span>,
+\end_layout
+
+\begin_layout Plain Layout
+
+            <span>{ajaxText(td.desc,
+\end_layout
+
+\begin_layout Plain Layout
+
+                            v => {td.desc(v).save; reDraw()})}
+\end_layout
+
+\begin_layout Plain Layout
+
+            </span>)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We define a private method, 
+\family typewriter
+desc
+\family default
+.
+ It takes a 
+\family typewriter
+ToDo
+\family default
+ instance and a function, 
+\family typewriter
+reDraw
+\family default
+, that will redisplay the list of to do items.
+ It's a function that takes no parameters, but returns a 
+\family typewriter
+JsCmd
+\family default
+.
+ A 
+\family typewriter
+JsCmd
+\family default
+ is a JavaScript command that the browser can execute.
+ This is the JavaScript that will be sent back to the browser in response
+ to an Ajax request.
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+swappable
+\family default
+ creates HTML that displays the first parameter, a 
+\family typewriter
+<span/>
+\family default
+ containing the 
+\family typewriter
+ToDo
+\family default
+'s 
+\family typewriter
+desc
+\family default
+.
+ When user clicks on the swappable, it swaps to display the second parameter,
+ a 
+\family typewriter
+<span/>
+\family default
+ containing an 
+\family typewriter
+ajaxText
+\family default
+ field.
+ The user can edit the 
+\family typewriter
+ajaxText
+\family default
+ field and when the field loses focus or the user presses 
+\family typewriter
+Enter
+\family default
+, the updated text is sent back to the server via an Ajax call and the 
+\family typewriter
+swappable
+\family default
+ swaps itself back to displaying the first parameter.
+\end_layout
+
+\begin_layout Standard
+When the server receives the Ajax call, it passes the parameter to the function:
+ 
+\family typewriter
+v => {td.desc(v).save; reDraw()}
+\family default
+, which sets the 
+\family typewriter
+desc
+\family default
+ field and saves the 
+\family typewriter
+ToDo
+\family default
+ instance and then calls reDraw to update the browser.
+ The user sees the updated list of to do items.
+\end_layout
+
+\begin_layout Standard
+Next, add this method to the TD class:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+ private def doList(reDraw: () => JsCmd)(html: NodeSeq): NodeSeq =
+\end_layout
+
+\begin_layout Plain Layout
+
+  toShow.
+\end_layout
+
+\begin_layout Plain Layout
+
+  flatMap(td =>
+\end_layout
+
+\begin_layout Plain Layout
+
+    bind("todo", html,
+\end_layout
+
+\begin_layout Plain Layout
+
+         "check" -> ajaxCheckbox(td.done, 
+\end_layout
+
+\begin_layout Plain Layout
+
+                    v => {td.done(v).save; reDraw()}),
+\end_layout
+
+\begin_layout Plain Layout
+
+         "priority" ->
+\end_layout
+
+\begin_layout Plain Layout
+
+         ajaxSelect(ToDo.priorityList, Full(td.priority.toString),
+\end_layout
+
+\begin_layout Plain Layout
+
+                    v => {td.priority(v.toInt).save; reDraw()}),
+\end_layout
+
+\begin_layout Plain Layout
+
+         "desc" -> desc(td, reDraw)
+\end_layout
+
+\begin_layout Plain Layout
+
+    ))
+\end_layout
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+doList method in TD class
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We're defining the 
+\family typewriter
+doList
+\family default
+ method which takes two parameters: 
+\family typewriter
+reDraw
+\family default
+ and 
+\family typewriter
+html
+\family default
+.
+ The parameter list is split into two lists to allow the method to be 
+\emph on
+curried
+\emph default
+.
+ This means we can create a function that has the first parameter supplied,
+ but it does not have the second parameter supplied.
+ We'll see more of this in a minute.
+\end_layout
+
+\begin_layout Standard
+This method calls 
+\family typewriter
+toShow
+\family default
+ to get the list of to do items to show.
+ Using the 
+\family typewriter
+flatMap
+\family default
+ method, we iterate over each to do item and 
+\family typewriter
+bind
+\family default
+ing the item to the incoming html.
+ We bind 
+\family typewriter
+<todo:check/>
+\family default
+ to an 
+\family typewriter
+ajaxCheckbox
+\family default
+.
+ An 
+\family typewriter
+ajaxCheckbox
+\family default
+ generates the HTML to display a checkbox.
+ When the checkbox is toggled, an Ajax request is made on the server and
+ Lift forward the new value of the checkbox to the function.
+ The function, 
+\family typewriter
+v => {td.done(v).save; reDraw()}
+\family default
+, updates the to do item's done field and saves the to do item, then it
+ calls 
+\family typewriter
+reDraw
+\family default
+ to update the browser.
+\end_layout
+
+\begin_layout Standard
+The same thing is done with the 
+\family typewriter
+<todo:priority/>
+\family default
+ and 
+\family typewriter
+<todo:desc/>
+\family default
+ tags.
+\end_layout
+
+\begin_layout Standard
+Finally, we add the list method to the TD class:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+def list(html: NodeSeq) = {
+\end_layout
+
+\begin_layout Plain Layout
+
+  val id = S.attr("all_id").open_!
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  def inner(): NodeSeq = {
+\end_layout
+
+\begin_layout Plain Layout
+
+    def reDraw() = SetHtml(id, inner())
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    bind("todo", html,
+\end_layout
+
+\begin_layout Plain Layout
+
+         "exclude" ->
+\end_layout
+
+\begin_layout Plain Layout
+
+           ajaxCheckbox(QueryNotDone, v => {QueryNotDone(v); reDraw}),
+\end_layout
+
+\begin_layout Plain Layout
+
+         "list" -> doList(reDraw) _)
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  inner()
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+list method in TD class
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Because the list method is public, Lift will call it when Lift encounters
+ the 
+\family typewriter
+<lift:TD.list/>
+\family default
+ tag in the view code.
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+val id = S.attr("all_id").open_!
+\family default
+ retrieves the attribute 
+\family typewriter
+all_id
+\family default
+ from the snippet tag and stores it in the 
+\family typewriter
+id
+\family default
+ variable.
+\end_layout
+
+\begin_layout Standard
+We define the 
+\family typewriter
+inner
+\family default
+ method.
+ This method is bound to the variables in 
+\family typewriter
+list
+\family default
+'s scope.
+ 
+\end_layout
+
+\begin_layout Standard
+Inside 
+\family typewriter
+inner
+\family default
+, we define the 
+\family typewriter
+reDraw
+\family default
+ method which creates an 
+\family typewriter
+SetHtml
+\family default
+ 
+\family typewriter
+JsCmd
+\family default
+ with the 
+\family typewriter
+NodeSeq
+\family default
+ generated by calling the 
+\family typewriter
+inner
+\family default
+ method.
+ 
+\family typewriter
+SetHtml
+\family default
+ will set the HTML children to a new value.
+ In this case, it's the updated HTML based on redrawing all the to do items.
+\end_layout
+
+\begin_layout Standard
+The 
+\family typewriter
+bind()
+\family default
+ call binds the view template to an ajaxCheckbox and the list of our to
+ do items.
+\end_layout
+
+\begin_layout Standard
+Well...
+ that's all the code we need to write.
+ Time to play with our new application.
+\end_layout
+
+\begin_layout Standard
+At the terminate, type: 
+\family typewriter
+mvn clean jetty:run
+\family default
+.
+ The clean part of the command tells Maven to remove any previously compiled
+ files.
+ It's best practices to do a 
+\family typewriter
+clean
+\family default
+ every couple of compile cycles.
+\end_layout
+
+\begin_layout Standard
+Point your browser at 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://localhost:8080
+\end_layout
+
+\end_inset
+
+ and you'll see your application running.
+ Log in.
+ You'll see any to do items that you created in 
+\begin_inset Quotes eld
+\end_inset
+
+write only
+\begin_inset Quotes erd
+\end_inset
+
+ mode.
+ You can mark to do items done and the list instantly updates.
+ You can click on the description of any item and it'll swap to an editable
+ field.
+ If you log out and log in as a different user, you'll have a fresh set
+ of to do items.
+\end_layout
+
+\end_body
+\end_document
