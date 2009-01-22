@@ -106,7 +106,7 @@ Creating a new project
 \end_layout
 
 \begin_layout Standard
-The first thing to do is create a new project.
+The first thing to-do is create a new project.
  We do this with a build tool called Maven.
  Maven manages the compile and test phases of development as well as managing
  any dependencies by downloading resources from Internet.
@@ -623,7 +623,7 @@ ToDo
 \family typewriter
 desc
 \family default
- field is the description of the to do item.
+ field is the description of the to-do item.
  A 
 \family typewriter
 MappedPoliteString
@@ -2154,18 +2154,18 @@ Sign Up
 \end_layout
 
 \begin_layout Standard
-So far, we've created a model to hold our to do items, written a snippet
+So far, we've created a model to hold our to-do items, written a snippet
  to bridge between the view and business logic, and we've seen how to update
  our view to access the snippet.
 \end_layout
 
 \begin_layout Standard
 Next, we'll create the view and snippet code that allows us to create a
- to do item.
+ to-do item.
 \end_layout
 
 \begin_layout Section
-Creating a to do item
+Creating a to-do item
 \end_layout
 
 \begin_layout Standard
@@ -3263,7 +3263,7 @@ http://localhost:8080
 
  and then log in using the username/password you created when you tested
  the app last time around.
- Once you log in, you should see the form that lets you add a to do item.
+ Once you log in, you should see the form that lets you add a to-do item.
  It's nice to have a 
 \begin_inset Quotes eld
 \end_inset
@@ -3273,15 +3273,15 @@ write only
 \end_inset
 
  application.
- Next, we'll let you view and edit to do items.
+ Next, we'll let you view and edit to-do items.
 \end_layout
 
 \begin_layout Section
-Display and Editting to do items
+Display and Editting to-do items
 \end_layout
 
 \begin_layout Standard
-Now that we've created a mechanism to add to do items, it's time to display
+Now that we've created a mechanism to add to-do items, it's time to display
  those items and allow Ajax-style editting of the items.
 \end_layout
 
@@ -3433,7 +3433,7 @@ id
 <li>
 \family default
  which also has bind points.
- Our snippet will iterate over the list of to do items, binding each to
+ Our snippet will iterate over the list of to-do items, binding each to
  the children of 
 \family typewriter
 <todo:list/>
@@ -3584,7 +3584,7 @@ QueryNotDone
 \family typewriter
 true
 \family default
-, only the incomplete to do items will be displayed.
+, only the incomplete to-do items will be displayed.
 \end_layout
 
 \begin_layout Standard
@@ -3704,7 +3704,7 @@ false
 Ignore
 \family default
 .
- Finally, we define how the to do items should be ordered.
+ Finally, we define how the to-do items should be ordered.
 \end_layout
 
 \begin_layout Standard
@@ -3773,7 +3773,7 @@ ToDo
 \family typewriter
 reDraw
 \family default
-, that will redisplay the list of to do items.
+, that will redisplay the list of to-do items.
  It's a function that takes no parameters, but returns a 
 \family typewriter
 JsCmd
@@ -3846,7 +3846,7 @@ desc
 ToDo
 \family default
  instance and then calls reDraw to update the browser.
- The user sees the updated list of to do items.
+ The user sees the updated list of to-do items.
 \end_layout
 
 \begin_layout Standard
@@ -3960,12 +3960,12 @@ This method calls
 \family typewriter
 toShow
 \family default
- to get the list of to do items to show.
+ to get the list of to-do items to show.
  Using the 
 \family typewriter
 flatMap
 \family default
- method, we iterate over each to do item and 
+ method, we iterate over each to-do item and 
 \family typewriter
 bind
 \family default
@@ -3990,7 +3990,7 @@ ajaxCheckbox
 \family typewriter
 v => {td.done(v).save; reDraw()}
 \family default
-, updates the to do item's done field and saves the to do item, then it
+, updates the to-do item's done field and saves the to-do item, then it
  calls 
 \family typewriter
 reDraw
@@ -4174,7 +4174,7 @@ inner
 SetHtml
 \family default
  will set the HTML children to a new value.
- In this case, it's the updated HTML based on redrawing all the to do items.
+ In this case, it's the updated HTML based on redrawing all the to-do items.
 \end_layout
 
 \begin_layout Standard
@@ -4182,8 +4182,8 @@ The
 \family typewriter
 bind()
 \family default
- call binds the view template to an ajaxCheckbox and the list of our to
- do items.
+ call binds the view template to an ajaxCheckbox and the list of our to-do
+ items.
 \end_layout
 
 \begin_layout Standard
@@ -4200,7 +4200,7 @@ mvn clean jetty:run
 .
  The clean part of the command tells Maven to remove any previously compiled
  files.
- It's best practices to do a 
+ It's best practices to-do a 
 \family typewriter
 clean
 \family default
@@ -4221,7 +4221,7 @@ http://localhost:8080
 
  and you'll see your application running.
  Log in.
- You'll see any to do items that you created in 
+ You'll see any to-do items that you created in 
 \begin_inset Quotes eld
 \end_inset
 
@@ -4230,11 +4230,11 @@ write only
 \end_inset
 
  mode.
- You can mark to do items done and the list instantly updates.
+ You can mark to-do items done and the list instantly updates.
  You can click on the description of any item and it'll swap to an editable
  field.
  If you log out and log in as a different user, you'll have a fresh set
- of to do items.
+ of to-do items.
 \end_layout
 
 \end_body
