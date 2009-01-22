@@ -135,8 +135,6 @@ LatexCommand tableofcontents
 \end_layout
 
 \begin_layout Standard
-
-\lang ngerman
 \begin_inset ERT
 status open
 

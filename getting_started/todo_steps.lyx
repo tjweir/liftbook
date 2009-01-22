@@ -61,6 +61,13 @@ morestring=[b]"}
 
 \begin_layout Chapter
 Basic Lift
+\begin_inset CommandInset label
+LatexCommand label
+name "cha:Basic-Lift"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section
