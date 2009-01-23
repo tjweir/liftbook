@@ -43,7 +43,7 @@
 \begin_body
 
 \begin_layout Chapter
-Architecture and Advanced Topics
+Advanced Lift Architecture
 \begin_inset CommandInset label
 LatexCommand label
 name "cha:Advanced-Lift-Guts"
@@ -64,7 +64,7 @@ width "100col%"
 special "none"
 height "1in"
 height_special "totalheight"
-status collapsed
+status open
 
 \begin_layout Plain Layout
 This chapter is still under active development.
@@ -77,24 +77,26 @@ This chapter is still under active development.
 \end_layout
 
 \begin_layout Standard
-Congratulations! You've made it through the introduction to Lift.
- Or maybe you've skipped Basics and jumped right to here to Advanced, either
- way, the next group of chapters will be exciting.
+Congratulations! You've either made it through the introduction to Lift,
+ or maybe you've just skipped Basics and jumped right to here to Advanced;
+ either way, the next group of chapters will be exciting.
  
 \end_layout
 
 \begin_layout Standard
-In this chapter we're going to dive into some of the advanced mechanics
- and features of Lift so that you have a thorough understanding of what's
- going on.
+In this chapter we're going to dive into some of the advanced guts of Lift
+ so that you have a thorough understanding of what's going on before we
+ explore further.
 \end_layout
 
 \begin_layout Section
-Architecture
+Architectural Overview
 \end_layout
 
 \begin_layout Standard
-Figure 
+Before we jump into the specific details of the architecture, let's refresh
+ our memories.
+ Figure 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "fig:Architecture-diagram"
@@ -105,10 +107,32 @@ reference "fig:Architecture-diagram"
  Scala compiles down to Java bytecode, so we sit on top of the JVM.
  Lift Applications are typically run in a J(2)EE web container, such as
  Jetty or Tomcat.
- As we explained in the introduction, Lift is set up to act as a Filter
- component (REF) and this acts as the entry point.
- The rest of the component layout varies from application to application,
- and how you've implemented your Snippets and Templates amongst other things.
+ As we explained in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Entry-into-Lift"
+
+\end_inset
+
+, Lift is set up to act as a Filter
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+\begin_inset CommandInset href
+LatexCommand href
+target "http://java.sun.com/j2ee/1.4/docs/api/javax/servlet/Filter.html"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ that acts as the entry point.
+ Usage of the rest of the framework varies from application to application,
+ depending on how simple or complex you make it.
 \end_layout
 
 \begin_layout Standard
@@ -155,68 +179,109 @@ name "fig:Architecture-diagram"
 \end_layout
 
 \begin_layout Standard
-In Figure
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "fig:Architecture-diagram"
-
-\end_inset
-
- we've broken Lift up into it's major components, which are described below:
+The major components outlined in the diagram are:
 \end_layout
 
 \begin_layout Description
-SiteMap Contains the web pages for a Lift application.
- 
+LiftCore The engine of the framework responsible for request/response lifecycle,
+ rendering pipeline, invoking user's functions etc.
+ We don't directly cover the core in this book since essentially all of
+ the functionality that we do cover sits on top of the core
+\end_layout
+
+\begin_layout Description
+SiteMap Contains the web pages for a Lift application (chapter
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "cha:SiteMap"
 
 \end_inset
 
-
+)
 \end_layout
 
 \begin_layout Description
-LiftRules Allows you to configure Lift REF
+LiftRules Allows you to configure Lift.
+ We cover this in various sections throughout the book
 \end_layout
 
 \begin_layout Description
-LiftSession The session state representation REF
+LiftSession The session state representation (section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Session-Management"
+
+\end_inset
+
+)
 \end_layout
 
 \begin_layout Description
 S The stateful object impersonating the state context for a given request/respon
-se lifecycle REF
+se lifecycle (section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Advanced-S-Object"
+
+\end_inset
+
+)
 \end_layout
 
 \begin_layout Description
-SHtml Contains helper functions for XHtml artifacts (form fields, links,
- Ajax links, buttons, etc.) REF
+SHtml Contains helper functions for XHtml artifacts (chapters 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "cha:Forms-in-Lift"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "cha:AJAX-and-COMET"
+
+\end_inset
+
+)
 \end_layout
 
 \begin_layout Description
 Views LiftView objects impersonating a view as a XML content.
  Thus pages can be composed from other sources not only from html files.
- REF
+ (section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Views"
+
+\end_inset
+
+)
 \end_layout
 
 \begin_layout Description
 LiftResponse Represents the abstraction of a response that will be propagated
  to the client.
- REF
-\end_layout
+ (section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:LiftResponse-in-Detail"
 
-\begin_layout Description
-LiftCore The engine of the framework responsible for request/response lifecycle,
- rendering pipeline, invoking user's functions etc.
- REF
+\end_inset
+
+)
 \end_layout
 
 \begin_layout Description
 Comet Represents the Comet Actors layer which allows the sending of asynchronous
- content to the browser.
- REF
+ content to the browser (section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:COMET"
+
+\end_inset
+
+)
 \end_layout
 
 \begin_layout Description
@@ -224,7 +289,14 @@ ORM - Either Mapper or Record - The lightweight ORM library provided by
  Lift.
  The Mapper framework is the proposed ORM framework for Lift 1.0 and the
  Record framework will be out for next releases.
- REF
+ (chapter 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "cha:mapper_and_record"
+
+\end_inset
+
+)
 \end_layout
 
 \begin_layout Description
@@ -236,7 +308,14 @@ Auth - You can use either Basic or Digest HTTP authentication in your Lift
  application.
  This provides you more control as opposed to web-container's HTTP authenticatio
 n model.
- REF
+ (section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:HTTP-Authentication"
+
+\end_inset
+
+)
 \end_layout
 
 \begin_layout Description
@@ -246,14 +325,19 @@ JS
 
 API The JavaScript abstraction layer.
  These are Scala classes/objects that abstract JavaScript artifacts.
- Such objects can be combined to build JavaScript code.
- REF
+ Such objects can be combined to build JavaScript code (chapter 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "cha:Lift-and-Javascript"
+
+\end_inset
+
+)
 \end_layout
 
 \begin_layout Description
 Utils Contains a number of helper functions that Lift uses internally and
- are available to your application.
- REF
+ are available to your application
 \end_layout
 
 \begin_layout Subsection
@@ -279,7 +363,10 @@ reference "sec:The-Rendering-Process"
  This will serve not only to familiarize you with the full processing power
  of Lift, but also to introduce some of the other advanced topics we'll
  be discussing in this and later chapters.
- One important thing we'd like to mention is that most of the configurable
+\end_layout
+
+\begin_layout Standard
+One important thing we'd like to mention is that most of the configurable
  properties are in 
 \family typewriter
 LiftRules
@@ -315,7 +402,8 @@ The following list outlines, in order, the process of transforming a Request
 
 \begin_layout Enumerate
 Execute early functions: this is a mechanism that allows a user function
- to be called before the request enters the normal processing chain.
+ to be called on the HttpServletRequest before it enters the normal processing
+ chain.
  This can be used for, for example, to set the XHTML output to UTF-8.
  This is controlled through 
 \family typewriter
@@ -323,7 +411,7 @@ LiftRules.early
 \end_layout
 
 \begin_layout Enumerate
-Perform URL Rewriting, which we cover in detail in section 
+Perform URL Rewriting, which we already covered in detail in section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:URL-Rewriting"
@@ -337,7 +425,16 @@ LiftRules.rewrite
 \family default
 , this is useful for creating user-friendly URLs, among other things.
  The result of the transformation will be checked for possible rewrites
- until there are no more matches or it is explicitly stopped
+ until there are no more matches or it is explicitly stopped by setting
+ the 
+\family typewriter
+stopRewriting
+\family default
+ val in ReqwriteResponse to 
+\family typewriter
+true
+\family default
+.
 \end_layout
 
 \begin_layout Enumerate
@@ -348,7 +445,7 @@ LiftRules.onBeginServicing
  hooks.
  This is a mechanism that allows you to add your own hook functions that
  will be called when Lift is starting to process the request.
- You could set up logging here.
+ You could set up logging here, for instance.
 \end_layout
 
 \begin_layout Enumerate
@@ -374,6 +471,14 @@ S
 LiftSession
 \family default
  is not created yet.
+ Custom dispatch is covered in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Custom-dispatch-func"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Enumerate
@@ -463,6 +568,14 @@ LoanWrapper
  A simple example of this would be if you need to make sure that something
  is configured at the start of processing and cleanly shut down when processing
  terminates.
+ LoanWrappers are covered in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Wrapping-Lift's-processing"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Enumerate
@@ -625,7 +738,7 @@ Check the SiteMap and Loc functions.
  We cover SiteMap extensively in chapter 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "cha:SiteMap-1"
+reference "cha:SiteMap"
 
 \end_inset
 
@@ -690,7 +803,15 @@ reference "sec:Head-Merge"
 \begin_layout Enumerate
 Update the internal functions map.
  Basically this associates the user's Scala functions with tokens that are
- passed around in subsequent requests using HTTP query parameters??
+ passed around in subsequent requests using HTTP query parameters.
+ We cover this mechanism in detail in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Lift-Function-Mapping"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Enumerate
@@ -808,11 +929,109 @@ We realize that this is a lot of information to digest in one pass, so as
 \end_layout
 
 \begin_layout Subsection
-Functions mapping
+Lift Function Mapping
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Lift-Function-Mapping"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
-Functions mapping represent an important aspect of Lift framework.
+As we mentioned in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Form-Fundamentals"
+
+\end_inset
+
+, lift utilizes scala closures and functions for almost all processing of
+ client data.
+ Because of this, Lift's ability to associate functions with specific form
+ elements, AJAX calls, etc, is critical to its operation.
+ This association of functions, commonly known as 
+\begin_inset Quotes eld
+\end_inset
+
+mapping
+\begin_inset Quotes erd
+\end_inset
+
+ is handled through a combination of request parameters, Scala closures
+ and Session data.
+ We feel that understanding how mapping works is critical if you want to
+ work on advanced topics.
+\end_layout
+
+\begin_layout Standard
+At its most basic, mapping of functions is just that; a map of the user's
+ currently defined functions.
+ To simplify things, Lift actually uses one of four subclasses of AFuncHolder
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+net.liftweb.http.S.AFuncHolder
+\end_layout
+
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Description
+BinFuncHolder used for binding functions for file uploading.
+ It will hold a 
+\begin_inset Formula $FileParamHolder\Rightarrow Any$
+\end_inset
+
+ function, which is used to process the file data after upload (section
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:File-Uploads"
+
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Description
+SFuncHolder used for binding 
+\begin_inset Formula $String\Rightarrow Any$
+\end_inset
+
+ functions.
+ This function corresponds to a single HTTP query parameter, except that
+ the parameter name is 
+\emph on
+unique to this request
+\emph default
+ (we'll cover naming shortly)
+\end_layout
+
+\begin_layout Description
+LFuncHolder used for binding 
+\begin_inset Formula $List[String]\Rightarrow Any$
+\end_inset
+
+ functions.
+ This is essentially the same as SFuncHolder but for multiple values
+\end_layout
+
+\begin_layout Description
+NFuncHolder used for binding 
+\begin_inset Formula $()\Rightarrow Any$
+\end_inset
+
+ functions.
+ Typically these are used for event callabcks (such as form submission)
+\end_layout
+
+\begin_layout Standard
+theFunctions mapping represent an important aspect of Lift framework.
  It is the mechanism that binds functions to request parameters so these
  functions will be executed when a request is recevived by server containing
  such HTTP parameters.
@@ -904,33 +1123,6 @@ Here we have a simple snippet where we use the SHtml.ajaxButton function.
  name will be mapped with an AFuncHolder class.
  The AFuncHolder-s are in fact holding the user's functions internally.
  There are several implementations of AFuncHolder:
-\end_layout
-
-\begin_layout Enumerate
-BinFuncHolder - used for binding functions for file uploading.
- It will hold FileParamHolder => Any functions.
- So when uploding a file Lift will internally create a FileParamHolder and
- it will pass it when calling your function for handling the request.
-\end_layout
-
-\begin_layout Enumerate
-SFuncHolder - used for binding String => Any functions.
- You function here handles the request sent from client you will get the
- value of a single HTTP parameter.
- And this is the parameter generated by Lift that is internally mapped to
- your function (e.g.FN82234hjqewr89834723j=<some value>).
- 
-\end_layout
-
-\begin_layout Enumerate
-LFuncHolder - used for binding List[String] => Any) functions.
- Same as SFuncHolder but you can get a List of values
-\end_layout
-
-\begin_layout Enumerate
-NFuncHolder - used for binding () => Any functions.
- Your function gets zero parameters and this is mostly used for simple request
- where you do not care about incomming data.
 \end_layout
 
 \begin_layout Subsection
@@ -2002,7 +2194,14 @@ time
 \end_layout
 
 \begin_layout Subsection
-S Object
+Advanced S Object Features
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Advanced-S-Object"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -2764,6 +2963,13 @@ ResourceServer.baseResourceLocation
 
 \begin_layout Subsection
 HTTP Authentication
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:HTTP-Authentication"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard

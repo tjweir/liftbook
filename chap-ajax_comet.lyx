@@ -1090,6 +1090,13 @@ Renders a span that contains one visible element and the other hidden.
 
 \begin_layout Section
 COMET
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:COMET"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
