@@ -44,6 +44,13 @@
 
 \begin_layout Chapter
 JPA Integration
+\begin_inset CommandInset label
+LatexCommand label
+name "cha:JPA-Integration"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -1149,7 +1156,7 @@ abstract class ScalaEntityManager(val persistanceName: String) {
 
 \begin_layout Plain Layout
 
-    override def cleanupFunc : Can[() => Unit]= Full(() => closeEM(this.is))
+    override def cleanupFunc : Box[() => Unit]= Full(() => closeEM(this.is))
 \end_layout
 
 \begin_layout Plain Layout
@@ -1951,7 +1958,7 @@ find
  value of the ID field of the entity.
  In our example, the Book class uses the Long type for its ID, so we would
  put a Long value here.
- It returns either a Full Can
+ It returns either a Full Box
 \begin_inset Note Note
 status open
 

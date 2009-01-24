@@ -1,8 +1,9 @@
-#LyX 1.5.6 created this file. For more info see http://www.lyx.org/
-\lyxformat 276
+#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
 \begin_document
 \begin_header
 \textclass book
+\use_default_options false
 \language english
 \inputencoding auto
 \font_roman default
@@ -13,9 +14,11 @@
 \font_osf false
 \font_sf_scale 100
 \font_tt_scale 100
+
 \graphics default
 \paperfontsize default
 \spacing single
+\use_hyperref false
 \papersize default
 \use_geometry false
 \use_amsmath 1
@@ -48,7 +51,7 @@ Planning
 \end_layout
 
 \begin_layout Itemize
-Can/Empty/Full/Failure
+Box/Empty/Full/Failure
 \end_layout
 
 \begin_layout Itemize
@@ -82,7 +85,7 @@ OR
 \end_layout
 
 \begin_layout Itemize
-object passedAuthor extends RequestVar[Can[Author]](Empty)
+object passedAuthor extends RequestVar[Box[Author]](Empty)
 \end_layout
 
 \begin_layout Itemize
@@ -132,11 +135,11 @@ Writing
 \end_layout
 
 \begin_layout Subsection
-Can (or Scala's Option class on steroids)
+Box (or Scala's Option class on steroids)
 \end_layout
 
 \begin_layout Standard
-The Can Type is a utility that is built on top of Scala's Option Type, so
+The Box Type is a utility that is built on top of Scala's Option Type, so
  let's take a quick look at Option first.
 \end_layout
 
@@ -280,10 +283,10 @@ res8: String = Nothing found.
 \end_layout
 
 \begin_layout Standard
-Lift's Can extends Option with a few ideas, mainly the fact that you can
- add a message about why a Can is Empty.
+Lift's Box extends Option with a few ideas, mainly the fact that you can
+ add a message about why a Box is Empty.
  Empty corresponds to Option's None and Full to Option's Some.
- So you can pattern match against a Can like so:
+ So you can pattern match against a Box like so:
 \end_layout
 
 \begin_layout LyX-Code

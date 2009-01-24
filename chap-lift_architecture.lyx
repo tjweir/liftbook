@@ -3536,7 +3536,7 @@ LiftRules.statelessDispatchTable
  instead then these aren't available.
  The result of the dispatch should be a function that returns a 
 \family typewriter
-Can[LiftResponse]
+Box[LiftResponse]
 \family default
 .
  If the function returns 
@@ -3601,7 +3601,7 @@ name "lst:Charting-method"
 
 \begin_layout Plain Layout
 
-def chart (endDate : String) : Can[LiftResponse] = {
+def chart (endDate : String) : Box[LiftResponse] = {
 \end_layout
 
 \begin_layout Plain Layout
@@ -3829,7 +3829,7 @@ height
 
 \begin_layout LyX-Code
 Where dmap is identical with map function except the first argument is the
- default value applicable in case that the Can is Empty.
+ default value applicable in case that the Box is Empty.
 \end_layout
 
 \begin_layout Standard
@@ -3986,7 +3986,7 @@ deleteCookie Deletes a cookie (technically, this adds a cookie with a maxage
 \end_layout
 
 \begin_layout Description
-findCookie Looks for a cookie with a given name and returns a Can[Cookie].
+findCookie Looks for a cookie with a given name and returns a Box[Cookie].
  Empty means that the cookie doesn't exist
 \end_layout
 
@@ -4058,7 +4058,7 @@ request parameters
 
 \end_inset
 
- via the S.param method, which returns a Can[String].
+ via the S.param method, which returns a Box[String].
  Note that HTTP request parameters (sent either via GET or POST) differ
  from RequestVars in that query parameters are string values sent as part
  of the request; RequestVars, by contrast, use an internal per-request Map
@@ -4215,7 +4215,7 @@ reference "lst:Defining-a-Cleanup"
 \end_inset
 
  shows an example of opening a socket and closing it at the end of the request.
- You can see that we override cleanupFunc and return a Full Can with the
+ You can see that we override cleanupFunc and return a Full Box with the
  cleanup function.
  It's important to note that the cleanupFunc method is only used if the
  default value is used; if you always set the value of the RequestVar before

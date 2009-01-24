@@ -367,8 +367,8 @@ reference "sub:Multiple-Databases"
 \end_layout
 
 \begin_layout Enumerate
-The newConnection method needs to return a Can[java.sql.Connection].
- Returning an Empty Can indicates failure
+The newConnection method needs to return a Box[java.sql.Connection].
+ Returning an Empty Box indicates failure
 \end_layout
 
 \begin_layout Enumerate
@@ -2911,10 +2911,10 @@ toForm
 \family default
  methods on Mapper take a 
 \family typewriter
-Can[String]
+Box[String]
 \family default
- as their first parameter to control the submit button; if the Can is Empty,
- no submit button is generated, otherwise, the String contents of the Can
+ as their first parameter to control the submit button; if the Box is Empty,
+ no submit button is generated, otherwise, the String contents of the Box
  are used as the button label.
  If you opt to skip the submit button you'll need to provide it yourself
  via binding or some other mechanism, or you can rely on implicit form submissio
@@ -3322,7 +3322,7 @@ List[FieldError]]
 \family default
  (
 \family typewriter
-Can[Node]
+Box[Node]
 \family default
  in Record).
  To indicate that validation succeeded, simply return an empty List, otherwise
@@ -3494,7 +3494,7 @@ Note that we need to add the underscore for each validation function to
  be partially applied on the submitted value.
  When our form is submitted, all of the validators for each field are run,
  and if all of them return Empty then validation succeeds.
- If any validators return a Full Can, then the contents of the Can are displayed
+ If any validators return a Full Box, then the contents of the Box are displayed
  as error messages to the user.
 \end_layout
 
@@ -5297,7 +5297,7 @@ name "lst:setFrom...-Methods"
 \begin_layout Standard
 Our implementations are relatively straightforward.
  The only special handling we need for setFromAny is to properly deal with
- Lists, Cans, Options and the null value.
+ Lists, Boxes, Options and the null value.
  The BigDecimal constructor takes Strings, so the setFromString method is
  easy.
  The only addition we make over the BigDecimal constructor is to properly
@@ -5709,7 +5709,7 @@ Is that correct?
 
 .
  setFromAny essentially defers to setFromString for all operations, and
- the only special handling we need is for Lists, Options and Cans.
+ the only special handling we need is for Lists, Options and Boxes.
  setFromString is required to catch any exceptions thrown during conversion;
  if we have a failure we need to return an Empty as well as calling couldNotSetV
 alue to set a flag for validation.
@@ -5742,7 +5742,7 @@ name "lst:DecimalField-Set-Methods"
 
 \begin_layout Plain Layout
 
-def setFromAny (in : Any) : Can[BigDecimal] =
+def setFromAny (in : Any) : Box[BigDecimal] =
 \end_layout
 
 \begin_layout Plain Layout
@@ -5782,7 +5782,7 @@ def setFromAny (in : Any) : Can[BigDecimal] =
 
 \begin_layout Plain Layout
 
-def setFromString (in : String) : Can[BigDecimal] = {
+def setFromString (in : String) : Box[BigDecimal] = {
 \end_layout
 
 \begin_layout Plain Layout

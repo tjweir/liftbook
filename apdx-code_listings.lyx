@@ -1,8 +1,9 @@
-#LyX 1.5.3 created this file. For more info see http://www.lyx.org/
-\lyxformat 276
+#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
 \begin_document
 \begin_header
 \textclass book
+\use_default_options false
 \language english
 \inputencoding auto
 \font_roman default
@@ -13,9 +14,11 @@
 \font_osf false
 \font_sf_scale 100
 \font_tt_scale 100
+
 \graphics default
 \paperfontsize default
 \spacing single
+\use_hyperref false
 \papersize default
 \use_geometry false
 \use_amsmath 1
@@ -41,7 +44,8 @@
 
 \begin_layout Chapter
 Code Listings
-\begin_inset LatexCommand label
+\begin_inset CommandInset label
+LatexCommand label
 name "cha:Code-Listings"
 
 \end_inset
@@ -56,7 +60,7 @@ To conserve space and preserve flow in the main text, we've placed full
 \begin_inset Note Note
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 TODO: reverse cross-ref
 \end_layout
 
@@ -72,8 +76,13 @@ JPA Library Demo
 \begin_layout Standard
 The full library demo is available under the main Lift Git repository at
  
-\begin_inset LatexCommand htmlurl
-target "http://github.com/dpp/liftweb/tree/master"
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://github.com/dpp/liftweb/tree/master
+\end_layout
 
 \end_inset
 
@@ -82,15 +91,20 @@ target "http://github.com/dpp/liftweb/tree/master"
 \end_layout
 
 \begin_layout Standard
+\begin_inset Newpage clearpage
+\end_inset
 
-\clearpage
 
 \end_layout
 
 \begin_layout Subsection
 Master pom.xml
-\begin_inset LatexCommand index
-name "pom.xml"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+pom.xml
+\end_layout
 
 \end_inset
 
@@ -103,12 +117,13 @@ lstparams "basicstyle={\scriptsize},frame=single,language=XML,numbers=left,numbe
 inline false
 status collapsed
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
-\begin_inset LatexCommand label
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:JPA-Master-pom.xml"
 
 \end_inset
@@ -121,521 +136,521 @@ Master pom.xml
 <?xml version="1.0" encoding="UTF-8"?>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 <project>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   <modelVersion>4.0.0</modelVersion>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   <parent>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     <groupId>net.liftweb</groupId>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     <artifactId>lift-examples-parent</artifactId>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     <version>0.10-SNAPSHOT</version>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     <relativePath>../pom.xml</relativePath>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   </parent>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   <artifactId>JPADemo-Master</artifactId>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   <description>JPA tutorial master project</description>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   <name>JPA Demo Master</name>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   <inceptionYear>2007</inceptionYear>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   <packaging>pom</packaging>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   <modules>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     <module>JPADemo-web</module>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     <module>JPADemo-spa</module>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   </modules>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   <repositories>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     <!-- Add this so that we get the latest version of Hibernate -->
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     <repository>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       <id>JBoss</id>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       <name>JBoss Maven Repo</name>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       <layout>default</layout>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       <url>http://repository.jboss.com/maven2/</url>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       <snapshots>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
         <enabled>false</enabled>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       </snapshots>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     </repository>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   </repositories>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   <!-- Master properties (inherited by modules) -->
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   <dependencies>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     <dependency>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       <groupId>junit</groupId>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       <artifactId>junit</artifactId>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       <version>4.4</version>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       <scope>test</scope>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     </dependency>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     <dependency>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       <groupId>geronimo-spec</groupId>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       <artifactId>geronimo-spec-jta</artifactId>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       <version>1.0.1B-rc4</version>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       <scope>provided</scope>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     </dependency>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     <dependency>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       <groupId>javax.persistence</groupId>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       <artifactId>persistence-api</artifactId>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       <version>1.0</version>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       <scope>provided</scope>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     </dependency> 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     <dependency>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       <groupId>org.apache.derby</groupId>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       <artifactId>derby</artifactId>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       <version>10.2.2.0</version>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       <scope>test</scope>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     </dependency>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     <dependency>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       <groupId>org.hibernate</groupId>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       <artifactId>hibernate-core</artifactId>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       <version>3.3.0.SP1</version>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       <exclusions>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
         <exclusion>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
           <groupId>javax.transaction</groupId>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
           <artifactId>jta</artifactId>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
         </exclusion>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       </exclusions>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       <scope>provided</scope>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     </dependency>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     <dependency>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       <groupId>org.hibernate</groupId>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       <artifactId>hibernate-annotations</artifactId>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       <version>3.4.0.GA</version>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       <scope>provided</scope>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     </dependency>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     <dependency>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       <groupId>org.slf4j</groupId>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       <artifactId>slf4j-log4j12</artifactId>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       <version>1.4.2</version>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       <scope>provided</scope>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     </dependency> 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     <dependency>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       <groupId>log4j</groupId>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       <artifactId>log4j</artifactId>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       <version>1.2.15</version>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       <scope>provided</scope>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       <exclusions>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
         <exclusion>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
           <groupId>com.sun.jmx</groupId>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
           <artifactId>jmxri</artifactId>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
         </exclusion>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
         <exclusion>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
           <groupId>com.sun.jdmk</groupId>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
           <artifactId>jmxtools</artifactId>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
         </exclusion>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       </exclusions>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     </dependency>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   </dependencies>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 </project>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
@@ -645,8 +660,9 @@ Master pom.xml
 \end_layout
 
 \begin_layout Standard
+\begin_inset Newpage clearpage
+\end_inset
 
-\clearpage
 
 \end_layout
 
@@ -660,12 +676,13 @@ lstparams "basicstyle={\footnotesize},frame=single,numbers=left,numberstyle={\ti
 inline false
 status collapsed
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
-\begin_inset LatexCommand label
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:Author.scala"
 
 \end_inset
@@ -678,103 +695,103 @@ Author.scala
 package com.foo.jpaweb.model
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 import javax.persistence._
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 /**
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   An author is someone who writes books.
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 */
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 @Entity
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 class Author {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   @Id
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   @GeneratedValue{val strategy = GenerationType.AUTO}
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   var id : Long = _
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   @Column{val unique = true, val nullable = false}
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   var name : String = ""
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   @OneToMany{val mappedBy = "author",
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
              val targetEntity = classOf[Book],
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
              val cascade = Array(CascadeType.REMOVE)}
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   var books : java.util.Set[Book] = new java.util.HashSet[Book]()
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 }
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
@@ -784,15 +801,20 @@ class Author {
 \end_layout
 
 \begin_layout Standard
+\begin_inset Newpage clearpage
+\end_inset
 
-\clearpage
 
 \end_layout
 
 \begin_layout Subsection
 orm.xml
-\begin_inset LatexCommand index
-name "orm.xml"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+orm.xml
+\end_layout
 
 \end_inset
 
@@ -805,12 +827,13 @@ lstparams "basicstyle={\scriptsize},breaklines=true,frame=single,language=XML,nu
 inline false
 status collapsed
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
-\begin_inset LatexCommand label
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:orm.xml"
 
 \end_inset
@@ -823,146 +846,146 @@ orm.xml
 <?xml version="1.0" encoding="UTF-8" ?>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 <entity-mappings xmlns="http://java.sun.com/xml/ns/persistence/orm"
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
         http://java.sun.com/xml/ns/persistence/orm_1_0.xsd" version="1.0">
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   <package>com.foo.jpaweb.model</package>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   <entity class="Book">
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     <named-query name="findBooksByAuthor">
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       <query><![CDATA[from Book b where b.author.id = :id order by b.title]]></quer
 y>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     </named-query>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     <named-query name="findBooksByDate">
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       <query><![CDATA[from Book b where b.published between :startDate and
  :endDate]]></query>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     </named-query>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     <named-query name="findBooksByTitle">
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       <query><![CDATA[from Book b where lower(b.title) like :title order
  by b.title]]></query>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     </named-query>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     <named-query name="findAllBooks">
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       <query><![CDATA[from Book b order by b.title]]></query>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     </named-query>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   </entity>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   <entity class="Author">
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     <named-query name="findAllAuthors">
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       <query><![CDATA[from Author a order by a.name]]></query>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     </named-query>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   </entity>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 </entity-mappings>
 \end_layout
@@ -973,8 +996,9 @@ y>
 \end_layout
 
 \begin_layout Standard
+\begin_inset Newpage clearpage
+\end_inset
 
-\clearpage
 
 \end_layout
 
@@ -988,12 +1012,13 @@ lstparams "basicstyle={\scriptsize},breaklines=true,firstline=5,frame=single,num
 inline false
 status collapsed
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
-\begin_inset LatexCommand label
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:Enumv-Trait"
 
 \end_inset
@@ -1006,164 +1031,164 @@ Enumv Trait
 package com.foo.jpaweb.model
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 /* adds a valueOf function, assumes name is defined
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 add optional description */
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 trait Enumv  {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   this: Enumeration =>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   private var nameDescriptionMap = scala.collection.mutable.Map[String, String]()
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   /* store a name and description for forms */
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def Value(name: String, desc: String) : Value = {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     nameDescriptionMap += (name -> desc)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     new Val(name)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   }
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     /* get description if it exists else name */
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def getDescriptionOrName(ev: this.Value) = {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     try {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       nameDescriptionMap(""+ev)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     } catch {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       case e: NoSuchElementException => ev.toString
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     }
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   }
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   /* get name description pair list for forms */
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def getNameDescriptionList =  this.elements.toList.map(v => (v.toString, getDescri
 ptionOrName(v) ) ).toList
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   /* get the enum given a string */
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def valueOf(str: String) = this.elements.toList.filter(_.toString == str)
  match {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     case Nil => null
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     case x => x.head
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   }
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 }
 \end_layout
@@ -1174,8 +1199,9 @@ ptionOrName(v) ) ).toList
 \end_layout
 
 \begin_layout Standard
+\begin_inset Newpage clearpage
+\end_inset
 
-\clearpage
 
 \end_layout
 
@@ -1189,12 +1215,13 @@ lstparams "basicstyle={\scriptsize},breaklines=true,firstline=15,frame=single,la
 inline false
 status collapsed
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
-\begin_inset LatexCommand label
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:EnumvType"
 
 \end_inset
@@ -1207,269 +1234,269 @@ EnumvType class
 package com.foo.jpaweb.model
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 import java.io.Serializable
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 import java.sql.PreparedStatement
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 import java.sql.ResultSet
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 import java.sql.SQLException
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 import java.sql.Types
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 import org.hibernate.HibernateException
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 import org.hibernate.usertype.UserType
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 /**
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
  * Helper class to translate enum for hibernate
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
  */
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 abstract class EnumvType(val et: Enumeration with Enumv) extends UserType
  {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   val SQL_TYPES = Array({Types.VARCHAR})
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   override def sqlTypes() = SQL_TYPES
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   override def returnedClass = classOf[et.Value]
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   override def equals(x: Object, y: Object): Boolean = {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     return x == y
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   }
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   override def hashCode(x: Object) = x.hashCode
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   override def nullSafeGet(resultSet: ResultSet, names: Array[String], owner:
  Object): Object = {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     val value = resultSet.getString(names(0))
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     if (resultSet.wasNull()) return null
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     else {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       return et.valueOf(value)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     }
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   }
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   override def nullSafeSet(statement: PreparedStatement, value: Object,
  index: Int): Unit = {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     if (value == null) {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       statement.setNull(index, Types.VARCHAR)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     } else {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       val en = value.toString
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       statement.setString(index, en)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     }
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   }
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   override def deepCopy(value: Object): Object = value
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   override def isMutable() = false
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   override def disassemble(value: Object) = value.asInstanceOf[Serializable]
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   override def assemble(cached: Serializable, owner: Object): Serializable
  = cached
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   override def replace(original: Object, target: Object, owner: Object)
  = original
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 }
 \end_layout
@@ -1480,8 +1507,9 @@ abstract class EnumvType(val et: Enumeration with Enumv) extends UserType
 \end_layout
 
 \begin_layout Standard
+\begin_inset Newpage clearpage
+\end_inset
 
-\clearpage
 
 \end_layout
 
@@ -1495,12 +1523,13 @@ lstparams "basicstyle={\scriptsize},breaklines=true,frame=single,numbers=left,nu
 inline false
 status collapsed
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
-\begin_inset LatexCommand label
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:Creating-the-EM-directly"
 
 \end_inset
@@ -1513,100 +1542,100 @@ Creating the EM directly
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 object Model extends ScalaEntityManager("jpaweb") {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   lazy val factory = Persistence.createEntityManagerFactory(persistenceName)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def tx = getEM.getTransaction()
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   override def openEM() = {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     val em = factory.createEntityManager()
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     em.getTransaction().begin()
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     em
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   }
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   override def closeEM(em : EntityManager) = {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     val tx = em.getTransaction()
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     if (tx.isActive() && ! tx.getRollbackOnly()) {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       tx.commit()
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     } else if (tx.getRollbackOnly()) {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       tx.rollback()
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     }
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     em.close()
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   }
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
@@ -1616,8 +1645,9 @@ object Model extends ScalaEntityManager("jpaweb") {
 \end_layout
 
 \begin_layout Standard
+\begin_inset Newpage clearpage
+\end_inset
 
-\clearpage
 
 \end_layout
 
@@ -1631,12 +1661,13 @@ lstparams "basicstyle={\scriptsize},breaklines=true,frame=single,numbers=left,nu
 inline false
 status collapsed
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
-\begin_inset LatexCommand label
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:EM-Via-JNDI"
 
 \end_inset
@@ -1649,135 +1680,135 @@ Obtaining the EM via JNDI
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 object Model extends ScalaEntityManager("jpaweb") {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   lazy val ctxt = new InitialContext()
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def tx = ctxt.lookup("java:comp/UserTransaction").asInstanceOf[UserTransaction]
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   override def openEM () = {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     tx.begin()
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     ctxt.lookup("java:comp/env/persistence/" + persistanceName).asInstanceOf[Entit
 yManager]
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   }
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   override def closeEM (em : EntityManager) = {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     em.close()
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     /* 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
      * We only want to commit if we haven't already 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
      * thrown an exception (due to a constraint violation, etc)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
      */
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     try {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       if (tx.getStatus() == Status.STATUS_MARKED_ROLLBACK) {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
         tx.rollback()
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       } else if (tx.getStatus() == Status.STATUS_ACTIVE) {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
         tx.commit()
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
         Log.debug("Committed TX")
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       } else {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
         Log.debug("TX status = " + txStatus(tx.getStatus()))
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       }
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     }
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   }
 \end_layout
@@ -1788,8 +1819,9 @@ yManager]
 \end_layout
 
 \begin_layout Standard
+\begin_inset Newpage clearpage
+\end_inset
 
-\clearpage
 
 \end_layout
 
@@ -1803,12 +1835,13 @@ lstparams "basicstyle={\scriptsize},breaklines=true,frame=single,numbers=left,nu
 inline false
 status collapsed
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
-\begin_inset LatexCommand label
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:ScalaEntityManager"
 
 \end_inset
@@ -1821,274 +1854,274 @@ ScalaEntityManager
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 abstract class ScalaEntityManager(val persistanceName: String) {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   // The concrete impl should provide these methods 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   protected def openEM () : EntityManager 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   protected def closeEM (em : EntityManager)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   private object emVar extends RequestVar(openEM()) {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
-    override def cleanupFunc : Can[() => Unit]= Full(() => closeEM(this.is))
+    override def cleanupFunc : Box[() => Unit]= Full(() => closeEM(this.is))
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   }
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   // dont encourage use of the entity manager directly
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def getEM  = em
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   private def em = emVar.is
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   // value added methods
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def findAll[A](queryName : String, params : Pair[String,Any]*) = createAndPara
 mify[A](queryName, params).findAll
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def createNamedQuery[A](queryName : String, params : Pair[String,Any]*)
  : ScalaQuery[A] = createAndParamify[A](queryName,params)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   // Worker for the previous two methods
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   private def createAndParamify[A](queryName : String, params : Seq[Pair[String,
 Any]]) : ScalaQuery[A] = {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     val q = createNamedQuery[A](queryName)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     params.foreach(param => q.setParameter(param._1, param._2))
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     q
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   }
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   // Common enough to combine into one op
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def persistAndFlush(entity : AnyRef) = { em.persist(entity); em.flush()
  }
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def mergeAndFlush[T](entity : T) : T = {val e = merge(entity); flush();
  e}
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def removeAndFlush(entity : AnyRef) = { em.remove(entity); em.flush() }
  
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   // methods defined on Entity Manager
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def persist(entity: AnyRef) = em.persist(entity)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def merge[T](entity: T): T = em.merge(entity)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def remove(entity: AnyRef) = em.remove(entity);
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
-  def find[A](clazz: Class[A], id: Any) = JPA.findToCan(em.find[A](clazz,
+  def find[A](clazz: Class[A], id: Any) = JPA.findToBox(em.find[A](clazz,
  id).asInstanceOf[A])
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def flush() = em.flush()
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def setFlushMode(flushModeType: FlushModeType) = em.setFlushMode(flushModeType)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def refresh(entity: AnyRef) = em.refresh(entity)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def getFlushMode() = em.getFlushMode()
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def createQuery[A](queryString: String) = new ScalaQuery[A](em.createQuery(quer
 yString))
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def createNamedQuery[A](queryName: String) = new ScalaQuery[A](em.createNamedQu
 ery(queryName))
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def createNativeQuery[A](sqlString: String) = new ScalaQuery[A](em.createNative
 Query(sqlString))
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def createNativeQuery[A](sqlString: String, clazz: Class[A]) = new ScalaQuery[
 A](em.createNativeQuery(sqlString, clazz))
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def createNativeQuery[A](sqlString: String, resultSetMapping: String)
  = new ScalaQuery[A](em.createNativeQuery(sqlString, resultSetMapping))
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def close() = em.close()
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def isOpen() = em.isOpen()
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def getTransaction() = em.getTransaction()
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def joinTransaction() = em.joinTransaction()
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def clear() = em.clear()
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def getDelegate() = em.getDelegate()
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def getReference[A](clazz: Class[A], primaryKey: Any) = em.getReference[A](claz
 z, primaryKey)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def lock(entity: AnyRef, lockMode: LockModeType) = em.lock(entity, lockMode)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def contains(entity: AnyRef) = em.contains(entity)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 }
 \end_layout
@@ -2099,8 +2132,9 @@ z, primaryKey)
 \end_layout
 
 \begin_layout Standard
+\begin_inset Newpage clearpage
+\end_inset
 
-\clearpage
 
 \end_layout
 
@@ -2114,12 +2148,13 @@ lstparams "basicstyle={\scriptsize},breaklines=true,frame=single,numbers=left,nu
 inline false
 status collapsed
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
-\begin_inset LatexCommand label
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:ScalaQuery"
 
 \end_inset
@@ -2132,117 +2167,117 @@ ScalaQuery
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 class ScalaQuery[A](val query: Query) {
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   // value added methods
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def findAll = getResultList()
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
-  def findOne = JPA.findToCan[A](query.getSingleResult.asInstanceOf[A])
+  def findOne = JPA.findToBox[A](query.getSingleResult.asInstanceOf[A])
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def setParams(params : Pair[String,Any]*) = {params.foreach(param => query.setPa
 rameter(param._1, param._2)); this}
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   // methods defined on Query
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def getResultList() = Conversions.convertList[A](query.getResultList.asInstanceOf
 [java.util.List[A]])
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def getSingleResult() = query.getSingleResult.asInstanceOf[A]
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def executeUpdate() = query.executeUpdate()
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def setMaxResults(maxResult: Int) = {query.setMaxResults(maxResult);this}
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def setFirstResult(startPosition: Int) = {query.setFirstResult(startPosition);
  this}
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def setHint(hintName: String, value: Any) = {query.setHint(hintName, value);
  this}
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def setParameter(name: String, value: Any) = {query.setParameter(name,
  value); this}
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def setParameter(position: Int, value: Any) = {query.setParameter(position,
  value); this}
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def setParameter(name: String, value: Date, temporalType: TemporalType)
  = {query.setParameter(name, value, temporalType); this}
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def setParameter(position: Int, value: Date, temporalType: TemporalType)
  = {query.setParameter(position, value, temporalType); this}
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def setParameter(name: String, value: Calendar, temporalType: TemporalType)
  = {query.setParameter(name, value, temporalType); this}
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def setParameter(position: Int, value: Calendar, temporalType: TemporalType)
  = {query.setParameter(position, value, temporalType); this}
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   def setFlushMode(flushMode: FlushModeType) = {query.setFlushMode(flushMode);
  this}
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 }
 \end_layout
@@ -2253,15 +2288,20 @@ rameter(param._1, param._2)); this}
 \end_layout
 
 \begin_layout Standard
+\begin_inset Newpage clearpage
+\end_inset
 
-\clearpage
 
 \end_layout
 
 \begin_layout Subsection
 JPA web.xml
-\begin_inset LatexCommand index
-name "web.xml"
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+web.xml
+\end_layout
 
 \end_inset
 
@@ -2278,13 +2318,13 @@ lstparams "frame=single"
 inline false
 status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
-\begin_layout Standard
-
-\begin_inset LatexCommand label
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
 name "lst:JPA-web.xml"
 
 \end_inset
@@ -2297,163 +2337,163 @@ JPA web.xml
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 <?xml version="1.0" encoding="ISO-8859-1"?>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 <!DOCTYPE web-app
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 "http://java.sun.com/j2ee/dtds/web-app_2_3.dtd">
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 <web-app>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 <filter>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   <filter-name>LiftFilter</filter-name>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   <display-name>Lift Filter</display-name>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   <description>The Filter that intercepts lift calls</description>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   <filter-class>net.liftweb.http.LiftFilter</filter-class>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   <persistence-context-ref>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     <description>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       Persistence context for the library app
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     </description>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     <persistence-context-ref-name>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       persistence/jpaweb
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     </persistence-context-ref-name>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     <persistence-unit-name>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
       jpaweb
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
     </persistence-unit-name>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   </persistence-context-ref>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 </filter>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
         
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 <filter-mapping>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   <filter-name>LiftFilter</filter-name>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
   <url-pattern>/*</url-pattern>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 </filter-mapping>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 </web-app>
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \end_layout
 

@@ -2778,7 +2778,7 @@ override testAccess
 
 \begin_layout Plain Layout
 You need to return an Either to indicate success (Left[Boolean]) or failure
- (Right[Can[LiftResponse]])
+ (Right[Box[LiftResponse]])
 \end_layout
 
 \end_inset
@@ -2807,7 +2807,7 @@ override calcTemplate
 \begin_inset Text
 
 \begin_layout Plain Layout
-Return a Can[NodeSeq]
+Return a Box[NodeSeq]
 \end_layout
 
 \end_inset
@@ -2836,7 +2836,7 @@ override snippets
 \begin_inset Text
 
 \begin_layout Plain Layout
-snippets is a PartialFunction[String, Can[ParamType]), NodeSeq => NodeSeq],
+snippets is a PartialFunction[String, Box[ParamType]), NodeSeq => NodeSeq],
  which lets you use the type-safe parameter to control behavior.
 \end_layout
 
