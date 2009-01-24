@@ -1,4 +1,4 @@
-#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.0 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -435,6 +435,10 @@ stopRewriting
 true
 \family default
 .
+ It is relevant to know that you can have rewriter functions per-session
+ hence you can have different rewriter in different contexts.
+ These session rewriters are prended to the LiftRules rewriters before their
+ application.
 \end_layout
 
 \begin_layout Enumerate
@@ -1118,11 +1122,40 @@ Here we have a simple snippet where we use the SHtml.ajaxButton function.
  But to this function we are passing ajaxFunc1 function which is a () =>
  JsCmd function.
  A function that takes zero parameters and returns a JsCmd.
- Well internally a name is generated representing th HPPT parameter name
+ Well internally a name is generated representing the HTTP parameter name
  that will be sent to server when the AjaxRequest is submitted and this
  name will be mapped with an AFuncHolder class.
  The AFuncHolder-s are in fact holding the user's functions internally.
- There are several implementations of AFuncHolder:
+ Normally you do not have to directly deal with these holders since the
+ functions from S and SHtml object does that internally when you are binding
+ various functions with certain 
+\begin_inset Quotes eld
+\end_inset
+
+events
+\begin_inset Quotes erd
+\end_inset
+
+ such as click on an Ajax button.
+ However if there are situation when you need to bind functions by yourself,
+ say you're building a widget and SHtml functions are not enough for your
+ use case, you can use:
+\end_layout
+
+\begin_layout Itemize
+S.addFunctionMap function you are providing here the name as a String and
+ the AFuncHolder reference.
+ 
+\end_layout
+
+\begin_layout Itemize
+S.fmapFunc you are providing an AFuncHolder and the name will be generated
+ by Lift.
+ Actually S.fmapFunc being parameterized you also have to provide a conversion
+ function from String to T.
+ The function definition is 
+\family typewriter
+def fmapFunc[T](in: AFuncHolder)(f: String => T): T
 \end_layout
 
 \begin_layout Subsection
@@ -1277,6 +1310,265 @@ LiftResponse
  cookies etc.) is written internally by Lift to the container's output stream.
 \end_layout
 
+\begin_layout Standard
+Still let's take a look at a few examples
+\end_layout
+
+\begin_layout Subsubsection
+RedirectWithState
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+RedirectWithState example
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// Assume you boot function
+\end_layout
+
+\begin_layout Plain Layout
+
+import MessageState._
+\end_layout
+
+\begin_layout Plain Layout
+
+...
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def boot = { 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+LiftRules.dispatch.prepend {
+\end_layout
+
+\begin_layout Plain Layout
+
+  case Req("redirect1" :: _, _, _) => () => Full(RedirectWithState("/page1",
+ "My error" -> Error))
+\end_layout
+
+\begin_layout Plain Layout
+
+  case Req("redirect2" :: _, _, _) => () => Full(RedirectWithState("/page2",
+ 
+\end_layout
+
+\begin_layout Plain Layout
+
+								 				RedirectState(() => println(
+\begin_inset Quotes eld
+\end_inset
+
+Called on redirect!
+\begin_inset Quotes erd
+\end_inset
+
+), 
+\end_layout
+
+\begin_layout Plain Layout
+
+											   				"My error" -> Error)))     
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+First of all we added a DispatchPF function that pattern matches for paths
+ starting with 
+\family typewriter
+redirect1
+\family default
+ and 
+\family typewriter
+redirect2
+\family default
+.
+ Let's see what happens in each case.
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+redirect1
+\family default
+ - We are returning a RedirectWithState response.
+ It will do HTTP redirect towards /page1 and the state is impersonated by
+ the tuple 
+\begin_inset Quotes eld
+\end_inset
+
+MyError
+\begin_inset Quotes erd
+\end_inset
+
+ -> Error.
+ Because MessageState object holds an implicit conversion function from
+ Tuple2 to MessageState it suffices to just provide the tuple here.
+ Essentially we are saying here that when the browser sends the redirect
+ request to server we already have an Error notice set up and the <lift:msgs>
+ tag from your /page1 will show this 
+\begin_inset Quotes eld
+\end_inset
+
+My error
+\begin_inset Quotes erd
+\end_inset
+
+ error message.
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+redirect2
+\family default
+ - Similarly it does an HTTP redirect to browser towards your /page2.
+ But we are passing now a RedirectState object.
+ This object holds a () => Unit function that will be executed when browser
+ send the redirect request and the Notices impersonated by a repeated parameter
+ (String, NoticeType.Value)*.
+ In fact the mapping between the actual message and its type: Notice, Warning
+ or Error.
+\end_layout
+
+\begin_layout Subsubsection
+XmlResponse
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+XmlResponse example
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// Assume you boot function
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def boot = { 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+LiftRules.dispatch.prepend {
+\end_layout
+
+\begin_layout Plain Layout
+
+  case Req("rest" :: Nil, _, _) => () => Full(XmlResponse(
+\end_layout
+
+\begin_layout Plain Layout
+
+		<persons>
+\end_layout
+
+\begin_layout Plain Layout
+
+			<name>John</name>
+\end_layout
+
+\begin_layout Plain Layout
+
+			<name>Jane</name>
+\end_layout
+
+\begin_layout Plain Layout
+
+		</persons>
+\end_layout
+
+\begin_layout Plain Layout
+
+	))
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+When you are receiving a request with the path /rest the code is returning
+ an XML response.
+ The content-type and everything else is taken care of by XmlResponse.
+ You can build much more complex REST API's an return XML response which
+ is probably mot commonly used.
+\end_layout
+
 \begin_layout Subsection
 Session Management 
 \begin_inset CommandInset label
@@ -1388,63 +1680,10 @@ Even while Lift is handling session management you still have the ability
 SessionVar
 \family default
 s.
- Here is an example:
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-SessionVar example
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-object count extends SessionVar(0);
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-// later in your code you can increment the count by calling
-\end_layout
-
-\begin_layout Plain Layout
-
-count(count + 1)
-\end_layout
-
-\begin_layout Plain Layout
-
-// or obtain the value
-\end_layout
-
-\begin_layout Plain Layout
-
-var theCountValue: Int = count
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
+ For more details about SessionVar please see the fundamental chapter 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Session-and-Request"
 
 \end_inset
 
@@ -1452,21 +1691,7 @@ var theCountValue: Int = count
 \end_layout
 
 \begin_layout Standard
-
-\family typewriter
-SessionVar
-\family default
-s are typesafe representation of HTTP session attributes (they are kept
- in LiftSession and not directly in HttpSession).
- There are implicit conversion utility functions to convert a 
-\family typewriter
-SessionVar
-\family default
- to its underlying type.
-\end_layout
-
-\begin_layout Standard
-??The next question would be 
+The next question would be 
 \begin_inset Quotes eld
 \end_inset
 
@@ -1541,18 +1766,14 @@ name "sub:Wrapping-Lift's-processing"
 Lift provides the ability to allow user functions to be part of processing
  lifecycle.
  In these cases Lift allows you to provide your own functions and the actual
- Lift's processing function is passed to you??.
- This means that calling Lift's logic is your responsability.
- to call the function provided by Lift and of course you can have code before
- and after calling Lift's function.
+ Lift's processing function is passed to your function.
+ Hence your own function is responsible of calling the actual Lift's processing
+ logic.
+ 
 \end_layout
 
 \begin_layout Standard
-But let's see how exactly you can do this and we do that by starting with
- a code snippet:??????
-\end_layout
-
-\begin_layout Standard
+But let's see how exactly you can do this.
 \begin_inset listings
 inline false
 status open
@@ -2251,39 +2472,296 @@ S
  object goodies, which include:
 \end_layout
 
-\begin_layout Itemize
+\begin_layout Subsubsection
 Managing cookies
 \end_layout
 
-\begin_layout Itemize
-Localization ...
- see S.? functions.
- The resource-bundle name is given by LiftRules.resourceName variable.
+\begin_layout Standard
+You can retrieve cookies from the request or set cookies to the response.
+ Here are the helper functions:
 \end_layout
 
 \begin_layout Itemize
-Managing the Locale ...
- see S.locale function.
- The locale is given by LiftRules.localeCalculator variable which you can
- use to provide your own logic
+
+\family typewriter
+S.receivedCookies
+\family default
+ - returns a 
+\family typewriter
+List[Cookie]
 \end_layout
 
 \begin_layout Itemize
-Managing the Timezone ...
- see S.timeZone function.
- The timezone is given by LiftRules.timeZoneCalculator variable which you
- can use to provide your own logic.
+
+\family typewriter
+S.findCookie
+\family default
+ - finds a cookie by name and returns a 
+\family typewriter
+Box[Cookie]
 \end_layout
 
 \begin_layout Itemize
-Per-session DispatchPF functions ..
- see S.highLevelSessionDispatcher function.
+
+\family typewriter
+S.addCookie
+\family default
+ - adds a new cookie to the response
 \end_layout
 
 \begin_layout Itemize
+
+\family typewriter
+S.deleteCookie
+\family default
+ - deletes a give 
+\family typewriter
+Coo
+\family default
+kie from the response.
+ You can also pass a String instead of a 
+\family typewriter
+Cookie
+\family default
+ representing the cookie name
+\end_layout
+
+\begin_layout Subsubsection
+Localization 
+\end_layout
+
+\begin_layout Standard
+Localization and Internationalization are very important aspects of many
+ web applications.
+ Lift of course provides support to ease up the work with ResourceBundles.
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+S.?
+\family default
+ - returns a ResourceBundlevalue by the given name.
+ You can also provide parameters if you message requires them.
+ The resource-bundle name is given by 
+\family typewriter
+LiftRules.resourceName
+\family default
+ variable
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+S.??
+\family default
+ - similar with S.? but it uses the ResourceBundle for internal Lift strings.
+ Lift's resource-bundles are located in i18n folder with the name lift-core.prope
+rties The resource-bundle name is given by LiftRules.liftCoreResourceName
+ variable
+\end_layout
+
+\begin_layout Standard
+The Locale applied for these functions is given by
+\family typewriter
+ LiftRules.localeCalculator
+\family default
+ which by defult return the Locale from the request.
+ Of course you can provide you own logic of determining the locale.
+ A common case would be 
+\end_layout
+
+\begin_layout Subsubsection
+Managing the Timezone 
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+S.timeZone
+\family default
+ function is providing the timezone given by 
+\family typewriter
+LiftRules.timeZoneCalculator
+\family default
+ which by default it returns the default timezone.
+\end_layout
+
+\begin_layout Subsubsection
+Per-session DispatchPF functions 
+\end_layout
+
+\begin_layout Standard
+You can set DispatchPF functions that operates in the context of a current
+ session.
+ S.highLevelSessionDispatcher function.
+ Essentially you can bind DispatchPF functions with a given name.
+ Relevant functions are:
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+S.highLevelSessionDispatcher
+\family default
+ - returns a 
+\family typewriter
+List[LiftRules.DispatchPF]
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+S.highLevelSessionDispatchList
+\family default
+ - returns a 
+\family typewriter
+List[DispatchHolder] 
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+S.addHighLevelSessionDispatcher 
+\family default
+- maps a name with a given 
+\family typewriter
+DispatchPF
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+S.removeHighLevelSessionDispatcher
+\family default
+ - removes the 
+\family typewriter
+DispatchPF
+\family default
+ given its name
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+S.clearHighLevelSessionDispatcher
+\family default
+ - removes all 
+\family typewriter
+DispatchPF
+\family default
+ associations
+\end_layout
+
+\begin_layout Subsubsection
 Session re-writers.
- There are per session functions that allows to modify a HTTP request (URI,
- query parameters etc.) before the request is actually processed.
+ 
+\end_layout
+
+\begin_layout Standard
+Sessionre-writers are per session functions that allows to modify a HTTP
+ request (URI, query parameters etc.) before the request is actually processed.
+ This is similar with LiftRules.rewrite variable but you can apply rewriters
+ per a given session.
+ Hence you can have different rewrites in diferent contexts.
+ The relevant functions are:
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+S.sessionRewriter
+\family default
+ - returns a
+\family typewriter
+ List[RewriteHolder]
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+S.addSessionRewriter
+\family default
+ - maps a 
+\family typewriter
+LiftRules.RewritePF 
+\family default
+with a given name
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+S.removeSessionRewriter
+\family default
+ - removes a rewriter by a name
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+S.clearSessionRewriter
+\family default
+ - remove all session rewriters.
+\end_layout
+
+\begin_layout Subsubsection
+Access to HTTP headers
+\end_layout
+
+\begin_layout Standard
+Accessing HTTP header parameters from the request and adding HTTP header
+ parameters to the HTTP response represent very common operations.
+ You can easily do that using th following functions:
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+S.getHeaders
+\family default
+ - returns a 
+\family typewriter
+List[(String, String)] 
+\family default
+containing all HTTP headers grouped by name and value pair
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+S.setHeader
+\family default
+ - sets a HTTP header parameter by specifying the name and value pair
+\end_layout
+
+\begin_layout Subsubsection
+Manage document type
+\end_layout
+
+\begin_layout Standard
+You can also read and write the document type set for the current response.
+ You can use the following functions:
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+S.getDocType
+\family default
+ - returns the doc type that was set forthe current response
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+S.setDocType
+\family default
+ - sets a document type for the curent response object.
+\end_layout
+
+\begin_layout Subsubsection
+Other functions 
 \end_layout
 
 \begin_layout Itemize
@@ -2292,25 +2770,24 @@ Access to the raw HttpServletRequest and HttpSession if you really need
 \end_layout
 
 \begin_layout Itemize
-Managing notices ...
- see 
+Managing the function map.
+ The function map generates an association between a String and a function.
+ This string represents a query parameter that when Lift receives upon a
+ HTTP request, it will execute your function.
+ Normally these names are auto-generated by Lift but you can also provide
+ you own name.
+ Please see 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "sub:Notices/Warnings/Errors-messages"
+reference "sub:Functions-mapping"
 
 \end_inset
 
-
+ for more details.
 \end_layout
 
 \begin_layout Itemize
-Managing HTTP redirects ...
- see S.redirectTo functions.
-\end_layout
-
-\begin_layout Itemize
-Managing wrappers ...
- see 
+Managing wrappers - see 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sub:Wrapping-Lift's-processing"
@@ -2321,548 +2798,43 @@ reference "sub:Wrapping-Lift's-processing"
 \end_layout
 
 \begin_layout Itemize
-Access to HTTP headers (get/set)
-\end_layout
-
-\begin_layout Itemize
-Set document type for a particular response ...
- see S.setDocType
-\end_layout
-
-\begin_layout Itemize
-Using XML attibutes of a snippet ..
- see S.attr
-\end_layout
-
-\begin_layout Itemize
-Managing LiftSession parameters (we recommend using SessionVar due to its
- typesafe nature)
-\end_layout
-
-\begin_layout Itemize
-Managing the function map.
- The function map generates an association between a String and a function.
- This string represents a query parameter that when Lift receives upon a
- HTTP request, it will execute your function.
- Normally these names are auto-generated by Lift.
- See S.mapFunc function.??? Reword
-\end_layout
-
-\begin_layout Subsubsection
-Notices/Warnings/Errors messages
-\begin_inset CommandInset label
-LatexCommand label
-name "sub:Notices/Warnings/Errors-messages"
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Feedback for the user is required for modern applications, error messages
- for issues, status messages for update and general notifications.
- Lift provides a unified model for such messages that can be used for static
- pages as well as for Ajax and Comet calls.
- The S object provides three functions S.notice, S.warning, S.error.
- So we have a classification of messages where notices are just informative
- messages, warnings are advisory message letting the user know that the
- action is risky or may induce errors and error messages when we have an
- error conditions.
- How you use the different messages is up to you.
-\end_layout
-
-\begin_layout Standard
-Here's a simple example to send a 
-\family typewriter
-notice
-\family default
- message.
- 
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-S.notice example
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-class MySnippet {
-\end_layout
-
-\begin_layout Plain Layout
-
-...
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-  def doSomething() {
-\end_layout
-
-\begin_layout Plain Layout
-
-	...
-\end_layout
-
-\begin_layout Plain Layout
-
-	S.notice(
-\begin_inset Quotes eld
-\end_inset
-
-There are no records to render
-\begin_inset Quotes erd
-\end_inset
-
-)
-\end_layout
-
-\begin_layout Plain Layout
-
-	...
-\end_layout
-
-\begin_layout Plain Layout
-
-  }
-\end_layout
-
-\begin_layout Plain Layout
-
-}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-In your template you would use this Lift Tag: 
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-msgs tag
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-<lift:msgs>
-\end_layout
-
-\begin_layout Plain Layout
-
-  <lift:notice_msg>Note</lift:notice_msg>
-\end_layout
-
-\begin_layout Plain Layout
-
-  <lift:notice_class>noticeBox</lift:notice_class>
-\end_layout
-
-\begin_layout Plain Layout
-
-</lift:msgs>
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-The 
-\family typewriter
-<lift:msgs>
-\family default
- tag is one of the built-in snippets and it will render all messages (notice/war
-ning/error) by default.
- We have provided additional information in this case specifically for for
- notices.
- 
-\family typewriter
-<lift:notice_msg>
-\family default
- specifies the label of the message and 
-\family typewriter
-<lift:notice_class>
-\family default
- the CSS class to be used.
- You can then style your message by wrapping this snippet by a div that
- has a certain ID.
-\end_layout
-
-\begin_layout Standard
-Besides this there is another Lift buil in snippet call msg.
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-msg tag
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-<lift:msg id="myNotice" noticeClass=
-\begin_inset Quotes erd
-\end_inset
-
-noticeBox
-\begin_inset Quotes erd
-\end_inset
-
-/>
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-This will render only messages that are associate with 
-\emph on
-myNotice
-\emph default
- ID.
- To do this in the 
-\emph on
-doSomething 
-\emph default
-function above we just call 
-\end_layout
-
-\begin_layout Standard
-
-\family typewriter
-S.notice(
-\begin_inset Quotes eld
-\end_inset
-
-myNotice
-\begin_inset Quotes erd
-\end_inset
-
-, 
-\begin_inset Quotes eld
-\end_inset
-
-There are no records to render
-\begin_inset Quotes erd
-\end_inset
-
-).
-
-\family default
- This snippet provides three attributes 
-\emph on
-noticeClass
-\emph default
-, 
-\emph on
-warningClass
-\emph default
- and 
-\emph on
-errorClass 
-\emph default
-allowing the possibility to specify your own CSS classes.
- Again you can style you message using IDs in the CSS file as well.
- This snippet is very usefull when you want to render error messages for
- examples in different parts of the page such as near by a form field.
-\end_layout
-
-\begin_layout Standard
-Now we've seen how we can use the notices for static pages and how they
- get rendered.
- But what about Ajax calls? ...
- for instance we're in an Ajax function and we want to return an error message.
- The answer is that you do not need to do anything special.
- Just use the same S.notice/warning/error functions and Lift will take care
- of the rest.
- For instance assume that in your page youhave <lift:msg> and <lift:msgs>
- snippets.
- When these snippets are processed the meta-information (title for msgs
- and style attributes) is captured by Lift and kept on the LiftSession.
- Later on, (being in the same page) notices propagated via Ajax responses
- will preserve the same styling information that yu used for the snippets.
- This makes the the notices API to be unified regardles if we're using 
-\begin_inset Quotes eld
-\end_inset
-
-static
-\begin_inset Quotes erd
-\end_inset
-
- pages, asynchronous Ajax calls or push messages from server to client using
- Comet actors.
-\end_layout
-
-\begin_layout Standard
-There is one thing left ...
- how do we use notices from a CometActor? ...
- well pretty much in the same way but we do not use the S object since CometActo
-rs are asynchronous components and they exists beyon the request/response
- lifecycle.
- However the same functions notice/warning/error exist in the CometActor
- class, so being in a Comet actor isntead of calling 
-\family typewriter
-S.notice(
-\begin_inset Quotes eld
-\end_inset
-
-myNotice
-\begin_inset Quotes erd
-\end_inset
-
-, 
-\begin_inset Quotes eld
-\end_inset
-
-There are no records to render
-\begin_inset Quotes erd
-\end_inset
-
-)
-\family default
-you just call
-\family typewriter
- notice(
-\begin_inset Quotes eld
-\end_inset
-
-myNotice
-\begin_inset Quotes erd
-\end_inset
-
-, 
-\begin_inset Quotes eld
-\end_inset
-
-There are no records to render
-\begin_inset Quotes erd
-\end_inset
-
-).
-\end_layout
-
-\begin_layout Subsection
-SHtml object
-\end_layout
-
-\begin_layout Standard
-The SHtml object contains functions that help you constuct HTML 
-\begin_inset Quotes eld
-\end_inset
-
-primitives
-\begin_inset Quotes erd
-\end_inset
-
- (input elements, select, links and buttons, etc.).
- But it is not only about constructing these primitives but allowing user
- to pass functions that will process this field when a request is made on
- server side.
- For example let's see how we build an ajax button:
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-Ajax Button example
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-You are already used to snippets and binding so we won't reiterate them
- now.
- But the interersting part here is that 
-\family typewriter
-<hello:button>
-\family default
- tag will be replaced by the output of 
-\family typewriter
-ajaxButton
-\family default
- function which is a 
-\family typewriter
-<button ...>Press me</button>
-\family default
- tag.
- Lift also adds the 
-\family typewriter
-onclick
-\family default
- attribute and the JavaScript Ajax call in there.
- To 
-\family typewriter
-ajaxButton
-\family default
- function we also added an anonymous function that will be called by Lift
- when the Ajax request is sent from browser.
- It will print out to console 
-\begin_inset Quotes eld
-\end_inset
-
-Got an Ajax call
-\begin_inset Quotes erd
-\end_inset
-
- and then return the JsCmd SetHtml.
- This will set the content of the element having the id 
-\begin_inset Quotes eld
-\end_inset
-
-my-div
-\begin_inset Quotes erd
-\end_inset
-
- (for example a div element that exists in your page) with the text node
- 
-\begin_inset Quotes eld
-\end_inset
-
-That's it
-\begin_inset Quotes erd
-\end_inset
-
-.
-\end_layout
-
-\begin_layout Standard
-There is a focused discussion on building forms using SHtml in the Forms
- chapter 
+Managing notices - see 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "cha:Forms-in-Lift"
-
-\end_inset
-
-.
- Here is a quick description of other SHtml functions:
-\end_layout
-
-\begin_layout Subsubsection
-JqSHtml object
-\end_layout
-
-\begin_layout Standard
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Should this move to JavaScript or Ajax chapter?
-\end_layout
+reference "sub:Notices/Warnings/Errors-messages"
 
 \end_inset
 
 
 \end_layout
 
-\begin_layout Standard
-SHtml generated code is independent on the JavaScript framework used.
- However 
-\family typewriter
-net.liftweb.http.jquery.JsSHtml
-\family default
- object contains artifacts that are bound with JQuery framework.
- For instance it contains the autocomplete function that renders an input
- type text element but when start typing it will suggest words starting
- with what you typed already.
- Please see http://www.pengoworks.com/workshop/jquery/autocomplete.htm examples.
+\begin_layout Itemize
+Managing HTTP redirects - see S.redirectTo functions and 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:LiftResponse-in-Detail"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Using XML attibutes of a snippet - see 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Additional-Snippet-Features"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
 ResourceServer
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-This is also covered in the widgets chapter.
- Need to determine best place for it and cross-ref
-\end_layout
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:ResourceServer"
 
 \end_inset
 

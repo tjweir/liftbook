@@ -1,4 +1,4 @@
-#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.0 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -1973,6 +1973,23 @@ processForm
  as this is important for pattern matching as seen above.
  The actual form content is a Map object that can be easily use to obtain
  the values for each form field.
+\end_layout
+
+\begin_layout Section
+JqSHtml object
+\end_layout
+
+\begin_layout Standard
+SHtml generated code is independent on the JavaScript framework used.
+ However 
+\family typewriter
+net.liftweb.http.jquery.JsSHtml
+\family default
+ object contains artifacts that are bound with JQuery framework.
+ For instance it contains the autocomplete function that renders an input
+ type text element but when start typing it will suggest words starting
+ with what you typed already.
+ Please see http://www.pengoworks.com/workshop/jquery/autocomplete.htm examples.
 \end_layout
 
 \end_body
