@@ -1,4 +1,4 @@
-#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.0 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -2289,6 +2289,362 @@ foo
 
 \begin_layout Standard
 And just for this snippet, you'll import TableSorter.
+\end_layout
+
+\begin_layout Section
+Notices/Warnings/Errors messages
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Notices/Warnings/Errors-messages"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Feedback for the user is required for modern applications, error messages
+ for issues, status messages for update and general notifications.
+ Lift provides a unified model for such messages that can be used for static
+ pages as well as for Ajax and Comet calls.
+ The S object provides three functions S.notice, S.warning, S.error.
+ So we have a classification of messages where notices are just informative
+ messages, warnings are advisory message letting the user know that the
+ action is risky or may induce errors and error messages when we have an
+ error conditions.
+ How you use the different messages is up to you.
+\end_layout
+
+\begin_layout Standard
+Here's a simple example to send a 
+\family typewriter
+notice
+\family default
+ message.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+S.notice example
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+class MySnippet {
+\end_layout
+
+\begin_layout Plain Layout
+
+...
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  def doSomething() {
+\end_layout
+
+\begin_layout Plain Layout
+
+	...
+\end_layout
+
+\begin_layout Plain Layout
+
+	S.notice(
+\begin_inset Quotes eld
+\end_inset
+
+There are no records to render
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Plain Layout
+
+	...
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In your template you would use this Lift Tag: 
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+msgs tag
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<lift:msgs>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <lift:notice_msg>Note</lift:notice_msg>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <lift:notice_class>noticeBox</lift:notice_class>
+\end_layout
+
+\begin_layout Plain Layout
+
+</lift:msgs>
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The 
+\family typewriter
+<lift:msgs>
+\family default
+ tag is one of the built-in snippets and it will render all messages (notice/war
+ning/error) by default.
+ We have provided additional information in this case specifically for for
+ notices.
+ 
+\family typewriter
+<lift:notice_msg>
+\family default
+ specifies the label of the message and 
+\family typewriter
+<lift:notice_class>
+\family default
+ the CSS class to be used.
+ You can then style your message by wrapping this snippet by a div that
+ has a certain ID.
+\end_layout
+
+\begin_layout Standard
+Besides this there is another Lift buil in snippet call msg.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+msg tag
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<lift:msg id="myNotice" noticeClass=
+\begin_inset Quotes erd
+\end_inset
+
+noticeBox
+\begin_inset Quotes erd
+\end_inset
+
+/>
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This will render only messages that are associate with 
+\emph on
+myNotice
+\emph default
+ ID.
+ To do this in the 
+\emph on
+doSomething 
+\emph default
+function above we just call 
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+S.notice(
+\begin_inset Quotes eld
+\end_inset
+
+myNotice
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+There are no records to render
+\begin_inset Quotes erd
+\end_inset
+
+).
+
+\family default
+ This snippet provides three attributes 
+\emph on
+noticeClass
+\emph default
+, 
+\emph on
+warningClass
+\emph default
+ and 
+\emph on
+errorClass 
+\emph default
+allowing the possibility to specify your own CSS classes.
+ Again you can style you message using IDs in the CSS file as well.
+ This snippet is very usefull when you want to render error messages for
+ examples in different parts of the page such as near by a form field.
+\end_layout
+
+\begin_layout Standard
+Now we've seen how we can use the notices for static pages and how they
+ get rendered.
+ But what about Ajax calls? ...
+ for instance we're in an Ajax function and we want to return an error message.
+ The answer is that you do not need to do anything special.
+ Just use the same S.notice/warning/error functions and Lift will take care
+ of the rest.
+ For instance assume that in your page youhave <lift:msg> and <lift:msgs>
+ snippets.
+ When these snippets are processed the meta-information (title for msgs
+ and style attributes) is captured by Lift and kept on the LiftSession.
+ Later on, (being in the same page) notices propagated via Ajax responses
+ will preserve the same styling information that yu used for the snippets.
+ This makes the the notices API to be unified regardles if we're using 
+\begin_inset Quotes eld
+\end_inset
+
+static
+\begin_inset Quotes erd
+\end_inset
+
+ pages, asynchronous Ajax calls or push messages from server to client using
+ Comet actors.
+\end_layout
+
+\begin_layout Standard
+There is one thing left ...
+ how do we use notices from a CometActor? ...
+ well pretty much in the same way but we do not use the S object since CometActo
+rs are asynchronous components and they exists beyon the request/response
+ lifecycle.
+ However the same functions notice/warning/error exist in the CometActor
+ class, so being in a Comet actor isntead of calling 
+\family typewriter
+S.notice(
+\begin_inset Quotes eld
+\end_inset
+
+myNotice
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+There are no records to render
+\begin_inset Quotes erd
+\end_inset
+
+)
+\family default
+you just call
+\family typewriter
+ notice(
+\begin_inset Quotes eld
+\end_inset
+
+myNotice
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+There are no records to render
+\begin_inset Quotes erd
+\end_inset
+
+).
 \end_layout
 
 \begin_layout Section
