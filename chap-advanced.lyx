@@ -2541,7 +2541,7 @@ Localization and Internationalization are very important aspects of many
 \family typewriter
 S.?
 \family default
- - returns a ResourceBundlevalue by the given name.
+ - returns a ResourceBundle value by the given name.
  You can also provide parameters if you message requires them.
  The resource-bundle name is given by 
 \family typewriter
@@ -2568,7 +2568,81 @@ The Locale applied for these functions is given by
 \family default
  which by defult return the Locale from the request.
  Of course you can provide you own logic of determining the locale.
- A common case would be 
+ 
+\end_layout
+
+\begin_layout Standard
+Lift supports using multiple resource-bundles essentially multiple .properties
+ files.
+ You can specify this by setting in your Boot:
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+LiftRules.resourceNames = 
+\begin_inset Quotes eld
+\end_inset
+
+name1
+\begin_inset Quotes erd
+\end_inset
+
+ :: 
+\begin_inset Quotes eld
+\end_inset
+
+name2
+\begin_inset Quotes erd
+\end_inset
+
+ :: ...
+ :: Nil
+\family default
+.
+ This means that in your WEB-INF/classes folder you would have files like:
+\end_layout
+
+\begin_layout Itemize
+name1.properties
+\end_layout
+
+\begin_layout Itemize
+name1_fr_FR.properties
+\end_layout
+
+\begin_layout Itemize
+name2.properties
+\end_layout
+
+\begin_layout Itemize
+name2_fr_FR.properties
+\end_layout
+
+\begin_layout Itemize
+etc.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+At maven project level these files would exist in 
+\family typewriter
+src/main/resources
+\family default
+ folder.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+When you are calling S.?(..) function your entry will be looked up in all bundles
+ and the value is returned fron the first bundle that contains this key.
+ This approach allows you to structure your application string resources
+ in different files to ease up translations etc.
+ You can alsoobtain the list of ResourceBundles by calling 
+\family typewriter
+S.resourceBundles 
+\family default
+function.
 \end_layout
 
 \begin_layout Subsubsection
