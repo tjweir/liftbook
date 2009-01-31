@@ -852,6 +852,14 @@ Because Lift will implicitly search for suffixes, it's best to leave the
 \begin_layout Standard
 then Lift will use the appropriate template based on the user's requested
  language if a corresponding template is available.
+ For more information regarding internationalization please see 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "BROKEN: Ref: cha:Internationalization"
+
+\end_inset
+
+.
  In addition to normal templates, your application can make use of hidden
  templates
 \begin_inset Index
