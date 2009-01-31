@@ -1,4 +1,4 @@
-#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.0 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -1597,7 +1597,7 @@ TODO: Cross-ref
 
 \begin_layout Standard
 Now that we've covered a basic example we hope you're beginning to see why
- Lift is so powerful and cna make you more productive.
+ Lift is so powerful and cam make you more productive.
  We've barely scratched the surface on Lift's templating and binding capabilitie
 s, but what we've shown here is already a big step.
  In roughly 10 lines of Scala code and about 30 in XML we have a functional
