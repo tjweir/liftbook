@@ -1,4 +1,4 @@
-#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.0 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -1255,7 +1255,7 @@ Comet in Lift
 \end_layout
 
 \begin_layout Standard
-As we have seen the Comet support in Lift is provide by Scala Actors.
+As we have seen the Comet support in Lift is provided by Scala Actors.
  In fact there is a CometActor trait that does almost all the work.
  If you want to use Comet technique in Lift you have to make your own CometActor
  by extending the CometActor trait.
@@ -1293,7 +1293,7 @@ com.myapp.snippet
 \end_layout
 
 \begin_layout Enumerate
-First let's see how the marjup would look like:
+First let's see how the markup would look like:
 \end_layout
 
 \begin_deeper
@@ -1742,19 +1742,19 @@ Scallability concerns
 
 \begin_layout Standard
 If you are thinking to use Comet into your application one of your primary
- concenrs would be scallability.
+ concerns would be scallability.
  Because of the HTTP nature in order to be able to push data from server
- to client we nobviously need a communication channel.
+ to client we obviously need a communication channel.
  And this channel is an opened HTTP connection such as the HTTP client sent
  a request and waits for it for a resonabily long period of time (minutes).
- When this time elapses the client iss probably timing out and retries the
- request.
+ When this time elapses the client is probably timing out and/or retries
+ the request.
  Because we have these long-term connections typically the web container
- wioll allocate a thread to manage that and as explained above having threads
+ will allocate a thread to manage that and as explained above having threads
  waiting for the application to actaully provide a response back is a scallabili
 ty killer.
  Non-Blocking IO support solves this problem because when a client sends
- the request and waits for a response there is no thread waiting fr anything,
+ the request and waits for a response there is no thread waiting for anything,
  hence other parallel requests can be served.
  Most containrs nowadays provides support for Non-Blocking IO but this is
  more or less easy to work with in real applications.

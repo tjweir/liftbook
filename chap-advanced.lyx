@@ -1,4 +1,4 @@
-#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.0 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -750,7 +750,7 @@ reference "cha:SiteMap"
 \end_layout
 
 \begin_layout Enumerate
-Lookup the template based on the Req?? path.
+Lookup the template based on the request path.
  Lift will locate the templates using various approaches:
 \end_layout
 
@@ -789,7 +789,7 @@ getResourceAsStream
 
 \end_deeper
 \begin_layout Enumerate
-Process the templates by executing snippets combining templates etc.
+Process the templates by executing snippets, combining templates etc.
 \end_layout
 
 \begin_deeper
@@ -1082,7 +1082,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Function binding snippet
 \begin_inset CommandInset label
 LatexCommand label
@@ -1204,7 +1203,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Function binding template
 \begin_inset CommandInset label
 LatexCommand label
@@ -1310,7 +1308,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Function binding result
 \begin_inset CommandInset label
 LatexCommand label
@@ -1588,19 +1585,27 @@ LiftRules.dispatch.prepend {
 
 \begin_layout Plain Layout
 
-  case Req("redirect1" :: _, _, _) => () => Full(RedirectWithState("/page1",
- "My error" -> Error))
+  case Req("redirect1" :: _, _, _) => () => 
 \end_layout
 
 \begin_layout Plain Layout
 
-  case Req("redirect2" :: _, _, _) => () => Full(RedirectWithState("/page2",
- 
+	Full(RedirectWithState("/page1", "My error" -> Error))
 \end_layout
 
 \begin_layout Plain Layout
 
-								 				RedirectState(() => println(
+  case Req("redirect2" :: _, _, _) => () => 
+\end_layout
+
+\begin_layout Plain Layout
+
+	Full(RedirectWithState("/page2", 
+\end_layout
+
+\begin_layout Plain Layout
+
+	       				RedirectState(() => println(
 \begin_inset Quotes eld
 \end_inset
 
@@ -1613,7 +1618,7 @@ Called on redirect!
 
 \begin_layout Plain Layout
 
-											   				"My error" -> Error)))     
+			  		   				"My error" -> Error)))     
 \end_layout
 
 \begin_layout Plain Layout
@@ -1908,7 +1913,7 @@ reference "sec:Session-and-Request"
 \end_layout
 
 \begin_layout Standard
-The next question would be 
+The next question would probably be 
 \begin_inset Quotes eld
 \end_inset
 
@@ -1938,14 +1943,14 @@ sticky session
  by the same cluster node.
  This can be done by software or hardware load balancers, as they would
  dispatch the requests based on JSESSIONID cookie.
- Another approache is that the dispatching is done based on some URI or
- query parameters.
+ Another approach is that the dispatching is done based on some URI or query
+ parameters.
  For example, a query parameter like serverid=1 is configured in the load
  balancer to always be dispatched to the node 1 of the cluster, and so on.
  There are some downsides for the sticky session approach.
  For instance you are logged in the application and do your stuff.
  Suddenly the node designated to your session crashes.
- At this moment essentially you lost your session.
+ At this moment you lost your session.
  The next subsequent request would be automatically dispatched by the load
  balancer to another cluster node and depending how your application is
  built this may mean that you need to log in again or if part of the state
@@ -2464,9 +2469,9 @@ The utility of this support is quite obvious in so many situations.
 
 \end_deeper
 \begin_layout Standard
-Now we have seen how we can pass xml parameters to snippets bt what id we
- want to pass parameters to the nodes thatwill be bound? For instance in
- Listing 1.3 we also want to pass the amppm information:
+Now we have seen how we can pass xml parameters to snippets but what if
+ we want to pass parameters to the nodes that will be bound? For instance
+ in Listing 1.3 we also want to pass the am/pm information:
 \end_layout
 
 \begin_layout Standard
@@ -3191,7 +3196,7 @@ LiftRules.resourceServerPath
 \family default
  Lift will tell ResouceServer to load this resource from 'toserve' folder.
  But it will fail.
- There is onething left to do.
+ There is one thing left to do.
  We need to tell ResouceServer to allow the loading of mystyle.css resource.
  We can do this from Boot by calling:
 \end_layout
@@ -3239,9 +3244,9 @@ name "sub:HTTP-Authentication"
 HTTP authentication is described by RFC 2617 http://www.isi.edu/in-notes/rfc2617.tx
 t.
  It describes the means of protecting server resources and allowing access
- only to authorized entities.As you may know any J(2)EE web container provides
- HTTP authentication support moslty using JAAS (Java Authentication and
- Authorization Service.
+ only to authorized entities.
+ As you may know any J(2)EE web container provides HTTP authentication support
+ moslty using JAAS (Java Authentication and Authorization Service.
  More informations can be found here http://java.sun.com/javase/6/docs/technotes/g
 uides/security/jaas/JAASRefGuide.html) .
  But this appoach is not without caveats.
@@ -3251,8 +3256,8 @@ ion this will not be loaded by the web application classloader but instead
  at least in tomcat).
  This means that if your code has other dependencies that you can not use
  these dependencies from your web application since web application classloader
- sits below container's classloader in the delgation chain.
- Besides al these Using Scala's power the developer experience of protecting
+ sits below container's classloader in the delegation chain.
+ Besides all these using Scala's power the developer experience of protecting
  server resources using HTTP authentication can be simplified a lot.
  Lift supports both basic and digest authentications, Basic is shown below:
 \end_layout
@@ -3389,9 +3394,9 @@ admin
 Here we just told Lift that /users path is a protected resource and only
  by users that have the Role admin.
  So here we have both authentication and authorization.
- If this function returns an Emptybox it means that this resource is not
- bound to any Role meaning that only authorization will be performed, only
- authentication.
+ If this function returns an Empty box it means that this resource is not
+ bound to any Role meaning that only authentication will be performed, not
+ authorization.
  Secondly using 
 \family typewriter
 LiftRules.authentication
@@ -3729,12 +3734,12 @@ Romania-Admin
 \end_layout
 
 \begin_layout Standard
-In this case if user is authenticated authorization will also succeed because
+In this case if user is authenticated, authorization will also succeed because
  the user's Role is User-Admin and it is a parent of 
 \begin_inset Quotes eld
 \end_inset
 
-Romani-Admin
+Romania-Admin
 \begin_inset Quotes erd
 \end_inset
 
@@ -3762,7 +3767,7 @@ Romania-Admin
 \begin_layout Standard
 In conclusion you have a simple authentication and authorization mechanism
  and of course authentication function would typically validate the credentials
- agains a database and fetch the role from there.
+ against a database and fetch the roles from there.
 \end_layout
 
 \begin_layout Subsubsection
@@ -4012,7 +4017,7 @@ Romania-Admin
 \begin_layout Standard
 Eveything we talked about Roles is still valid.
  However we're now using digest authentication.
- Note that in this case wer not provided with a password anymore but our
+ Note that in this case we're not provided with a password anymore but our
  function is provided with the user name, the Req object and a callback
  function.
  Because digest authentication implies checksum calculations there is no
@@ -4031,7 +4036,7 @@ There is also important to know that diget authentication mechanism uses
  challenge down to client (401 HTTP status).
  In order to avoid replay attacks this nonce is valid only for a period
  of time.
- By default this is set to 30 seconds but you can change this by setting:!
+ By default this is set to 30 seconds but you can change this by setting:
 \end_layout
 
 \begin_layout Standard
@@ -4100,7 +4105,7 @@ This is pretty much it as far as HTTP authentication and authorization goes
  The reason is that in order to match the client's digest, server needs
  to calculate it and for that it needs the password in clear but because
  the application stores a digest, the user's password can not be recovered.
- Hence the HTTP digest can no be calculated.
+ Hence the HTTP digest can not be calculated.
  This is a missmatch betwen the two concepts: HTTP digest authentication
  given by RFC 2617 and the unrecoverable password storage.
 \end_layout
