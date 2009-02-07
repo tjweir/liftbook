@@ -1,4 +1,4 @@
-#LyX 1.6.0 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -340,7 +340,7 @@ Utils Contains a number of helper functions that Lift uses internally and
  are available to your application
 \end_layout
 
-\begin_layout Subsection
+\begin_layout Section
 The Request/Response Lifecycle
 \begin_inset CommandInset label
 LatexCommand label
@@ -932,7 +932,7 @@ We realize that this is a lot of information to digest in one pass, so as
  the new information in the greater context of how Lift is working.
 \end_layout
 
-\begin_layout Subsection
+\begin_layout Section
 Lift Function Mapping
 \begin_inset CommandInset label
 LatexCommand label
@@ -1372,7 +1372,7 @@ registration
  for you.
 \end_layout
 
-\begin_layout Subsection
+\begin_layout Section
 LiftResponse in Detail
 \begin_inset CommandInset label
 LatexCommand label
@@ -1528,7 +1528,7 @@ LiftResponse
 Still let's take a look at a few examples
 \end_layout
 
-\begin_layout Subsubsection
+\begin_layout Subsection
 RedirectWithState
 \end_layout
 
@@ -1694,7 +1694,7 @@ redirect2
  or Error.
 \end_layout
 
-\begin_layout Subsubsection
+\begin_layout Subsection
 XmlResponse
 \end_layout
 
@@ -1791,7 +1791,7 @@ When you are receiving a request with the path /rest the code is returning
  is probably mot commonly used.
 \end_layout
 
-\begin_layout Subsection
+\begin_layout Section
 Session Management 
 \begin_inset CommandInset label
 LatexCommand label
@@ -2216,7 +2216,14 @@ This feature allows you use a resource before Lift does and release them
 \end_layout
 
 \begin_layout Subsection
-Addition Snippet Features
+Additional Snippet Features
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Additional-Snippet-Features"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -2636,7 +2643,7 @@ time
  correct context so that BindHelpers can be safely used.
 \end_layout
 
-\begin_layout Subsection
+\begin_layout Section
 Advanced S Object Features
 \begin_inset CommandInset label
 LatexCommand label
@@ -2652,7 +2659,7 @@ The
 \family typewriter
 S
 \family default
- or Stateful, object is a very important part of Lift.
+, or Stateful, object is a very important part of Lift.
  The S context is created when a client request is recieved that needs to
  be handled as a stateful reuest.
  Please see 
@@ -2662,25 +2669,17 @@ reference "sec:Request/Response-Lifecycle"
 
 \end_inset
 
-.
- The way the state is managed in Lift is interesting in that the processing
- logic is impersonated by a closure that is passed to the 
-\family typewriter
-S
-\family default
- object.
- The 
-\family typewriter
-S
-\family default
- object then gets initialized, the closure is executed and then state is
- cleaned up.
- The 
-\family typewriter
-S
-\family default
- context is maintained for a request/response lifecycle.
- The actual state information is kept inside S object using ThreadLocal
+ for more details on the state creation and handling.
+ The actual state information is kept inside the S object using ThreadLocal
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+java.lang.ThreadLocal
+\end_layout
+
+\end_inset
+
  variables since 
 \family typewriter
 S
@@ -2694,203 +2693,87 @@ S
  object goodies, which include:
 \end_layout
 
-\begin_layout Subsubsection
+\begin_layout Subsection
 Managing cookies
 \end_layout
 
 \begin_layout Standard
-You can retrieve cookies from the request or set cookies to the response.
- Here are the helper functions:
+You can retrieve cookies from the request or set cookies to be sent in the
+ response.
+ Cookies are covered in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Cookies"
+
+\end_inset
+
+.
 \end_layout
 
-\begin_layout Itemize
-
-\family typewriter
-S.receivedCookies
-\family default
- - returns a 
-\family typewriter
-List[Cookie]
-\end_layout
-
-\begin_layout Itemize
-
-\family typewriter
-S.findCookie
-\family default
- - finds a cookie by name and returns a 
-\family typewriter
-Box[Cookie]
-\end_layout
-
-\begin_layout Itemize
-
-\family typewriter
-S.addCookie
-\family default
- - adds a new cookie to the response
-\end_layout
-
-\begin_layout Itemize
-
-\family typewriter
-S.deleteCookie
-\family default
- - deletes a give 
-\family typewriter
-Coo
-\family default
-kie from the response.
- You can also pass a String instead of a 
-\family typewriter
-Cookie
-\family default
- representing the cookie name
-\end_layout
-
-\begin_layout Subsubsection
-Localization 
+\begin_layout Subsection
+Localization and Internationalization
 \end_layout
 
 \begin_layout Standard
-Localization and Internationalization are very important aspects of many
- web applications.
- Lift of course provides support to ease up the work with ResourceBundles.
-\end_layout
+Localization (also called L10N) and Internationalization (also called I18N)
+ are very important aspects of many web applications that deal with different
+ languages.
+ These topics are covered in chapter 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "cha:Internationalization"
 
-\begin_layout Itemize
+\end_inset
 
-\family typewriter
-S.?
-\family default
- - returns a ResourceBundle value by the given name.
- You can also provide parameters if you message requires them.
- The resource-bundle name is given by 
-\family typewriter
-LiftRules.resourceName
-\family default
- variable
-\end_layout
-
-\begin_layout Itemize
-
-\family typewriter
-S.??
-\family default
- - similar with S.? but it uses the ResourceBundle for internal Lift strings.
- Lift's resource-bundles are located in i18n folder with the name lift-core.prope
-rties The resource-bundle name is given by LiftRules.liftCoreResourceName
- variable
-\end_layout
-
-\begin_layout Standard
-The Locale applied for these functions is given by
-\family typewriter
- LiftRules.localeCalculator
-\family default
- which by defult return the Locale from the request.
- Of course you can provide you own logic of determining the locale.
+.
  
 \end_layout
 
-\begin_layout Standard
-Lift supports using multiple resource-bundles essentially multiple .properties
- files.
- You can specify this by setting in your Boot:
+\begin_layout Subsection
+Managing the Timezone
 \end_layout
 
 \begin_layout Standard
-
+The
 \family typewriter
-LiftRules.resourceNames = 
-\begin_inset Quotes eld
-\end_inset
-
-name1
-\begin_inset Quotes erd
-\end_inset
-
- :: 
-\begin_inset Quotes eld
-\end_inset
-
-name2
-\begin_inset Quotes erd
-\end_inset
-
- :: ...
- :: Nil
+ S.timeZone
 \family default
-.
- This means that in your WEB-INF/classes folder you would have files like:
-\end_layout
-
-\begin_layout Itemize
-name1.properties
-\end_layout
-
-\begin_layout Itemize
-name1_fr_FR.properties
-\end_layout
-
-\begin_layout Itemize
-name2.properties
-\end_layout
-
-\begin_layout Itemize
-name2_fr_FR.properties
-\end_layout
-
-\begin_layout Itemize
-etc.
-\end_layout
-
-\begin_deeper
-\begin_layout Standard
-At maven project level these files would exist in 
-\family typewriter
-src/main/resources
-\family default
- folder.
-\end_layout
-
-\end_deeper
-\begin_layout Standard
-When you are calling S.?(..) function your entry will be looked up in all bundles
- and the value is returned fron the first bundle that contains this key.
- This approach allows you to structure your application string resources
- in different files to ease up translations etc.
- You can alsoobtain the list of ResourceBundles by calling 
-\family typewriter
-S.resourceBundles 
-\family default
-function.
-\end_layout
-
-\begin_layout Subsubsection
-Managing the Timezone 
-\end_layout
-
-\begin_layout Standard
-
-\family typewriter
-S.timeZone
-\family default
- function is providing the timezone given by 
+ function returns the current timezone as computed by the 
 \family typewriter
 LiftRules.timeZoneCalculator
 \family default
- which by default it returns the default timezone.
+ function.
+ By default, the 
+\family typewriter
+LiftRules
+\family default
+ method simply executes TimeZone.getDefault, but you can provide your own
+ 
+\begin_inset Formula $Box[HttpServletRequest]\Rightarrow TimeZone$
+\end_inset
+
+ partial function to define your own behavior.
+ Examples would include allowing users to choose their own timezone, or
+ to use geographic lookup of the user's IP address.
 \end_layout
 
-\begin_layout Subsubsection
+\begin_layout Subsection
 Per-session DispatchPF functions 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Need an example of usage
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
-You can set DispatchPF functions that operates in the context of a current
+You can set DispatchPF functions that operate in the context of a current
  session.
- S.highLevelSessionDispatcher function.
  Essentially you can bind DispatchPF functions with a given name.
  Relevant functions are:
 \end_layout
@@ -2949,14 +2832,24 @@ DispatchPF
  associations
 \end_layout
 
-\begin_layout Subsubsection
-Session re-writers.
- 
+\begin_layout Subsection
+Session re-writers
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Need an example of usage
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
-Sessionre-writers are per session functions that allows to modify a HTTP
- request (URI, query parameters etc.) before the request is actually processed.
+Session re-writers are per session functions that allow you to modify a
+ HTTP request (URI, query parameters etc.) before the request is actually
+ processed.
  This is similar with LiftRules.rewrite variable but you can apply rewriters
  per a given session.
  Hence you can have different rewrites in diferent contexts.
@@ -3001,14 +2894,14 @@ S.clearSessionRewriter
  - remove all session rewriters.
 \end_layout
 
-\begin_layout Subsubsection
+\begin_layout Subsection
 Access to HTTP headers
 \end_layout
 
 \begin_layout Standard
 Accessing HTTP header parameters from the request and adding HTTP header
  parameters to the HTTP response represent very common operations.
- You can easily do that using th following functions:
+ You can easily perform these operations using the following functions:
 \end_layout
 
 \begin_layout Itemize
@@ -3031,12 +2924,12 @@ S.setHeader
  - sets a HTTP header parameter by specifying the name and value pair
 \end_layout
 
-\begin_layout Subsubsection
-Manage document type
+\begin_layout Subsection
+Manage the document type
 \end_layout
 
 \begin_layout Standard
-You can also read and write the document type set for the current response.
+You can also read and write the XML document type set for the current response.
  You can use the following functions:
 \end_layout
 
@@ -3056,7 +2949,7 @@ S.setDocType
  - sets a document type for the curent response object.
 \end_layout
 
-\begin_layout Subsubsection
+\begin_layout Subsection
 Other functions 
 \end_layout
 
@@ -3075,7 +2968,7 @@ Managing the function map.
  Please see 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "sub:Functions-mapping"
+reference "sub:Lift-Function-Mapping"
 
 \end_inset
 
@@ -3126,7 +3019,7 @@ reference "sub:Additional-Snippet-Features"
 
 \end_layout
 
-\begin_layout Subsection
+\begin_layout Section
 ResourceServer
 \begin_inset CommandInset label
 LatexCommand label
@@ -3229,7 +3122,7 @@ ResourceServer.baseResourceLocation
  which can be changed.
 \end_layout
 
-\begin_layout Subsection
+\begin_layout Section
 HTTP Authentication
 \begin_inset CommandInset label
 LatexCommand label
@@ -3241,14 +3134,45 @@ name "sub:HTTP-Authentication"
 \end_layout
 
 \begin_layout Standard
-HTTP authentication is described by RFC 2617 http://www.isi.edu/in-notes/rfc2617.tx
-t.
+HTTP authentication is described by RFC 2617 
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+\begin_inset CommandInset href
+LatexCommand href
+target "http://www.isi.edu/in-notes/rfc2617.txt"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+.
  It describes the means of protecting server resources and allowing access
  only to authorized entities.
  As you may know any J(2)EE web container provides HTTP authentication support
- moslty using JAAS (Java Authentication and Authorization Service.
- More informations can be found here http://java.sun.com/javase/6/docs/technotes/g
-uides/security/jaas/JAASRefGuide.html) .
+ mostly using JAAS
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+Java Authentication and Authorization Service.
+ More informations can be found at 
+\begin_inset CommandInset href
+LatexCommand href
+target "http://java.sun.com/javase/6/docs/technotes/guides/security/jaas/JAASRefGuide.html"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ .
  But this appoach is not without caveats.
  For instance if you provide your own LoginModule or CallbackHandler implementat
 ion this will not be loaded by the web application classloader but instead
