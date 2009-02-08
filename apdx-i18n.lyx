@@ -174,5 +174,21 @@ S.resourceBundles
 function.
 \end_layout
 
+\begin_layout Section
+Resource Bundles
+\end_layout
+
+\begin_layout Section
+Localized Strings in Scala Code
+\end_layout
+
+\begin_layout Section
+Localized Strings in Templates
+\end_layout
+
+\begin_layout Section
+Calculating Locale
+\end_layout
+
 \end_body
 \end_document

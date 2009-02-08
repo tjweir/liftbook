@@ -1384,6 +1384,235 @@ name "sec:LiftResponse-in-Detail"
 \end_layout
 
 \begin_layout Standard
+In some cases, particularly when using dispatch functions (section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Custom-dispatch-func"
+
+\end_inset
+
+), you may want explicit control over what Lift returns to the user.
+ The LiftResponse trait is the base of a complete hierarchy of response
+ classes that cover a wide variety of functionality, from simply returning
+ an HTTP status code to returning a byte stream or your own XML fragments.
+ In this section we'll cover some of the more common classes.
+\end_layout
+
+\begin_layout Subsection
+InMemoryResponse
+\end_layout
+
+\begin_layout Standard
+The InMemoryResponse allows you to return an array of bytes directly to
+ the user along with a set of HTTP headers, cookies and a response code.
+ An example of using InMemoryResponse was given in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Custom-dispatch-func"
+
+\end_inset
+
+, showing how we can directly generate a chart PNG in memory and send it
+ to the user.
+ This is generally useful as long as the data you need to generate and send
+ is relatively small; when you start getting into larger buffers you can
+ run into memory constraints as well as garbage collection pressure if you're
+ serving a large number of requests.
+\end_layout
+
+\begin_layout Subsection
+StreamingResponse
+\end_layout
+
+\begin_layout Standard
+The StreamingResponse class is similar to the InMemoryResponse, except that
+ instead of reading from a buffer, it reads from an input object.
+ The input object is not required to be a subclass of java.io.InputStream,
+ but rather is only required to implement the method 
+\begin_inset Quotes eld
+\end_inset
+
+def read(buf: Array[Byte]): Int
+\begin_inset Quotes erd
+\end_inset
+
+
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+This is done with Scala's structural typing, which we don't cover in this
+ book.
+ For more info, see 
+\begin_inset CommandInset href
+LatexCommand href
+target "http://scala.sygneca.com/patterns/duck-typing-done-right"
+
+\end_inset
+
+, or the Scala Language Spec, section 3.2.7
+\end_layout
+
+\end_inset
+
+.
+ This allows you to essentially send back anything that can provide an input
+ stream.
+ Additionally, you can provide a 
+\begin_inset Formula $()\Rightarrow Unit$
+\end_inset
+
+ function (cleanup, if you will) that is called when the input stream is
+ exhausted.
+ As an example, let's refine the chart code from section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Custom-dispatch-func"
+
+\end_inset
+
+ to use piped streams instead of sucking the whole chart into memory.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:refined-Charting-method"
+
+\end_inset
+
+ shows how we can use PipedInputStream and PipedOutputStream from java.io
+ to send the data back to the user.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "basicstyle={\scriptsize},frame=single"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Streaming Charting method
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:refined-Charting-method"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def chart (endDate : String) : Box[LiftResponse] = {
+\end_layout
+
+\begin_layout Plain Layout
+
+  // Query, set up chart, etc...
+\end_layout
+
+\begin_layout Plain Layout
+
+  val buffered = balanceChart.createBufferedImage(width,height)
+\end_layout
+
+\begin_layout Plain Layout
+
+  val inPipe = new java.io.PipedInputStream()
+\end_layout
+
+\begin_layout Plain Layout
+
+  val outPipe = new java.io.PipedOutputStream(inPipe)
+\end_layout
+
+\begin_layout Plain Layout
+
+  val writer = new Thread {
+\end_layout
+
+\begin_layout Plain Layout
+
+    def run () = { ChartUtilities.writeBufferedImageAsPNG(outPipe, buffered)
+ }
+\end_layout
+
+\begin_layout Plain Layout
+
+  }.start
+\end_layout
+
+\begin_layout Plain Layout
+
+  Full(StreamingResponse(inPipe,
+\end_layout
+
+\begin_layout Plain Layout
+
+                         () => { inPipe.close; outPipe.close },
+\end_layout
+
+\begin_layout Plain Layout
+
+                        0, // We don't know the size ahead of time
+\end_layout
+
+\begin_layout Plain Layout
+
+                        (Content-Type -> image/png) :: Nil,
+\end_layout
+
+\begin_layout Plain Layout
+
+                        Nil,
+\end_layout
+
+\begin_layout Plain Layout
+
+                        200))
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Notice that we run the image encoding in a separate thread; if we didn't
+ do this then we would block our response thread because the pipe buffer
+ would fill while writing the image data out.
+ Also note that we use the cleanup function to close the pipes once we're
+ done so that we make sure to release resources.
+\end_layout
+
+\begin_layout Subsection
+Hierarchy
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+May remove this after I complete the summary of classes.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 The Lift framework makes a lot of things really easy and it provides extremly
  useful abstractions as you may have already discovered.
  Responses to clients are also abstacted by 
