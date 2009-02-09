@@ -53,41 +53,379 @@ name "cha:Internationalization"
 
 \end_layout
 
-\begin_layout Itemize
-S.?(String)
+\begin_layout Standard
+The ability to display pages to users of multiple languages is a common
+ feature of many web frameworks.
+ Lift builds on the underlying Java I18N foundations
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+Primarily java.util.Locale and java.util.ResourceBundle
+\end_layout
+
+\end_inset
+
+ to provide a simple yet flexible means for using Locales and translated
+ strings in your app.
+ Locales are used to control not only what language the text is in that's
+ presented to the user, but also number and date formatting, among others.
+ If you want more details on the underlying foundation of Java I18N we suggest
+ you visit the Internationalization Homepage at 
+\begin_inset CommandInset href
+LatexCommand href
+target "http://java.sun.com/javase/technologies/core/basic/intl/"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section
+Resource Bundles
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Resource-Bundles"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Resource bundles are sets of property files
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+Technically, they can have other formats, but Lift generally only deals
+ with PropertyResourceBundles
+\end_layout
+
+\end_inset
+
+ that contain keyed strings for your application to use in messages.
+ In addition to the key/value pair contents of the files, the filename itself
+ is significant.
+ When a ResourceBundle is specified by name, the base name is used as the
+ default, and additional files with names of the form 
+\begin_inset Quotes eld
+\end_inset
+
+<base name>_<ISO language code>
+\begin_inset Quotes erd
+\end_inset
+
+ can be used to specify translations of the default strings in a given language.
+ As an example, consider listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Default-door-bundle"
+
+\end_inset
+
+, which specifies a default resource bundle for an application that reports
+ the status of a door (open or closed).
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Default door bundle
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Default-door-bundle"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+openStatus=The door is open
+\end_layout
+
+\begin_layout Plain Layout
+
+closedStatus=The door is closed
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Suppose this file is called 
+\begin_inset Quotes eld
+\end_inset
+
+DoorMessages.properties
+\begin_inset Quotes erd
+\end_inset
+
+; we can provide an additional translation for Spanish by creating a file
+ called 
+\begin_inset Quotes eld
+\end_inset
+
+DoorMessages_es.properties
+\begin_inset Quotes erd
+\end_inset
+
+, shown in listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Spanish-door-bundle"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Spanish door bundle
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Spanish-door-bundle"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+openStatus=La puerta está abierta
+\end_layout
+
+\begin_layout Plain Layout
+
+closedStatus=La puerta está cerrada
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+When you want to retrieve a message (covered in the next two sections) Lift
+ will check the current Locale and see if there's a specialized ResourceBundle
+ available for it.
+ If so, it uses the messages in that file; otherwise, it uses the default
+ bundle.
+\end_layout
+
+\begin_layout Standard
+Lift supports using multiple resource bundle files so that you can break
+ your messages up into functional groups.
+ You specify this by setting the 
+\family typewriter
+LiftRules.resourceNames
+\family default
+ property to a list of the base names (without a language or 
+\begin_inset Quotes eld
+\end_inset
+
+.properties
+\begin_inset Quotes erd
+\end_inset
+
+ extension):
+\end_layout
+
+\begin_layout LyX-Code
+LiftRules.resourceNames = 
+\begin_inset Quotes eld
+\end_inset
+
+DoorMessages
+\begin_inset Quotes erd
+\end_inset
+
+ :: 
+\begin_inset Quotes eld
+\end_inset
+
+DoorknobMessages
+\begin_inset Quotes erd
+\end_inset
+
+ :: Nil
+\end_layout
+
+\begin_layout Standard
+The order that you define the resource bundle names is the order that they'll
+ be searched for keys.
+ The message properties files should be located in your 
+\family typewriter
+WEB-INF/classes
+\family default
+ folder so that they are accessible from Lift's classloader
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+The properties files are retrieved with ClassLoader.getResourceAsStream
+\end_layout
+
+\end_inset
+
+; if you're using Maven this will happen if you put your files in the 
+\family typewriter
+src/main/resources
+\family default
+ directory.
+\end_layout
+
+\begin_layout Section
+Localized Strings in Scala Code
+\end_layout
+
+\begin_layout Standard
+Retrieving localized strings in your Scala code is primarily performed using
+ the 
+\family typewriter
+S.?
+\family default
+ method.
+ When invoked with one argument the resource bundles are searched for a
+ key matching the given argument.
+ If a matching value is found it's returned.
+ If it can't be found then Lift calls LiftRules.localizationLookupFailureNotice
+ on the (key, current Locale) pair and then simply returns the key.
+ If you call S.? with more than one argument, the first argument is still
+ the key to look up, but any remaining arguments are used as format parameters
+ for String.format executed on the retrieved value.
+ For example, listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Formatted-bundles"
+
+\end_inset
+
+ shows a sample bundle file and the associated Scala code for using message
+ formatting.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Formatted bundles
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Formatted-bundles"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// bundle
+\end_layout
+
+\begin_layout Plain Layout
+
+tempMsg=The current temperature is %0.1 degrees
+\end_layout
+
+\begin_layout Plain Layout
+
+// code
+\end_layout
+
+\begin_layout Plain Layout
+
+var currentTmp : Double = getTemp()
+\end_layout
+
+\begin_layout Plain Layout
+
+Text(S.?(
+\begin_inset Quotes eld
+\end_inset
+
+tempMsg
+\begin_inset Quotes erd
+\end_inset
+
+, currentTemp))
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Lift also provides the 
+\family typewriter
+S.??
+\family default
+ method, which is similar to S.? but uses the ResourceBundle for internal
+ Lift strings.
+ Lift's resource-bundles are located in the i18n folder with the name lift-core.p
+roperties The resource-bundle name is given by LiftRules.liftCoreResourceName
+ variable.
+ Generally you won't use this method.
+\end_layout
+
+\begin_layout Section
+Localized Strings in Templates
 \end_layout
 
 \begin_layout Itemize
 lift:loc tag
 \end_layout
 
-\begin_layout Itemize
-Proper placement of language resource
-\end_layout
-
-\begin_layout Itemize
-
-\family typewriter
-S.?
-\family default
- - returns a ResourceBundle value by the given name.
- You can also provide parameters if you message requires them.
- The resource-bundle name is given by 
-\family typewriter
-LiftRules.resourceName
-\family default
- variable
-\end_layout
-
-\begin_layout Itemize
-
-\family typewriter
-S.??
-\family default
- - similar with S.? but it uses the ResourceBundle for internal Lift strings.
- Lift's resource-bundles are located in i18n folder with the name lift-core.prope
-rties The resource-bundle name is given by LiftRules.liftCoreResourceName
- variable
+\begin_layout Section
+Calculating Locale
 \end_layout
 
 \begin_layout Standard
@@ -98,96 +436,6 @@ The Locale applied for these functions is given by
  which by defult return the Locale from the request.
  Of course you can provide you own logic of determining the locale.
  
-\end_layout
-
-\begin_layout Standard
-Lift supports using multiple resource-bundles essentially multiple .properties
- files.
- You can specify this by setting in your Boot:
-\end_layout
-
-\begin_layout Standard
-
-\family typewriter
-LiftRules.resourceNames = 
-\begin_inset Quotes eld
-\end_inset
-
-name1
-\begin_inset Quotes erd
-\end_inset
-
- :: 
-\begin_inset Quotes eld
-\end_inset
-
-name2
-\begin_inset Quotes erd
-\end_inset
-
- :: ...
- :: Nil
-\family default
-.
- This means that in your WEB-INF/classes folder you would have files like:
-\end_layout
-
-\begin_layout Itemize
-name1.properties
-\end_layout
-
-\begin_layout Itemize
-name1_fr_FR.properties
-\end_layout
-
-\begin_layout Itemize
-name2.properties
-\end_layout
-
-\begin_layout Itemize
-name2_fr_FR.properties
-\end_layout
-
-\begin_layout Itemize
-etc.
-\end_layout
-
-\begin_deeper
-\begin_layout Standard
-At maven project level these files would exist in 
-\family typewriter
-src/main/resources
-\family default
- folder.
-\end_layout
-
-\end_deeper
-\begin_layout Standard
-When you are calling S.?(..) function your entry will be looked up in all bundles
- and the value is returned fron the first bundle that contains this key.
- This approach allows you to structure your application string resources
- in different files to ease up translations etc.
- You can alsoobtain the list of ResourceBundles by calling 
-\family typewriter
-S.resourceBundles 
-\family default
-function.
-\end_layout
-
-\begin_layout Section
-Resource Bundles
-\end_layout
-
-\begin_layout Section
-Localized Strings in Scala Code
-\end_layout
-
-\begin_layout Section
-Localized Strings in Templates
-\end_layout
-
-\begin_layout Section
-Calculating Locale
 \end_layout
 
 \end_body
