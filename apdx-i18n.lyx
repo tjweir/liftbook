@@ -139,7 +139,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Default door bundle
 \begin_inset CommandInset label
 LatexCommand label
@@ -208,7 +207,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Spanish door bundle
 \begin_inset CommandInset label
 LatexCommand label
@@ -323,11 +321,18 @@ S.?
  When invoked with one argument the resource bundles are searched for a
  key matching the given argument.
  If a matching value is found it's returned.
- If it can't be found then Lift calls LiftRules.localizationLookupFailureNotice
+ If it can't be found then Lift calls 
+\family typewriter
+LiftRules.localizationLookupFailureNotice
+\family default
  on the (key, current Locale) pair and then simply returns the key.
- If you call S.? with more than one argument, the first argument is still
- the key to look up, but any remaining arguments are used as format parameters
- for String.format executed on the retrieved value.
+ If you call 
+\family typewriter
+S.?
+\family default
+ with more than one argument, the first argument is still the key to look
+ up, but any remaining arguments are used as format parameters for String.format
+ executed on the retrieved value.
  For example, listing 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -349,7 +354,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Formatted bundles
 \begin_inset CommandInset label
 LatexCommand label
@@ -408,8 +412,11 @@ Lift also provides the
 \family typewriter
 S.??
 \family default
- method, which is similar to S.? but uses the ResourceBundle for internal
- Lift strings.
+ method, which is similar to 
+\family typewriter
+S.?
+\family default
+ but uses the ResourceBundle for internal Lift strings.
  Lift's resource-bundles are located in the i18n folder with the name lift-core.p
 roperties The resource-bundle name is given by LiftRules.liftCoreResourceName
  variable.
@@ -446,7 +453,7 @@ reference "lst:Spanish-door-bundle"
 
 .
  The fallthrough behavior lets us put a default text (English) directly
- in the template, although for consistencyyou should usually provide an
+ in the template, although for consistency you should usually provide an
  explicit bundle for all languages.
 \end_layout
 
@@ -461,7 +468,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Using the loc tag
 \begin_inset CommandInset label
 LatexCommand label
