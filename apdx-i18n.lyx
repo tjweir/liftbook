@@ -420,8 +420,98 @@ roperties The resource-bundle name is given by LiftRules.liftCoreResourceName
 Localized Strings in Templates
 \end_layout
 
-\begin_layout Itemize
-lift:loc tag
+\begin_layout Standard
+You can add localized strings directly in your templates through the <lift:loc
+ /> tag.
+ You can either provide a locid attribute on the tag which is used as the
+ lookup key, or if you don't provide one, the contents of the tag will be
+ used as the key.
+ In either case, if the key can't be found in any resource bundles, the
+ contents of the tag will be used.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Using-the-loc-tag"
+
+\end_inset
+
+ shows some examples of how you could use lift:loc.
+ In both examples, assume that we're using the resource bundle shown in
+ listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Spanish-door-bundle"
+
+\end_inset
+
+.
+ The fallthrough behavior lets us put a default text (English) directly
+ in the template, although for consistencyyou should usually provide an
+ explicit bundle for all languages.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=XML"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Using the loc tag
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Using-the-loc-tag"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<!-- using explicit key -->
+\end_layout
+
+\begin_layout Plain Layout
+
+<lift:loc locid=
+\begin_inset Quotes erd
+\end_inset
+
+openStatus
+\begin_inset Quotes erd
+\end_inset
+
+>The door is open</lift:loc>
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<!-- should be the same result -->
+\end_layout
+
+\begin_layout Plain Layout
+
+<lift:loc>openStatus</lift:loc>
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section
@@ -429,13 +519,19 @@ Calculating Locale
 \end_layout
 
 \begin_layout Standard
-The Locale applied for these functions is given by
+The Locale for a given request is calculated by the function set in
 \family typewriter
  LiftRules.localeCalculator
 \family default
- which by defult return the Locale from the request.
- Of course you can provide you own logic of determining the locale.
- 
+, a 
+\begin_inset Formula $(Box[HttpServletRequest])\Rightarrow Locale$
+\end_inset
+
+.
+ The default behavior is to call getLocale on the HttpServletRequest, which
+ allows the server to set it if your clients send locale preferences.
+ If that call returns null, then Locale.getDefault is used.
+ You can provide your own function for calculating locales if you desire.
 \end_layout
 
 \end_body
