@@ -2251,7 +2251,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 LiftRules gabage collection variables
 \end_layout
 
@@ -2274,7 +2273,7 @@ LiftRules gabage collection variables
 \begin_layout Plain Layout
 
  * Setting this to false will disable this mechanims and there will be no
- Ajax polling mechanims attempted.
+ Ajax polling request attempted.
     
 \end_layout
 
@@ -2305,8 +2304,8 @@ var enableLiftGC = true;
 
 \begin_layout Plain Layout
 
- * (given in milliseonds) will be discarded hence eligible for garbage collectio
-ns.
+ * (given in milliseonds) will be discarded, hence eligible for garbage
+ collection.
  
 \end_layout
 
@@ -2337,15 +2336,14 @@ var unusedFunctionsLifeTime: Long = 10 minutes
 
 \begin_layout Plain Layout
 
- * The polling interval for background Ajax requests to keep functions to
- not be garbage collected.
+ * The polling interval for background Ajax requests to prevent functions
+ of being garbage collected.
    
 \end_layout
 
 \begin_layout Plain Layout
 
  * Default value is set to 75 seconds.
-   
 \end_layout
 
 \begin_layout Plain Layout
@@ -2369,14 +2367,14 @@ var liftGCPollingInterval: Long = 75 seconds
 
 \begin_layout Plain Layout
 
- * The polling interval for background Ajax requests to keep functions to
- not be garbage collected.
+ * The polling interval for background Ajax requests to prevent functions
+ of being garbage collected.
   
 \end_layout
 
 \begin_layout Plain Layout
 
- * This will be applied if the AJax request will fail.
+ * This will be applied if the Ajax request will fail.
  Default value is set to 15 seconds.
   
 \end_layout
