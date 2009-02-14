@@ -1,4 +1,4 @@
-#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.0 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -2191,6 +2191,209 @@ sticky session
  since in this model the state does not need to be replicated in all cluster
  nodes which for significant state information can be quite time/resources
  consuming.
+\end_layout
+
+\begin_layout Subsection
+Lift garbage collection
+\end_layout
+
+\begin_layout Standard
+As you have seen, Lift tailors Scala functions with client side artifacts
+ (XHTML input elements, Ajax requests etc.).
+ Naturally these functions are kept into the session state until the session
+ is terminated.
+ Also for every rendered page new parametes are generated and mapped with
+ the appropriate functions.
+ In order to prevent accumulation of such mappings, Lift has a mechanism
+ of purging unused functions.
+ Basically the idea is:
+\end_layout
+
+\begin_layout Enumerate
+Each element that is bound to a function contains a lift:gc XHTML attribute.
+\end_layout
+
+\begin_layout Enumerate
+On client side, a script periodically collects the lift:gc values and sends
+ them to the server via a background Ajax request.
+ On service side Lift just updates the timestamp of these functions.
+ The functions older then 
+\family typewriter
+LiftRules.unusedFunctionsLifeTime
+\family default
+ (default value is 10 minutes) become eligible for garbage collection as
+ they are de-referenced from the current session.
+ The frequency of such Ajax requests is given by 
+\family typewriter
+LiftRules.liftGCPollingInterval
+\family default
+.
+ By default it is set to 75 seconds.
+\end_layout
+
+\begin_layout Standard
+You can o course turn of this garbage collection mechanism by setting 
+\family typewriter
+LiftRules.enableLiftGC = false
+\family default
+ typically in your Boot.
+ You can also fine tune the garbage collection mechanims to fit your application
+ needs, by changing the default LiftRules variables.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+LiftRules gabage collection variables
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * By default lift uses a garbage-collection mechanism of removing unused
+ bound functions from LiftSesssion
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Setting this to false will disable this mechanims and there will be no
+ Ajax polling mechanims attempted.
+    
+\end_layout
+
+\begin_layout Plain Layout
+
+ */ 
+\end_layout
+
+\begin_layout Plain Layout
+
+var enableLiftGC = true;
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * If Lift garbage collection is enabled, functions that are not seen in
+ the page for this period of time  
+\end_layout
+
+\begin_layout Plain Layout
+
+ * (given in milliseonds) will be discarded hence eligible for garbage collectio
+ns.
+ 
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The default value is 10 minutes.
+    
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var unusedFunctionsLifeTime: Long = 10 minutes
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**    
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The polling interval for background Ajax requests to keep functions to
+ not be garbage collected.
+   
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Default value is set to 75 seconds.
+   
+\end_layout
+
+\begin_layout Plain Layout
+
+ */   
+\end_layout
+
+\begin_layout Plain Layout
+
+var liftGCPollingInterval: Long = 75 seconds
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**   
+\end_layout
+
+\begin_layout Plain Layout
+
+ * The polling interval for background Ajax requests to keep functions to
+ not be garbage collected.
+  
+\end_layout
+
+\begin_layout Plain Layout
+
+ * This will be applied if the AJax request will fail.
+ Default value is set to 15 seconds.
+  
+\end_layout
+
+\begin_layout Plain Layout
+
+ */ 
+\end_layout
+
+\begin_layout Plain Layout
+
+var liftGCFailureRetryTimeout: Long = 15 seconds 
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section
