@@ -1,4 +1,4 @@
-#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.0 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -231,6 +231,13 @@ Derek would like to thank his wife, Debbie, for her patience and support
 \begin_layout Standard
 \noindent
 Tyler would like to thank his wife Laura, for encouraging him.
+\end_layout
+
+\begin_layout Standard
+\noindent
+Marius would like to thank his wife Alina, for her patience during long
+ weekends and bearing with his monosyllabic answers while working on the
+ book.
 \end_layout
 
 \begin_layout Chapter*
