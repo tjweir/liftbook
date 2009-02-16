@@ -1,4 +1,4 @@
-#LyX 1.6.0 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -294,16 +294,6 @@ filename "chap-welcome.lyx"
 \begin_layout Standard
 \begin_inset CommandInset include
 LatexCommand include
-filename "chap-maven.lyx"
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset CommandInset include
-LatexCommand include
 filename "chap-demoapp.lyx"
 
 \end_inset
@@ -475,6 +465,13 @@ part{Appendices}
 
 \begin_layout Standard
 \start_of_appendix
+\begin_inset CommandInset include
+LatexCommand include
+filename "chap-maven.lyx"
+
+\end_inset
+
+
 \begin_inset CommandInset include
 LatexCommand include
 filename "apdx-message-handling.lyx"

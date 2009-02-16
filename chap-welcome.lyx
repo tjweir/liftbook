@@ -1,4 +1,4 @@
-#LyX 1.6.0 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -118,17 +118,14 @@ basic configuration
  for your application.
  Instead, a basic Lift app only requires that you add the LiftFilter to
  your web.xml and add one or more lines telling Lift what package your classes
- sit in 
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-TODO: cross-ref
-\end_layout
+ sit in (section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Bootstrap"
 
 \end_inset
 
-.
+).
  The methods you code aren't required to implement a specific interface
  (called a trait), although there are support traits that make things that
  much simpler.
@@ -524,16 +521,6 @@ http://java.sun.com/
  although most likely other versions (Blackdown, OpenJDK) should work with
  little or no modification.
  
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Should we include brief blurbs on platform-specific installation?
-\end_layout
-
-\end_inset
-
-
 \end_layout
 
 \begin_layout Description
@@ -551,23 +538,19 @@ Maven
 
 \end_inset
 
- is a project management tool which we'll cover in more detail in chapter
+ is a project management tool which has extensive capabilities for building,
+ dependency management, testing and reporting.
+ We assume that you are familiar with basic Maven usage for compilation,
+ packaging and testing.
+ If you haven't used Maven before you can get a brief overview in appendix
  
 \begin_inset CommandInset ref
-LatexCommand vref
+LatexCommand ref
 reference "cha:Maven"
 
 \end_inset
 
 .
- Maven has extensive capabilities for building, dependency management, testing
- and reporting.
- If you haven't used Maven before you can think of it as an incredibly powerful
- version of 
-\family typewriter
-make
-\family default
- for now.
  You can download the latest version of Maven from 
 \begin_inset Flex URL
 status collapsed
@@ -711,17 +694,18 @@ https://lampsvn.epfl.ch/trac/scala/browser/scala-tool-support/trunk/src
 \end_deeper
 \begin_layout Standard
 Now that we have the prerequisites out of the way, it's time to get started.
- We're going to leverage Maven's archetypes 
-\begin_inset Note Note
+ We're going to leverage Maven's archetypes
+\begin_inset Foot
 status open
 
 \begin_layout Plain Layout
-TODO: Need a cross-reference to the section on archetypes
+An archetype is essentially a project template for Maven that provides prompt-dr
+iven customization of basic attributes
 \end_layout
 
 \end_inset
 
-to do 99% of the work for us in this example.
+ to do 99% of the work for us in this example.
  First, change to whatever directory you'd like to work in:
 \end_layout
 
@@ -969,13 +953,10 @@ lift
 \end_inset
 
  prefix; they form the basis of lift's extensive templating support, which
- we will cover in more detail in 
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-TODO: Need a cross reference here
-\end_layout
+ we will cover in more detail in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Templates"
 
 \end_inset
 
@@ -1250,13 +1231,10 @@ SiteMap
 
 \end_inset
 
- (to be covered in 
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-TODO: Cross ref
-\end_layout
+ (to be covered in chapter 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "cha:SiteMap"
 
 \end_inset
 
@@ -1559,13 +1537,10 @@ demo.helloworld
 \family typewriter
 demo.helloworld.snippets
 \family default
- package, views (which we'll cover in 
-\begin_inset Note Note
-status collapsed
-
-\begin_layout Plain Layout
-TODO: Cross-ref
-\end_layout
+ package, views (section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Views"
 
 \end_inset
 
@@ -1582,17 +1557,7 @@ addToPackages
  multiple times.
  The second item in the Boot class is the SiteMenu setup.
  Obviously this is a pretty simple menu in this demo, but we'll cover more
- interesting examples in 
-\begin_inset Note Note
-status collapsed
-
-\begin_layout Plain Layout
-TODO: Cross-ref
-\end_layout
-
-\end_inset
-
-.
+ interesting examples in the SiteMap chapter.
 \end_layout
 
 \begin_layout Standard
@@ -1635,17 +1600,14 @@ How to handle state within your application
 \end_layout
 
 \begin_layout Itemize
-Lift's ORM layer, 
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-TODO: Record or Mapper?
-\end_layout
+Lift's ORM layer, Mapper (chapter 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "cha:mapper_and_record"
 
 \end_inset
 
- which provides a powerful yet lightweight interface to databases
+), which provides a powerful yet lightweight interface to databases
 \end_layout
 
 \begin_layout Itemize
