@@ -2200,23 +2200,23 @@ Lift garbage collection
 \begin_layout Standard
 As you have seen, Lift tailors Scala functions with client side artifacts
  (XHTML input elements, Ajax requests etc.).
- Naturally these functions are kept into the session state until the session
- is terminated.
- Also for every rendered page new parametes are generated and mapped with
- the appropriate functions.
+ Naturally these functions are kept into the session state.
+ Also for every rendered page, a page ID is generated and functions bound
+ for these pages as asociated with this page ID.
  In order to prevent accumulation of such mappings, Lift has a mechanism
  of purging unused functions.
- Basically the idea is:
+ Basically the idea is
 \end_layout
 
 \begin_layout Enumerate
-Each element that is bound to a function contains a lift:gc XHTML attribute.
+On client side, a script periodically sends to the server an Ajax request
+ impersonating a lift GC request.
+ 
 \end_layout
 
 \begin_layout Enumerate
-On client side, a script periodically collects the lift:gc values and sends
- them to the server via a background Ajax request.
- On service side Lift just updates the timestamp of these functions.
+On service side Lift updates the timestamps of the functions associated
+ with this page ID.
  The functions older then 
 \family typewriter
 LiftRules.unusedFunctionsLifeTime
@@ -2231,8 +2231,17 @@ LiftRules.liftGCPollingInterval
  By default it is set to 75 seconds.
 \end_layout
 
+\begin_layout Enumerate
+Each Ajax request contains includes the page ID as new function may be bound
+ as a result of processing the Ajax request, dependin on the application
+ code.
+ Such function that are dynamically bound are automatically associated with
+ the same page ID.
+\end_layout
+
 \begin_layout Standard
-You can o course turn of this garbage collection mechanism by setting 
+You can of course turn off this garbage collection mechanism by setting
+ 
 \family typewriter
 LiftRules.enableLiftGC = false
 \family default
