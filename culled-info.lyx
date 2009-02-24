@@ -1,0 +1,390 @@
+#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\language english
+\inputencoding auto
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\cite_engine basic
+\use_bibtopic false
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\author "" 
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+This document holds some of the sections that we've removed from the book
+ so that they don't just disappear into the ether...
+\end_layout
+
+\begin_layout Section
+Defining Custom Field Types in Record
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Defining-Custom-Field-types-record"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Similar to the example in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Defining-Custom-Field-types-mapper"
+
+\end_inset
+
+, when using Record we would like a DecimalField to represent decimal currency
+ amounts.
+ Our implementation starts off looking very similar to the Mapper version,
+ as shown in listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:DecimalField-constructors"
+
+\end_inset
+
+.
+ The main difference so far is that the owner type has to be a subtype of
+ Record instead of Mapper.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+DecimalField Constructors
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:DecimalField-constructors"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+class DecimalField[OwnerType <: Record[OwnerType]]
+\end_layout
+
+\begin_layout Plain Layout
+
+    (rec : OwnerType, scale : Int)
+\end_layout
+
+\begin_layout Plain Layout
+
+    extends Field[BigDecimal,OwnerType] {
+\end_layout
+
+\begin_layout Plain Layout
+
+  def this(rec : OwnerType, newVal : BigDecimal) = {
+\end_layout
+
+\begin_layout Plain Layout
+
+    this(rec, newVal.scale)
+\end_layout
+
+\begin_layout Plain Layout
+
+    set(newVal)
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+  var rounding = RoundingMode.HALF_EVEN
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The next step is to start defining the methods that are left abstract on
+ Field.
+ Our first set deals with some basic housekeeping and presentation layer
+ details, shown in listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:DecimalField-Methods"
+
+\end_inset
+
+.
+ The defaultValue method simply defines the value that we use for new instances.
+ The owner method lets Record know which Record instance owns this field.
+ asXHtml and toForm define the methods for display and form generation,
+ respectively.
+ We use the setFromString method (defined later in this section) to handle
+ form setting, which keeps the logic clean.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+DecimalField Methods
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:DecimalField-Methods"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def defaultValue = (new BigDecimal("0")).setScale(scale)
+\end_layout
+
+\begin_layout Plain Layout
+
+def owner = rec
+\end_layout
+
+\begin_layout Plain Layout
+
+def asXHtml = Text(value.toString)
+\end_layout
+
+\begin_layout Plain Layout
+
+def toForm = text(value.toString, this.setFromString) 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Our final set of methods deals with setting the value of the field, shown
+ in listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:DecimalField-Set-Methods"
+
+\end_inset
+
+.
+ The setFromAny method, and its counterpart setFromString, have replaced
+ the buildSet...
+ method functionality that we would define in Mapper
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Is that correct?
+\end_layout
+
+\end_inset
+
+.
+ setFromAny essentially defers to setFromString for all operations, and
+ the only special handling we need is for Lists, Options and Boxes.
+ setFromString is required to catch any exceptions thrown during conversion;
+ if we have a failure we need to return an Empty as well as calling couldNotSetV
+alue to set a flag for validation.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+DecimalField Set Methods
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:DecimalField-Set-Methods"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def setFromAny (in : Any) : Box[BigDecimal] =
+\end_layout
+
+\begin_layout Plain Layout
+
+  in match {
+\end_layout
+
+\begin_layout Plain Layout
+
+    case n :: _ => setFromString(n.toString)
+\end_layout
+
+\begin_layout Plain Layout
+
+    case Some(n) => setFromString(n.toString)
+\end_layout
+
+\begin_layout Plain Layout
+
+    case Full(n) => setFromString(n.toString)
+\end_layout
+
+\begin_layout Plain Layout
+
+    case None | Empty | Failure(_, _, _) | null => setFromString("0")
+\end_layout
+
+\begin_layout Plain Layout
+
+    case n => setFromString(n.toString)
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+def setFromString (in : String) : Box[BigDecimal] = {
+\end_layout
+
+\begin_layout Plain Layout
+
+  try {
+\end_layout
+
+\begin_layout Plain Layout
+
+    Full(this.setAll(new BigDecimal(in)))
+\end_layout
+
+\begin_layout Plain Layout
+
+  } catch {
+\end_layout
+
+\begin_layout Plain Layout
+
+    case e : Exception => couldNotSetValue; Empty
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+/** Set the value along with proper scale and rounding */
+\end_layout
+
+\begin_layout Plain Layout
+
+protected def setAll (in : BigDecimal) = set(in.setScale(scale,rounding))
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Since BigDecimal takes a string as a constructor (in fact, this is the recommend
+ed way to initialize it to avoid precision issues with numerics), the setFromStr
+ing method is relatively easy to implement.
+ To make things even simpler, we add the setAll method that takes a BigDecimal
+ as input and then sets the proper scale and rounding on it.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Confirm change in behavior from Mapper to not save the original value
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
