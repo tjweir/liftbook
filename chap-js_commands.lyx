@@ -201,24 +201,20 @@ reference "lst:Simple-Form-Validation"
 id
 \family default
  attribute.
- We add the id attribute to our text field via the standard 
-\begin_inset Quotes eld
-\end_inset
-
-%
-\begin_inset Quotes erd
-\end_inset
-
- mechanism
-\begin_inset Note Note
+ We add the id attribute
+\begin_inset Index
 status open
 
 \begin_layout Plain Layout
-Cross-ref
+XML attribute
 \end_layout
 
 \end_inset
 
+ to our text field by passing a 
+\family typewriter
+Pair[String,String]
+\family default
 .
  Next, we need to define our actual validation.
  We do this by adding some javascript to the 
@@ -326,7 +322,7 @@ name
 \begin_inset Quotes erd
 \end_inset
 
- -> text(myName, myName = _) % (
+ -> text(myName, myName = _, 
 \begin_inset Quotes eld
 \end_inset
 
@@ -363,7 +359,7 @@ Save
 \begin_inset Quotes erd
 \end_inset
 
-, ...) % (
+, ..., 
 \begin_inset Quotes eld
 \end_inset
 
@@ -423,6 +419,10 @@ You must provide a name
 
 \end_layout
 
+\begin_layout Subsection
+JsCmd and JsExp overview
+\end_layout
+
 \begin_layout Standard
 If you peruse the Lift API docs you'll find a large number of traits and
  classes under the JsCmds and JE objects; these provide the vast majority
@@ -442,12 +442,1359 @@ pure
 JE.Call
 \family default
  class to execute those functions from your Lift code.
-\begin_inset Note Note
+ Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:Top-Level-JsCmds"
+
+\end_inset
+
+ gives a brief overview of the available JsCmds, while table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:Top-Level-JE-abstractions"
+
+\end_inset
+
+ shows the JE expression abstractions.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+placement H
+wide false
+sideways false
 status open
 
 \begin_layout Plain Layout
-Should we add a small table of commonly used classes? Maybe a brief overview
- of the top-level ones?
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="22" columns="2">
+<features islongtable="true">
+<column alignment="left" valignment="top" width="1.25in">
+<column alignment="left" valignment="bottom" width="4.5in">
+<row endhead="true" endfirsthead="true">
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+Command
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+Description
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+After
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+Executes the given JsCmd fragment after a given amount of time
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+Alert
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+Corresponds directly to the JavaScript alert function
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+CmdPair
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+Executes two JsCmd fragments in order
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+FocusOnLoad
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+Forces focus on the given XML element when the document loads
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+Function
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+Defines a JavaScript function with name, parameter list, and JsCmd body
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+JsBreak, JsContinue, JsReturn
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+Corresponds directly to the JavaScript 
+\begin_inset Quotes eld
+\end_inset
+
+break
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+continue
+\begin_inset Quotes erd
+\end_inset
+
+, and 
+\begin_inset Quotes eld
+\end_inset
+
+return
+\begin_inset Quotes erd
+\end_inset
+
+ keywords
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+JsFor, JsForIn, JsDoWhile, JsWhile
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+These define loop constructs in JavaScript with conditions and execution
+ bodies
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+JsHideId, JsShowId
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+Hides or shows the HTML element with the given Id.
+ This is actually handled via the LiftArtifacts' hide and show methods
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+JsIf
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+Corresponds to the JavaScript 
+\begin_inset Quotes eld
+\end_inset
+
+if
+\begin_inset Quotes erd
+\end_inset
+
+ statement, with a condition, body to execute if the condition is true,
+ and optional 
+\begin_inset Quotes eld
+\end_inset
+
+else
+\begin_inset Quotes erd
+\end_inset
+
+ body statement
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+JsTry
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+Defines a try/catch block tha can optionally alert if an exception is caught
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+JsWith
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+Defines a with statement to reduce object references
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+Noop
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+Defines an empty JavaScript statement
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+OnLoad
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+Defines a JavaScript statement that is executed on page load
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+RedirectTo
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+Uses window.location to redirect to a new page
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+ReplaceOptions
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+Replaces options on a form Select with a new list of options.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+Run
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+Executes the given string as raw javascript
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+Script
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+Defines a <script> element with proper CDATA escaping, etc to conform to
+ XHTML JavaScript support
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+SetElemById
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+Assigns a statement to a given element by id.
+ Optional parameters allow you to specify properties on the element
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+SetExp
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+Defines an assignment to an arbitrary JavaScript expression from another
+ JavaScript expression
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+SetHtml
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+Sets the contents of a given HTML node by Id to a given NodeSeq.
+ This is especially useful in Ajax calls that update parts of the page
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+SetValById
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+Defines an assignment to a given element's 
+\begin_inset Quotes eld
+\end_inset
+
+value
+\begin_inset Quotes erd
+\end_inset
+
+ property
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Basic JsCmds
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:Top-Level-JsCmds"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="18" columns="2">
+<features islongtable="true">
+<column alignment="left" valignment="top" width="1.5in">
+<column alignment="left" valignment="top" width="4in">
+<row endhead="true" endfirsthead="true">
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+Expression
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+Description
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+AnonFunc
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+Defines an anonymous JavaScript function
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+Call
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+Calls a JavaScript function by name, with parameters
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+ElemById
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+Obtains a DOM element by its Id, with optional property access
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+FormToJson
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+Converts a given form (by Id) into a JSON representation.
+ 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+Id, Style, Value
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+Represents the 
+\begin_inset Quotes eld
+\end_inset
+
+id
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+style
+\begin_inset Quotes erd
+\end_inset
+
+ and 
+\begin_inset Quotes eld
+\end_inset
+
+value
+\begin_inset Quotes erd
+\end_inset
+
+ element attributes
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+JsArray
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+Constructs a JavaScript array from a given set of JavaScript expressions
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+JsEq, JsNotEq, JsGt, JsGtEq, JsLt, JsLtEq
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+Comparison tests between two JavaScript expressions.
+ JsExp instances also have a 
+\begin_inset Quotes eld
+\end_inset
+
+===
+\begin_inset Quotes erd
+\end_inset
+
+ operator which is equivalent to JsEq
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+JsTrue, JsFalse, JsNull
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+Represents the 
+\begin_inset Quotes eld
+\end_inset
+
+true
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+false
+\begin_inset Quotes erd
+\end_inset
+
+, and 
+\begin_inset Quotes eld
+\end_inset
+
+null
+\begin_inset Quotes erd
+\end_inset
+
+ values
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+JsFunc
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+Similar to Call; executes a JavaScript function
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+JsObj
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+Represents a JavaScript object with a Map for properties
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+JsRaw
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+Represents a raw JavaScript fragment.
+ You can use this if Lift doesn't provide functionality via abstractions
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+JsVal
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+Represents an abritrary JavaScript value
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+JsVar
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+Represents a JavaScript variable, with optional property access
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+Num
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+Represents a JavaScript number.
+ JE contains implicit conversions from Scala numeric types to Num
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+Str
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+Represents a Javascript String.
+ JE contains implicit conversions from a Scala String to Str
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+Stringify
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+Calls JSON.stringify to convert a JavaScript object into a JSON string representa
+tion.
+ 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+ValById
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+Represents the 
+\begin_inset Quotes eld
+\end_inset
+
+value
+\begin_inset Quotes erd
+\end_inset
+
+ property of a given element by Id
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Basic JE abstractions
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:Top-Level-JE-abstractions"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+JavaScript Abstraction Examples
+\end_layout
+
+\begin_layout Standard
+As you can see, Lift provides a large coverage of JavaScript functionality
+ through its abstraction layer.
+ Even if you've done a lot of JavaScript, however, the abstractions don't
+ always map one-to-one and it can take some effort to wrap your head around
+ it.
+ We're going to provide a few examples to help you understand how it works.
+ We'll start off with a simple example of an Ajax callback (Ajax is covered
+ in chapter 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "cha:AJAX-and-COMET"
+
+\end_inset
+
+).
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Using-SetHtml"
+
+\end_inset
+
+ shows how we can update an HTML element with new content via the Ajax call.
+ In this case, we're changing a chart image based on some passed parameters.
+ Our HTML needs to contain an element with an id of 
+\begin_inset Quotes eld
+\end_inset
+
+tx_graph
+\begin_inset Quotes erd
+\end_inset
+
+; this element will have its children 
+\emph on
+replaced
+\emph default
+ with whatever NodeSeq we pass as the second argument.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Using SetHtml
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Using-SetHtml"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+def updateGraph() = {
+\end_layout
+
+\begin_layout Plain Layout
+
+  val dateClause : String = ...
+\end_layout
+
+\begin_layout Plain Layout
+
+  val url = "/graph/" + acctName + "/" + graphType + dateClause
+\end_layout
+
+\begin_layout Plain Layout
+
+  JsCmds.SetHtml("tx_graph", <img src={url} />)
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+As a more complex example, we could add some JavaScript behavior combining
+ Ajax with some client-side state, as shown in listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Client-side-comparisons"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Client-side comparisons
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Client-side-comparisons"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import js.JE._ // for implicit conversions
+\end_layout
+
+\begin_layout Plain Layout
+
+def moreComplexCallback (value : String) = {
+\end_layout
+
+\begin_layout Plain Layout
+
+  JsIf(ValById("username") === value.toLowerCase, {
+\end_layout
+
+\begin_layout Plain Layout
+
+    JsFunc("logAccess", "Self-share attempted").cmd & Alert("You can't share
+ with yourself!")
+\end_layout
+
+\begin_layout Plain Layout
+
+  })
+\end_layout
+
+\begin_layout Plain Layout
+
+}
 \end_layout
 
 \end_inset
@@ -1990,6 +3337,312 @@ net.liftweb.http.jquery.JsSHtml
  type text element but when start typing it will suggest words starting
  with what you typed already.
  Please see http://www.pengoworks.com/workshop/jquery/autocomplete.htm examples.
+\end_layout
+
+\begin_layout Section
+A recap
+\end_layout
+
+\begin_layout Standard
+We've seen so far how we can abstract JavaScript code at Scala level using
+ Lift's JS abstraction.
+ You can model endless cases by using these abstractions.
+ But let's take a look on another example a bit more complex.
+ It is about a fast search where you have a text box and when you hit enter
+ it will return the list of items that contain that sequence.
+ The list of itms will be rendered in a DIV real estate.
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Example template
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<lift:surround with="default" at="content">
+\end_layout
+
+\begin_layout Plain Layout
+
+  <lift:Hello.ajaxian>    		
+\end_layout
+
+\begin_layout Plain Layout
+
+    <text:show/>    
+\end_layout
+
+\begin_layout Plain Layout
+
+  </lift:Hello.ajaxian>      
+\end_layout
+
+\begin_layout Plain Layout
+
+  <div id="items_list" style="width: 300px; height: 100px; overflow: auto;
+ border: 1px solid black;">   
+\end_layout
+
+\begin_layout Plain Layout
+
+  </div>    
+\end_layout
+
+\begin_layout Plain Layout
+
+</lift:surround>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+So we just have a really simple snippet and the div placeholder.
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Example snippet
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import JE._   
+\end_layout
+
+\begin_layout Plain Layout
+
+import net.liftweb.http.js.jquery.JqJE._      
+\end_layout
+
+\begin_layout Plain Layout
+
+import net.liftweb.http.SHtml._ 
+\end_layout
+
+\begin_layout Plain Layout
+
+import net.liftweb.util.Helpers._
+\end_layout
+
+\begin_layout Plain Layout
+
+import JsCmds._ 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+val names = "marius" :: "tyler" :: "derek" :: "dave" :: "jorge" :: "viktor"
+ :: Nil  
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def ajaxian(html: Group) : NodeSeq = {
+\end_layout
+
+\begin_layout Plain Layout
+
+    bind("text", html,
+\end_layout
+
+\begin_layout Plain Layout
+
+            "show"  -> ajaxText("Type something", {value => {
+\end_layout
+
+\begin_layout Plain Layout
+
+               val matches = names.filter(e => e.indexOf(value) > -1)
+\end_layout
+
+\begin_layout Plain Layout
+
+               SetHtml("items_list", NodeSeq.Empty) & 
+\end_layout
+
+\begin_layout Plain Layout
+
+               JsCrVar("items", JsArray(matches.map(Str(_)):_*)) &
+\end_layout
+
+\begin_layout Plain Layout
+
+               JsCrVar("func", Jx(<ul>{
+\end_layout
+
+\begin_layout Plain Layout
+
+                                    JxMap(JsVar("it"), Jx(<li><a href="">{JsVar(
+"it")}</a></li>))                                   }                  
+           	   </ul>).toJs) &
+\end_layout
+
+\begin_layout Plain Layout
+
+               (ElemById("items_list") ~> JsFunc("appendChild", Call("func",
+ JsVar("items"))))
+\end_layout
+
+\begin_layout Plain Layout
+
+             }})
+\end_layout
+
+\begin_layout Plain Layout
+
+    )
+\end_layout
+
+\begin_layout Plain Layout
+
+} 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+The part with the snippet is probably already familiar to you.
+ We are calling the ajaxText function which renders an input text element.
+ When you hit enter an Ajax request will be sent and the anonymous function
+ that we bound here will be executed.
+ Here is what happens:
+\end_layout
+
+\begin_layout Enumerate
+
+First filter out the names that contain the provided value in the input
+ text.
+ So all element that contain that sequence.
+\end_layout
+
+\begin_layout Enumerate
+
+Then return a JsExp that we are building:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+SetHtml is clearing out the div element that we're using as a real estate
+ for our search results list
+\end_layout
+
+\begin_layout Enumerate
+
+Then we re declaring a JavaScript variable which is an array containing
+ the resulting items that matched the search criteria.
+\end_layout
+
+\begin_layout Enumerate
+
+Then we are declaring thr 
+\family typewriter
+func
+\family default
+ variable which obviously is a function.
+ We've seen above how to use the Jx artifacts.
+ Now we are building a html list (
+\family typewriter
+<ul>
+\family default
+) that for each element from the 
+\family typewriter
+it
+\family default
+ variable will build the 
+\family typewriter
+<li>
+\family default
+ sequences.
+ The it variable is actually the paramter that this function takes which
+ is the items array that we declared above.
+\end_layout
+
+\begin_layout Enumerate
+
+After that we are obtaining the HTML node denominated by 
+\begin_inset Quotes eld
+\end_inset
+
+items_list
+\begin_inset Quotes erd
+\end_inset
+
+ id and call appendChild function of the Node object.
+ The ~> function is use to call functions of objects.
+ Of course to the appendChild function we need to provide a parameter.
+ This parameter is the document fragment returned by 
+\family typewriter
+func
+\family default
+ function.
+ When we are caling the 
+\family typewriter
+func
+\family default
+ function we are passing items variable decalred above.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+
+As you noticed already we composed a small JavaScript code by chainin multiple
+ JS expressions/commands using the & function.
 \end_layout
 
 \end_body

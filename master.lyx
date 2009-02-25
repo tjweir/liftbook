@@ -233,6 +233,13 @@ Derek would like to thank his wife, Debbie, for her patience and support
 Tyler would like to thank his wife Laura, for encouraging him.
 \end_layout
 
+\begin_layout Standard
+\noindent
+Marius would like to thank his wife Alina, for her patience during long
+ weekends and bearing with his monosyllabic answers while working on the
+ book.
+\end_layout
+
 \begin_layout Chapter*
 Acknowledgements
 \end_layout
@@ -278,16 +285,6 @@ part{The Basics}
 \begin_inset CommandInset include
 LatexCommand include
 filename "chap-welcome.lyx"
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset CommandInset include
-LatexCommand include
-filename "chap-maven.lyx"
 
 \end_inset
 
@@ -403,16 +400,6 @@ filename "chap-JPA.lyx"
 \begin_layout Standard
 \begin_inset CommandInset include
 LatexCommand include
-filename "chap-actors.lyx"
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset CommandInset include
-LatexCommand include
 filename "chap-thirdparty.lyx"
 
 \end_inset
@@ -470,6 +457,13 @@ part{Appendices}
 \start_of_appendix
 \begin_inset CommandInset include
 LatexCommand include
+filename "chap-maven.lyx"
+
+\end_inset
+
+
+\begin_inset CommandInset include
+LatexCommand include
 filename "apdx-message-handling.lyx"
 
 \end_inset
@@ -511,26 +505,6 @@ filename "apdx-logging.lyx"
 \begin_inset CommandInset include
 LatexCommand include
 filename "apdx-email.lyx"
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset CommandInset include
-LatexCommand include
-filename "apdx-devtips.lyx"
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset CommandInset include
-LatexCommand include
-filename "chap-deployment.lyx"
 
 \end_inset
 

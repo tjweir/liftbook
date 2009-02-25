@@ -53,244 +53,377 @@ name "cha:Message-Handling"
 
 \end_layout
 
+\begin_layout Standard
+When we talk about message handling in Lift we're talking about how you
+ provide feedback to the users of your application.
+ While there are already a lot of mechanisms for displaying data to the
+ user via snippets, views, etc, properly binding and setting up HTML-level
+ elements can get complicated, especially when you're dealing with callback
+ functions or error handling.
+ Lift provides an alternate mechanism for displaying messages to users that
+ is easy to use and allows flexibility in display on the client side.
+\end_layout
+
 \begin_layout Section
-Planning:
-\end_layout
-
-\begin_layout Itemize
-Introduce message concept
-\end_layout
-
-\begin_layout Itemize
-Introduce message types
-\end_layout
-
-\begin_deeper
-\begin_layout Itemize
-error
-\end_layout
-
-\begin_layout Itemize
-notice
-\end_layout
-
-\begin_layout Itemize
-warning
-\end_layout
-
-\end_deeper
-\begin_layout Itemize
-Talk about how they get to the screen
-\end_layout
-
-\begin_deeper
-\begin_layout Itemize
-There is a requestVar that handles a list of messages
-\end_layout
-
-\begin_layout Itemize
-LiftSession spills those to the screen
-\end_layout
-
-\end_deeper
-\begin_layout Standard
-
+Sending Messages
 \end_layout
 
 \begin_layout Standard
-For example, if a user successfully saves, notify with S.notice(
-\begin_inset Quotes eld
+Messages for non-Comet requests are handled via the S object (yes, even
+ Ajax is handled automatically); specifically, the error, notice and warning
+ methods allow you to send a String or a NodeSeq back to the user for display,
+ with or without an association with a particular element id.
+ The error method also provides an overload that takes a List[FieldError],
+ the type returned from Mapper field validation (section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Mapper-Validation"
+
 \end_inset
 
-Save was sucessful
-\begin_inset Quotes erd
+).
+ The messages that you send are held by a RequestVar (section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Session-and-Request"
+
 \end_inset
 
-) and then redirect/sit on the page/etc
+) in the S object, so you can send messages from anywhere in your stateful
+ request/response lifecycle without breaking the flow of your code.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Using-messages-in-forms"
+
+\end_inset
+
+ shows how you could use messages in form processing to send feedback on
+ missing fields.
 \end_layout
 
-\begin_layout LyX-Code
-def saveAuthor(a: Author): NodeSeq = {
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Using messages in form processing
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Using-messages-in-forms"
+
+\end_inset
+
+
 \end_layout
 
-\begin_layout LyX-Code
-  a.save
+\end_inset
+
+
 \end_layout
 
-\begin_layout LyX-Code
-  S.notice(
-\begin_inset Quotes eld
-\end_inset
+\begin_layout Plain Layout
 
-Author 
-\begin_inset Quotes eld
-\end_inset
-
- + a.niceName + 
-\begin_inset Quotes eld
-\end_inset
-
- saved successfully.
-\begin_inset Quotes erd
-\end_inset
-
-)
+object data extends RequestVar[String]("")
 \end_layout
 
-\begin_layout LyX-Code
-  S.redirect(
-\begin_inset Quotes eld
-\end_inset
+\begin_layout Plain Layout
 
-/
-\begin_inset Quotes erd
-\end_inset
-
-)
+def addNote (xhtml : NodeSeq) : NodeSeq = {
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Plain Layout
+
+  def doAdd () = {
+\end_layout
+
+\begin_layout Plain Layout
+
+    //validate
+\end_layout
+
+\begin_layout Plain Layout
+
+    if (data.is == "") { 
+\end_layout
+
+\begin_layout Plain Layout
+
+      S.error("noteField", "You need to provide a note")
+\end_layout
+
+\begin_layout Plain Layout
+
+    } else {
+\end_layout
+
+\begin_layout Plain Layout
+
+      Note.create.note(data).save
+\end_layout
+
+\begin_layout Plain Layout
+
+      S.notice("Note added")
+\end_layout
+
+\begin_layout Plain Layout
+
+      redirectTo("/viewNotes")
+\end_layout
+
+\begin_layout Plain Layout
+
+    }
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+  bind("form", xhtml,
+\end_layout
+
+\begin_layout Plain Layout
+
+       "note" -> SHtml.text(data.is, data(_), "id" -> "noteField"),
+\end_layout
+
+\begin_layout Plain Layout
+
+       "add" -> SHtml.submit("Add", doAdd))
+\end_layout
+
+\begin_layout Plain Layout
+
 }
 \end_layout
 
-\begin_layout Section
-builtin/snippet/Msgs.scala
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
-Marius: Comet push to msgs: http://groups.google.com/group/liftweb/browse_thread/t
-hread/cfab4a332bb7cf81/32c04a0758c71205?lnk=gst&q=msgs#32c04a0758c71205
-\end_layout
+In this particular case we use two different messages.
+ One is an error to be displayed when the form is re-shown; this error is
+ associated with the 
+\begin_inset Quotes eld
+\end_inset
 
-\begin_layout Standard
-You can send Errors, Warnings and Notices and out of the box you can use:
-\end_layout
-
-\begin_layout LyX-Code
-<lift:Msgs />
-\end_layout
-
-\begin_layout LyX-Code
-
-\end_layout
-
-\begin_layout LyX-Code
-<lift:Msgs id=
+noteField
 \begin_inset Quotes erd
 \end_inset
 
-msg_area
+ element.
+ The second message is a simple notice to let the user know that the data
+ was successfully saved.
+\end_layout
+
+\begin_layout Standard
+For Comet
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Comet
+\end_layout
+
+\end_inset
+
+ the only difference in sending messages is that the error, notice and warning
+ methods are defined in the CometActor class, so you just use those directly
+ and Lift handles the rest.
+ 
+\end_layout
+
+\begin_layout Section
+Displaying Messages
+\end_layout
+
+\begin_layout Standard
+The display of messages is handled by two builtin snippets, <lift:Msgs/>
+ and <lift:Msg/>.
+ The Msgs snippet displays all messages not associated with a particular
+ element Id.
+ The messages are displayed as an unordered list, but Lift allows customization
+ of the messages via XML that you embed within the snippet.
+ For each of the three message types, you can specify a <lift:TYPE_msg>
+ and <lift:TYPE_class> element that controls the message label and CSS class,
+ respectively.
+ The default label is simply the title-case type (Error, Notice, Warning).
+ For example, listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Custom-message-labels"
+
+\end_inset
+
+ shows how we could change the error and notice messages.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Custom message labels
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Custom-message-labels"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<lift:Msgs>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <lift:error_msg>Danger, Will Robinson! </lift:error_msg>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <lift:error_class>redtext</lift:error_class>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <lift:notice_msg>FYI: </lift:notice_msg>
+\end_layout
+
+\begin_layout Plain Layout
+
+</lift:Msgs>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The Msg snippet is used to display all messages associated with a particular
+ Id by specifying the id attribute on the <lift:Msg/> element.
+ With Msg, you don't get a message label, so there's no override mechanism
+ for it.
+ You do, however, have the ability to to change the message class on a per-type
+ basis by setting the noticeClass, errorClass, or warningClass attributes
+ on the <lfit:Msg/> element.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Per-id-messages"
+
+\end_inset
+
+ shows usage of Msg corresponding to our snippet in listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Using-messages-in-forms"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Per-id messages
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Per-id-messages"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<lift:Stuff.addNote form=
+\begin_inset Quotes erd
+\end_inset
+
+POST
+\begin_inset Quotes erd
+\end_inset
+
+>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <form:note /><lift:Msg id=
+\begin_inset Quotes erd
+\end_inset
+
+noteField
+\begin_inset Quotes erd
+\end_inset
+
+ errorClass=
+\begin_inset Quotes erd
+\end_inset
+
+redtext
 \begin_inset Quotes erd
 \end_inset
 
  />
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Plain Layout
 
+  <form:add />
 \end_layout
 
-\begin_layout LyX-Code
-<lift:snippet type="error_report">    
+\begin_layout Plain Layout
+
+</lift:Stuff.addNote>
 \end_layout
 
-\begin_layout LyX-Code
-  <lift:error_msg>Error!  The details are:</lift:error_msg>    
-\end_layout
+\end_inset
 
-\begin_layout LyX-Code
-  <lift:error_class>errorBox</lift:error_class>    
-\end_layout
-
-\begin_layout LyX-Code
-  <lift:warning_msg>Whoops, I had a problem:</lift:warning_msg>    
-\end_layout
-
-\begin_layout LyX-Code
-  <lift:warning_class>warningBox</lift:warning_class>    
-\end_layout
-
-\begin_layout LyX-Code
-  <lift:notice_msg>Note:</lift:notice_msg>    
-\end_layout
-
-\begin_layout LyX-Code
-  <lift:notice_class>noticeBox</lift:notice_class>  
-\end_layout
-
-\begin_layout LyX-Code
-</lift:snippet> 
-\end_layout
-
-\begin_layout LyX-Code
-
-\end_layout
-
-\begin_layout Standard
-Talk to the Msgs area via: 
-\end_layout
-
-\begin_layout LyX-Code
-S.error, S.warning and S.notice
-\end_layout
-
-\begin_layout Standard
-You can style them using CSS, for example:
-\end_layout
-
-\begin_layout LyX-Code
-.error {
-\end_layout
-
-\begin_layout LyX-Code
-  color: red;
-\end_layout
-
-\begin_layout LyX-Code
-  font-size: bigger;
-\end_layout
-
-\begin_layout LyX-Code
-}
-\end_layout
-
-\begin_layout LyX-Code
-.warning {
-\end_layout
-
-\begin_layout LyX-Code
-  color: yellow;
-\end_layout
-
-\begin_layout LyX-Code
-  font-size: bigger;
-\end_layout
-
-\begin_layout LyX-Code
-}
-\end_layout
-
-\begin_layout LyX-Code
-.notice {
-\end_layout
-
-\begin_layout LyX-Code
-  color: green;
-\end_layout
-
-\begin_layout LyX-Code
-  font-size: bigger;
-\end_layout
-
-\begin_layout LyX-Code
-}
-\end_layout
-
-\begin_layout Standard
-Handing exceptions and redirecting the user
-\end_layout
-
-\begin_layout LyX-Code
 
 \end_layout
 
