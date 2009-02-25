@@ -1,4 +1,4 @@
-#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.0 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -1689,7 +1689,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Using SetHtml
 \begin_inset CommandInset label
 LatexCommand label
@@ -1752,7 +1751,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Client-side comparisons
 \begin_inset CommandInset label
 LatexCommand label
@@ -1797,19 +1795,6 @@ def moreComplexCallback (value : String) = {
 \begin_layout Plain Layout
 
 }
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-TODO: Add more examples
 \end_layout
 
 \end_inset
@@ -3352,6 +3337,312 @@ net.liftweb.http.jquery.JsSHtml
  type text element but when start typing it will suggest words starting
  with what you typed already.
  Please see http://www.pengoworks.com/workshop/jquery/autocomplete.htm examples.
+\end_layout
+
+\begin_layout Section
+A recap
+\end_layout
+
+\begin_layout Standard
+We've seen so far how we can abstract JavaScript code at Scala level using
+ Lift's JS abstraction.
+ You can model endless cases by using these abstractions.
+ But let's take a look on another example a bit more complex.
+ It is about a fast search where you have a text box and when you hit enter
+ it will return the list of items that contain that sequence.
+ The list of itms will be rendered in a DIV real estate.
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Example template
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<lift:surround with="default" at="content">
+\end_layout
+
+\begin_layout Plain Layout
+
+  <lift:Hello.ajaxian>    		
+\end_layout
+
+\begin_layout Plain Layout
+
+    <text:show/>    
+\end_layout
+
+\begin_layout Plain Layout
+
+  </lift:Hello.ajaxian>      
+\end_layout
+
+\begin_layout Plain Layout
+
+  <div id="items_list" style="width: 300px; height: 100px; overflow: auto;
+ border: 1px solid black;">   
+\end_layout
+
+\begin_layout Plain Layout
+
+  </div>    
+\end_layout
+
+\begin_layout Plain Layout
+
+</lift:surround>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+So we just have a really simple snippet and the div placeholder.
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Example snippet
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import JE._   
+\end_layout
+
+\begin_layout Plain Layout
+
+import net.liftweb.http.js.jquery.JqJE._      
+\end_layout
+
+\begin_layout Plain Layout
+
+import net.liftweb.http.SHtml._ 
+\end_layout
+
+\begin_layout Plain Layout
+
+import net.liftweb.util.Helpers._
+\end_layout
+
+\begin_layout Plain Layout
+
+import JsCmds._ 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+val names = "marius" :: "tyler" :: "derek" :: "dave" :: "jorge" :: "viktor"
+ :: Nil  
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def ajaxian(html: Group) : NodeSeq = {
+\end_layout
+
+\begin_layout Plain Layout
+
+    bind("text", html,
+\end_layout
+
+\begin_layout Plain Layout
+
+            "show"  -> ajaxText("Type something", {value => {
+\end_layout
+
+\begin_layout Plain Layout
+
+               val matches = names.filter(e => e.indexOf(value) > -1)
+\end_layout
+
+\begin_layout Plain Layout
+
+               SetHtml("items_list", NodeSeq.Empty) & 
+\end_layout
+
+\begin_layout Plain Layout
+
+               JsCrVar("items", JsArray(matches.map(Str(_)):_*)) &
+\end_layout
+
+\begin_layout Plain Layout
+
+               JsCrVar("func", Jx(<ul>{
+\end_layout
+
+\begin_layout Plain Layout
+
+                                    JxMap(JsVar("it"), Jx(<li><a href="">{JsVar(
+"it")}</a></li>))                                   }                  
+           	   </ul>).toJs) &
+\end_layout
+
+\begin_layout Plain Layout
+
+               (ElemById("items_list") ~> JsFunc("appendChild", Call("func",
+ JsVar("items"))))
+\end_layout
+
+\begin_layout Plain Layout
+
+             }})
+\end_layout
+
+\begin_layout Plain Layout
+
+    )
+\end_layout
+
+\begin_layout Plain Layout
+
+} 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+The part with the snippet is probably already familiar to you.
+ We are calling the ajaxText function which renders an input text element.
+ When you hit enter an Ajax request will be sent and the anonymous function
+ that we bound here will be executed.
+ Here is what happens:
+\end_layout
+
+\begin_layout Enumerate
+
+First filter out the names that contain the provided value in the input
+ text.
+ So all element that contain that sequence.
+\end_layout
+
+\begin_layout Enumerate
+
+Then return a JsExp that we are building:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+SetHtml is clearing out the div element that we're using as a real estate
+ for our search results list
+\end_layout
+
+\begin_layout Enumerate
+
+Then we re declaring a JavaScript variable which is an array containing
+ the resulting items that matched the search criteria.
+\end_layout
+
+\begin_layout Enumerate
+
+Then we are declaring thr 
+\family typewriter
+func
+\family default
+ variable which obviously is a function.
+ We've seen above how to use the Jx artifacts.
+ Now we are building a html list (
+\family typewriter
+<ul>
+\family default
+) that for each element from the 
+\family typewriter
+it
+\family default
+ variable will build the 
+\family typewriter
+<li>
+\family default
+ sequences.
+ The it variable is actually the paramter that this function takes which
+ is the items array that we declared above.
+\end_layout
+
+\begin_layout Enumerate
+
+After that we are obtaining the HTML node denominated by 
+\begin_inset Quotes eld
+\end_inset
+
+items_list
+\begin_inset Quotes erd
+\end_inset
+
+ id and call appendChild function of the Node object.
+ The ~> function is use to call functions of objects.
+ Of course to the appendChild function we need to provide a parameter.
+ This parameter is the document fragment returned by 
+\family typewriter
+func
+\family default
+ function.
+ When we are caling the 
+\family typewriter
+func
+\family default
+ function we are passing items variable decalred above.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+
+As you noticed already we composed a small JavaScript code by chainin multiple
+ JS expressions/commands using the & function.
 \end_layout
 
 \end_body
