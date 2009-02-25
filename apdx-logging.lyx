@@ -1,8 +1,9 @@
-#LyX 1.5.3 created this file. For more info see http://www.lyx.org/
-\lyxformat 276
+#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
 \begin_document
 \begin_header
 \textclass book
+\use_default_options false
 \language english
 \inputencoding auto
 \font_roman default
@@ -13,9 +14,11 @@
 \font_osf false
 \font_sf_scale 100
 \font_tt_scale 100
+
 \graphics default
 \paperfontsize default
 \spacing single
+\use_hyperref false
 \papersize default
 \use_geometry false
 \use_amsmath 1
@@ -34,28 +37,525 @@
 \tracking_changes false
 \output_changes false
 \author "" 
+\author "" 
 \end_header
 
 \begin_body
 
 \begin_layout Chapter
 Logging in Lift
+\begin_inset CommandInset label
+LatexCommand label
+name "cha:Logging-in-Lift"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Logging is a useful part of any application, Lift app or otherwise.
+ Logging can be used to audit user actions, give insight into runtime performanc
+e and operation, and even to troubleshoot and debug issues.
+ Lift comes with a thin logging facade that sits on top of the log4j library
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+\begin_inset CommandInset href
+LatexCommand href
+target "http://logging.apache.org/log4j/"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+.
+ This facade provides simple access to most common logging functions and
+ aims to be easy to use, flexible, and most important, inconspicuous.
+ If you do decide that Lift's logging facilities don't meet your needs,
+ it's possible to use any Java logging framework you desire, but it's still
+ useful to understand Lift's framework since Lift uses it internally for
+ logging.
+\end_layout
+
+\begin_layout Section
+Logging Configuration
+\end_layout
+
+\begin_layout Standard
+Out of the box Lift sets up a log4j logging hierarchy using a cascading
+ setup as defined in the 
+\family typewriter
+LogBoot._log4jSetup
+\family default
+ method.
+ First, it checks to see if log4j is already configured; this is commonly
+ the case when a Lift application is deployed on a J2EE app server that
+ uses log4j (JBoss, for example).
+ If not, then it attempts to locate a 
+\family typewriter
+log4j.props
+\family default
+ or 
+\family typewriter
+log4j.xml
+\family default
+ configuration file in the class path and if it finds either it will use
+ them for configuration.
+ Failing that, it will fall back to configuring log4j using the 
+\family typewriter
+LogBoot.defaultProps
+\family default
+ variable.
+ Usually it's simplest to just provide a 
+\family typewriter
+log4j.props
+\family default
+ or 
+\family typewriter
+log4j.xml
+\family default
+ file in your resources to configure logging.
+ If you prefer, you can provide your own 
+\family typewriter
+LogBoot.loggerSetup
+\family default
+ function to use instead of 
+\family typewriter
+_log4jSetup
+\family default
+ if you want to do something special, like configureAndWatch.
+\end_layout
+
+\begin_layout Standard
+If you would prefer, Lift's logging framework also supports slf4j
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+\begin_inset CommandInset href
+LatexCommand href
+target "http://www.slf4j.org/"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+.
+ Enabling slf4j is as simple as calling Slf4jLogBoot.enable in your boot
+ method, as shown in listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Enabling-slf4j"
+
+\end_inset
+
+.
+ Note that you need to add both slf4j and a backend as dependencies in your
+ pom.xml, and you should configure slf4j before enabling it.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Enabling slf4j
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Enabling-slf4j"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+class Boot {
+\end_layout
+
+\begin_layout Plain Layout
+
+  def boot {
+\end_layout
+
+\begin_layout Plain Layout
+
+    Slf4jLogBoot.enable()
+\end_layout
+
+\begin_layout Plain Layout
+
+    ...
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Basic Logging
+\end_layout
+
+\begin_layout Standard
+Logging in Lift is performed via the net.liftweb.util.Log object.
+ This object provides some basic log methods which we'll summarize here.
+ Each log method comes in two forms: one with just an Object argument, and
+ one with an Object and Throwable argument.
+ These correspond one-to-one with the log4j log methods, although the parameters
+ are passed by-name; this is done so that computation of the log message
+ can be deferred.
+ This is useful to avoid processing messages for log statements below the
+ current logging threshold, a topic we'll cover more in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Log-Levels"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Description
+trace This logs a message at trace level.
+ Trace level is generally intended for very detailed 
+\begin_inset Quotes eld
+\end_inset
+
+tracing
+\begin_inset Quotes erd
+\end_inset
+
+ of processing, even more detailed than debug level
+\end_layout
+
+\begin_layout Description
+debug Logs a message at debug level.
+ This level is usually used to output internal variable values or other
+ information that is useful in debugging and troubleshooting an app
+\end_layout
+
+\begin_layout Description
+info Logs a message at info level.
+ This level is appropriate for general information about the app
+\end_layout
+
+\begin_layout Description
+warn Logs a message at warning level.
+ This level should be used for reporting issues that are in error but can
+ be handled cleanly, such as someone trying to submit a character string
+ for a numeric field value
+\end_layout
+
+\begin_layout Description
+error Logs a message at error level.
+ This level should be used for messages relating to errors that can't be
+ handled cleanly, such as a failure to connect to a backing database
+\end_layout
+
+\begin_layout Description
+fatal Logs a message at the fatal level.
+ This level should be used for messages that relate to conditions under
+ which the application cannot continue to function, such as an OutOfMemory
+ exception
+\end_layout
+
+\begin_layout Description
+never This essentially throws away the passed message.
+ This is useful for some of Lift's functionality that requires a log output
+ function (Schemifier.schemify, for example, in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Schema-Mapping"
+
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Description
+assertLog This allows you to test an assertion condition and if true, logs
+ the assertion as well as a given message
+\end_layout
+
+\begin_layout Standard
+Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Some-example-logging"
+
+\end_inset
+
+ shows an example of using a few different Logging methods within a form
+ processing function that handles logins.
+ We start out with some tracing of method entry (and corresponding exit
+ at the end), then add an assertion to log the case where someone is logging
+ in a second time.
+ We add a debug statement that uses a function to generate the message so
+ that the string concatenation won't take place if debug logging is disabled.
+ Finally, we log an error message if a problem ocurred during authentication.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Some example logging
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Some-example-logging"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import net.liftweb.util.Log
+\end_layout
+
+\begin_layout Plain Layout
+
+def processLogin(name : String, password : String) = {
+\end_layout
+
+\begin_layout Plain Layout
+
+  Log.trace("Starting login process")
+\end_layout
+
+\begin_layout Plain Layout
+
+  try {
+\end_layout
+
+\begin_layout Plain Layout
+
+    ...
+\end_layout
+
+\begin_layout Plain Layout
+
+    Log.assertLog(User.currentUser.isDefined, "Redundant authentication!")
+\end_layout
+
+\begin_layout Plain Layout
+
+    ...
+\end_layout
+
+\begin_layout Plain Layout
+
+    Log.debug(() => ("Retreiving auth data for " + name))
+\end_layout
+
+\begin_layout Plain Layout
+
+    ...
+\end_layout
+
+\begin_layout Plain Layout
+
+    if (!authenticated) {
+\end_layout
+
+\begin_layout Plain Layout
+
+      Log.error("Authentication failed for " + name)
+\end_layout
+
+\begin_layout Plain Layout
+
+    }
+\end_layout
+
+\begin_layout Plain Layout
+
+  } finally {
+\end_layout
+
+\begin_layout Plain Layout
+
+    Log.trace("Login process complete")
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Log Level Guards
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Log-Levels"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We want to provide a brief discussion on the use of log guards and why they're
+ usually not needed with Lift's log framework.
+ A log guard is a simple test to see if a given log statement will actually
+ be processed.
+ The Log object provides a test method (returning a boolean) for each log
+ level:
 \end_layout
 
 \begin_layout Itemize
-Configuring built-in log4j
+isDebugEnabled
 \end_layout
 
 \begin_layout Itemize
-Using slf4j instead
+isErrorEnabled
 \end_layout
 
 \begin_layout Itemize
-Query Logger
+isInfoEnabled
 \end_layout
 
 \begin_layout Itemize
-Maybe some recommendations?
+isTraceEnabled
+\end_layout
+
+\begin_layout Itemize
+isWarnEnabled
+\end_layout
+
+\begin_layout Standard
+Fatal logging is always enabled, so there is no test for that level.
+ Log guards are fairly common in logging frameworks to avoid expensive computati
+on of log message that won't actually be used.
+ This is particularly relevant with debug logging, since they often cover
+ a large section of code and usually aren't enabled in production.
+ The Log object can implicitly do log guards for you because of the pass-by-name
+ message parameters.
+ As we showed in listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Some-example-logging"
+
+\end_inset
+
+, simply converting your log message into a closure allows the Log object
+ decide whether to execute the closure based on the current log level.
+ You get the flexibility and simplicity of adding log statements anywhere
+ you want without explicit log guards, without losing the performance benefit
+ of the guards.
+\end_layout
+
+\begin_layout Section
+Logging Mapper Queries
+\end_layout
+
+\begin_layout Standard
+In addition to application-level logging, the Mapper framework provides
+ a simple interface for logging queries.
+ The DB.addLogFunc method takes a function 
+\begin_inset Formula $(String,Long)\Rightarrow Any$
+\end_inset
+
+ that can log the actual query string along with its execution time in milliseco
+nds.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Mapper-Logging"
+
+\end_inset
+
+ shows a trivial log function example.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Mapper Logging
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Mapper-Logging"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+DB.addLogFunc((query, time) => Log.debug(() => (query + ":" + time + "ms")))
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \end_body

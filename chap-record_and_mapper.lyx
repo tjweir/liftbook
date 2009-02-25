@@ -3844,6 +3844,13 @@ For most purposes, though, using the validation mechanism discussed in the
 
 \begin_layout Subsection
 Validation
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Mapper-Validation"
+
+\end_inset
+
+
 \begin_inset Index
 status collapsed
 
