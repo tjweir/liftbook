@@ -1,4 +1,4 @@
-#LyX 1.6.0 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -120,6 +120,118 @@ SteveJ gave us the go-ahead to use his stuff.
 \end_inset
 
 
+\end_layout
+
+\begin_layout Section
+Building an API for your Web Application
+\end_layout
+
+\begin_layout Standard
+Many Web Applications offer an API
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+Application Programming Interface
+\end_layout
+
+\end_inset
+
+ that allows others to extend the functionality of the site.
+ Building an application that adds to an existing one is usually called
+ a Mash-up.
+ One famous mash-up is WikiCrimes
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+\begin_inset CommandInset href
+LatexCommand href
+name "http://www.wikicrimes.org/"
+target "http://www.wikicrimes.org/"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ which combines GoogleMaps and local criminal activity to allow users to
+ visualize the danger in their neighbourhood.
+ 
+\end_layout
+
+\begin_layout Standard
+Typically, when discussing Web Services there are two types of services
+ discussed, those that follow XML-RPC and those that are RESTful.
+ We'll focus on REST and show you how you can easily add an API to your
+ application.
+\end_layout
+
+\begin_layout Section
+What is REST?
+\end_layout
+
+\begin_layout Standard
+Wikipedia defines REST as:
+\end_layout
+
+\begin_layout Quotation
+[...] a style of software architecture for distributed hypermedia systems such
+ as the World Wide Web.
+ As such, it is not strictly a method for building "web services".
+ The terms "representational state transfer" and "REST" were introduced
+ in 2000 in the doctoral dissertation of Roy Fielding
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+http://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm
+\end_layout
+
+\end_inset
+
+, one of the principal authors of the Hypertext Transfer Protocol (HTTP)
+ specification.
+ 
+\end_layout
+
+\begin_layout Quotation
+REST strictly refers to a collection of network architecture principles
+ which outline how resources are defined and addressed.
+ The term is often used in a looser sense to describe any simple interface
+ which transmits domain-specific data over HTTP without an additional messaging
+ layer such as SOAP or session tracking via HTTP cookies.
+ These two meanings can conflict as well as overlap.
+ It is possible to design a software system in accordance with Fielding's
+ REST architectural style without using HTTP and without interacting with
+ the World Wide Web.[2] It is also possible to design simple XML+HTTP interfaces
+ which do not conform to REST principles, and instead follow a model of
+ remote procedure call.
+ The difference between the uses of the term "REST" therefore causes some
+ confusion in technical discussions.
+ 
+\end_layout
+
+\begin_layout Quotation
+Systems which follow Fielding's REST principles are often referred to as
+ "RESTful".
+\end_layout
+
+\begin_layout Standard
+REST relies on the action of the request to be defined by the HTTP action
+ and the resources to be defined in the URI.
+ For example, a request like 
+\end_layout
+
+\begin_layout Section
+What is ROA REST?
+\end_layout
+
+\begin_layout Standard
+Resource oriented architecture is a set of rules that sit on top of REST.
+ We again turn to Wikipedia for a definition:
 \end_layout
 
 \end_body
