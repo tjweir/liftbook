@@ -1,8 +1,9 @@
-#LyX 1.5.3 created this file. For more info see http://www.lyx.org/
-\lyxformat 276
+#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
 \begin_document
 \begin_header
 \textclass book
+\use_default_options false
 \language english
 \inputencoding auto
 \font_roman default
@@ -13,9 +14,11 @@
 \font_osf false
 \font_sf_scale 100
 \font_tt_scale 100
+
 \graphics default
 \paperfontsize default
 \spacing single
+\use_hyperref false
 \papersize default
 \use_geometry false
 \use_amsmath 1
@@ -34,12 +37,20 @@
 \tracking_changes false
 \output_changes false
 \author "" 
+\author "" 
 \end_header
 
 \begin_body
 
 \begin_layout Chapter
 Sending Email
+\begin_inset CommandInset label
+LatexCommand label
+name "cha:Sending-Email"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Itemize
@@ -52,6 +63,298 @@ Sending email
 
 \begin_layout Itemize
 System.properties
+\end_layout
+
+\begin_layout Standard
+Sending email is a common enough task (user registration, notifications,
+ etc) within a web application that we've decided to cover it here.
+ Although email isn't Lift's primary focus, Lift does provide some facilities
+ to simplify email transmission.
+\end_layout
+
+\begin_layout Section
+Setup
+\end_layout
+
+\begin_layout Standard
+The first thing to take care of is adding the lift-util module to your pom.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Lift-util-module-dependency"
+
+\end_inset
+
+ shows the dependency info for a Lift 1.0 project.
+ Adjust the version of the dependency to match your primary lift-webkit
+ dependency version.
+ The Lift-util dependency will automatically pull in the required JavaMail
+ and JAF dependencies.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=XML"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Lift-util module dependency
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Lift-util-module-dependency"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<dependency>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <groupId>net.liftweb</groupId>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <artifactId>lift-util</artifactId>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <version>1.0</version>
+\end_layout
+
+\begin_layout Plain Layout
+
+</dependency> 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Configuration of the mailer is handled in a few different ways.
+ The 
+\family typewriter
+net.liftweb.util.Mailer
+\family default
+ object defines a 
+\family typewriter
+hostFunc
+\family default
+ function var, 
+\begin_inset Formula $()\Rightarrow String$
+\end_inset
+
+, that is used to compute the hostname of your SMTP server to be used for
+ transmission.
+ The default value is a function that looks up the 
+\family typewriter
+mail.smtp.host
+\family default
+ system property and uses that String.
+ If that property isn't defined then the mailer defaults to 
+\family typewriter
+localhost
+\family default
+.
+ Setting the system property is the simplest way to change your SMTP relay,
+ although you could also define your own function to return a custom hostname
+ and assign it to 
+\family typewriter
+Mailer.hostFunc
+\family default
+.
+\end_layout
+
+\begin_layout Section
+Sending Emails
+\end_layout
+
+\begin_layout Standard
+The mailer interface is simple but covers a wide variety of cases.
+ The 
+\family typewriter
+Mailer
+\family default
+ object defines a number of case classes that correspond to the components
+ of an RFC822 email.
+ The addressing and subject cases classes, 
+\family typewriter
+From
+\family default
+, 
+\family typewriter
+To
+\family default
+, 
+\family typewriter
+CC
+\family default
+, 
+\family typewriter
+BCC
+\family default
+, 
+\family typewriter
+ReplyTo
+\family default
+ and 
+\family typewriter
+Subject
+\family default
+ should all be self-explanatory.
+ For the body of the email you have three main options:
+\end_layout
+
+\begin_layout Description
+PlainMailBodyType Represents a plain-text email body based on a given String
+\end_layout
+
+\begin_layout Description
+XHTMLMailBodyType Represents an XHTML email body based on a given NodeSeq
+\end_layout
+
+\begin_layout Description
+XHTMLPlusImages Similar to XHTMLMailBodyType, but in addition to the NodeSeq,
+ you can provide one or more PlusImageHolder instances that represent images
+ to be attached to the email (embedded images, so to speak)
+\end_layout
+
+\begin_layout Standard
+The 
+\family typewriter
+Mailer.sendMail
+\family default
+ function is used to generate and send an email.
+ It takes three arguments: the 
+\family typewriter
+From
+\family default
+ sender address, the 
+\family typewriter
+Subject
+\family default
+ of the email, and a varargs list of recipient addresses and body components.
+ The mailer creates MIME/Multipart messages, so you can send more than one
+ body (i.e.
+ plain text and XHMTL) if you would like.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Sending-a-two-part-email"
+
+\end_inset
+
+ shows an example of sending an email to a group of recipients in both plain
+ text and XHTML format.
+ The Mailer object defines some implicit conversions to PlainMailBodyType
+ and XHTMLMailBodyType, which we use here.
+ We also have to do a little List trickery to be able to squeeze multiple
+ arguments into the final vararg argument since Scala doesn't support mixing
+ regular values and coerced sequences in vararg arguments.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Sending a two-part email
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Sending-a-two-part-email"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import net.liftweb.util.Mailer
+\end_layout
+
+\begin_layout Plain Layout
+
+import Mailer._
+\end_layout
+
+\begin_layout Plain Layout
+
+...
+\end_layout
+
+\begin_layout Plain Layout
+
+val myRecips : List[String] = ...
+\end_layout
+
+\begin_layout Plain Layout
+
+val plainContent : String = "..."
+\end_layout
+
+\begin_layout Plain Layout
+
+val xhtmlContent : NodeSeq = ...
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+Mailer.sendMail(From("no-reply@foo.com"), Subject("Just a test"),
+\end_layout
+
+\begin_layout Plain Layout
+
+                (plainContent :: xhtmlContent :: myRecips.map(To(_))) : _*)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+When you call 
+\family typewriter
+sendMail
+\family default
+ you're actually sending a message to an actor in the background that will
+ handle actual mail delivery; because of this, you shouldn't expect to see
+ a synchronous relay of the message through your SMTP server.
 \end_layout
 
 \end_body

@@ -810,7 +810,7 @@ During template processing, Lift tries to locate a file in the WAR tree
  that matches the request.
  Lift tries several suffixes (html, xhtml, htm, and no suffix) and also
  tries to match based on the client's Accept-Language header.
- The pattern Lift uses is
+ The pattern Lift uses is:
 \end_layout
 
 \begin_layout LyX-Code
@@ -855,7 +855,7 @@ then Lift will use the appropriate template based on the user's requested
  For more information regarding internationalization please see 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "BROKEN: Ref: cha:Internationalization"
+reference "cha:Internationalization"
 
 \end_inset
 
@@ -985,27 +985,15 @@ As you can see, templates are a nice way of setting up your layout and then
 y if you composite your templates using the surround and embed tags.
  If you'd like more control or don't need a template for a certain section,
  you'll want to use a View, which is coming up in the next section.
-\begin_inset Newline newline
-\end_inset
-
-
 \end_layout
 
 \begin_layout Standard
-\align center
-
-\series medium
-\begin_inset Box Shadowbox
-position "c"
-hor_pos "c"
-has_inner_box 1
-inner_pos "t"
-use_parbox 0
-width "75col%"
-special "none"
-height "1in"
-height_special "totalheight"
+\begin_inset Note Note
 status open
+
+\begin_layout Plain Layout
+Not sure if we actually want this here:
+\end_layout
 
 \begin_layout Plain Layout
 
@@ -1097,7 +1085,11 @@ reference "sec:Custom-dispatch-func"
 \end_inset
 
 .
- A view is a normal Scala method that returns a NodeSeq
+ A view is a normal Scala method that returns a 
+\family typewriter
+scala.xml.NodeSeq
+\family default
+
 \begin_inset Index
 status collapsed
 
@@ -1117,7 +1109,11 @@ NodeSeq
 
 \begin_layout Standard
 There are two options for implementing a view class: one is to extend the
- LiftView
+ 
+\family typewriter
+LiftView
+\family default
+
 \begin_inset Index
 status collapsed
 
@@ -1127,7 +1123,11 @@ LiftView
 
 \end_inset
 
- trait, the other is to implement the InsecureLiftView
+ trait, the other is to implement the 
+\family typewriter
+InsecureLiftView
+\family default
+
 \begin_inset Index
 status collapsed
 
@@ -1137,11 +1137,29 @@ InsecureLiftView
 
 \end_inset
 
- trait.
+ trait
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+Both under the net.liftweb.http package
+\end_layout
+
+\end_inset
+
+.
  As you may be able to tell from the names, we would prefer that you use
- the LiftView trait.
- The InsecureLiftView determines method dispatch by turning a request path
- into a class and method name.
+ the 
+\family typewriter
+LiftView
+\family default
+ trait.
+ The 
+\family typewriter
+InsecureLiftView
+\family default
+ determines method dispatch by turning a request path into a class and method
+ name.
  For instance, if we have a path 
 \family typewriter
 /MyStuff/enumerate
@@ -1647,13 +1665,9 @@ binding
 \begin_layout Standard
 Surrounds the child nodes with the named template; the child nodes are inserted
  into the named template at the binding point specified by the 
-\begin_inset Quotes eld
-\end_inset
-
+\family typewriter
 at
-\begin_inset Quotes erd
-\end_inset
-
+\family default
  parameter (we'll cover the bind tag in section 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -2223,7 +2237,7 @@ head
  Lift is smart about this, though, and instead takes the contents of the
  head tag and merges it into the outer template's head tag.
  This means that you can use a surround tag to keep a uniform default template,
- but still change things like the title of the tag, add in scripts or special
+ but still change things like the title of the page, add in scripts or special
  CSS, etc.
  For example, if you have a table in a page that you'd like to style with
  jQuery's TableSorter, you would add a head tag:
@@ -2300,7 +2314,7 @@ And just for this snippet, you'll import TableSorter.
 \end_layout
 
 \begin_layout Section
-Notices/Warnings/Errors messages
+Notice/Warning/Error messages
 \begin_inset CommandInset label
 LatexCommand label
 name "sub:Notices/Warnings/Errors-messages"
@@ -2337,7 +2351,11 @@ name "sec:Snippets"
 \end_layout
 
 \begin_layout Standard
-A snippet is a function that takes a single NodeSeq
+A snippet is a function that takes a single 
+\family typewriter
+scala.xml.NodeSeq
+\family default
+
 \begin_inset Index
 status collapsed
 
@@ -2492,8 +2510,8 @@ lift:Util.time
  It is this hierarchical processing of template tags that makes Lift so
  flexible.
  For those of you coming here with some JSP experience, Lift is designed
- to let you write your own template libraries, except much more powerful
- and much simpler to use.
+ to let you write your own tag libraries, except much more powerful and
+ much simpler to use.
 \end_layout
 
 \begin_layout Subsection
@@ -2572,8 +2590,8 @@ Then the Ledger.balance method receives
 
 \begin_layout Standard
 as its input parameter.
- This is perfectly valid XML, although it may look a little strange at first
- unless you've used prefixed elements in XML before.
+ This is perfectly correct XML, although it may look a little strange at
+ first unless you've used prefixed elements in XML before.
  The key is that Lift allows you to selectively 
 \begin_inset Quotes eld
 \end_inset
@@ -2604,8 +2622,8 @@ net.liftweb.util.Helpers.
 \end_layout
 
 \begin_layout Enumerate
-The namespace, or prefix, of the elements you wish to bind.
- In our example the namespace is 
+The prefix of the elements you wish to bind.
+ In our example the prefix is 
 \begin_inset Quotes eld
 \end_inset
 
@@ -2785,8 +2803,7 @@ Use a StatefulSnippet subclass.
 \end_layout
 
 \begin_layout Standard
-.
- Using a StatefulSnippet is very similar to a normal snippet, with the addition
+Using a StatefulSnippet is very similar to a normal snippet, with the addition
  of a few mechanisms.
  First, the StatefulSnippet trait defines a dispatch method of type PartialFunct
 ion[String, () => NodeSeq].
@@ -2992,12 +3009,12 @@ http://someplace.com/user/derek
 The mechanism is fairly simple to set up.
  We need to write a partial function from a RewriteRequest to a RewriteResponse
  to determine if and how we want to rewrite particular requests.
- Once we have the partial function we modify 
+ Once we have the partial function we modify the 
 \family typewriter
 LiftRules.rewrite
 \family default
- with it to hook into Lift's processing chain.
- The simplest way to write a partial function is with a match statement
+ configuration to hook into Lift's processing chain.
+ The simplest way to write a partial function is with Scala's match statement
  which will allow us to selectively match on some or all of the request
  information.
  It is important to understand that the Lift session is not created at the
@@ -3276,32 +3293,23 @@ The flexibility of Scala's matching system is what really makes this powerful.
  With matching on Lists in particular, we can match parts of the path and
  capture others.
  For instance, for our second example we'd like to rewrite the 
-\begin_inset Quotes eld
-\end_inset
-
-/user/<username>
-\begin_inset Quotes erd
-\end_inset
-
+\family typewriter
+/account/<account name>
+\family default
  path so that it's handled by the 
-\begin_inset Quotes eld
-\end_inset
-
-/viewUser
-\begin_inset Quotes erd
-\end_inset
-
- template
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Modify for PocketChange
-\end_layout
+\family typewriter
+/viewAcct
+\family default
+ template as shown in listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Simple-rewrite-example"
 
 \end_inset
 
-:
+.
+ In this case we provide two rewrites so that someone could specify an optional
+ tag for filtering the account view.
 \end_layout
 
 \begin_layout Standard
@@ -3336,12 +3344,41 @@ LiftRules.rewrite.append {
 
 \begin_layout Plain Layout
 
-  case RewriteRequest(ParsePath(user :: username :: Nil,_,_,_),_,_) => 
+  case RewriteRequest(
 \end_layout
 
 \begin_layout Plain Layout
 
-       RewriteResponse(viewUser :: Nil, Map(username -> username))
+         ParsePath(List("account",acctName),_,_,_),_,_) => 
+\end_layout
+
+\begin_layout Plain Layout
+
+         RewriteResponse("viewAcct" :: Nil, Map("name" -> acctName))
+\end_layout
+
+\begin_layout Plain Layout
+
+  case RewriteRequest(
+\end_layout
+
+\begin_layout Plain Layout
+
+         ParsePath(List("account",acctName, tag),_,_,_),_,_) => 
+\end_layout
+
+\begin_layout Plain Layout
+
+         RewriteResponse("viewAcct" :: Nil, Map("name" -> acctName,
+\end_layout
+
+\begin_layout Plain Layout
+
+                                                "tag" -> tag)))
+\end_layout
+
+\begin_layout Plain Layout
+
 \end_layout
 
 \begin_layout Plain Layout
@@ -3416,6 +3453,22 @@ S
 We can combine the ParsePath matching with the RequestType and HttpServletReques
 t to be very specific with our matches.
  For example, if we wanted to support the DELETE HTTP verb for a RESTful
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+\begin_inset CommandInset href
+LatexCommand href
+target "http://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \begin_inset Index
 status collapsed
 
