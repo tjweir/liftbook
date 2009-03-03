@@ -3,12 +3,31 @@
 \begin_document
 \begin_header
 \textclass book
+\begin_preamble
+\usepackage[notbib]{tocbibind}
+
+% redefine the \LyX macro for PDF bookmarks
+\def\LyX{\texorpdfstring{%
+  L\kern-.1667em\lower.25em\hbox{Y}\kern-.125emX\@}
+  {LyX }}
+
+% "define" Scala
+\lstdefinelanguage{scala}{morekeywords={class,object,trait,extends,with,new,if,while,for,def,val,var,this},
+otherkeywords={->,=>},
+sensitive=true,
+morecomment=[l]{//},
+morecomment=[s]{/*}{*/},
+morestring=[b]"}
+
+% Default settings for code listings
+\lstset{frame=tb,language=scala,aboveskip=3mm,belowskip=3mm,showstringspaces=false,columns=flexible,basicstyle={\small\ttfamily}}
+\end_preamble
 \use_default_options true
 \language english
 \inputencoding auto
-\font_roman default
+\font_roman palatino
 \font_sans default
-\font_typewriter default
+\font_typewriter courier
 \font_default_family default
 \font_sc false
 \font_osf false
@@ -16,16 +35,34 @@
 \font_tt_scale 100
 
 \graphics default
-\paperfontsize default
+\paperfontsize 11
 \spacing single
-\use_hyperref false
-\papersize default
-\use_geometry false
+\use_hyperref true
+\pdf_title "Starting with Lift"
+\pdf_author "Derek Chen-Becker, Marius Danciu, David Pollak and Tyler Weir"
+\pdf_subject "Learning the Lift web framework"
+\pdf_keywords "Lift Scala Introduction"
+\pdf_bookmarks true
+\pdf_bookmarksnumbered false
+\pdf_bookmarksopen false
+\pdf_bookmarksopenlevel 1
+\pdf_breaklinks false
+\pdf_pdfborder true
+\pdf_colorlinks true
+\pdf_backref false
+\pdf_pdfusetitle true
+\pdf_quoted_options "urlcolor=blue,linkcolor=blue"
+\papersize letterpaper
+\use_geometry true
 \use_amsmath 1
 \use_esint 1
 \cite_engine basic
 \use_bibtopic false
 \paperorientation portrait
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
 \secnumdepth 3
 \tocdepth 3
 \paragraph_separation indent
@@ -61,8 +98,8 @@ Derek Chen-Becker, Marius Danciu, David Pollak and Tyler Weir
 \noindent
 
 \size footnotesize
-Copyright© 2008- Derek Chen-Becker, Marius Danciu, David Pollak and Tyler
- Weir
+Copyright © 2008, 2009 Derek Chen-Becker, Marius Danciu, David Pollak and
+ Tyler Weir
 \end_layout
 
 \begin_layout Standard

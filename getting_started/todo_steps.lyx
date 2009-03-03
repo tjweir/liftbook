@@ -144,7 +144,7 @@ mvn archetype:generate -U
 
 \begin_layout Plain Layout
 
- -DarchetypeVersion=0.10 
+ -DarchetypeVersion=1.0 
 \backslash
 
 \end_layout
@@ -626,7 +626,8 @@ desc
  field is the description of the to-do item.
  A 
 \family typewriter
-MappedPoliteString
+Mapped\SpecialChar \-
+PoliteString
 \family default
  maps a 
 \family typewriter
@@ -1131,6 +1132,10 @@ Boot
 \family default
 , you'll see 
 \family typewriter
+
+\begin_inset Newline linebreak
+\end_inset
+
 LiftRules.addToPackages("com.liftworkshop")
 \family default
  line.
@@ -1226,6 +1231,8 @@ Some examples:
 \end_layout
 
 \begin_layout Standard
+\noindent
+\align center
 \begin_inset Tabular
 <lyxtabular version="3" rows="5" columns="3">
 <features>
@@ -1558,6 +1565,7 @@ So, the quintessential use of lift's templates are as follows:
 
 \begin_layout Standard
 \begin_inset listings
+lstparams "language=XML"
 inline false
 status open
 
@@ -2512,7 +2520,11 @@ def doBind(form: NodeSeq)
 , that the priority field generates.
  
 \family typewriter
-"desc" -> todo.desc.toForm
+"desc" ->
+\begin_inset Newline linebreak
+\end_inset
+
+todo.desc.toForm
 \family default
  does the same for the 
 \family typewriter
@@ -2521,7 +2533,11 @@ desc
  field.
  
 \family typewriter
-"submit" -> submit("New", checkAndSave)
+"submit" ->
+\begin_inset Newline linebreak
+\end_inset
+
+submit("New", checkAndSave)
 \family default
  creates a submit button with the value 
 \begin_inset Quotes eld
@@ -2758,7 +2774,10 @@ override def _toForm
 priority
 \family default
  field.
- 
+\begin_inset Newline linebreak
+\end_inset
+
+
 \family typewriter
 select(ToDo.priorityList,
 \family default
@@ -3031,6 +3050,7 @@ Inside the
 
 \begin_layout Standard
 \begin_inset listings
+lstparams "language=XML"
 inline false
 status open
 
@@ -3296,6 +3316,7 @@ First, let's define the view.
 
 \begin_layout Standard
 \begin_inset listings
+lstparams "language=XML"
 inline false
 status open
 
@@ -3835,7 +3856,11 @@ swappable
 When the server receives the Ajax call, it passes the parameter to the function:
  
 \family typewriter
-v => {td.desc(v).save; reDraw()}
+v =>
+\begin_inset Newline linebreak
+\end_inset
+
+ {td.desc(v).save; reDraw()}
 \family default
 , which sets the 
 \family typewriter

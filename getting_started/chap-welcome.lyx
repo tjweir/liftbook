@@ -397,7 +397,7 @@ is constantly attending to the mailing list, answering questions and taking
 \begin_layout Enumerate
 The first place to look is the Wiki at 
 \begin_inset Flex URL
-status collapsed
+status open
 
 \begin_layout Plain Layout
 
@@ -705,7 +705,7 @@ mvn archetype:generate -U
 \end_layout
 
 \begin_layout LyX-Code
-  -DarchetypeVersion=0.10 
+  -DarchetypeVersion=1.0 
 \backslash
 
 \end_layout
@@ -858,7 +858,7 @@ index.html
 
 \begin_layout Standard
 \begin_inset listings
-lstparams "basicstyle={\small\ttfamily},frame=lines,language=XML"
+lstparams "language=XML"
 inline false
 status open
 
@@ -1030,6 +1030,7 @@ default.html
 
 \begin_layout Standard
 \begin_inset listings
+lstparams "language=XML"
 inline false
 status open
 
@@ -1070,8 +1071,12 @@ status open
 
 \begin_layout Plain Layout
 
-    <script id="jquery" src="/classpath/jquery.js" type="text/javascript"></scrip
-t>
+    <script id="jquery" src="/classpath/jquery.js" type="text/javascript">
+\end_layout
+
+\begin_layout Plain Layout
+
+    </script>
 \end_layout
 
 \begin_layout Plain Layout
@@ -1276,7 +1281,12 @@ class HelloWorld {
 
 \begin_layout Plain Layout
 
-  def howdy: NodeSeq = <span>Welcome to helloworld at {new java.util.Date}</span>
+  def howdy: NodeSeq = 
+\end_layout
+
+\begin_layout Plain Layout
+
+    <span>Welcome to helloworld at {new java.util.Date}</span>
 \end_layout
 
 \begin_layout Plain Layout
