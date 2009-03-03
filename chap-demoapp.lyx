@@ -62,6 +62,121 @@ Planning
 - Add a few screenshots
 \end_layout
 
+\begin_layout Enumerate
+Start with Intro of what the app does and our requirements
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Handles small-scale finance
+\end_layout
+
+\begin_layout Enumerate
+Nice reporting and charting
+\end_layout
+
+\begin_layout Enumerate
+Simple, responsive user interface
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Very briefly discuss MVC
+\end_layout
+
+\begin_layout Enumerate
+Outline the model first
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Discuss major model entities
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+User
+\end_layout
+
+\begin_layout Enumerate
+Account
+\end_layout
+
+\begin_layout Enumerate
+Transaction
+\end_layout
+
+\begin_layout Enumerate
+Tag
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Show how simple it is to use MegaProtoUser (cross-ref to mapper chapter)
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+3 or so lines of code
+\end_layout
+
+\begin_layout Enumerate
+Show hooking SiteMap for user menus (cross-ref to SiteMap)
+\end_layout
+
+\begin_layout Enumerate
+Show overriding snippet code to surround with default template
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Show definition of Account class, cross-ref to mapper
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Quotes eld
+\end_inset
+
+See full source (ref) for the rest of the entities
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Write the index page template
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Briefly discuss surround (cross-ref to tags section)
+\end_layout
+
+\begin_layout Enumerate
+Discuss snippet embedding
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Write a snippet
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Snippet showing balances of accounts for the User
+\end_layout
+
+\begin_layout Enumerate
+Discuss getting the current user from MetaMegaProtoUser (cross-ref)
+\end_layout
+
+\begin_layout Enumerate
+Briefly discuss MetaMapper.findAll (cross-ref to mapper)
+\end_layout
+
+\end_deeper
 \begin_layout Section
 Our Demo Application
 \end_layout
