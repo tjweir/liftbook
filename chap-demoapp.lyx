@@ -81,7 +81,8 @@ Simple, responsive user interface
 
 \end_deeper
 \begin_layout Enumerate
-Very briefly discuss MVC
+Very briefly discuss MVC and LiftViewFirst: http://wiki.liftweb.net/index.php?title
+=Lift_View_First
 \end_layout
 
 \begin_layout Enumerate
