@@ -3457,9 +3457,15 @@ t to be very specific with our matches.
 status open
 
 \begin_layout Plain Layout
-\begin_inset CommandInset href
-LatexCommand href
-target "http://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm"
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+url{http://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm}
+\end_layout
 
 \end_inset
 
@@ -3470,7 +3476,7 @@ target "http://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm"
 
 
 \begin_inset Index
-status collapsed
+status open
 
 \begin_layout Plain Layout
 RESTful
