@@ -2177,8 +2177,11 @@ Creating a to-do item
 \end_layout
 
 \begin_layout Standard
-Create a new snippet in src/main/scala/com/liftcode/snippet/TD.scala with
- the following code:
+Create a new snippet in 
+\family typewriter
+src/main/scala/com/liftworkshop/snippet/TD.scala
+\family default
+ with the following code:
 \end_layout
 
 \begin_layout Standard
