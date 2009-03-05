@@ -47,143 +47,8 @@ Demo Application: PocketChange
 \end_layout
 
 \begin_layout Standard
-Planning
-\end_layout
-
-\begin_layout Standard
-- describe the app
-\end_layout
-
-\begin_layout Standard
-- outline the feature/chapter tie-ins
-\end_layout
-
-\begin_layout Standard
-- Add a few screenshots
-\end_layout
-
-\begin_layout Enumerate
-Start with Intro of what the app does and our requirements
-\end_layout
-
-\begin_deeper
-\begin_layout Enumerate
-Handles small-scale finance
-\end_layout
-
-\begin_layout Enumerate
-Nice reporting and charting
-\end_layout
-
-\begin_layout Enumerate
-Simple, responsive user interface
-\end_layout
-
-\end_deeper
-\begin_layout Enumerate
-Very briefly discuss MVC and LiftViewFirst: http://wiki.liftweb.net/index.php?title
-=Lift_View_First
-\end_layout
-
-\begin_layout Enumerate
-Outline the model first
-\end_layout
-
-\begin_deeper
-\begin_layout Enumerate
-Discuss major model entities
-\end_layout
-
-\begin_deeper
-\begin_layout Enumerate
-User
-\end_layout
-
-\begin_layout Enumerate
-Account
-\end_layout
-
-\begin_layout Enumerate
-Transaction
-\end_layout
-
-\begin_layout Enumerate
-Tag
-\end_layout
-
-\end_deeper
-\begin_layout Enumerate
-Show how simple it is to use MegaProtoUser (cross-ref to mapper chapter)
-\end_layout
-
-\begin_deeper
-\begin_layout Enumerate
-3 or so lines of code
-\end_layout
-
-\begin_layout Enumerate
-Show hooking SiteMap for user menus (cross-ref to SiteMap)
-\end_layout
-
-\begin_layout Enumerate
-Show overriding snippet code to surround with default template
-\end_layout
-
-\end_deeper
-\begin_layout Enumerate
-Show definition of Account class, cross-ref to mapper
-\end_layout
-
-\begin_layout Enumerate
-\begin_inset Quotes eld
-\end_inset
-
-See full source (ref) for the rest of the entities
-\begin_inset Quotes erd
-\end_inset
-
-
-\end_layout
-
-\end_deeper
-\begin_layout Enumerate
-Write the index page template
-\end_layout
-
-\begin_deeper
-\begin_layout Enumerate
-Briefly discuss surround (cross-ref to tags section)
-\end_layout
-
-\begin_layout Enumerate
-Discuss snippet embedding
-\end_layout
-
-\end_deeper
-\begin_layout Enumerate
-Write a snippet
-\end_layout
-
-\begin_deeper
-\begin_layout Enumerate
-Snippet showing balances of accounts for the User
-\end_layout
-
-\begin_layout Enumerate
-Discuss getting the current user from MetaMegaProtoUser (cross-ref)
-\end_layout
-
-\begin_layout Enumerate
-Briefly discuss MetaMapper.findAll (cross-ref to mapper)
-\end_layout
-
-\end_deeper
-\begin_layout Section
-Our Demo Application
-\end_layout
-
-\begin_layout Standard
-We decided to build an application throughout the book as evolutionary example.
+As a way to demonstrate the concepts in the book, we've decided to build
+ an as an evolutionary example.
  The application we've picked is an Expense Tracker and we're calling it
  
 \shape italic
@@ -191,15 +56,2290 @@ PocketChange.
 \end_layout
 
 \begin_layout Standard
-SCREENSHOT
+\begin_inset Float figure
+placement h
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/pocketchange.png
+	width 6in
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+The PocketChange App
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
 PocketChange will track your expenses, keep a running total of what you've
  spent, allow you to organize by tags, and visualize the data.
  During the later chapters of the book we'll add a few fun features such
- as multiple people per account and <super awesome feature goes here when
- we think of it.>.
+ as AJAX charting and allowing multiple people per account (with COMET update
+ of entries).
+ Above all, we want to keep the interface lean, mean and clean.
+\end_layout
+
+\begin_layout Standard
+We're going to be using the MVC
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+Model-View-Controller; more at XXX
+\end_layout
+
+\end_inset
+
+ pattern for the design of our app, since Lift's separation of presentation
+ and logic via templating, views, and snippets lends itself to MVC so well.
+ For an excellent article on the design decisions behind Lift's approach
+ to templating and logic, read David Pollak's 
+\emph on
+Lift View First 
+\emph default
+article on the wiki
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://wiki.liftweb.net/index.php?title=Lift_View_First
+\end_layout
+
+\end_inset
+
+.
+ Note that the example code is somewhat out of date on this page; the interestin
+g part is David's reasoning and decisions that have made Lift so easy to
+ use.
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Another important thing to note is that we're going to breeze through the
+ app and touch on a lot of details.
+ We'll provide plenty of references to the chapters where things are covered;
+ this chapter is really intended to just give you a taste of Lift, so feel
+ free to read ahead if you want more info on how something works.
+ Full source for the entire PocketChange application is available at GitHub
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+\begin_inset CommandInset href
+LatexCommand href
+target "http://github.com/tjweir/pocketchangeapp/tree"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+.
+ Enough chatter, let's go!
+\end_layout
+
+\begin_layout Section
+Defining the Model
+\end_layout
+
+\begin_layout Standard
+The first step we'll take is to define the database entities that we're
+ going to use for our app.
+ The base functionality of a categorized expense tracker is covered by the
+ following items:
+\end_layout
+
+\begin_layout Itemize
+User - representing a user of the application
+\end_layout
+
+\begin_layout Itemize
+Account - representing a specific expense account.
+ We want to support more than one per user
+\end_layout
+
+\begin_layout Itemize
+Expense - representing a specific expense transaction tied to a particular
+ account
+\end_layout
+
+\begin_layout Itemize
+Tag - Allows us a to categorize each expense for later searching and reporting
+\end_layout
+
+\begin_layout Standard
+We'll start out with the User, as shown in listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:PocketChange-User-entity"
+
+\end_inset
+
+.
+ We leverage Lift's MegaProtoUser (section 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "sub:ProtoUser-and-MegaProtoUser"
+
+\end_inset
+
+) class to handle 99% of everything we need for user management.
+ For example, with just the code you see, we define an entire user management
+ function for our site, including signup page, lost password page, and login
+ page.
+ The accompanying SiteMap (section 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "cha:SiteMap"
+
+\end_inset
+
+) menus are generated with a single call to 
+\family typewriter
+User.siteMap
+\family default
+.
+ As you can see, we can customize the XHTML that's generated for the user
+ management pages with a few simple defs; the customization for MetaMegaProtoUse
+r is extensive.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+PocketChange User entity
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:PocketChange-User-entity"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+package com.pocketchangeapp.model
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import _root_.net.liftweb.mapper._
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+object User extends User with MetaMegaProtoUser[User] {
+\end_layout
+
+\begin_layout Plain Layout
+
+  override def dbTableName = "users" // define the DB table name
+\end_layout
+
+\begin_layout Plain Layout
+
+  // Spruce up the forms a bit
+\end_layout
+
+\begin_layout Plain Layout
+
+  override def loginXhtml =
+\end_layout
+
+\begin_layout Plain Layout
+
+    <lift:surround with="default" at="content">
+\end_layout
+
+\begin_layout Plain Layout
+
+      { super.loginXhtml }
+\end_layout
+
+\begin_layout Plain Layout
+
+    </lift:surround>
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  override def signupXhtml(user: User) = 
+\end_layout
+
+\begin_layout Plain Layout
+
+    <lift:surround with="default" at="content">
+\end_layout
+
+\begin_layout Plain Layout
+
+      { super.signupXhtml(user) }
+\end_layout
+
+\begin_layout Plain Layout
+
+    </lift:surround>
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+class User extends MegaProtoUser[User] {
+\end_layout
+
+\begin_layout Plain Layout
+
+  def getSingleton = User // what's the "meta" server
+\end_layout
+
+\begin_layout Plain Layout
+
+  def allAccounts : List[Account] = 
+\end_layout
+
+\begin_layout Plain Layout
+
+    Account.findAll(By(Account.owner, this.id))
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Note that we've also added a utility method to the User class to retrieve
+ all of the accounts for a given user.
+ We use the MetaMapper.findAll method to do a query by owner id (section
+ 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "sub:Querying-for-Entities"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Standard
+Defining the Account entity is a little more involved, as shown in listing
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:PocketChange-Account-entity"
+
+\end_inset
+
+.
+ Here we define a class with a Long primary key and some fields associate
+ with the accounts.
+ We also define some helper methods for object relationship joins (section
+ 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "sub:helper-joins"
+
+\end_inset
+
+).
+ The Expense and Tag entities (along with some ancillary entities) follow
+ suit, so we won't cover them here.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+PocketChange Account entity
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:PocketChange-Account-entity"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+package com.pocketchangeapp.model
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import java.math.MathContext
+\end_layout
+
+\begin_layout Plain Layout
+
+import net.liftweb.mapper._
+\end_layout
+
+\begin_layout Plain Layout
+
+import net.liftweb.util.Empty
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+class Account extends LongKeyedMapper[Account] with IdPK {
+\end_layout
+
+\begin_layout Plain Layout
+
+  def getSingleton = Account
+\end_layout
+
+\begin_layout Plain Layout
+
+  object owner extends MappedLongForeignKey(this, User) {
+\end_layout
+
+\begin_layout Plain Layout
+
+    override def dbIndexed_? = true
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+  def admins = AccountAdmin.findAll(By(AccountAdmin.account, this.id))
+\end_layout
+
+\begin_layout Plain Layout
+
+  def addAdmin (user : User) = 
+\end_layout
+
+\begin_layout Plain Layout
+
+    AccountAdmin.create.account(this).administrator(user).save
+\end_layout
+
+\begin_layout Plain Layout
+
+  def viewers = AccountViewer.findAll(By(AccountViewer.account, this.id))
+\end_layout
+
+\begin_layout Plain Layout
+
+  object is_public extends MappedBoolean(this) {
+\end_layout
+
+\begin_layout Plain Layout
+
+    override def defaultValue = false
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+  // The balance has up to 16 digits and 2 decimal places
+\end_layout
+
+\begin_layout Plain Layout
+
+  object balance extends MappedDecimal(this, MathContext.DECIMAL64, 2)
+\end_layout
+
+\begin_layout Plain Layout
+
+  def entries = Expense.getByAcct(this, Empty, Empty, Empty)
+\end_layout
+
+\begin_layout Plain Layout
+
+  def tags = Tag.findAll(By(Tag.account, this.id))
+\end_layout
+
+\begin_layout Plain Layout
+
+  object name extends MappedString(this,100)
+\end_layout
+
+\begin_layout Plain Layout
+
+  object description extends MappedString(this, 300)
+\end_layout
+
+\begin_layout Plain Layout
+
+  object externalAccount extends MappedString(this, 300)
+\end_layout
+
+\begin_layout Plain Layout
+
+  def notes = AccountNote.findAll(By(AccountNote.account, this.id))
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+object Account extends Account with LongKeyedMetaMapper[Account] {
+\end_layout
+
+\begin_layout Plain Layout
+
+  def findByName (owner : User, name : String) : List[Account] = 
+\end_layout
+
+\begin_layout Plain Layout
+
+    Account.findAll(By(Account.owner, owner.id.is), By(Account.name, name))
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Our First Template
+\end_layout
+
+\begin_layout Standard
+Our next step is to figure out how we'll present this data to the user.
+ We'd like to show a home page on the site that shows either a welcome message
+ or a summary of account balances and a place to enter new expenses depending
+ on whether the user is logged in.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:The-welcome-template"
+
+\end_inset
+
+ shows a basic template to handle this that we'll save in index.html.
+ The astute reader will notice that we have a head element but no body.
+ This is XHTML, so how does this work? This template uses the 
+\family typewriter
+<lift:surround>
+\family default
+ tag (section 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "sub:surround-tag"
+
+\end_inset
+
+) to embed itself into a master template (
+\family typewriter
+/templates_hidden/default
+\family default
+); Lift actually does what's called a 
+\begin_inset Quotes eld
+\end_inset
+
+head merge
+\begin_inset Quotes erd
+\end_inset
+
+ (section 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "sec:Head-Merge"
+
+\end_inset
+
+) to include the contents of the 
+\family typewriter
+head
+\family default
+ tag in our template within the 
+\family typewriter
+head
+\family default
+ elemend of the master template.
+ The 
+\family typewriter
+<lift:HomePage.summary>
+\family default
+ and 
+\family typewriter
+<lift:AddEntry.addentry>
+\family default
+ tags are snippet definitions.
+ Snippets are the backing Scala code the control the actual page logic;
+ we'll be covering them in the next section.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=XML"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+The welcome template
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:The-welcome-template"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<lift:surround with="default" at="content">
+\end_layout
+
+\begin_layout Plain Layout
+
+<head>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <!-- required plugins -->
+\end_layout
+
+\begin_layout Plain Layout
+
+  <script type="text/javascript" src="/scripts/date.js"></script>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <!--[if IE]>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <script type="text/javascript" src="/scripts/jquery.bgiframe.js">
+\end_layout
+
+\begin_layout Plain Layout
+
+  </script>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <![endif]-->
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  <!-- jquery.datePicker.js -->
+\end_layout
+
+\begin_layout Plain Layout
+
+  <script type="text/javascript" src="/scripts/jquery.datePicker.js">
+\end_layout
+
+\begin_layout Plain Layout
+
+  </script>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <link rel="stylesheet" type="text/css" href="/style/datePicker.css" />
+\end_layout
+
+\begin_layout Plain Layout
+
+</head>
+\end_layout
+
+\begin_layout Plain Layout
+
+    <lift:HomePage.summary>
+\end_layout
+
+\begin_layout Plain Layout
+
+      <div class="column span-24 bordered">
+\end_layout
+
+\begin_layout Plain Layout
+
+    	<h2>Summary of accounts:</h2>
+\end_layout
+
+\begin_layout Plain Layout
+
+        <account:entry>
+\end_layout
+
+\begin_layout Plain Layout
+
+	      <acct:name /> : <acct:balance /> <br/>
+\end_layout
+
+\begin_layout Plain Layout
+
+	    </account:entry>
+\end_layout
+
+\begin_layout Plain Layout
+
+      </div>   
+\end_layout
+
+\begin_layout Plain Layout
+
+    <hr />
+\end_layout
+
+\begin_layout Plain Layout
+
+    </lift:HomePage.summary>
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    <div class="column span-24">
+\end_layout
+
+\begin_layout Plain Layout
+
+      <lift:AddEntry.addentry form="POST">
+\end_layout
+
+\begin_layout Plain Layout
+
+        <div id="entryform">
+\end_layout
+
+\begin_layout Plain Layout
+
+          <div class="column span-24"><h3>Entry Form</h3>
+\end_layout
+
+\begin_layout Plain Layout
+
+            <e:account /> <e:dateOf /> <e:desc /> <e:value />
+\end_layout
+
+\begin_layout Plain Layout
+
+            <e:tags/><button>Add $</button>
+\end_layout
+
+\begin_layout Plain Layout
+
+          </div>
+\end_layout
+
+\begin_layout Plain Layout
+
+        </div>
+\end_layout
+
+\begin_layout Plain Layout
+
+      </lift:AddEntry.addentry>
+\end_layout
+
+\begin_layout Plain Layout
+
+    </div>
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    <script type="text/javascript">
+\end_layout
+
+\begin_layout Plain Layout
+
+      Date.format = 'yyyy/mm/dd';
+\end_layout
+
+\begin_layout Plain Layout
+
+      jQuery(function () {
+\end_layout
+
+\begin_layout Plain Layout
+
+        jQuery('#entrydate').datePicker({startDate:'00010101', 
+\end_layout
+
+\begin_layout Plain Layout
+
+                                        clickInput:true});
+\end_layout
+
+\begin_layout Plain Layout
+
+      })
+\end_layout
+
+\begin_layout Plain Layout
+
+    </script>
+\end_layout
+
+\begin_layout Plain Layout
+
+</lift:surround>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+As you can see, there's no control logic at all in our template, just well-forme
+d XML and some javascript to activate the jQuery datePicker functionality.
+\end_layout
+
+\begin_layout Section
+Writing Snippets
+\end_layout
+
+\begin_layout Standard
+Now that we have a template, we need to write the summary and addEntry snippets
+ so that we can actually do something with the site.
+ First, let's look at the summary snippet, shown in listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Defining-the-summary-snippet"
+
+\end_inset
+
+.
+ We've skipped the standard Lift imports (section XXX) to save space, but
+ we've specifically imported 
+\family typewriter
+java.util.Date
+\family default
+ and all of our Model classes.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Defining the summary snippet
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Defining-the-summary-snippet"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+package com.pocketchangeapp.snippet
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import ...
+ standard imports ...
+\end_layout
+
+\begin_layout Plain Layout
+
+import com.pocketchangeapp.model._
+\end_layout
+
+\begin_layout Plain Layout
+
+import java.util.Date
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+class HomePage {
+\end_layout
+
+\begin_layout Plain Layout
+
+  def summary (xhtml : NodeSeq) : NodeSeq = User.currentUser match {
+\end_layout
+
+\begin_layout Plain Layout
+
+    case Full(user) => {
+\end_layout
+
+\begin_layout Plain Layout
+
+      val entries : NodeSeq = user.allAccounts match {
+\end_layout
+
+\begin_layout Plain Layout
+
+	    case Nil => Text("You have no accounts set up") 
+\end_layout
+
+\begin_layout Plain Layout
+
+	    case accounts => accounts.flatMap({account => 
+\end_layout
+
+\begin_layout Plain Layout
+
+	      bind("acct", chooseTemplate("account", "entry", xhtml),
+\end_layout
+
+\begin_layout Plain Layout
+
+	           "name" -> <a href={"/account/" + account.name.is}>
+\end_layout
+
+\begin_layout Plain Layout
+
+                           {account.name.is}</a>,
+\end_layout
+
+\begin_layout Plain Layout
+
+	           "balance" -> Text(account.balance.toString))
+\end_layout
+
+\begin_layout Plain Layout
+
+	    })
+\end_layout
+
+\begin_layout Plain Layout
+
+      }
+\end_layout
+
+\begin_layout Plain Layout
+
+      bind("account", xhtml, "entry" -> entries)
+\end_layout
+
+\begin_layout Plain Layout
+
+    }
+\end_layout
+
+\begin_layout Plain Layout
+
+    case _ => <lift:embed what="welcome_msg" />
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Our first step is to use the 
+\family typewriter
+User.currentUser
+\family default
+ method (this is part of MetaMegaProtoUser) to determine if someone is logged
+ in.
+ If so, we use the 
+\family typewriter
+User.allAccounts
+\family default
+ method to retrieve a 
+\family typewriter
+List
+\family default
+ of all of the user's accounts.
+ If the user doesn't have accounts we return an XML text node saying so
+ that will be bound where our tag was placed in the template.
+ If the user does have accounts, then we map the accounts into XHTML using
+ the bind function.
+ For each account, we bind the name of the account where we've defined the
+ 
+\family typewriter
+<acct:name>
+\family default
+ tag in the template, and the balance where we defined 
+\family typewriter
+<acct:balance>
+\family default
+.
+ The resulting List of XML NodeSeq entities is used to replace the 
+\family typewriter
+<lift:HomePage.summary>
+\family default
+ element in the template.
+ Finally, we match the case where a user isn't logged in by embedding the
+ contents of a welcome template (which may be further processed).
+\end_layout
+
+\begin_layout Standard
+Of course, it doesn't do us any good to display account balances if we can't
+ add expenses, so let's define the addEntry snippet.
+ The code is shown in listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:The-addEntry-snippet"
+
+\end_inset
+
+.
+ This looks different than the summary snippet primarily because we're using
+ a StatefulSnippet (section 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "sub:Stateless-versus-Stateful"
+
+\end_inset
+
+).
+ The primary difference is that with a StatefulSnippet the same 
+\begin_inset Quotes eld
+\end_inset
+
+instance
+\begin_inset Quotes erd
+\end_inset
+
+ of the snippet is used for each page request in a given session, so we
+ can keep the variables around in case we need the user to fix something
+ in the form.
+ The basic structure of the snippet is the same as for our summary: we do
+ some work (we'll cover the 
+\family typewriter
+doTagsAndSubmit
+\family default
+ function in a moment) and then bind values back into the template.
+ In this snippet, however, we use the 
+\family typewriter
+SHtml.select
+\family default
+ and 
+\family typewriter
+SHtml.text
+\family default
+ methods to generate form fields.
+ The 
+\family typewriter
+text
+\family default
+ fields simply take an initial value and a function (closure) to process
+ the value on submission.
+ The 
+\family typewriter
+select
+\family default
+ field is a little more complex because we give it a list of options, but
+ is otherwise the same concept.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+The addEntry snippet
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:The-addEntry-snippet"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+package com.pocketchangeapp.snippet
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import ...
+ standard imports ...
+\end_layout
+
+\begin_layout Plain Layout
+
+import com.pocketchangeapp.model._
+\end_layout
+
+\begin_layout Plain Layout
+
+import com.pocketchangeapp.util.Util
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import java.util.Date
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/* date | desc | tags | value */ 
+\end_layout
+
+\begin_layout Plain Layout
+
+class AddEntry extends StatefulSnippet {
+\end_layout
+
+\begin_layout Plain Layout
+
+ def dispatch = {
+\end_layout
+
+\begin_layout Plain Layout
+
+  case "addentry" => add _
+\end_layout
+
+\begin_layout Plain Layout
+
+ }
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+ var account : Long = _
+\end_layout
+
+\begin_layout Plain Layout
+
+ var date = ""
+\end_layout
+
+\begin_layout Plain Layout
+
+ var desc = ""
+\end_layout
+
+\begin_layout Plain Layout
+
+ var value = ""
+\end_layout
+
+\begin_layout Plain Layout
+
+ var tags = S.param("tag") openOr ""
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\end_layout
+
+\begin_layout Plain Layout
+
+ def add(in: NodeSeq): NodeSeq = User.currentUser match {
+\end_layout
+
+\begin_layout Plain Layout
+
+  case Full(user) if user.editable.size > 0 => {
+\end_layout
+
+\begin_layout Plain Layout
+
+   def doTagsAndSubmit(t: String) {
+\end_layout
+
+\begin_layout Plain Layout
+
+    tags = t
+\end_layout
+
+\begin_layout Plain Layout
+
+	if (tags.trim.length == 0) 
+\end_layout
+
+\begin_layout Plain Layout
+
+     error("We're going to need at least one tag.")
+\end_layout
+
+\begin_layout Plain Layout
+
+	else {
+\end_layout
+
+\begin_layout Plain Layout
+
+     /* Get the date correctly, comes in as yyyy/mm/dd */
+\end_layout
+
+\begin_layout Plain Layout
+
+	 val entryDate = Util.slashDate.parse(date)
+\end_layout
+
+\begin_layout Plain Layout
+
+	 val amount = BigDecimal(value)
+\end_layout
+
+\begin_layout Plain Layout
+
+	 val currentAccount = Account.find(account).open_!
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	 // We need to determine the last serial number and balance
+\end_layout
+
+\begin_layout Plain Layout
+
+     // for the date in question
+\end_layout
+
+\begin_layout Plain Layout
+
+	 val (entrySerial,entryBalance) = 
+\end_layout
+
+\begin_layout Plain Layout
+
+      Expense.getLastExpenseData(currentAccount, entryDate)
+\end_layout
+
+\begin_layout Plain Layout
+
+	  
+\end_layout
+
+\begin_layout Plain Layout
+
+	 val e = Expense.create.account(account)
+\end_layout
+
+\begin_layout Plain Layout
+
+                    .dateOf(entryDate)
+\end_layout
+
+\begin_layout Plain Layout
+
+                    .serialNumber(entrySerial + 1)
+\end_layout
+
+\begin_layout Plain Layout
+
+	                .description(desc)
+\end_layout
+
+\begin_layout Plain Layout
+
+                    .amount(BigDecimal(value)).tags(tags)
+\end_layout
+
+\begin_layout Plain Layout
+
+		            .currentBalance(entryBalance + amount)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	 e.validate match {
+\end_layout
+
+\begin_layout Plain Layout
+
+      case Nil => {
+\end_layout
+
+\begin_layout Plain Layout
+
+	   Expense.updateEntries(entrySerial + 1, amount)
+\end_layout
+
+\begin_layout Plain Layout
+
+       e.save
+\end_layout
+
+\begin_layout Plain Layout
+
+  	 val acct = Account.find(account).open_!
+\end_layout
+
+\begin_layout Plain Layout
+
+	   val newBalance = acct.balance.is + e.amount.is
+\end_layout
+
+\begin_layout Plain Layout
+
+	   acct.balance(newBalance).save
+\end_layout
+
+\begin_layout Plain Layout
+
+       notice("Entry added!")
+\end_layout
+
+\begin_layout Plain Layout
+
+       // dpp: remove the statefullness of this snippet
+\end_layout
+
+\begin_layout Plain Layout
+
+	   unregisterThisSnippet() 
+\end_layout
+
+\begin_layout Plain Layout
+
+	  }
+\end_layout
+
+\begin_layout Plain Layout
+
+      case x => error(x)
+\end_layout
+
+\begin_layout Plain Layout
+
+	 }
+\end_layout
+
+\begin_layout Plain Layout
+
+    }
+\end_layout
+
+\begin_layout Plain Layout
+
+   }
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+   val allAccounts = user.allAccounts.map(acct => (acct.id.toString,
+\end_layout
+
+\begin_layout Plain Layout
+
+                                                   acct.name))
+\end_layout
+
+\begin_layout Plain Layout
+
+   bind("e", in, 
+\end_layout
+
+\begin_layout Plain Layout
+
+	    "account" -> select(allAccounts, Empty,
+\end_layout
+
+\begin_layout Plain Layout
+
+                            id => account = id.toLong),
+\end_layout
+
+\begin_layout Plain Layout
+
+	    "dateOf" -> text(Util.slashDate.format(new Date()).toString,
+\end_layout
+
+\begin_layout Plain Layout
+
+                         date = _,
+\end_layout
+
+\begin_layout Plain Layout
+
+                         "id" -> "entrydate"),
+\end_layout
+
+\begin_layout Plain Layout
+
+	    "desc" -> text("Item Description", desc = _),
+\end_layout
+
+\begin_layout Plain Layout
+
+	    "value" -> text("Value", value = _),
+\end_layout
+
+\begin_layout Plain Layout
+
+	    "tags" -> text(tags, doTagsAndSubmit))
+\end_layout
+
+\begin_layout Plain Layout
+
+    }
+\end_layout
+
+\begin_layout Plain Layout
+
+  case _ => Text("")
+\end_layout
+
+\begin_layout Plain Layout
+
+ }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The 
+\family typewriter
+doTagsAndSubmit
+\family default
+ function is a new addition; its primary purpose is to process all of the
+ submitted data, create and validate an 
+\family typewriter
+Expense
+\family default
+ entry, and then return to the user.
+ This pattern of defining a local function to handle form submission is
+ quite common as opposed to defining a method on your class.
+ The main reason is that by defining the function locally, it becomes a
+ closure on any variables defined in the scope of your snippet function.
+\end_layout
+
+\begin_layout Section
+A Little Ajax Spice
+\end_layout
+
+\begin_layout Standard
+So far this is all pretty standard fare, so let's push things a bit and
+ show you some more advanced functionality.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Displaying-an-Expense-table"
+
+\end_inset
+
+ shows a template for displaying a table of Expenses for the user with an
+ optional start and end date.
+ The 
+\family typewriter
+Accounts.detail
+\family default
+ snippet is what we'll be defining later in this section.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=XML"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Displaying an Expense table
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Displaying-an-Expense-table"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<lift:surround with="default" at="content">
+\end_layout
+
+\begin_layout Plain Layout
+
+  <lift:Accounts.detail eager_eval="true"> 
+\end_layout
+
+\begin_layout Plain Layout
+
+  <div class="column span-24">
+\end_layout
+
+\begin_layout Plain Layout
+
+  <h2>Summary</h2>
+\end_layout
+
+\begin_layout Plain Layout
+
+    <table><tr><th>Name</th><th>Balance</th></tr>
+\end_layout
+
+\begin_layout Plain Layout
+
+      <tr><td><acct:name /></td><td><acct:balance /></td></tr>
+\end_layout
+
+\begin_layout Plain Layout
+
+    </table
+\end_layout
+
+\begin_layout Plain Layout
+
+  <div>
+\end_layout
+
+\begin_layout Plain Layout
+
+    <h3>Filters:</h3>
+\end_layout
+
+\begin_layout Plain Layout
+
+    <table><tr><th>Start Date</th><td><acct:startDate /></td>
+\end_layout
+
+\begin_layout Plain Layout
+
+	           <th>End Date</th><td><acct:endDate /></td></tr>
+\end_layout
+
+\begin_layout Plain Layout
+
+    </table>
+\end_layout
+
+\begin_layout Plain Layout
+
+  </div>
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  <div class="column span-24" >
+\end_layout
+
+\begin_layout Plain Layout
+
+    <h2>Transactions</h2>
+\end_layout
+
+\begin_layout Plain Layout
+
+    <lift:embed what="entry_table" />
+\end_layout
+
+\begin_layout Plain Layout
+
+  </div>
+\end_layout
+
+\begin_layout Plain Layout
+
+  </lift:Accounts.detail>
+\end_layout
+
+\begin_layout Plain Layout
+
+</lift:surround>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The <lift:embed> tag (section 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "sub:embed-tag"
+
+\end_inset
+
+) allows you to include another template at that point.
+ In our case, the entry_table template is shown in listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Embedded-Expense-table"
+
+\end_inset
+
+.
+ This is really just a fragment, not intended to be used alone, since it's
+ not a full XHTML document and it doesn't surround itself with a master
+ template.
+ It does, however, provide binding sites that we can fill in.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=XML"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Embedded Expense table
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Embedded-Expense-table"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<table id="" class="" border="0" cellpadding="0" cellspacing="1" 
+\end_layout
+
+\begin_layout Plain Layout
+
+    width="100%">
+\end_layout
+
+\begin_layout Plain Layout
+
+  <thead>
+\end_layout
+
+\begin_layout Plain Layout
+
+    <tr>
+\end_layout
+
+\begin_layout Plain Layout
+
+      <th>Date</th><th>Description</th><th>Tags</th><th>Value</th>
+\end_layout
+
+\begin_layout Plain Layout
+
+      <th>Balance</th>
+\end_layout
+
+\begin_layout Plain Layout
+
+    </tr>
+\end_layout
+
+\begin_layout Plain Layout
+
+  </thead>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <tbody id="entry_table">
+\end_layout
+
+\begin_layout Plain Layout
+
+    <acct:table>
+\end_layout
+
+\begin_layout Plain Layout
+
+      <acct:tableEntry>
+\end_layout
+
+\begin_layout Plain Layout
+
+	<tr><td><entry:date /></td><td><entry:desc /></td>
+\end_layout
+
+\begin_layout Plain Layout
+
+        <td><entry:tags /></td><td><entry:amt /></td>
+\end_layout
+
+\begin_layout Plain Layout
+
+        <td><entry:balance /></td>
+\end_layout
+
+\begin_layout Plain Layout
+
+	</tr>
+\end_layout
+
+\begin_layout Plain Layout
+
+      </acct:tableEntry>
+\end_layout
+
+\begin_layout Plain Layout
+
+    </acct:table>
+\end_layout
+
+\begin_layout Plain Layout
+
+  </tbody>
+\end_layout
+
+\begin_layout Plain Layout
+
+</table>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Before we get into the Ajax portion of the code, let's define a helper method,
+ shown in listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:The-table-helper-function"
+
+\end_inset
+
+, to generate the XHTML table entries that we'll be displaying (assuming
+ normal imports).
+ The function basically pulls the contents of the 
+\family typewriter
+<acct:tableEntry>
+\family default
+ tag (via the 
+\family typewriter
+Helpers.chooseTemplate
+\family default
+ method, section ???) and binds each 
+\family typewriter
+Expense
+\family default
+ from the provided list into it.
+ As you can see in the 
+\family typewriter
+entry_table
+\family default
+ template, that corresponds to one table row for each entry.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+The table helper function
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:The-table-helper-function"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  def buildExpenseTable(entries : List[Expense], template : NodeSeq) = {
+\end_layout
+
+\begin_layout Plain Layout
+
+    entries.flatMap({ entry =>
+\end_layout
+
+\begin_layout Plain Layout
+
+      bind("entry", chooseTemplate("acct", "tableEntry", template),
+\end_layout
+
+\begin_layout Plain Layout
+
+	   "date" -> Text(Util.slashDate.format(entry.dateOf.is)),
+\end_layout
+
+\begin_layout Plain Layout
+
+	   "desc" -> Text(entry.description.is),
+\end_layout
+
+\begin_layout Plain Layout
+
+	   "tags" -> Text(entry.tags.map(_.tag.is).mkString(", ")),
+\end_layout
+
+\begin_layout Plain Layout
+
+	   "amt" -> Text(entry.amount.toString),
+\end_layout
+
+\begin_layout Plain Layout
+
+	   "balance" -> Text(entry.currentBalance.toString))
+\end_layout
+
+\begin_layout Plain Layout
+
+		    })
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The final piece is our Accounts.detail snippet, shown in listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Our-Ajax-snippet"
+
+\end_inset
+
+.
+ We start off with some boilerplate matches to locate the 
+\family typewriter
+Account
+\family default
+ to be viewed, then we define some vars to hold state.
+ It's important that they're vars so that they can be captured by the 
+\family typewriter
+entryTable
+\family default
+, 
+\family typewriter
+updateStartDate
+\family default
+ and 
+\family typewriter
+updateEndDate
+\family default
+ closures, and the Ajax form fields that we define.
+ The only magic we have to use is the 
+\family typewriter
+SHtml.ajaxText
+\family default
+ form field generator (chapter 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "cha:AJAX-and-COMET"
+
+\end_inset
+
+), which will turn our update closures into Ajax callbacks.
+ The values returned from these callbacks are JavaScript code that will
+ be run on the client side.
+ You can see that in a few lines of code we now have a page that will automatica
+lly update our Expense table when you set the start or end dates!
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "float"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Our Ajax snippet
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Our-Ajax-snippet"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+package com.pocketchangeapp.snippet
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import ..
+ standard imports ...
+\end_layout
+
+\begin_layout Plain Layout
+
+import com.pocketchangeapp.model._
+\end_layout
+
+\begin_layout Plain Layout
+
+import com.pocketchangeapp.util.Util
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+class Accounts {
+\end_layout
+
+\begin_layout Plain Layout
+
+ def detail (xhtml: NodeSeq) : NodeSeq = S.param("name") match {
+\end_layout
+
+\begin_layout Plain Layout
+
+  case Full(acctName) => {
+\end_layout
+
+\begin_layout Plain Layout
+
+   Account.findByName(User.currentUser.open_!, acctName) match {
+\end_layout
+
+\begin_layout Plain Layout
+
+	case acct :: Nil => {
+\end_layout
+
+\begin_layout Plain Layout
+
+	 // Some closure state for the Ajax calls
+\end_layout
+
+\begin_layout Plain Layout
+
+	 var startDate : Box[Date] = Empty
+\end_layout
+
+\begin_layout Plain Layout
+
+	 var endDate : Box[Date] = Empty
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	 // Ajax utility methods.
+ Defined here to capture the closure
+\end_layout
+
+\begin_layout Plain Layout
+
+     // vars defined above
+\end_layout
+
+\begin_layout Plain Layout
+
+	 def entryTable = 
+\end_layout
+
+\begin_layout Plain Layout
+
+      buildExpenseTable(Expense.getByAcct(acct, startDate, endDate, Empty),
+\end_layout
+
+\begin_layout Plain Layout
+
+                        xhtml)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	 def updateStartDate (date : String) = {
+\end_layout
+
+\begin_layout Plain Layout
+
+	   startDate = Util.parseDate(date, Util.slashDate.parse)
+\end_layout
+
+\begin_layout Plain Layout
+
+	   JsCmds.SetHtml("entry_table", entryTable)
+\end_layout
+
+\begin_layout Plain Layout
+
+	 }
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	 def updateEndDate (date : String) = {
+\end_layout
+
+\begin_layout Plain Layout
+
+	   endDate = Util.parseDate(date, Util.slashDate.parse)
+\end_layout
+
+\begin_layout Plain Layout
+
+	   JsCmds.SetHtml("entry_table", entryTable)
+\end_layout
+
+\begin_layout Plain Layout
+
+	 }
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	 bind("acct", xhtml, 
+\end_layout
+
+\begin_layout Plain Layout
+
+	      "name" -> acct.name.asHtml,
+\end_layout
+
+\begin_layout Plain Layout
+
+	      "balance" -> acct.balance.asHtml,
+\end_layout
+
+\begin_layout Plain Layout
+
+	      "startDate" -> SHtml.ajaxText("", updateStartDate),
+\end_layout
+
+\begin_layout Plain Layout
+
+	      "endDate" -> SHtml.ajaxText("", updateEndDate),
+\end_layout
+
+\begin_layout Plain Layout
+
+	      "table" -> entryTable)
+\end_layout
+
+\begin_layout Plain Layout
+
+	}
+\end_layout
+
+\begin_layout Plain Layout
+
+    case _ => Text("Could not locate account " + acctName)
+\end_layout
+
+\begin_layout Plain Layout
+
+   }
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+  case _ => Text("No account name provided")
+\end_layout
+
+\begin_layout Plain Layout
+
+ }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Conclusion
+\end_layout
+
+\begin_layout Standard
+We hope that this chapter has demonstrated how powerful Lift can be while
+ remaining concise and easy to use.
+ We're going to continue to expand on this example app throughout the book,
+ so feel free to look back here for a basis point, or pull your own version
+ of the PocketChange git repository with the following command (assuming
+ you have git installed):
+\end_layout
+
+\begin_layout LyX-Code
+git clone 
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+git://github.com/tjweir/pocketchangeapp.git
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now let's dive in!
 \end_layout
 
 \end_body
