@@ -1502,7 +1502,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Indexing a field
 \begin_inset CommandInset label
 LatexCommand label
@@ -1573,7 +1572,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 More complex indices
 \begin_inset CommandInset label
 LatexCommand label
@@ -1693,7 +1691,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Using Schemifier
 \begin_inset CommandInset label
 LatexCommand label
@@ -1793,7 +1790,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Setting a custom column name
 \begin_inset CommandInset label
 LatexCommand label
@@ -2119,7 +2115,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Example deletion
 \begin_inset CommandInset label
 LatexCommand label
@@ -2502,7 +2497,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 An example of ByRef
 \begin_inset CommandInset label
 LatexCommand label
@@ -5965,6 +5959,236 @@ def fieldCreatorString(dbType: DriverType, colName: String): String = {
 
 \end_layout
 
+\begin_layout Subsection
+ProtoUser and MegaProtoUser
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:ProtoUser-and-MegaProtoUser"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In addition to all of the database-related features, Mapper contains an
+ extra goody to help you quickly set up small sites.
+ The 
+\family typewriter
+ProtoUser
+\family default
+ and 
+\family typewriter
+MegaProtoUser
+\family default
+ traits are two built-in traits that define a simple user account.
+ The 
+\family typewriter
+ProtoUser
+\family default
+ trait defines some basic fields for a user: 
+\family typewriter
+email
+\family default
+, 
+\family typewriter
+firstName
+\family default
+, 
+\family typewriter
+lastName
+\family default
+, 
+\family typewriter
+password
+\family default
+ and 
+\family typewriter
+superUser
+\family default
+ (a boolean to provide basic permissions).
+ There are also a number of defs used to format the fields for display or
+ to provide form labels.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:A-simple-ProtoUser"
+
+\end_inset
+
+ shows an example of a ProtoUser-based Mapper class that overrides some
+ of the formatting defs.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+A simple ProtoUser
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:A-simple-ProtoUser"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+class User extends ProtoUser[User] {
+\end_layout
+
+\begin_layout Plain Layout
+
+  override def shortName = firstName.is
+\end_layout
+
+\begin_layout Plain Layout
+
+  override lastNameDisplayName = "surname"
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The 
+\family typewriter
+MegaProtoUser
+\family default
+ trait, as its name implies, extends the 
+\family typewriter
+ProtoUser
+\family default
+ trait with a whole suite of functionality.
+ The main thrust of 
+\family typewriter
+MegaProtoUser
+\family default
+ (and its associated meta object, 
+\family typewriter
+MetaMegaProtoUser
+\family default
+) is to automatically handle all of the scaffolding for a complete user
+ management system, with:
+\end_layout
+
+\begin_layout Itemize
+A user registration page with configurable validation via email
+\end_layout
+
+\begin_layout Itemize
+A login page that automatically handles authentication
+\end_layout
+
+\begin_layout Itemize
+A lost password page that does reset via email
+\end_layout
+
+\begin_layout Itemize
+A change password page
+\end_layout
+
+\begin_layout Itemize
+A user edit page
+\end_layout
+
+\begin_layout Itemize
+A simple method to generate SiteMap menus for all of these pages
+\end_layout
+
+\begin_layout Standard
+Of course, you can customize any of these by overriding the associated methods
+ on the MetaMegaProtoUser object.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "lst:PocketChange-User-entity"
+
+\end_inset
+
+ shows an example of sprucing up the signup and login pages by overriding
+ the 
+\family typewriter
+loginXHtml
+\family default
+ and 
+\family typewriter
+signupXHtml
+\family default
+ methods.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Hooking-MetaMegaProtoUser-into-Boot"
+
+\end_inset
+
+ shows how easy it is to then hook the MetaMegaProtoUser menus into SiteMap.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Hooking MetaMegaProtoUser into Boot
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Hooking-MetaMegaProtoUser-into-Boot"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// in Boot.scala
+\end_layout
+
+\begin_layout Plain Layout
+
+LiftRules.setSiteMap(SiteMap((...
+ :: User.sitemap) :_*))
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Section
 Advanced Features
 \end_layout
@@ -6620,7 +6844,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Using DB.runQuery
 \begin_inset CommandInset label
 LatexCommand label
@@ -6755,7 +6978,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Using DB.use
 \begin_inset CommandInset label
 LatexCommand label
