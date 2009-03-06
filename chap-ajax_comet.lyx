@@ -1,4 +1,4 @@
-#LyX 1.6.0 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -1232,19 +1232,28 @@ Actors in Scala
 \end_layout
 
 \begin_layout Standard
-It is important to know that Comet support in Lift is also done by the means
- of Scala Actors.
- We won't get into much details regarding Scala Actors as you can also find
- detailed information in Scala paper 
+It is important to know that Comet support in Lift is primarly enable via
+ Scala Actors.
+ We won't go into too much detail regarding Scala Actors, as you can find
+ very detailed information in the paper 
 \emph on
 Actors that Unify Threads And Events
 \emph default
- 
+
 \begin_inset Foot
 status open
 
 \begin_layout Plain Layout
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
 http://lamp.epfl.ch/~phaller/doc/haller07coord.pdf
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -1254,40 +1263,55 @@ http://lamp.epfl.ch/~phaller/doc/haller07coord.pdf
 \end_layout
 
 \begin_layout Standard
-Scala Actors are build somehow similar with Erlang 
+Scala Actors are based on the concepts of the Erlang
 \begin_inset Foot
 status open
 
 \begin_layout Plain Layout
-http://erlang.org/
+\begin_inset CommandInset href
+LatexCommand href
+target "http://erlang.org/"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
 
-Actors model where an Actor is an asynchronous component that receives messages
- and sends/replies messages.
- However in Erlang processes are communicating via a very simple and effective
- messaging system.
- In Scala, the Actors are supported at library level and not at language
- level (unlike Erlang).
- This provides great flexibility as Actors library evolution does not impact
- the language itself.
+ Actors model where an Actor is an asynchronous component that receives
+ messages and sends/replies messages.
+ In Erlang, processes communicate via a very simple and effective messaging
+ system built into the VM.
+ In Scala, however, Actors are supported at the library level and not at
+ the language level.
+ While less integrated, this does provide greater flexibility as the Actors
+ library evolution does not impact the language itself.
  
 \end_layout
 
 \begin_layout Standard
-Since Scala is typically sitting on top of JVM (Java Virtual Machine) Scala
- Actors are not 'bound' to processes but rather to JVM threads.
+Since Scala typically sits on top of the JVM, Scala Actors are not bound
+ to processes but rather to JVM threads.
  The key of understanding the scallability of Scala Actors is that there
  is no one-to-one relationshipp between Actors and Threads.
- For instance when an Actor is waiting for a message e won't end up having
+ For instance, when an Actor is waiting for a message we don't end up having
  a thread waiting for a lock.
- Instead the Actor body is impersonated by a closure that captures the rest
- of the computation.
+ Instead, the Actor body is impersonated by a closure that captures the
+ rest of the computation.
  This closure is 'cached' internally until a message is designated for this
  Actor to consume.
- Also the Actor body (react function) rever returns normally in fact the
- return type of the react function is 
+ In particular, Scala's Actor library leverages the 
+\family typewriter
+match
+\family default
+ construct to allow very fine-grained selection of messages for processing.
+ Another interesting note is that the Actor body (
+\family typewriter
+react
+\family default
+ function) never returns normally; in fact the return type of the react
+ function is 
 \family typewriter
 Nothing
 \family default
@@ -1308,7 +1332,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 PingPong example
 \end_layout
 
@@ -1497,27 +1520,55 @@ case object Stop
 \end_layout
 
 \begin_layout Standard
-This is of course a trivial example in which we have two Actors exchanging
- Ping, Pong and Stop messages (note that the messages are case objects for
- pattern matching purposes).
+This is a trivial example in which we have two Actors exchanging 
+\family typewriter
+Ping
+\family default
+, 
+\family typewriter
+Pong
+\family default
+ and 
+\family typewriter
+Stop
+\family default
+ messages (note that the messages are case objects for pattern matching
+ purposes).
  Also note that we did not explicitelly used threads anywhere.
  We also did not use any thread blocking technique such as synchronized
  blocks.
  The reason is that we don't have to.
- Actors are by their nature thread-safe.
+ Actors' message-passing mechanism is generally thread-safe (although deadlock
+ is still possible due to dependent Actors
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+\begin_inset CommandInset href
+LatexCommand href
+target "http://ruben.savanne.be/articles/concurrency-in-erlang-scala"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+).
  Note that threads are used internally and in this specific example the
  execution may even occur on the same thread.
- The reason is that internally the Actors library is using a thread pool
- and when an Actor receives a message, the execution occurs in a thread
- from the thread pool.
- This is also key to Actors scallabiliy because they allow threads to be
- used very efficiently end returned to the pool as soon as the Actor consumes
- the message.
+ The reason is that internally the Actors library uses a thread pool, and
+ when an Actor receives a message the execution occurs in a thread from
+ the thread pool.
+ This is also a key to Actors' scalability, because they allow threads to
+ be used very efficiently and returned to the pool as soon as the Actor
+ consumes the message.
 \end_layout
 
 \begin_layout Standard
 We won't be getting into deeper level of details as this is beyond the scope
- of this book however we recommend you readimg other materials in order
+ of this book, however we recommend you readimg other materials in order
  to fully understand Scala Actors
 \end_layout
 
