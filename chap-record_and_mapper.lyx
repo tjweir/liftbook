@@ -4624,7 +4624,7 @@ name "lst:Using-CRUDify-Menus"
 \begin_layout Plain Layout
 
 val menus = ...
- Menu(Loc(...)) :: Expense.menus :: Nil
+ Menu(Loc(...)) :: Expense.menus
 \end_layout
 
 \begin_layout Plain Layout
