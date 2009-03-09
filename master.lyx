@@ -5,6 +5,7 @@
 \textclass book
 \begin_preamble
 \usepackage[notbib]{tocbibind}
+\usepackage{breakurl}
 
 % redefine the \LyX macro for PDF bookmarks
 \def\LyX{\texorpdfstring{%
@@ -222,6 +223,8 @@ Dedication
 \begin_layout Standard
 Derek would like to thank his wife, Debbie, for her patience and support
  while writing this book.
+ He would also like to thank his two young sons, Dylan and Dean, for keeping
+ things interesting and in perspective.
 \begin_inset Newline newline
 \end_inset
 
@@ -231,6 +234,10 @@ Derek would like to thank his wife, Debbie, for her patience and support
 \begin_layout Standard
 \noindent
 Tyler would like to thank his wife Laura, for encouraging him.
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard

@@ -1,4 +1,4 @@
-#LyX 1.6.0 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -165,7 +165,7 @@ name "fig:Architecture-diagram"
 \align center
 \begin_inset Graphics
 	filename images/LiftArchDiagram.pdf
-	BoundingBox 0bp 5.75in 5in 792bp
+	BoundingBox .25in 5.75in 4.85in 10.75in
 	clip
 
 \end_inset
@@ -3840,6 +3840,8 @@ status open
 \align center
 \begin_inset Graphics
 	filename images/roles.png
+	lyxscale 10
+	width 5in
 
 \end_inset
 

@@ -3745,17 +3745,7 @@ Empty
 
 \begin_layout Standard
 As a concrete example, let's look at returning a generated chart image from
- our application
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Modify as appropriate for PocketChange
-\end_layout
-
-\end_inset
-
-.
+ our application.
  There are several libraries for charting, but we'll take a look at JFreeChart
  in particular.
  First, let's write a method that will chart our account balances by month
