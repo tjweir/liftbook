@@ -2,7 +2,7 @@
 \lyxformat 345
 \begin_document
 \begin_header
-\textclass book
+\textclass article
 \use_default_options false
 \language english
 \inputencoding auto
@@ -42,7 +42,7 @@
 
 \begin_body
 
-\begin_layout Chapter
+\begin_layout Section
 Welcome to Lift!
 \end_layout
 
@@ -71,7 +71,7 @@ Lift is designed to make powerful techniques easily accessible, while keeping
  extend any web application you can think of.
 \end_layout
 
-\begin_layout Section
+\begin_layout Subsection
 Why Lift?
 \end_layout
 
@@ -351,7 +351,7 @@ A trait is a Scala construct that's essentially like a Java interface.
  templates.
 \end_layout
 
-\begin_layout Section
+\begin_layout Subsection
 For more information
 \begin_inset CommandInset label
 LatexCommand label
@@ -419,7 +419,7 @@ http://liftweb.net/index.php/Main_Page
 \begin_layout Enumerate
 The mailing list at 
 \begin_inset Flex URL
-status collapsed
+status open
 
 \begin_layout Plain Layout
 
@@ -434,7 +434,7 @@ http://groups.google.com/group/liftweb
  Please post specific questions about the book to the Lift Book Google Group
  found 
 \begin_inset Flex URL
-status collapsed
+status open
 
 \begin_layout Plain Layout
 
@@ -449,7 +449,7 @@ http://groups.google.com/group/the-lift-book
 \begin_layout Enumerate
 Lift has an IRC channel at 
 \begin_inset Flex URL
-status collapsed
+status open
 
 \begin_layout Plain Layout
 
@@ -462,7 +462,7 @@ irc://irc.freenode.net/lift
  It's a great place to chat about issues and ideas concerning Lift.
 \end_layout
 
-\begin_layout Section
+\begin_layout Subsection
 Your first Lift application
 \end_layout
 
@@ -652,7 +652,7 @@ misc/scala-tool-support
 , or you can directly access the latest versions via the SVN (Subversion)
  interface at 
 \begin_inset Flex URL
-status collapsed
+status open
 
 \begin_layout Plain Layout
 

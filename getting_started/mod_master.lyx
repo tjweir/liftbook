@@ -2,9 +2,9 @@
 \lyxformat 345
 \begin_document
 \begin_header
-\textclass book
+\textclass article
 \begin_preamble
-\usepackage[notbib]{tocbibind}
+\usepackage{breakurl}
 
 % redefine the \LyX macro for PDF bookmarks
 \def\LyX{\texorpdfstring{%
@@ -21,6 +21,12 @@ morestring=[b]"}
 
 % Default settings for code listings
 \lstset{frame=tb,language=scala,aboveskip=3mm,belowskip=3mm,showstringspaces=false,columns=flexible,basicstyle={\small\ttfamily}}
+
+\usepackage{html}   %  *always* load this for LaTeX2HTML
+\begin{htmlonly}
+  \usepackage{verbatim}
+  \providecommand{\lstinputlisting}[2][]{\verbatiminput{#2}}
+\end{htmlonly}
 \end_preamble
 \use_default_options true
 \language english
@@ -87,11 +93,7 @@ Starting with Lift
 \end_layout
 
 \begin_layout Author
-Written by
-\end_layout
-
-\begin_layout Author
-Derek Chen-Becker, Marius Danciu, David Pollak and Tyler Weir
+By Derek Chen-Becker, Marius Danciu, David Pollak and Tyler Weir
 \end_layout
 
 \begin_layout Standard
@@ -108,6 +110,15 @@ Copyright © 2008, 2009 Derek Chen-Becker, Marius Danciu, David Pollak and
 \size footnotesize
 This work is licensed under the Creative Commons Attribution-No Derivative
  Works 3.0 Unported License.
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard

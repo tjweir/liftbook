@@ -1,0 +1,9 @@
+The Makefile should do almost all work for you. If you want to use a
+different version of LyX either change your path, or define the LYX
+env var like so:
+
+LYX=/home/software/lyx-1.6/bin/lyx make
+
+When the Makefile generates html it will complain about undefined
+control sequences. Just keep hitting "r" and "enter" until it's
+done. I haven't had time to figure out how to fix this.
