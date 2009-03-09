@@ -2,22 +2,9 @@
 \lyxformat 345
 \begin_document
 \begin_header
-\textclass book
+\textclass article
 \begin_preamble
-% "define" Scala
-\lstdefinelanguage{scala}{morekeywords={class,object,trait,extends,with,new,if,while,for,def,val,var,this,package,import},
-otherkeywords={->,=>},
-sensitive=true,
-morecomment=[l]{//},
-morecomment=[s]{/*}{*/},
-morestring=[b]"}
 
-% Default settings for code listings
-\lstset{frame=single,language=scala,basicstyle=\footnotesize\ttfamily,aboveskip=3mm,belowskip=3mm,showstringspaces=false}
-
-% \renewcommand{\ttdefault}{pcr}{2}
-\DeclareTextFontCommand{\texttt}{\small\ttfamily}
-\renewcommand{\url}{\texttt}
 \end_preamble
 \use_default_options false
 \language english
@@ -59,7 +46,7 @@ morestring=[b]"}
 
 \begin_body
 
-\begin_layout Chapter
+\begin_layout Section
 Basic Lift
 \begin_inset CommandInset label
 LatexCommand label
@@ -70,7 +57,7 @@ name "cha:Basic-Lift"
 
 \end_layout
 
-\begin_layout Section
+\begin_layout Subsection
 What we're going to cover
 \end_layout
 
@@ -101,7 +88,7 @@ How to bind the elements on the web page to dynamically created content
  
 \end_layout
 
-\begin_layout Section
+\begin_layout Subsection
 Creating a new project
 \end_layout
 
@@ -223,7 +210,7 @@ ctrl-c
  to stop the Jetty web server.
 \end_layout
 
-\begin_layout Section
+\begin_layout Subsection
 Adding a model
 \end_layout
 
@@ -778,7 +765,7 @@ LongKeyedMetaMapper
 .
 \end_layout
 
-\begin_layout Section
+\begin_layout Subsection
 Boot and Schemifier
 \end_layout
 
@@ -924,7 +911,7 @@ Boot
  settings are correct.
 \end_layout
 
-\begin_layout Section
+\begin_layout Subsection
 Snippets: Bridging View and Logic
 \end_layout
 
@@ -1472,7 +1459,7 @@ The out method works similarly, but returns the child nodes if no user is
  logged in.
 \end_layout
 
-\begin_layout Section
+\begin_layout Subsection
 Lift's 
 \begin_inset Quotes eld
 \end_inset
@@ -1955,7 +1942,7 @@ In Lift, display can creep into a snippet, but business logic cannot creep
 Back to our regularly scheduled code writing.
 \end_layout
 
-\begin_layout Section
+\begin_layout Subsection
 Updating the ToDo view
 \end_layout
 
@@ -2090,7 +2077,7 @@ Login
  from accessing the page.
 \end_layout
 
-\begin_layout Section
+\begin_layout Subsection
 Seeing if the snippet works
 \end_layout
 
@@ -2172,7 +2159,7 @@ Next, we'll create the view and snippet code that allows us to create a
  to-do item.
 \end_layout
 
-\begin_layout Section
+\begin_layout Subsection
 Creating a to-do item
 \end_layout
 
@@ -2622,7 +2609,7 @@ todo
  If your head is spinning, don't worry.
 \end_layout
 
-\begin_layout Section
+\begin_layout Subsection
 Updating the priority and desc fields
 \end_layout
 
@@ -3033,7 +3020,7 @@ ToDo.priority
  for form generation.
 \end_layout
 
-\begin_layout Section
+\begin_layout Subsection
 Hooking up the view to the form
 \end_layout
 
@@ -3263,7 +3250,7 @@ TD.add
  tag.
 \end_layout
 
-\begin_layout Section
+\begin_layout Subsection
 Trying it out again
 \end_layout
 
@@ -3299,7 +3286,7 @@ write only
  Next, we'll let you view and edit to-do items.
 \end_layout
 
-\begin_layout Section
+\begin_layout Subsection
 Display and Editting to-do items
 \end_layout
 

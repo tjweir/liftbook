@@ -259,6 +259,71 @@ reference "lst:JPA-web.xml"
 \end_layout
 
 \begin_layout Section
+A Note on Standard Imports
+\end_layout
+
+\begin_layout Standard
+For the sake of saving space, the following import statements are assumed
+ for all example code through the rest of the book:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Standard import statements
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Standard-import-statements"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import _root_.net.liftweb._
+\end_layout
+
+\begin_layout Plain Layout
+
+import http._
+\end_layout
+
+\begin_layout Plain Layout
+
+import S._
+\end_layout
+
+\begin_layout Plain Layout
+
+import util._
+\end_layout
+
+\begin_layout Plain Layout
+
+import Helpers._
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
 Bootstrap
 \begin_inset CommandInset label
 LatexCommand label

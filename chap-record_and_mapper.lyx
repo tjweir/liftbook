@@ -405,8 +405,8 @@ name "sub:Constructing-a-Mapper-enabled-class"
 \begin_layout Standard
 Now that we've covered some basic background, we can start constructing
  some Mapper classes to get more familiar with the framework.
- We'll start with a simple example of a class for a transaction from our
- PocketChange application with the following fields:
+ We'll start with a simple example of a class for an expense transaction
+ from our PocketChange application with the following fields:
 \end_layout
 
 \begin_layout Itemize
@@ -426,8 +426,11 @@ A reference to the Account that owns the transaction
 \end_layout
 
 \begin_layout Standard
-Given these requirements we can declare our Transaction class as shown in
- listing 
+Given these requirements we can declare our 
+\family typewriter
+Expense
+\family default
+ class as shown in listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Entry-class-mapper"
@@ -475,12 +478,12 @@ import net.liftweb.mapper._
 
 \begin_layout Plain Layout
 
-class Transaction extends LongKeyedMapper[Transaction] with IdPK {
+class Expense extends LongKeyedMapper[Expense] with IdPK {
 \end_layout
 
 \begin_layout Plain Layout
 
-  def getSingleton = Transaction
+  def getSingleton = Expense
 \end_layout
 
 \begin_layout Plain Layout
@@ -523,8 +526,11 @@ reference "lst:Entry-class-record"
 
 .
  This example already shows some functionality that hasn't been ported over
- to Record from Mapper; among other things, the IdPK trait, and foreign
- key fields (many to one mappings) are missing.
+ to Record from Mapper; among other things, the 
+\family typewriter
+IdPK
+\family default
+ trait, and foreign key fields (many to one mappings) are missing.
  The other minor differences are that the 
 \family typewriter
 getSingleton
@@ -534,7 +540,15 @@ getSingleton
 meta
 \family default
 , and the Field traits use different names under the Record framework (i.e.
- DateTimeField vs MappedDateTime).
+ 
+\family typewriter
+DateTimeField
+\family default
+ vs 
+\family typewriter
+MappedDateTime
+\family default
+).
 \end_layout
 
 \begin_layout Standard
@@ -575,12 +589,12 @@ import net.liftweb.record._
 
 \begin_layout Plain Layout
 
-class Transaction extends KeyedRecord[Transaction,Long] {
+class Expense extends KeyedRecord[Expense,Long] {
 \end_layout
 
 \begin_layout Plain Layout
 
-  def meta = Transaction
+  def meta = Expense
 \end_layout
 
 \begin_layout Plain Layout
@@ -590,7 +604,7 @@ class Transaction extends KeyedRecord[Transaction,Long] {
 
 \begin_layout Plain Layout
 
-  object id extends LongField(this) with KeyField[Long,Transaction]
+  object id extends LongField(this) with KeyField[Long,Expense]
 \end_layout
 
 \begin_layout Plain Layout
@@ -624,13 +638,32 @@ class Transaction extends KeyedRecord[Transaction,Long] {
 \end_layout
 
 \begin_layout Standard
-As you can see, we've set Transaction to extend the LongKeyedMapper and
- IdPK traits and we've added the fields required by our class.
+As you can see, we've set 
+\family typewriter
+Expense
+\family default
+ to extend the 
+\family typewriter
+LongKeyedMapper
+\family default
+ and 
+\family typewriter
+IdPK
+\family default
+ traits and we've added the fields required by our class.
  We would like to provide a primary key for our entity; while not strictly
  necessary, having a synthetic primary key often helps with CRUD operations.
- The LongKeyedMapper trait accomplishes two objectives: it tells Lift that
- we want a primary key defined and that the key should be a long.
- This is basically a shortcut for using the KeyedMapper[Long,Transaction]
+ The 
+\family typewriter
+LongKeyedMapper
+\family default
+ trait accomplishes two objectives: it tells Lift that we want a primary
+ key defined and that the key should be a long.
+ This is basically a shortcut for using the 
+\family typewriter
+KeyedMapper[Long,Expense]
+\family default
+
 \begin_inset Index
 status collapsed
 
@@ -641,9 +674,23 @@ KeyedMapper
 \end_inset
 
  trait.
- When you use the KeyedMapper trait you need to provide an implementation
- for the primaryKeyField def, which must match the type of the KeyedMapper
- trait and be a subtype of IndexedField
+ When you use the 
+\family typewriter
+KeyedMapper
+\family default
+ trait you need to provide an implementation for the 
+\family typewriter
+primaryKeyField
+\family default
+ def, which must match the type of the 
+\family typewriter
+KeyedMapper
+\family default
+ trait and be a subtype of 
+\family typewriter
+IndexedField
+\family default
+
 \begin_inset Index
 status collapsed
 
@@ -654,11 +701,36 @@ IndexedField
 \end_inset
 
 .
- The IdPK trait handles the implementation, but note that IdPK currently
- only supports Long keys.
- Mapper supports both indexed Longs and Strings, so if you want Strings
- you'll need to explicitly use KeyedMapper[String,...] and provide the field
- definition yourself.
+ The 
+\family typewriter
+IdPK
+\family default
+ trait handles the implementation, but note that 
+\family typewriter
+IdPK
+\family default
+ currently only supports 
+\family typewriter
+Long
+\family default
+ keys.
+ Mapper supports both indexed 
+\family typewriter
+Longs
+\family default
+ and 
+\family typewriter
+Strings
+\family default
+, so if you want 
+\family typewriter
+Strings
+\family default
+ you'll need to explicitly use 
+\family typewriter
+KeyedMapper[String,...]
+\family default
+ and provide the field definition yourself.
  It's possible to use some other type for your primary key, but you'll need
  to roll your own (section 
 \begin_inset CommandInset ref
@@ -668,10 +740,22 @@ reference "sub:Defining-Custom-Field-types-mapper"
 \end_inset
 
 ).
- Technically Int indexes are supported as well, but there is no corresponding
- trait for an Int foreign key.
- That means that if you use an Int for the primary key you may not be able
- to do a relationship with other objects (section 
+ Technically 
+\family typewriter
+Int
+\family default
+ indexes are supported as well, but there is no corresponding trait for
+ an 
+\family typewriter
+Int
+\family default
+ foreign key.
+ That means that if you use an 
+\family typewriter
+Int
+\family default
+ for the primary key you may not be able to do a relationship with other
+ objects (section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sub:Object-Relationships"
@@ -680,8 +764,11 @@ reference "sub:Object-Relationships"
 
 ) unless you write your own.
  Record is a little more flexible in primary key selection since it uses,
- in effect, a marker trait (KeyField) to indicate that a particular field
- is a key field.
+ in effect, a marker trait (
+\family typewriter
+KeyField
+\family default
+) to indicate that a particular field is a key field.
  One thing to note is that in the Mapper framework, the table name
 \begin_inset Index
 status collapsed
@@ -692,8 +779,12 @@ table name
 
 \end_inset
 
- for your entity defaults to the name of the class (Transaction in our case).
- If you want to change this then you just need to override the dbTableName
+ for your entity defaults to the name of the class (Expense in our case).
+ If you want to change this then you just need to override the 
+\family typewriter
+dbTableName
+\family default
+
 \begin_inset Index
 status collapsed
 
@@ -713,7 +804,11 @@ Looking at these examples, you've probably noticed that the fields are defined
  for its validation and form functionality; it is more difficult to cleanly
  define these properties in the MetaMapper if it had to access member vars
  on each instance since a MetaMapper instance is itself an object.
- Also note that MappedDecimal is a custom field type
+ Also note that 
+\family typewriter
+MappedDecimal
+\family default
+ is a custom field type
 \begin_inset Foot
 status open
 
@@ -735,8 +830,11 @@ reference "sub:Defining-Custom-Field-types-mapper"
 \end_layout
 
 \begin_layout Standard
-In order to tie all of this together, we need to define a matching LongKeyedMeta
-Mapper
+In order to tie all of this together, we need to define a matching 
+\family typewriter
+LongKeyedMetaMapper
+\family default
+
 \begin_inset Index
 status collapsed
 
@@ -796,8 +894,7 @@ name "lst:EntryMeta-object"
 
 \begin_layout Plain Layout
 
-object Transaction extends Transaction with LongKeyedMetaMapper[Transaction]
- {
+object Expense extends Expense with LongKeyedMetaMapper[Expense] {
 \end_layout
 
 \begin_layout Plain Layout
@@ -1034,8 +1131,11 @@ reference "lst:Entry-class-mapper"
 
 \end_inset
 
-, there is a corresponding MappedForeignKey trait, with concrete implementations
- for Long and String foreign keys.
+, there is a corresponding 
+\family typewriter
+MappedForeignKey
+\family default
+ trait, with concrete implementations for Long and String foreign keys.
  Once we have this defined, accessing the object via the relationship is
  achieved by using the obj method on the foreign key field.
  With the foreign key functionality you can easily do one-to-many and many-to-on
@@ -1106,7 +1206,7 @@ name "lst:Accessing-Foreign-Objects"
 
 \begin_layout Plain Layout
 
-class Transaction extends LongKeyedMapper[Transaction] with IdPK {
+class Expense extends LongKeyedMapper[Expense] with IdPK {
 \end_layout
 
 \begin_layout Plain Layout
@@ -1146,7 +1246,7 @@ class Account ...
 
 \begin_layout Plain Layout
 
-  def transactions = Transaction.findAll(By(Transaction.account, this.id))
+  def entries = Expense.findAll(By(Expense.account, this.id))
 \end_layout
 
 \begin_layout Plain Layout
@@ -1184,10 +1284,10 @@ join
  (i.e.
  you purchase a book for your mother's birthday, so it has the tags Gift,
  Mom and Books).
- First we define the category entity, as shown in listing
+ First we define the tag entity, as shown in listing
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "lst:Category-Entity"
+reference "lst:Tag-Entity"
 
 \end_inset
 
@@ -1204,10 +1304,10 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Category Entity
+Tag Entity
 \begin_inset CommandInset label
 LatexCommand label
-name "lst:Category-Entity"
+name "lst:Tag-Entity"
 
 \end_inset
 
@@ -1268,8 +1368,12 @@ reference "lst:Join-Entity"
 \end_inset
 
 .
- It's a LongKeyedMapper just like the rest of the entities, but it only
- contains foreign key fields to the other entities.
+ It's a 
+\family typewriter
+LongKeyedMapper
+\family default
+ just like the rest of the entities, but it only contains foreign key fields
+ to the other entities.
 \end_layout
 
 \begin_layout Standard
@@ -1299,7 +1403,7 @@ name "lst:Join-Entity"
 
 \begin_layout Plain Layout
 
-class TagBind extends LongKeyedMapper[TagBind] with IdPK {
+class ExpenseTag extends LongKeyedMapper[ExpenseTag] with IdPK {
 \end_layout
 
 \begin_layout Plain Layout
@@ -1315,7 +1419,7 @@ class TagBind extends LongKeyedMapper[TagBind] with IdPK {
 
 \begin_layout Plain Layout
 
-  object transaction extends MappedLongForeignKey(this,Transaction)
+  object expense extends MappedLongForeignKey(this,Expense)
 \end_layout
 
 \begin_layout Plain Layout
@@ -1329,17 +1433,18 @@ class TagBind extends LongKeyedMapper[TagBind] with IdPK {
 
 \begin_layout Plain Layout
 
-object TagBind extends TagBind with LongKeyedMetaMapper[TagBind] {
+object ExpenseTag extends ExpenseTag with LongKeyedMetaMapper[ExpenseTag]
+ {
 \end_layout
 
 \begin_layout Plain Layout
 
-  def join (tag : Tag, tx : Transaction) = 
+  def join (tag : Tag, tx : Expense) = 
 \end_layout
 
 \begin_layout Plain Layout
 
-    this.create.tag(tag).transaction(tx).save
+    this.create.tag(tag).expense(tx).save
 \end_layout
 
 \begin_layout Plain Layout
@@ -1355,7 +1460,7 @@ object TagBind extends TagBind with LongKeyedMetaMapper[TagBind] {
 \begin_layout Standard
 To use the join entity, you'll need to create a new instance and set the
  appropriate foreign keys to point to the associated instances.
- As you can see, we've defined a convenience method on our TagBind meta
+ As you can see, we've defined a convenience method on our ExpenseTag meta
  object to do just that.
  To make the many-to-many
 \begin_inset Index
@@ -1405,7 +1510,7 @@ name "lst:HasManyThrough-for-Many-to-Many"
 
 \begin_layout Plain Layout
 
-class Transaction ...
+class Expense ...
  {
 \end_layout
 
@@ -1416,7 +1521,7 @@ class Transaction ...
 
 \begin_layout Plain Layout
 
-    TagBind, TagBind.tag, TagBind.transaction)
+    ExpenseTag, ExpenseTag.tag, ExpenseTag.expense)
 \end_layout
 
 \begin_layout Plain Layout
@@ -1435,16 +1540,16 @@ A similar field could be set up on the Category entity to point to entries.
 \end_layout
 
 \begin_layout Itemize
-The only way to add new entries is to directly construct the TagBind instances
- and save them (either directly or via a helper method).
+The only way to add new entries is to directly construct the ExpenseTag
+ instances and save them (either directly or via a helper method).
  You can't make any modifications via the HasManyThrough trait
 \end_layout
 
 \begin_layout Itemize
 Although the field is defined as a query, the field is actually lazy and
  only runs once.
- That means if you query it and then add some new TagBind instances, they
- won't show up in the field contents
+ That means if you query it and then add some new ExpenseTag instances,
+ they won't show up in the field contents
 \end_layout
 
 \begin_layout Standard
@@ -1489,7 +1594,11 @@ reference "lst:Indexing-a-field"
 
 \end_inset
 
- shows how we would add an index to our Transaction.account field.
+ shows how we would add an index to our 
+\family typewriter
+Expense.account
+\family default
+ field.
 \end_layout
 
 \begin_layout Standard
@@ -1519,7 +1628,7 @@ name "lst:Indexing-a-field"
 
 \begin_layout Plain Layout
 
-class Transaction ...
+class Expense ...
  {
 \end_layout
 
@@ -1550,8 +1659,23 @@ class Transaction ...
 \end_layout
 
 \begin_layout Standard
-Mapper provides for more complex indexing via the MetaMapper.dbIndexes def
- combined with the Index, IndexField and BoundedIndexField case classes.
+Mapper provides for more complex indexing via the 
+\family typewriter
+MetaMapper.dbIndexes
+\family default
+ def combined with the 
+\family typewriter
+Index
+\family default
+, 
+\family typewriter
+IndexField
+\family default
+ and 
+\family typewriter
+BoundedIndexField
+\family default
+ case classes.
  Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -1589,7 +1713,7 @@ name "lst:More-complex-indices"
 
 \begin_layout Plain Layout
 
-object Transaction extends ...
+object Expense extends ...
  {
 \end_layout
 
@@ -1643,7 +1767,11 @@ name "sub:Schema-Mapping"
 \begin_layout Standard
 The Mapper framework makes it easy not only to define domain objects, but
  also to create the database schema to go along with those objects.
- The Schemifier
+ The 
+\family typewriter
+Schemifier
+\family default
+
 \begin_inset Index
 status open
 
@@ -1653,7 +1781,10 @@ Schemifier
 
 \end_inset
 
- object is what does all of the work for you; you simply pass in the MetaMapper
+ object is what does all of the work for you; you simply pass in the 
+\family typewriter
+MetaMapper
+\family default
  objects that you want the schema created for and it does the rest.
  Listing 
 \begin_inset CommandInset ref
@@ -1662,11 +1793,18 @@ reference "lst:Using-Schemifier"
 
 \end_inset
 
- shows how we could use Schemifier to set up the database for our example
- objects.
+ shows how we could use 
+\family typewriter
+Schemifier
+\family default
+ to set up the database for our example objects.
  The first argument controls whether an actual write will be performed on
- the database; if false, Schemifier will log all of the DDL statements that
- it would like to apply, but no changes will be made to the database.
+ the database; if false, 
+\family typewriter
+Schemifier
+\family default
+ will log all of the DDL statements that it would like to apply, but no
+ changes will be made to the database.
  The second argument is a logging function (logging is covered in appendix
  
 \begin_inset CommandInset ref
@@ -1676,9 +1814,12 @@ reference "cha:Logging-in-Lift"
 \end_inset
 
 ).
- The remaining arguments are the MetaMapper objects that you would like
- to have schemified; you need to be careful and remember to include all
- objects, otherwise tables won't be created.
+ The remaining arguments are the 
+\family typewriter
+MetaMapper
+\family default
+ objects that you would like to have schemified; you need to be careful
+ and remember to include all objects, otherwise tables won't be created.
 \end_layout
 
 \begin_layout Standard
@@ -1708,7 +1849,7 @@ name "lst:Using-Schemifier"
 
 \begin_layout Plain Layout
 
-Schemifier.schemify(true, Log.infoF _, User, Transaction, Account, Tag, TagBind)
+Schemifier.schemify(true, Log.infoF _, User, Expense, Account, Tag, ExpenseTag)
 \end_layout
 
 \end_inset
@@ -1725,7 +1866,11 @@ reference "sub:Constructing-a-Mapper-enabled-class"
 \end_inset
 
 , you can override the default table name for a given Mapper class via the
- dbTableName def in the corresponding MetaMapper.
+ 
+\family typewriter
+dbTableName
+\family default
+ def in the corresponding MetaMapper.
  The default table name is the name of the Mapper class, except when the
  class name is also an SQL reserved word; in this case, a 
 \begin_inset Quotes eld
@@ -1769,11 +1914,15 @@ reference "lst:Custom-column-name"
 
 \end_inset
 
- shows how we could make our TagBind.transaction field map to 
+ shows how we could make our 
+\family typewriter
+ExpenseTag.expense
+\family default
+ field map to 
 \begin_inset Quotes eld
 \end_inset
 
-tx_id
+expense_id
 \begin_inset Quotes erd
 \end_inset
 
@@ -1807,13 +1956,13 @@ name "lst:Custom-column-name"
 
 \begin_layout Plain Layout
 
-class TagBind ...
+class ExpenseTag ...
  {
 \end_layout
 
 \begin_layout Plain Layout
 
-  object transaction extends ...
+  object expense extends ...
  {
 \end_layout
 
@@ -1823,7 +1972,7 @@ class TagBind ...
 \begin_inset Quotes eld
 \end_inset
 
-tx_id
+expense_id
 \begin_inset Quotes erd
 \end_inset
 
@@ -1852,7 +2001,11 @@ Persistence Operations on an Entity
 \begin_layout Standard
 Now that we've defined our entity we probably want to use it in the real
  world to load and store data.
- There are several operations on MetaMapper that we can use :
+ There are several operations on 
+\family typewriter
+MetaMapper
+\family default
+ that we can use :
 \end_layout
 
 \begin_layout Description
@@ -1883,11 +2036,11 @@ countByInsecureSQL Similar to count, except a raw SQL string can be used
 
 \begin_deeper
 \begin_layout LyX-Code
-Transaction.countByInsecureSQL(
+Expense.countByInsecureSQL(
 \begin_inset Quotes eld
 \end_inset
 
-select count(amount) from transactions tx where tx.amount > 20
+select count(amount) from Expense where amount > 20
 \begin_inset Quotes erd
 \end_inset
 
@@ -1895,7 +2048,11 @@ select count(amount) from transactions tx where tx.amount > 20
 \end_layout
 
 \begin_layout Standard
-We'll cover the IHaveValidatedThisSQL parameter in a moment
+We'll cover the 
+\family typewriter
+IHaveValidatedThisSQL
+\family default
+ parameter in a moment
 \end_layout
 
 \end_deeper
@@ -1920,7 +2077,11 @@ DB
 \end_inset
 
  appended to the method name.
- The query methods on MetaMapper are:
+ The query methods on 
+\family typewriter
+MetaMapper
+\family default
+ are:
 \end_layout
 
 \begin_layout Description
@@ -1939,14 +2100,20 @@ reference "sub:Querying-for-Entities"
 \begin_layout Description
 findAllByInsecureSQL Retrieves a list of instances based on a raw SQL query.
  The query needs to return columns for all mapped fields.
- Usually you can use the BySQL QueryParameter to cover most of the same
- functionality
+ Usually you can use the 
+\family typewriter
+BySQL
+\family default
+ QueryParameter to cover most of the same functionality
 \end_layout
 
 \begin_layout Description
-findAllByPreparedStatement Similar to findAllByInsecureSQL except that prepared
- statements are used which usually means that the driver will handle properly
- escaping arguments in the query string
+findAllByPreparedStatement Similar to 
+\family typewriter
+findAllByInsecureSQL
+\family default
+ except that prepared statements are used which usually means that the driver
+ will handle properly escaping arguments in the query string
 \end_layout
 
 \begin_layout Description
@@ -1961,19 +2128,30 @@ findAllFields This allows you to do a normal query returning only certain
 
 \begin_layout Description
 findMap* These methods provide the same functionality as the non-Map methods,
- but take an extra function argument that transforms an entity into a Box[T],
- where T is an arbitrary type.
+ but take an extra function argument that transforms an entity into a 
+\family typewriter
+Box[T]
+\family default
+, where 
+\family typewriter
+T
+\family default
+ is an arbitrary type.
  An example would be getting a list of descriptions of our transactions:
 \end_layout
 
 \begin_deeper
 \begin_layout LyX-Code
-Transaction.findMap(entry => Full(entry.description.is))
+Expense.findMap(entry => Full(entry.description.is))
 \end_layout
 
 \end_deeper
 \begin_layout Standard
-The KeyedMapperClass adds the 
+The 
+\family typewriter
+KeyedMapperClass
+\family default
+ adds the 
 \family typewriter
 find
 \family default
@@ -1992,8 +2170,11 @@ Creating an Instance
 \end_layout
 
 \begin_layout Standard
-Once we have a MetaMapper object defined we can use it to create objects
- using the 
+Once we have a 
+\family typewriter
+MetaMapper
+\family default
+ object defined we can use it to create objects using the 
 \family typewriter
 create
 \begin_inset Index
@@ -2020,7 +2201,11 @@ new
  such as field owner, etc.
  This is important to remember, since nothing will prevent you from creating
  an instance manually; you may just get errors when you go to use the instance.
- The join method in listing 
+ The 
+\family typewriter
+join
+\family default
+ method in listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Join-Entity"
@@ -2045,7 +2230,11 @@ save
 save
 \family default
  method on the Meta object, passing in the instance you want to save.
- The save method uses the the 
+ The 
+\family typewriter
+save
+\family default
+ method uses the the 
 \family typewriter
 saved_?
 \family default
@@ -2056,14 +2245,22 @@ clean_?
  flags to determine whether an insert or update is required to persist the
  current state to the database, and returns a boolean to indicate whether
  the save was successful or not.
- The join method in listing 
+ The 
+\family typewriter
+join
+\family default
+ method in listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Join-Entity"
 
 \end_inset
 
- shows an example of save usage.
+ shows an example of 
+\family typewriter
+save
+\family default
+ usage.
 \end_layout
 
 \begin_layout Subsubsection*
@@ -2132,7 +2329,7 @@ name "lst:Example-deletion"
 
 \begin_layout Plain Layout
 
-if (! myTx.delete_!) S.error("Couldn't delete the transaction!")
+if (! myExpense.delete_!) S.error("Couldn't delete the transaction!")
 \end_layout
 
 \begin_layout Plain Layout
@@ -2142,7 +2339,7 @@ if (! myTx.delete_!) S.error("Couldn't delete the transaction!")
 
 \begin_layout Plain Layout
 
-if (! (Transaction delete_! myTx)) S.error(...)
+if (! (Expense delete_! myExpense)) S.error(...)
 \end_layout
 
 \end_inset
@@ -2155,8 +2352,13 @@ Another approach to deleting entities is to use the
 \family typewriter
 bulkDelete_!!
 \family default
- method on MetaMapper.This method allows you to specify query parameters
- to control which entities are deleted.
+ method on 
+\family typewriter
+MetaMapper
+\family default
+.
+ This method allows you to specify query parameters to control which entities
+ are deleted.
  We will cover query parameters in section 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -2186,8 +2388,11 @@ name "sub:Querying-for-Entities"
 \end_layout
 
 \begin_layout Standard
-There are a variety of methods on MetaMapper for querying for instances
- of a given entity.
+There are a variety of methods on 
+\family typewriter
+MetaMapper
+\family default
+ for querying for instances of a given entity.
  The simplest method is 
 \family typewriter
 findAll
@@ -2215,9 +2420,16 @@ bare
 \family typewriter
 findAll
 \family default
- returns a List of all of the instances of a given entity loaded from the
- database.
- Note that each findAll...
+ returns a 
+\family typewriter
+List
+\family default
+ of all of the instances of a given entity loaded from the database.
+ Note that each 
+\family typewriter
+findAll...
+
+\family default
  method has a corresponding method that takes a database connection for
  sharding or multiple database usage (see sharding in section 
 \begin_inset CommandInset ref
@@ -2229,7 +2441,11 @@ reference "sub:Multiple-Databases"
 ).
  Of course, for all but the smallest datasets, pulling the entire model
  to get one entity from the database is inefficient and slow.
- Instead, the MetMapper provides 
+ Instead, the 
+\family typewriter
+MetaMapper
+\family default
+ provides 
 \begin_inset Quotes eld
 \end_inset
 
@@ -2247,9 +2463,17 @@ The ability to use fine-grained queries to select data is a fundamental
  for constructing queries in a manner that is not only easy to use, but
  type-safe.
  This means that you can catch query errors at compile time instead of runtime.
- The basis for this functionality is the QueryParam trait, which has several
- concrete implementations that are used to construct the actual query.
- The QueryParam impls can be broken up into two main groups:
+ The basis for this functionality is the 
+\family typewriter
+QueryParam
+\family default
+ trait, which has several concrete implementations that are used to construct
+ the actual query.
+ The 
+\family typewriter
+QueryParam
+\family default
+ implementations can be broken up into two main groups:
 \end_layout
 
 \begin_layout Enumerate
@@ -2282,7 +2506,15 @@ Comparison QueryParams
 \end_layout
 
 \begin_layout Standard
-The simplest QueryParam to refine your query is the By
+The simplest 
+\family typewriter
+QueryParam
+\family default
+ to refine your query is the 
+\family typewriter
+By
+\family default
+
 \begin_inset Index
 status collapsed
 
@@ -2293,8 +2525,12 @@ By
 \end_inset
 
  object, and its related objects.
- By is used for a direct value comparison of a given field, essentially
- an 
+ 
+\family typewriter
+By
+\family default
+ is used for a direct value comparison of a given field, essentially an
+ 
 \begin_inset Quotes eld
 \end_inset
 
@@ -2340,7 +2576,7 @@ name "lst:Retrieving-by-account"
 
 \begin_layout Plain Layout
 
-val myEntry = Transaction.findAll(By(Transaction.account, myAccount.id))
+val myEntries = Expense.findAll(By(Expense.account, myAccount.id))
 \end_layout
 
 \end_inset
@@ -2350,15 +2586,34 @@ val myEntry = Transaction.findAll(By(Transaction.account, myAccount.id))
 
 \begin_layout Standard
 Note that we specify the account primary key (id) on the right side.
- This is because the type of Transaction.account is really Long, not Account,
- so we need to match the type.
- Besides By, the other basic clauses are:
+ This is because the type of 
+\family typewriter
+Expense.account
+\family default
+ is really 
+\family typewriter
+Long
+\family default
+, not 
+\family typewriter
+Account
+\family default
+, so we need to match the type.
+ Besides 
+\family typewriter
+By
+\family default
+, the other basic clauses are:
 \end_layout
 
 \begin_layout Itemize
+
+\family typewriter
 NotBy
+\family default
+
 \begin_inset Index
-status collapsed
+status open
 
 \begin_layout Plain Layout
 NotBy
@@ -2370,12 +2625,16 @@ NotBy
 \end_layout
 
 \begin_layout Itemize
+
+\family typewriter
 By_>
+\family default
+
 \begin_inset Index
 status open
 
 \begin_layout Plain Layout
-by_>
+By_>
 \end_layout
 
 \end_inset
@@ -2384,12 +2643,16 @@ by_>
 \end_layout
 
 \begin_layout Itemize
+
+\family typewriter
 By_<
+\family default
+
 \begin_inset Index
 status open
 
 \begin_layout Plain Layout
-by_<
+By_<
 \end_layout
 
 \end_inset
@@ -2398,9 +2661,13 @@ by_<
 \end_layout
 
 \begin_layout Itemize
+
+\family typewriter
 ByList
+\family default
+
 \begin_inset Index
-status collapsed
+status open
 
 \begin_layout Plain Layout
 ByList
@@ -2422,9 +2689,13 @@ field IN (x,y,z)
 \end_layout
 
 \begin_layout Itemize
+
+\family typewriter
 NullRef
+\family default
+
 \begin_inset Index
-status collapsed
+status open
 
 \begin_layout Plain Layout
 NullRef
@@ -2436,9 +2707,13 @@ NullRef
 \end_layout
 
 \begin_layout Itemize
+
+\family typewriter
 NotNullRef
+\family default
+
 \begin_inset Index
-status collapsed
+status open
 
 \begin_layout Plain Layout
 NotNullRef
@@ -2450,7 +2725,11 @@ NotNullRef
 \end_layout
 
 \begin_layout Itemize
+
+\family typewriter
 Like
+\family default
+
 \begin_inset Index
 status collapsed
 
@@ -2467,7 +2746,11 @@ Like
 \begin_layout Standard
 In addition to the basic clauses there are some slightly more complex ways
  to control the query.
- The first of these is ByRef
+ The first of these is 
+\family typewriter
+ByRef
+\family default
+
 \begin_inset Index
 status collapsed
 
@@ -2528,11 +2811,19 @@ TreeNode.findAll(ByRef(TreeNode.parent,TreeNode.id))
 \end_layout
 
 \begin_layout Standard
-The related NotByRef tests for inequality between two query fields.
+The related 
+\family typewriter
+NotByRef
+\family default
+ tests for inequality between two query fields.
 \end_layout
 
 \begin_layout Standard
-Getting slightly more complex, we come to the In
+Getting slightly more complex, we come to the 
+\family typewriter
+In
+\family default
+
 \begin_inset Index
 status collapsed
 
@@ -2542,7 +2833,11 @@ In
 
 \end_inset
 
- QueryParameter, which is used just like an 
+ 
+\family typewriter
+QueryParameter
+\family default
+, which is used just like an 
 \begin_inset Quotes eld
 \end_inset
 
@@ -2569,6 +2864,9 @@ reference "lst:Using-In"
 \end_inset
 
  shows the full breakdown.
+ Note that we use List.removeDuplicates to make the List contain unique entities
+ (this requires overriding the equals and hashCode methods, which we don't
+ show here).
 \end_layout
 
 \begin_layout Standard
@@ -2598,17 +2896,27 @@ name "lst:Using-In"
 
 \begin_layout Plain Layout
 
-TagBind.findAll(In(TagBind.tag,
+val cExpenses = 
 \end_layout
 
 \begin_layout Plain Layout
 
-     Tag.id,
+  ExpenseTag.findAll(
 \end_layout
 
 \begin_layout Plain Layout
 
-     Like(Tag.name, "c%"))).map(_.transaction.obj).sort(_.id < _.id).removeDuplicates
+    In(ExpenseTag.tag,
+\end_layout
+
+\begin_layout Plain Layout
+
+       Tag.id,
+\end_layout
+
+\begin_layout Plain Layout
+
+       Like(Tag.name, "c%"))).map(_.expense.obj.open_!).removeDuplicates
 \end_layout
 
 \end_inset
@@ -2617,9 +2925,20 @@ TagBind.findAll(In(TagBind.tag,
 \end_layout
 
 \begin_layout Standard
-We use the ByRef params to do the join between the many-to-many entity on
- the query.
- Related to In is InRaw
+We use the 
+\family typewriter
+ByRef
+\family default
+ params to do the join between the many-to-many entity on the query.
+ Related to 
+\family typewriter
+In
+\family default
+ is 
+\family typewriter
+InRaw
+\family default
+
 \begin_inset Index
 status collapsed
 
@@ -2645,8 +2964,11 @@ reference "lst:Using-InRaw"
 
 \end_inset
 
- shows how we could use this to find Categories for ledger entries made
- in the last 30 days.
+ shows how we could use this to find 
+\family typewriter
+Tags
+\family default
+ for ledger entries made in the last 30 days.
 \end_layout
 
 \begin_layout Standard
@@ -2682,18 +3004,18 @@ def recentCategories = {
 
 \begin_layout Plain Layout
 
-  val joins = TagBind.findAll(
+  val joins = ExpenseTag.findAll(
 \end_layout
 
 \begin_layout Plain Layout
 
-    InRaw(TagBind.transaction,
+    InRaw(ExpenseTag.expense,
 \end_layout
 
 \begin_layout Plain Layout
 
-          "select id from Transaction where Transaction.date > (CURRENT_DATE
- - interval '30 days')",
+          "select id from Expense where date > (CURRENT_DATE - interval
+ '30 days')",
 \end_layout
 
 \begin_layout Plain Layout
@@ -2703,7 +3025,7 @@ def recentCategories = {
 
 \begin_layout Plain Layout
 
-  joins.map(_.transaction.obj).sort(_.id < _.id).removeDuplicates
+  joins.map(_.expense.obj.open_!).removeDuplicates
 \end_layout
 
 \begin_layout Plain Layout
@@ -2718,11 +3040,21 @@ def recentCategories = {
 
 \begin_layout Standard
 Here things are starting to get a little hairy.
- The InRaw only allows us to specify the subquery for the IN clause, so
- we have to do some postprocessing to get unique results.
- If you want to do this in the query itself you'll have to use the findAllByInse
-cureSql or findAllByPreparedStatement methods, which are covered later in
- this section on page 
+ The 
+\family typewriter
+InRaw
+\family default
+ only allows us to specify the subquery for the IN clause, so we have to
+ do some postprocessing to get unique results.
+ If you want to do this in the query itself you'll have to use the 
+\family typewriter
+findAllByInsecureSql
+\family default
+ or 
+\family typewriter
+findAllByPreparedStatement
+\family default
+ methods, which are covered later in this section on page 
 \begin_inset CommandInset ref
 LatexCommand pageref
 reference "sub:SQL-based-queries"
@@ -2730,8 +3062,16 @@ reference "sub:SQL-based-queries"
 \end_inset
 
 .
- The final parameter for InRaw acts as a code audit mechanism that says
- that someone has checked the SQL to make sure it's safe to use.
+ The final parameter for 
+\family typewriter
+InRaw
+\family default
+, 
+\family typewriter
+IHaveValidatedThisSQL
+\family default
+ acts as a code audit mechanism that says that someone has checked the SQL
+ to make sure it's safe to use.
  Since the query fragment is added to the master query as-is, no escaping
  or other filtering is performed on the string.
  That means that if you take user input you need to be very careful about
@@ -2739,9 +3079,17 @@ reference "sub:SQL-based-queries"
 \end_layout
 
 \begin_layout Standard
-The next QueryParam we'll cover is BySql, which lets you use a complete
- SQL fragment that gets put into the where clause.
- An example of this would be if we want to find all ledger entries within
+The next 
+\family typewriter
+QueryParam
+\family default
+ we'll cover is 
+\family typewriter
+BySql
+\family default
+, which lets you use a complete SQL fragment that gets put into the where
+ clause.
+ An example of this would be if we want to find all expense entries within
  the last 30 days, as shown in listing 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -2750,7 +3098,11 @@ reference "lst:Using-BySql"
 \end_inset
 
 .
- The IHaveValidatedThisSQL
+ Again, the 
+\family typewriter
+IHaveValidatedThisSQL
+\family default
+
 \begin_inset Index
 status open
 
@@ -2791,12 +3143,12 @@ name "lst:Using-BySql"
 
 \begin_layout Plain Layout
 
-val recentEntries = Transaction.findAll(
+val recentEntries = Expense.findAll(
 \end_layout
 
 \begin_layout Plain Layout
 
-  BySql("Transaction.date > (CURRENT_DATE - interval '30 days')",
+  BySql("date > (CURRENT_DATE - interval '30 days')",
 \end_layout
 
 \begin_layout Plain Layout
@@ -2810,9 +3162,16 @@ val recentEntries = Transaction.findAll(
 \end_layout
 
 \begin_layout Standard
-The tradeoff with using BySql is that you need to be careful with what you
- allow into the query string.
- BySql supports parameterized queries as shown in listing 
+The tradeoff with using 
+\family typewriter
+BySql
+\family default
+ is that you need to be careful with what you allow into the query string.
+ 
+\family typewriter
+BySql
+\family default
+ supports parameterized queries as shown in listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Parameterized-BySql"
@@ -2851,12 +3210,12 @@ name "lst:Parameterized-BySql"
 
 \begin_layout Plain Layout
 
-val amountRange = Transaction.findAll(
+val amountRange = Expense.findAll(
 \end_layout
 
 \begin_layout Plain Layout
 
-  BySql("Transaction.amount between ? and ?", lowVal, highVal))
+  BySql("Expense.amount between ? and ?", lowVal, highVal))
 \end_layout
 
 \end_inset
@@ -2874,7 +3233,11 @@ reference "sub:Deleting-an-Instance"
 
 , we can use the query parameters to effect bulk deletes in addition to
  querying for instances.
- Simply use the QueryParam classes to constrain what you want to delete.
+ Simply use the 
+\family typewriter
+QueryParam
+\family default
+ classes to constrain what you want to delete.
  Obviously the control params that we'll cover next make no sense but the
  compiler won't complain.
  Listing 
@@ -2919,7 +3282,7 @@ def deleteBefore (date : Date) =
 
 \begin_layout Plain Layout
 
-  Transaction.bulkDelete_!!(By_<(Transaction.date, date))
+  Expense.bulkDelete_!!(By_<(Expense.date, date))
 \end_layout
 
 \end_inset
@@ -2929,12 +3292,26 @@ def deleteBefore (date : Date) =
 
 \begin_layout Subsection
 Control QueryParams
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Control-QueryParams"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
-Now that we've covered the selection and comparison QueryParams, we can
- start to look at the control params.
- The first one that we'll look at is OrderBy.
+Now that we've covered the selection and comparison 
+\family typewriter
+QueryParams
+\family default
+, we can start to look at the control params.
+ The first one that we'll look at is 
+\family typewriter
+OrderBy
+\family default
+.
  This operates exactly like the order by clause in SQL, and allows you to
  order on a given field in either ascending or descending order.
  Listing 
@@ -2945,9 +3322,21 @@ reference "lst:OrderBy-Clause"
 \end_inset
 
  shows an example of ordering our ledger entries by amount.
- The Ascending and Descending case objects are in the net.liftweb.mapper package.
- The OrderBySql case class operates similarly except you provide your own
- SQL fragment for the ordering, as shown in the example.
+ The 
+\family typewriter
+Ascending
+\family default
+ and 
+\family typewriter
+Descending
+\family default
+ case objects are in the net.liftweb.mapper package.
+ The 
+\family typewriter
+OrderBySql
+\family default
+ case class operates similarly except you provide your own SQL fragment
+ for the ordering, as shown in the example.
  Again, you need to validate this SQL.
 \end_layout
 
@@ -2983,7 +3372,7 @@ val cheapestFirst =
 
 \begin_layout Plain Layout
 
-  Transaction.findAll(OrderBy(Transaction.amount,Ascending))
+  Expense.findAll(OrderBy(Expense.amount,Ascending))
 \end_layout
 
 \begin_layout Plain Layout
@@ -2998,7 +3387,7 @@ val cheapestFirst =
 
 \begin_layout Plain Layout
 
-  Transaction.findAll(OrderBySql("Transaction.amount asc"),
+  Expense.findAll(OrderBySql("Expense.amount asc"),
 \end_layout
 
 \begin_layout Plain Layout
@@ -3013,8 +3402,19 @@ val cheapestFirst =
 
 \begin_layout Standard
 Pagination of results is another feature that people often want to use,
- and Mapper provides a simple means for controlling it with two more QueryParam
- classes: StartAt and MaxRows, as shown in listing 
+ and Mapper provides a simple means for controlling it with two more 
+\family typewriter
+QueryParam
+\family default
+ classes: 
+\family typewriter
+StartAt
+\family default
+ and 
+\family typewriter
+MaxRows
+\family default
+, as shown in listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Pagination-of-Results"
@@ -3058,7 +3458,7 @@ val offset = S.param("offset").map(_.toLong) openOr 0
 
 \begin_layout Plain Layout
 
-Transaction.findAll(StartAt(offset), MaxRows(20))
+Expense.findAll(StartAt(offset), MaxRows(20))
 \end_layout
 
 \end_inset
@@ -3067,8 +3467,11 @@ Transaction.findAll(StartAt(offset), MaxRows(20))
 \end_layout
 
 \begin_layout Standard
-An important feature of the methods that take QueryParams is that they can
- take multiple params, as shown in this example.
+An important feature of the methods that take 
+\family typewriter
+QueryParams
+\family default
+ is that they can take multiple params, as shown in this example.
  A more complex example is shown in listing 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -3077,8 +3480,12 @@ reference "lst:Multiple-QueryParams"
 \end_inset
 
 .
- In this example we're doing a query using a Like clause, ordering on the
- date of the entries, and paginating the results, all in one statement!
+ In this example we're doing a query using a 
+\family typewriter
+Like
+\family default
+ clause, ordering on the date of the entries, and paginating the results,
+ all in one statement!
 \end_layout
 
 \begin_layout Standard
@@ -3108,22 +3515,22 @@ name "lst:Multiple-QueryParams"
 
 \begin_layout Plain Layout
 
-Transaction.findAll(Like(Transaction.description, "Gift for%"),
+Expense.findAll(Like(Expense.description, "Gift for%"),
 \end_layout
 
 \begin_layout Plain Layout
 
-                    OrderBy(Transaction.date,Descending),
+                OrderBy(Expense.date,Descending),
 \end_layout
 
 \begin_layout Plain Layout
 
-                    StartAt(offset),
+                StartAt(offset),
 \end_layout
 
 \begin_layout Plain Layout
 
-                    MaxRows(pageSize))
+                MaxRows(pageSize))
 \end_layout
 
 \end_inset
@@ -3132,8 +3539,21 @@ Transaction.findAll(Like(Transaction.description, "Gift for%"),
 \end_layout
 
 \begin_layout Standard
-Another useful QueryParam is the Distinct case class, which acts exactly
- the same way as the DISTINCT keyword in SQL.
+Another useful 
+\family typewriter
+QueryParam
+\family default
+ is the 
+\family typewriter
+Distinct
+\family default
+ case class, which acts exactly the same way as the DISTINCT keyword in
+ SQL; one caveat is that Mapper doesn't support explicit joins, so this
+ restricts the situations in which you can use 
+\family typewriter
+Distinct
+\family default
+.
  The final 
 \begin_inset Quotes eld
 \end_inset
@@ -3142,7 +3562,15 @@ control
 \begin_inset Quotes erd
 \end_inset
 
- QueryParam that we'll cover is PreCache
+ 
+\family typewriter
+QueryParam
+\family default
+ that we'll cover is 
+\family typewriter
+PreCache
+\family default
+
 \begin_inset Index
 status collapsed
 
@@ -3158,8 +3586,11 @@ PreCache
  field in a lazy state, so that the query to get the foreign object isn't
  executed until you access the field.
  This can obviously be inefficient when you have a whole lot of entities
- loaded that you need to access, so the PreCache parameter forces Mapper
- to preload the foreign objects as part of the query.
+ loaded that you need to access, so the 
+\family typewriter
+PreCache
+\family default
+ parameter forces Mapper to preload the foreign objects as part of the query.
  Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -3167,7 +3598,7 @@ reference "lst:Using-PreCache"
 
 \end_inset
 
- shows how we could use this to fetch a ledger entry as well as the account
+ shows how we could use this to fetch a expense entry as well as the account
  for the entry.
 \end_layout
 
@@ -3198,17 +3629,17 @@ name "lst:Using-PreCache"
 
 \begin_layout Plain Layout
 
-def loadTransactionPlusAccount (id : Long) =
+def loadExpensePlusAccount (id : Long) =
 \end_layout
 
 \begin_layout Plain Layout
 
-  Transaction.findAll(By(Transaction.id, id),
+  Expense.findAll(By(Expense.id, id),
 \end_layout
 
 \begin_layout Plain Layout
 
-                    PreCache(Transaction.account))
+                    PreCache(Expense.account))
 \end_layout
 
 \end_inset
@@ -3240,7 +3671,10 @@ reference "lst:Join-Convenience-Method"
 \end_inset
 
 .
- Using this method in our example has an advantage over using HasManyThrough
+ Using this method in our example has an advantage over using 
+\family typewriter
+HasManyThrough
+\family default
  in that it will pull from the database each time instead of just once at
  query.
 \end_layout
@@ -3272,7 +3706,7 @@ name "lst:Join-Convenience-Method"
 
 \begin_layout Plain Layout
 
-def tags = TagBind.findAll(By(TagBind.transaction, this.id)).map(_.tag.obj)
+def tags = ExpenseTag.findAll(By(ExpenseTag.expense, this.id)).map(_.tag.obj)
 \end_layout
 
 \end_inset
@@ -3330,8 +3764,11 @@ asHtml
 toXHtml
 \family default
  in Record) on your instance.
- The default implementation turns each field's value into a Text node via
- the 
+ The default implementation turns each field's value into a 
+\family typewriter
+Text
+\family default
+ node via the 
 \family typewriter
 toString
 \family default
@@ -3397,7 +3834,7 @@ object date extends MappedDateTime(this) {
 
 \begin_layout Plain Layout
 
-  override def asHtml = Text(dateFormat.format(value.getTime))
+  override def asHtml = Text(dateFormat.format(is))
 \end_layout
 
 \begin_layout Plain Layout
@@ -3408,28 +3845,6 @@ object date extends MappedDateTime(this) {
 \end_inset
 
 
-\end_layout
-
-\begin_layout Standard
-Note that the DateTimeField contains a 
-\family typewriter
-java.util.Calendar
-\family default
- instance, which is why we need to use the 
-\family typewriter
-getTime
-\family default
- method on the value.
- Two similar methods, 
-\family typewriter
-asJSON
-\family default
- and 
-\family typewriter
-asJs
-\family default
-, will return the JSON and javascript object representation of the instance,
- respectively.
 \end_layout
 
 \begin_layout Subsection
@@ -3882,12 +4297,23 @@ Box[Node]
 FieldErrors
 \family default
  you return are used as the failure messages to be presented to the user.
- A FieldError is simply a case class that associates an error message with
- a particular field.
- As an example, let's say we don't want someone to be able to add a ledger
+ A 
+\family typewriter
+FieldError
+\family default
+ is simply a case class that associates an error message with a particular
+ field.
+ As an example, let's say we don't want someone to be able to add an expense
  entry in the future.
- First, we need to define a function for our date field that takes a Date
- as an input (For Record, java.util.Calendar
+ First, we need to define a function for our date field that takes a 
+\family typewriter
+Date
+\family default
+ as an input (For Record, 
+\family typewriter
+java.util.Calendar
+\family default
+
 \begin_inset Index
 status collapsed
 
@@ -3897,8 +4323,19 @@ Calendar
 
 \end_inset
 
- and not Date is the actual value type of DateTimeField) and returns the
- proper List.
+ and not 
+\family typewriter
+Date
+\family default
+ is the actual value type of 
+\family typewriter
+DateTimeField
+\family default
+) and returns the proper 
+\family typewriter
+List
+\family default
+.
  We show a simple function in listing 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -4055,8 +4492,12 @@ CRUD Support
 
 \begin_layout Standard
 Adding CRUD support to your Mapper classes is very simple.
- We just mix in the CRUDify trait to our class and it provides a full set
- of add, edit, list, delete and view pages automatically.
+ We just mix in the 
+\family typewriter
+CRUDify
+\family default
+ trait to our class and it provides a full set of add, edit, list, delete
+ and view pages automatically.
  Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -4064,7 +4505,15 @@ reference "lst:Mixing-in-CRUDify"
 
 \end_inset
 
- shows our Entry class with CRUDify mixed in.
+ shows our 
+\family typewriter
+Entry
+\family default
+ class with 
+\family typewriter
+CRUDify
+\family default
+ mixed in.
 \end_layout
 
 \begin_layout Standard
@@ -4094,8 +4543,8 @@ name "lst:Mixing-in-CRUDify"
 
 \begin_layout Plain Layout
 
-class Transaction extends LongKeyedMapper[Transaction] with CRUDify[Long,Transac
-tion] {
+class Expense extends LongKeyedMapper[Expense] with CRUDify[Long,Expense]
+ {
 \end_layout
 
 \begin_layout Plain Layout
@@ -4175,7 +4624,7 @@ name "lst:Using-CRUDify-Menus"
 \begin_layout Plain Layout
 
 val menus = ...
- Menu(Loc(...)) :: Transaction.menus :: Nil
+ Menu(Loc(...)) :: Expense.menus
 \end_layout
 
 \begin_layout Plain Layout
@@ -4196,9 +4645,17 @@ Lifecycle Callbacks
 Mapper and Record provide for a set of callbacks that allow you to perform
  actions at various points during the lifecycle of a given instance.
  If you want to define your own handling for one of the lifecycle events,
- simply add the LifecycleCallbacks trait to your object.
- Note that there is a separate LifecycleCallback trait in each of the record
- and mapper pacakges, so make sure that you import the correct one.
+ simply add the 
+\family typewriter
+LifecycleCallbacks
+\family default
+ trait to your object.
+ Note that there is a separate 
+\family typewriter
+LifecycleCallbacks
+\family default
+ trait in each of the record and mapper pacakges, so make sure that you
+ import the correct one.
  For example, if we wanted to notify a comet actor whenever a new ledger
  entry is saved, we could change our Entry as shown in listing 
 \begin_inset CommandInset ref
@@ -4237,7 +4694,7 @@ name "lst:Lifecycle-Callbacks"
 
 \begin_layout Plain Layout
 
-object Transaction extends LongKeyedMapper[Transaction] with LifecycleCallbacks
+object Expense extends LongKeyedMapper[Expense] with LifecycleCallbacks
  {
 \end_layout
 
@@ -5181,7 +5638,8 @@ name "sub:Defining-Custom-Field-types-mapper"
 \begin_layout Standard
 The basic MappedField types cover a wide range of needs, but sometimes you
  may find yourself wanting to cover a specific type.
- In our example, we would like a decimal value for our ledger amount.
+ In our example, we would like a decimal value for our expense amount and
+ account balance.
  Using a double would be inappropriate due to imprecision and rounding errors
 \begin_inset Foot
 status collapsed
@@ -5203,7 +5661,11 @@ http://stephan.reposita.org/archives/2008/01/11/once-and-for-all-do-not-use-doub
 
 \end_inset
 
-, so instead we base it on BigDecimal.
+, so instead we base it on 
+\family typewriter
+BigDecimal
+\family default
+.
  We're going to provide an abridged version of the code that will end up
  in the Lift library; feel free to examine the source to see the constructors
  and methods that we've omitted
@@ -5227,8 +5689,19 @@ reference "lst:MappedDecimal-constructors"
 \end_inset
 
 .
- Note that the BigDecimal we're using here is scala.BigDecimal, not java.math.BigDe
-cimal.
+ Note that the 
+\family typewriter
+BigDecimal
+\family default
+ we're using here is 
+\family typewriter
+scala.BigDecimal
+\family default
+, not 
+\family typewriter
+java.math.BigDecimal
+\family default
+.
  We'll cover how we make this work with JDBC (which doesn't support scala.BigDeci
 mal) in a moment.
 \end_layout
@@ -5367,17 +5840,33 @@ target "http://www.scala-lang.org/node/136"
 
 ).
  With our primary constructor we specify the owner mapper as well as the
- MathContext (this controls rounding and precision, or the total number
- of digits) and scale of the decimal value.
- The scale in BigDecimal essentially represents the number of digits to
- the right of the decimal point.
+ 
+\family typewriter
+MathContext
+\family default
+ (this controls rounding and precision, or the total number of digits) and
+ scale of the decimal value.
+ The scale in 
+\family typewriter
+BigDecimal
+\family default
+ essentially represents the number of digits to the right of the decimal
+ point.
  In addition, we specify ancillary constructors to take an initial value
- with or without and explicit MathContext.
+ with or without and explicit 
+\family typewriter
+MathContext
+\family default
+.
 \end_layout
 
 \begin_layout Standard
 Now that we have the constructors in place, there are several abstract methods
- on MappedField that we need to define.
+ on 
+\family typewriter
+MappedField
+\family default
+ that we need to define.
  The first of these is a method to provide a default value.
  The default value is used for uninitialized fields or if validation fails.
  We also need to specify the class for our value type by implementing the
@@ -5396,7 +5885,11 @@ reference "lst:Setting-a-default-value"
  shows both of these methods.
  In our case, we default to a zero value, with the scale set as specified
  in the contructor.
- Note that BigDecimal instances are generally immutable, so the 
+ Note that 
+\family typewriter
+BigDecimal
+\family default
+ instances are generally immutable, so the 
 \family typewriter
 setScale
 \family default
@@ -5537,11 +6030,27 @@ reference "lst:Access-Control"
 \end_inset
 
  shows the overrides that set the read and write permissions to true (default
- to false for both) as well as the i_obscure_! and real_i_set_! methods.
- The i_obscure_! method returns the a value that is used then the user doesn't
- have read permissions.
- The real_i_set_! method is what actually stores the internal value and
- sets the dirty flag when the field is updated.
+ to false for both) as well as the 
+\family typewriter
+i_obscure_!
+\family default
+ and 
+\family typewriter
+real_i_set_!
+\family default
+ methods.
+ The 
+\family typewriter
+i_obscure_!
+\family default
+ method returns the a value that is used then the user doesn't have read
+ permissions.
+ The 
+\family typewriter
+real_i_set_!
+\family default
+ method is what actually stores the internal value and sets the dirty flag
+ when the field is updated.
 \end_layout
 
 \begin_layout Standard
@@ -5665,8 +6174,16 @@ reference "lst:setFrom...-Methods"
 \end_inset
 
 .
- We've also added a setAll method so that we have a common place to properly
- set scale and rounding modes on the value of the field.
+ We've also added a 
+\family typewriter
+setAll
+\family default
+ and 
+\family typewriter
+coerce
+\family default
+ method so that we have a common place to properly set scale and rounding
+ modes on the value of the field.
 \end_layout
 
 \begin_layout Standard
@@ -5781,12 +6298,41 @@ name "lst:setFrom...-Methods"
 
 \begin_layout Standard
 Our implementations are relatively straightforward.
- The only special handling we need for setFromAny is to properly deal with
- Lists, Boxes, Options and the null value.
- The BigDecimal constructor takes Strings, so the setFromString method is
- easy.
- The only addition we make over the BigDecimal constructor is to properly
- set the scale and rounding on the returned value.
+ The only special handling we need for 
+\family typewriter
+setFromAny
+\family default
+ is to properly deal with 
+\family typewriter
+Lists
+\family default
+, 
+\family typewriter
+Boxes
+\family default
+, 
+\family typewriter
+Options
+\family default
+ and the 
+\family typewriter
+null
+\family default
+ value.
+ The 
+\family typewriter
+BigDecimal
+\family default
+ constructor takes Strings, so the 
+\family typewriter
+setFromString
+\family default
+ method is easy.
+ The only addition we make over the 
+\family typewriter
+BigDecimal
+\family default
+ constructor is to properly set the scale and rounding on the returned value.
  
 \end_layout
 
@@ -5800,21 +6346,58 @@ reference "lst:Database-Specific-Methods"
 \end_inset
 
 .
- The first method we implement is targetSQLType.
+ The first method we implement is 
+\family typewriter
+targetSQLType
+\family default
+.
  This method tells Mapper what the corresponding SQL type is for our database
  column.
- The jdbcFriendly method returns a value that can be used in a JDBC statement;
- here's where we need to use the bigDecimal val on our scala.BigDecimal to
- obtain the real java.math.BigDecimal instance from whatever our current value
- is.
- Similarly, the real_convertToJDBCFriendly method needs to return a java
- BigDecimal for a given scala BigDecimal input.
- The buildSet...
+ The 
+\family typewriter
+jdbcFriendly
+\family default
+ method returns a value that can be used in a JDBC statement; here's where
+ we need to use the 
+\family typewriter
+bigDecimal
+\family default
+ val on our 
+\family typewriter
+scala.BigDecimal
+\family default
+ to obtain the real 
+\family typewriter
+java.math.BigDecimal
+\family default
+ instance from whatever our current value is.
+ Similarly, the 
+\family typewriter
+real_convertToJDBCFriendly
+\family default
+ method needs to return a java 
+\family typewriter
+BigDecimal
+\family default
+ for a given scala 
+\family typewriter
+BigDecimal
+\family default
+ input.
+ The 
+\family typewriter
+buildSet...
+
+\family default
  methods return functions that can be used to set the value of our field
  based on different input types.
  These are essentially conversion functions.
- Finally, the fieldCreatorString specifices what we would need in a CREATE
- TABLE statement to define this column.
+ Finally, the 
+\family typewriter
+fieldCreatorString
+\family default
+ specifices what we would need in a CREATE TABLE statement to define this
+ column.
  In our case we need to take into account the precision and scale of ; we
  use default precision if we're set to unlimited, but it's important to
  understand that actual precision for the default DECIMAL type varies between
@@ -6030,7 +6613,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 A simple ProtoUser
 \begin_inset CommandInset label
 LatexCommand label
@@ -6157,7 +6739,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Hooking MetaMegaProtoUser into Boot
 \begin_inset CommandInset label
 LatexCommand label
@@ -6213,8 +6794,20 @@ It's common for an application to need to access data in more than one database.
  Lift supports this feature through the use of overrides on your MetaMapper
  classes.
  First, we need to define the identifiers for the various databases using
- the ConnectionIdentifier trait and overriding the jndiName def.
- Lift comes with one pre-made: DefaultConnectionIdentifier.
+ the 
+\family typewriter
+ConnectionIdentifier
+\family default
+ trait and overriding the 
+\family typewriter
+jndiName
+\family default
+ def.
+ Lift comes with one pre-made: 
+\family typewriter
+DefaultConnectionIdentifier
+\family default
+.
  It's jndiName is set to 
 \begin_inset Quotes eld
 \end_inset
@@ -6232,7 +6825,11 @@ reference "lst:Defining-Connection-Identifiers"
 
 \end_inset
 
- shows how we would define the ConnectionIdentifier objects for these.
+ shows how we would define the 
+\family typewriter
+ConnectionIdentifier
+\family default
+ objects for these.
 \end_layout
 
 \begin_layout Standard
@@ -6586,7 +7183,7 @@ name "lst:Sharding-in-Action"
 
 \begin_layout Plain Layout
 
-class Transaction extends LongKeyedMapper[Transaction] {
+class Expense extends LongKeyedMapper[Expense] {
 \end_layout
 
 \begin_layout Plain Layout
@@ -6655,11 +7252,25 @@ name "sub:SQL-based-queries"
 
 \begin_layout Standard
 If, despite all that Mapper covers, you find yourself still wanting more
- control over the query, there are two more options available to you: findAllByP
-reparedStatement and findAllByInsecureSql.
- The findAllByPreparedStatement method allows you to, in essence, construct
- your query completely by hand.
- The added benefit of using a PreparedStatement
+ control over the query, there are two more options available to you: 
+\family typewriter
+findAllByPreparedStatement
+\family default
+ and 
+\family typewriter
+findAllByInsecureSql
+\family default
+.
+ The 
+\family typewriter
+findAllByPreparedStatement
+\family default
+ method allows you to, in essence, construct your query completely by hand.
+ The added benefit of using a 
+\family typewriter
+PreparedStatement
+\family default
+
 \begin_inset Foot
 status collapsed
 
@@ -6680,8 +7291,16 @@ http://java.sun.com/javase/6/docs/api/java/sql/PreparedStatement.html
 \end_inset
 
  means that you can easily include user-defined data in your queries.
- The findAllByPreparedStatement method takes a single function parameter;
- this function needs to take a SuperConnection
+ The 
+\family typewriter
+findAllByPreparedStatement
+\family default
+ method takes a single function parameter; this function needs to take a
+ 
+\family typewriter
+SuperConnection
+\family default
+
 \begin_inset Foot
 status collapsed
 
@@ -6703,7 +7322,11 @@ SuperConnection.html
 
 \end_inset
 
- and return a PreparedStatement instance.
+ and return a 
+\family typewriter
+PreparedStatement
+\family default
+ instance.
  Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -6712,7 +7335,11 @@ reference "lst:Using-findAllByPreparedStatement"
 \end_inset
 
  shows our previous example of looking up all transactions for recent ledger
- entries using findAllByPreparedStatement instead.
+ entries using 
+\family typewriter
+findAllByPreparedStatement
+\family default
+ instead.
  The query that you provide must at least return the fields that are mapped
  by your entity, but you can return other columns as well (they'll just
  be ignored) in case you just want to do a 
@@ -6764,27 +7391,27 @@ def recentCategories = CategoryMeta.findAllByPreparedStatement({ superconn
 
 \begin_layout Plain Layout
 
-    "select distinct transaction.id, tags.tag" +
+    "select distinct Expense.id, Tag.name" +
 \end_layout
 
 \begin_layout Plain Layout
 
-    "from tags" +
+    "from Tag" +
 \end_layout
 
 \begin_layout Plain Layout
 
-    "join TagBind tb on tags.id = tb.tag " +
+    "join ExpenseTag et on tags.id = et.tag " +
 \end_layout
 
 \begin_layout Plain Layout
 
-    "join Transaction tx on tx.id = tb.transaction " +
+    "join Expense ex on ex.id = et.expense " +
 \end_layout
 
 \begin_layout Plain Layout
 
-    "where tx.date > (CURRENT_DATE - interval '30 days')")
+    "where ex.date > (CURRENT_DATE - interval '30 days')")
 \end_layout
 
 \begin_layout Plain Layout
@@ -6798,10 +7425,21 @@ def recentCategories = CategoryMeta.findAllByPreparedStatement({ superconn
 \end_layout
 
 \begin_layout Standard
-The findAllByInsecureSql method goes even further, executing the string
- you submit directly as a statement without any checks.
- The same general rules apply as for findAllByPreparedStatement, although
- you need to add the IHaveValidatedThisSQL parameter as a code audit check.
+The 
+\family typewriter
+findAllByInsecureSql
+\family default
+ method goes even further, executing the string you submit directly as a
+ statement without any checks.
+ The same general rules apply as for 
+\family typewriter
+findAllByPreparedStatement
+\family default
+, although you need to add the 
+\family typewriter
+IHaveValidatedThisSQL
+\family default
+ parameter as a code audit check.
  In either case, the ability to use full SQL queries can allow you to do
  some very powerful things, but it comes at the cost of losing type safety
  and possibly making your app non-portable.
@@ -6817,9 +7455,19 @@ DB.runQuery
 .
  This method allows you to provide a full SQL query string, and is overloaded
  to take a parameterized query if you desire.
- It returns a Pair[List[String],List[List[String]], with the first List[String]
- containing all of the column names and the second List corresponding to
- each row in the result set.
+ It returns a 
+\family typewriter
+Pair[List[String],List[List[String]]
+\family default
+, with the first 
+\family typewriter
+List[String]
+\family default
+ containing all of the column names and the second 
+\family typewriter
+List
+\family default
+ corresponding to each row in the result set.
  For example, let's say we wanted to compute the sums of each tag for a
  given account.
  Listing 
@@ -6861,27 +7509,27 @@ name "lst:Using-DB.runQuery"
 
 \begin_layout Plain Layout
 
-DB.runQuery("select tags.tag, sum(amount) from transaction tx " +
+DB.runQuery("select Tag.name, sum(amount) from Expense ex " +
 \end_layout
 
 \begin_layout Plain Layout
 
-            "join tagbind tb on tb.transaction = tx.id " +
+            "join ExpenseTag et on et.expense = ex.id " +
 \end_layout
 
 \begin_layout Plain Layout
 
-            "join tags on tb.tag = tags.id " +
+            "join Tag on et.tag = Tag.id " +
 \end_layout
 
 \begin_layout Plain Layout
 
-            "join account on account.id = tx.account " +
+            "join Account on Account.id = ex.account " +
 \end_layout
 
 \begin_layout Plain Layout
 
-            "where account.id = ? group by tags.tag order by tags.tag",
+            "where Account.id = ? group by Tags.name order by Tag.name",
 \end_layout
 
 \begin_layout Plain Layout
@@ -7020,7 +7668,7 @@ DB.use(DefaultConnectionIdentifier) { conn =>
 \begin_inset Quotes eld
 \end_inset
 
-select sum(tx.amount) from transaction_t tx where tx.account = 
+select sum(ex.amount) from Expense ex where ex.account = 
 \begin_inset Quotes eld
 \end_inset
 
@@ -7039,7 +7687,7 @@ select sum(tx.amount) from transaction_t tx where tx.account =
 
 \begin_layout Plain Layout
 
-  DB.prepareStatement("update account set balance = ? where account.id = ?
+  DB.prepareStatement("update Account set balance = ? where Account.id = ?
 \begin_inset Quotes erd
 \end_inset
 

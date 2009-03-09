@@ -410,16 +410,6 @@ filename "chap-thirdparty.lyx"
 \begin_layout Standard
 \begin_inset CommandInset include
 LatexCommand include
-filename "chap-tagging.lyx"
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset CommandInset include
-LatexCommand include
 filename "chap-widgets.lyx"
 
 \end_inset
