@@ -811,30 +811,6 @@ Defines a with statement to reduce object references
 \begin_layout Plain Layout
 
 \size small
-Noop
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\size small
-Defines an empty JavaScript statement
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\size small
 OnLoad
 \end_layout
 
@@ -847,6 +823,30 @@ OnLoad
 
 \size small
 Defines a JavaScript statement that is executed on page load
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+Noop
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size small
+Defines an empty JavaScript statement
 \end_layout
 
 \end_inset
@@ -1215,8 +1215,7 @@ FormToJson
 \begin_layout Plain Layout
 
 \size small
-Converts a given form (by Id) into a JSON representation.
- 
+Converts a given form (by Id) into a JSON representation
 \end_layout
 
 \end_inset
@@ -1565,8 +1564,7 @@ Stringify
 
 \size small
 Calls JSON.stringify to convert a JavaScript object into a JSON string representa
-tion.
- 
+tion
 \end_layout
 
 \end_inset
@@ -2073,7 +2071,7 @@ reference "lst:Jx-trivial-example"
 
 \end_inset
 
- shows a simple example of emitting a div on a page via JavaScript
+ shows a simple example of emitting a div on a page via JavaScript.
 \end_layout
 
 \begin_layout Standard
@@ -2218,7 +2216,7 @@ Of course, if that was all Lift was doing that's not much help.
  the Jx classes.
  Assume we have a JSON structure that contains an array of objects containing
  firstName and lastName properties.
- Such JSON structure could look something like:
+ This JSON structure could look something like:
 \end_layout
 
 \begin_layout Standard
@@ -2371,12 +2369,17 @@ name "lst:Rendering-a-JSON-list"
 
 \begin_layout Plain Layout
 
-def renderPerson = Jx(<li class="item_header"> {JsVar("it", "name")} is
- {JsVar("it", "race")}</li>)
+def renderPerson = 
 \end_layout
 
 \begin_layout Plain Layout
 
+  Jx(<li class="item_header"> {JsVar("it", "name")} 
+\end_layout
+
+\begin_layout Plain Layout
+
+       is {JsVar("it", "race")}</li>)
 \end_layout
 
 \begin_layout Plain Layout
@@ -2501,18 +2504,36 @@ item_header
 \begin_layout Standard
 With a couple of lines of code we've managed to generate the JavaScript
  code that creates document fragments dynamically.
+ Here is the list of JX classes that you may find interesting:
 \end_layout
 
 \begin_layout Standard
-Here is the list of JX classes that you may find interesting:
-\end_layout
-
-\begin_layout Standard
+\align center
 \begin_inset Tabular
-<lyxtabular version="3" rows="7" columns="2">
+<lyxtabular version="3" rows="8" columns="2">
 <features>
 <column alignment="left" valignment="top" width="0">
-<column alignment="left" valignment="top" width="0">
+<column alignment="left" valignment="top" width="4in">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Class
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Description
+\end_layout
+
+\end_inset
+</cell>
+</row>
 <row>
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
@@ -3336,7 +3357,14 @@ net.liftweb.http.jquery.JsSHtml
  For instance it contains the autocomplete function that renders an input
  type text element but when start typing it will suggest words starting
  with what you typed already.
- Please see http://www.pengoworks.com/workshop/jquery/autocomplete.htm examples.
+ Please see 
+\begin_inset CommandInset href
+LatexCommand href
+target "http://www.pengoworks.com/workshop/jquery/autocomplete.htm"
+
+\end_inset
+
+ for examples.
 \end_layout
 
 \begin_layout Section
@@ -3350,11 +3378,10 @@ We've seen so far how we can abstract JavaScript code at Scala level using
  But let's take a look on another example a bit more complex.
  It is about a fast search where you have a text box and when you hit enter
  it will return the list of items that contain that sequence.
- The list of itms will be rendered in a DIV real estate.
+ The list of items will be rendered in a DIV real estate.
 \end_layout
 
 \begin_layout Standard
-
 \begin_inset listings
 inline false
 status open
@@ -3364,7 +3391,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Example template
 \end_layout
 
@@ -3419,12 +3445,10 @@ Example template
 \end_layout
 
 \begin_layout Standard
-
 So we just have a really simple snippet and the div placeholder.
 \end_layout
 
 \begin_layout Standard
-
 \begin_inset listings
 inline false
 status open
@@ -3434,7 +3458,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Example snippet
 \end_layout
 
@@ -3555,7 +3578,6 @@ def ajaxian(html: Group) : NodeSeq = {
 \end_layout
 
 \begin_layout Standard
-
 The part with the snippet is probably already familiar to you.
  We are calling the ajaxText function which renders an input text element.
  When you hit enter an Ajax request will be sent and the anonymous function
@@ -3564,32 +3586,27 @@ The part with the snippet is probably already familiar to you.
 \end_layout
 
 \begin_layout Enumerate
-
 First filter out the names that contain the provided value in the input
  text.
  So all element that contain that sequence.
 \end_layout
 
 \begin_layout Enumerate
-
 Then return a JsExp that we are building:
 \end_layout
 
 \begin_deeper
 \begin_layout Enumerate
-
 SetHtml is clearing out the div element that we're using as a real estate
  for our search results list
 \end_layout
 
 \begin_layout Enumerate
-
 Then we re declaring a JavaScript variable which is an array containing
  the resulting items that matched the search criteria.
 \end_layout
 
 \begin_layout Enumerate
-
 Then we are declaring thr 
 \family typewriter
 func
@@ -3614,7 +3631,6 @@ it
 \end_layout
 
 \begin_layout Enumerate
-
 After that we are obtaining the HTML node denominated by 
 \begin_inset Quotes eld
 \end_inset
@@ -3640,7 +3656,6 @@ func
 
 \end_deeper
 \begin_layout Standard
-
 As you noticed already we composed a small JavaScript code by chainin multiple
  JS expressions/commands using the & function.
 \end_layout
