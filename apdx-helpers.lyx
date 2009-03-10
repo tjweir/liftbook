@@ -1,4 +1,4 @@
-#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.0 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -43,115 +43,41 @@
 \begin_body
 
 \begin_layout Chapter
-Helper Methods
+Lift Helpers
 \end_layout
 
 \begin_layout Section
-Planning
+Introduction
 \end_layout
 
-\begin_layout Itemize
-Box/Empty/Full/Failure
+\begin_layout Standard
+Lift provides a a pretty consistent collection of helper artifacts.
+ The helpers are essentially utility functions that helps you avoid boilerplate
+ code.
+ Hence it isimportant to be aware what is provided by Lift already for you
+ to use so you wont have to spend time coding something that already exists.
 \end_layout
 
-\begin_layout Itemize
-Good description with examples: http://groups.google.com/group/liftweb/browse_thre
-ad/thread/1a0808688d7923b2
-\end_layout
-
-\begin_deeper
-\begin_layout Itemize
-openOr examples
-\end_layout
-
-\begin_layout Itemize
-map examples
-\end_layout
-
-\begin_layout Itemize
-pass - function with side effects
-\end_layout
-
-\begin_layout Itemize
-run - function with default
-\end_layout
-
-\begin_layout Itemize
-Using and/or chaining Failure objects
-\end_layout
-
-\begin_layout Itemize
-OR
-\end_layout
-
-\begin_layout Itemize
-object passedAuthor extends RequestVar[Box[Author]](Empty)
-\end_layout
-
-\begin_layout Itemize
-def view (xhtml : NodeSeq) : NodeSeq = passedAuthor.map({ author => // do
- bind, etc here and return a NodeSeq
-\end_layout
-
-\begin_layout Itemize
-}) openOr Text("Invalid author") 
-\end_layout
-
-\end_deeper
-\begin_layout Itemize
-Time/date formatting
-\end_layout
-
-\begin_layout Itemize
-String formatting and utilities
-\end_layout
-
-\begin_layout Itemize
-Encryption and hashing
-\end_layout
-
-\begin_layout Itemize
-List helpers
-\end_layout
-
-\begin_layout Itemize
-Binding
-\end_layout
-
-\begin_layout Itemize
-URL modification
-\end_layout
-
-\begin_layout Itemize
-IO Helpers
-\end_layout
-
-\begin_layout Itemize
-tryo wrappers
+\begin_layout Standard
+Pretty much all Lift's helpers live in 
+\family typewriter
+net.liftweb.util
+\family default
+ package.
 \end_layout
 
 \begin_layout Section
-Writing
-\end_layout
-
-\begin_layout Subsection
 Box (or Scala's Option class on steroids)
 \end_layout
 
 \begin_layout Standard
-The Box Type is a utility that is built on top of Scala's Option Type, so
- let's take a quick look at Option first.
-\end_layout
-
-\begin_layout Standard
-The Option class allows for typesafe method of dealing with a situation
+The Box is a utility that is built on top of Scala's Option Type (also heavily
+ used inside Lift ), so let's take a quick look at Option first.
+ The Option class allows for typesafe method of dealing with a situation
  where you may or may not have a result.
  Option has two values, either Some(value) where value is actually the value
  and None which is used to represent nothing.
-\end_layout
-
-\begin_layout Standard
-A typical example for Option is outlined using Scala's Map type.
+ A typical example for Option is outlined using Scala's Map type.
  Below you'll see a definition of a Map, a successful attempt to get the
  value of key 
 \begin_inset Quotes eld
@@ -169,11 +95,7 @@ i
 \begin_inset Quotes erd
 \end_inset
 
-.
-\end_layout
-
-\begin_layout Standard
-Notice that when there was an existing key-value pair for 
+.Notice that when there was an existing key-value pair for 
 \begin_inset Quotes eld
 \end_inset
 
@@ -194,6 +116,24 @@ i
 \end_layout
 
 \begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+inline false
+status open
+
+\begin_layout LyX-Code
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Option and Map example
+\end_layout
+
+\end_inset
+
 
 \end_layout
 
@@ -230,8 +170,36 @@ scala> cap.get("i")
 res2: Option[java.lang.String] = None 
 \end_layout
 
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Standard
 Getting the value out of an Option is usually handled via map, for example:
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+inline false
+status open
+
+\begin_layout LyX-Code
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Fetch value from an Option
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code
@@ -258,7 +226,10 @@ Nothing found.
 }
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
+
+    
+\lang english
 Which would be used in conjunction with the previous code:
 \end_layout
 
@@ -282,11 +253,212 @@ scala> prettyPrint(cap.get("i"))
 res8: String = Nothing found.
 \end_layout
 
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Before detailing the Box functionality, it is relevant to point out some
+ interesting functionality about Option.
+ Lots of times when writing code we have to doa bunch of null checks than
+ perform that operation then other null checks, other operations and so
+ one.
+ So we would have something like:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Pseudocode nested operations example
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	x = getSomeValue();
+\end_layout
+
+\begin_layout Plain Layout
+
+	if (x != null) {
+\end_layout
+
+\begin_layout Plain Layout
+
+  	y = getSomeOtherValue();
+\end_layout
+
+\begin_layout Plain Layout
+
+  	if (y != null) {
+\end_layout
+
+\begin_layout Plain Layout
+
+    	compute(x, y);
+\end_layout
+
+\begin_layout Plain Layout
+
+  	}
+\end_layout
+
+\begin_layout Plain Layout
+
+	}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+...
+ so you got the picture.
+ Needless to say how tedious such style is in practice.
+ Now let's see if we can do better with Scala and Option.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Scala nested operations example
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    def getSomeValue(): Option[Int] = Some(12)     
+\end_layout
+
+\begin_layout Plain Layout
+
+    def getSomeOtherValue(): Option[Int] = Some(2)
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\end_layout
+
+\begin_layout Plain Layout
+
+    def compute(x: Int, y: Int) = x * y
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\end_layout
+
+\begin_layout Plain Layout
+
+    val res = for ( x <- getSomeValue();
+\end_layout
+
+\begin_layout Plain Layout
+
+    	            y <- getSomeOtherValue() if x > 10) yield compute(x, y)
+\end_layout
+
+\begin_layout Plain Layout
+
+    println(res) 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In the above example we have to values x and y and we want to do some computatio
+n with these values.
+ But we must ensure that computation is done on the correct data.
+ For instance the computation can not be done if 
+\family typewriter
+getSomeValue()
+\family default
+ returns no value.
+ In this context the two function return an Option[Int].
+ The interesting part is that if eith ofthe two functions or both return
+ a None Option instead of Some (None impersonating the non-existence of
+ the value) the res value will also be None.
+ However if both functions return a Some (like in the very example) the
+ computation is called and res will be a 
+\family typewriter
+Some(24)
+\family default
+.
+ But we have something else interesting here: 
+\family typewriter
+if x > 10
+\family default
+.
+ If we would make getSomeValue to return a value less or equalwith 10 the
+ res value will be None.
+ The point of all this is to exemplify the power of Option and for comprehention
+s in Scala and how it can be used to build quite complex expressions and
+ yet keep an impressive code claririty.
+\end_layout
+
 \begin_layout Standard
 Lift's Box extends Option with a few ideas, mainly the fact that you can
  add a message about why a Box is Empty.
  Empty corresponds to Option's None and Full to Option's Some.
- So you can pattern match against a Box like so:
+ So you can pattern match against a Box like:
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+inline false
+status open
+
+\begin_layout LyX-Code
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Box example
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code
@@ -379,8 +551,36 @@ def confirmDelete {
 }
 \end_layout
 
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Standard
+In conjunction with the above example we have.
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+inline false
+status open
+
+\begin_layout LyX-Code
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
 openOr example
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code
@@ -388,8 +588,211 @@ lazy val UserBio = UserBio.find(By(UserBio.id, id)) openOr (new UserBio)
 \end_layout
 
 \begin_layout LyX-Code
-def view (xhtml: NodeSeq): NodeSeq = passedAuthor.map({ author => // do bind,
- etc here and return a NodeSeq}) openOr Text("Invalid author") 
+def view (xhtml: NodeSeq): NodeSeq = passedAuthor.map({ author => 
+\end_layout
+
+\begin_layout LyX-Code
+
+  
+\lang english
+// do bind, etc here and return a NodeSeq
+\end_layout
+
+\begin_layout LyX-Code
+}) openOr Text("Invalid author") 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+So you can think of Box as a container that can either contain something
+ or to be empty.
+ A Box can be empty from various causes including some error conditions.
+ This is why we also have Failure which is an Empty Box but contains information
+ about the error.
+ See 
+\family typewriter
+case class Failure(msg: String, exception: Box[Throwable], chain: Box[Failure])
+\family default
+.
+\end_layout
+
+\begin_layout Standard
+We won't be detailing here all the Box functions but a few words on the
+ most common function might be benficial.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="4" columns="3">
+<features>
+<column alignment="left" valignment="top" width="0">
+<column alignment="left" valignment="top" width="0">
+<column alignment="left" valignment="top" width="0">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Function name
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Description
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Short example.
+ Assume myBox is a Box
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+openOr
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns the value contained by this Box.
+ If the Box is Empty 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+myBox openOr 
+\begin_inset Quotes eld
+\end_inset
+
+The box is Empty
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+map
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Apply a function on the values of this Box and return something else.
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+myBox map (value => value + 
+\begin_inset Quotes eld
+\end_inset
+
+ suffix
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+dmap
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Equivalent with map(..) openOr default_value.
+ The default value will be returned in case the map is Empty
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+myBox dmap(
+\begin_inset Quotes eld
+\end_inset
+
+default
+\begin_inset Quotes erd
+\end_inset
+
+)(value => value + 
+\begin_inset Quotes eld
+\end_inset
+
+ suffix
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Note that Box contains a set of implicit conversion functions form/to Option
+ and from/to Iterable.
 \end_layout
 
 \begin_layout Subsection
