@@ -119,7 +119,7 @@ i
 
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Standard
 \begin_inset listings
 inline false
 status open
@@ -138,10 +138,12 @@ Option and Map example
 \end_layout
 
 \begin_layout LyX-Code
+
 scala> val cap = Map("a" -> "A", "b" -> "B") 
 \end_layout
 
 \begin_layout LyX-Code
+
 cap: scala.collection.immutable.Map[java.lang.String,java.lang.String] = Map(a
  -> A, b -> B)
 \end_layout
@@ -151,10 +153,12 @@ cap: scala.collection.immutable.Map[java.lang.String,java.lang.String] = Map(a
 \end_layout
 
 \begin_layout LyX-Code
+
 scala> cap.get("a")  
 \end_layout
 
 \begin_layout LyX-Code
+
 res1: Option[java.lang.String] = Some(A)
 \end_layout
 
@@ -163,10 +167,12 @@ res1: Option[java.lang.String] = Some(A)
 \end_layout
 
 \begin_layout LyX-Code
+
 scala> cap.get("i") 
 \end_layout
 
 \begin_layout LyX-Code
+
 res2: Option[java.lang.String] = None 
 \end_layout
 
@@ -183,7 +189,7 @@ res2: Option[java.lang.String] = None
 Getting the value out of an Option is usually handled via map, for example:
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Standard
 \begin_inset listings
 inline false
 status open
@@ -193,7 +199,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Fetch value from an Option
 \end_layout
 
@@ -203,14 +208,17 @@ Fetch value from an Option
 \end_layout
 
 \begin_layout LyX-Code
+
 def prettyPrint(foo: Option[String]): String = foo match {
 \end_layout
 
 \begin_layout LyX-Code
+
   case Some(x) => x
 \end_layout
 
 \begin_layout LyX-Code
+
   case None => 
 \begin_inset Quotes eld
 \end_inset
@@ -223,21 +231,22 @@ Nothing found.
 \end_layout
 
 \begin_layout LyX-Code
+
 }
 \end_layout
 
 \begin_layout Plain Layout
 
-    
-\lang english
-Which would be used in conjunction with the previous code:
+    Which would be used in conjunction with the previous code:
 \end_layout
 
 \begin_layout LyX-Code
+
 scala> prettyPrint(cap.get("a")) 
 \end_layout
 
 \begin_layout LyX-Code
+
 res7: String = A
 \end_layout
 
@@ -246,10 +255,12 @@ res7: String = A
 \end_layout
 
 \begin_layout LyX-Code
+
 scala> prettyPrint(cap.get("i")) 
 \end_layout
 
 \begin_layout LyX-Code
+
 res8: String = Nothing found.
 \end_layout
 
@@ -277,7 +288,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Pseudocode nested operations example
 \end_layout
 
@@ -442,7 +452,7 @@ Lift's Box extends Option with a few ideas, mainly the fact that you can
  So you can pattern match against a Box like:
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Standard
 \begin_inset listings
 inline false
 status open
@@ -452,7 +462,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Box example
 \end_layout
 
@@ -462,10 +471,12 @@ Box example
 \end_layout
 
 \begin_layout LyX-Code
+
 a match {
 \end_layout
 
 \begin_layout LyX-Code
+
   Full(author) => Text(
 \begin_inset Quotes eld
 \end_inset
@@ -478,6 +489,7 @@ I found the author
 \end_layout
 
 \begin_layout LyX-Code
+
   Empty => Text(
 \begin_inset Quotes eld
 \end_inset
@@ -490,6 +502,7 @@ No author by that name.
 \end_layout
 
 \begin_layout LyX-Code
+
   Failure(message, _, _) => Text(
 \begin_inset Quotes eld
 \end_inset
@@ -510,44 +523,54 @@ Database disconnected.
 \end_layout
 
 \begin_layout LyX-Code
+
 }
 \end_layout
 
 \begin_layout LyX-Code
+
 def confirmDelete {     
 \end_layout
 
 \begin_layout LyX-Code
+
   (for (val id <- param("id");     // get the ID           
 \end_layout
 
 \begin_layout LyX-Code
+
         val user <- User.find(id)) // find the user                     
                                                            
 \end_layout
 
 \begin_layout LyX-Code
+
   yield {          
 \end_layout
 
 \begin_layout LyX-Code
+
     user.delete_!                   
 \end_layout
 
 \begin_layout LyX-Code
+
     notice("User deleted")          
 \end_layout
 
 \begin_layout LyX-Code
+
     redirectTo("/simple/index.html")        
 \end_layout
 
 \begin_layout LyX-Code
+
   }) getOrElse {error("User not found"); redirectTo("/simple/index.html")}
     
 \end_layout
 
 \begin_layout LyX-Code
+
 }
 \end_layout
 
@@ -564,7 +587,7 @@ def confirmDelete {
 In conjunction with the above example we have.
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Standard
 \begin_inset listings
 inline false
 status open
@@ -574,7 +597,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 openOr example
 \end_layout
 
@@ -584,21 +606,22 @@ openOr example
 \end_layout
 
 \begin_layout LyX-Code
+
 lazy val UserBio = UserBio.find(By(UserBio.id, id)) openOr (new UserBio)
 \end_layout
 
 \begin_layout LyX-Code
+
 def view (xhtml: NodeSeq): NodeSeq = passedAuthor.map({ author => 
 \end_layout
 
 \begin_layout LyX-Code
 
-  
-\lang english
-// do bind, etc here and return a NodeSeq
+  // do bind, etc here and return a NodeSeq
 \end_layout
 
 \begin_layout LyX-Code
+
 }) openOr Text("Invalid author") 
 \end_layout
 
@@ -627,7 +650,7 @@ We won't be detailing here all the Box functions but a few words on the
 
 \begin_layout Standard
 \begin_inset Tabular
-<lyxtabular version="3" rows="4" columns="3">
+<lyxtabular version="3" rows="5" columns="3">
 <features>
 <column alignment="left" valignment="top" width="0">
 <column alignment="left" valignment="top" width="0">
@@ -738,7 +761,7 @@ myBox map (value => value +
 </cell>
 </row>
 <row>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -747,7 +770,7 @@ dmap
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -757,7 +780,7 @@ Equivalent with map(..) openOr default_value.
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -783,6 +806,48 @@ default
 \end_inset
 </cell>
 </row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+?~
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Transforms an Empty to a Failure and passing a message.
+ If the Box is a Full it will just return 
+\family typewriter
+this
+\family default
+.
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+myBox ?~ (
+\begin_inset Quotes eld
+\end_inset
+
+Error message
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\end_inset
+</cell>
+</row>
 </lyxtabular>
 
 \end_inset
@@ -793,6 +858,380 @@ default
 \begin_layout Standard
 Note that Box contains a set of implicit conversion functions form/to Option
  and from/to Iterable.
+\end_layout
+
+\begin_layout Section
+ActorPing
+\end_layout
+
+\begin_layout Standard
+It provides convenient functionality to schedule messages to Actors.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+ActorPing examples
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// Assume myActor an existing Actor
+\end_layout
+
+\begin_layout Plain Layout
+
+// And a case object MyMessage
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// Send the MyMessage message after 15 seconds
+\end_layout
+
+\begin_layout Plain Layout
+
+ActorPing.schedule(myActor, MyMessage, 15 seconds)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// Send the MyMessage message every 15 seconds.
+ The cycle is stopped 
+\end_layout
+
+\begin_layout Plain Layout
+
+// if recipient actor exits or replied back with UnSchedule message
+\end_layout
+
+\begin_layout Plain Layout
+
+ActorPing.scheduleAtFixedRate(myActor, MyMessage, 0 seconds, 15 secods)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+ClassHelpers
+\end_layout
+
+\begin_layout Standard
+Provides convenient functions for loading classes using Java reflection,
+ instantiating dinamically loaded classes, invoking methods vis reflection
+ etc.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+ClassHelper examples
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import _root_.net.liftweb.util.Helpers._
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// lookup the class Bar in the three packages specified in th list
+\end_layout
+
+\begin_layout Plain Layout
+
+findClass(
+\begin_inset Quotes eld
+\end_inset
+
+Bar
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+com.foo
+\begin_inset Quotes erd
+\end_inset
+
+ :: 
+\begin_inset Quotes eld
+\end_inset
+
+com.bar
+\begin_inset Quotes erd
+\end_inset
+
+ :: 
+\begin_inset Quotes eld
+\end_inset
+
+com.baz
+\begin_inset Quotes erd
+\end_inset
+
+ :: Nil)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+invokeMethod(myClass, myInstance, 
+\begin_inset Quotes eld
+\end_inset
+
+doSomething
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+CodeHelpers
+\end_layout
+
+\begin_layout Standard
+Provides a convenient way of telling why a boolean expression failed.
+ For instance we are seeing manytime code like:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Expressiom example
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+var isTooYoung = false;
+\end_layout
+
+\begin_layout Plain Layout
+
+var isTooBig = false;
+\end_layout
+
+\begin_layout Plain Layout
+
+var isTooLazy = true;
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+var exp = isTooYoung && isTooBig && isTooLazy
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+As you can see we have no way of telling if the exp was false because of
+ isTooYoung, isTooBig or isTooLazy unless we test them again.
+ But let's see this:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+CodeHelpers example
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import net.liftweb.util._
+\end_layout
+
+\begin_layout Plain Layout
+
+import net.liftweb.util.MonadicConversions._
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+val exp = (isTooYoung ~ "too young") &&  
+\end_layout
+
+\begin_layout Plain Layout
+
+          (isTooBad ~ "too bad") &&  
+\end_layout
+
+\begin_layout Plain Layout
+
+          (isToLazy ~ "too lazy")
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+println(exp match {  
+\end_layout
+
+\begin_layout Plain Layout
+
+          case False(msgs) => msgs mkString("Test failed because it is '",
+ "' and '", "'.")  
+\end_layout
+
+\begin_layout Plain Layout
+
+          case _ => "success"  
+\end_layout
+
+\begin_layout Plain Layout
+
+        }) 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now if exp is a False we can tell why it failed as we have the messages
+ now.
+\end_layout
+
+\begin_layout Section
+ControlHelpers
+\end_layout
+
+\begin_layout Standard
+Provides convenient functions for try/catch situations.
+ For example:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+ControlHelpers examples
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
