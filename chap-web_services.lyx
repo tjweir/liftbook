@@ -86,35 +86,35 @@ Explain REST - http://en.wikipedia.org/wiki/REST
 \end_layout
 
 \begin_layout Itemize
-Build off of the URL rewriting comment
+Explain ROA - resource-oriented architecture from ReSTful web services
 \end_layout
 
 \begin_layout Itemize
-api demo from the wiki
+Compare ROA to XML-RPC
 \end_layout
 
 \begin_layout Itemize
-Talk to SteveJ about using his demo from LiftOff: http://liftweb.net/index.php/How
-To_do_Web_Services
-\end_layout
-
-\begin_deeper
-\begin_layout Itemize
-Add a dispatcher to sit on the right urls
+Set up the example, explain what we're going to do
 \end_layout
 
 \begin_layout Itemize
-Add a class that has the methods that correspond to your API/Service
+Write the pattern matching code to intercept
 \end_layout
 
 \begin_layout Itemize
-That's about it
+Add the dispatch to Boot
 \end_layout
 
-\end_deeper
 \begin_layout Itemize
-SteveJ gave us the go-ahead to use his stuff.
- It will have to be updated to the latest.
+Write a helper for the model, toXML
+\end_layout
+
+\begin_layout Itemize
+Show a GET Request and Response
+\end_layout
+
+\begin_layout Itemize
+Show a PUT Request and Response
 \end_layout
 
 \end_inset
@@ -231,7 +231,72 @@ What is ROA REST?
 
 \begin_layout Standard
 Resource oriented architecture is a set of rules that sit on top of REST.
- We again turn to Wikipedia for a definition:
+ 
+\end_layout
+
+\begin_layout Section
+Compare XML-RPC to ROA
+\end_layout
+
+\begin_layout Standard
+XML-RPC is this, ROA is that.
+\end_layout
+
+\begin_layout Section
+Set up the example, explain what we're going to do
+\end_layout
+
+\begin_layout Standard
+Something without authentication.
+ Add
+\end_layout
+
+\begin_layout Section
+Write the pattern matching code to intercept
+\end_layout
+
+\begin_layout Standard
+RestAPI.scala code
+\end_layout
+
+\begin_layout Section
+Add the dispatch to Boot
+\end_layout
+
+\begin_layout Standard
+Boot.scala code
+\end_layout
+
+\begin_layout Section
+Write a helper for the model, toXML
+\end_layout
+
+\begin_layout Standard
+model.scala code
+\end_layout
+
+\begin_layout Section
+Show a GET Request and Response
+\end_layout
+
+\begin_layout Standard
+<xml>fjaklsdjfds
+\end_layout
+
+\begin_layout Section
+Show a PUT Request and Response
+\end_layout
+
+\begin_layout Standard
+<xml> boadfdf
+\end_layout
+
+\begin_layout Section
+Recap
+\end_layout
+
+\begin_layout Standard
+We did some awesome stuff and built a simple ReST API
 \end_layout
 
 \end_body
