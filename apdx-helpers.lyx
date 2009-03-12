@@ -54,8 +54,11 @@ Introduction
 Lift provides a a pretty consistent collection of helper artifacts.
  The helpers are essentially utility functions that helps you avoid boilerplate
  code.
- Hence it isimportant to be aware what is provided by Lift already for you
- to use so you wont have to spend time coding something that already exists.
+ Hence it is important to be aware what is provided by Lift already for
+ you to use so you wont have to spend time coding something that already
+ exists.
+ We won;t be detailing here every single helper or helper function as you
+ can easily discover them and enjoy using them in your applciation.
 \end_layout
 
 \begin_layout Standard
@@ -879,7 +882,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 ActorPing examples
 \end_layout
 
@@ -957,7 +959,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 ClassHelper examples
 \end_layout
 
@@ -1058,7 +1059,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Expressiom example
 \end_layout
 
@@ -1116,7 +1116,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 CodeHelpers example
 \end_layout
 
@@ -1212,7 +1211,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 ControlHelpers examples
 \end_layout
 
@@ -1227,6 +1225,74 @@ ControlHelpers examples
 
 \begin_layout Plain Layout
 
+tryo {
+\end_layout
+
+\begin_layout Plain Layout
+
+  // code here.
+ Any exception thrown here will be silently caught
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+ 
+\end_layout
+
+\begin_layout Plain Layout
+
+tryo((e: Throwable) => println(e)) {
+\end_layout
+
+\begin_layout Plain Layout
+
+  // code here.
+ Any exception here willbe caught add passed to the above function.
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+tryo(List(classOf[ClassNotFoundException], classOf[IOException])) {
+\end_layout
+
+\begin_layout Plain Layout
+
+  // code here.
+ If IOException or ClassNotFoundException is thrown (or a subclass of the
+ two) they will be ignored.
+ Any other
+\end_layout
+
+\begin_layout Plain Layout
+
+  // exception will be rethrown.
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
 \end_layout
 
 \end_inset
@@ -1234,73 +1300,611 @@ ControlHelpers examples
 
 \end_layout
 
-\begin_layout Subsection
-Time/date formatting
+\begin_layout Section
+CSSHelpers
 \end_layout
 
 \begin_layout Standard
-Various time span and general convenience functions.
-\end_layout
-
-\begin_layout Subsection
-String formatting and utilities
-\end_layout
-
-\begin_layout Standard
-Capitailize, spliting, parsing strings to numbers, cleaning non-standard
- chars.
-\end_layout
-
-\begin_layout Subsection
-Encryption and hashing
+This provide a convenient functionality to fix relative root paths in CSS
+ (Cascade Stylesheet) files.
+ Here is an example:
 \end_layout
 
 \begin_layout Standard
-Blowfish en/decrypt, md5, sha256, hexEncode
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+CSSHelper example
 \end_layout
 
-\begin_layout Subsection
-List helpers
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+Assume this entry in a CSS file:
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+.boxStyle {
+\end_layout
+
+\begin_layout Plain Layout
+
+  background-image: url('/img/bkg.png')
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+//in your code you can say
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+CSSHelpers.fixCSS(reader, 
+\begin_inset Quotes eld
+\end_inset
+
+/myliftapp
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// where reader is a java.io.Reader that provides the content of the CSS file.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
-Rotation, enumsToList, join, or
-\end_layout
+Now if your application is not deployed in the ROOT context path (
+\begin_inset Quotes eld
+\end_inset
 
-\begin_layout Subsection
-Binding
+/
+\begin_inset Quotes erd
+\end_inset
+
+) and say it is deployed with the context root /myliftapp then the background
+ picture will probably notbe found.
+ Say 
+\family typewriter
+http://my.domain.com/img/bkg.png
+\family default
+ is an unknown path.
+ However 
+\family typewriter
+http://my.domain.com/
+\bar under
+myliftapp
+\bar default
+/img/bkg.png 
+\family default
+is known.
+ In the example above we are calling fixCSS so that it will automatically
+ replace the root relative paths such that 
+\family typewriter
+background-image: url('/img/bkg.png')
+\family default
+ becomes 
+\family typewriter
+background-image: url('/myliftapp/img/bkg.png')
+\family default
+.
+ To use that in your lift application you can do:
 \end_layout
 
 \begin_layout Standard
-Binding for templates
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+fixCSS example
 \end_layout
 
-\begin_layout Subsection
-URL modification
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def boot(){
+\end_layout
+
+\begin_layout Plain Layout
+
+    ...
+\end_layout
+
+\begin_layout Plain Layout
+
+	LiftRules.fixCSS("styles" :: "theme" :: Nil, Empty)
+\end_layout
+
+\begin_layout Plain Layout
+
+    ...
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
-encode, decode, add params, check appropriate file extensions.
-\end_layout
-
-\begin_layout Subsection
-IO Helpers
+When the 
+\family typewriter
+/styles/theme.css
+\family default
+ file Lift will apply the prefix specified.
+ But in this case we provodided an Empty Box.
+ This actually means that Lift will apply the context path rturned by 
+\family typewriter
+S.contextPath 
+\family default
+function which as you know return the context path from the 
+\family typewriter
+HttpSession
+\family default
+.
 \end_layout
 
 \begin_layout Standard
-Reading files and Streams, executing files
-\end_layout
-
-\begin_layout Subsection
-tryo wrappers
+Internally when you call 
+\family typewriter
+fixCSS
+\family default
+ a dispatch function is automatically created and prepended to 
+\family typewriter
+LiftRules.dispatch
+\family default
+.
+ This is needed in order to intercept the broser reqiest to this .css resource.
+ Also internally we are telling Lift the this resource must be server by
+ Lift and not by container.
+ 
 \end_layout
 
 \begin_layout Standard
-Addition to try blocks, allows the developer to ignore certain exceptions.
+The way it works internally is that we are using Scala combinator parsers
+ to augment only the root relative paths with the given prefix.
 \end_layout
 
-\begin_layout Subsection
-Regular Expressions
+\begin_layout Section
+HttpHelpers
+\end_layout
+
+\begin_layout Standard
+This provides helper functions for HTTP parameters manipulation, URL encoding/de
+coding etc.
+ 
+\end_layout
+
+\begin_layout Section
+JSON
+\end_layout
+
+\begin_layout Standard
+Lift provides its own JSON parser if you ever need one.
+ At a first glance it may be a bit rendundant with Scala's JSON parser but
+ infact Scala'sparser has its own problems with large JSON objects hence
+ List's uses its own JSON parser implemented of course using combinator
+ parsers.
+\end_layout
+
+\begin_layout Section
+LD
+\end_layout
+
+\begin_layout Standard
+Provides utility functions for calculating the distance between words 
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+http://en.wikipedia.org/wiki/Levenshtein_distance
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+ListHelpers
+\end_layout
+
+\begin_layout Standard
+Provides utility functions for manipulating lists that are not provided
+ by Scala libraries.
+\end_layout
+
+\begin_layout Section
+Log
+\end_layout
+
+\begin_layout Standard
+Used to abstract the logging.
+ It provides functions like:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Log example
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+ ...
+\end_layout
+
+\begin_layout Plain Layout
+
+ def trace(msg: => AnyRef)
+\end_layout
+
+\begin_layout Plain Layout
+
+ def debug(msg: => AnyRef) 
+\end_layout
+
+\begin_layout Plain Layout
+
+ def error(msg: => AnyRef)
+\end_layout
+
+\begin_layout Plain Layout
+
+ ...
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+By default it uses Log4J logger but you an of course provideay other implementat
+ion.
+ See 
+\family typewriter
+LogBoot.loggerByName
+\family default
+ variable.
+ 
+\end_layout
+
+\begin_layout Standard
+It is important to note that each logger function does not take a value
+ as parameter but instead a call-by-name function.
+ Normally if we use Log4J's 
+\family typewriter
+log.error(
+\begin_inset Quotes eld
+\end_inset
+
+Message
+\begin_inset Quotes erd
+\end_inset
+
+)
+\family default
+ even if the error log is not enabled the function parameters are still
+ computed.
+ In large applications this may consume quite considerable amount of time.
+ However in Lift's case if we are calling 
+\family typewriter
+Log.error(
+\begin_inset Quotes eld
+\end_inset
+
+message
+\begin_inset Quotes erd
+\end_inset
+
+)
+\family default
+ the parameter is lazily evaluated and it will be evaluated ONLY IF the
+ error logger is enabled.
+ This is extremely useful as we don't have to wrap the logging calls like
+ 
+\family typewriter
+if (log.isErrorEnabled()) {log.error(
+\begin_inset Quotes eld
+\end_inset
+
+Message
+\begin_inset Quotes erd
+\end_inset
+
+)}
+\family default
+.
+\end_layout
+
+\begin_layout Section
+Mailer
+\end_layout
+
+\begin_layout Standard
+Utility class that allows you to send emails.
+ Example:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Mailer example
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+Mailer.sendMail(
+\begin_inset Quotes eld
+\end_inset
+
+john.doe@domain.com
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+jane.doe@domain.com
+\begin_inset Quotes erd
+\end_inset
+
+, PlainMailBodyType(
+\begin_inset Quotes eld
+\end_inset
+
+Honey, I'm comming home !
+\begin_inset Quotes erd
+\end_inset
+
+))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Note that the call to sendMail is asynchronous.
+\end_layout
+
+\begin_layout Section
+NamedPartialFunctions
+\end_layout
+
+\begin_layout Standard
+Provides extremly useful functions for invoking partial functions that are
+ chained in lists of functions.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+NamedPF exmaple
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+var f1: PartialFunction[Int,Int] = {
+\end_layout
+
+\begin_layout Plain Layout
+
+  case 10 => 11
+\end_layout
+
+\begin_layout Plain Layout
+
+  case 12 => 14
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+var f2: PartialFunction[Int,Int] = {
+\end_layout
+
+\begin_layout Plain Layout
+
+  case 20 => 11
+\end_layout
+
+\begin_layout Plain Layout
+
+  case 22 => 14
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+NamedPF(10, f1 :: f2 :: Nil)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Remember that many LiftRules variable are RuleSeq-s.
+ Meaning that most of the times we re talking about lists of partial functions.
+ Hence internally lift uses NamedPF for invoking such functions that ultimatelly
+ are provided by the user.
+ Please see 
+\family typewriter
+LiftRules.dispatch
+\end_layout
+
+\begin_layout Section
+SecurityHelpers
+\end_layout
+
+\begin_layout Standard
+Provides various functions used for random number generation, encryption/decript
+ions (blowfish), hash calculations (MD5, SHA, SHA-256) and so on.
+\end_layout
+
+\begin_layout Section
+TimeHelpers
+\end_layout
+
+\begin_layout Standard
+Utility functions for time operations.
+ For instance if also provides a set of implicit converion functions thatallow
+ you to type 
+\begin_inset Quotes eld
+\end_inset
+
+10 seconds
+\begin_inset Quotes erd
+\end_inset
+
+ and returns the value in milliseconds.
+ 
 \end_layout
 
 \end_body
