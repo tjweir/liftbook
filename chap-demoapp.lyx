@@ -43,7 +43,7 @@
 \begin_body
 
 \begin_layout Chapter
-Demo Application: PocketChange 
+PocketChange
 \end_layout
 
 \begin_layout Standard
@@ -94,24 +94,22 @@ The PocketChange App
 PocketChange will track your expenses, keep a running total of what you've
  spent, allow you to organize by tags, and visualize the data.
  During the later chapters of the book we'll add a few fun features such
- as AJAX charting and allowing multiple people per account (with COMET update
+ as AJAX charting and allowing multiple people per account (with Comet update
  of entries).
  Above all, we want to keep the interface lean, mean and clean.
 \end_layout
 
 \begin_layout Standard
-We're going to be using the MVC
-\begin_inset Foot
-status open
-
-\begin_layout Plain Layout
-Model-View-Controller; more at XXX
-\end_layout
-
-\end_inset
-
+We're going to be using the 
+\emph on
+View First
+\emph default
  pattern for the design of our app, since Lift's separation of presentation
- and logic via templating, views, and snippets lends itself to MVC so well.
+ and logic via templating, views, and snippets lends itself to 
+\emph on
+View First
+\emph default
+ so well.
  For an excellent article on the design decisions behind Lift's approach
  to templating and logic, read David Pollak's 
 \emph on
@@ -658,7 +656,7 @@ head
 \family typewriter
 head
 \family default
- elemend of the master template.
+ element of the master template.
  The 
 \family typewriter
 <lift:HomePage.summary>
@@ -779,7 +777,7 @@ name "lst:The-welcome-template"
 
 \begin_layout Plain Layout
 
-    	<h2>Summary of accounts:</h2>
+        <h2>Summary of accounts:</h2>
 \end_layout
 
 \begin_layout Plain Layout
@@ -789,12 +787,12 @@ name "lst:The-welcome-template"
 
 \begin_layout Plain Layout
 
-	      <acct:name /> : <acct:balance /> <br/>
+          <acct:name /> : <acct:balance /> <br/>
 \end_layout
 
 \begin_layout Plain Layout
 
-	    </account:entry>
+        </account:entry>
 \end_layout
 
 \begin_layout Plain Layout
@@ -935,8 +933,14 @@ reference "lst:Defining-the-summary-snippet"
 \end_inset
 
 .
- We've skipped the standard Lift imports (section XXX) to save space, but
- we've specifically imported 
+ We've skipped the standard Lift imports (listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Standard-import-statements"
+
+\end_inset
+
+) to save space, but we've specifically imported 
 \family typewriter
 java.util.Date
 \family default
@@ -1019,22 +1023,22 @@ class HomePage {
 
 \begin_layout Plain Layout
 
-	    case Nil => Text("You have no accounts set up") 
+        case Nil => Text("You have no accounts set up") 
 \end_layout
 
 \begin_layout Plain Layout
 
-	    case accounts => accounts.flatMap({account => 
+        case accounts => accounts.flatMap({account => 
 \end_layout
 
 \begin_layout Plain Layout
 
-	      bind("acct", chooseTemplate("account", "entry", xhtml),
+          bind("acct", chooseTemplate("account", "entry", xhtml),
 \end_layout
 
 \begin_layout Plain Layout
 
-	           "name" -> <a href={"/account/" + account.name.is}>
+               "name" -> <a href={"/account/" + account.name.is}>
 \end_layout
 
 \begin_layout Plain Layout
@@ -1044,12 +1048,12 @@ class HomePage {
 
 \begin_layout Plain Layout
 
-	           "balance" -> Text(account.balance.toString))
+               "balance" -> Text(account.balance.toString))
 \end_layout
 
 \begin_layout Plain Layout
 
-	    })
+        })
 \end_layout
 
 \begin_layout Plain Layout
@@ -1188,6 +1192,7 @@ select
 
 \begin_layout Standard
 \begin_inset listings
+lstparams "tabsize=4"
 inline false
 status open
 
@@ -1330,7 +1335,7 @@ class AddEntry extends StatefulSnippet {
 
 \begin_layout Plain Layout
 
-	if (tags.trim.length == 0) 
+    if (tags.trim.length == 0) 
 \end_layout
 
 \begin_layout Plain Layout
@@ -1340,7 +1345,7 @@ class AddEntry extends StatefulSnippet {
 
 \begin_layout Plain Layout
 
-	else {
+    else {
 \end_layout
 
 \begin_layout Plain Layout
@@ -1350,17 +1355,17 @@ class AddEntry extends StatefulSnippet {
 
 \begin_layout Plain Layout
 
-	 val entryDate = Util.slashDate.parse(date)
+     val entryDate = Util.slashDate.parse(date)
 \end_layout
 
 \begin_layout Plain Layout
 
-	 val amount = BigDecimal(value)
+     val amount = BigDecimal(value)
 \end_layout
 
 \begin_layout Plain Layout
 
-	 val currentAccount = Account.find(account).open_!
+     val currentAccount = Account.find(account).open_!
 \end_layout
 
 \begin_layout Plain Layout
@@ -1522,7 +1527,7 @@ class AddEntry extends StatefulSnippet {
 
 \begin_layout Plain Layout
 
-	    "account" -> select(allAccounts, Empty,
+        "account" -> select(allAccounts, Empty,
 \end_layout
 
 \begin_layout Plain Layout
@@ -1532,7 +1537,7 @@ class AddEntry extends StatefulSnippet {
 
 \begin_layout Plain Layout
 
-	    "dateOf" -> text(Util.slashDate.format(new Date()).toString,
+        "dateOf" -> text(Util.slashDate.format(new Date()).toString,
 \end_layout
 
 \begin_layout Plain Layout
@@ -1547,17 +1552,17 @@ class AddEntry extends StatefulSnippet {
 
 \begin_layout Plain Layout
 
-	    "desc" -> text("Item Description", desc = _),
+        "desc" -> text("Item Description", desc = _),
 \end_layout
 
 \begin_layout Plain Layout
 
-	    "value" -> text("Value", value = _),
+        "value" -> text("Value", value = _),
 \end_layout
 
 \begin_layout Plain Layout
 
-	    "tags" -> text(tags, doTagsAndSubmit))
+        "tags" -> text(tags, doTagsAndSubmit))
 \end_layout
 
 \begin_layout Plain Layout
@@ -1627,7 +1632,7 @@ Accounts.detail
 
 \begin_layout Standard
 \begin_inset listings
-lstparams "language=XML"
+lstparams "language=XML,tabsize=4"
 inline false
 status open
 
@@ -1636,7 +1641,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Displaying an Expense table
 \begin_inset CommandInset label
 LatexCommand label
@@ -1704,7 +1708,7 @@ name "lst:Displaying-an-Expense-table"
 
 \begin_layout Plain Layout
 
-	           <th>End Date</th><td><acct:endDate /></td></tr>
+               <th>End Date</th><td><acct:endDate /></td></tr>
 \end_layout
 
 \begin_layout Plain Layout
@@ -1781,7 +1785,7 @@ reference "lst:Embedded-Expense-table"
 
 \begin_layout Standard
 \begin_inset listings
-lstparams "language=XML"
+lstparams "language=XML,tabsize=4"
 inline false
 status open
 
@@ -1790,7 +1794,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Embedded Expense table
 \begin_inset CommandInset label
 LatexCommand label
@@ -1808,7 +1811,7 @@ name "lst:Embedded-Expense-table"
 
 \begin_layout Plain Layout
 
-<table id="" class="" border="0" cellpadding="0" cellspacing="1" 
+<table class="" border="0" cellpadding="0" cellspacing="1" 
 \end_layout
 
 \begin_layout Plain Layout
@@ -1863,7 +1866,7 @@ name "lst:Embedded-Expense-table"
 
 \begin_layout Plain Layout
 
-	<tr><td><entry:date /></td><td><entry:desc /></td>
+    <tr><td><entry:date /></td><td><entry:desc /></td>
 \end_layout
 
 \begin_layout Plain Layout
@@ -1878,7 +1881,7 @@ name "lst:Embedded-Expense-table"
 
 \begin_layout Plain Layout
 
-	</tr>
+    </tr>
 \end_layout
 
 \begin_layout Plain Layout
@@ -1947,7 +1950,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 The table helper function
 \begin_inset CommandInset label
 LatexCommand label
@@ -1965,52 +1967,52 @@ name "lst:The-table-helper-function"
 
 \begin_layout Plain Layout
 
-  def buildExpenseTable(entries : List[Expense], template : NodeSeq) = {
+def buildExpenseTable(entries : List[Expense], template : NodeSeq) = {
 \end_layout
 
 \begin_layout Plain Layout
 
-    entries.flatMap({ entry =>
+  entries.flatMap({ entry =>
 \end_layout
 
 \begin_layout Plain Layout
 
-      bind("entry", chooseTemplate("acct", "tableEntry", template),
+    bind("entry", chooseTemplate("acct", "tableEntry", template),
 \end_layout
 
 \begin_layout Plain Layout
 
-	   "date" -> Text(Util.slashDate.format(entry.dateOf.is)),
+         "date" -> Text(Util.slashDate.format(entry.dateOf.is)),
 \end_layout
 
 \begin_layout Plain Layout
 
-	   "desc" -> Text(entry.description.is),
+         "desc" -> Text(entry.description.is),
 \end_layout
 
 \begin_layout Plain Layout
 
-	   "tags" -> Text(entry.tags.map(_.tag.is).mkString(", ")),
+         "tags" -> Text(entry.tags.map(_.tag.is).mkString(", ")),
 \end_layout
 
 \begin_layout Plain Layout
 
-	   "amt" -> Text(entry.amount.toString),
+         "amt" -> Text(entry.amount.toString),
 \end_layout
 
 \begin_layout Plain Layout
 
-	   "balance" -> Text(entry.currentBalance.toString))
+         "balance" -> Text(entry.currentBalance.toString))
 \end_layout
 
 \begin_layout Plain Layout
 
-		    })
+ })
 \end_layout
 
 \begin_layout Plain Layout
 
-  }
+}
 \end_layout
 
 \end_inset
@@ -2044,7 +2046,7 @@ updateStartDate
 \family typewriter
 updateEndDate
 \family default
- closures, and the Ajax form fields that we define.
+ closures, as well as the Ajax form fields that we define.
  The only magic we have to use is the 
 \family typewriter
 SHtml.ajaxText
@@ -2065,7 +2067,7 @@ lly update our Expense table when you set the start or end dates!
 
 \begin_layout Standard
 \begin_inset listings
-lstparams "float"
+lstparams "float,tabsize=4"
 inline false
 status open
 
@@ -2074,7 +2076,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Our Ajax snippet
 \begin_inset CommandInset label
 LatexCommand label
@@ -2101,7 +2102,7 @@ package com.pocketchangeapp.snippet
 
 \begin_layout Plain Layout
 
-import ..
+import ...
  standard imports ...
 \end_layout
 
@@ -2243,32 +2244,32 @@ class Accounts {
 
 \begin_layout Plain Layout
 
-	 bind("acct", xhtml, 
+     bind("acct", xhtml, 
 \end_layout
 
 \begin_layout Plain Layout
 
-	      "name" -> acct.name.asHtml,
+          "name" -> acct.name.asHtml,
 \end_layout
 
 \begin_layout Plain Layout
 
-	      "balance" -> acct.balance.asHtml,
+          "balance" -> acct.balance.asHtml,
 \end_layout
 
 \begin_layout Plain Layout
 
-	      "startDate" -> SHtml.ajaxText("", updateStartDate),
+          "startDate" -> SHtml.ajaxText("", updateStartDate),
 \end_layout
 
 \begin_layout Plain Layout
 
-	      "endDate" -> SHtml.ajaxText("", updateEndDate),
+          "endDate" -> SHtml.ajaxText("", updateEndDate),
 \end_layout
 
 \begin_layout Plain Layout
 
-	      "table" -> entryTable)
+          "table" -> entryTable)
 \end_layout
 
 \begin_layout Plain Layout
@@ -2330,6 +2331,7 @@ git clone
 status open
 
 \begin_layout Plain Layout
+
 git://github.com/tjweir/pocketchangeapp.git
 \end_layout
 
