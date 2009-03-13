@@ -319,7 +319,7 @@ mvn archetype:generate
 \end_layout
 
 \begin_layout LyX-Code
-  -DDremoteRepositories=http://scala-tools.org/repo-snapshots 
+  -DarchetypeRepository=http://scala-tools.org/repo-snapshots 
 \backslash
 
 \end_layout
@@ -2462,7 +2462,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Auto-flush methods
 \begin_inset CommandInset label
 LatexCommand label
@@ -2564,7 +2563,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Multiple JPA ops
 \begin_inset CommandInset label
 LatexCommand label
