@@ -43,7 +43,7 @@
 \begin_body
 
 \begin_layout Chapter
-Code Listings
+JPA Code Listings
 \begin_inset CommandInset label
 LatexCommand label
 name "cha:Code-Listings"
@@ -55,18 +55,7 @@ name "cha:Code-Listings"
 
 \begin_layout Standard
 To conserve space and preserve flow in the main text, we've placed full
- code listings in this appendix.
- Each listing is cross-referenced back to the section where it's used
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-TODO: reverse cross-ref
-\end_layout
-
-\end_inset
-
-.
+ code listings for the JPA chapter in this appendix.
 \end_layout
 
 \begin_layout Section
