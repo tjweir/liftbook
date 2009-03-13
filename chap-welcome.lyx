@@ -740,7 +740,7 @@ mvn archetype:generate -U
 \end_layout
 
 \begin_layout LyX-Code
-  -DarchetypeVersion=0.9 
+  -DarchetypeVersion=1.0 
 \backslash
 
 \end_layout
