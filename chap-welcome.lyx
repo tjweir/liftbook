@@ -148,15 +148,15 @@ MVC
 
  pattern
 \begin_inset Foot
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \begin_inset Flex URL
-status collapsed
+status open
 
 \begin_layout Plain Layout
 
-http://heim.ifi.uio.no/~trygver/1979/mvc-2/1979-12-MVC.pdf
+http://java.sun.com/blueprints/patterns/MVC.html
 \end_layout
 
 \end_inset
@@ -170,11 +170,11 @@ http://heim.ifi.uio.no/~trygver/1979/mvc-2/1979-12-MVC.pdf
  One of the original Java web application technologies that's still in use
  today is JSP, or Java Server Pages
 \begin_inset Foot
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \begin_inset Flex URL
-status collapsed
+status open
 
 \begin_layout Plain Layout
 
@@ -205,11 +205,11 @@ http://java.sun.com/products/jsp/
  any conceivable uses.
  To that end, Lift uses a powerful templating system, a la Wicket
 \begin_inset Foot
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \begin_inset Flex URL
-status collapsed
+status open
 
 \begin_layout Plain Layout
 
@@ -227,7 +227,7 @@ http://wicket.apache.org/
  Lift's templating is built on the XML processing capabilities of the Scala
  Language
 \begin_inset Foot
-status collapsed
+status open
 
 \begin_layout Plain Layout
 Not only does Scala have some extensive library support for XML, but XML
@@ -245,8 +245,8 @@ Not only does Scala have some extensive library support for XML, but XML
 \end_layout
 
 \begin_layout Standard
-Lift has another advantage that no other web framework currently shares:
- the Scala
+Lift has another advantage over many other web frameworks: it's designed
+ specifically to leverage the Scala
 \begin_inset Index
 status collapsed
 
@@ -259,15 +259,11 @@ Scala
  programming language.
  Scala is a relatively new language developed by Martin Odersky
 \begin_inset Foot
-status collapsed
+status open
 
 \begin_layout Plain Layout
-Martin wrote the original 
-\family typewriter
-javac
-\family default
- compiler for Sun, and more recently led the Pizza and GJ projects that
- eventually became Java Generics.
+Martin created the Pizza programming language, which led to the Generic
+ Java (GJ) project that was eventually incorporated into Java 1.5.
  His home page is at 
 \begin_inset Flex URL
 status collapsed
@@ -284,7 +280,7 @@ http://lamp.epfl.ch/~odersky/
 
 \end_inset
 
- and his group at EPFL Switzerland.
+ and his programming language research group at EPFL Switzerland.
  It compiles to Java bytecode and runs on the JVM, which means that you
  can leverage the vast ecosystem of Java libraries just as you would with
  any other java web framework.
@@ -293,7 +289,7 @@ http://lamp.epfl.ch/~odersky/
  Among these features are an extremely rich type system along with powerful
  type inference, native XML processing, full support for closures and functions
  as objects, and an extensive high-level library.
- The power of the type system along with its type inferencing has led people
+ The power of the type system along with its type inference has led people
  to call it 
 \begin_inset Quotes eld
 \end_inset
@@ -330,8 +326,9 @@ http://scala-blogs.org/2007/12/scala-statically-typed-dynamic-language.html
  you can get the power of the higher-level functional (or FP) languages
  (such as Haskell, Scheme, etc) while retaining the modularity and reusability
  of OO components.
- In particular, the FP concept of immutability is well represented in Scala,
- and is one of the simplest means to high throughput scalability.
+ In particular, the FP concept of immutability is encouraged by Scala, making
+ it well-suited for writing highly concurrent programs that achieve high
+ throughput scalability.
  The hybrid model also means that if you haven't touched FP before, you
  can gradually ease into it.
  In our experience, Scala allows you to do more in Lift with less lines
@@ -341,35 +338,34 @@ http://scala-blogs.org/2007/12/scala-statically-typed-dynamic-language.html
 \begin_layout Standard
 Lift strives to encompass advanced features in a very concise and straightforwar
 d manner.
- Lift's powerful support for AJAX and COMET allow you to use Web 2.0 features
+ Lift's powerful support for AJAX and Comet allow you to use Web 2.0 features
  with very little effort.
  Lift leverages Scala's Actor library to provide a message-driven framework
- for COMET updates.
- In most cases, adding COMET support to a page just involves extending a
+ for Comet updates.
+ In most cases, adding Comet support to a page just involves extending a
  trait
 \begin_inset Foot
-status collapsed
+status open
 
 \begin_layout Plain Layout
-A trait is a Scala construct that's essentially like a Java interface.
- The main difference is that traits are allowed to provide method bodies
- and may have variables.
+A trait is a Scala construct that's almost like a Java interface.
+ The main difference is that traits may implement methods and have fields
 \end_layout
 
 \end_inset
 
  to define the rendering method of your page and adding an extra function
  call to your links to dispatch the update message; Lift handles all of
- the backend and page-side coding to effect the COMET polling.
+ the backend and page-side coding to effect the Comet polling.
  AJAX support includes special handlers for doing AJAX form submission via
  JSON, and almost any link function can easily be turned into an AJAX version
  with a few keystrokes.
- In order to preform all of this client-side goodness, Lift has a class
+ In order to perform all of this client-side goodness, Lift has a class
  hierarchy for encapsulating Javascript calls via direct Javascript, jQuery
  and YUI.
  The nice part is that you, too, can utilize these support classes so that
- you can generate the code and don't have to put Javascript logic into your
- templates.
+ code can be generated for you and you don't have to put Javascript logic
+ into your templates.
 \end_layout
 
 \begin_layout Section
@@ -768,7 +764,7 @@ mvn archetype:generate -U
 \end_layout
 
 \begin_layout Standard
-Maven should output several page's worth of text.
+Maven should output several page's of text.
  It may stop and ask you to confirm the properties configuration, in which
  case you can just hit 
 \family typewriter
@@ -884,7 +880,8 @@ test/
 \family typewriter
 src/main/webapp/
 \family default
- in your project directory Here's the 
+ in your project directory.
+ Here's the 
 \family typewriter
 index.html
 \family default
@@ -939,9 +936,13 @@ In our case we have two elements in use:
 \family typewriter
 <lift:surround>
 \family default
- and 
+ and
 \family typewriter
-<lift:helloWorld.howdy/>
+
+\begin_inset Newline linebreak
+\end_inset
+
+<lift:helloWorld.howdy />
 \family default
 .
  Lift assigns special meaning to elements that use the 
@@ -1040,7 +1041,7 @@ binding
 \family typewriter
 <lift:helloWorld.howdy/>
 \family default
- element, let's recurse and look at the default template.
+ element, let's look at the default template.
  You can find it in the 
 \family typewriter
 templates-hidden
@@ -1248,7 +1249,7 @@ reference "cha:SiteMap"
 \begin_layout Enumerate
 The 
 \family typewriter
-<lift:msgs/>
+<lift:msgs />
 \family default
  element allows Lift (or your code) to display messages on a page as it's
  rendered.
@@ -1260,7 +1261,7 @@ The
 \begin_layout Standard
 Now let's look back at the 
 \family typewriter
-<lift:helloWorld.howdy/>
+<lift:helloWorld.howdy />
 \family default
  element from the 
 \family typewriter
@@ -1490,7 +1491,17 @@ class Boot {
 
 \begin_layout Plain Layout
 
-    val entries = Menu(Loc("Home", "/", "Home")) :: Nil 
+    val entries = 
+\end_layout
+
+\begin_layout Plain Layout
+
+      Menu(Loc("Home", List("index"), "Home")) :: 
+\end_layout
+
+\begin_layout Plain Layout
+
+      Nil 
 \end_layout
 
 \begin_layout Plain Layout
@@ -1611,7 +1622,7 @@ reference "cha:mapper_and_record"
 \end_layout
 
 \begin_layout Itemize
-Advanced AJAX and COMET support in Lift for Web 2.0 style applications
+Advanced AJAX and Comet support in Lift for Web 2.0 style applications
 \end_layout
 
 \begin_layout Standard

@@ -1324,7 +1324,8 @@ RequestVar
  interface to obtain the EM via local lookup (i.e.
  via the 
 \family typewriter
-javax.persistence.Persistence
+javax.persistence.\SpecialChar \-
+Persistence
 \family default
  class), as shown in listing 
 \begin_inset CommandInset ref
@@ -1702,7 +1703,11 @@ iver"/>
 \begin_layout Standard
 One final note in regard to transactions is how they're affected by Exceptions.
  Per the spec, any exceptions thrown during the scope of a transaction,
- other than 
+ other than
+\begin_inset Newline linebreak
+\end_inset
+
+
 \family typewriter
 javax.persistence.NoResultException
 \family default
@@ -2316,7 +2321,7 @@ Positional
 parameters 
 \family typewriter
 select user from User where (user.name like ? or user.email like ?) and user.widget
-s > :widgetCount
+s > ?
 \end_layout
 
 \begin_layout Standard
@@ -2449,9 +2454,20 @@ It's important to understand that in JPA the provider isn't required to
  Using the flush method forces the provider to write any pending changes
  to the database and immediately throw any exceptions resulting from any
  violations.
- As a convenience, we've written the mergeAndFlush, persisteAndFlush, and
- removeAndFlush methods to do persist, merge and remove with a subsequent
- flush, as shown in listing 
+ As a convenience, we've written the 
+\family typewriter
+mergeAndFlush
+\family default
+, 
+\family typewriter
+persistAndFlush
+\family default
+, and 
+\family typewriter
+removeAndFlush
+\family default
+ methods to do persist, merge and remove with a subsequent flush, as shown
+ in listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Auto-flush-methods"

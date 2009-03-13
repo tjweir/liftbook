@@ -1,4 +1,4 @@
-#LyX 1.6.0 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -57,7 +57,7 @@ Lift provides a a pretty consistent collection of helper artifacts.
  Hence it is important to be aware what is provided by Lift already for
  you to use so you wont have to spend time coding something that already
  exists.
- We won;t be detailing here every single helper or helper function as you
+ We won't be detailing here every single helper or helper function as you
  can easily discover them and enjoy using them in your applciation.
 \end_layout
 
@@ -1320,7 +1320,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 CSSHelper example
 \end_layout
 
@@ -1449,7 +1448,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 fixCSS example
 \end_layout
 
@@ -1719,7 +1717,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Mailer example
 \end_layout
 
@@ -1794,7 +1791,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 NamedPF exmaple
 \end_layout
 

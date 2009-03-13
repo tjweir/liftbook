@@ -68,7 +68,7 @@ name "cha:Maven"
 In this chapter we'll discuss the Maven build tool and some of the basics
  of configuration and usage.
  Maven is what Lift uses for build management, so becoming acquainted with
- with Maven is important to getting the most out of Lift.
+ Maven is important to getting the most out of Lift.
  If you're already familiar with Maven you can safely skip this chapter.
  
 \end_layout
@@ -1105,7 +1105,7 @@ zed layout for projects.
 \begin_layout Description
 <application_root>/src/main/scala This directory is where you place your
  Scala source, such as snippets, model objects, and any libraries you write.
- The subfolder structure follows the traditional Java packaging style
+ The subfolder structure follows the traditional Java packaging style.
 \end_layout
 
 \begin_layout Description
@@ -1113,7 +1113,7 @@ zed layout for projects.
  your application, such as images, XHTML templates, JavaScript and CSS are
  placed under this directory.
  This directory is essentially what is packaged into the WAR in addition
- to the output from your Scala sources
+ to the output from your Scala sources.
 \end_layout
 
 \begin_layout Description
@@ -1134,7 +1134,7 @@ reference "sub:embed-tag"
 \end_inset
 
 , templates placed in this directory cannot be viewed directly by clients,
- but are available to other templates
+ but are available to other templates.
 \end_layout
 
 \begin_layout Description
@@ -1144,7 +1144,7 @@ reference "sub:embed-tag"
 \family typewriter
 src/main/scala
 \family default
-, the subfolder structure follows the traditional Java packaging style
+, the subfolder structure follows the traditional Java packaging style.
 \end_layout
 
 \end_body

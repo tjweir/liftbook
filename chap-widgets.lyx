@@ -571,7 +571,7 @@ class CalendarMonthViewDemo {
 
 \begin_layout Plain Layout
 
-	bind("cal", html,
+    bind("cal", html,
 \end_layout
 
 \begin_layout Plain Layout
@@ -831,23 +831,7 @@ val itemClick = Full(
 
 \begin_layout Plain Layout
 
-  AnonFunc(
-\begin_inset Quotes eld
-\end_inset
-
-elem, param
-\begin_inset Quotes erd
-\end_inset
-
-, JsRaw(
-\begin_inset Quotes eld
-\end_inset
-
-alert(elem);
-\begin_inset Quotes erd
-\end_inset
-
-)
+  AnonFunc("elem, param", JsRaw("alert(elem);")
 \end_layout
 
 \end_inset
@@ -964,47 +948,47 @@ class CalendarWeekViewDemo {
 
 \begin_layout Plain Layout
 
-	val c = Calendar getInstance;
+  val c = Calendar.getInstance
 \end_layout
 
 \begin_layout Plain Layout
 
-	c.set(DAY_OF_MONTH, 17)
+  c.set(DAY_OF_MONTH, 17)
 \end_layout
 
 \begin_layout Plain Layout
 
-	c.set(MONTH, 4)
+  c.set(MONTH, 4)
 \end_layout
 
 \begin_layout Plain Layout
 
-    bind("cal", html,
+  bind("cal", html,
 \end_layout
 
 \begin_layout Plain Layout
 
-         "widget" -> CalendarWeekView(c, 
+       "widget" -> CalendarWeekView(c, 
 \end_layout
 
 \begin_layout Plain Layout
 
-                WeekViewMeta(MONDAY, Locale.getDefault()),
+         WeekViewMeta(MONDAY, Locale.getDefault()),
 \end_layout
 
 \begin_layout Plain Layout
 
-                list,
+         list,
 \end_layout
 
 \begin_layout Plain Layout
 
-                itemClick))
+         itemClick))
 \end_layout
 
 \begin_layout Plain Layout
 
-  }
+ }
 \end_layout
 
 \begin_layout Plain Layout
@@ -1105,7 +1089,7 @@ class CalendarDayViewDemo {
 
 \begin_layout Plain Layout
 
-   val c = Calendar getInstance;
+   val c = Calendar.getInstance
 \end_layout
 
 \begin_layout Plain Layout
@@ -1706,7 +1690,7 @@ Lone child
 \begin_inset Quotes erd
 \end_inset
 
-) : Nil) ::
+) :: Nil) ::
 \end_layout
 
 \begin_layout Plain Layout
@@ -1941,7 +1925,7 @@ reference "fig:Sparklines-bar-chart"
 id
 \family default
  attribute that will be used by the widget for its content.
- In our example weprovide a JsArray (an abstracted JavaScript array) with
+ In our example we provide a JsArray (an abstracted JavaScript array) with
  our data, as well as a JSON object containing options for the chart
 \begin_inset Foot
 status collapsed
