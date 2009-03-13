@@ -1239,9 +1239,13 @@ reference "sec:Session-and-Request"
 status open
 
 \begin_layout Plain Layout
-\begin_inset CommandInset href
-LatexCommand href
-target "http://scala-tools.org/mvnsites-snapshots/scalajpa/"
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://scala-tools.org/mvnsites-snapshots/scalajpa/
+\end_layout
 
 \end_inset
 
@@ -1521,7 +1525,7 @@ Setting the transaction type
 
 \begin_layout Plain Layout
 
-  <non-jta-datasource>myDS</jta-datasource>
+  <jta-datasource>myDS</jta-datasource>
 \end_layout
 
 \end_inset
@@ -1806,9 +1810,14 @@ Model
 ScalaEntityManager
 \family default
  can be found at 
-\begin_inset CommandInset href
-LatexCommand href
-target "http://scala-tools.org/mvnsites/scalajpa/scaladocs/org/scala_libs/jpa/ScalaEntityManager.html"
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://scala-tools.org/mvnsites/scalajpa/scaladocs/org/scala_libs/jpa/ScalaEntity
+Manager.html
+\end_layout
 
 \end_inset
 
@@ -1821,9 +1830,14 @@ Next, we have the
 ScalaQuery
 \family default
  trait, with API docs at 
-\begin_inset CommandInset href
-LatexCommand href
-target "http://scala-tools.org/mvnsites/scalajpa/scaladocs/org/scala_libs/jpa/ScalaQuery.html"
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://scala-tools.org/mvnsites/scalajpa/scaladocs/org/scala_libs/jpa/ScalaQuery.h
+tml
+\end_layout
 
 \end_inset
 
