@@ -256,7 +256,72 @@ Write the pattern matching code to intercept
 \end_layout
 
 \begin_layout Standard
-RestAPI.scala code
+RestAPI.scala code:
+\end_layout
+
+\begin_layout LyX-Code
+object RestAPI extends XMLApiHelper { 
+\end_layout
+
+\begin_layout LyX-Code
+  val logger: Logger = Logger.getLogger("ca.tylerweir.api")
+\end_layout
+
+\begin_layout LyX-Code
+  
+\end_layout
+
+\begin_layout LyX-Code
+  logger.info("[REST] Up")
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+  def dispatch: LiftRules.DispatchPF = { 
+\end_layout
+
+\begin_layout LyX-Code
+    case Req("api" :: "user" :: user :: Nil, "", GetRequest) => () => showUser(u
+ser) 
+\end_layout
+
+\begin_layout LyX-Code
+    case r @ Req("api" :: "user" :: Nil, "", PutRequest) => () => addOrUpdateUse
+r(r)
+\end_layout
+
+\begin_layout LyX-Code
+    case Req("api" :: "scores" :: gid :: Nil, "", GetRequest) => () => listScore
+s(gid) 
+\end_layout
+
+\begin_layout LyX-Code
+    
+\end_layout
+
+\begin_layout LyX-Code
+    case Req("api" :: "scores" :: rid :: Nil, "", GetRequest) => () => showScore
+(sid) 
+\end_layout
+
+\begin_layout LyX-Code
+    case r @ Req("api" :: "scores" :: gid :: Nil, "", PutRequest) => ()
+ => addScore(gid, r)
+\end_layout
+
+\begin_layout LyX-Code
+    // Invalid API request 
+\end_layout
+
+\begin_layout LyX-Code
+    case Req("api" :: x :: Nil, "", _) => failure _ 
+\end_layout
+
+\begin_layout LyX-Code
+  }
 \end_layout
 
 \begin_layout Section
@@ -264,7 +329,51 @@ Add the dispatch to Boot
 \end_layout
 
 \begin_layout Standard
+As we discussed in chapter ??? Lift uses dispatch rules to route requests.
+ Since we'd like to sit on /api/ and handle all of the requests we're going
+ to need to update the dispatch rules.
+\end_layout
+
+\begin_layout Standard
+This is accomplished by adding the following code into Boot.scala:
+\end_layout
+
+\begin_layout Standard
 Boot.scala code
+\end_layout
+
+\begin_layout LyX-Code
+class Boot {
+\end_layout
+
+\begin_layout LyX-Code
+  def boot {
+\end_layout
+
+\begin_layout LyX-Code
+    ...
+\end_layout
+
+\begin_layout LyX-Code
+    LiftRules.dispatch.prepend(RestAPI.dispatch) 
+\end_layout
+
+\begin_layout LyX-Code
+    ...
+\end_layout
+
+\begin_layout LyX-Code
+  }
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout Standard
+In Section X.6 we defined the dispatch rule specific to our API.
+ Adding them then injects them into the Lift request pipeline and we'll
+ be able to handle the /api/ calls.
 \end_layout
 
 \begin_layout Section
@@ -296,7 +405,8 @@ Recap
 \end_layout
 
 \begin_layout Standard
-We did some awesome stuff and built a simple ReST API
+We did some awesome stuff and built a simple ReST API.
+ 
 \end_layout
 
 \end_body
