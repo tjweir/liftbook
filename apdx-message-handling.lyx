@@ -54,7 +54,7 @@ name "cha:Message-Handling"
 \end_layout
 
 \begin_layout Standard
-When we talk about message handling in Lift we're talking about how you
+When we talk about message handling in Lift, we're talking about how you
  provide feedback to the users of your application.
  While there are already a lot of mechanisms for displaying data to the
  user via snippets, views, etc, properly binding and setting up HTML-level
@@ -112,7 +112,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Using messages in form processing
 \begin_inset CommandInset label
 LatexCommand label
@@ -131,6 +130,10 @@ name "lst:Using-messages-in-forms"
 \begin_layout Plain Layout
 
 object data extends RequestVar[String]("")
+\end_layout
+
+\begin_layout Plain Layout
+
 \end_layout
 
 \begin_layout Plain Layout
@@ -281,7 +284,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Custom message labels
 \begin_inset CommandInset label
 LatexCommand label
@@ -362,7 +364,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Per-id messages
 \begin_inset CommandInset label
 LatexCommand label

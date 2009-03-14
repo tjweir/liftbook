@@ -277,7 +277,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Standard import statements
 \begin_inset CommandInset label
 LatexCommand label
@@ -295,12 +294,7 @@ name "lst:Standard-import-statements"
 
 \begin_layout Plain Layout
 
-import _root_.net.liftweb._
-\end_layout
-
-\begin_layout Plain Layout
-
-import http._
+import _root_.net.liftweb.http._
 \end_layout
 
 \begin_layout Plain Layout
@@ -310,7 +304,7 @@ import S._
 
 \begin_layout Plain Layout
 
-import util._
+import _root_.net.liftweb.util._
 \end_layout
 
 \begin_layout Plain Layout
@@ -917,7 +911,8 @@ Because Lift will implicitly search for suffixes, it's best to leave the
 \begin_layout Standard
 then Lift will use the appropriate template based on the user's requested
  language if a corresponding template is available.
- For more information regarding internationalization please see 
+ For more information regarding internationalization please see appendix
+ 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "cha:Internationalization"

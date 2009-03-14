@@ -125,7 +125,7 @@ CMP
 ) framework, which required many boilerplate artifacts in the form of interfaces
  and XML descriptors.
  As part of the overarching theme of EJB3 to simplify and use configuration
- by convention, JPA uses annotations
+ by convention, JPA uses sensible defaults and annotations
 \begin_inset Index
 status collapsed
 
@@ -137,7 +137,11 @@ annotations
 
  heavily, while allowing for targetted overrides of behavior via XML descriptors.
  JPA also does away with many of the interfaces used in CMP and provides
- a single EntityManager
+ a single 
+\family typewriter
+EntityManager
+\family default
+
 \begin_inset Index
 status collapsed
 
@@ -180,7 +184,11 @@ JPOX
 
 \end_inset
 
-, etc) provide standalone implementations of EntityManager.
+, etc) provide standalone implementations of 
+\family typewriter
+EntityManager
+\family default
+.
 \end_layout
 
 \begin_layout Standard
@@ -206,18 +214,11 @@ JPA is easily accessible from both Java and Scala.
 
 \begin_layout Enumerate
 JPA gives you more flexibility with complex and/or large schemas.
- While Lift's Record
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-TODO: is it Record or Mapper?
-\end_layout
-
-\end_inset
-
-provides most of the functionality you would need, JPA provides additional
- lifecycle methods and mapping controls when you have complex needs
+ While Lift's Mapper provides most of the functionality you would need,
+ JPA provides additional lifecycle methods and mapping controls when you
+ have complex needs.
+ Additionally, JPA has better support for joins and relationships between
+ entities.
 \end_layout
 
 \begin_layout Enumerate
@@ -225,21 +226,6 @@ JPA can provide additional performance improvements via second-level object
  caching.
  It's possible to roll your own in Lift, but JPA allows you to cache frequently-
 accessed objects in memory so that you avoid hitting the database entirely
-\end_layout
-
-\begin_layout Enumerate
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-May need to remove this if it's not true by printing
-\end_layout
-
-\end_inset
-
-JPA and Lift's Record are not mutually exclusive.
- You can use an adapter to allow Record to utilize JPA as the underlying
- provider, thus gaining the best of both worlds.
 \end_layout
 
 \begin_layout Section
@@ -320,83 +306,117 @@ master project
 
 \end_inset
 
- for Maven
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Will the Maven chapter have a section on master/module projects?
-\end_layout
-
-\end_inset
-
-.
+ for Maven.
  This project will have two modules under it, one for the JPA library and
  one for the Lift application.
- The only thing we actually need for the master project is the pom.xml
-\begin_inset Index
-status collapsed
-
-\begin_layout Plain Layout
-pom.xml
+ In a working directory of your choosing, issue the following command:
 \end_layout
 
-\end_inset
+\begin_layout LyX-Code
+mvn archetype:generate 
+\backslash
 
-.
- The complete pom.xml is shown in section 
-\begin_inset CommandInset ref
-LatexCommand vref
-reference "lst:JPA-Master-pom.xml"
+\end_layout
 
-\end_inset
+\begin_layout LyX-Code
+  -DarchetypeRepository=http://scala-tools.org/repo-snapshots 
+\backslash
 
-.
- Note that the dependencies specifically exclude the Hibernate JTA dependence
- so that we can use the geronimo-specs version of JTA.
- If you don't do that then you'll have to manually download and install
- the Sun versions from their website.
+\end_layout
+
+\begin_layout LyX-Code
+  -DarchetypeGroupId=net.liftweb 
+\backslash
+
+\end_layout
+
+\begin_layout LyX-Code
+  -DarchetypeArtifactId=lift-archetype-jpa-basic 
+\backslash
+
+\end_layout
+
+\begin_layout LyX-Code
+  -DarchetypeVersion=1.1-SNAPSHOT 
+\backslash
+
+\end_layout
+
+\begin_layout LyX-Code
+  -DgroupId=com.foo.jpaweb 
+\backslash
+
+\end_layout
+
+\begin_layout LyX-Code
+  -DartifactId=JPADemo 
+\backslash
+
+\end_layout
+
+\begin_layout LyX-Code
+  -Dversion=1.0-SNAPSHOT
 \end_layout
 
 \begin_layout Standard
-The master pom.xml sets up some basic dependencies and plugin configurations
- which the modules will inherit.
- Our next step will be to create the JPA module using an archetype
-\begin_inset Index
-status collapsed
-
-\begin_layout Plain Layout
-archetype
-\end_layout
-
-\end_inset
-
- for Maven to create the scaffolding of our project
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-I need to get the JPA archetype set up
-\end_layout
-
-\end_inset
-
-.
- From your master project directory, use the 
+This will use the JPA archetype to create a new project for you with modules
+ for the persistence and web portions of the project.
+ You will get a prompt asking you to confirm the settings we've chosen;
+ just hit 
 \family typewriter
-mvn archetype:generate
+<enter>
 \family default
- command, select the 
-\begin_inset Quotes eld
-\end_inset
+.
+ As of this writing we have to use the snapshot version of the archetype
+ because it didn't make the Lift 1.0 deadline, but otherwise it's a stable
+ archetype.
+ You will also see some Velocity warnings about invalid references; these
+ can be safely ignored and will hopefully be fixed by 1.1.
+ After the archetype is generated, you should have the following tree structure:
+\end_layout
 
-Scala JPA
-\begin_inset Quotes erd
-\end_inset
+\begin_layout LyX-Code
+JPADemo
+\end_layout
 
- archetype and when prompted use com.foo.jpaweb for the group ID, JPADemo-spa
- for the artifact ID, and com.foo.jpaweb.model for the package.
- You should now have a JPADemo-spa module that we can explore.
+\begin_layout LyX-Code
+|-- README
+\end_layout
+
+\begin_layout LyX-Code
+|-- pom.xml
+\end_layout
+
+\begin_layout LyX-Code
+|-- spa
+\end_layout
+
+\begin_layout LyX-Code
+|   |-- pom.xml
+\end_layout
+
+\begin_layout LyX-Code
+|   `-- src ...
+\end_layout
+
+\begin_layout LyX-Code
+`-- web
+\end_layout
+
+\begin_layout LyX-Code
+    |-- pom.xml
+\end_layout
+
+\begin_layout LyX-Code
+    `-- src ...
+\end_layout
+
+\begin_layout Standard
+If you look at the source directories, you'll see that our code is already
+ in place! If you were making your own application you could modify the
+ POMs and create/edit/replace the existing Scala code and templates to match
+ your needs.
+ For now, let's go over the contents of the project.
 \end_layout
 
 \begin_layout Subsection
@@ -431,8 +451,8 @@ reference "lst:Author.scala"
  look very familiar.
  The major difference between Java and Scala annotations is that each parameter
  in a Scala annotation is considered a val, which explains the presence
- of the val keyword in lines 11, 14 and 17-18.
- In line 18 you may also note that we must specify the target entity class;
+ of the val keyword in lines 12, 15 and 17-18.
+ In line 17 you may also note that we must specify the target entity class;
  although Scala uses generics, the generic types aren't visible from Java
 \begin_inset Note Note
 status open
@@ -444,7 +464,7 @@ I think this changes in 2.8
 \end_inset
 
 , so the Java JPA libraries can't deduce the correct type.
- You may also notice that on line 19 we need to use the Java collections
+ You may also notice that on line 18 we need to use the Java collections
  classes for Set, List, etc.
  With a little bit of implicit conversion magic (to be shown later), this
  has very little impact on our code.
@@ -544,7 +564,11 @@ http://java.sun.com/xml/ns/persistence/orm_1_0.xsd
 In this case we have used the orm.xml file to augment our entity classes.
  If, however, we would like to override the configuration, we may use that
  as well on a case-by-case basis.
- Suppose we wished to change the column name for the Author's name property.
+ Suppose we wished to change the column name for the Author's 
+\family typewriter
+name
+\family default
+ property.
  We can add (per the XSD) a section to the Author entity element as shown
  in listing 
 \begin_inset CommandInset ref
@@ -735,14 +759,29 @@ Java
 \emph default
  enumerations, but that doesn't help us here since Scala enumerations aren't
  an extension of Java enumerations.
- In this example, we'll be using Hibernate's UserType to support an enumeration
- for the Genre of a Book.
+ In this example, we'll be using Hibernate's 
+\family typewriter
+UserType
+\family default
+ to support an enumeration for the 
+\family typewriter
+Genre
+\family default
+ of a 
+\family typewriter
+Book
+\family default
+.
 \end_layout
 
 \begin_layout Standard
 We begin by implementing a few helper classes besides the Genre enumeration
  itself.
- First, we define an Enumv trait, shown in listing 
+ First, we define an 
+\family typewriter
+Enumv
+\family default
+ trait, shown in listing 
 \begin_inset CommandInset ref
 LatexCommand vref
 reference "lst:Enumv-Trait"
@@ -758,20 +797,53 @@ valueOf
  actual enumeration.
  We also add some extra methods so that we can encapsulate a description
  along with the database value.
- Scala enumerations can use either Ints or Strings for the identity of the
- enumeration value (unique to each val), and in this case we've chosen Strings.
+ Scala enumerations can use either 
+\family typewriter
+Ints
+\family default
+ or 
+\family typewriter
+Strings
+\family default
+ for the identity of the enumeration value (unique to each val), and in
+ this case we've chosen 
+\family typewriter
+Strings
+\family default
+.
  By adding a map for the description (since Scala enumeration values must
- extend the Enumeration#Value class and therefore can't carry the additional
- string) we allow for the additional info.
- We could extend this concept to make the Map carry additional data, but
- for our purposes this is sufficient.
+ extend the 
+\family typewriter
+Enumeration#Value
+\family default
+ class and therefore can't carry the additional string) we allow for the
+ additional info.
+ We could extend this concept to make the 
+\family typewriter
+Map
+\family default
+ carry additional data, but for our purposes this is sufficient.
  
 \end_layout
 
 \begin_layout Standard
-In order to actually convert the Enumeration class into the proper database
- type (String, Int, etc), we need to implement the Hibernate UserType interface,
- shown in listing 
+In order to actually convert the 
+\family typewriter
+Enumeration
+\family default
+ class into the proper database type (
+\family typewriter
+String
+\family default
+, 
+\family typewriter
+Int
+\family default
+, etc), we need to implement the Hibernate 
+\family typewriter
+UserType
+\family default
+ interface, shown in listing 
 \begin_inset CommandInset ref
 LatexCommand vref
 reference "lst:EnumvType"
@@ -779,10 +851,24 @@ reference "lst:EnumvType"
 \end_inset
 
 .
- We can see on line 18 that we will be using a varchar column for the enumeratio
-n value.
- Since this is based on the Scala Enumeration's Value method, we could technical
-ly use either Integer or character types here.
+ We can see on line 18 that we will be using a 
+\family typewriter
+varchar
+\family default
+ column for the enumeration value.
+ Since this is based on the Scala 
+\family typewriter
+Enumeration
+\family default
+'s 
+\family typewriter
+Value
+\family default
+ method, we could technically use either 
+\family typewriter
+Integer
+\family default
+ or character types here.
  We override the 
 \family typewriter
 sqlTypes
@@ -813,17 +899,32 @@ hashCode
 equals
 \family default
  method, so we're not testing reference equality here.
- The actual resolution of database column value to Enumeration is done in
- the 
+ The actual resolution of database column value to 
+\family typewriter
+Enumeration
+\family default
+ is done in the 
 \family typewriter
 nullSafeGet
 \family default
  method; if we decided, for instance, that the null value should be returned
  as unknown, we could do this here with some minor modifications to the
- Enumv class (defining the unknown value, for one).The rest of the methods
- are set appropriately for an immutable object (Enumeration).
- The great thing about the EnumvType class, is that it can easily be used
- for a variety of types due to the 
+ 
+\family typewriter
+Enumv
+\family default
+ class (defining the unknown value, for one).The rest of the methods are
+ set appropriately for an immutable object (
+\family typewriter
+Enumeration
+\family default
+).
+ The great thing about the 
+\family typewriter
+EnumvType
+\family default
+ class, is that it can easily be used for a variety of types due to the
+ 
 \begin_inset Quotes eld
 \end_inset
 
@@ -831,11 +932,24 @@ et
 \begin_inset Quotes erd
 \end_inset
 
- constructor argument; as long as we mix in the Enumv trait to our Enumeration
+ constructor argument; as long as we mix in the 
+\family typewriter
+Enumv
+\family default
+ trait to our 
+\family typewriter
+Enumeration
+\family default
  objects, we get persistence essentially for free.
- If we determined instead that we want to use Integer enumeration IDs, we
- need to make minor modifications to the EnumvType to make sure arguments
- match and we're set.
+ If we determined instead that we want to use 
+\family typewriter
+Integer
+\family default
+ enumeration IDs, we need to make minor modifications to the 
+\family typewriter
+EnumvType
+\family default
+ to make sure arguments match and we're set.
 \end_layout
 
 \begin_layout Standard
@@ -912,8 +1026,15 @@ class GenreType extends EnumvType(Genre) {}
 \end_layout
 
 \begin_layout Standard
-Finally, the Genre object and the associated GenreType is shown in listing
- 
+Finally, the 
+\family typewriter
+Genre
+\family default
+ object and the associated 
+\family typewriter
+GenreType
+\family default
+ is shown in listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Genre-and-GenreType"
@@ -921,15 +1042,33 @@ reference "lst:Genre-and-GenreType"
 \end_inset
 
 .
- You can see that we create a singleton Genre object with specific member
- values for each enumeration value.
- The GenreType class is trivial now that we have the EnumvType class defined.
- To use the Genre type in our entity classes, we simply need to add the
- proper 
+ You can see that we create a singleton 
+\family typewriter
+Genre
+\family default
+ object with specific member values for each enumeration value.
+ The 
+\family typewriter
+GenreType
+\family default
+ class is trivial now that we have the 
+\family typewriter
+EnumvType
+\family default
+ class defined.
+ To use the 
+\family typewriter
+Genre
+\family default
+ type in our entity classes, we simply need to add the proper 
 \family typewriter
 var
 \family default
- and annotate it with the @Type annotation, as shown in listing 
+ and annotate it with the 
+\family typewriter
+@Type
+\family default
+ annotation, as shown in listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Using-the-@Type"
@@ -938,8 +1077,19 @@ reference "lst:Using-the-@Type"
 
 .
  We need to specify the type of the var due to the fact that the actual
- enumeration values are of the type Enumeration.Val, which doesn't match
- our valueOf method in the Enumv trait.
+ enumeration values are of the type 
+\family typewriter
+Enumeration.Val
+\family default
+, which doesn't match our 
+\family typewriter
+valueOf
+\family default
+ method in the 
+\family typewriter
+Enumv
+\family default
+ trait.
  We also want to make sure we set the enumeration to some reasonable default;
  in our example we have an 
 \emph on
@@ -1026,12 +1176,22 @@ Fortunately for us, Lift provides just such a mechanism.
 status open
 
 \begin_layout Plain Layout
-Notably, S.addAround with the LoanWrapper
+Notably, 
+\family typewriter
+S.addAround
+\family default
+ with the 
+\family typewriter
+LoanWrapper
 \end_layout
 
 \end_inset
 
-, but for now we're going to focus on just one: the RequestVar
+, but for now we're going to focus on just one: the 
+\family typewriter
+RequestVar
+\family default
+
 \begin_inset Index
 status collapsed
 
@@ -1042,62 +1202,149 @@ RequestVar
 \end_inset
 
 .
- A RequestVar represents a variable associated with the lifetime of the
- request.
- This is in contrast to SessionVar, which defines a variable for the lifetime
- of the user's session.
- RequestVar gives us several niceties over handling request parameters ourselves
-, including type safety and a default value.
- We go into more detail on Request- and SessionVars in section 
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-TODO: cross-ref
-\end_layout
-
-\end_inset
-
-, but for now we're going to concentrate on the methods needed to do lifecycle
- management.
-\end_layout
-
-\begin_layout Standard
-The initial setup of the entity manager is done through the RequestVar's
- constructor.
- We define a RequestVar as an object (as opposed to a class) as shown in
- listing 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "lst:Setting-up-EM"
-
-\end_inset
-
- (the full listing is in section 
-\begin_inset CommandInset ref
-LatexCommand vref
-reference "lst:ScalaEntityManager"
-
-\end_inset
-
-).
- In our example we're using an abstraction of the EntityManager (and Query)
- interfaces as a template for our concrete implementation; we'll cover these
+ A 
+\family typewriter
+RequestVar
+\family default
+ represents a variable associated with the lifetime of the request.
+ This is in contrast to 
+\family typewriter
+SessionVar
+\family default
+, which defines a variable for the lifetime of the user's session.
+ 
+\family typewriter
+RequestVar
+\family default
+ gives us several niceties over handling request parameters ourselves, including
+ type safety and a default value.
+ We go into more detail on 
+\family typewriter
+RequestVars
+\family default
+ and 
+\family typewriter
+SessionVars
+\family default
  in section 
 \begin_inset CommandInset ref
 LatexCommand vref
-reference "sec:ScalaEntityManager-and-ScalaQuery"
+reference "sec:Session-and-Request"
 
 \end_inset
 
 .
- As you can see, we've defined two methods to handle the opening and closing
- of the EntityManager and we delegate to our impl for the actual setup.
- We utilize the constructor of the RequestVar to call the openEM() method,
- and we override the cleanupFunc method to call the closeEM() method.
- Note that the RequestVar is lazy, so the EntityManager won't be opened
- until it's actually requested.
+ In addition to the Lift facilities, we also use the ScalaJPA project
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://scala-tools.org/mvnsites-snapshots/scalajpa/
+\end_layout
+
+\end_inset
+
+, source code available at 
+\begin_inset CommandInset href
+LatexCommand href
+target "http://github.com/dchenbecker/scalajpa/tree"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ to handle some of the boilerplate of utilizing JPA.
+ ScalaJPA provides some nice traits that 
+\begin_inset Quotes eld
+\end_inset
+
+Scalafy
+\begin_inset Quotes erd
+\end_inset
+
+ the JPA 
+\family typewriter
+EntityManager
+\family default
+ and 
+\family typewriter
+Query
+\family default
+ interfaces, as well as accessors that make retrieving an EM simple.
+ To use ScalaJPA we simply add the following dependency to our POM.
  
+\end_layout
+
+\begin_layout LyX-Code
+<dependency>
+\end_layout
+
+\begin_layout LyX-Code
+  <groupId>org.scala-tools</groupId>
+\end_layout
+
+\begin_layout LyX-Code
+  <artifactId>scalajpa</artifactId>
+\end_layout
+
+\begin_layout LyX-Code
+  <version>1.0-SNAPSHOT</version>
+\end_layout
+
+\begin_layout LyX-Code
+</dependency>
+\end_layout
+
+\begin_layout Standard
+Note that at the time of writing the library is at 1.0-SNAPSHOT, but should
+ be promoted to 1.0 soon.
+\end_layout
+
+\begin_layout Standard
+We leverage ScalaJPA's 
+\family typewriter
+LocalEMF
+\family default
+ and 
+\family typewriter
+RequestVarEM
+\family default
+ traits to provide a simple 
+\family typewriter
+RequestVar
+\family default
+ interface to obtain the EM via local lookup (i.e.
+ via the 
+\family typewriter
+javax.persistence.\SpecialChar \-
+Persistence
+\family default
+ class), as shown in listing 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "lst:Setting-up-EM"
+
+\end_inset
+
+.
+ It's trivial to use JNDI instead by substituting the 
+\family typewriter
+JndiEMF
+\family default
+ trait for the 
+\family typewriter
+LocalEMF
+\family default
+ trait, but the details of setting up the JNDI persistence module are beyond
+ the scope of this book.
 \end_layout
 
 \begin_layout Standard
@@ -1127,41 +1374,7 @@ Setting up an EntityManager via RequestVar
 
 \begin_layout Plain Layout
 
-abstract class ScalaEntityManager(val persistanceName: String) {
-\end_layout
-
-\begin_layout Plain Layout
-
-  // The concrete impl should provide these methods 
-\end_layout
-
-\begin_layout Plain Layout
-
-  protected def openEM () : EntityManager 
-\end_layout
-
-\begin_layout Plain Layout
-
-  protected def closeEM (em : EntityManager)
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-  private object emVar extends RequestVar(openEM()) {
-\end_layout
-
-\begin_layout Plain Layout
-
-    override def cleanupFunc : Box[() => Unit]= Full(() => closeEM(this.is))
-\end_layout
-
-\begin_layout Plain Layout
-
-  }
+object Model extends LocalEMF("jpaweb") with RequestVarEM
 \end_layout
 
 \end_inset
@@ -1170,186 +1383,15 @@ abstract class ScalaEntityManager(val persistanceName: String) {
 \end_layout
 
 \begin_layout Standard
-Now that we've defined the mechanism for setting up and tearing down our
- EM, we need to actually obtain an EM.
- There are essentially two ways to do this
-\end_layout
-
-\begin_layout Enumerate
-Construct the EntityManagerFactory
-\begin_inset Index
-status collapsed
-
-\begin_layout Plain Layout
-EntityManagerFactory
-\end_layout
-
-\end_inset
-
- directly
-\end_layout
-
-\begin_layout Enumerate
-Obtain an EntityManager via JNDI
-\begin_inset Index
-status collapsed
-
-\begin_layout Plain Layout
-JNDI
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Of these two, JNDI offers a cleaner approach from the standpoint of deployment.
- Using JNDI acts as a form of IoC
-\begin_inset Index
-status collapsed
-
-\begin_layout Plain Layout
-Inversion of Control
-\end_layout
-
-\end_inset
-
- (Inversion of Control) to allow us to separate out the selection of the
- persistence module; it's also more in line with JEE standards and allows
- us to more easily move our app between full-blown (JBoss, GlassFish, etc)
- and lightweight (Jetty, Tomcat) containers.
- 
-\end_layout
-
-\begin_layout Subsection
-Creating a factory directly
-\end_layout
-
-\begin_layout Standard
-Creating a factory directly is fairly simple, and is the use case for apps
- that will run under the Java SE without access to the JEE facilicities.
- As shown in listing 
-\begin_inset CommandInset ref
-LatexCommand vref
-reference "lst:Creating-the-EM-directly"
-
-\end_inset
-
-, we first set up the EntityManagerFactory by a call to the static javax.persiste
-nce.Persistence.createFactory(...) method.
- Once we have the factory, we define our openEM method to use the factory's
- createEntityManager() method to obtain the EM, and then we start a transaction.
- We're going to cover transactions in more detail a little later in this
- chapter; for now, just understand that in this particular configuration
- we have to begin and commit the transaction 
-\emph on
-within
-\emph default
- the lifecycle of the EM.
- We also define our closeEM method as essentially the mirror of openEM.
-\end_layout
-
-\begin_layout Subsection
-Using JNDI
-\end_layout
-
-\begin_layout Standard
-The standard binding for persistence modules in JNDI is 
+Once we have this object set up, we can access all of the 
 \family typewriter
-java:comp/env/persistence/<module name>
+ScalaEntityManager
 \family default
-
-\begin_inset Foot
-status open
-
-\begin_layout Plain Layout
-\begin_inset Flex URL
-status collapsed
-
-\begin_layout Plain Layout
-
-http://database.in2p3.fr/doc/oracle/Oracle_Application_Server_10_Release_3/web.1013
-/b28221/servjndi010.htm
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
+ methods directly on 
+\family typewriter
+Model
+\family default
 .
- We'll cover how to set up JNDI on lightweight containers like Tomcat and
- Jetty in section 
-\begin_inset CommandInset ref
-LatexCommand vref
-reference "sec:Setting-up-JNDI-jetty"
-
-\end_inset
-
-, but for now we'll concentrate on the client side of things.
- We define our openEM method using the javax.naming.InitialContext class to
- obtain the EM from JNDI, as shown in listing 
-\begin_inset CommandInset ref
-LatexCommand vref
-reference "lst:EM-Via-JNDI"
-
-\end_inset
-
-.
- You can also see that we start a transaction (also via JNDI) just prior
- to looking up the EntityManager.
- When we use JNDI (really, JTA) for obtaining our transactions, notice that
- we open begin and end the transaction outsid of the EM's lifecycle.
- In a production application you would want to put these steps into a try/catch
- or use LiftRules.browserResponseToException
-\begin_inset Index
-status collapsed
-
-\begin_layout Plain Layout
-browserResponseToException
-\end_layout
-
-\end_inset
-
-
-\begin_inset Index
-status collapsed
-
-\begin_layout Plain Layout
-LiftRules
-\end_layout
-
-\end_inset
-
- (covered in section 
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-TODO: cross-ref
-\end_layout
-
-\end_inset
-
-) to make sure that the user doesn't get a stack trace if something goes
- wrong.
- You can also see in the listing that we've defined our closeEM method.
- We simply close the EM and then either commit or rollback the transaction
- depending on its state.
-\end_layout
-
-\begin_layout Standard
-However you obtain the EM, the general principles of how you use the EM
- are the same.
- All of the entity operations work exactly the same way in either case and
- the EntityManager takes care of the underlying details, such as how to
- set rollback on the current transaction.
- This allows your code to stay portable; if you want to use the simpler
- user-managed factory you can start with that and when you change your mind
- later it requires only minor modifications to a single class.
 \end_layout
 
 \begin_layout Subsection
@@ -1405,15 +1447,14 @@ In JPA, transactions are required.
  There are two ways of handling transactions under JPA: resource local and
  JTA.
  Resource local transactions are what you use if you are managing the EM
- factory yourself (section 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "lst:Creating-the-EM-directly"
-
-\end_inset
-
-).
+ factory yourself (corresponding to the 
+\family typewriter
+LocalEMF
+\family default
+ trait).
  Similarly, JTA is what you use when you obtain your EM via JNDI.
+ Technically it's also possible to use JTA with a locally managed EM, but
+ that configuration is beyond the scope of this book.
  Choosing between the two is as simple as setting a property in your persistence.
 xml file (and changing the code to open and close the EM).
  Listing 
@@ -1485,7 +1526,7 @@ Setting the transaction type
 
 \begin_layout Plain Layout
 
-  <non-jta-datasource>myDS</jta-datasource>
+  <jta-datasource>myDS</jta-datasource>
 \end_layout
 
 \end_inset
@@ -1563,15 +1604,12 @@ http://www.jpox.org/docs/1_2/persistence_unit.html
 \end_layout
 
 \begin_layout Standard
-In our opinion, using JTA to manage your transactions is well worth the
- extra effort.
- If you'll be deploying into a JEE container, such as JBoss or GlassFish,
+If you'll be deploying into a JEE container, such as JBoss or GlassFish,
  then you get JTA support almost for free since JTA is part of the JEE spec.
- Even if you want to deploy your application on a lightweight container
- like Jetty, the extra effort to set up JNDI and JTA in Jetty is small relative
- to the effort involved in coding and testing your app.
- As we've discussed before, you also get the benefit of separation of configurat
-ion when you use JNDI.
+ If you want to deploy your application on a lightweight container like
+ Jetty or Tomcat, the extra effort to set up JNDI and JTA in Jetty may or
+ may not exceed the effort involved in coding and testing your app.
+ 
 \end_layout
 
 \begin_layout Standard
@@ -1665,7 +1703,11 @@ iver"/>
 \begin_layout Standard
 One final note in regard to transactions is how they're affected by Exceptions.
  Per the spec, any exceptions thrown during the scope of a transaction,
- other than 
+ other than
+\begin_inset Newline linebreak
+\end_inset
+
+
 \family typewriter
 javax.persistence.NoResultException
 \family default
@@ -1687,10 +1729,16 @@ ScalaEntityManager and ScalaQuery
 \end_layout
 
 \begin_layout Standard
-Now that we've gone through setting up our EntityManager, let's look at
- how we actually use them in an application.
- As a convenience, we will define two thin wrappers on the existing EntityManage
-r
+Now that we've gone through setting up our 
+\family typewriter
+EntityManager
+\family default
+, let's look at how we actually use them in an application.
+ As a convenience, ScalaJPA defines two thin wrappers on the existing 
+\family typewriter
+EntityManager
+\family default
+
 \begin_inset Foot
 status collapsed
 
@@ -1710,7 +1758,11 @@ http://java.sun.com/javaee/5/docs/api/javax/persistence/EntityManager.html
 
 \end_inset
 
- and Query
+ and 
+\family typewriter
+Query
+\family default
+
 \begin_inset Foot
 status collapsed
 
@@ -1732,46 +1784,86 @@ http://java.sun.com/javaee/5/docs/api/javax/persistence/Query.html
 
  interfaces to provide more Scala-friendly methods.
  This means that we get Scala's collection types (i.e.
- List instead of java.util.List) and generic signatures so that we can avoid
- explicit casting.
- Listing 
-\begin_inset CommandInset ref
-LatexCommand vref
-reference "lst:ScalaEntityManager"
+ 
+\family typewriter
+List
+\family default
+ instead of 
+\family typewriter
+java.util.List
+\family default
+) and generic signatures so that we can avoid explicit casting.
+ The 
+\family typewriter
+ScalaEntityManager
+\family default
+ trait provides a wrapper on the 
+\family typewriter
+EntityManager
+\family default
+ class, and is included as part of the 
+\family typewriter
+RequestVarEM
+\family default
+ trait that we've mixed into our 
+\family typewriter
+Model
+\family default
+ object.
+ The API ScalaDoc for 
+\family typewriter
+ScalaEntityManager
+\family default
+ can be found at 
+\begin_inset Flex URL
+status collapsed
 
-\end_inset
+\begin_layout Plain Layout
 
- shows the ScalaEntityManager class.
- We start with the method and RequestVar definitions that we discussed in
- section 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "sec:Obtaining-an-EM"
+http://scala-tools.org/mvnsites/scalajpa/scaladocs/org/scala_libs/jpa/ScalaEntity
+Manager.html
+\end_layout
 
 \end_inset
 
 .
- Following that, we have a few convenience methods for creating and executing
- named queries in a single method, as well combo methods to merge or remove
- an entity and flush to the database in one go.
- The rest of the methods essentially delegate to the underlying EM directly.
 \end_layout
 
 \begin_layout Standard
-Next, we have the ScalaQuery class in listing 
-\begin_inset CommandInset ref
-LatexCommand vref
-reference "lst:ScalaQuery"
+Next, we have the 
+\family typewriter
+ScalaQuery
+\family default
+ trait, with API docs at 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://scala-tools.org/mvnsites/scalajpa/scaladocs/org/scala_libs/jpa/ScalaQuery.h
+tml
+\end_layout
 
 \end_inset
 
 .
- Like ScalaEntityManager, this is a thin wrapper on the Query interface.
- In particular, methods that return entities are typed against the ScalaQuery
+ Like 
+\family typewriter
+ScalaEntityManager
+\family default
+, this is a thin wrapper on the 
+\family typewriter
+Query
+\family default
+ interface.
+ In particular, methods that return entities are typed against the 
+\family typewriter
+ScalaQuery
+\family default
  itself, so that you don't need to do any explicit casting in your client
  code.
- We also add some utility methods to simplify setting a parameter list as
- well as obtaining the result(s) of the query.
+ We also have some utility methods to simplify setting a parameter list
+ as well as obtaining the result(s) of the query.
  
 \end_layout
 
@@ -1936,8 +2028,8 @@ find
 status open
 
 \begin_layout Plain Layout
-Jorge has pointed out that this may change: http://groups.google.com/group/liftweb
-/browse_thread/thread/874b38daa0d535f7
+Jorge has pointed out that this may change with Manifest: http://groups.google.com
+/group/liftweb/browse_thread/thread/874b38daa0d535f7
 \end_layout
 
 \end_inset
@@ -1958,17 +2050,16 @@ find
  value of the ID field of the entity.
  In our example, the Book class uses the Long type for its ID, so we would
  put a Long value here.
- It returns either a Full Box
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-TODO: cross-ref
-\end_layout
-
-\end_inset
-
- if the entity is found in the database, otherwise it returns Empty.
+ It returns either a 
+\family typewriter
+Full
+\family default
+ Box (section ???) if the entity is found in the database, otherwise it
+ returns 
+\family typewriter
+Empty
+\family default
+.
  With 
 \family typewriter
 find
@@ -2230,7 +2321,7 @@ Positional
 parameters 
 \family typewriter
 select user from User where (user.name like ? or user.email like ?) and user.widget
-s > :widgetCount
+s > ?
 \end_layout
 
 \begin_layout Standard
@@ -2352,7 +2443,7 @@ name "sub:The-importance-of-flush"
 
 \end_inset
 
-The importance of flush()
+The importance of flush() and Exceptions
 \end_layout
 
 \begin_layout Standard
@@ -2363,28 +2454,172 @@ It's important to understand that in JPA the provider isn't required to
  Using the flush method forces the provider to write any pending changes
  to the database and immediately throw any exceptions resulting from any
  violations.
- As a convenience, we've written methods to do persist, merge and remove
- with a subsequent flush, as shown in listing 
+ As a convenience, we've written the 
+\family typewriter
+mergeAndFlush
+\family default
+, 
+\family typewriter
+persistAndFlush
+\family default
+, and 
+\family typewriter
+removeAndFlush
+\family default
+ methods to do persist, merge and remove with a subsequent flush, as shown
+ in listing 
 \begin_inset CommandInset ref
-LatexCommand vref
-reference "lst:ScalaEntityManager"
+LatexCommand ref
+reference "lst:Auto-flush-methods"
 
 \end_inset
 
-.
- We do, however, recommend that if you will be doing multiple operations
- in one session cycle that you use a single flush at the end:
+, taken from the Author snippet code.
+ You can also see that because we flush at this point, we can catch any
+ JPA-related exceptions and deal with them here.
+ If we don't flush at this point, the exception would be thrown when the
+ transaction commits, which is often very far (in code) from where you would
+ want to handle it.
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Auto-flush methods
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Auto-flush-methods"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+def doAdd () = {
+\end_layout
+
+\begin_layout Plain Layout
+
+  if (author.name.length == 0) {
+\end_layout
+
+\begin_layout Plain Layout
+
+	error("emptyAuthor", "The author's name cannot be blank")
+\end_layout
+
+\begin_layout Plain Layout
+
+  } else {
+\end_layout
+
+\begin_layout Plain Layout
+
+	try {
+\end_layout
+
+\begin_layout Plain Layout
+
+      Model.mergeAndFlush(author)
+\end_layout
+
+\begin_layout Plain Layout
+
+     redirectTo("list.html")
+\end_layout
+
+\begin_layout Plain Layout
+
+	} catch {
+\end_layout
+
+\begin_layout Plain Layout
+
+	  case ee : EntityExistsException => error("Author already exists")
+\end_layout
+
+\begin_layout Plain Layout
+
+	  case pe : PersistenceException => 
+\end_layout
+
+\begin_layout Plain Layout
+
+        error("Error adding author"); Log.error("Error adding author", pe)
+\end_layout
+
+\begin_layout Plain Layout
+
+	}
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Although the combo methods simplify things, we recommend that if you will
+ be doing multiple operations in one session cycle that you use a single
+ flush at the end:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Multiple JPA ops
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Multiple-JPA-ops"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
 val container = Model.find(classOf[Container], containerId)
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Plain Layout
+
 Model.remove(container.widget)
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Plain Layout
+
 container.widget = new Widget(
 \begin_inset Quotes eld
 \end_inset
@@ -2396,16 +2631,24 @@ Foo!
 )
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Plain Layout
+
 // next line only required if container.widget doesn't cascade PERSIST
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Plain Layout
+
 Model.persist(container.widget)
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Plain Layout
+
 Model.flush()
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \end_body

@@ -1,4 +1,4 @@
-#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.0 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -106,7 +106,11 @@ log4j.xml
 \family default
  configuration file in the class path and if it finds either it will use
  them for configuration.
- Failing that, it will fall back to configuring log4j using the 
+ Failing that, it will fall back to configuring log4j using the
+\begin_inset Newline linebreak
+\end_inset
+
+
 \family typewriter
 LogBoot.defaultProps
 \family default
@@ -172,7 +176,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Enabling slf4j
 \begin_inset CommandInset label
 LatexCommand label
@@ -231,7 +234,7 @@ Basic Logging
 Logging in Lift is performed via the net.liftweb.util.Log object.
  This object provides some basic log methods which we'll summarize here.
  Each log method comes in two forms: one with just an Object argument, and
- one with an Object and Throwable argument.
+ one with Object and Throwable arguments.
  These correspond one-to-one with the log4j log methods, although the parameters
  are passed by-name; this is done so that computation of the log message
  can be deferred.
@@ -256,38 +259,38 @@ tracing
 \begin_inset Quotes erd
 \end_inset
 
- of processing, even more detailed than debug level
+ of processing, even more detailed than debug level.
 \end_layout
 
 \begin_layout Description
 debug Logs a message at debug level.
  This level is usually used to output internal variable values or other
- information that is useful in debugging and troubleshooting an app
+ information that is useful in debugging and troubleshooting an app.
 \end_layout
 
 \begin_layout Description
 info Logs a message at info level.
- This level is appropriate for general information about the app
+ This level is appropriate for general information about the app.
 \end_layout
 
 \begin_layout Description
 warn Logs a message at warning level.
  This level should be used for reporting issues that are in error but can
  be handled cleanly, such as someone trying to submit a character string
- for a numeric field value
+ for a numeric field value.
 \end_layout
 
 \begin_layout Description
 error Logs a message at error level.
  This level should be used for messages relating to errors that can't be
- handled cleanly, such as a failure to connect to a backing database
+ handled cleanly, such as a failure to connect to a backing database.
 \end_layout
 
 \begin_layout Description
 fatal Logs a message at the fatal level.
  This level should be used for messages that relate to conditions under
  which the application cannot continue to function, such as an OutOfMemory
- exception
+ exception.
 \end_layout
 
 \begin_layout Description
@@ -300,12 +303,12 @@ reference "sub:Schema-Mapping"
 
 \end_inset
 
-)
+).
 \end_layout
 
 \begin_layout Description
 assertLog This allows you to test an assertion condition and if true, logs
- the assertion as well as a given message
+ the assertion as well as a given message.
 \end_layout
 
 \begin_layout Standard
@@ -336,7 +339,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Some example logging
 \begin_inset CommandInset label
 LatexCommand label
@@ -379,7 +381,12 @@ def processLogin(name : String, password : String) = {
 
 \begin_layout Plain Layout
 
-    Log.assertLog(User.currentUser.isDefined, "Redundant authentication!")
+    Log.assertLog(User.currentUser.isDefined, 
+\end_layout
+
+\begin_layout Plain Layout
+
+                  "Redundant authentication!")
 \end_layout
 
 \begin_layout Plain Layout
@@ -497,6 +504,58 @@ reference "lst:Some-example-logging"
  You get the flexibility and simplicity of adding log statements anywhere
  you want without explicit log guards, without losing the performance benefit
  of the guards.
+ To explain it a bit more, let's assume for instace that the 
+\family typewriter
+debug
+\family default
+ method would have been declared as 
+\family typewriter
+def debug(msg:AnyRef): Unit.
+ 
+\family default
+When 
+\family typewriter
+debug
+\family default
+ would be called the parameter will be first evaluated and then passed to
+ the method.
+ Inside the method we have the test to see if the debug i enabled to know
+ if we actaully need to trace that message or not.
+ Well in this case even if the debugging level is turned off we still have
+ the evaluation of the parameters and that leads to unnecessary computing
+ and in an application that heaviliy uses logging that would likely leads
+ to relevant performance impact.
+ So in this 
+\begin_inset Quotes eld
+\end_inset
+
+eagerly
+\begin_inset Quotes erd
+\end_inset
+
+ evaluation situation we have to test if the debug level is on even before
+ calling the 
+\family typewriter
+debug
+\family default
+ method.
+ Something like 
+\family typewriter
+if (Log.isDebugEnabled) {debug(
+\begin_inset Quotes eld
+\end_inset
+
+Retreiving auth data
+\begin_inset Quotes erd
+\end_inset
+
+)}
+\family default
+.
+ Not very convenient.
+ So because the logging functions take pass-by-name functions as parameter
+ they will be evaluated lazily and only if the appropriate debugging level
+ is set.
 \end_layout
 
 \begin_layout Section
@@ -532,7 +591,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Mapper Logging
 \begin_inset CommandInset label
 LatexCommand label
@@ -550,7 +608,12 @@ name "lst:Mapper-Logging"
 
 \begin_layout Plain Layout
 
-DB.addLogFunc((query, time) => Log.debug(() => (query + ":" + time + "ms")))
+DB.addLogFunc((query, time) => 
+\end_layout
+
+\begin_layout Plain Layout
+
+  Log.debug(() => (query + ":" + time + "ms")))
 \end_layout
 
 \end_inset
