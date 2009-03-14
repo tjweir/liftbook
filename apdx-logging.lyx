@@ -1,4 +1,4 @@
-#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.0 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -504,6 +504,58 @@ reference "lst:Some-example-logging"
  You get the flexibility and simplicity of adding log statements anywhere
  you want without explicit log guards, without losing the performance benefit
  of the guards.
+ To explain it a bit more, let's assume for instace that the 
+\family typewriter
+debug
+\family default
+ method would have been declared as 
+\family typewriter
+def debug(msg:AnyRef): Unit.
+ 
+\family default
+When 
+\family typewriter
+debug
+\family default
+ would be called the parameter will be first evaluated and then passed to
+ the method.
+ Inside the method we have the test to see if the debug i enabled to know
+ if we actaully need to trace that message or not.
+ Well in this case even if the debugging level is turned off we still have
+ the evaluation of the parameters and that leads to unnecessary computing
+ and in an application that heaviliy uses logging that would likely leads
+ to relevant performance impact.
+ So in this 
+\begin_inset Quotes eld
+\end_inset
+
+eagerly
+\begin_inset Quotes erd
+\end_inset
+
+ evaluation situation we have to test if the debug level is on even before
+ calling the 
+\family typewriter
+debug
+\family default
+ method.
+ Something like 
+\family typewriter
+if (Log.isDebugEnabled) {debug(
+\begin_inset Quotes eld
+\end_inset
+
+Retreiving auth data
+\begin_inset Quotes erd
+\end_inset
+
+)}
+\family default
+.
+ Not very convenient.
+ So because the logging functions take pass-by-name functions as parameter
+ they will be evaluated lazily and only if the appropriate debugging level
+ is set.
 \end_layout
 
 \begin_layout Section

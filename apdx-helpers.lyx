@@ -1,4 +1,4 @@
-#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.0 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -44,10 +44,24 @@
 
 \begin_layout Chapter
 Lift Helpers
+\begin_inset CommandInset label
+LatexCommand label
+name "cha:Lift-Helpers"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section
 Introduction
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Introduction"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -71,6 +85,13 @@ net.liftweb.util
 
 \begin_layout Section
 Box (or Scala's Option class on steroids)
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Box-(or-Scala's"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -133,6 +154,13 @@ status open
 
 \begin_layout Plain Layout
 Option and Map example
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Option-and-Map"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -203,6 +231,13 @@ status open
 
 \begin_layout Plain Layout
 Fetch value from an Option
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Fetch-value-from"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -273,11 +308,26 @@ res8: String = Nothing found.
 \end_layout
 
 \begin_layout Standard
-Before detailing the Box functionality, it is relevant to point out some
- interesting functionality about Option.
- Lots of times when writing code we have to doa bunch of null checks than
+Box in Lift may seem very similar in functionality with Option.
+ But Box is taking Option at the next level.
+ If we have an Option that is None at some point we can not really tell
+ why that Option is None although in many situation it would be quite helpful.
+ With Box, on the other hand, and Empty Box can be a Failure incorporating
+ the cause for the failure.
+ So you can think of Box as a container that can either contain something
+ or to be empty.
+ A Box can be empty from various causes including some error conditions.
+ This is why we also have Failure which is an Empty Box but contains information
+ about the error.
+ See 
+\family typewriter
+case class Failure(msg: String, exception: Box[Throwable], chain: Box[Failure])
+\family default
+.
+ Of course, the usability doesn;t stop here.
+ Lots of times when writing code we have to do a bunch of null checks than
  perform that operation then other null checks, other operations and so
- one.
+ on.
  So we would have something like:
 \end_layout
 
@@ -292,6 +342,13 @@ status open
 
 \begin_layout Plain Layout
 Pseudocode nested operations example
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Pseudocode-nested-operations"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -347,7 +404,7 @@ Pseudocode nested operations example
 ...
  so you got the picture.
  Needless to say how tedious such style is in practice.
- Now let's see if we can do better with Scala and Option.
+ Now let's see if we can do better with Lift's Box.
 \end_layout
 
 \begin_layout Standard
@@ -361,6 +418,13 @@ status open
 
 \begin_layout Plain Layout
 Scala nested operations example
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Scala-nested-operations"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -374,12 +438,12 @@ Scala nested operations example
 
 \begin_layout Plain Layout
 
-    def getSomeValue(): Option[Int] = Some(12)     
+    def getSomeValue(): Box[Int] = Full(12)     
 \end_layout
 
 \begin_layout Plain Layout
 
-    def getSomeOtherValue(): Option[Int] = Some(2)
+    def getSomeOtherValue(): Box[Int] = Full(2)
 \end_layout
 
 \begin_layout Plain Layout
@@ -426,14 +490,14 @@ n with these values.
 getSomeValue()
 \family default
  returns no value.
- In this context the two function return an Option[Int].
- The interesting part is that if eith ofthe two functions or both return
- a None Option instead of Some (None impersonating the non-existence of
- the value) the res value will also be None.
- However if both functions return a Some (like in the very example) the
+ In this context the two function return a Box[Int].
+ The interesting part is that if either of the two functions or both return
+ an Empty Box instead of Full (Empty impersonating the non-existence of
+ the value) the res value will also be Empty.
+ However if both functions return a Full (like in the very example) the
  computation is called and res will be a 
 \family typewriter
-Some(24)
+Full(24)
 \family default
 .
  But we have something else interesting here: 
@@ -441,10 +505,10 @@ Some(24)
 if x > 10
 \family default
 .
- If we would make getSomeValue to return a value less or equalwith 10 the
- res value will be None.
- The point of all this is to exemplify the power of Option and for comprehention
-s in Scala and how it can be used to build quite complex expressions and
+ If we would make getSomeValue to return a value less or equal with 10 the
+ res value will be Empty.
+ The point of all this is to exemplify the power of Box and for comprehentions
+ in Scala and how it can be used to build quite complex expressions and
  yet keep an impressive code claririty.
 \end_layout
 
@@ -466,6 +530,13 @@ status open
 
 \begin_layout Plain Layout
 Box example
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Box-example"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -601,6 +672,13 @@ status open
 
 \begin_layout Plain Layout
 openOr example
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:openOr-example"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -634,26 +712,13 @@ def view (xhtml: NodeSeq): NodeSeq = passedAuthor.map({ author =>
 \end_layout
 
 \begin_layout Standard
-So you can think of Box as a container that can either contain something
- or to be empty.
- A Box can be empty from various causes including some error conditions.
- This is why we also have Failure which is an Empty Box but contains information
- about the error.
- See 
-\family typewriter
-case class Failure(msg: String, exception: Box[Throwable], chain: Box[Failure])
-\family default
-.
-\end_layout
-
-\begin_layout Standard
 We won't be detailing here all the Box functions but a few words on the
  most common function might be benficial.
 \end_layout
 
 \begin_layout Standard
 \begin_inset Tabular
-<lyxtabular version="3" rows="5" columns="3">
+<lyxtabular version="3" rows="10" columns="3">
 <features>
 <column alignment="left" valignment="top" width="0">
 <column alignment="left" valignment="top" width="0">
@@ -810,7 +875,37 @@ default
 </cell>
 </row>
 <row>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+!!
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+If the argument is null in will return an Empty, otherwise a Full containing
+ the arguent's value.
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+myBox !! (<a reference>)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -819,7 +914,7 @@ default
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -833,7 +928,7 @@ this
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -851,6 +946,124 @@ Error message
 \end_inset
 </cell>
 </row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+isDefined
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns true if this Box contains a value
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+myBox isDefined
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+isEmpty
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Retun true is this Boxis empty
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+myBox isEmpty
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+asA[B]
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Return a Full[B] if the content of this Box is of type B, otherwise return
+ Empty 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+myBox asA[Person]
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+isA[B]
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Return a Full[B] if the contents of this Box is an instance of the specified
+ class, otherwise return Empty 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+myBox isA[Person]
+\end_layout
+
+\end_inset
+</cell>
+</row>
 </lyxtabular>
 
 \end_inset
@@ -863,8 +1076,87 @@ Note that Box contains a set of implicit conversion functions form/to Option
  and from/to Iterable.
 \end_layout
 
+\begin_layout Standard
+Remember that Box is heavily used in Lift and most of the Lift's API's operates
+ with Box-es.
+ The rationale is to avoid null references and to operate safely in context
+ where values may be missing.
+ Of course that programmatically a variabel of type Box can be set to null
+ manually but we strongly recommend against such practices.
+ There are cases however where you are using some third party Java libraries
+ and their API's return null values.
+ To cope with such cases in Lift you can use the !! function to Box that
+ value.
+ For instance:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Null example
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Null-example"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+var x = getSomeValueThatMayBeNull();
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+var boxified = Box !! x
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In this case the boxified variable will be Empty if x is null or Full if
+ x is a valid value/reference..
+\end_layout
+
 \begin_layout Section
 ActorPing
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:ActorPing"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -883,6 +1175,13 @@ status open
 
 \begin_layout Plain Layout
 ActorPing examples
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:ActorPing-examples"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -941,6 +1240,13 @@ ActorPing.scheduleAtFixedRate(myActor, MyMessage, 0 seconds, 15 secods)
 
 \begin_layout Section
 ClassHelpers
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:ClassHelpers"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -960,6 +1266,13 @@ status open
 
 \begin_layout Plain Layout
 ClassHelper examples
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:ClassHelper-examples"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -1042,6 +1355,13 @@ doSomething
 
 \begin_layout Section
 CodeHelpers
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:CodeHelpers"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -1060,6 +1380,13 @@ status open
 
 \begin_layout Plain Layout
 Expressiom example
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Expressiom-example"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -1117,6 +1444,13 @@ status open
 
 \begin_layout Plain Layout
 CodeHelpers example
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:CodeHelpers-example"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -1194,6 +1528,13 @@ Now if exp is a False we can tell why it failed as we have the messages
 
 \begin_layout Section
 ControlHelpers
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:ControlHelpers"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -1212,6 +1553,13 @@ status open
 
 \begin_layout Plain Layout
 ControlHelpers examples
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:ControlHelpers-examples"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -1302,6 +1650,13 @@ tryo(List(classOf[ClassNotFoundException], classOf[IOException])) {
 
 \begin_layout Section
 CSSHelpers
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:CSSHelpers"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -1321,6 +1676,13 @@ status open
 
 \begin_layout Plain Layout
 CSSHelper example
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:CSSHelper-example"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -1449,6 +1811,13 @@ status open
 
 \begin_layout Plain Layout
 fixCSS example
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:fixCSS-example"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -1530,17 +1899,250 @@ The way it works internally is that we are using Scala combinator parsers
 \end_layout
 
 \begin_layout Section
+BindHelpers
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:BindHelpers"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Binders are extensivley discussed in other chapters so we won't reiterate
+ them here.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Choose template
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Choose-template"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+//Assume the following markup.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<lift:CountGame.run form="post">
+\end_layout
+
+\begin_layout Plain Layout
+
+  <choose:guess>
+\end_layout
+
+\begin_layout Plain Layout
+
+    Guess a number between 1 and 100.<br/>
+\end_layout
+
+\begin_layout Plain Layout
+
+    Last guess: <count:last/><br />
+\end_layout
+
+\begin_layout Plain Layout
+
+    Guess: <count:input/><br/>
+\end_layout
+
+\begin_layout Plain Layout
+
+    <input type="submit" value="Guess"/>
+\end_layout
+
+\begin_layout Plain Layout
+
+  </choose:guess>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <choose:win>
+\end_layout
+
+\begin_layout Plain Layout
+
+    You Win!!<br />
+\end_layout
+
+\begin_layout Plain Layout
+
+    You guessed <count:number/> after <count:count/> guesses.<br/>
+\end_layout
+
+\begin_layout Plain Layout
+
+  </choose:win>
+\end_layout
+
+\begin_layout Plain Layout
+
+</lift:CountGame.run>  
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// And the Scala code
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import net.liftweb.util._
+\end_layout
+
+\begin_layout Plain Layout
+
+import Helpers._
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+class CountGame {
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  def run(xhtml: NodeSeq): NodeSeq = {
+\end_layout
+
+\begin_layout Plain Layout
+
+    ...
+ 
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\end_layout
+
+\begin_layout Plain Layout
+
+    chooseTemplate(
+\begin_inset Quotes eld
+\end_inset
+
+choose
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+win
+\begin_inset Quotes erd
+\end_inset
+
+, xhtml);
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+So in the snippet conditionally we can choose between parts of the snippet
+ template.
+ In the case above only the childs of 
+\family typewriter
+<choose:win>
+\family default
+ node will be returned by the snippetfunction, hence rendered.
+\end_layout
+
+\begin_layout Section
 HttpHelpers
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:HttpHelpers"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
 This provides helper functions for HTTP parameters manipulation, URL encoding/de
 coding etc.
+ However there is some interesting functionality available that lets you
+ choose between tags of a snippet.
  
 \end_layout
 
 \begin_layout Section
 JSON
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:JSON"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -1553,6 +2155,13 @@ Lift provides its own JSON parser if you ever need one.
 
 \begin_layout Section
 LD
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:LD"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -1571,6 +2180,13 @@ http://en.wikipedia.org/wiki/Levenshtein_distance
 
 \begin_layout Section
 ListHelpers
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:ListHelpers"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -1579,200 +2195,14 @@ Provides utility functions for manipulating lists that are not provided
 \end_layout
 
 \begin_layout Section
-Log
-\end_layout
-
-\begin_layout Standard
-Used to abstract the logging.
- It provides functions like:
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-Log example
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
- ...
-\end_layout
-
-\begin_layout Plain Layout
-
- def trace(msg: => AnyRef)
-\end_layout
-
-\begin_layout Plain Layout
-
- def debug(msg: => AnyRef) 
-\end_layout
-
-\begin_layout Plain Layout
-
- def error(msg: => AnyRef)
-\end_layout
-
-\begin_layout Plain Layout
-
- ...
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-By default it uses Log4J logger but you an of course provideay other implementat
-ion.
- See 
-\family typewriter
-LogBoot.loggerByName
-\family default
- variable.
- 
-\end_layout
-
-\begin_layout Standard
-It is important to note that each logger function does not take a value
- as parameter but instead a call-by-name function.
- Normally if we use Log4J's 
-\family typewriter
-log.error(
-\begin_inset Quotes eld
-\end_inset
-
-Message
-\begin_inset Quotes erd
-\end_inset
-
-)
-\family default
- even if the error log is not enabled the function parameters are still
- computed.
- In large applications this may consume quite considerable amount of time.
- However in Lift's case if we are calling 
-\family typewriter
-Log.error(
-\begin_inset Quotes eld
-\end_inset
-
-message
-\begin_inset Quotes erd
-\end_inset
-
-)
-\family default
- the parameter is lazily evaluated and it will be evaluated ONLY IF the
- error logger is enabled.
- This is extremely useful as we don't have to wrap the logging calls like
- 
-\family typewriter
-if (log.isErrorEnabled()) {log.error(
-\begin_inset Quotes eld
-\end_inset
-
-Message
-\begin_inset Quotes erd
-\end_inset
-
-)}
-\family default
-.
-\end_layout
-
-\begin_layout Section
-Mailer
-\end_layout
-
-\begin_layout Standard
-Utility class that allows you to send emails.
- Example:
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-Mailer example
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-Mailer.sendMail(
-\begin_inset Quotes eld
-\end_inset
-
-john.doe@domain.com
-\begin_inset Quotes erd
-\end_inset
-
-, 
-\begin_inset Quotes eld
-\end_inset
-
-jane.doe@domain.com
-\begin_inset Quotes erd
-\end_inset
-
-, PlainMailBodyType(
-\begin_inset Quotes eld
-\end_inset
-
-Honey, I'm comming home !
-\begin_inset Quotes erd
-\end_inset
-
-))
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Note that the call to sendMail is asynchronous.
-\end_layout
-
-\begin_layout Section
 NamedPartialFunctions
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:NamedPartialFunctions"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -1792,6 +2222,13 @@ status open
 
 \begin_layout Plain Layout
 NamedPF exmaple
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:NamedPF-exmaple"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -1877,6 +2314,13 @@ LiftRules.dispatch
 
 \begin_layout Section
 SecurityHelpers
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:SecurityHelpers"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -1886,6 +2330,13 @@ ions (blowfish), hash calculations (MD5, SHA, SHA-256) and so on.
 
 \begin_layout Section
 TimeHelpers
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:TimeHelpers"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
