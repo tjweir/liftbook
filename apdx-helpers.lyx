@@ -417,7 +417,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Scala nested operations example
+Box nested operations example
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:Scala-nested-operations"
@@ -1174,10 +1174,10 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-ActorPing examples
+ActorPing example
 \begin_inset CommandInset label
 LatexCommand label
-name "lst:ActorPing-examples"
+name "lst:ActorPing-example"
 
 \end_inset
 
@@ -1265,10 +1265,10 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-ClassHelper examples
+ClassHelper example
 \begin_inset CommandInset label
 LatexCommand label
-name "lst:ClassHelper-examples"
+name "lst:ClassHelper-example"
 
 \end_inset
 
@@ -1379,10 +1379,10 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Expressiom example
+Expression example
 \begin_inset CommandInset label
 LatexCommand label
-name "lst:Expressiom-example"
+name "lst:Expression-example"
 
 \end_inset
 
@@ -1552,10 +1552,10 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-ControlHelpers examples
+ControlHelpers example
 \begin_inset CommandInset label
 LatexCommand label
-name "lst:ControlHelpers-examples"
+name "lst:ControlHelpers-example"
 
 \end_inset
 
@@ -1865,12 +1865,12 @@ When the
 /styles/theme.css
 \family default
  file Lift will apply the prefix specified.
- But in this case we provodided an Empty Box.
- This actually means that Lift will apply the context path rturned by 
+ But in this case we provided an Empty Box.
+ This actually means that Lift will apply the context path returned by 
 \family typewriter
 S.contextPath 
 \family default
-function which as you know return the context path from the 
+function which as you know returns the context path from the 
 \family typewriter
 HttpSession
 \family default
@@ -1882,12 +1882,12 @@ Internally when you call
 \family typewriter
 fixCSS
 \family default
- a dispatch function is automatically created and prepended to 
+ a dispatch function is automatically created and pre-pended to 
 \family typewriter
 LiftRules.dispatch
 \family default
 .
- This is needed in order to intercept the broser reqiest to this .css resource.
+ This is needed in order to intercept the browser request to this .css resource.
  Also internally we are telling Lift the this resource must be server by
  Lift and not by container.
  
@@ -1910,7 +1910,7 @@ name "sec:BindHelpers"
 \end_layout
 
 \begin_layout Standard
-Binders are extensivley discussed in other chapters so we won't reiterate
+Binders are extensiveley discussed in other chapters so we won't reiterate
  them here.
  
 \end_layout
@@ -2147,7 +2147,7 @@ name "sec:JSON"
 
 \begin_layout Standard
 Lift provides its own JSON parser if you ever need one.
- At a first glance it may be a bit rendundant with Scala's JSON parser but
+ At a first glance it may be a bit redundant with Scala's JSON parser but
  infact Scala'sparser has its own problems with large JSON objects hence
  List's uses its own JSON parser implemented of course using combinator
  parsers.
@@ -2221,10 +2221,10 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-NamedPF exmaple
+NamedPF example
 \begin_inset CommandInset label
 LatexCommand label
-name "lst:NamedPF-exmaple"
+name "lst:NamedPF-example"
 
 \end_inset
 
@@ -2305,8 +2305,8 @@ NamedPF(10, f1 :: f2 :: Nil)
 \begin_layout Standard
 Remember that many LiftRules variable are RuleSeq-s.
  Meaning that most of the times we re talking about lists of partial functions.
- Hence internally lift uses NamedPF for invoking such functions that ultimatelly
- are provided by the user.
+ Hence internally lift uses NamedPF for invoking such functions that are
+ ultimately provided by the user.
  Please see 
 \family typewriter
 LiftRules.dispatch
@@ -2341,8 +2341,8 @@ name "sec:TimeHelpers"
 
 \begin_layout Standard
 Utility functions for time operations.
- For instance if also provides a set of implicit converion functions thatallow
- you to type 
+ For instance if also provides a set of implicit conversion functions that
+ allow you to type 
 \begin_inset Quotes eld
 \end_inset
 
