@@ -1896,28 +1896,12 @@ name "lst:File-upload-template"
 
 \begin_layout Plain Layout
 
-<lift:MyForm.file form=
-\begin_inset Quotes erd
-\end_inset
-
-POST
-\begin_inset Quotes erd
-\end_inset
-
- multipart=
-\begin_inset Quotes erd
-\end_inset
-
-true
-\begin_inset Quotes erd
-\end_inset
-
->
+<lift:MyForm.file form="POST" multipart="true">
 \end_layout
 
 \begin_layout Plain Layout
 
-  <form:file /> <form:submit />
+  <form:file /> <input type="submit" value="Upload" />
 \end_layout
 
 \begin_layout Plain Layout
@@ -1991,17 +1975,7 @@ def storeFile (xhtml : Group) : NodeSeq = {
 
 \begin_layout Plain Layout
 
-  var file : FileParamHolder = _
-\end_layout
-
-\begin_layout Plain Layout
-
-  
-\end_layout
-
-\begin_layout Plain Layout
-
-  def saveFile () {
+  def saveFile (file : FileParamHolder) {
 \end_layout
 
 \begin_layout Plain Layout
@@ -2035,49 +2009,12 @@ def storeFile (xhtml : Group) : NodeSeq = {
 
 \begin_layout Plain Layout
 
-  bind(
-\begin_inset Quotes eld
-\end_inset
-
-form
-\begin_inset Quotes erd
-\end_inset
-
-, xhtml,
+  bind("form", xhtml,
 \end_layout
 
 \begin_layout Plain Layout
 
-       
-\begin_inset Quotes eld
-\end_inset
-
-file
-\begin_inset Quotes erd
-\end_inset
-
- -> SHtml.fileUpload(file = _)
-\end_layout
-
-\begin_layout Plain Layout
-
-       
-\begin_inset Quotes eld
-\end_inset
-
-submit
-\begin_inset Quotes erd
-\end_inset
-
- -> SHtml.submit(
-\begin_inset Quotes eld
-\end_inset
-
-Upload
-\begin_inset Quotes erd
-\end_inset
-
-, saveFile))
+       "file" -> SHtml.fileUpload(saveFile(_)))
 \end_layout
 
 \begin_layout Plain Layout
