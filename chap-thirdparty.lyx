@@ -620,7 +620,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 AMQP sending messages example
 \begin_inset CommandInset label
 LatexCommand label
@@ -733,7 +732,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 AMQP receiving messages example
 \end_layout
 
@@ -1037,6 +1035,298 @@ AMQPDispatcher
 AMQPMessage
 \family default
  messages.
+\end_layout
+
+\begin_layout Section
+PayPal
+\end_layout
+
+\begin_layout Standard
+Paypal
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+https://www.paypal.com
+\end_layout
+
+\end_inset
+
+ is the notorious service that allows you to do online payment transactions.
+ Lift supports both 
+\end_layout
+
+\begin_layout Standard
+PDT(Payment Data Transferr)
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+https://www.paypal.com/en_US/i/IntegrationCenter/scr/scr_ppPDTDiagram_513x282.gif
+\end_layout
+
+\end_inset
+
+as well as 
+\end_layout
+
+\begin_layout Standard
+IPN(Instant Payment Notification)
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+https://www.paypal.com/en_US/i/IntegrationCenter/scr/scr_ppIPNDiagram_555x310.gif
+\end_layout
+
+\end_inset
+
+ API' sprovided by PayPal.
+ We won't be getting into PayPal API details as this information can be
+ found on PayPal site.
+ However let's see how we'd use PDT and IPN.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+PDT Example
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import net.liftweb.paypal._
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+object MyPayPalPDT extends PayPalPDT {
+\end_layout
+
+\begin_layout Plain Layout
+
+  override def pdtPath = "paypal_complete"
+\end_layout
+
+\begin_layout Plain Layout
+
+  def paypalAuthToken = Props.get("paypal.authToken") openOr "cannot find
+ auth token from props file"
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  def pdtResponse: PartialFunction[(PayPalInfo, Req), LiftResponse] = {
+\end_layout
+
+\begin_layout Plain Layout
+
+    case (info, req) => println("--- in pdtResponse"); DoRedirectResponse("/acco
+unt_admin/index");
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// in Boot
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def boot(){
+\end_layout
+
+\begin_layout Plain Layout
+
+  ...
+\end_layout
+
+\begin_layout Plain Layout
+
+  LiftRules.statelessDispatchTable.append(MyPayPalPDT)
+\end_layout
+
+\begin_layout Plain Layout
+
+  ...
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+That is pretty much it.
+ 
+\family typewriter
+pdtResponse
+\family default
+ function allows you to determine the behavior of you application upon receiving
+ the reponse from PayPal.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+IPN Example
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import net.liftweb.paypal._
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+object MyPayPalIPN extends PayPalIPN {
+\end_layout
+
+\begin_layout Plain Layout
+
+  def actions = {
+\end_layout
+
+\begin_layout Plain Layout
+
+	case (ClearedPayment, info, req) => // do your processing here
+\end_layout
+
+\begin_layout Plain Layout
+
+    case (RefundedPayment, info, req) => // do refund processing 
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// in Boot
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def boot(){
+\end_layout
+
+\begin_layout Plain Layout
+
+  ...
+\end_layout
+
+\begin_layout Plain Layout
+
+  LiftRules.statelessDispatchTable.append(MyPayPalIPN)
+\end_layout
+
+\begin_layout Plain Layout
+
+  ...
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+As you can see everything is pretty strightforward.
+ Just pattern match on the 
+\family typewriter
+PaypalTransactionStatus
+\family default
+.
+ It is worth to note sthat IPN is a 'machine-to-machine' API which happens
+ in the background without the end user interraction.
 \end_layout
 
 \begin_layout Section
