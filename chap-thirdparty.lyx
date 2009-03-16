@@ -222,7 +222,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 OpenID example
 \end_layout
 
@@ -372,7 +371,10 @@ User accesses your lift page that contains the OpenID form
 \end_layout
 
 \begin_layout Enumerate
-User enters his/her OpenID identity URL and submits the form
+User enters his/her OpenID identity URL and submits the form.
+ Note that you don't have to use the default login form asyou can construct
+ your own as long as the form is submitted to the correct path and contains
+ the correct input text parameter name.
 \end_layout
 
 \begin_layout Enumerate
@@ -412,7 +414,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 SimpleOpenIDVendor
 \end_layout
 
@@ -433,7 +434,7 @@ trait SimpleOpenIdVendor extends OpenIdVendor {
 
 \begin_layout Plain Layout
 
-  type ConsumerType = OpenIDConsumer[UserType]
+  type ConsumerType = OpenIdConsumer[UserType]
 \end_layout
 
 \begin_layout Plain Layout
@@ -525,16 +526,517 @@ object SimpleOpenIdVendor extends SimpleOpenIdVendor
 Note the postLogin implementation.
  Of course if you need a more complex post-login processing you can extend
  OpenIdVendor by yourself.
- During this message exchange between the Identity Provider ans your Lift
+ 
+\end_layout
+
+\begin_layout Standard
+During this message exchange between the Identity Provider ans your Lift
  application, Lift utilizes a couple of SessionVars:
 \end_layout
 
 \begin_layout Itemize
-OpenIdObject - holds an OpenIDConsumer
+OpenIdObject - holds an OpenIdConsumer
 \end_layout
 
 \begin_layout Itemize
 OpenIdUser - holding an org.openid4java.discovery.Identifier
+\end_layout
+
+\begin_layout Section
+AMQP 
+\end_layout
+
+\begin_layout Standard
+AMQP stands for 
+\series bold
+A
+\series default
+dvanced 
+\series bold
+M
+\series default
+essage 
+\series bold
+Q
+\series default
+ueuing 
+\series bold
+P
+\series default
+rotocol
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+http://jira.amqp.org/confluence/display/AMQP/Advanced+Message+Queuing+Protocol
+\end_layout
+
+\end_inset
+
+.
+ It is an open Internet protocol for messaging.
+ It is concepted as a binary representation of messages.
+ Lift facilitates the work with AMQP using the RabbitMQ
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+http://www.rabbitmq.com/
+\end_layout
+
+\end_inset
+
+ Java implementation.
+ There are two fundamental classes:
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+net.liftweb.amqp.AMQPSender
+\family default
+ - used for sending AMQP messages
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+net.liftweb.amqp.AMQPDispatcher
+\family default
+ - used for receiving AMQP messages
+\end_layout
+
+\begin_layout Standard
+Let's see how we can use Lift to send AMQP messages
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+AMQP sending messages example
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:AMQP-sending-messages"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  import net.liftweb.amqp._
+\end_layout
+
+\begin_layout Plain Layout
+
+  import com.rabbitmq.client._ 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  val params = new ConnectionParameters
+\end_layout
+
+\begin_layout Plain Layout
+
+  // All of the params, exchanges, and queues are all just example data.
+\end_layout
+
+\begin_layout Plain Layout
+
+  params.setUsername("guest")
+\end_layout
+
+\begin_layout Plain Layout
+
+  params.setPassword("guest")
+\end_layout
+
+\begin_layout Plain Layout
+
+  params.setVirtualHost("/")
+\end_layout
+
+\begin_layout Plain Layout
+
+  params.setRequestedHeartbeat(0)
+\end_layout
+
+\begin_layout Plain Layout
+
+  val factory = new ConnectionFactory(params)
+\end_layout
+
+\begin_layout Plain Layout
+
+  val amqp = new StringAMQPSender(factory, "localhost", 5672, "mult", "routerout
+e")
+\end_layout
+
+\begin_layout Plain Layout
+
+  amqp.start
+\end_layout
+
+\begin_layout Plain Layout
+
+  amqp ! AMQPMessage("hi") 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+As you can see the 
+\family typewriter
+AMQSender
+\family default
+ is leveraging Scala actors to send messages.
+ Scala actors and AMQP messaging concepts play very well together.
+\end_layout
+
+\begin_layout Standard
+Now let's see how we can receive and process AMQP messages:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+AMQP receiving messages example
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import net.liftweb.amqp._
+\end_layout
+
+\begin_layout Plain Layout
+
+import com.rabbitmq.client._ 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Example Dispatcher that listens on an example queue and exchange.
+ Use this
+\end_layout
+
+\begin_layout Plain Layout
+
+ * as your guiding example for creating your own Dispatcher.
+\end_layout
+
+\begin_layout Plain Layout
+
+ *
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+class ExampleSerializedAMQPDispatcher[T](factory: ConnectionFactory, host:
+ String, port: Int)
+\end_layout
+
+\begin_layout Plain Layout
+
+    extends AMQPDispatcher[T](factory, host, port) {
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  override def configure(channel: Channel) {
+\end_layout
+
+\begin_layout Plain Layout
+
+    // Get the ticket.
+\end_layout
+
+\begin_layout Plain Layout
+
+    val ticket = channel.accessRequest("/data")
+\end_layout
+
+\begin_layout Plain Layout
+
+    // Set up the exchange and queue
+\end_layout
+
+\begin_layout Plain Layout
+
+    channel.exchangeDeclare(ticket, "mult", "direct")
+\end_layout
+
+\begin_layout Plain Layout
+
+    channel.queueDeclare(ticket, "mult_queue")
+\end_layout
+
+\begin_layout Plain Layout
+
+    channel.queueBind(ticket, "mult_queue", "mult", "routeroute")
+\end_layout
+
+\begin_layout Plain Layout
+
+    // Use the short version of the basicConsume method for convenience.
+\end_layout
+
+\begin_layout Plain Layout
+
+    channel.basicConsume(ticket, "mult_queue", false, new SerializedConsumer(chan
+nel, this))
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Example class that accepts Strings coming in from the
+\end_layout
+
+\begin_layout Plain Layout
+
+ * ExampleSerializedAMQPDispatcher.
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+class ExampleStringAMQPListener {
+\end_layout
+
+\begin_layout Plain Layout
+
+  val params = new ConnectionParameters
+\end_layout
+
+\begin_layout Plain Layout
+
+  params.setUsername("guest")
+\end_layout
+
+\begin_layout Plain Layout
+
+  params.setPassword("guest")
+\end_layout
+
+\begin_layout Plain Layout
+
+  params.setVirtualHost("/")
+\end_layout
+
+\begin_layout Plain Layout
+
+  params.setRequestedHeartbeat(0)
+\end_layout
+
+\begin_layout Plain Layout
+
+  val factory = new ConnectionFactory(params)
+\end_layout
+
+\begin_layout Plain Layout
+
+  // thor.local is a machine on your network with rabbitmq listening on port
+ 5672
+\end_layout
+
+\begin_layout Plain Layout
+
+  val amqp = new ExampleSerializedAMQPDispatcher[String](factory, "thor.local",
+ 5672)
+\end_layout
+
+\begin_layout Plain Layout
+
+  amqp.start
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  // Example Listener that just prints the String it receives.
+\end_layout
+
+\begin_layout Plain Layout
+
+  class StringListener extends Actor {
+\end_layout
+
+\begin_layout Plain Layout
+
+    def act = {
+\end_layout
+
+\begin_layout Plain Layout
+
+      react {
+\end_layout
+
+\begin_layout Plain Layout
+
+	    case msg@AMQPMessage(contents: String) => println("received: " + msg);
+ act
+\end_layout
+
+\begin_layout Plain Layout
+
+      }
+\end_layout
+
+\begin_layout Plain Layout
+
+    }
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+  val stringListener = new StringListener()
+\end_layout
+
+\begin_layout Plain Layout
+
+  stringListener.start
+\end_layout
+
+\begin_layout Plain Layout
+
+  amqp ! AMQPAddListener(stringListener) 
+\end_layout
+
+\begin_layout Plain Layout
+
+} 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+First of all don't get scarred about this.
+ The above classes are already existent so you can just reuse them.
+ However the point of showing them here is to understand how to use a AMQP
+ consumer, how to configure it to match the client settings from the Listing
+ 1.3
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:AMQP-sending-messages"
+
+\end_inset
+
+.
+ The key here is to see how the actual messages are consumed.
+ Note the StringListener actor is consumming the 
+\family typewriter
+AMQPMessage
+\family default
+ but the actor itself it provided to 
+\family typewriter
+AMQPDispatcher
+\family default
+.
+ What happens is that when a real AMQP message is received by 
+\family typewriter
+AMQPDispatcher
+\family default
+ it will just forward it to the user'sActor for actuall processing.
+ SerializedConsumer class is actually doing the transformation of the raw
+ data (array of byte-s) into 
+\family typewriter
+AMQPMessage
+\family default
+ messages.
 \end_layout
 
 \begin_layout Section

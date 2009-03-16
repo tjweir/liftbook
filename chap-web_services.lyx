@@ -70,10 +70,6 @@ This chapter is still under active development.
 \end_layout
 
 \begin_layout Standard
-
-\end_layout
-
-\begin_layout Standard
 \begin_inset Note Note
 status open
 
@@ -86,35 +82,35 @@ Explain REST - http://en.wikipedia.org/wiki/REST
 \end_layout
 
 \begin_layout Itemize
-Build off of the URL rewriting comment
+Explain ROA - resource-oriented architecture from ReSTful web services
 \end_layout
 
 \begin_layout Itemize
-api demo from the wiki
+Compare ROA to XML-RPC
 \end_layout
 
 \begin_layout Itemize
-Talk to SteveJ about using his demo from LiftOff: http://liftweb.net/index.php/How
-To_do_Web_Services
-\end_layout
-
-\begin_deeper
-\begin_layout Itemize
-Add a dispatcher to sit on the right urls
+Set up the example, explain what we're going to do
 \end_layout
 
 \begin_layout Itemize
-Add a class that has the methods that correspond to your API/Service
+Write the pattern matching code to intercept
 \end_layout
 
 \begin_layout Itemize
-That's about it
+Add the dispatch to Boot
 \end_layout
 
-\end_deeper
 \begin_layout Itemize
-SteveJ gave us the go-ahead to use his stuff.
- It will have to be updated to the latest.
+Write a helper for the model, toXML
+\end_layout
+
+\begin_layout Itemize
+Show a GET Request and Response
+\end_layout
+
+\begin_layout Itemize
+Show a PUT Request and Response
 \end_layout
 
 \end_inset
@@ -231,7 +227,352 @@ What is ROA REST?
 
 \begin_layout Standard
 Resource oriented architecture is a set of rules that sit on top of REST.
- We again turn to Wikipedia for a definition:
+ 
+\end_layout
+
+\begin_layout Section
+Compare XML-RPC to ROA
+\end_layout
+
+\begin_layout Standard
+XML-RPC is this, ROA is that.
+\end_layout
+
+\begin_layout Section
+Set up the example, explain what we're going to do
+\end_layout
+
+\begin_layout Standard
+We're going to start out with a simple example.
+ We'd like to skip some of the more complex steps of a web service at the
+ start, in particular, authorization.
+ We'll add it later, but for right now, we'd like to illustrate how to get
+ stuff out of the server.
+ 
+\end_layout
+
+\begin_layout Standard
+We'd going to model two calls to the server, a GET request that responds
+ with the current balance of an account and a PUT to add an expense.
+ The URLs will be:
+\end_layout
+
+\begin_layout Itemize
+A GET request - http://www.pocketchangeapp.com/api/account/<aid> where aid
+ is the Account Id, and
+\end_layout
+
+\begin_layout Itemize
+A PUT request - http://www.pocketchangeapp.com/api/account/<aid> again aid
+ is the Account Id
+\end_layout
+
+\begin_layout Standard
+This set-up will allow 3rd party applications, such as widgets or AIR applicatio
+ns interact with our server programmatically, like the multitude of dedicated
+ clients for Twitter.
+ The URLs are the same, but as we will show, we can pattern-match on the
+ type of request.
+ In this case, either a GET or a PUT.
+\end_layout
+
+\begin_layout Section
+Write the pattern matching code to intercept
+\end_layout
+
+\begin_layout Standard
+Now that we've discussed our design, let's see the code that will handle
+ the routing.
+ In the package com.pocketchangeapp.api, we have a cl named RestAPI living
+ in RestAPI.scala.
+\end_layout
+
+\begin_layout Standard
+The block of code to handle the routing follows:
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+object RestAPI extends XMLApiHelper {
+\end_layout
+
+\begin_layout LyX-Code
+  def dispatch: LiftRules.DispatchPF = {     
+\end_layout
+
+\begin_layout LyX-Code
+    case Req("api" :: "account" :: aid :: Nil, "", GetRequest) => () =>
+ showAccountBalance(aid) 
+\end_layout
+
+\begin_layout LyX-Code
+    case r @ Req("api" :: "account" :: aid :: Nil, "", PutRequest) => ()
+ => addExpense(aid, r)
+\end_layout
+
+\begin_layout LyX-Code
+    
+\end_layout
+
+\begin_layout LyX-Code
+    // Invalid API request - route to our error handler
+\end_layout
+
+\begin_layout LyX-Code
+    case Req("api" :: x :: Nil, "", _) => failure _ 
+\end_layout
+
+\begin_layout LyX-Code
+  }
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout Standard
+The server to now service GET requests with showAccountBalance and PUT requests
+ with addExpense.
+ One thing to note is we are pattern matching on the Req object and in the
+ PUT request, we extract the Req and pass it as a parameter to addExpense.
+ This is because we're passing in an XML body with the information for the
+ Exspense.
+\end_layout
+
+\begin_layout Section
+Add the dispatch to Boot
+\end_layout
+
+\begin_layout Standard
+As we discussed in chapter ??? Lift uses dispatch rules to route requests.
+ Since we'd like to sit on /api/ and handle all of the requests we're going
+ to need to update the dispatch rules.
+\end_layout
+
+\begin_layout Standard
+This is accomplished by adding the following code into Boot.scala:
+\end_layout
+
+\begin_layout Standard
+Boot.scala code
+\end_layout
+
+\begin_layout LyX-Code
+class Boot {
+\end_layout
+
+\begin_layout LyX-Code
+  def boot {
+\end_layout
+
+\begin_layout LyX-Code
+    ...
+\end_layout
+
+\begin_layout LyX-Code
+    LiftRules.dispatch.prepend(RestAPI.dispatch) 
+\end_layout
+
+\begin_layout LyX-Code
+    ...
+\end_layout
+
+\begin_layout LyX-Code
+  }
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout Standard
+In Section X.6 we defined the dispatch rule specific to our API.
+ Adding them then injects them into the Lift request pipeline and we'll
+ be able to handle the /api/ calls.
+\end_layout
+
+\begin_layout Section
+Service Code
+\end_layout
+
+\begin_layout LyX-Code
+def showReview(rid: String): LiftResponse = { 
+\end_layout
+
+\begin_layout LyX-Code
+  val r: Box[NodeSeq] = for(r <- Account.find(By(Account.id, rid.toLong)))
+ yield { 
+\end_layout
+
+\begin_layout LyX-Code
+     wrapXmlBody(<operation id="show_review" success="true">{r.toXML}</operation>
+) 
+\end_layout
+
+\begin_layout LyX-Code
+  }
+\end_layout
+
+\begin_layout LyX-Code
+  
+\end_layout
+
+\begin_layout LyX-Code
+  r 
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+def addExpense(eid: String, req: Req): LiftResponse = { 
+\end_layout
+
+\begin_layout LyX-Code
+  var rsvp = new Rsvp req.xml match { 
+\end_layout
+
+\begin_layout LyX-Code
+    case Full(<rsvp>{parameters @ _*}</rsvp>) => { 
+\end_layout
+
+\begin_layout LyX-Code
+      for(parameter <- parameters){ parameter match { 
+\end_layout
+
+\begin_layout LyX-Code
+        case <udid>{udid}</udid> => rsvp.udid(udid) 
+\end_layout
+
+\begin_layout LyX-Code
+        case <dateOf>{dateof}</dateOf> => rsvp.dateOf(millis) 
+\end_layout
+
+\begin_layout LyX-Code
+        case <email>{email}</email> => rsvp.email(email) 
+\end_layout
+
+\begin_layout LyX-Code
+        case _ => 
+\end_layout
+
+\begin_layout LyX-Code
+      } 
+\end_layout
+
+\begin_layout LyX-Code
+    } 
+\end_layout
+
+\begin_layout LyX-Code
+    try { 
+\end_layout
+
+\begin_layout LyX-Code
+      if (isValid(rsvp.udid)) { 
+\end_layout
+
+\begin_layout LyX-Code
+        rsvp.eventId(eid.toLong).save 
+\end_layout
+
+\begin_layout LyX-Code
+        CreatedResponse(wrapXmlBody(<operation id="show_review" success="true"><
+/operation>), "text/xml") 
+\end_layout
+
+\begin_layout LyX-Code
+      }
+\end_layout
+
+\begin_layout LyX-Code
+      else { 
+\end_layout
+
+\begin_layout LyX-Code
+        CreatedResponse(wrapXmlBody(<operation id="show_review" success="false">
+</operation>), "text/xml") 
+\end_layout
+
+\begin_layout LyX-Code
+      } 
+\end_layout
+
+\begin_layout LyX-Code
+    } 
+\end_layout
+
+\begin_layout LyX-Code
+    catch { 
+\end_layout
+
+\begin_layout LyX-Code
+      case e => Log.error("Could not add rsvp", e); BadResponse() 
+\end_layout
+
+\begin_layout LyX-Code
+    } 
+\end_layout
+
+\begin_layout LyX-Code
+  } 
+\end_layout
+
+\begin_layout LyX-Code
+  case _ => Log.error("Request was malformed"); BadResponse() 
+\end_layout
+
+\begin_layout LyX-Code
+  }  
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout Section
+Write a helper for the model, toXML
+\end_layout
+
+\begin_layout Standard
+model.scala code
+\end_layout
+
+\begin_layout Section
+Show a GET Request and Response
+\end_layout
+
+\begin_layout Standard
+<xml>
+\end_layout
+
+\begin_layout Section
+Show a PUT Request and Response
+\end_layout
+
+\begin_layout Standard
+<xml> boadfdf
+\end_layout
+
+\begin_layout Section
+Recap
+\end_layout
+
+\begin_layout Standard
+We did some awesome stuff and built a simple ReST API.
+ 
 \end_layout
 
 \end_body
