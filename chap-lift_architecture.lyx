@@ -376,7 +376,7 @@ bootloader
 
 
 \family default
- context param as shown in listing 
+ init param for the LiftFilter as shown in listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Overriding-bootloader"
@@ -414,7 +414,18 @@ name "lst:Overriding-bootloader"
 
 \begin_layout Plain Layout
 
-  <context-param>     
+<filter>
+\end_layout
+
+\begin_layout Plain Layout
+
+  ...
+ filter setup here ...
+\end_layout
+
+\begin_layout Plain Layout
+
+  <init-param>     
 \end_layout
 
 \begin_layout Plain Layout
@@ -429,7 +440,12 @@ name "lst:Overriding-bootloader"
 
 \begin_layout Plain Layout
 
-  </context-param> 
+  </init-param> 
+\end_layout
+
+\begin_layout Plain Layout
+
+</filter>
 \end_layout
 
 \end_inset
