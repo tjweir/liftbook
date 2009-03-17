@@ -1097,7 +1097,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 PDT Example
 \end_layout
 
@@ -1223,7 +1222,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 IPN Example
 \end_layout
 
@@ -1327,6 +1325,167 @@ PaypalTransactionStatus
 .
  It is worth to note sthat IPN is a 'machine-to-machine' API which happens
  in the background without the end user interraction.
+\end_layout
+
+\begin_layout Section
+Facebook
+\end_layout
+
+\begin_layout Standard
+Facebook
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+http://www.facebook.com
+\end_layout
+
+\end_inset
+
+ is the well known site that simply allows people to easily interract, build
+ social graphs share photos etc.
+ Fecebook also exposes HTTP API's
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+http://wiki.developers.facebook.com/index.php/API
+\end_layout
+
+\end_inset
+
+ that allows other applications to interract with Facebook.
+ Lift also provide an implementation that allos your application to interract
+ with Facebook quite seamelessly.
+ Here is an example:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Facebook example
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import net.liftweb.ext_api.facebook._
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+FacebookRestApi.apiKey = <your API key>;
+\end_layout
+
+\begin_layout Plain Layout
+
+FacebookRestApi.secret = <your secret>;
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// The api key is ontained from System.getProperty("com.facebook.api_key")
+\end_layout
+
+\begin_layout Plain Layout
+
+// The secreat is obtained from System.setProperty("com.facebook.secret", key)
+ 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// Invoke stateless calls
+\end_layout
+
+\begin_layout Plain Layout
+
+val respNode: Node = FacebookClient !? AuthCreateToken
+\end_layout
+
+\begin_layout Plain Layout
+
+val authToken = // extract authToken from respNode
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// Obtain a stateful client based on the authToken
+\end_layout
+
+\begin_layout Plain Layout
+
+val faceBookClient = FacebookClient fromAuthToken(authToken)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+faceBookClient !? GetFriendLists
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Once you have the FacebookClient you can invoke numerous API methods described
+ by 
+\family typewriter
+FacebookMethod
+\family default
+ or 
+\family typewriter
+SessionlessFacebookMethod
+\family default
+.
+ In the above examplewe are creating the facebook context by first obtaining
+ an authToken and then obtaining a faceBookClient reference bound to the
+ newly created session.
+ After that we're just ontaining the friends list.
 \end_layout
 
 \begin_layout Section
