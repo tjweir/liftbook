@@ -1344,7 +1344,7 @@ http://www.facebook.com
 
  is the well known site that simply allows people to easily interract, build
  social graphs share photos etc.
- Fecebook also exposes HTTP API's
+ Facebook also exposes HTTP API's
 \begin_inset Foot
 status open
 
@@ -1354,9 +1354,9 @@ http://wiki.developers.facebook.com/index.php/API
 
 \end_inset
 
- that allows other applications to interract with Facebook.
- Lift also provide an implementation that allos your application to interract
- with Facebook quite seamelessly.
+ that allows other applications to interract with it.
+ Lift framework allows your application to easily interract with Facebook
+ by providing an abstraction layer over the Facebook API.
  Here is an example:
 \end_layout
 
@@ -1482,9 +1482,12 @@ FacebookMethod
 SessionlessFacebookMethod
 \family default
 .
- In the above examplewe are creating the facebook context by first obtaining
- an authToken and then obtaining a faceBookClient reference bound to the
- newly created session.
+ In the above examplewe are creating the FaceBook context by first obtaining
+ an authToken and then obtaining a 
+\family typewriter
+faceBookClient
+\family default
+ reference bound to the newly created session.
  After that we're just ontaining the friends list.
 \end_layout
 
