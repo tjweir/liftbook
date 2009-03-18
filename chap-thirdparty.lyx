@@ -1552,12 +1552,20 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 XMPP Example
 \end_layout
 
 \end_inset
 
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import net.liftweb.xmpp._
+\end_layout
+
+\begin_layout Plain Layout
 
 \end_layout
 
