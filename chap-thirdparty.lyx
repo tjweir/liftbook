@@ -1538,7 +1538,17 @@ http://xmpp.org/about/jabber.shtml
  open-source community.
  Lift provides an XMPP dispatcher implementation that you application can
  use to receive instant messages, manage rosters etc.
- This support realies on Scala actor a the model fits like a glove.
+ This support realies on Smack 
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+http://www.igniterealtime.org/downloads/index.jsp
+\end_layout
+
+\end_inset
+
+ XMPP client library and Scala actors as the actors model fits like a glove.
  Here is an example:
 \end_layout
 
