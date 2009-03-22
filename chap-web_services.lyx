@@ -74,6 +74,14 @@ This chapter is still under active development.
 status open
 
 \begin_layout Plain Layout
+Todo:
+\end_layout
+
+\begin_layout Plain Layout
+Pick a better mashup - maybe find the first one
+\end_layout
+
+\begin_layout Plain Layout
 Planning:
 \end_layout
 
@@ -166,7 +174,99 @@ Typically, when discussing Web Services there are two types of services
 \end_layout
 
 \begin_layout Section
+HTTP Details
+\end_layout
+
+\begin_layout Standard
+In building our web service it's going to help to know a few things about
+ HTTP requests and responses.
+ If you're comfortable with the Request and Response cycles and the details
+ then feel free to jump to 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:What-is-REST?"
+
+\end_inset
+
+ and get down to business.
+\end_layout
+
+\begin_layout Standard
+The details of an HTTP GET:
+\end_layout
+
+\begin_layout LyX-Code
+GET /index.html HTTP/1.1 
+\end_layout
+
+\begin_layout LyX-Code
+Host: www.pocketchangeapp.com 
+\end_layout
+
+\begin_layout LyX-Code
+User-Agent: Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.7.12)...
+ 
+\end_layout
+
+\begin_layout LyX-Code
+Accept: text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,...
+ 
+\end_layout
+
+\begin_layout LyX-Code
+Accept-Language: us,en;q=0.5 
+\end_layout
+
+\begin_layout LyX-Code
+Accept-Encoding: gzip,deflate 
+\end_layout
+
+\begin_layout LyX-Code
+Accept-Charset: ISO-8859-15,utf-8;q=0.7,*;q=0.7 
+\end_layout
+
+\begin_layout LyX-Code
+Keep-Alive: 300 
+\end_layout
+
+\begin_layout LyX-Code
+Connection: keep-alive 
+\end_layout
+
+\begin_layout Standard
+The parts of an HTTP request are:
+\end_layout
+
+\begin_layout Standard
+HTTP Actions or verbs: GET, POST, DELETE, PUT, HEAD, OPTIONS, we'll focus
+ on 
+\end_layout
+
+\begin_layout Standard
+Path/URI: http://www.pocketchangeapp.com/index.html
+\end_layout
+
+\begin_layout Standard
+Request Header:
+\end_layout
+
+\begin_layout Standard
+Entity Body:
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout Section
 What is REST?
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:What-is-REST?"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -216,6 +316,48 @@ Systems which follow Fielding's REST principles are often referred to as
 \end_layout
 
 \begin_layout Standard
+----------------
+\end_layout
+
+\begin_layout Standard
+Q.
+ What action should I take?
+\end_layout
+
+\begin_layout Standard
+A.
+ HTTP verbs or actions.
+\end_layout
+
+\begin_layout Standard
+The first question is how the client can convey its intentions to the server.
+ How does the server know a certain request is a request to retrieve some
+ data, instead of a request to delete that same data or to overwrite it
+ with different data? Why should the server do this instead of doing that?
+\end_layout
+
+\begin_layout Standard
+----------------
+\end_layout
+
+\begin_layout Standard
+Q.
+ What data shall I apply the action to?
+\end_layout
+
+\begin_layout Standard
+A.
+ Entity body
+\end_layout
+
+\begin_layout Standard
+how the client tells the server which part of the data set to operate on.
+ Given that the server understands that the client wants to (say) delete
+ some data, how can it know which data the client wants to delete? Why should
+ the server operate on this data instead of that data? 
+\end_layout
+
+\begin_layout Standard
 REST relies on the action of the request to be defined by the HTTP action
  and the resources to be defined in the URI.
  For example, a request like 
@@ -226,8 +368,51 @@ What is ROA REST?
 \end_layout
 
 \begin_layout Standard
-Resource oriented architecture is a set of rules that sit on top of REST.
- 
+What we care about for ROA REST:
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Concepts
+\end_layout
+
+\begin_layout Enumerate
+Resources - 
+\end_layout
+
+\begin_layout Enumerate
+Their names (URIs) 
+\end_layout
+
+\begin_layout Enumerate
+Their representations 
+\end_layout
+
+\begin_layout Enumerate
+The links between them 
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+And Properties: 
+\end_layout
+
+\begin_layout Enumerate
+Addressability 
+\end_layout
+
+\begin_layout Enumerate
+Statelessness 
+\end_layout
+
+\begin_layout Enumerate
+Connectedness 
+\end_layout
+
+\begin_layout Enumerate
+A uniform interface 
 \end_layout
 
 \begin_layout Section
@@ -236,6 +421,12 @@ Compare XML-RPC to ROA
 
 \begin_layout Standard
 XML-RPC is this, ROA is that.
+\end_layout
+
+\begin_layout Standard
+XML-RPC acts like the web for getting things, but breaks from those tenets
+ for everything else.
+ The goal of REST is:
 \end_layout
 
 \begin_layout Section
@@ -253,18 +444,30 @@ We're going to start out with a simple example.
 
 \begin_layout Standard
 We'd going to model two calls to the server, a GET request that responds
- with the current balance of an account and a PUT to add an expense.
- The URLs will be:
+ with the transaction details and a PUT to add an transaction.
+ 
 \end_layout
 
-\begin_layout Itemize
-A GET request - http://www.pocketchangeapp.com/api/account/<aid> where aid
- is the Account Id, and
+\begin_layout Standard
+The URLs will be:
 \end_layout
 
-\begin_layout Itemize
-A PUT request - http://www.pocketchangeapp.com/api/account/<aid> again aid
- is the Account Id
+\begin_layout LyX-Code
+GET request sent to URI: 
+\end_layout
+
+\begin_layout LyX-Code
+  http://www.pocketchangeapp.com/api/transaction/<transaction_id> where transactio
+n_id is the Transaction Id
+\end_layout
+
+\begin_layout LyX-Code
+PUT request + an XML Body sent to URI:
+\end_layout
+
+\begin_layout LyX-Code
+  http://www.pocketchangeapp.com/api/transaction/<transaction_id> again transactio
+n_id is the Transaction Id
 \end_layout
 
 \begin_layout Standard
@@ -273,7 +476,7 @@ ns interact with our server programmatically, like the multitude of dedicated
  clients for Twitter.
  The URLs are the same, but as we will show, we can pattern-match on the
  type of request.
- In this case, either a GET or a PUT.
+ In this case, we act upon a GET and a PUT differently.
 \end_layout
 
 \begin_layout Section
@@ -555,7 +758,35 @@ Show a GET Request and Response
 \end_layout
 
 \begin_layout Standard
-<xml>
+TODO: actual model members
+\end_layout
+
+\begin_layout Standard
+Request:
+\end_layout
+
+\begin_layout LyX-Code
+http://localhost:8080/api/account/<account_id> - GET - getAccount(account_id)
+\end_layout
+
+\begin_layout Standard
+Response: 
+\end_layout
+
+\begin_layout LyX-Code
+<?xml version="1.0" encoding="UTF-8"?> 
+\end_layout
+
+\begin_layout LyX-Code
+  <events_api>
+\end_layout
+
+\begin_layout LyX-Code
+    <operation success="true" id="show_review"></operation>
+\end_layout
+
+\begin_layout LyX-Code
+  </events_api> 
 \end_layout
 
 \begin_layout Section
@@ -563,7 +794,44 @@ Show a PUT Request and Response
 \end_layout
 
 \begin_layout Standard
-<xml> boadfdf
+TODO: actual model members
+\end_layout
+
+\begin_layout Standard
+Request:
+\end_layout
+
+\begin_layout LyX-Code
+http://localhost:8080/api/entry/<account_id> - GET - addEntry(acccount_id,
+ request) + XML Body
+\end_layout
+
+\begin_layout Standard
+Request Body: 
+\end_layout
+
+\begin_layout LyX-Code
+<entry> 
+\end_layout
+
+\begin_layout LyX-Code
+  <udid>1234</udid> 
+\end_layout
+
+\begin_layout LyX-Code
+  <dateOf>Fri Feb 20 08:37:16 EST 2009</dateOf> 
+\end_layout
+
+\begin_layout LyX-Code
+  <email>tyler.weir@gmail.com</email> 
+\end_layout
+
+\begin_layout LyX-Code
+</entry> 
+\end_layout
+
+\begin_layout Standard
+Response:
 \end_layout
 
 \begin_layout Section
