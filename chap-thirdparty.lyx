@@ -1492,6 +1492,604 @@ faceBookClient
 \end_layout
 
 \begin_layout Section
+XMPP
+\end_layout
+
+\begin_layout Standard
+XMPP
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+http://xmpp.org/
+\end_layout
+
+\end_inset
+
+ stand for e
+\series bold
+X
+\series default
+tensible 
+\series bold
+M
+\series default
+essaging and 
+\series bold
+P
+\series default
+resence 
+\series bold
+P
+\series default
+rotocol.
+ It is an XML based protocol presence and realtime communication such as
+ instance messaging.
+ It is developer by Jabber
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+http://xmpp.org/about/jabber.shtml
+\end_layout
+
+\end_inset
+
+ open-source community.
+ Lift provides an XMPP dispatcher implementation that you application can
+ use to receive instant messages, manage rosters etc.
+ This support realies on Smack 
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+http://www.igniterealtime.org/downloads/index.jsp
+\end_layout
+
+\end_inset
+
+ XMPP client library and Scala actors as the actors model fits like a glove.
+ Here is an example:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+XMPP Example
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import net.liftweb.xmpp._
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * An example Chat application that prints to stdout.
+\end_layout
+
+\begin_layout Plain Layout
+
+ *
+\end_layout
+
+\begin_layout Plain Layout
+
+ * @param username is the username to login to at Google Talk: format: something
+@gmail.com
+\end_layout
+
+\begin_layout Plain Layout
+
+ * @param password is the password for the user account at Google Talk.
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+class ConsoleChatActor(val username: String, val password: String) extends
+ Actor {
+\end_layout
+
+\begin_layout Plain Layout
+
+  def connf() = new ConnectionConfiguration("talk.google.com", 5222, "gmail.com")
+\end_layout
+
+\begin_layout Plain Layout
+
+  def login(conn: XMPPConnection) = conn.login(username, password)
+\end_layout
+
+\begin_layout Plain Layout
+
+  val xmpp = new XMPPDispatcher(connf, login)
+\end_layout
+
+\begin_layout Plain Layout
+
+  xmpp.start
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  val chats: Map[String, List[Message]] = new HashMap[String, List[Message]]
+\end_layout
+
+\begin_layout Plain Layout
+
+  val rosterMap: HashMap[String, Presence] = new HashMap[String, Presence]
+\end_layout
+
+\begin_layout Plain Layout
+
+  var roster: Roster = null
+\end_layout
+
+\begin_layout Plain Layout
+
+  def act = loop
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  def loop { 
+\end_layout
+
+\begin_layout Plain Layout
+
+   react {
+\end_layout
+
+\begin_layout Plain Layout
+
+      case Start => {
+\end_layout
+
+\begin_layout Plain Layout
+
+        xmpp ! AddListener(this)
+\end_layout
+
+\begin_layout Plain Layout
+
+        xmpp ! SetPresence(new Presence(Presence.Type.available))
+\end_layout
+
+\begin_layout Plain Layout
+
+        loop
+\end_layout
+
+\begin_layout Plain Layout
+
+      }
+\end_layout
+
+\begin_layout Plain Layout
+
+      case NewChat(c) => {
+\end_layout
+
+\begin_layout Plain Layout
+
+        chats += (c.getParticipant -> Nil)
+\end_layout
+
+\begin_layout Plain Layout
+
+        loop
+\end_layout
+
+\begin_layout Plain Layout
+
+      }
+\end_layout
+
+\begin_layout Plain Layout
+
+      case RecvMsg(chat, msg) => {
+\end_layout
+
+\begin_layout Plain Layout
+
+        println("RecvMsg from: " + msg.getFrom + ": " + msg.getBody);
+\end_layout
+
+\begin_layout Plain Layout
+
+        loop 
+\end_layout
+
+\begin_layout Plain Layout
+
+      }
+\end_layout
+
+\begin_layout Plain Layout
+
+      case NewRoster(r) => {
+\end_layout
+
+\begin_layout Plain Layout
+
+        println("getting a new roster: " + r)
+\end_layout
+
+\begin_layout Plain Layout
+
+        this.roster = r
+\end_layout
+
+\begin_layout Plain Layout
+
+        val e: Array[Object] = r.getEntries.toArray.asInstanceOf[Array[Object]]
+\end_layout
+
+\begin_layout Plain Layout
+
+        for (entry <- e) {
+\end_layout
+
+\begin_layout Plain Layout
+
+          val user: String = entry.asInstanceOf[RosterEntry].getUser
+\end_layout
+
+\begin_layout Plain Layout
+
+          rosterMap += (user -> r.getPresence(user))
+\end_layout
+
+\begin_layout Plain Layout
+
+        }
+\end_layout
+
+\begin_layout Plain Layout
+
+        loop
+\end_layout
+
+\begin_layout Plain Layout
+
+      }
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+      case RosterPresenceChanged(p) => { 
+\end_layout
+
+\begin_layout Plain Layout
+
+        val user = StringUtils.parseBareAddress(p.getFrom)
+\end_layout
+
+\begin_layout Plain Layout
+
+        println("Roster Update: " + user + " " + p)
+\end_layout
+
+\begin_layout Plain Layout
+
+        // It's best practice to ask the roster for the presence.
+ This is because
+\end_layout
+
+\begin_layout Plain Layout
+
+        // multiple presences can exist for one user and the roster knows
+ which one 
+\end_layout
+
+\begin_layout Plain Layout
+
+        // has priority.
+ 
+\end_layout
+
+\begin_layout Plain Layout
+
+        rosterMap += (user -> roster.getPresence(user))
+\end_layout
+
+\begin_layout Plain Layout
+
+        loop
+\end_layout
+
+\begin_layout Plain Layout
+
+      }
+\end_layout
+
+\begin_layout Plain Layout
+
+      case RosterEntriesDeleted(e) => {
+\end_layout
+
+\begin_layout Plain Layout
+
+        println(e) 
+\end_layout
+
+\begin_layout Plain Layout
+
+        loop 
+\end_layout
+
+\begin_layout Plain Layout
+
+      } 
+\end_layout
+
+\begin_layout Plain Layout
+
+      case RosterEntriesUpdated(e) => {
+\end_layout
+
+\begin_layout Plain Layout
+
+        println(e)
+\end_layout
+
+\begin_layout Plain Layout
+
+        loop
+\end_layout
+
+\begin_layout Plain Layout
+
+      }
+\end_layout
+
+\begin_layout Plain Layout
+
+      case RosterEntriesAdded(e) => { 
+\end_layout
+
+\begin_layout Plain Layout
+
+        println(e)
+\end_layout
+
+\begin_layout Plain Layout
+
+        loop 
+\end_layout
+
+\begin_layout Plain Layout
+
+      }
+\end_layout
+
+\begin_layout Plain Layout
+
+      case a => println(a); loop
+\end_layout
+
+\begin_layout Plain Layout
+
+    }
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+  def createChat(to: String) {
+\end_layout
+
+\begin_layout Plain Layout
+
+    xmpp ! CreateChat(to)
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+  def sendMessage(to: String, msg: String) {
+\end_layout
+
+\begin_layout Plain Layout
+
+    xmpp ! SendMsg(to, msg)
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+ /**
+\end_layout
+
+\begin_layout Plain Layout
+
+  * @returns an Iterable of all users who aren't unavailable along with
+ their Presence
+\end_layout
+
+\begin_layout Plain Layout
+
+  */
+\end_layout
+
+\begin_layout Plain Layout
+
+ def availableUsers: Iterable[(String, Presence)] = {
+\end_layout
+
+\begin_layout Plain Layout
+
+   rosterMap.filter((e) => e._2.getType() != Presence.Type.unavailable)
+\end_layout
+
+\begin_layout Plain Layout
+
+ }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+object ConsoleChatHelper {
+\end_layout
+
+\begin_layout Plain Layout
+
+  /**
+\end_layout
+
+\begin_layout Plain Layout
+
+   * @param u is the username
+\end_layout
+
+\begin_layout Plain Layout
+
+   * @param p is the password
+\end_layout
+
+\begin_layout Plain Layout
+
+   */
+\end_layout
+
+\begin_layout Plain Layout
+
+  def run(u: String, p: String) = {
+\end_layout
+
+\begin_layout Plain Layout
+
+    val ex = new ConsoleChatActor(u, p)
+\end_layout
+
+\begin_layout Plain Layout
+
+    ex.start 
+\end_layout
+
+\begin_layout Plain Layout
+
+    ex ! Start 
+\end_layout
+
+\begin_layout Plain Layout
+
+    ex 
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// To start the dispatcher just call:
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+ConsoleChatHelper.run(userName, password);
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+...
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The above is an example how you can integrate your application with an XMPP
+ server and how messages are pocessed.
+ We won;t be detailing each line of code in this example as it is pretty
+ much self explanatory and straight forward.
+\end_layout
+
+\begin_layout Section
 Lucene/Compass Integration
 \end_layout
 
