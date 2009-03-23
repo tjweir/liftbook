@@ -1866,7 +1866,9 @@ reference "lst:File-upload-template"
 
 \end_inset
 
- shows an example snippet tag using file uploads.
+ shows how we can add a file upload to our existing expense entry form so
+ that someone can attach a scanned receipt to their expense.
+ We modify our template to add a new form
 \end_layout
 
 \begin_layout Standard
@@ -1896,17 +1898,39 @@ name "lst:File-upload-template"
 
 \begin_layout Plain Layout
 
-<lift:MyForm.file form="POST" multipart="true">
+<lift:AddEntry.addEntry form="POST" multipart="true">
 \end_layout
 
 \begin_layout Plain Layout
 
-  <form:file /> <input type="submit" value="Upload" />
+  ...
+ existing headers ...
 \end_layout
 
 \begin_layout Plain Layout
 
-</lift:MyForm.file>
+  <td>Receipt (JPEG or PNG)</td>
+\end_layout
+
+\begin_layout Plain Layout
+
+  ...
+ existing form fields ...
+\end_layout
+
+\begin_layout Plain Layout
+
+  <td><e:receipt /></td>
+\end_layout
+
+\begin_layout Plain Layout
+
+  ...
+\end_layout
+
+\begin_layout Plain Layout
+
+</lift:AddEntry.addEntry>
 \end_layout
 
 \end_inset
@@ -1915,17 +1939,25 @@ name "lst:File-upload-template"
 \end_layout
 
 \begin_layout Standard
-In this example we've set up binding tags for the file itself (this will
- be shown as a text input with a browse button, typically) as well as the
- submit button.
- On the server side, listing 
+On the server side, listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:File-upload-snippet"
 
 \end_inset
 
- shows the corresponding snippet.
+ shows how we modify the existing 
+\family typewriter
+addEntry
+\family default
+ snippet to handle the (optional) file attachment.
+ We've added some logic to the existing form submission callback to check
+ to make sure that the image is of the proper type, then we use the SHtml
+ file upload generator with a callback that sets our 
+\family typewriter
+fileHolder
+\family default
+ variable.
  The callback for the fileUpload generator takes a 
 \family typewriter
 FileParamHolder
@@ -1965,37 +1997,126 @@ name "lst:File-upload-snippet"
 
 \begin_layout Plain Layout
 
-import java.io.{File,FileOutputStream}
+class AddEntry {
 \end_layout
 
 \begin_layout Plain Layout
 
-def storeFile (xhtml : Group) : NodeSeq = {
+  ...
 \end_layout
 
 \begin_layout Plain Layout
 
-  def saveFile (file : FileParamHolder) {
+  // Add a variable to hold the FileParamHolder on submission
 \end_layout
 
 \begin_layout Plain Layout
 
-    val dir = new File(tmpDir, file.fileName)
+  var fileHolder : FileParamHolder = _
 \end_layout
 
 \begin_layout Plain Layout
 
-    val output = new FileOutputStream(dir)
+  ...
 \end_layout
 
 \begin_layout Plain Layout
 
-    output.write(file.file)
+  def doTagsAndSubmit (t : String) {
 \end_layout
 
 \begin_layout Plain Layout
 
-    output.close()
+    ...
+\end_layout
+
+\begin_layout Plain Layout
+
+  // Add the optional receipt if it's the correct type
+\end_layout
+
+\begin_layout Plain Layout
+
+  val receiptOk =
+\end_layout
+
+\begin_layout Plain Layout
+
+    if (fileHolder != null) {
+\end_layout
+
+\begin_layout Plain Layout
+
+      if (fileHolder.mimeType.startsWith("image/")) {
+\end_layout
+
+\begin_layout Plain Layout
+
+        e.receipt(fileHolder.file).receiptMime(fileHolder.mimeType)
+\end_layout
+
+\begin_layout Plain Layout
+
+        true
+\end_layout
+
+\begin_layout Plain Layout
+
+      } else {
+\end_layout
+
+\begin_layout Plain Layout
+
+        S.error("Invalid receipt attachment")
+\end_layout
+
+\begin_layout Plain Layout
+
+        false
+\end_layout
+
+\begin_layout Plain Layout
+
+      }
+\end_layout
+
+\begin_layout Plain Layout
+
+    } else {
+\end_layout
+
+\begin_layout Plain Layout
+
+      true
+\end_layout
+
+\begin_layout Plain Layout
+
+    }
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    (e.validate, receiptOk) match {
+\end_layout
+
+\begin_layout Plain Layout
+
+    ...
+\end_layout
+
+\begin_layout Plain Layout
+
+    }
+\end_layout
+
+\begin_layout Plain Layout
+
+    ...
 \end_layout
 
 \begin_layout Plain Layout
@@ -2009,12 +2130,27 @@ def storeFile (xhtml : Group) : NodeSeq = {
 
 \begin_layout Plain Layout
 
-  bind("form", xhtml,
+  bind("e", in,
 \end_layout
 
 \begin_layout Plain Layout
 
-       "file" -> SHtml.fileUpload(saveFile(_)))
+       ...
+\end_layout
+
+\begin_layout Plain Layout
+
+       "receipt" -> SHtml.fileUpload(fileHolder = _),
+\end_layout
+
+\begin_layout Plain Layout
+
+       "tags" -> SHtml.text(tags, doTagsAndSubmit))
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
 \end_layout
 
 \begin_layout Plain Layout
@@ -2028,10 +2164,10 @@ def storeFile (xhtml : Group) : NodeSeq = {
 \end_layout
 
 \begin_layout Standard
-In our example, we want to save the file data to a temporary location, so
- we open a FileOutputStream and write the data to disk; you could just as
- easily process the data in place using a scala.io.Source or java.io.ByteArrayInputS
-tream.
+In our example, we want to save the file data into a MappedBinary field
+ on our expense entry; you could just as easily process the data in place
+ using a scala.io.Source or java.io.ByteArrayInputStream, or output it using
+ a java.io.FileOutputStream.
 \end_layout
 
 \end_body
