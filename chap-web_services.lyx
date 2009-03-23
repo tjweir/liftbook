@@ -1030,10 +1030,223 @@ def toJSON = {
 }
 \end_layout
 
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
 \begin_layout Standard
 And we'll have to modify the dispatch rules to add a format selection in
  the URI.
- We'll leave plain XML 
+ We'll leave plain XML as the default response, and we'll add a way to select
+ JSON, XML or Atom.
+\end_layout
+
+\begin_layout Standard
+The URIs for GET will now be:
+\end_layout
+
+\begin_layout LyX-Code
+http://www.pocketchangeapp.com/api/expense/<eid>
+\end_layout
+
+\begin_layout LyX-Code
+http://www.pocketchangeapp.com/api/expense/<eid>/xml
+\end_layout
+
+\begin_layout LyX-Code
+http://www.pocketchangeapp.com/api/expense/<eid>/json
+\end_layout
+
+\begin_layout LyX-Code
+http://www.pocketchangeapp.com/api/expense/<eid>/atom
+\end_layout
+
+\begin_layout Standard
+And the additions to the dispatch are as follows:
+\end_layout
+
+\begin_layout LyX-Code
+object RestAPI extends XMLApiHelper {
+\end_layout
+
+\begin_layout LyX-Code
+  def dispatch: LiftRules.DispatchPF = {     
+\end_layout
+
+\begin_layout LyX-Code
+    case Req("api" :: "expense" :: eid :: Nil, "", GetRequest) => () =>
+ showExpenseXml(eid) // old
+\end_layout
+
+\begin_layout LyX-Code
+    case Req("api" :: "expense" :: eid :: 
+\begin_inset Quotes eld
+\end_inset
+
+xml
+\begin_inset Quotes erd
+\end_inset
+
+ :: Nil, "", GetRequest) => () => showExpenseXml(eid) // new
+\end_layout
+
+\begin_layout LyX-Code
+    case Req("api" :: "expense" :: eid :: 
+\begin_inset Quotes eld
+\end_inset
+
+json
+\begin_inset Quotes erd
+\end_inset
+
+ :: Nil, "", GetRequest) => () => showExpenseJson(eid) // new
+\end_layout
+
+\begin_layout LyX-Code
+    case Req("api" :: "expense" :: eid :: 
+\begin_inset Quotes eld
+\end_inset
+
+atom
+\begin_inset Quotes erd
+\end_inset
+
+ :: Nil, "", GetRequest) => () => showExpenseAtom(eid) // new
+\end_layout
+
+\begin_layout LyX-Code
+    case r @ Req("api" :: "expense" :: eid :: Nil, "", PutRequest) => ()
+ => addExpense(eid, r)
+\end_layout
+
+\begin_layout LyX-Code
+    
+\end_layout
+
+\begin_layout LyX-Code
+    // Invalid API request - route to our error handler
+\end_layout
+
+\begin_layout LyX-Code
+    case Req("api" :: x :: Nil, "", _) => failure _ 
+\end_layout
+
+\begin_layout LyX-Code
+  }
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout Standard
+Finally, we'll add the show* functions:
+\end_layout
+
+\begin_layout LyX-Code
+def showExpenseXml(eid: String): LiftResponse = {     
+\end_layout
+
+\begin_layout LyX-Code
+  val e: Box[NodeSeq] = for(e <- Expense.find(By(Expense.id, eid.toLong)))
+      
+\end_layout
+
+\begin_layout LyX-Code
+    yield {       
+\end_layout
+
+\begin_layout LyX-Code
+      XmlResponse(<operation id="show_expense_xml" success="true">{r.toXML}</oper
+ation>)     
+\end_layout
+
+\begin_layout LyX-Code
+    }
+\end_layout
+
+\begin_layout LyX-Code
+  r    
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+def showExpenseAtom(eid: String): LiftResponse = {     
+\end_layout
+
+\begin_layout LyX-Code
+  val e: Box[NodeSeq] = for(e <- Expense.find(By(Expense.id, eid.toLong)))
+      
+\end_layout
+
+\begin_layout LyX-Code
+    yield {       
+\end_layout
+
+\begin_layout LyX-Code
+      AtomResponse(<operation id="show_expense_atom" success="true">{r.toAtom}</o
+peration>)     
+\end_layout
+
+\begin_layout LyX-Code
+    }
+\end_layout
+
+\begin_layout LyX-Code
+  r    
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+def showExpenseJson(eid: String): LiftResponse = {     
+\end_layout
+
+\begin_layout LyX-Code
+  val e: Box[NodeSeq] = for(e <- Expense.find(By(Expense.id, eid.toLong)))
+      
+\end_layout
+
+\begin_layout LyX-Code
+    yield {       
+\end_layout
+
+\begin_layout LyX-Code
+      JsonResponse(<operation id="show_expense_json" success="true">{r.toJSON}</o
+peration>)     
+\end_layout
+
+\begin_layout LyX-Code
+    }
+\end_layout
+
+\begin_layout LyX-Code
+  r    
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout LyX-Code
+
 \end_layout
 
 \begin_layout Section
@@ -1041,7 +1254,7 @@ Recap
 \end_layout
 
 \begin_layout Standard
-We did some awesome stuff and built a simple ReST API.
+We did some awesome stuff and built a simple REST API.
  Some logical extensions would be a full authentication layer or transforming
  the data to a different format.
 \end_layout
