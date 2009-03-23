@@ -78,47 +78,7 @@ Todo:
 \end_layout
 
 \begin_layout Plain Layout
-Pick a better mashup - maybe find the first one
-\end_layout
-
-\begin_layout Plain Layout
-Planning:
-\end_layout
-
-\begin_layout Itemize
-Explain REST - http://en.wikipedia.org/wiki/REST
-\end_layout
-
-\begin_layout Itemize
-Explain ROA - resource-oriented architecture from ReSTful web services
-\end_layout
-
-\begin_layout Itemize
-Compare ROA to XML-RPC
-\end_layout
-
-\begin_layout Itemize
-Set up the example, explain what we're going to do
-\end_layout
-
-\begin_layout Itemize
-Write the pattern matching code to intercept
-\end_layout
-
-\begin_layout Itemize
-Add the dispatch to Boot
-\end_layout
-
-\begin_layout Itemize
-Write a helper for the model, toXML
-\end_layout
-
-\begin_layout Itemize
-Show a GET Request and Response
-\end_layout
-
-\begin_layout Itemize
-Show a PUT Request and Response
+- finish
 \end_layout
 
 \end_inset
@@ -131,7 +91,7 @@ Building an API for your Web Application
 \end_layout
 
 \begin_layout Standard
-Many Web Applications offer an API
+Many Web Applications now offer an API
 \begin_inset Foot
 status open
 
@@ -144,15 +104,15 @@ Application Programming Interface
  that allows others to extend the functionality of the site.
  Building an application that adds to an existing one is usually called
  a Mash-up.
- One famous mash-up is WikiCrimes
+ One famous mash-up is FlickrVision.com/
 \begin_inset Foot
 status open
 
 \begin_layout Plain Layout
 \begin_inset CommandInset href
 LatexCommand href
-name "http://www.wikicrimes.org/"
-target "http://www.wikicrimes.org/"
+name "http://flickrvision.com/"
+target "http://flickrvision.com/"
 
 \end_inset
 
@@ -161,14 +121,14 @@ target "http://www.wikicrimes.org/"
 
 \end_inset
 
- which combines GoogleMaps and local criminal activity to allow users to
- visualize the danger in their neighbourhood.
+ which combines GoogleMaps and Flickr that allows users to visualize where
+ in the world photos are being uploaded.
  
 \end_layout
 
 \begin_layout Standard
-Typically, when discussing Web Services there are two types of services
- discussed, those that follow XML-RPC and those that are RESTful.
+Typically, when discussing Web Services, two types of services discussed,
+ those that follow XML-RPC and those that are RESTful.
  We'll focus on REST and show you how you can easily add an API to your
  application.
 \end_layout
@@ -444,7 +404,7 @@ We're going to start out with a simple example.
 
 \begin_layout Standard
 We'd going to model two calls to the server, a GET request that responds
- with the transaction details and a PUT to add an transaction.
+ with the transaction details and a PUT to add an expense.
  
 \end_layout
 
@@ -453,21 +413,21 @@ The URLs will be:
 \end_layout
 
 \begin_layout LyX-Code
-GET request sent to URI: 
+A GET request sent to URI: 
 \end_layout
 
 \begin_layout LyX-Code
-  http://www.pocketchangeapp.com/api/transaction/<transaction_id> where transactio
-n_id is the Transaction Id
+  http://www.pocketchangeapp.com/api/expense/<expense_id> where expense_id
+ is the Expense Id
 \end_layout
 
 \begin_layout LyX-Code
-PUT request + an XML Body sent to URI:
+A PUT request + an XML Body sent to URI:
 \end_layout
 
 \begin_layout LyX-Code
-  http://www.pocketchangeapp.com/api/transaction/<transaction_id> again transactio
-n_id is the Transaction Id
+  http://www.pocketchangeapp.com/api/expense/<expense_id> again expense_id
+ is the Expense Id
 \end_layout
 
 \begin_layout Standard
@@ -507,13 +467,13 @@ object RestAPI extends XMLApiHelper {
 \end_layout
 
 \begin_layout LyX-Code
-    case Req("api" :: "account" :: aid :: Nil, "", GetRequest) => () =>
- showAccountBalance(aid) 
+    case Req("api" :: "expense" :: eid :: Nil, "", GetRequest) => () =>
+ showExpense(eid) 
 \end_layout
 
 \begin_layout LyX-Code
-    case r @ Req("api" :: "account" :: aid :: Nil, "", PutRequest) => ()
- => addExpense(aid, r)
+    case r @ Req("api" :: "expense" :: eid :: Nil, "", PutRequest) => ()
+ => addExpense(eid, r)
 \end_layout
 
 \begin_layout LyX-Code
@@ -602,17 +562,21 @@ Service Code
 \end_layout
 
 \begin_layout LyX-Code
-def showReview(rid: String): LiftResponse = { 
+// reacts to the GET Request
 \end_layout
 
 \begin_layout LyX-Code
-  val r: Box[NodeSeq] = for(r <- Account.find(By(Account.id, rid.toLong)))
+def showExpense(eid: String): LiftResponse = { 
+\end_layout
+
+\begin_layout LyX-Code
+  val e: Box[NodeSeq] = for(r <- Expense.find(By(Expense.id, eid.toLong)))
  yield { 
 \end_layout
 
 \begin_layout LyX-Code
-     wrapXmlBody(<operation id="show_review" success="true">{r.toXML}</operation>
-) 
+     wrapXmlBody(<operation id="show_expense" success="true">{e.toXML}</operation
+>) 
 \end_layout
 
 \begin_layout LyX-Code
@@ -624,7 +588,7 @@ def showReview(rid: String): LiftResponse = {
 \end_layout
 
 \begin_layout LyX-Code
-  r 
+  e
 \end_layout
 
 \begin_layout LyX-Code
@@ -636,11 +600,23 @@ def showReview(rid: String): LiftResponse = {
 \end_layout
 
 \begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+// reacts to the PUT Request
+\end_layout
+
+\begin_layout LyX-Code
 def addExpense(eid: String, req: Req): LiftResponse = { 
 \end_layout
 
 \begin_layout LyX-Code
-  var rsvp = new Rsvp req.xml match { 
+  var expense = new Expense 
+\end_layout
+
+\begin_layout LyX-Code
+  req.xml match { 
 \end_layout
 
 \begin_layout LyX-Code
@@ -652,15 +628,15 @@ def addExpense(eid: String, req: Req): LiftResponse = {
 \end_layout
 
 \begin_layout LyX-Code
-        case <udid>{udid}</udid> => rsvp.udid(udid) 
+        case <udid>{udid}</udid> => expense.udid(udid) 
 \end_layout
 
 \begin_layout LyX-Code
-        case <dateOf>{dateof}</dateOf> => rsvp.dateOf(millis) 
+        case <dateOf>{dateof}</dateOf> => expense.dateOf(millis) 
 \end_layout
 
 \begin_layout LyX-Code
-        case <email>{email}</email> => rsvp.email(email) 
+        case <email>{email}</email> => expense.email(email) 
 \end_layout
 
 \begin_layout LyX-Code
@@ -680,15 +656,15 @@ def addExpense(eid: String, req: Req): LiftResponse = {
 \end_layout
 
 \begin_layout LyX-Code
-      if (isValid(rsvp.udid)) { 
+      if (expense.validate) { 
 \end_layout
 
 \begin_layout LyX-Code
-        rsvp.eventId(eid.toLong).save 
+        expense.save 
 \end_layout
 
 \begin_layout LyX-Code
-        CreatedResponse(wrapXmlBody(<operation id="show_review" success="true"><
+        CreatedResponse(wrapXmlBody(<operation id="add_expense" success="true"><
 /operation>), "text/xml") 
 \end_layout
 
@@ -701,7 +677,7 @@ def addExpense(eid: String, req: Req): LiftResponse = {
 \end_layout
 
 \begin_layout LyX-Code
-        CreatedResponse(wrapXmlBody(<operation id="show_review" success="false">
+        CreatedResponse(wrapXmlBody(<operation id="add_expense" success="false">
 </operation>), "text/xml") 
 \end_layout
 
@@ -718,7 +694,7 @@ def addExpense(eid: String, req: Req): LiftResponse = {
 \end_layout
 
 \begin_layout LyX-Code
-      case e => Log.error("Could not add rsvp", e); BadResponse() 
+      case e => Log.error("Could not add expense", e); BadResponse() 
 \end_layout
 
 \begin_layout LyX-Code
@@ -746,11 +722,112 @@ def addExpense(eid: String, req: Req): LiftResponse = {
 \end_layout
 
 \begin_layout Section
-Write a helper for the model, toXML
+Write a helper for the Expense Model object
 \end_layout
 
-\begin_layout Standard
-model.scala code
+\begin_layout LyX-Code
+// look up the account name for the expense
+\end_layout
+
+\begin_layout LyX-Code
+private def getAccountName(id: Long): String = {     
+\end_layout
+
+\begin_layout LyX-Code
+  Account.find(By(Account.id, id)) match {       
+\end_layout
+
+\begin_layout LyX-Code
+    case Empty => "No Account Name"       
+\end_layout
+
+\begin_layout LyX-Code
+    case Full(a) => a.name.is     
+\end_layout
+
+\begin_layout LyX-Code
+  }   
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+// get a list of tags of the form <tag>tagname1</tag><tag>tagname2</tag>
+\end_layout
+
+\begin_layout LyX-Code
+def showXMLTags: NodeSeq = tags.map(t => <tag>{t.name.is}</tag>)
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+// 
+\end_layout
+
+\begin_layout LyX-Code
+def toXML: NodeSeq = {    
+\end_layout
+
+\begin_layout LyX-Code
+  val id = "http://www.pocketchangeapp.com/api/expense/" + this.id    
+\end_layout
+
+\begin_layout LyX-Code
+  val formatter = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
+    
+\end_layout
+
+\begin_layout LyX-Code
+  val edate = formatter.format(this.dateOf.is)
+\end_layout
+
+\begin_layout LyX-Code
+    
+\end_layout
+
+\begin_layout LyX-Code
+  <expense>       
+\end_layout
+
+\begin_layout LyX-Code
+    <id>{id}</id>       
+\end_layout
+
+\begin_layout LyX-Code
+    <accountname>{getAccountName(account.is)}</accountname>       
+\end_layout
+
+\begin_layout LyX-Code
+    <date>{edate}</date>       
+\end_layout
+
+\begin_layout LyX-Code
+    <description>{description.is}</description>       
+\end_layout
+
+\begin_layout LyX-Code
+    <amount>{amount.is.toString}</amount>       
+\end_layout
+
+\begin_layout LyX-Code
+    <tags>{showXMLTags}</tags>     
+\end_layout
+
+\begin_layout LyX-Code
+  </expense>
+\end_layout
+
+\begin_layout LyX-Code
+}  
 \end_layout
 
 \begin_layout Section
@@ -766,7 +843,7 @@ Request:
 \end_layout
 
 \begin_layout LyX-Code
-http://localhost:8080/api/account/<account_id> - GET - getAccount(account_id)
+http://www.pocketchangeapp.com/api/expense/<eid> - GET - showExpense(eid)
 \end_layout
 
 \begin_layout Standard
@@ -778,15 +855,7 @@ Response:
 \end_layout
 
 \begin_layout LyX-Code
-  <events_api>
-\end_layout
 
-\begin_layout LyX-Code
-    <operation success="true" id="show_review"></operation>
-\end_layout
-
-\begin_layout LyX-Code
-  </events_api> 
 \end_layout
 
 \begin_layout Section
@@ -802,7 +871,7 @@ Request:
 \end_layout
 
 \begin_layout LyX-Code
-http://localhost:8080/api/entry/<account_id> - GET - addEntry(acccount_id,
+http://www.pocketchangeapp.com/api/expense/<eid> - PUT - addEntry(acccount_id,
  request) + XML Body
 \end_layout
 
@@ -834,13 +903,147 @@ Request Body:
 Response:
 \end_layout
 
+\begin_layout LyX-Code
+<?xml version="1.0" encoding="UTF-8"?> 
+\end_layout
+
+\begin_layout Section
+Atom and JSON
+\end_layout
+
+\begin_layout Standard
+If you'd like to return your data in a different format, you'll have to
+ do two things.
+ First define the helper or helpers, we'll add 
+\family typewriter
+toJSON
+\family default
+ and 
+\family typewriter
+toAtom
+\family default
+ as a sample.
+ Second, update the dispatch rules to allow users to request the alternate
+ data formats.
+\end_layout
+
+\begin_layout LyX-Code
+def toAtom = {    
+\end_layout
+
+\begin_layout LyX-Code
+  val id = "http://www.pocketchangeapp.com/api/expense/" + this.id    
+\end_layout
+
+\begin_layout LyX-Code
+  val formatter = new  SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")    
+\end_layout
+
+\begin_layout LyX-Code
+  val edate = formatter.format(this.dateOf.is)
+\end_layout
+
+\begin_layout LyX-Code
+  
+\end_layout
+
+\begin_layout LyX-Code
+  <entry xmlns="http://www.w3.org/2005/Atom">     
+\end_layout
+
+\begin_layout LyX-Code
+    <expense>       
+\end_layout
+
+\begin_layout LyX-Code
+      <id>{id}</id>       
+\end_layout
+
+\begin_layout LyX-Code
+      <accountname>{getAccountName(account.is)}</accountname>       
+\end_layout
+
+\begin_layout LyX-Code
+      <date>{edate}</date>       
+\end_layout
+
+\begin_layout LyX-Code
+      <description>{description.is}</description>       
+\end_layout
+
+\begin_layout LyX-Code
+      <amount>{amount.is.toString}</amount>       
+\end_layout
+
+\begin_layout LyX-Code
+      <tags>{showXMLTags}</tags>      
+\end_layout
+
+\begin_layout LyX-Code
+    </expense>     
+\end_layout
+
+\begin_layout LyX-Code
+  </entry>   
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout LyX-Code
+  
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+def toJSON = {    
+\end_layout
+
+\begin_layout LyX-Code
+  val id = "http://www.pocketchangeapp.com/api/expense/" + this.id    
+\end_layout
+
+\begin_layout LyX-Code
+  val formatter = new  SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")    
+\end_layout
+
+\begin_layout LyX-Code
+  val edate = formatter.format(this.dateOf.is)
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+  "{'expense':{ 'id':'" + id + "','accountname':'" + getAccountName(account.is)
+ + "'," +    "'date':'" + edate + "'," +    "'description':'" + description.is
+ +     "'," +    "'amount':'" + amount.is.toString + "'," +    "'tags': {["
+ + showJSONTags + "]}"  
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout Standard
+And we'll have to modify the dispatch rules to add a format selection in
+ the URI.
+ We'll leave plain XML 
+\end_layout
+
 \begin_layout Section
 Recap
 \end_layout
 
 \begin_layout Standard
 We did some awesome stuff and built a simple ReST API.
- 
+ Some logical extensions would be a full authentication layer or transforming
+ the data to a different format.
 \end_layout
 
 \end_body
