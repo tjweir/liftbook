@@ -2563,6 +2563,11 @@ name "lst:Binding-a-Menu-group"
 
 \begin_layout Plain Layout
 
+  <ul>
+\end_layout
+
+\begin_layout Plain Layout
+
   <lift:Menu.group group="site"
 \end_layout
 
@@ -2573,17 +2578,17 @@ name "lst:Binding-a-Menu-group"
 
 \begin_layout Plain Layout
 
-   <b>Site Menu</b>:<br/>
-\end_layout
-
-\begin_layout Plain Layout
-
-   <menu:bind />
+   <li><menu:bind /></li>
 \end_layout
 
 \begin_layout Plain Layout
 
   </lift:Menu.group>
+\end_layout
+
+\begin_layout Plain Layout
+
+  </ul>
 \end_layout
 
 \begin_layout Plain Layout
