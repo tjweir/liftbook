@@ -87,7 +87,7 @@ Todo:
 \end_layout
 
 \begin_layout Section
-Building an API for your Web Application
+Why add an API to your Web Application?
 \end_layout
 
 \begin_layout Standard
@@ -134,13 +134,13 @@ Typically, when discussing Web Services, two types of services discussed,
 \end_layout
 
 \begin_layout Section
-HTTP Details
+Plumbing Details
 \end_layout
 
 \begin_layout Standard
 In building our web service it's going to help to know a few things about
  HTTP requests and responses.
- If you're comfortable with the Request and Response cycles and the details
+ If you're comfortable with the Request-Response cycle and their details
  then feel free to jump to 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -152,70 +152,251 @@ reference "sec:What-is-REST?"
 \end_layout
 
 \begin_layout Standard
+The web works via HTTP requests from clients to servers, which respond with
+ HTTP Responses.
+ 
+\end_layout
+
+\begin_layout Subsection
+GET Request
+\end_layout
+
+\begin_layout Standard
 The details of an HTTP GET:
 \end_layout
 
+\begin_layout Plain Layout
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
 \begin_layout LyX-Code
-GET /index.html HTTP/1.1 
+\begin_inset Caption
+
+\begin_layout Plain Layout
+GET Request
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code
-Host: www.pocketchangeapp.com 
+Connected to www.praytothemachine.com port 80 (#0) 
 \end_layout
 
 \begin_layout LyX-Code
-User-Agent: Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.7.12)...
+GET /evil/ HTTP/1.1 
+\end_layout
+
+\begin_layout LyX-Code
+User-Agent: curl/7.19.0 (i386-apple-darwin9.5.0) libcurl/7.19.0 zlib/1.2.3 
+\end_layout
+
+\begin_layout LyX-Code
+Host: www.praytothemachine.com 
+\end_layout
+
+\begin_layout LyX-Code
+Accept: */*
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout Standard
+The parts of an HTTP request that we'd like to point on are the action,
+ in this case 
+\family typewriter
+
+\begin_inset Quotes eld
+\end_inset
+
+GET
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\family default
+and the host, which is 
+\family typewriter
+
+\begin_inset Quotes eld
+\end_inset
+
+http://www.praytothemachine.com/evil/
+\begin_inset Quotes erd
+\end_inset
+
+
+\family default
+ here.
+ Other HTTP actions, sometimes called verbs, are POST, DELETE, PUT, HEAD,
+ OPTIONS.
+ In this chapter we will focus on GET and PUT.
  
 \end_layout
 
-\begin_layout LyX-Code
-Accept: text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,...
- 
+\begin_layout Standard
+
 \end_layout
 
-\begin_layout LyX-Code
-Accept-Language: us,en;q=0.5 
-\end_layout
-
-\begin_layout LyX-Code
-Accept-Encoding: gzip,deflate 
-\end_layout
-
-\begin_layout LyX-Code
-Accept-Charset: ISO-8859-15,utf-8;q=0.7,*;q=0.7 
-\end_layout
-
-\begin_layout LyX-Code
-Keep-Alive: 300 
-\end_layout
-
-\begin_layout LyX-Code
-Connection: keep-alive 
+\begin_layout Subsection
+GET Response
 \end_layout
 
 \begin_layout Standard
-The parts of an HTTP request are:
+The response from the server for the above Request is below:
 \end_layout
 
-\begin_layout Standard
-HTTP Actions or verbs: GET, POST, DELETE, PUT, HEAD, OPTIONS, we'll focus
- on 
+\begin_layout Plain Layout
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout LyX-Code
+\begin_inset Caption
+
+\begin_layout Plain Layout
+GET Response
 \end_layout
 
-\begin_layout Standard
-Path/URI: http://www.pocketchangeapp.com/index.html
-\end_layout
+\end_inset
 
-\begin_layout Standard
-Request Header:
-\end_layout
 
-\begin_layout Standard
-Entity Body:
 \end_layout
 
 \begin_layout LyX-Code
+HTTP/1.1 200 OK 
+\end_layout
 
+\begin_layout LyX-Code
+Date: Tue, 24 Mar 2009 20:00:15 GMT 
+\end_layout
+
+\begin_layout LyX-Code
+Server: Apache/2.0.63 (FreeBSD)
+\end_layout
+
+\begin_layout LyX-Code
+X-Powered-By: PHP/5.2.8 
+\end_layout
+
+\begin_layout LyX-Code
+Transfer-Encoding: chunked 
+\end_layout
+
+\begin_layout LyX-Code
+Content-Type: text/html; charset=UTF-8
+\end_layout
+
+\begin_layout LyX-Code
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/T
+R/xhtml1/DTD/xhtml1-transitional.dtd"> 
+\end_layout
+
+\begin_layout LyX-Code
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">....
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Responses come with a few important pieces of information, of note right
+ now are the Response code and the Entity Body.
+ In this case the Response Code is 
+\begin_inset Quotes eld
+\end_inset
+
+
+\family typewriter
+200 OK
+\family default
+
+\begin_inset Quotes erd
+\end_inset
+
+ and the Entity Body is the HTML content of the webpage, which is shown
+ as the last two lines starting with 
+\begin_inset Quotes eld
+\end_inset
+
+
+\family typewriter
+<!DOCTYPE
+\family default
+
+\begin_inset Quotes erd
+\end_inset
+
+ and truncated.
+\end_layout
+
+\begin_layout Section
+Comparing XML-RPC to REST architectures
+\end_layout
+
+\begin_layout Standard
+So what is the difference between RESTful architectures and a traditional
+ RPC
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+Remote Procedure Call
+\end_layout
+
+\end_inset
+
+ architecture? 
+\end_layout
+
+\begin_layout Standard
+An RPC appliction is more closely related to traditional development.
+ It tends to ignore most of the features offered by HTTP such as the methods.
+ Rather, the scoping and data for the request is contained in the body of
+ the POST.
+ XML-RPC acts like the web for getting things, but breaks from those tenets
+ for everything else, by overloading the POST request.
+\end_layout
+
+\begin_layout Standard
+RESTful architectures embrace HTTP and use it to their advantage.
+ Since we're using that web, we may as well act like it.
+\end_layout
+
+\begin_layout Standard
+RPC example:
+\end_layout
+
+\begin_layout Standard
+REST example:
 \end_layout
 
 \begin_layout Section
@@ -373,20 +554,6 @@ Connectedness
 
 \begin_layout Enumerate
 A uniform interface 
-\end_layout
-
-\begin_layout Section
-Compare XML-RPC to ROA
-\end_layout
-
-\begin_layout Standard
-XML-RPC is this, ROA is that.
-\end_layout
-
-\begin_layout Standard
-XML-RPC acts like the web for getting things, but breaks from those tenets
- for everything else.
- The goal of REST is:
 \end_layout
 
 \begin_layout Section
@@ -1143,6 +1310,10 @@ atom
 }
 \end_layout
 
+\begin_layout LyX-Code
+
+\end_layout
+
 \begin_layout Standard
 Finally, we'll add the show* functions:
 \end_layout
@@ -1170,7 +1341,7 @@ ation>)
 \end_layout
 
 \begin_layout LyX-Code
-  r    
+  e    
 \end_layout
 
 \begin_layout LyX-Code
@@ -1204,7 +1375,7 @@ peration>)
 \end_layout
 
 \begin_layout LyX-Code
-  r    
+  e    
 \end_layout
 
 \begin_layout LyX-Code
@@ -1238,7 +1409,7 @@ peration>)
 \end_layout
 
 \begin_layout LyX-Code
-  r    
+  e    
 \end_layout
 
 \begin_layout LyX-Code
