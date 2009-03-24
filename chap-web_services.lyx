@@ -152,17 +152,15 @@ reference "sec:What-is-REST?"
 \end_layout
 
 \begin_layout Standard
-The web works via HTTP requests from clients to servers, which respond with
- HTTP Responses.
- 
-\end_layout
-
-\begin_layout Subsection
-GET Request
+A simplification of how the web works is clients send HTTP requests servers,
+ which respond with HTTP Responses.
+ Let's take a look at an exchange between a client and a server.
 \end_layout
 
 \begin_layout Standard
-The details of an HTTP GET:
+We're going to send a GET request to the URI http://demo.liftweb.net/ using
+ the cURL utility.
+ We can dump the header information and we get the following request:
 \end_layout
 
 \begin_layout Plain Layout
@@ -191,23 +189,65 @@ GET Request
 \end_layout
 
 \begin_layout LyX-Code
-Connected to www.praytothemachine.com port 80 (#0) 
+]> curl -v http://demo.liftweb.net/ 
 \end_layout
 
 \begin_layout LyX-Code
-GET /evil/ HTTP/1.1 
+* About to connect() to demo.liftweb.net port 80 (#0) 
 \end_layout
 
 \begin_layout LyX-Code
-User-Agent: curl/7.19.0 (i386-apple-darwin9.5.0) libcurl/7.19.0 zlib/1.2.3 
+*   Trying 64.27.11.183...
+ connected 
 \end_layout
 
 \begin_layout LyX-Code
-Host: www.praytothemachine.com 
+* Connected to demo.liftweb.net (64.27.11.183) port 80 (#0) 
 \end_layout
 
 \begin_layout LyX-Code
-Accept: */*
+> GET / HTTP/1.1 
+\end_layout
+
+\begin_layout LyX-Code
+> User-Agent: curl/7.19.0 (i386-apple-darwin9.5.0) libcurl/7.19.0 zlib/1.2.3 
+\end_layout
+
+\begin_layout LyX-Code
+> Host: demo.liftweb.net 
+\end_layout
+
+\begin_layout LyX-Code
+> Accept: */*
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+And then the corresponding response from the server follows:
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout LyX-Code
+\begin_inset Caption
+
+\begin_layout Plain Layout
+GET Response
 \end_layout
 
 \end_inset
@@ -216,12 +256,72 @@ Accept: */*
 \end_layout
 
 \begin_layout LyX-Code
+< HTTP/1.1 200 OK 
+\end_layout
+
+\begin_layout LyX-Code
+< Server: nginx/0.6.32 
+\end_layout
+
+\begin_layout LyX-Code
+< Date: Tue, 24 Mar 2009 20:52:55 GMT 
+\end_layout
+
+\begin_layout LyX-Code
+< Content-Type: text/html 
+\end_layout
+
+\begin_layout LyX-Code
+< Connection: keep-alive 
+\end_layout
+
+\begin_layout LyX-Code
+< Expires: Mon, 26 Jul 1997 05:00:00 GMT 
+\end_layout
+
+\begin_layout LyX-Code
+< Set-Cookie: JSESSIONID=5zrn24obipm5;Path=/ 
+\end_layout
+
+\begin_layout LyX-Code
+< Content-Length: 8431 
+\end_layout
+
+\begin_layout LyX-Code
+< Cache-Control: no-cache; private; no-store; must-revalidate; max-stale=0;
+ post-check=0; pre-check=0; max-age=0 
+\end_layout
+
+\begin_layout LyX-Code
+< Pragma: no-cache 
+\end_layout
+
+\begin_layout LyX-Code
+< X-Lift-Version: 0.11-SNAPSHOT 
+\end_layout
+
+\begin_layout LyX-Code
+<  
+\end_layout
+
+\begin_layout LyX-Code
+<?xml version="1.0" encoding="UTF-8"?> 
+\end_layout
+
+\begin_layout LyX-Code
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/T
+R/xhtml1/DTD/xhtml1-transitional.dtd"> <html xmlns:lift="http://liftweb.net"
+ xmlns="http://www.w3.org/1999/xhtml"><head>....
+\end_layout
+
+\end_inset
+
 
 \end_layout
 
 \begin_layout Standard
 The parts of an HTTP request that we'd like to point on are the action,
- in this case 
+ in this case a 
 \family typewriter
 
 \begin_inset Quotes eld
@@ -233,98 +333,45 @@ GET
 
 , 
 \family default
-and the host, which is 
+and the
 \family typewriter
-
+ 
+\family default
+URI
+\family typewriter
+ 
+\family default
+which is 
 \begin_inset Quotes eld
 \end_inset
 
-http://www.praytothemachine.com/evil/
+http://demo.liftweb.net/
 \begin_inset Quotes erd
 \end_inset
 
-
-\family default
- here.
- Other HTTP actions, sometimes called verbs, are POST, DELETE, PUT, HEAD,
- OPTIONS.
- In this chapter we will focus on GET and PUT.
+.
+ Actions are defined as part of the protocol and we'll use them in our API.
+ The other HTTP actions, which are sometimes called verbs, are POST, DELETE,
+ PUT, HEAD, OPTIONS.
+ In this chapter we will focus on using GET and PUT in the API.
  
 \end_layout
 
 \begin_layout Standard
-
-\end_layout
-
-\begin_layout Subsection
-GET Response
-\end_layout
-
-\begin_layout Standard
-The response from the server for the above Request is below:
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Box Frameless
-position "t"
-hor_pos "c"
-has_inner_box 1
-inner_pos "t"
-use_parbox 0
-width "100col%"
-special "none"
-height "1in"
-height_special "totalheight"
-status open
-
-\begin_layout LyX-Code
-\begin_inset Caption
-
-\begin_layout Plain Layout
-GET Response
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout LyX-Code
-HTTP/1.1 200 OK 
-\end_layout
-
-\begin_layout LyX-Code
-Date: Tue, 24 Mar 2009 20:00:15 GMT 
-\end_layout
-
-\begin_layout LyX-Code
-Server: Apache/2.0.63 (FreeBSD)
-\end_layout
-
-\begin_layout LyX-Code
-X-Powered-By: PHP/5.2.8 
-\end_layout
-
-\begin_layout LyX-Code
-Transfer-Encoding: chunked 
-\end_layout
-
-\begin_layout LyX-Code
-Content-Type: text/html; charset=UTF-8
-\end_layout
-
-\begin_layout LyX-Code
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/T
-R/xhtml1/DTD/xhtml1-transitional.dtd"> 
-\end_layout
-
-\begin_layout LyX-Code
-<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">....
-\end_layout
-
-\end_inset
-
-
+You can probably guess from the naming that 
+\family typewriter
+a GET
+\family default
+ request gets a resource from the server and that a 
+\family typewriter
+PUT
+\family default
+ request puts a resource.
+ These actions are operations that we would like to perform on the 
+\family typewriter
+URI
+\family default
+.
 \end_layout
 
 \begin_layout Standard
@@ -519,7 +566,7 @@ Concepts
 \end_layout
 
 \begin_layout Enumerate
-Resources - 
+Resources
 \end_layout
 
 \begin_layout Enumerate
@@ -557,7 +604,7 @@ A uniform interface
 \end_layout
 
 \begin_layout Section
-Set up the example, explain what we're going to do
+A simple API for PocketChange
 \end_layout
 
 \begin_layout Standard
@@ -579,6 +626,19 @@ We'd going to model two calls to the server, a GET request that responds
 The URLs will be:
 \end_layout
 
+\begin_layout Plain Layout
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
 \begin_layout LyX-Code
 A GET request sent to URI: 
 \end_layout
@@ -597,6 +657,11 @@ A PUT request + an XML Body sent to URI:
  is the Expense Id
 \end_layout
 
+\end_inset
+
+
+\end_layout
+
 \begin_layout Standard
 This set-up will allow 3rd party applications, such as widgets or AIR applicatio
 ns interact with our server programmatically, like the multitude of dedicated
@@ -607,7 +672,7 @@ ns interact with our server programmatically, like the multitude of dedicated
 \end_layout
 
 \begin_layout Section
-Write the pattern matching code to intercept
+Pattern matching for the API URLs
 \end_layout
 
 \begin_layout Standard
@@ -620,6 +685,19 @@ Now that we've discussed our design, let's see the code that will handle
 \begin_layout Standard
 The block of code to handle the routing follows:
 \end_layout
+
+\begin_layout Plain Layout
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
 
 \begin_layout LyX-Code
  
@@ -663,6 +741,11 @@ object RestAPI extends XMLApiHelper {
 }
 \end_layout
 
+\end_inset
+
+
+\end_layout
+
 \begin_layout Standard
 The server to now service GET requests with showAccountBalance and PUT requests
  with addExpense.
@@ -670,10 +753,6 @@ The server to now service GET requests with showAccountBalance and PUT requests
  PUT request, we extract the Req and pass it as a parameter to addExpense.
  This is because we're passing in an XML body with the information for the
  Exspense.
-\end_layout
-
-\begin_layout Section
-Add the dispatch to Boot
 \end_layout
 
 \begin_layout Standard
@@ -689,6 +768,19 @@ This is accomplished by adding the following code into Boot.scala:
 \begin_layout Standard
 Boot.scala code
 \end_layout
+
+\begin_layout Plain Layout
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
 
 \begin_layout LyX-Code
 class Boot {
@@ -718,6 +810,11 @@ class Boot {
 }
 \end_layout
 
+\end_inset
+
+
+\end_layout
+
 \begin_layout Standard
 In Section X.6 we defined the dispatch rule specific to our API.
  Adding them then injects them into the Lift request pipeline and we'll
@@ -725,8 +822,21 @@ In Section X.6 we defined the dispatch rule specific to our API.
 \end_layout
 
 \begin_layout Section
-Service Code
+API Service Code
 \end_layout
+
+\begin_layout Plain Layout
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
 
 \begin_layout LyX-Code
 // reacts to the GET Request
@@ -884,13 +994,31 @@ def addExpense(eid: String, req: Req): LiftResponse = {
 }
 \end_layout
 
+\end_inset
+
+
+\end_layout
+
 \begin_layout LyX-Code
 
 \end_layout
 
 \begin_layout Section
-Write a helper for the Expense Model object
+Helper method for the Expense Model Object
 \end_layout
+
+\begin_layout Plain Layout
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
 
 \begin_layout LyX-Code
 // look up the account name for the expense
@@ -997,8 +1125,13 @@ def toXML: NodeSeq = {
 }  
 \end_layout
 
+\end_inset
+
+
+\end_layout
+
 \begin_layout Section
-Show a GET Request and Response
+Request and Response Cycle for an API GET 
 \end_layout
 
 \begin_layout Standard
@@ -1010,7 +1143,25 @@ Request:
 \end_layout
 
 \begin_layout LyX-Code
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
 http://www.pocketchangeapp.com/api/expense/<eid> - GET - showExpense(eid)
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -1018,7 +1169,25 @@ Response:
 \end_layout
 
 \begin_layout LyX-Code
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
 <?xml version="1.0" encoding="UTF-8"?> 
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code
@@ -1026,7 +1195,7 @@ Response:
 \end_layout
 
 \begin_layout Section
-Show a PUT Request and Response
+Request and Response Cycle for an API PUT
 \end_layout
 
 \begin_layout Standard
@@ -1038,13 +1207,44 @@ Request:
 \end_layout
 
 \begin_layout LyX-Code
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
 http://www.pocketchangeapp.com/api/expense/<eid> - PUT - addEntry(acccount_id,
  request) + XML Body
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
 Request Body: 
 \end_layout
+
+\begin_layout Plain Layout
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
 
 \begin_layout LyX-Code
 <entry> 
@@ -1066,16 +1266,39 @@ Request Body:
 </entry> 
 \end_layout
 
+\end_inset
+
+
+\end_layout
+
 \begin_layout Standard
 Response:
 \end_layout
 
 \begin_layout LyX-Code
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
 <?xml version="1.0" encoding="UTF-8"?> 
 \end_layout
 
+\end_inset
+
+
+\end_layout
+
 \begin_layout Section
-Atom and JSON
+Extending the API to return Atom and JSON
 \end_layout
 
 \begin_layout Standard
@@ -1093,6 +1316,19 @@ toAtom
  Second, update the dispatch rules to allow users to request the alternate
  data formats.
 \end_layout
+
+\begin_layout Plain Layout
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
 
 \begin_layout LyX-Code
 def toAtom = {    
@@ -1197,11 +1433,8 @@ def toJSON = {
 }
 \end_layout
 
-\begin_layout LyX-Code
+\end_inset
 
-\end_layout
-
-\begin_layout LyX-Code
 
 \end_layout
 
@@ -1215,6 +1448,19 @@ And we'll have to modify the dispatch rules to add a format selection in
 \begin_layout Standard
 The URIs for GET will now be:
 \end_layout
+
+\begin_layout Plain Layout
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
 
 \begin_layout LyX-Code
 http://www.pocketchangeapp.com/api/expense/<eid>
@@ -1232,9 +1478,27 @@ http://www.pocketchangeapp.com/api/expense/<eid>/json
 http://www.pocketchangeapp.com/api/expense/<eid>/atom
 \end_layout
 
+\end_inset
+
+
+\end_layout
+
 \begin_layout Standard
 And the additions to the dispatch are as follows:
 \end_layout
+
+\begin_layout Plain Layout
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
 
 \begin_layout LyX-Code
 object RestAPI extends XMLApiHelper {
@@ -1310,6 +1574,11 @@ atom
 }
 \end_layout
 
+\end_inset
+
+
+\end_layout
+
 \begin_layout LyX-Code
 
 \end_layout
@@ -1317,6 +1586,19 @@ atom
 \begin_layout Standard
 Finally, we'll add the show* functions:
 \end_layout
+
+\begin_layout Plain Layout
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
 
 \begin_layout LyX-Code
 def showExpenseXml(eid: String): LiftResponse = {     
@@ -1420,8 +1702,13 @@ peration>)
 
 \end_layout
 
+\end_inset
+
+
+\end_layout
+
 \begin_layout Section
-Recap
+Chapter Summary
 \end_layout
 
 \begin_layout Standard
