@@ -74,7 +74,7 @@ Why add an API to your Web Application?
 \end_layout
 
 \begin_layout Standard
-Many Web Applications now offer an API
+Many web applications today now offer an API
 \begin_inset Foot
 status open
 
@@ -85,9 +85,23 @@ Application Programming Interface
 \end_inset
 
  that allows others to extend the functionality of the site.
- Building an application that adds to an existing one is usually called
- a Mash-up.
- One famous mash-up is FlickrVision.com/
+ An API is a set of exposed functions that are meant to allow 3rd parties
+ to reuse elements of the application.
+ There a number of sites that catalog the available APIs, such as ProgrammableWe
+b
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://www.programmableweb.com/
+\end_layout
+
+\end_inset
+
+.
+ An example of a site that has combined the GoogleMaps and Flickr APIs is
+ FlickrVision.com/
 \begin_inset Foot
 status open
 
@@ -104,17 +118,16 @@ target "http://flickrvision.com/"
 
 \end_inset
 
- which combines GoogleMaps and Flickr that allows users to visualize where
- in the world photos are being uploaded.
- This site is possible because there is an API available for both Google
- Maps and Flickr.
+.
+ FlickrVision that allows users to visualize where in the world recent photos
+ have been taken by combining the geolocation information embedded in the
+ photos and the mapping system of GoogleMaps.
+ There are countless of examples of these types of sites.
 \end_layout
 
 \begin_layout Standard
-Typically, when discussing Web Services, two types of services discussed,
- those that follow XML-RPC and those that are RESTful.
- We'll focus on REST and show you how you can easily add an API to your
- application.
+We're going to focus on what it takes to offer a simple RESTful web api
+ for PocketChange.
 \end_layout
 
 \begin_layout Section
