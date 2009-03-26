@@ -122,7 +122,7 @@ target "http://flickrvision.com/"
  FlickrVision that allows users to visualize where in the world recent photos
  have been taken by combining the geolocation information embedded in the
  photos and the mapping system of GoogleMaps.
- There are countless of examples of these types of sites.
+ This is just one example of an API mashup, there are countless other examples.
 \end_layout
 
 \begin_layout Standard
@@ -135,8 +135,8 @@ A Little Bit about HTTP
 \end_layout
 
 \begin_layout Standard
-In building our web service it's going to help to know a few things about
- HTTP
+While building our web service it's going to be helpful to know a few things
+ about HTTP
 \begin_inset Foot
 status open
 
@@ -159,15 +159,16 @@ reference "sec:What-is-REST?"
 \end_layout
 
 \begin_layout Standard
-A simplification of how the web works is clients send HTTP requests to servers,
- which respond with HTTP Responses.
+A simplification of how the web works is that clients, typically web browsers,
+ send HTTP Requests to servers, which respond with HTTP Responses.
  Let's take a look at an exchange between a client and a server.
 \end_layout
 
 \begin_layout Standard
 We're going to send a GET request to the URI http://demo.liftweb.net/ using
- the cURL utility, dumping the header information, we get the following
- request:
+ the cURL utility.
+ We'll enable the dumping of the header information and we get the following
+ result:
 \end_layout
 
 \begin_layout Standard
@@ -344,34 +345,24 @@ http://demo.liftweb.net/
 
 .
  Actions and addresses are what make the web work.
- Actions are defined as part of HTTP and we'll use them in our API.
- The other HTTP actions, which are sometimes called verbs, are POST, DELETE,
- PUT, HEAD, OPTIONS.
+ You can think of the web as a series of actions on varying resources.
+ 
+\end_layout
+
+\begin_layout Standard
+Actions are defined as part of the HTTP standard and we'll use them in our
+ API.
+ In addition to GET, the other HTTP actions are POST, DELETE, PUT, HEAD,
+ OPTIONS.
+ You may also see actions referred to as verbs.
  In this chapter we will focus on using GET and PUT in the API.
  
 \end_layout
 
 \begin_layout Standard
-You can probably guess from the naming that 
-\family typewriter
-a GET
-\family default
- request gets a resource from the server and that a 
-\family typewriter
-PUT
-\family default
- request puts a resource.
- These actions are operations that we would like to perform on the 
-\family typewriter
-URI
-\family default
-.
-\end_layout
-
-\begin_layout Standard
-Responses come with a few important pieces of information, of note right
- now are the Response code and the Entity Body.
- In this case the Response Code is 
+Just like Requests, Responses come with a few important pieces of information.
+ Of note, is the Response Code and the Entity Body.
+ In the example above, the Response Code is 
 \begin_inset Quotes eld
 \end_inset
 
@@ -400,8 +391,8 @@ Responses come with a few important pieces of information, of note right
 \end_layout
 
 \begin_layout Standard
-This was a quick overview of HTTP, if you'd like to learn more, head over
- to the protocol definition
+This was a quick overview of HTTP but if you'd like to learn more, head
+ over to the protocol definition
 \begin_inset Foot
 status open
 
@@ -472,30 +463,12 @@ REST strictly refers to a collection of network architecture principles
 There are a couple of ideas that are key in the preceeding definition, first
  is the use of HTTP actions and second is the idea of resources and their
  addressability or URIs.
- REST is an architecture that answers two questions that relates to actions
- and resources:
-\end_layout
-
-\begin_layout Standard
-1.) What action should I take? 
-\end_layout
-
-\begin_layout Standard
-This is answered in the request by the HTTP action (GET, POST, PUT, DELETE,
- OPTIONS, HEAD).
-\end_layout
-
-\begin_layout Standard
-2.)
-\series bold
+ REST is an architecture that answers two questions that relate to actions
+ and resources.
+ They are: what action should occur? and what data shall the action be applied?
+ REST answers these questions with what you would expect, HTTP actions and
+ URIs.
  
-\series default
-What data shall I apply the action to? 
-\end_layout
-
-\begin_layout Standard
-This is answered by the URI of the request and optionally an associated
- entity body included in the request.
 \end_layout
 
 \begin_layout Standard
@@ -528,7 +501,7 @@ Comparing XML-RPC to REST architectures
 \end_layout
 
 \begin_layout Standard
-So what is the difference between RESTful architectures and a traditional
+So what is the difference between a RESTful architecture and a traditional
  RPC
 \begin_inset Foot
 status open
@@ -556,7 +529,7 @@ An RPC appliction is more closely related to traditional development.
 
 \begin_layout Standard
 RESTful architectures embrace HTTP and use it to their advantage.
- Since we're using that web, we may as well act like it.
+ Since we're using the web, we may as well act like it.
 \end_layout
 
 \begin_layout Plain Layout
@@ -672,7 +645,7 @@ A uniform interface
 \end_layout
 
 \begin_layout Section
-A simple API for PocketChange
+A Simple API for PocketChange
 \end_layout
 
 \begin_layout Standard
@@ -726,12 +699,12 @@ A PUT request + an XML Body sent to URI:
 \end_layout
 
 \begin_layout Standard
-The URLs are almost the same, but as we will show, we can pattern-match
- on the type of request in addition to the URI.
+The URLs are almost the same and as we will show, we can pattern-match on
+ the type of request in addition to the URI.
 \end_layout
 
 \begin_layout Section
-Pattern matching for the API URLs
+Pattern matching for the URLs
 \end_layout
 
 \begin_layout Standard
