@@ -546,11 +546,15 @@ RESTful architectures embrace HTTP and use it to their advantage.
  Since we're using that web, we may as well act like it.
 \end_layout
 
+\begin_layout Plain Layout
+\begin_inset Note Note
+status open
+
 \begin_layout Section
-What is ROA REST?
+What is ROA REST? Do I need this????
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 The book 
 \begin_inset Quotes eld
 \end_inset
@@ -601,11 +605,11 @@ GET http://www.pocketchangeapp.com/api/transcation/22
  of 22.
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 What we care about for ROA REST:
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \series bold
 Concepts
@@ -627,7 +631,7 @@ Their representations
 The links between them 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 \series bold
 And Properties: 
@@ -647,6 +651,11 @@ Connectedness
 
 \begin_layout Enumerate
 A uniform interface 
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section
