@@ -69,23 +69,6 @@ This chapter is still under active development.
 
 \end_layout
 
-\begin_layout Standard
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Todo:
-\end_layout
-
-\begin_layout Plain Layout
-- finish
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
 \begin_layout Section
 Why add an API to your Web Application?
 \end_layout
@@ -123,7 +106,8 @@ target "http://flickrvision.com/"
 
  which combines GoogleMaps and Flickr that allows users to visualize where
  in the world photos are being uploaded.
- 
+ This site is possible because there is an API available for both Google
+ Maps and Flickr.
 \end_layout
 
 \begin_layout Standard
@@ -134,12 +118,22 @@ Typically, when discussing Web Services, two types of services discussed,
 \end_layout
 
 \begin_layout Section
-Plumbing Details
+A Little Bit about HTTP
 \end_layout
 
 \begin_layout Standard
 In building our web service it's going to help to know a few things about
- HTTP requests and responses.
+ HTTP
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+Hypertext Transfer Protocol
+\end_layout
+
+\end_inset
+
+ requests and responses.
  If you're comfortable with the Request-Response cycle and their details
  then feel free to jump to 
 \begin_inset CommandInset ref
@@ -152,18 +146,18 @@ reference "sec:What-is-REST?"
 \end_layout
 
 \begin_layout Standard
-A simplification of how the web works is clients send HTTP requests servers,
+A simplification of how the web works is clients send HTTP requests to servers,
  which respond with HTTP Responses.
  Let's take a look at an exchange between a client and a server.
 \end_layout
 
 \begin_layout Standard
 We're going to send a GET request to the URI http://demo.liftweb.net/ using
- the cURL utility.
- We can dump the header information and we get the following request:
+ the cURL utility, dumping the header information, we get the following
+ request:
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Standard
 \begin_inset Box Frameless
 position "t"
 hor_pos "c"
@@ -177,14 +171,6 @@ height_special "totalheight"
 status open
 
 \begin_layout LyX-Code
-\begin_inset Caption
-
-\begin_layout Plain Layout
-GET Request
-\end_layout
-
-\end_inset
-
 
 \end_layout
 
@@ -230,7 +216,7 @@ GET Request
 And then the corresponding response from the server follows:
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Standard
 \begin_inset Box Frameless
 position "t"
 hor_pos "c"
@@ -244,14 +230,6 @@ height_special "totalheight"
 status open
 
 \begin_layout LyX-Code
-\begin_inset Caption
-
-\begin_layout Plain Layout
-GET Response
-\end_layout
-
-\end_inset
-
 
 \end_layout
 
@@ -320,8 +298,10 @@ R/xhtml1/DTD/xhtml1-transitional.dtd"> <html xmlns:lift="http://liftweb.net"
 \end_layout
 
 \begin_layout Standard
-The parts of an HTTP request that we'd like to point on are the action,
- in this case a 
+Seems pretty straight-forward, we ask for a resource and the server returns
+ it to us.
+ Take a look at the HTTP request, we'd like to point out the action, in
+ this case a 
 \family typewriter
 
 \begin_inset Quotes eld
@@ -337,7 +317,7 @@ and the
 \family typewriter
  
 \family default
-URI
+URI,
 \family typewriter
  
 \family default
@@ -350,7 +330,8 @@ http://demo.liftweb.net/
 \end_inset
 
 .
- Actions are defined as part of the protocol and we'll use them in our API.
+ Actions and addresses are what make the web work.
+ Actions are defined as part of HTTP and we'll use them in our API.
  The other HTTP actions, which are sometimes called verbs, are POST, DELETE,
  PUT, HEAD, OPTIONS.
  In this chapter we will focus on using GET and PUT in the API.
@@ -405,45 +386,21 @@ Responses come with a few important pieces of information, of note right
  and truncated.
 \end_layout
 
-\begin_layout Section
-Comparing XML-RPC to REST architectures
-\end_layout
-
 \begin_layout Standard
-So what is the difference between RESTful architectures and a traditional
- RPC
+This was a quick overview of HTTP, if you'd like to learn more, head over
+ to the protocol definition
 \begin_inset Foot
 status open
 
 \begin_layout Plain Layout
-Remote Procedure Call
+http://www.ietf.org/rfc/rfc2616.txt
 \end_layout
 
 \end_inset
 
- architecture? 
-\end_layout
-
-\begin_layout Standard
-An RPC appliction is more closely related to traditional development.
- It tends to ignore most of the features offered by HTTP such as the methods.
- Rather, the scoping and data for the request is contained in the body of
- the POST.
- XML-RPC acts like the web for getting things, but breaks from those tenets
- for everything else, by overloading the POST request.
-\end_layout
-
-\begin_layout Standard
-RESTful architectures embrace HTTP and use it to their advantage.
- Since we're using that web, we may as well act like it.
-\end_layout
-
-\begin_layout Standard
-RPC example:
-\end_layout
-
-\begin_layout Standard
-REST example:
+.
+ We wanted to point out a few of the interesting parts of the cycle before
+ we got into building a REST API.
 \end_layout
 
 \begin_layout Section
@@ -498,61 +455,150 @@ REST strictly refers to a collection of network architecture principles
  
 \end_layout
 
-\begin_layout Quotation
-Systems which follow Fielding's REST principles are often referred to as
- "RESTful".
+\begin_layout Standard
+There are a couple of ideas that are key in the preceeding definition, first
+ is the use of HTTP actions and second is the idea of resources and their
+ addressability or URIs.
+ REST is an architecture that answers two questions that relates to actions
+ and resources:
 \end_layout
 
 \begin_layout Standard
-----------------
+1.) What action should I take? 
 \end_layout
 
 \begin_layout Standard
-Q.
- What action should I take?
+This is answered in the request by the HTTP action (GET, POST, PUT, DELETE,
+ OPTIONS, HEAD).
 \end_layout
 
 \begin_layout Standard
-A.
- HTTP verbs or actions.
+2.)
+\series bold
+ 
+\series default
+What data shall I apply the action to? 
 \end_layout
 
 \begin_layout Standard
-The first question is how the client can convey its intentions to the server.
- How does the server know a certain request is a request to retrieve some
- data, instead of a request to delete that same data or to overwrite it
- with different data? Why should the server do this instead of doing that?
-\end_layout
-
-\begin_layout Standard
-----------------
-\end_layout
-
-\begin_layout Standard
-Q.
- What data shall I apply the action to?
-\end_layout
-
-\begin_layout Standard
-A.
- Entity body
-\end_layout
-
-\begin_layout Standard
-how the client tells the server which part of the data set to operate on.
- Given that the server understands that the client wants to (say) delete
- some data, how can it know which data the client wants to delete? Why should
- the server operate on this data instead of that data? 
+This is answered by the URI of the request and optionally an associated
+ entity body included in the request.
 \end_layout
 
 \begin_layout Standard
 REST relies on the action of the request to be defined by the HTTP action
  and the resources to be defined in the URI.
- For example, a request like 
+ For example, a request like:
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+\begin_inset Quotes eld
+\end_inset
+
+GET http://www.pocketchangeapp.com/api/transcation/22
+\begin_inset Quotes erd
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+tells us we want to get the resource that is addressed by the URI 
+\family typewriter
+http://www.pocketchangeapp.com/api/transcation/22.
+\end_layout
+
+\begin_layout Section
+Comparing XML-RPC to REST architectures
+\end_layout
+
+\begin_layout Standard
+So what is the difference between RESTful architectures and a traditional
+ RPC
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+Remote Procedure Call
+\end_layout
+
+\end_inset
+
+ architecture? 
+\end_layout
+
+\begin_layout Standard
+An RPC appliction is more closely related to traditional development.
+ It tends to ignore most of the features offered by HTTP such as the methods.
+ Rather, the scoping and data for the request is contained in the body of
+ the POST.
+ XML-RPC acts like the web for getting things, but breaks from those tenets
+ for everything else, by overloading the POST request.
+ You will often see the term SOAP when talking about an XML-RPC setup, as
+ SOAP allows the developer to define the action and the resource and ignore
+ the HTTP details.
+\end_layout
+
+\begin_layout Standard
+RESTful architectures embrace HTTP and use it to their advantage.
+ Since we're using that web, we may as well act like it.
 \end_layout
 
 \begin_layout Section
 What is ROA REST?
+\end_layout
+
+\begin_layout Standard
+The book 
+\begin_inset Quotes eld
+\end_inset
+
+RESTful Web Services
+\begin_inset Quotes erd
+\end_inset
+
+
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+http://oreilly.com/catalog/9780596529260/index.html
+\end_layout
+
+\end_inset
+
+ defines an architecture, referred to as 
+\begin_inset Quotes eld
+\end_inset
+
+Resource Oriented
+\begin_inset Quotes erd
+\end_inset
+
+ that builds on top of Fielding's original REST definition.
+ We mentioned previously that a REST architecture will take advantage of
+ the HTTP methods to define the action of the request.
+ An ROA also uses HTTP methods and defines the scope of the data being acted
+ upon in the URI.
+ This combination is the real win for ROA, because of the clarity associated
+ with it.
+ If you saw 
+\begin_inset Quotes eld
+\end_inset
+
+
+\family typewriter
+GET http://www.pocketchangeapp.com/api/transcation/22
+\family default
+
+\begin_inset Quotes erd
+\end_inset
+
+ you would have an excellent idea of what is going to happen.
+ In this case, we want to get the details of the transaction with the ID
+ of 22.
 \end_layout
 
 \begin_layout Standard
@@ -611,22 +657,18 @@ A simple API for PocketChange
 We're going to start out with a simple example.
  We'd like to skip some of the more complex steps of a web service at the
  start, in particular, authorization.
- We'll add it later, but for right now, we'd like to illustrate how to get
- stuff out of the server.
- 
 \end_layout
 
 \begin_layout Standard
-We'd going to model two calls to the server, a GET request that responds
- with the transaction details and a PUT to add an expense.
- 
+We're going to model two calls to the server, a GET request that responds
+ with the expense details and a PUT to add an expense 
 \end_layout
 
 \begin_layout Standard
 The URLs will be:
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Standard
 \begin_inset Box Frameless
 position "t"
 hor_pos "c"
@@ -653,8 +695,7 @@ A PUT request + an XML Body sent to URI:
 \end_layout
 
 \begin_layout LyX-Code
-  http://www.pocketchangeapp.com/api/expense/<expense_id> again expense_id
- is the Expense Id
+  http://www.pocketchangeapp.com/api/expense
 \end_layout
 
 \end_inset
@@ -663,12 +704,8 @@ A PUT request + an XML Body sent to URI:
 \end_layout
 
 \begin_layout Standard
-This set-up will allow 3rd party applications, such as widgets or AIR applicatio
-ns interact with our server programmatically, like the multitude of dedicated
- clients for Twitter.
- The URLs are the same, but as we will show, we can pattern-match on the
- type of request.
- In this case, we act upon a GET and a PUT differently.
+The URLs are almost the same, but as we will show, we can pattern-match
+ on the type of request in addition to the URI.
 \end_layout
 
 \begin_layout Section
@@ -678,15 +715,15 @@ Pattern matching for the API URLs
 \begin_layout Standard
 Now that we've discussed our design, let's see the code that will handle
  the routing.
- In the package com.pocketchangeapp.api, we have a cl named RestAPI living
- in RestAPI.scala.
+ In the package com.pocketchangeapp.api, we have an object named RestAPI defined
+ in com/pocketchangeapp/api/RestAPI.scala.
 \end_layout
 
 \begin_layout Standard
 The block of code to handle the routing follows:
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Standard
 \begin_inset Box Frameless
 position "t"
 hor_pos "c"
@@ -700,7 +737,11 @@ height_special "totalheight"
 status open
 
 \begin_layout LyX-Code
- 
+package com.pocketchangeapp.api
+\end_layout
+
+\begin_layout LyX-Code
+
 \end_layout
 
 \begin_layout LyX-Code
@@ -717,8 +758,8 @@ object RestAPI extends XMLApiHelper {
 \end_layout
 
 \begin_layout LyX-Code
-    case r @ Req("api" :: "expense" :: eid :: Nil, "", PutRequest) => ()
- => addExpense(eid, r)
+    case r @ Req("api" :: "expense" :: Nil, "", PutRequest) => () => addExpense(
+r)
 \end_layout
 
 \begin_layout LyX-Code
@@ -747,8 +788,8 @@ object RestAPI extends XMLApiHelper {
 \end_layout
 
 \begin_layout Standard
-The server to now service GET requests with showAccountBalance and PUT requests
- with addExpense.
+The server will now service GET requests with showExpense and will handle
+ PUT requests with addExpense.
  One thing to note is we are pattern matching on the Req object and in the
  PUT request, we extract the Req and pass it as a parameter to addExpense.
  This is because we're passing in an XML body with the information for the
@@ -756,8 +797,15 @@ The server to now service GET requests with showAccountBalance and PUT requests
 \end_layout
 
 \begin_layout Standard
-As we discussed in chapter ??? Lift uses dispatch rules to route requests.
- Since we'd like to sit on /api/ and handle all of the requests we're going
+As we discussed in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Custom-dispatch-func"
+
+\end_inset
+
+ Lift uses dispatch rules to route requests.
+ Since we'd like to sit of /api/ and handle all of the requests we're going
  to need to update the dispatch rules.
 \end_layout
 
@@ -766,10 +814,6 @@ This is accomplished by adding the following code into Boot.scala:
 \end_layout
 
 \begin_layout Standard
-Boot.scala code
-\end_layout
-
-\begin_layout Plain Layout
 \begin_inset Box Frameless
 position "t"
 hor_pos "c"
@@ -781,6 +825,14 @@ special "none"
 height "1in"
 height_special "totalheight"
 status open
+
+\begin_layout LyX-Code
+import com.pocketchangeapp.api
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
 
 \begin_layout LyX-Code
 class Boot {
@@ -816,16 +868,28 @@ class Boot {
 \end_layout
 
 \begin_layout Standard
-In Section X.6 we defined the dispatch rule specific to our API.
- Adding them then injects them into the Lift request pipeline and we'll
- be able to handle the /api/ calls.
+We'll now be able to intercept incoming requests with 
+\begin_inset Quotes eld
+\end_inset
+
+/api/
+\begin_inset Quotes erd
+\end_inset
+
+ as the start of the URI.
 \end_layout
 
 \begin_layout Section
 API Service Code
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Standard
+Now that we're handling the API calls, we'll need to write the code to process
+ and respond.
+ In RestAPI.scala, we'll add:
+\end_layout
+
+\begin_layout Standard
 \begin_inset Box Frameless
 position "t"
 hor_pos "c"
@@ -877,121 +941,239 @@ def showExpense(eid: String): LiftResponse = {
 \end_layout
 
 \begin_layout LyX-Code
-
+private def getAccount(e: String, n: String): Account = {     
 \end_layout
 
 \begin_layout LyX-Code
-// reacts to the PUT Request
+val u = User.find(By(User.email, e))         
 \end_layout
 
 \begin_layout LyX-Code
-def addExpense(eid: String, req: Req): LiftResponse = { 
+val a = Account.findByName(u.open_!, n) match {       
 \end_layout
 
 \begin_layout LyX-Code
-  var expense = new Expense 
+case acct :: Nil => acct       
 \end_layout
 
 \begin_layout LyX-Code
-  req.xml match { 
-\end_layout
-
-\begin_layout LyX-Code
-    case Full(<rsvp>{parameters @ _*}</rsvp>) => { 
-\end_layout
-
-\begin_layout LyX-Code
-      for(parameter <- parameters){ parameter match { 
-\end_layout
-
-\begin_layout LyX-Code
-        case <udid>{udid}</udid> => expense.udid(udid) 
-\end_layout
-
-\begin_layout LyX-Code
-        case <dateOf>{dateof}</dateOf> => expense.dateOf(millis) 
-\end_layout
-
-\begin_layout LyX-Code
-        case <email>{email}</email> => expense.email(email) 
-\end_layout
-
-\begin_layout LyX-Code
-        case _ => 
-\end_layout
-
-\begin_layout LyX-Code
-      } 
-\end_layout
-
-\begin_layout LyX-Code
-    } 
-\end_layout
-
-\begin_layout LyX-Code
-    try { 
-\end_layout
-
-\begin_layout LyX-Code
-      if (expense.validate) { 
-\end_layout
-
-\begin_layout LyX-Code
-        expense.save 
-\end_layout
-
-\begin_layout LyX-Code
-        CreatedResponse(wrapXmlBody(<operation id="add_expense" success="true"><
-/operation>), "text/xml") 
-\end_layout
-
-\begin_layout LyX-Code
-      }
-\end_layout
-
-\begin_layout LyX-Code
-      else { 
-\end_layout
-
-\begin_layout LyX-Code
-        CreatedResponse(wrapXmlBody(<operation id="add_expense" success="false">
-</operation>), "text/xml") 
-\end_layout
-
-\begin_layout LyX-Code
-      } 
-\end_layout
-
-\begin_layout LyX-Code
-    } 
-\end_layout
-
-\begin_layout LyX-Code
-    catch { 
-\end_layout
-
-\begin_layout LyX-Code
-      case e => Log.error("Could not add expense", e); BadResponse() 
-\end_layout
-
-\begin_layout LyX-Code
-    } 
-\end_layout
-
-\begin_layout LyX-Code
-  } 
-\end_layout
-
-\begin_layout LyX-Code
-  case _ => Log.error("Request was malformed"); BadResponse() 
-\end_layout
-
-\begin_layout LyX-Code
-  }  
+case _ => new Account     
 \end_layout
 
 \begin_layout LyX-Code
 }
+\end_layout
+
+\begin_layout LyX-Code
+    
+\end_layout
+
+\begin_layout LyX-Code
+a   
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout LyX-Code
+  
+\end_layout
+
+\begin_layout LyX-Code
+// reacts to the PUT Request   
+\end_layout
+
+\begin_layout LyX-Code
+def addExpense(req: Req): LiftResponse = {     
+\end_layout
+
+\begin_layout LyX-Code
+var tempEmail = ""     
+\end_layout
+
+\begin_layout LyX-Code
+var tempAccountName = ""
+\end_layout
+
+\begin_layout LyX-Code
+var expense = new Expense     
+\end_layout
+
+\begin_layout LyX-Code
+req.xml match {       
+\end_layout
+
+\begin_layout LyX-Code
+case Full(<expense>{parameters @ _*}</expense>) => {         
+\end_layout
+
+\begin_layout LyX-Code
+for(parameter <- parameters){ 
+\end_layout
+
+\begin_layout LyX-Code
+parameter match {           
+\end_layout
+
+\begin_layout LyX-Code
+case <email>{email}</email> => tempEmail = email.text           
+\end_layout
+
+\begin_layout LyX-Code
+case <accountName>{name}</accountName> => tempAccountName = name.text   
+        
+\end_layout
+
+\begin_layout LyX-Code
+case <dateOf>{dateof}</dateOf> => expense.dateOf(new java.util.Date(dateof.text))
+           
+\end_layout
+
+\begin_layout LyX-Code
+case <amount>{value}</amount> => expense.amount(BigDecimal(value.text))  
+         
+\end_layout
+
+\begin_layout LyX-Code
+case <desc>{description}</desc> => expense.description(description.text) 
+          
+\end_layout
+
+\begin_layout LyX-Code
+case _ =>         
+\end_layout
+
+\begin_layout LyX-Code
+}       
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout LyX-Code
+      try {         
+\end_layout
+
+\begin_layout LyX-Code
+val currentAccount = getAccount(tempEmail, tempAccountName)         
+\end_layout
+
+\begin_layout LyX-Code
+expense.account(currentAccount.id.is)
+\end_layout
+
+\begin_layout LyX-Code
+        
+\end_layout
+
+\begin_layout LyX-Code
+val (entrySerial,entryBalance) = Expense.getLastExpenseData(currentAccount,
+ expense.dateOf)
+\end_layout
+
+\begin_layout LyX-Code
+        
+\end_layout
+
+\begin_layout LyX-Code
+expense.account(currentAccount).serialNumber(entrySerial + 1).tags("api").currentBal
+ance(entryBalance + expense.amount)
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+expense.validate match {           
+\end_layout
+
+\begin_layout LyX-Code
+case Nil =>             
+\end_layout
+
+\begin_layout LyX-Code
+Expense.updateEntries(entrySerial + 1, expense.amount.is)             
+\end_layout
+
+\begin_layout LyX-Code
+expense.save             
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+val newBalance = currentAccount.balance.is + expense.amount.is             
+\end_layout
+
+\begin_layout LyX-Code
+currentAccount.balance(newBalance).save 
+\end_layout
+
+\begin_layout LyX-Code
+           
+\end_layout
+
+\begin_layout LyX-Code
+CreatedResponse(wrapXmlBody(<operation id="add_expense" success="true"></operati
+on>), "text/xml")           
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+case _ =>             
+\end_layout
+
+\begin_layout LyX-Code
+CreatedResponse(wrapXmlBody(<operation id="add_expense" success="false"></operat
+ion>), "text/xml")         
+\end_layout
+
+\begin_layout LyX-Code
+}       
+\end_layout
+
+\begin_layout LyX-Code
+}       
+\end_layout
+
+\begin_layout LyX-Code
+catch {         
+\end_layout
+
+\begin_layout LyX-Code
+case e => Log.error("Could not add expense", e); BadResponse()       
+\end_layout
+
+\begin_layout LyX-Code
+}     
+\end_layout
+
+\begin_layout LyX-Code
+}     
+\end_layout
+
+\begin_layout LyX-Code
+case _ => Log.error("Request was malformed"); BadResponse()     
+\end_layout
+
+\begin_layout LyX-Code
+}   
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout LyX-Code
+
 \end_layout
 
 \end_inset
@@ -1007,7 +1189,12 @@ def addExpense(eid: String, req: Req): LiftResponse = {
 Helper method for the Expense Model Object
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Standard
+To simplify our lives, we'll add a helper function to our Expense model
+ object:
+\end_layout
+
+\begin_layout Standard
 \begin_inset Box Frameless
 position "t"
 hor_pos "c"
@@ -1156,7 +1343,7 @@ height_special "totalheight"
 status open
 
 \begin_layout Plain Layout
-http://www.pocketchangeapp.com/api/expense/<eid> - GET - showExpense(eid)
+http://www.pocketchangeapp.com/api/expense/3 GET
 \end_layout
 
 \end_inset
@@ -1183,6 +1370,70 @@ status open
 
 \begin_layout Plain Layout
 <?xml version="1.0" encoding="UTF-8"?> 
+\end_layout
+
+\begin_layout Plain Layout
+<pca_api operation="expense" success="true" >
+\end_layout
+
+\begin_layout Plain Layout
+<operation success="true" id="show_expense">
+\end_layout
+
+\begin_layout Plain Layout
+<expense> 
+\end_layout
+
+\begin_layout Plain Layout
+<id>http://www.pocketchangeapp.com/api/expense/3</id> 
+\end_layout
+
+\begin_layout Plain Layout
+<accountname>Home</accountname> 
+\end_layout
+
+\begin_layout Plain Layout
+<date>2009-03-26T00:00:00Z</date> 
+\end_layout
+
+\begin_layout Plain Layout
+<description>MacHeist Apps</description> 
+\end_layout
+
+\begin_layout Plain Layout
+<amount>35.00</amount> 
+\end_layout
+
+\begin_layout Plain Layout
+<tags> 
+\end_layout
+
+\begin_layout Plain Layout
+<tag>software</tag>
+\end_layout
+
+\begin_layout Plain Layout
+<tag>apps</tag>
+\end_layout
+
+\begin_layout Plain Layout
+<tag>mac</tag> 
+\end_layout
+
+\begin_layout Plain Layout
+</tags> 
+\end_layout
+
+\begin_layout Plain Layout
+</expense>
+\end_layout
+
+\begin_layout Plain Layout
+</operation>
+\end_layout
+
+\begin_layout Plain Layout
+</events_api> 
 \end_layout
 
 \end_inset
@@ -1220,8 +1471,8 @@ height_special "totalheight"
 status open
 
 \begin_layout Plain Layout
-http://www.pocketchangeapp.com/api/expense/<eid> - PUT - addEntry(acccount_id,
- request) + XML Body
+http://www.pocketchangeapp.com/api/expense - PUT - addEntry(request) + XML
+ Body
 \end_layout
 
 \end_inset
@@ -1233,7 +1484,7 @@ http://www.pocketchangeapp.com/api/expense/<eid> - PUT - addEntry(acccount_id,
 Request Body: 
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Standard
 \begin_inset Box Frameless
 position "t"
 hor_pos "c"
@@ -1247,23 +1498,31 @@ height_special "totalheight"
 status open
 
 \begin_layout LyX-Code
-<entry> 
+<expense> 
 \end_layout
 
 \begin_layout LyX-Code
-  <udid>1234</udid> 
+  <email>tyler.weir@pocketchangeapp.com</email> 
 \end_layout
 
 \begin_layout LyX-Code
-  <dateOf>Fri Feb 20 08:37:16 EST 2009</dateOf> 
+  <accountName>Home</accountName> 
 \end_layout
 
 \begin_layout LyX-Code
-  <email>tyler.weir@gmail.com</email> 
+  <dateOf>2009/03/26</dateOf> 
 \end_layout
 
 \begin_layout LyX-Code
-</entry> 
+  <amount>45.00</amount> 
+\end_layout
+
+\begin_layout LyX-Code
+  <desc>I buy food</desc> 
+\end_layout
+
+\begin_layout LyX-Code
+</expense>
 \end_layout
 
 \end_inset
@@ -1288,8 +1547,13 @@ height "1in"
 height_special "totalheight"
 status open
 
-\begin_layout Plain Layout
-<?xml version="1.0" encoding="UTF-8"?> 
+\begin_layout LyX-Code
+HTTP/1.1 201 Created
+\end_layout
+
+\begin_layout LyX-Code
+<?xml version="1.0" encoding="UTF-8"?> <pca_api><operation success="true"
+ id="add_expense"></operation></pca_api> 
 \end_layout
 
 \end_inset
@@ -1298,7 +1562,7 @@ status open
 \end_layout
 
 \begin_layout Section
-Extending the API to return Atom and JSON
+Extending the API to return Atom
 \end_layout
 
 \begin_layout Standard
@@ -1317,7 +1581,7 @@ toAtom
  data formats.
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Standard
 \begin_inset Box Frameless
 position "t"
 hor_pos "c"
@@ -1398,41 +1662,6 @@ def toAtom = {
   
 \end_layout
 
-\begin_layout LyX-Code
-
-\end_layout
-
-\begin_layout LyX-Code
-def toJSON = {    
-\end_layout
-
-\begin_layout LyX-Code
-  val id = "http://www.pocketchangeapp.com/api/expense/" + this.id    
-\end_layout
-
-\begin_layout LyX-Code
-  val formatter = new  SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")    
-\end_layout
-
-\begin_layout LyX-Code
-  val edate = formatter.format(this.dateOf.is)
-\end_layout
-
-\begin_layout LyX-Code
-
-\end_layout
-
-\begin_layout LyX-Code
-  "{'expense':{ 'id':'" + id + "','accountname':'" + getAccountName(account.is)
- + "'," +    "'date':'" + edate + "'," +    "'description':'" + description.is
- +     "'," +    "'amount':'" + amount.is.toString + "'," +    "'tags': {["
- + showJSONTags + "]}"  
-\end_layout
-
-\begin_layout LyX-Code
-}
-\end_layout
-
 \end_inset
 
 
@@ -1449,7 +1678,7 @@ And we'll have to modify the dispatch rules to add a format selection in
 The URIs for GET will now be:
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Standard
 \begin_inset Box Frameless
 position "t"
 hor_pos "c"
@@ -1471,10 +1700,6 @@ http://www.pocketchangeapp.com/api/expense/<eid>/xml
 \end_layout
 
 \begin_layout LyX-Code
-http://www.pocketchangeapp.com/api/expense/<eid>/json
-\end_layout
-
-\begin_layout LyX-Code
 http://www.pocketchangeapp.com/api/expense/<eid>/atom
 \end_layout
 
@@ -1487,7 +1712,7 @@ http://www.pocketchangeapp.com/api/expense/<eid>/atom
 And the additions to the dispatch are as follows:
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Standard
 \begin_inset Box Frameless
 position "t"
 hor_pos "c"
@@ -1523,18 +1748,6 @@ xml
 \end_inset
 
  :: Nil, "", GetRequest) => () => showExpenseXml(eid) // new
-\end_layout
-
-\begin_layout LyX-Code
-    case Req("api" :: "expense" :: eid :: 
-\begin_inset Quotes eld
-\end_inset
-
-json
-\begin_inset Quotes erd
-\end_inset
-
- :: Nil, "", GetRequest) => () => showExpenseJson(eid) // new
 \end_layout
 
 \begin_layout LyX-Code
@@ -1584,10 +1797,10 @@ atom
 \end_layout
 
 \begin_layout Standard
-Finally, we'll add the show* functions:
+Finally, we'll add showExpenseAtom, and rename showExpense to showExpenseXml:
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Standard
 \begin_inset Box Frameless
 position "t"
 hor_pos "c"
@@ -1635,63 +1848,28 @@ ation>)
 \end_layout
 
 \begin_layout LyX-Code
-def showExpenseAtom(eid: String): LiftResponse = {     
+  
 \end_layout
 
 \begin_layout LyX-Code
-  val e: Box[NodeSeq] = for(e <- Expense.find(By(Expense.id, eid.toLong)))
-      
+def showExpenseAtom(eid: String): AtomResponse = {     
 \end_layout
 
 \begin_layout LyX-Code
-    yield {       
+  val e: Box[Node] = for(e <- Expense.find(By(Expense.id, eid.toLong))) yield
+ {       
 \end_layout
 
 \begin_layout LyX-Code
-      AtomResponse(<operation id="show_expense_atom" success="true">{r.toAtom}</o
-peration>)     
+    e.toAtom
 \end_layout
 
 \begin_layout LyX-Code
-    }
+  }     
 \end_layout
 
 \begin_layout LyX-Code
-  e    
-\end_layout
-
-\begin_layout LyX-Code
-}
-\end_layout
-
-\begin_layout LyX-Code
-
-\end_layout
-
-\begin_layout LyX-Code
-def showExpenseJson(eid: String): LiftResponse = {     
-\end_layout
-
-\begin_layout LyX-Code
-  val e: Box[NodeSeq] = for(e <- Expense.find(By(Expense.id, eid.toLong)))
-      
-\end_layout
-
-\begin_layout LyX-Code
-    yield {       
-\end_layout
-
-\begin_layout LyX-Code
-      JsonResponse(<operation id="show_expense_json" success="true">{r.toJSON}</o
-peration>)     
-\end_layout
-
-\begin_layout LyX-Code
-    }
-\end_layout
-
-\begin_layout LyX-Code
-  e    
+  AtomResponse(e.open_!)   
 \end_layout
 
 \begin_layout LyX-Code
@@ -1700,6 +1878,138 @@ peration>)
 
 \begin_layout LyX-Code
 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Let's take a look at a request for an Atom-ized entry.
+\end_layout
+
+\begin_layout Standard
+Request:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout LyX-Code
+GET - http://localhost:8080/api/expense/10/atom
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Headers and Response:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout LyX-Code
+Expires	Thu, 01 Jan 1970 00:00:00 GMT 
+\end_layout
+
+\begin_layout LyX-Code
+Set-Cookie	JSESSIONID=1bq219bmoevv1;Path=/ 
+\end_layout
+
+\begin_layout LyX-Code
+Content-Length	353 
+\end_layout
+
+\begin_layout LyX-Code
+Content-Type	application/atom+xml 
+\end_layout
+
+\begin_layout LyX-Code
+X-Lift-Version	
+\end_layout
+
+\begin_layout LyX-Code
+0.11-SNAPSHOT Server	
+\end_layout
+
+\begin_layout LyX-Code
+Jetty(6.1.15.rc3)
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+<entry xmlns="http://www.w3.org/2005/Atom">     
+\end_layout
+
+\begin_layout LyX-Code
+<expense>       
+\end_layout
+
+\begin_layout LyX-Code
+<id>http://www.pocketchangeapp.com/api/expense/10</id>       
+\end_layout
+
+\begin_layout LyX-Code
+<accountname>Home</accountname>       
+\end_layout
+
+\begin_layout LyX-Code
+<date>2009-03-26T00:00:00Z</date>       
+\end_layout
+
+\begin_layout LyX-Code
+<description>I buy food</description>       
+\end_layout
+
+\begin_layout LyX-Code
+<amount>45.00</amount>       
+\end_layout
+
+\begin_layout LyX-Code
+<tags>         
+\end_layout
+
+\begin_layout LyX-Code
+<tag>api</tag>       
+\end_layout
+
+\begin_layout LyX-Code
+</tags>      
+\end_layout
+
+\begin_layout LyX-Code
+</expense>     
+\end_layout
+
+\begin_layout LyX-Code
+</entry>  
 \end_layout
 
 \end_inset
