@@ -88,9 +88,9 @@ Application Programming Interface
  An API is a set of exposed functions that are meant to allow 3rd parties
  to reuse elements of the application.
  There a number of sites that catalog the available APIs, such as ProgrammableWe
-b
+b (see 
 \begin_inset Flex URL
-status collapsed
+status open
 
 \begin_layout Plain Layout
 
@@ -99,9 +99,9 @@ http://www.programmableweb.com/
 
 \end_inset
 
-.
+).
  An example of a site that has combined the GoogleMaps and Flickr APIs is
- FlickrVision.com/
+ FlickrVision.com
 \begin_inset Foot
 status open
 
@@ -119,10 +119,11 @@ target "http://flickrvision.com/"
 \end_inset
 
 .
- FlickrVision that allows users to visualize where in the world recent photos
+ FlickrVision allows users to visualize where in the world recent photos
  have been taken by combining the geolocation information embedded in the
  photos and the mapping system of GoogleMaps.
- This is just one example of an API mashup, there are countless other examples.
+ This is just one example of an API mashup, and there are countless other
+ examples.
 \end_layout
 
 \begin_layout Standard
@@ -165,10 +166,23 @@ A simplification of how the web works is that clients, typically web browsers,
 \end_layout
 
 \begin_layout Standard
-We're going to send a GET request to the URI http://demo.liftweb.net/ using
- the cURL utility.
- We'll enable the dumping of the header information and we get the following
- result:
+We're going to send a GET request to the URI 
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+http://demo.liftweb.net/
+\end_layout
+
+\end_inset
+
+ using the 
+\family typewriter
+cURL
+\family default
+ utility.
+ We'll enable dumping the HTTP protocol header information and we get the
+ following result:
 \end_layout
 
 \begin_layout Standard
@@ -227,7 +241,7 @@ status open
 \end_layout
 
 \begin_layout Standard
-And then the corresponding response from the server follows:
+And the corresponding response from the server:
 \end_layout
 
 \begin_layout Standard
@@ -312,10 +326,10 @@ R/xhtml1/DTD/xhtml1-transitional.dtd"> <html xmlns:lift="http://liftweb.net"
 \end_layout
 
 \begin_layout Standard
-Seems pretty straight-forward, we ask for a resource and the server returns
- it to us.
- Take a look at the HTTP request, we'd like to point out the action, in
- this case a 
+This seems pretty straight-forward: we ask for a resource and the server
+ returns it to us.
+ Take a look at the HTTP request.
+ We'd like to point out the action, in this case a 
 \family typewriter
 
 \begin_inset Quotes eld
@@ -352,16 +366,47 @@ http://demo.liftweb.net/
 \begin_layout Standard
 Actions are defined as part of the HTTP standard and we'll use them in our
  API.
- In addition to GET, the other HTTP actions are POST, DELETE, PUT, HEAD,
- OPTIONS.
+ In addition to 
+\family typewriter
+GET
+\family default
+, the other HTTP actions are 
+\family typewriter
+POST
+\family default
+, 
+\family typewriter
+DELETE
+\family default
+, 
+\family typewriter
+PUT
+\family default
+, 
+\family typewriter
+HEAD
+\family default
+, 
+\family typewriter
+OPTIONS
+\family default
+.
  You may also see actions referred to as verbs.
- In this chapter we will focus on using GET and PUT in the API.
+ In this chapter we will focus on using 
+\family typewriter
+GET
+\family default
+ and 
+\family typewriter
+PUT
+\family default
+ in the API.
  
 \end_layout
 
 \begin_layout Standard
 Just like Requests, Responses come with a few important pieces of information.
- Of note, is the Response Code and the Entity Body.
+ Of note is the Response Code and the Entity Body.
  In the example above, the Response Code is 
 \begin_inset Quotes eld
 \end_inset
@@ -532,7 +577,7 @@ RESTful architectures embrace HTTP and use it to their advantage.
  Since we're using the web, we may as well act like it.
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Standard
 \begin_inset Note Note
 status open
 
@@ -710,12 +755,33 @@ Pattern matching for the URLs
 \begin_layout Standard
 Now that we've discussed our design, let's see the code that will handle
  the routing.
- In the package com.pocketchangeapp.api, we have an object named RestAPI defined
- in com/pocketchangeapp/api/RestAPI.scala.
+ In the package 
+\family typewriter
+com.pocketchangeapp.api
+\family default
+, we have an object named 
+\family typewriter
+RestAPI
+\family default
+ defined in 
+\family typewriter
+com/pocketchangeapp/api/RestAPI.scala
+\family default
+.
 \end_layout
 
 \begin_layout Standard
-The block of code to handle the routing follows:
+The block of code to handle the routing follows
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Please use List(...) instead of cons
+\end_layout
+
+\end_inset
+
+:
 \end_layout
 
 \begin_layout Standard
@@ -783,12 +849,46 @@ r)
 \end_layout
 
 \begin_layout Standard
-The server will now service GET requests with showExpense and will handle
- PUT requests with addExpense.
- One thing to note is we are pattern matching on the Req object and in the
- PUT request, we extract the Req and pass it as a parameter to addExpense.
+The server will now service 
+\family typewriter
+GET
+\family default
+ requests with 
+\family typewriter
+showExpense
+\family default
+ and will handle 
+\family typewriter
+PUT
+\family default
+ requests with 
+\family typewriter
+addExpense
+\family default
+.
+ One thing to note is we are pattern matching on the 
+\family typewriter
+Req
+\family default
+ object and in the 
+\family typewriter
+PUT
+\family default
+ request, we extract the 
+\family typewriter
+Req
+\family default
+ and pass it as a parameter to 
+\family typewriter
+addExpense
+\family default
+.
  This is because we're passing in an XML body with the information for the
- Exspense.
+ 
+\family typewriter
+Expense
+\family default
+.
 \end_layout
 
 \begin_layout Standard
@@ -800,12 +900,16 @@ reference "sec:Custom-dispatch-func"
 \end_inset
 
  Lift uses dispatch rules to route requests.
- Since we'd like to sit of /api/ and handle all of the requests we're going
- to need to update the dispatch rules.
+ Since we'd like to hook our dispatch under the /api/ path and handle all
+ of the requests we're going to need to update the dispatch rules.
 \end_layout
 
 \begin_layout Standard
-This is accomplished by adding the following code into Boot.scala:
+This is accomplished by adding the following code into 
+\family typewriter
+Boot.scala
+\family default
+:
 \end_layout
 
 \begin_layout Standard
@@ -881,7 +985,11 @@ API Service Code
 \begin_layout Standard
 Now that we're handling the API calls, we'll need to write the code to process
  and respond.
- In RestAPI.scala, we'll add:
+ In 
+\family typewriter
+RestAPI.scala
+\family default
+, we'll add:
 \end_layout
 
 \begin_layout Standard
@@ -940,23 +1048,23 @@ private def getAccount(e: String, n: String): Account = {
 \end_layout
 
 \begin_layout LyX-Code
-val u = User.find(By(User.email, e))         
+  val u = User.find(By(User.email, e))         
 \end_layout
 
 \begin_layout LyX-Code
-val a = Account.findByName(u.open_!, n) match {       
+  val a = Account.findByName(u.open_!, n) match {       
 \end_layout
 
 \begin_layout LyX-Code
-case acct :: Nil => acct       
+    case acct :: Nil => acct       
 \end_layout
 
 \begin_layout LyX-Code
-case _ => new Account     
+    case _ => new Account     
 \end_layout
 
 \begin_layout LyX-Code
-}
+  }
 \end_layout
 
 \begin_layout LyX-Code
@@ -964,7 +1072,7 @@ case _ => new Account
 \end_layout
 
 \begin_layout LyX-Code
-a   
+  a   
 \end_layout
 
 \begin_layout LyX-Code
@@ -984,67 +1092,71 @@ def addExpense(req: Req): LiftResponse = {
 \end_layout
 
 \begin_layout LyX-Code
-var tempEmail = ""     
+  var tempEmail = ""     
 \end_layout
 
 \begin_layout LyX-Code
-var tempAccountName = ""
+  var tempAccountName = ""
 \end_layout
 
 \begin_layout LyX-Code
-var expense = new Expense     
+  var expense = new Expense     
 \end_layout
 
 \begin_layout LyX-Code
-req.xml match {       
+  req.xml match {       
 \end_layout
 
 \begin_layout LyX-Code
-case Full(<expense>{parameters @ _*}</expense>) => {         
+    case Full(<expense>{parameters @ _*}</expense>) => {         
 \end_layout
 
 \begin_layout LyX-Code
-for(parameter <- parameters){ 
+      for(parameter <- parameters){ 
 \end_layout
 
 \begin_layout LyX-Code
-parameter match {           
+        parameter match {           
 \end_layout
 
 \begin_layout LyX-Code
-case <email>{email}</email> => tempEmail = email.text           
+          case <email>{email}</email> => tempEmail = email.text         
+  
 \end_layout
 
 \begin_layout LyX-Code
-case <accountName>{name}</accountName> => tempAccountName = name.text   
-        
+          case <accountName>{name}</accountName> => tempAccountName = name.text
+   
 \end_layout
 
 \begin_layout LyX-Code
-case <dateOf>{dateof}</dateOf> => expense.dateOf(new java.util.Date(dateof.text))
-           
+          case <dateOf>{dateof}</dateOf> => 
 \end_layout
 
 \begin_layout LyX-Code
-case <amount>{value}</amount> => expense.amount(BigDecimal(value.text))  
-         
+            expense.dateOf(new java.util.Date(dateof.text)     
 \end_layout
 
 \begin_layout LyX-Code
-case <desc>{description}</desc> => expense.description(description.text) 
-          
+          case <amount>{value}</amount> => expense.amount(BigDecimal(value.text))
+   
 \end_layout
 
 \begin_layout LyX-Code
-case _ =>         
+          case <desc>{description}</desc> => expense.description(description.text)
+   
 \end_layout
 
 \begin_layout LyX-Code
-}       
+          case _ =>         
 \end_layout
 
 \begin_layout LyX-Code
-}
+        }       
+\end_layout
+
+\begin_layout LyX-Code
+      }
 \end_layout
 
 \begin_layout LyX-Code
@@ -1052,20 +1164,12 @@ case _ =>
 \end_layout
 
 \begin_layout LyX-Code
-val currentAccount = getAccount(tempEmail, tempAccountName)         
+        val currentAccount = getAccount(tempEmail, tempAccountName)    
+     
 \end_layout
 
 \begin_layout LyX-Code
-expense.account(currentAccount.id.is)
-\end_layout
-
-\begin_layout LyX-Code
-        
-\end_layout
-
-\begin_layout LyX-Code
-val (entrySerial,entryBalance) = Expense.getLastExpenseData(currentAccount,
- expense.dateOf)
+        expense.account(currentAccount.id.is)
 \end_layout
 
 \begin_layout LyX-Code
@@ -1073,8 +1177,24 @@ val (entrySerial,entryBalance) = Expense.getLastExpenseData(currentAccount,
 \end_layout
 
 \begin_layout LyX-Code
-expense.account(currentAccount).serialNumber(entrySerial + 1).tags("api").currentBal
-ance(entryBalance + expense.amount)
+        val (entrySerial,entryBalance) = Expense.getLastExpenseData(currentAccoun
+t,
+\end_layout
+
+\begin_layout LyX-Code
+          expense.dateOf)
+\end_layout
+
+\begin_layout LyX-Code
+        
+\end_layout
+
+\begin_layout LyX-Code
+        expense.account(currentAccount).serialNumber(entrySerial + 1)
+\end_layout
+
+\begin_layout LyX-Code
+          .tags("api").currentBalance(entryBalance + expense.amount)
 \end_layout
 
 \begin_layout LyX-Code
@@ -1082,19 +1202,20 @@ ance(entryBalance + expense.amount)
 \end_layout
 
 \begin_layout LyX-Code
-expense.validate match {           
+        expense.validate match {           
 \end_layout
 
 \begin_layout LyX-Code
-case Nil =>             
+          case Nil =>             
 \end_layout
 
 \begin_layout LyX-Code
-Expense.updateEntries(entrySerial + 1, expense.amount.is)             
+            Expense.updateEntries(entrySerial + 1, expense.amount.is)     
+        
 \end_layout
 
 \begin_layout LyX-Code
-expense.save             
+            expense.save             
 \end_layout
 
 \begin_layout LyX-Code
@@ -1102,11 +1223,11 @@ expense.save
 \end_layout
 
 \begin_layout LyX-Code
-val newBalance = currentAccount.balance.is + expense.amount.is             
+            val newBalance = currentAccount.balance.is + expense.amount.is
 \end_layout
 
 \begin_layout LyX-Code
-currentAccount.balance(newBalance).save 
+            currentAccount.balance(newBalance).save 
 \end_layout
 
 \begin_layout LyX-Code
@@ -1114,8 +1235,16 @@ currentAccount.balance(newBalance).save
 \end_layout
 
 \begin_layout LyX-Code
-CreatedResponse(wrapXmlBody(<operation id="add_expense" success="true"></operati
-on>), "text/xml")           
+            CreatedResponse(
+\end_layout
+
+\begin_layout LyX-Code
+              wrapXmlBody(<operation id="add_expense" success="true"></operation
+>),
+\end_layout
+
+\begin_layout LyX-Code
+              "text/xml")           
 \end_layout
 
 \begin_layout LyX-Code
@@ -1123,44 +1252,48 @@ on>), "text/xml")
 \end_layout
 
 \begin_layout LyX-Code
-case _ =>             
+          case _ =>             
 \end_layout
 
 \begin_layout LyX-Code
-CreatedResponse(wrapXmlBody(<operation id="add_expense" success="false"></operat
-ion>), "text/xml")         
+            CreatedResponse(wrapXmlBody(<operation id="add_expense"
 \end_layout
 
 \begin_layout LyX-Code
-}       
+              success="false"></operation>), "text/xml")         
 \end_layout
 
 \begin_layout LyX-Code
-}       
+        }       
 \end_layout
 
 \begin_layout LyX-Code
-catch {         
+      }       
 \end_layout
 
 \begin_layout LyX-Code
-case e => Log.error("Could not add expense", e); BadResponse()       
+      catch {         
 \end_layout
 
 \begin_layout LyX-Code
-}     
+        case e => Log.error("Could not add expense", e); BadResponse()  
+     
 \end_layout
 
 \begin_layout LyX-Code
-}     
+      }     
 \end_layout
 
 \begin_layout LyX-Code
-case _ => Log.error("Request was malformed"); BadResponse()     
+    }     
 \end_layout
 
 \begin_layout LyX-Code
-}   
+    case _ => Log.error("Request was malformed"); BadResponse()     
+\end_layout
+
+\begin_layout LyX-Code
+  }   
 \end_layout
 
 \begin_layout LyX-Code
@@ -1176,17 +1309,16 @@ case _ => Log.error("Request was malformed"); BadResponse()
 
 \end_layout
 
-\begin_layout LyX-Code
-
-\end_layout
-
 \begin_layout Section
 Helper method for the Expense Model Object
 \end_layout
 
 \begin_layout Standard
-To simplify our lives, we'll add a helper function to our Expense model
- object:
+To simplify our lives, we'll add a helper function to our 
+\family typewriter
+Expense
+\family default
+ model object:
 \end_layout
 
 \begin_layout Standard
@@ -1347,7 +1479,17 @@ http://www.pocketchangeapp.com/api/expense/3 GET
 \end_layout
 
 \begin_layout Standard
-Response: 
+Response
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Please indent XML for clarity (even if it doesn't in the actual response)
+\end_layout
+
+\end_inset
+
+: 
 \end_layout
 
 \begin_layout LyX-Code
@@ -1563,7 +1705,8 @@ Extending the API to return Atom
 \begin_layout Standard
 If you'd like to return your data in a different format, you'll have to
  do two things.
- First define the helper or helpers, we'll add 
+ First define the helper or helpers.
+ In our case we'll add 
 \family typewriter
 toJSON
 \family default
@@ -1666,7 +1809,17 @@ def toAtom = {
 And we'll have to modify the dispatch rules to add a format selection in
  the URI.
  We'll leave plain XML as the default response, and we'll add a way to select
- JSON, XML or Atom.
+ JSON, XML or Atom
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+JSON is mentioned but doesn't appear to be covered
+\end_layout
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
@@ -1705,6 +1858,16 @@ http://www.pocketchangeapp.com/api/expense/<eid>/atom
 
 \begin_layout Standard
 And the additions to the dispatch are as follows:
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Please change to use List(...) instead of cons
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -1792,7 +1955,19 @@ atom
 \end_layout
 
 \begin_layout Standard
-Finally, we'll add showExpenseAtom, and rename showExpense to showExpenseXml:
+Finally, we'll add 
+\family typewriter
+showExpenseAtom
+\family default
+, and rename 
+\family typewriter
+showExpense
+\family default
+ to 
+\family typewriter
+showExpenseXml
+\family default
+:
 \end_layout
 
 \begin_layout Standard
