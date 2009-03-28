@@ -2947,7 +2947,14 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Snippet attributes
+Snippet attributes 
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Snippet-attributes"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -3099,7 +3106,14 @@ status open
 
 \begin_layout Plain Layout
 
-Snippet attributes simplified
+Snippet mixin attributes 
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Snippet-mixin-attributes"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
