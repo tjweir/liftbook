@@ -1,4 +1,4 @@
-#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.0 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -3080,6 +3080,154 @@ time
  is turned into a BindParam object using implicit conversions.
  It is important to note that BindParam.calcValue function is called in the
  correct context so that BindHelpers can be safely used.
+\end_layout
+
+\begin_layout Standard
+It is sometimes more convenient to just put node attributes in the markup
+ and just not worry about them in the Scala code.
+ Consider this:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Snippet attributes simplified
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// the markup
+\end_layout
+
+\begin_layout Plain Layout
+
+<lift:Ledger.balance>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <ledger:time ledger:id=
+\begin_inset Quotes erd
+\end_inset
+
+myId
+\begin_inset Quotes erd
+\end_inset
+
+/>
+\end_layout
+
+\begin_layout Plain Layout
+
+</lift:Ledger.balance>
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// The snipppet class
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+class Ledger {
+\end_layout
+
+\begin_layout Plain Layout
+
+  def balance (content : NodeSeq ) : NodeSeq = {
+\end_layout
+
+\begin_layout Plain Layout
+
+	bind (
+\begin_inset Quotes eld
+\end_inset
+
+ledger
+\begin_inset Quotes erd
+\end_inset
+
+, content,
+\end_layout
+
+\begin_layout Plain Layout
+
+          
+\begin_inset Quotes eld
+\end_inset
+
+time
+\begin_inset Quotes erd
+\end_inset
+
+ -> <span>{(new java.util.Date).toString}</span>
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+/*here the date value*/
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now what we just did was to preffix the 
+\family typewriter
+id
+\family default
+ attribute for the time node.
+ Lift will automatically add the attributes preffixed with the same node
+ preffix to the resulting bind element for 
+\family typewriter
+time
+\family default
+.
+ Thefore the resulting node will be something like 
+\family typewriter
+<span id=
+\begin_inset Quotes erd
+\end_inset
+
+myId
+\begin_inset Quotes erd
+\end_inset
+
+>Sat Mar 28 16:43:48 EET 2009</span>.
 \end_layout
 
 \begin_layout Section
