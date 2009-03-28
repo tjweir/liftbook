@@ -3423,7 +3423,7 @@ all_id
 \family typewriter
 id
 \family default
- attribute, the the snippet.
+ attribute, to the snippet.
  We can see the 
 \family typewriter
 id
@@ -3666,7 +3666,7 @@ We're defining the
 \family typewriter
 toShow
 \family default
- method with returns a 
+ method which returns a 
 \family typewriter
 List[ToDo]
 \family default
@@ -4000,7 +4000,7 @@ ajaxCheckbox
 \family default
  generates the HTML to display a checkbox.
  When the checkbox is toggled, an Ajax request is made on the server and
- Lift forward the new value of the checkbox to the function.
+ Lift forwards the new value of the checkbox to the function.
  The function, 
 \family typewriter
 v => {td.done(v).save; reDraw()}
@@ -4208,14 +4208,14 @@ Well...
 \end_layout
 
 \begin_layout Standard
-At the terminate, type: 
+At the terminal, type: 
 \family typewriter
 mvn clean jetty:run
 \family default
 .
  The clean part of the command tells Maven to remove any previously compiled
  files.
- It's best practices to-do a 
+ It's best practice to-do a 
 \family typewriter
 clean
 \family default
