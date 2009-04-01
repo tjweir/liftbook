@@ -7334,7 +7334,7 @@ reference "lst:Using-findAllByPreparedStatement"
 
 \end_inset
 
- shows our previous example of looking up all transactions for recent ledger
+ shows our previous example of looking up all transactions for recent expense
  entries using 
 \family typewriter
 findAllByPreparedStatement
@@ -7380,8 +7380,7 @@ name "lst:Using-findAllByPreparedStatement"
 
 \begin_layout Plain Layout
 
-def recentCategories = CategoryMeta.findAllByPreparedStatement({ superconn
- =>
+def recentTags = Tag.findAllByPreparedStatement({ superconn =>
 \end_layout
 
 \begin_layout Plain Layout

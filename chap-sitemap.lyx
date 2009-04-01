@@ -2657,7 +2657,27 @@ reference "sub:Type-Safe-Params"
 \begin_layout Standard
 These essentially mirror the params that are required when you use Loc.apply
  to generate a Loc.
- 
+ We're going to write our own Loc implementation for our Expenses in this
+ section to demonstrate how this works.
+ Because this overlaps with existing functionality in the PocketChange applicati
+on, we'll be using a branch in the PocketChange app.
+ You can pull the new branch with the command
+\end_layout
+
+\begin_layout LyX-Code
+git checkout custom-loc
+\end_layout
+
+\begin_layout Standard
+You can switch back to the main branch with the command
+\end_layout
+
+\begin_layout LyX-Code
+git checkout master
+\end_layout
+
+\begin_layout Standard
+
 \end_layout
 
 \begin_layout Subsection
