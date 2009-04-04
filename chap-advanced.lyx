@@ -805,12 +805,19 @@ view
 LiftRules.addToPackages
 \family default
 .
- It will look for classes that extend InsecureLiftView and invoke the corespondi
-ng function or classes that extend 
+ It will look for classes that extend 
+\family typewriter
+InsecureLiftView
+\family default
+ and invoke the coresponding function or classes that extend 
 \family typewriter
 LiftView
 \family default
- and invoke the dispatch function.
+ and invoke the 
+\family typewriter
+dispatch
+\family default
+ function.
 \end_layout
 
 \end_deeper
