@@ -684,7 +684,7 @@ If there is no matching
 viewDispatch
 \family default
 , locate a template that matches and use it.
- We'll cover templates in section 
+ We'll cover templates, and how they're located, in section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Templates"
@@ -695,7 +695,8 @@ reference "sec:Templates"
 \end_layout
 
 \begin_layout Enumerate
-If no templates match, attempt to locate a view based on classname and method.
+If no templates match, attempt to locate a view based on matching a class
+ name and method dispatch.
  We'll cover views in section 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -715,7 +716,7 @@ In our experience views and templates will cover most of your needs, but
 
 \begin_layout Standard
 The following sections cover each aspect of our rendering steps defined
- above, but not in the same order.
+ above, but not in order.
  We'll start with Templates, since those are by far the most common mechanism
  for rendering content in Lift.
  Next, we'll cover Views, which are essentially programmatic templates.
@@ -1257,7 +1258,7 @@ LiftView
 
 \end_inset
 
- trait, the other is to implement the 
+ trait, the other is to extend the 
 \family typewriter
 InsecureLiftView
 \family default
@@ -1328,11 +1329,8 @@ reflection
 \family typewriter
 InsecureLiftView
 \family default
-, so it can access any method in the class
-\emph on
- 
-\emph default
-whether or not the developer intends them to be public.
+, so it can access any method in the class, even ones that you don't intend
+ to make public.
  A better way to do it is to use the 
 \family typewriter
 LiftView

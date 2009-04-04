@@ -1874,12 +1874,14 @@ name "sec:JPA-Examples"
 
 \end_inset
 
-Examples
+Examples and Tips
 \end_layout
 
 \begin_layout Standard
 We find it helpful to solidify what we've discussed here with some concrete
  examples.
+ We'll also cover some useful information that should help you when using
+ JPA from within Lift.
  Let's start with some basic operations
 \end_layout
 
@@ -2649,6 +2651,320 @@ Model.flush()
 \end_inset
 
 
+\end_layout
+
+\begin_layout Subsection
+Validating Entities
+\end_layout
+
+\begin_layout Standard
+Since we've already covered the Mapper framework and all of the extra functional
+ity that it provides beyond being a simple ORM, we felt that we should discuss
+ one of the more important aspects of data handling as it pertains to JPA:
+ validation of data.
+\end_layout
+
+\begin_layout Standard
+JPA itself doesn't come with a built-in validation framework, although the
+ upcoming JPA 2.0 may use the JSR 303 Bean Validation framework as its default.
+ Currently, Hibernate Validator is one of the more popular libraries for
+ validating JPA entities, and can be used with any JPA provider.
+ More information is available at the project home page: 
+\begin_inset CommandInset href
+LatexCommand href
+target "http://www.hibernate.org/412.html"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+The validation of entities with Hibernate Validator is achieved, like the
+ JPA mappings, with annotations.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:The-Author-class-validations"
+
+\end_inset
+
+ shows a modified Author class with validations for the name.
+ In this case we have added a NotNull validation as well as a Length check
+ to ensure we are within limits.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace smallskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Box Shadowbox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "75col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+Note: Unfortunately, due to the way that the validator framework extracts
+ entity properties, we have to rework our entity to use a getter/setter
+ for any properties that we want to validate; even the 
+\family typewriter
+scala.reflect.BeanProperty
+\family default
+ annotation won't work.
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace smallskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Validation can be performed automatically via the 
+\family typewriter
+org.hibernate.validator.event.JPAValidateListener
+\family default
+ EntityListener, or programmatically via the 
+\family typewriter
+org.hibernate.validator.ClassValidator
+\family default
+ utility class.
+ In the listing we use 
+\family typewriter
+ClassValidator
+\family default
+ and match on the array returned from 
+\family typewriter
+getInvalidValues
+\family default
+ for processing.
+ Further usage and configuration is beyond the scope of this book.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+The Author class with Hibernate Validations
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:The-Author-class-validations"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+...
+\end_layout
+
+\begin_layout Plain Layout
+
+class Author {
+\end_layout
+
+\begin_layout Plain Layout
+
+  ...
+\end_layout
+
+\begin_layout Plain Layout
+
+  var name : String = ""
+\end_layout
+
+\begin_layout Plain Layout
+
+  @Column{val unique = true, val nullable = false}
+\end_layout
+
+\begin_layout Plain Layout
+
+  @NotNull
+\end_layout
+
+\begin_layout Plain Layout
+
+  @Length{val min = 3, val max = 100}
+\end_layout
+
+\begin_layout Plain Layout
+
+  def getName() = name
+\end_layout
+
+\begin_layout Plain Layout
+
+  def setName(nm : String) { name = nm }
+\end_layout
+
+\begin_layout Plain Layout
+
+  ...
+\end_layout
+
+\begin_layout Plain Layout
+
+} 
+\end_layout
+
+\begin_layout Plain Layout
+
+// In the snippet class
+\end_layout
+
+\begin_layout Plain Layout
+
+class AuthorOps {
+\end_layout
+
+\begin_layout Plain Layout
+
+  ...
+\end_layout
+
+\begin_layout Plain Layout
+
+  val authorValidator = new ClassValidator(classOf[Author])
+\end_layout
+
+\begin_layout Plain Layout
+
+  def add (xhtml : NodeSeq) : NodeSeq = {
+\end_layout
+
+\begin_layout Plain Layout
+
+    def doAdd () = {
+\end_layout
+
+\begin_layout Plain Layout
+
+      authorValidator.getInvalidValues(author) match {
+\end_layout
+
+\begin_layout Plain Layout
+
+	    case Array() =>
+\end_layout
+
+\begin_layout Plain Layout
+
+	      try {
+\end_layout
+
+\begin_layout Plain Layout
+
+	        Model.mergeAndFlush(author)
+\end_layout
+
+\begin_layout Plain Layout
+
+            ...
+\end_layout
+
+\begin_layout Plain Layout
+
+    	  } catch {
+\end_layout
+
+\begin_layout Plain Layout
+
+            ...
+\end_layout
+
+\begin_layout Plain Layout
+
+          } 	
+\end_layout
+
+\begin_layout Plain Layout
+
+        case errors => {
+\end_layout
+
+\begin_layout Plain Layout
+
+	      errors.foreach(err => S.error(err.toString)) 
+\end_layout
+
+\begin_layout Plain Layout
+
+	    }      
+\end_layout
+
+\begin_layout Plain Layout
+
+      }
+\end_layout
+
+\begin_layout Plain Layout
+
+	...
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Summing Up
+\end_layout
+
+\begin_layout Standard
+As we've shown in this chapter, the Java Persistence API provides a robust,
+ flexibile framework for persisting data to your database, and does so in
+ a manner that integrates fairly well with Lift.
+ We've demonstrated how you can easily write entities using a combination
+ of annotations and the orm.xml descriptor, how to define your own custom
+ user types to handle enumerations, the intricacies of working with transactions
+ in various contexts, and leveraging the ScalaJPA framework to simplify
+ your persistence setup.
+ 
 \end_layout
 
 \end_body
