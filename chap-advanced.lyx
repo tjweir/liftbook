@@ -767,8 +767,16 @@ LiftRules.viewDispatch
 
 ,LiftView].
  This allows you to either return the function for handling the view directly,
- or delegate to a LiftView subclass.
- LiftView is covered in section 
+ or delegate to a 
+\family typewriter
+LiftView
+\family default
+ subclass.
+ 
+\family typewriter
+LiftView
+\family default
+ is covered in section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Views"
@@ -785,6 +793,24 @@ If no viewDispatch functions match, then look for the template using the
 getResourceAsStream
 \family default
 .
+\end_layout
+
+\begin_layout Enumerate
+If the template is still not found for classes in 
+\family typewriter
+view
+\family default
+ folder fom the paths declared in boot through 
+\family typewriter
+LiftRules.addToPackages
+\family default
+.
+ It will look for classes that extend InsecureLiftView and invoke the corespondi
+ng function or classes that extend 
+\family typewriter
+LiftView
+\family default
+ and invoke the dispatch function.
 \end_layout
 
 \end_deeper
@@ -3105,7 +3131,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Snippet mixin attributes 
 \begin_inset CommandInset label
 LatexCommand label
@@ -3195,7 +3220,7 @@ time
 \begin_inset Quotes erd
 \end_inset
 
- -> <span>{(new java.util.Date).toString}</span>
+ -> <span>{(new java.util.Date).toString}</span>)
 \end_layout
 
 \begin_layout Plain Layout
@@ -3210,8 +3235,6 @@ time
 
 \begin_layout Plain Layout
 
-\family typewriter
-/*here the date value*/
 \end_layout
 
 \end_inset
