@@ -2665,15 +2665,19 @@ on, we'll be using a branch in the PocketChange app.
 \end_layout
 
 \begin_layout LyX-Code
-git checkout custom-loc
+git checkout --track -b custom-loc origin/custom-loc
 \end_layout
 
 \begin_layout Standard
-You can switch back to the main branch with the command
+You can then switch back and forth between the branches with the commands:
 \end_layout
 
 \begin_layout LyX-Code
 git checkout master
+\end_layout
+
+\begin_layout LyX-Code
+git checkout custom-loc
 \end_layout
 
 \begin_layout Standard
