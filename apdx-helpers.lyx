@@ -1,4 +1,4 @@
-#LyX 1.6.0 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -175,8 +175,12 @@ scala> val cap = Map("a" -> "A", "b" -> "B")
 
 \begin_layout LyX-Code
 
-cap: scala.collection.immutable.Map[java.lang.String,java.lang.String] = Map(a
- -> A, b -> B)
+cap: scala.collection.immutable.Map[java.lang.String,java.lang.String] = 
+\end_layout
+
+\begin_layout LyX-Code
+
+  Map(a -> A, b -> B)
 \end_layout
 
 \begin_layout LyX-Code
@@ -257,15 +261,7 @@ def prettyPrint(foo: Option[String]): String = foo match {
 
 \begin_layout LyX-Code
 
-  case None => 
-\begin_inset Quotes eld
-\end_inset
-
-Nothing found.
-\begin_inset Quotes erd
-\end_inset
-
-
+  case None => "Nothing found."
 \end_layout
 
 \begin_layout LyX-Code
@@ -551,49 +547,22 @@ a match {
 
 \begin_layout LyX-Code
 
-  Full(author) => Text(
-\begin_inset Quotes eld
-\end_inset
-
-I found the author 
-\begin_inset Quotes eld
-\end_inset
-
- + author.niceName)
+  Full(author) => Text("I found the author " + author.niceName)
 \end_layout
 
 \begin_layout LyX-Code
 
-  Empty => Text(
-\begin_inset Quotes eld
-\end_inset
-
-No author by that name.
-\begin_inset Quotes erd
-\end_inset
-
-)
+  Empty => Text("No author by that name.")
 \end_layout
 
 \begin_layout LyX-Code
 
-  Failure(message, _, _) => Text(
-\begin_inset Quotes eld
-\end_inset
+  // message may be something like "Database disconnected."
+\end_layout
 
-Nothing found due to 
-\begin_inset Quotes eld
-\end_inset
+\begin_layout LyX-Code
 
- + message) // message may be something like 
-\begin_inset Quotes eld
-\end_inset
-
-Database disconnected.
-\begin_inset Quotes erd
-\end_inset
-
-
+  Failure(message, _, _) => Text("Nothing found due to " + message) 
 \end_layout
 
 \begin_layout LyX-Code
@@ -712,17 +681,18 @@ def view (xhtml: NodeSeq): NodeSeq = passedAuthor.map({ author =>
 \end_layout
 
 \begin_layout Standard
-We won't be detailing here all the Box functions but a few words on the
- most common function might be benficial.
+We won't be detailing all of the Box functions here, but a few words on
+ the most common function might be benficial.
 \end_layout
 
 \begin_layout Standard
+\align center
 \begin_inset Tabular
 <lyxtabular version="3" rows="10" columns="3">
 <features>
-<column alignment="left" valignment="top" width="0">
-<column alignment="left" valignment="top" width="0">
-<column alignment="left" valignment="top" width="0">
+<column alignment="left" valignment="top" width="1in">
+<column alignment="left" valignment="top" width="2.75in">
+<column alignment="left" valignment="top" width="2in">
 <row>
 <cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
@@ -1100,7 +1070,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Null example
 \begin_inset CommandInset label
 LatexCommand label
@@ -1296,39 +1265,7 @@ import _root_.net.liftweb.util.Helpers._
 
 \begin_layout Plain Layout
 
-findClass(
-\begin_inset Quotes eld
-\end_inset
-
-Bar
-\begin_inset Quotes erd
-\end_inset
-
-, 
-\begin_inset Quotes eld
-\end_inset
-
-com.foo
-\begin_inset Quotes erd
-\end_inset
-
- :: 
-\begin_inset Quotes eld
-\end_inset
-
-com.bar
-\begin_inset Quotes erd
-\end_inset
-
- :: 
-\begin_inset Quotes eld
-\end_inset
-
-com.baz
-\begin_inset Quotes erd
-\end_inset
-
- :: Nil)
+findClass("Bar", "com.foo" :: "com.bar" :: "com.baz" :: Nil)
 \end_layout
 
 \begin_layout Plain Layout
@@ -1337,15 +1274,7 @@ com.baz
 
 \begin_layout Plain Layout
 
-invokeMethod(myClass, myInstance, 
-\begin_inset Quotes eld
-\end_inset
-
-doSomething
-\begin_inset Quotes erd
-\end_inset
-
-)
+invokeMethod(myClass, myInstance, "doSomething")
 \end_layout
 
 \end_inset
@@ -1502,18 +1431,22 @@ println(exp match {
 
 \begin_layout Plain Layout
 
-          case False(msgs) => msgs mkString("Test failed because it is '",
- "' and '", "'.")  
+  case False(msgs) => 
 \end_layout
 
 \begin_layout Plain Layout
 
-          case _ => "success"  
+    msgs mkString("Test failed because it is '", "' and '", "'.")  
 \end_layout
 
 \begin_layout Plain Layout
 
-        }) 
+  case _ => "success"  
+\end_layout
+
+\begin_layout Plain Layout
+
+  }) 
 \end_layout
 
 \end_inset
@@ -1604,7 +1537,12 @@ tryo((e: Throwable) => println(e)) {
 \begin_layout Plain Layout
 
   // code here.
- Any exception here willbe caught add passed to the above function.
+ Any exception here willbe caught add passed to 
+\end_layout
+
+\begin_layout Plain Layout
+
+  // the above function.
 \end_layout
 
 \begin_layout Plain Layout
@@ -1624,8 +1562,12 @@ tryo(List(classOf[ClassNotFoundException], classOf[IOException])) {
 \begin_layout Plain Layout
 
   // code here.
- If IOException or ClassNotFoundException is thrown (or a subclass of the
- two) they will be ignored.
+ If IOException or ClassNotFoundException is thrown 
+\end_layout
+
+\begin_layout Plain Layout
+
+  // (or a subclass of the two) they will be ignored.
  Any other
 \end_layout
 
@@ -1637,10 +1579,6 @@ tryo(List(classOf[ClassNotFoundException], classOf[IOException])) {
 \begin_layout Plain Layout
 
 }
-\end_layout
-
-\begin_layout Plain Layout
-
 \end_layout
 
 \end_inset
@@ -1733,15 +1671,7 @@ Assume this entry in a CSS file:
 
 \begin_layout Plain Layout
 
-CSSHelpers.fixCSS(reader, 
-\begin_inset Quotes eld
-\end_inset
-
-/myliftapp
-\begin_inset Quotes erd
-\end_inset
-
-)
+CSSHelpers.fixCSS(reader, "/myliftapp")
 \end_layout
 
 \begin_layout Plain Layout
@@ -1750,11 +1680,12 @@ CSSHelpers.fixCSS(reader,
 
 \begin_layout Plain Layout
 
-// where reader is a java.io.Reader that provides the content of the CSS file.
+// where reader is a java.io.Reader that provides the 
 \end_layout
 
 \begin_layout Plain Layout
 
+// content of the CSS file.
 \end_layout
 
 \end_inset
@@ -1850,10 +1781,6 @@ def boot(){
 }
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
 \end_inset
 
 
@@ -1917,6 +1844,7 @@ Binders are extensiveley discussed in other chapters so we won't reiterate
 
 \begin_layout Standard
 \begin_inset listings
+lstparams "language=XML"
 inline false
 status open
 
@@ -1925,7 +1853,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Choose template
+Choose template XML
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:Choose-template"
@@ -1937,15 +1865,6 @@ name "lst:Choose-template"
 
 \end_inset
 
-
-\end_layout
-
-\begin_layout Plain Layout
-
-//Assume the following markup.
-\end_layout
-
-\begin_layout Plain Layout
 
 \end_layout
 
@@ -2006,19 +1925,38 @@ name "lst:Choose-template"
 
 \begin_layout Plain Layout
 
-</lift:CountGame.run>  
+</lift:CountGame.run>
 \end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+You can use the 
+\family typewriter
+Helpers.chooseTemplate
+\family default
+ method to extract portions of a given XML input:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
 
 \begin_layout Plain Layout
 
-\end_layout
+\begin_inset Caption
 
 \begin_layout Plain Layout
 
-// And the Scala code
+Choose template Scala code
 \end_layout
 
-\begin_layout Plain Layout
+\end_inset
+
 
 \end_layout
 
@@ -2043,10 +1981,6 @@ class CountGame {
 
 \begin_layout Plain Layout
 
-\end_layout
-
-\begin_layout Plain Layout
-
   def run(xhtml: NodeSeq): NodeSeq = {
 \end_layout
 
@@ -2058,28 +1992,7 @@ class CountGame {
 
 \begin_layout Plain Layout
 
-    
-\end_layout
-
-\begin_layout Plain Layout
-
-    chooseTemplate(
-\begin_inset Quotes eld
-\end_inset
-
-choose
-\begin_inset Quotes erd
-\end_inset
-
-, 
-\begin_inset Quotes eld
-\end_inset
-
-win
-\begin_inset Quotes erd
-\end_inset
-
-, xhtml);
+    chooseTemplate("choose", "win", xhtml);
 \end_layout
 
 \begin_layout Plain Layout
@@ -2089,15 +2002,7 @@ win
 
 \begin_layout Plain Layout
 
-\end_layout
-
-\begin_layout Plain Layout
-
 }
-\end_layout
-
-\begin_layout Plain Layout
-
 \end_layout
 
 \end_inset

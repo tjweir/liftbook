@@ -68,6 +68,10 @@ morestring=[b]"}
 \paperorientation portrait
 \paperwidth 6.139in
 \paperheight 9.21in
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
 \secnumdepth 3
 \tocdepth 2
 \paragraph_separation indent
