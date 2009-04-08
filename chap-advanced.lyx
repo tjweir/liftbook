@@ -798,6 +798,35 @@ getResourceAsStream
 .
 \end_layout
 
+\begin_layout Enumerate
+If Lift still can't find any templates, it will attempt to locate a View
+ class whose name matches the first component of the request path under
+ the 
+\family typewriter
+view
+\family default
+ folder of any packages defined by 
+\family typewriter
+LiftRules.addToPackages
+\family default
+ method.
+ If an 
+\family typewriter
+InsecureLiftView
+\family default
+ class is found, it will attempt to invoke a function on the class corresponding
+ to the second component of the request path.
+ If a 
+\family typewriter
+LiftView
+\family default
+ class is found, it will invoke the 
+\family typewriter
+dispatch
+\family default
+ method on the second component of the request path.
+\end_layout
+
 \end_deeper
 \begin_layout Enumerate
 Process the templates by executing snippets, combining templates etc.
