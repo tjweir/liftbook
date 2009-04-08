@@ -200,6 +200,100 @@ Field
 \end_layout
 
 \begin_layout Subsection
+Adding Mapper to your POM.xml
+\end_layout
+
+\begin_layout Standard
+Since Mapper is a separate module, you need to add the following dependency
+ to your pom.xml to access it:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=XML"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Mapper POM Dependency
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<project ...>
+\end_layout
+
+\begin_layout Plain Layout
+
+  ...
+\end_layout
+
+\begin_layout Plain Layout
+
+  <dependencies>
+\end_layout
+
+\begin_layout Plain Layout
+
+    ...
+\end_layout
+
+\begin_layout Plain Layout
+
+    <dependency>
+\end_layout
+
+\begin_layout Plain Layout
+
+      <groupId>net.liftweb</groupId>
+\end_layout
+
+\begin_layout Plain Layout
+
+      <artifactId>lift-mapper</artifactId>
+\end_layout
+
+\begin_layout Plain Layout
+
+      <version>1.0</version> <!-- or 1.1-SNAPSHOT, etc -->
+\end_layout
+
+\begin_layout Plain Layout
+
+    </dependency>
+\end_layout
+
+\begin_layout Plain Layout
+
+  </dependencies>
+\end_layout
+
+\begin_layout Plain Layout
+
+  ...
+\end_layout
+
+\begin_layout Plain Layout
+
+</project>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
 Setting Up the Database Connection
 \end_layout
 
@@ -247,6 +341,26 @@ name "lst:Setting-up-the-database"
 
 \end_inset
 
+
+\end_layout
+
+\begin_layout Plain Layout
+
+..
+ standard Lift imports ...
+\end_layout
+
+\begin_layout Plain Layout
+
+import _root_.net.liftweb.mapper._
+\end_layout
+
+\begin_layout Plain Layout
+
+import _root_.java.sql._
+\end_layout
+
+\begin_layout Plain Layout
 
 \end_layout
 
@@ -331,7 +445,32 @@ object DBVendor extends ConnectionManager {
 
 \begin_layout Plain Layout
 
-DB.defineConnectionManager(DefaultConnectionIdentifier, DBVendor)
+class Boot {
+\end_layout
+
+\begin_layout Plain Layout
+
+  def boot {
+\end_layout
+
+\begin_layout Plain Layout
+
+    ...
+\end_layout
+
+\begin_layout Plain Layout
+
+    DB.defineConnectionManager(DefaultConnectionIdentifier, DBVendor)
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
 \end_layout
 
 \end_inset
