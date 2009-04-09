@@ -103,8 +103,8 @@ status open
 
 \begin_layout Plain Layout
 The Record framework is relatively new to Lift.
- The plan is to deprecate Mapper and move to Record as the primary ORM framework
- for Lift sometime post-1.0.
+ The plan is to move to Record as the primary ORM framework for Lift sometime
+ post-1.0.
  Because Record is still under active design and development, and because
  of its current 
 \begin_inset Quotes eld
@@ -117,6 +117,8 @@ moving target
  status, this chapter is mostly going to focus on Mapper.
  We will, however, provide a few comparitive examples of Record functionality
  to give you a general feel for the flavor of the changes.
+ In any case, Mapper will not go away even when record comes out, so you
+ can feel secure that any code using Mapper will be viable for quite a while.
 \end_layout
 
 \end_inset
@@ -200,7 +202,7 @@ Field
 \end_layout
 
 \begin_layout Subsection
-Adding Mapper to your POM.xml
+Adding Mapper to Your Project
 \end_layout
 
 \begin_layout Standard
@@ -219,7 +221,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Mapper POM Dependency
 \end_layout
 
@@ -286,6 +287,39 @@ Mapper POM Dependency
 \begin_layout Plain Layout
 
 </project>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+You'll also need the following import in any Scala code that uses Mapper:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Mapper Imports
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import _root_.net.liftweb.mapper._
 \end_layout
 
 \end_inset
@@ -590,7 +624,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Entry class in Mapper
+Expense class in Mapper
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:Entry-class-mapper"
@@ -607,12 +641,7 @@ name "lst:Entry-class-mapper"
 
 \begin_layout Plain Layout
 
-import java.math.MathContext
-\end_layout
-
-\begin_layout Plain Layout
-
-import net.liftweb.mapper._
+import _root_.java.math.MathContext
 \end_layout
 
 \begin_layout Plain Layout
@@ -627,7 +656,7 @@ class Expense extends LongKeyedMapper[Expense] with IdPK {
 
 \begin_layout Plain Layout
 
-  object date extends MappedDateTime(this)
+  object dateOf extends MappedDateTime(this)
 \end_layout
 
 \begin_layout Plain Layout
@@ -718,12 +747,12 @@ name "lst:Entry-class-record"
 
 \begin_layout Plain Layout
 
-import java.math.MathContext
+import _root_.java.math.MathContext
 \end_layout
 
 \begin_layout Plain Layout
 
-import net.liftweb.record._
+import _root_.net.liftweb.record._
 \end_layout
 
 \begin_layout Plain Layout
@@ -748,7 +777,7 @@ class Expense extends KeyedRecord[Expense,Long] {
 
 \begin_layout Plain Layout
 
-  object date extends DateTimeField(this)
+  object dateOf extends DateTimeField(this)
 \end_layout
 
 \begin_layout Plain Layout
@@ -1038,7 +1067,7 @@ object Expense extends Expense with LongKeyedMetaMapper[Expense] {
 
 \begin_layout Plain Layout
 
-  override def fieldOrder = List(date, description, amount)
+  override def fieldOrder = List(dateOf, description, amount)
 \end_layout
 
 \begin_layout Plain Layout
@@ -1140,7 +1169,7 @@ name "lst:Setting-field-values"
 
 \begin_layout Plain Layout
 
-myEntry.date(new Date).description("A sample entry")
+myEntry.dateOf(new Date).description("A sample entry")
 \end_layout
 
 \begin_layout Plain Layout
@@ -1423,7 +1452,11 @@ join
  (i.e.
  you purchase a book for your mother's birthday, so it has the tags Gift,
  Mom and Books).
- First we define the tag entity, as shown in listing
+ First we define the 
+\family typewriter
+Tag
+\family default
+ entity, as shown in listing
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Tag-Entity"
@@ -1547,8 +1580,7 @@ class ExpenseTag extends LongKeyedMapper[ExpenseTag] with IdPK {
 
 \begin_layout Plain Layout
 
-  ...
- singleton, primary key defs here ...
+  def getSingleton = ExpenseTag
 \end_layout
 
 \begin_layout Plain Layout
@@ -1599,8 +1631,11 @@ object ExpenseTag extends ExpenseTag with LongKeyedMetaMapper[ExpenseTag]
 \begin_layout Standard
 To use the join entity, you'll need to create a new instance and set the
  appropriate foreign keys to point to the associated instances.
- As you can see, we've defined a convenience method on our ExpenseTag meta
- object to do just that.
+ As you can see, we've defined a convenience method on our 
+\family typewriter
+Expense
+\family default
+ meta object to do just that.
  To make the many-to-many
 \begin_inset Index
 status open
@@ -1674,7 +1709,11 @@ class Expense ...
 \end_layout
 
 \begin_layout Standard
-A similar field could be set up on the Category entity to point to entries.
+A similar field could be set up on the 
+\family typewriter
+Tag
+\family default
+ entity to point to entries.
  It's important to note a few items:
 \end_layout
 
@@ -2298,8 +2337,8 @@ find
  key.
  In general these operations will be supported in both Record and Mapper.
  However, because Record isn't coupled tightly to a JDBC backend some of
- the find methods may not be supported and there may be additional methods
- not available in Mapper for persistence.
+ the find methods may not be supported directly and there may be additional
+ methods not available in Mapper for persistence.
  For this reason, this section will deal specifically with Mapper's persistence
  operations.
 \end_layout
@@ -2468,7 +2507,7 @@ name "lst:Example-deletion"
 
 \begin_layout Plain Layout
 
-if (! myExpense.delete_!) S.error("Couldn't delete the transaction!")
+if (! myExpense.delete_!) S.error("Couldn't delete the expense!")
 \end_layout
 
 \begin_layout Plain Layout
@@ -2685,7 +2724,7 @@ reference "lst:Retrieving-by-account"
 
 \end_inset
 
- shows how we can get all of the transactions for a given account.
+ shows how we can get all of the expenses for a given account.
 \end_layout
 
 \begin_layout Standard
@@ -2905,8 +2944,8 @@ ByRef
 on the same entity
 \emph default
 .
- An example would be if we define a tree structure in our table and root
- nodes are marked as having themselves as parents:
+ A contrived example would be if we define a tree structure in our table
+ and root nodes are marked as having themselves as parents:
 \end_layout
 
 \begin_layout Standard
@@ -2986,7 +3025,7 @@ IN
 
  clause with a subselect in an SQL statement.
  As an example, let's say we wanted to get all of the entries that belong
- to categories that start with the letter 
+ to tags that start with the letter 
 \begin_inset Quotes eld
 \end_inset
 
@@ -3107,7 +3146,7 @@ reference "lst:Using-InRaw"
 \family typewriter
 Tags
 \family default
- for ledger entries made in the last 30 days.
+ for expense entries made in the last 30 days.
 \end_layout
 
 \begin_layout Standard
@@ -3138,7 +3177,7 @@ name "lst:Using-InRaw"
 
 \begin_layout Plain Layout
 
-def recentCategories = {
+def recentTags = {
 \end_layout
 
 \begin_layout Plain Layout
@@ -3153,7 +3192,7 @@ def recentCategories = {
 
 \begin_layout Plain Layout
 
-          "select id from Expense where date > (CURRENT_DATE - interval
+          "select id from Expense where dateOf > (CURRENT_DATE - interval
  '30 days')",
 \end_layout
 
@@ -3287,7 +3326,7 @@ val recentEntries = Expense.findAll(
 
 \begin_layout Plain Layout
 
-  BySql("date > (CURRENT_DATE - interval '30 days')",
+  BySql("dateOf > (CURRENT_DATE - interval '30 days')",
 \end_layout
 
 \begin_layout Plain Layout
@@ -3354,7 +3393,7 @@ val amountRange = Expense.findAll(
 
 \begin_layout Plain Layout
 
-  BySql("Expense.amount between ? and ?", lowVal, highVal))
+  BySql("amount between ? and ?", lowVal, highVal))
 \end_layout
 
 \end_inset
@@ -3421,7 +3460,7 @@ def deleteBefore (date : Date) =
 
 \begin_layout Plain Layout
 
-  Expense.bulkDelete_!!(By_<(Expense.date, date))
+  Expense.bulkDelete_!!(By_<(Expense.dateOf, date))
 \end_layout
 
 \end_inset
@@ -3460,7 +3499,11 @@ reference "lst:OrderBy-Clause"
 
 \end_inset
 
- shows an example of ordering our ledger entries by amount.
+ shows an example of ordering our 
+\family typewriter
+Expense
+\family default
+ entries by amount.
  The 
 \family typewriter
 Ascending
@@ -3526,7 +3569,7 @@ val cheapestFirst =
 
 \begin_layout Plain Layout
 
-  Expense.findAll(OrderBySql("Expense.amount asc"),
+  Expense.findAll(OrderBySql("amount asc"),
 \end_layout
 
 \begin_layout Plain Layout
@@ -3659,7 +3702,7 @@ Expense.findAll(Like(Expense.description, "Gift for%"),
 
 \begin_layout Plain Layout
 
-                OrderBy(Expense.date,Descending),
+                OrderBy(Expense.dateOf,Descending),
 \end_layout
 
 \begin_layout Plain Layout
@@ -3737,8 +3780,11 @@ reference "lst:Using-PreCache"
 
 \end_inset
 
- shows how we could use this to fetch a expense entry as well as the account
- for the entry.
+ shows how we could use this to fetch an 
+\family typewriter
+Expense
+\family default
+ entry as well as the account for the entry.
 \end_layout
 
 \begin_layout Standard
@@ -3801,8 +3847,11 @@ name "sub:helper-joins"
 In case you would prefer to keep your queries type-safe but you want a little
  more convenience in your joins between entities, you can define helper
  methods on your entities.
- One example would be finding all of the tags for a given transaction, as
- shown in listing 
+ One example would be finding all of the tags for a given 
+\family typewriter
+Expense
+\family default
+, as shown in listing 
 \begin_inset CommandInset ref
 LatexCommand pageref
 reference "lst:Join-Convenience-Method"
@@ -3845,7 +3894,7 @@ name "lst:Join-Convenience-Method"
 
 \begin_layout Plain Layout
 
-def tags = ExpenseTag.findAll(By(ExpenseTag.expense, this.id)).map(_.tag.obj)
+def tags = ExpenseTag.findAll(By(ExpenseTag.expense, this.id)).map(_.tag.obj.open_!)
 \end_layout
 
 \end_inset
@@ -3917,8 +3966,11 @@ toString
 asHtml
 \family default
  on your field definitions.
- For example, if we wanted to control formatting on our date we could modify
- the field as shown in listing
+ For example, if we wanted to control formatting on our 
+\family typewriter
+dateOf
+\family default
+ field we could modify the field as shown in listing
 \end_layout
 
 \begin_layout Standard
@@ -3948,7 +4000,7 @@ name "lst:Custom-field-display"
 
 \begin_layout Plain Layout
 
-import java.util.DateFormat
+import _root_.java.text.DateFormat
 \end_layout
 
 \begin_layout Plain Layout
@@ -3958,7 +4010,7 @@ import java.util.DateFormat
 
 \begin_layout Plain Layout
 
-object date extends MappedDateTime(this) {
+object dateOf extends MappedDateTime(this) {
 \end_layout
 
 \begin_layout Plain Layout
@@ -3984,6 +4036,37 @@ object date extends MappedDateTime(this) {
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+Note that in Record, 
+\family typewriter
+dateOf
+\family default
+ contains a 
+\family typewriter
+java.util.Calendar
+\family default
+ instance and not a 
+\family typewriter
+java.util.Date
+\family default
+, so we would need to use the 
+\family typewriter
+getTime
+\family default
+ method on the value.
+ Two similar methods, 
+\family typewriter
+asJSON
+\family default
+ and 
+\family typewriter
+asJs
+\family default
+, will return the JSON and JavaScript object representation of the instance,
+ respectively.
+ 
 \end_layout
 
 \begin_layout Subsection
@@ -4442,9 +4525,16 @@ FieldError
 \family default
  is simply a case class that associates an error message with a particular
  field.
- As an example, let's say we don't want someone to be able to add an expense
+ As an example, let's say we don't want someone to be able to add an 
+\family typewriter
+Expense
+\family default
  entry in the future.
- First, we need to define a function for our date field that takes a 
+ First, we need to define a function for our 
+\family typewriter
+dateOf
+\family default
+ field that takes a 
 \family typewriter
 Date
 \family default
@@ -4522,17 +4612,26 @@ name "lst:Date-validation"
 
 \begin_layout Plain Layout
 
-def noFutureDates (time : java.util.Calendar) = {
+import _root_.java.util.Date
 \end_layout
 
 \begin_layout Plain Layout
 
-  if (time.getTimeInMillis > System.currentTimeMillis) {
 \end_layout
 
 \begin_layout Plain Layout
 
-    List(FieldError(this, "You cannot make future ledger entries"))
+def noFutureDates (time : Date) = {
+\end_layout
+
+\begin_layout Plain Layout
+
+  if (time.getTime > System.currentTimeMillis) {
+\end_layout
+
+\begin_layout Plain Layout
+
+    List(FieldError(this, "You cannot make future expense entries"))
 \end_layout
 
 \begin_layout Plain Layout
@@ -4598,7 +4697,7 @@ name "lst:Setting-validators"
 
 \end_inset
 
-object date extends MappedDateTime(this) {
+object dateOf extends MappedDateTime(this) {
 \end_layout
 
 \begin_layout Plain Layout
@@ -4646,7 +4745,7 @@ reference "lst:Mixing-in-CRUDify"
 
  shows our 
 \family typewriter
-Entry
+Expense
 \family default
  class with 
 \family typewriter
@@ -4762,13 +4861,38 @@ name "lst:Using-CRUDify-Menus"
 
 \begin_layout Plain Layout
 
-val menus = ...
+class Boot {
+\end_layout
+
+\begin_layout Plain Layout
+
+  def boot {
+\end_layout
+
+\begin_layout Plain Layout
+
+    ...
+\end_layout
+
+\begin_layout Plain Layout
+
+    val menus = ...
  Menu(Loc(...)) :: Expense.menus
 \end_layout
 
 \begin_layout Plain Layout
 
-LiftRules.setSiteMap(SiteMap(menus : _*))
+    LiftRules.setSiteMap(SiteMap(menus : _*))
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
 \end_layout
 
 \end_inset
@@ -4784,19 +4908,30 @@ Lifecycle Callbacks
 Mapper and Record provide for a set of callbacks that allow you to perform
  actions at various points during the lifecycle of a given instance.
  If you want to define your own handling for one of the lifecycle events,
- simply add the 
+ all you need to do is override and define the callback, since 
+\family typewriter
+MetaMapper
+\family default
+ already extends the 
 \family typewriter
 LifecycleCallbacks
 \family default
- trait to your object.
+ trait.
  Note that there is a separate 
 \family typewriter
 LifecycleCallbacks
 \family default
  trait in each of the record and mapper pacakges, so make sure that you
  import the correct one.
- For example, if we wanted to notify a comet actor whenever a new ledger
- entry is saved, we could change our Entry as shown in listing 
+ For example, if we wanted to notify a comet actor whenever a new 
+\family typewriter
+Expense
+\family default
+ entry is saved, we could change our 
+\family typewriter
+Expense
+\family default
+ class as shown in listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Lifecycle-Callbacks"
@@ -4858,28 +4993,29 @@ object Expense extends LongKeyedMapper[Expense] with LifecycleCallbacks
 \end_layout
 
 \begin_layout Standard
-The lifecycle hooks come at the main operations in an instance lifecycle:
+The lifecycle hooks are executed at the main operations in an instance lifecycle
+:
 \end_layout
 
-\begin_layout Itemize
-Create - When a new instance is created
+\begin_layout Description
+Create When a new instance is created
 \end_layout
 
-\begin_layout Itemize
-Delete - When an instance is deleted
+\begin_layout Description
+Delete When an instance is deleted
 \end_layout
 
-\begin_layout Itemize
-Save - When a fresh instance is first saved (corresponding to a table insert)
+\begin_layout Description
+Save When a fresh instance is first saved (corresponding to a table insert)
 \end_layout
 
-\begin_layout Itemize
-Update - When an instance that already exists in the database is updated
- (corresponding to a table update)
+\begin_layout Description
+Update When an instance that already exists in the database is updated (correspo
+nding to a table update)
 \end_layout
 
-\begin_layout Itemize
-Validation - When form validation occurs.
+\begin_layout Description
+Validation When form validation occurs.
 \end_layout
 
 \begin_layout Standard
@@ -5775,8 +5911,12 @@ name "sub:Defining-Custom-Field-types-mapper"
 \end_layout
 
 \begin_layout Standard
-The basic MappedField types cover a wide range of needs, but sometimes you
- may find yourself wanting to cover a specific type.
+The basic 
+\family typewriter
+MappedField
+\family default
+ types cover a wide range of needs, but sometimes you may find yourself
+ wanting to cover a specific type.
  In our example, we would like a decimal value for our expense amount and
  account balance.
  Using a double would be inappropriate due to imprecision and rounding errors
@@ -5802,7 +5942,7 @@ http://stephan.reposita.org/archives/2008/01/11/once-and-for-all-do-not-use-doub
 
 , so instead we base it on 
 \family typewriter
-BigDecimal
+scala.BigDecimal
 \family default
 .
  We're going to provide an abridged version of the code that will end up
@@ -5872,7 +6012,7 @@ name "lst:MappedDecimal-constructors"
 
 \begin_layout Plain Layout
 
-import java.math.{MathContext, RoundingMode}
+import _root_.java.math.{MathContext, RoundingMode}
 \end_layout
 
 \begin_layout Plain Layout
@@ -5909,7 +6049,7 @@ imal,T] {
 
 \begin_layout Plain Layout
 
-    setAll(value) // we'll cover this in a moment, too
+    setAll(value) // we'll cover this later in this section
 \end_layout
 
 \begin_layout Plain Layout
@@ -6518,9 +6658,9 @@ real_convertToJDBCFriendly
 \family typewriter
 BigDecimal
 \family default
- for a given scala 
+ for a given 
 \family typewriter
-BigDecimal
+scala.BigDecimal
 \family default
  input.
  The 
@@ -7227,7 +7367,7 @@ http://highscalability.com/unorthodox-approach-database-design-coming-shard
 \end_layout
 
 \begin_layout Itemize
-Sharding increases the complexity of your code a little
+Sharding increases the complexity of your code
 \end_layout
 
 \begin_layout Itemize
@@ -7243,9 +7383,16 @@ selector
 .
  If you're not careful you can get an uneven distribution where some servers
  handle significantly more load than others, defeating the purpose of sharding.
- If you decide to re-tune your selctor later on you need to redistribute
- the data to the proper servers in concert with changing your code or you
- won't be able to find things
+ The example we've given here of using the last name is, in practice, a
+ very poor choice.
+ We recommend reading 
+\begin_inset CommandInset href
+LatexCommand href
+target "http://startuplessonslearned.blogspot.com/2009/01/sharding-for-startups.html"
+
+\end_inset
+
+ for a good overview of the pros and cons of various selector strategies.
 \end_layout
 
 \begin_layout Itemize
@@ -7365,19 +7512,6 @@ class Expense extends LongKeyedMapper[Expense] {
 
 \end_layout
 
-\begin_layout Standard
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-This needs to be revised and expanded once sharding is truly figured out
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
 \begin_layout Subsection
 SQL-based Queries
 \begin_inset CommandInset label
@@ -7473,7 +7607,14 @@ reference "lst:Using-findAllByPreparedStatement"
 
 \end_inset
 
- shows our previous example of looking up all transactions for recent expense
+ shows our previous example of looking up all 
+\family typewriter
+Tag
+\family default
+s for recent 
+\family typewriter
+Expense
+\family default
  entries using 
 \family typewriter
 findAllByPreparedStatement
@@ -7539,7 +7680,7 @@ def recentTags = Tag.findAllByPreparedStatement({ superconn =>
 
 \begin_layout Plain Layout
 
-    "join ExpenseTag et on tags.id = et.tag " +
+    "join ExpenseTag et on Tag.id = et.tag " +
 \end_layout
 
 \begin_layout Plain Layout
@@ -7549,7 +7690,7 @@ def recentTags = Tag.findAllByPreparedStatement({ superconn =>
 
 \begin_layout Plain Layout
 
-    "where ex.date > (CURRENT_DATE - interval '30 days')")
+    "where ex.dateOf > (CURRENT_DATE - interval '30 days')")
 \end_layout
 
 \begin_layout Plain Layout
@@ -7667,7 +7808,7 @@ DB.runQuery("select Tag.name, sum(amount) from Expense ex " +
 
 \begin_layout Plain Layout
 
-            "where Account.id = ? group by Tags.name order by Tag.name",
+            "where Account.id = ? group by Tag.name order by Tag.name",
 \end_layout
 
 \begin_layout Plain Layout
@@ -7791,7 +7932,7 @@ DB.use(DefaultConnectionIdentifier) { conn =>
 
 \begin_layout Plain Layout
 
-  val txBalance = 
+  val balance = 
 \end_layout
 
 \begin_layout Plain Layout
@@ -7810,7 +7951,7 @@ select sum(ex.amount) from Expense ex where ex.account =
 \begin_inset Quotes eld
 \end_inset
 
- + resetAccount.id) {
+ + myAccount.id) {
 \end_layout
 
 \begin_layout Plain Layout
@@ -7834,7 +7975,7 @@ select sum(ex.amount) from Expense ex where ex.account =
 
 \begin_layout Plain Layout
 
-    stmt.setBigDecimal(1, txBalance.bigDecimal)
+    stmt.setBigDecimal(1, balance.bigDecimal)
 \end_layout
 
 \begin_layout Plain Layout
@@ -7860,6 +8001,23 @@ select sum(ex.amount) from Expense ex where ex.account =
 \end_inset
 
 
+\end_layout
+
+\begin_layout Section
+Summary 
+\end_layout
+
+\begin_layout Standard
+In this chapter we discussed the two major ORMs included in Lift, Mapper
+ and Record.
+ We’ve shown how you can define entities using the Mapper field types and
+ how to coordinate between the entity and its Meta-object.
+ We’ve shown how you can customize the display and schema of your behavior
+ with custom form control, CRUD support and indexing, as well as how to
+ query for entities using Mapper’s type-safe query support.
+ Finally, we showed how you can do in-depth customization of Mapper behavior
+ by writing your own field types, using multiple databases, and using raw
+ SQL queries.
 \end_layout
 
 \end_body
