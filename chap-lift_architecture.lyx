@@ -312,6 +312,11 @@ import _root_.net.liftweb.util._
 import Helpers._
 \end_layout
 
+\begin_layout Plain Layout
+
+import _root_.scala.xml._
+\end_layout
+
 \end_inset
 
 
@@ -2523,8 +2528,45 @@ NodeSeq
 
 \end_inset
 
- argument and is expected to return a NodeSeq.
- The argument passed to the method is the XML contents of the snippet tag;
+ argument and is expected to return a 
+\family typewriter
+NodeSeq
+\family default
+.
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Box Shadowbox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "75col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+Note: It's important to explicitly specify the return type of your snippet
+ methods as 
+\family typewriter
+NodeSeq
+\family default
+.
+ Failure to do so sometimes means that Lift can't locate the snippet method,
+ in which case the snippet won't execute!
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The argument passed to the method is the XML contents of the snippet tag;
  because Lift processes from the outside in, the contents are not processed
  before being passed to the snippet method unless you specify the eager_eval
  attribute (section 
