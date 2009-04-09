@@ -53,18 +53,6 @@ name "cha:Sending-Email"
 
 \end_layout
 
-\begin_layout Itemize
-Configuring the mailer lib
-\end_layout
-
-\begin_layout Itemize
-Sending email
-\end_layout
-
-\begin_layout Itemize
-System.properties
-\end_layout
-
 \begin_layout Standard
 Sending email is a common enough task (user registration, notifications,
  etc) within a web application that we've decided to cover it here.
@@ -74,79 +62,6 @@ Sending email is a common enough task (user registration, notifications,
 
 \begin_layout Section
 Setup
-\end_layout
-
-\begin_layout Standard
-The first thing to take care of is adding the lift-util module to your pom.
- Listing 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "lst:Lift-util-module-dependency"
-
-\end_inset
-
- shows the dependency info for a Lift 1.0 project.
- Adjust the version of the dependency to match your primary lift-webkit
- dependency version.
- The Lift-util dependency will automatically pull in the required JavaMail
- and JAF dependencies.
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-lstparams "language=XML"
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-
-Lift-util module dependency
-\begin_inset CommandInset label
-LatexCommand label
-name "lst:Lift-util-module-dependency"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-<dependency>
-\end_layout
-
-\begin_layout Plain Layout
-
-  <groupId>net.liftweb</groupId>
-\end_layout
-
-\begin_layout Plain Layout
-
-  <artifactId>lift-util</artifactId>
-\end_layout
-
-\begin_layout Plain Layout
-
-  <version>1.0</version>
-\end_layout
-
-\begin_layout Plain Layout
-
-</dependency> 
-\end_layout
-
-\end_inset
-
-
 \end_layout
 
 \begin_layout Standard
@@ -282,7 +197,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Sending a two-part email
 \begin_inset CommandInset label
 LatexCommand label
