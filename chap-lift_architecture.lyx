@@ -2557,7 +2557,7 @@ NodeSeq
 \family default
 .
  Failure to do so sometimes means that Lift can't locate the snippet method,
- in which case the snippet won't execute!
+ in which case the snippet may not execute!
 \end_layout
 
 \end_inset

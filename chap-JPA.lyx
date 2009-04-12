@@ -416,7 +416,40 @@ If you look at the source directories, you'll see that our code is already
  in place! If you were making your own application you could modify the
  POMs and create/edit/replace the existing Scala code and templates to match
  your needs.
- For now, let's go over the contents of the project.
+ 
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Box Shadowbox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "75col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+Note: The reason we have split the module out into two projects is that
+ it aids deployment on Jave EE servers to have the Persistence module be
+ an independent JAR file.
+ If you don't need that, you can simply merge the contents of the two modules
+ into a single project and it will work standalone.
+ Note that you'll need to merge the pom.xml file's dependencies and plugin
+ configurations from all three POMs.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now let's go over the contents of the project.
 \end_layout
 
 \begin_layout Subsection
@@ -2949,6 +2982,34 @@ class AuthorOps {
 \end_inset
 
 
+\end_layout
+
+\begin_layout Section
+Running the App
+\end_layout
+
+\begin_layout Standard
+We just want to make a quick note on how to run the application.
+ Because we've split up the app into separate SPA and WEB modules, we need
+ to first run
+\end_layout
+
+\begin_layout LyX-Code
+mvn install
+\end_layout
+
+\begin_layout Standard
+From the SPA module directory to get the persistence module added to your
+ maven repository.
+ Once that is done, you can go to the WEB module directory and run
+\end_layout
+
+\begin_layout LyX-Code
+mvn jetty:run
+\end_layout
+
+\begin_layout Standard
+To get it started.
 \end_layout
 
 \begin_layout Section
