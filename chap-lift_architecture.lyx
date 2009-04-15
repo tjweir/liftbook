@@ -2272,7 +2272,7 @@ reference "lst:Ledger-Entry-Comet"
 
 \end_inset
 
- shows an example of a comet binding that displays ledger entries as they're
+ shows an example of a comet binding that displays expense entries as they're
  added.
  Comet is covered in more detail in chapter 
 \begin_inset CommandInset ref
@@ -2295,7 +2295,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Ledger Entry Comet
+Account Entry Comet
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:Ledger-Entry-Comet"
@@ -2312,17 +2312,17 @@ name "lst:Ledger-Entry-Comet"
 
 \begin_layout Plain Layout
 
-<div class="ledgerUpdates">
+<div class="accountUpdates">
 \end_layout
 
 \begin_layout Plain Layout
 
-  <lift:comet type="LedgerMonitor">
+  <lift:comet type="AccountMonitor">
 \end_layout
 
 \begin_layout Plain Layout
 
-    <ul><ledger:entries>
+    <ul><account:entries>
 \end_layout
 
 \begin_layout Plain Layout
@@ -2332,7 +2332,7 @@ name "lst:Ledger-Entry-Comet"
 
 \begin_layout Plain Layout
 
-    </ledger:entries></ul>
+    </account:entries></ul>
 \end_layout
 
 \begin_layout Plain Layout
@@ -3198,7 +3198,11 @@ target "http://tinyurl.com"
 \begin_layout Itemize
 Use portions of the URL to determine how a particular snippet or view responds.
  For example, you could make it so that a user's profile is displayed via
- a URL like 
+ a URL like
+\begin_inset Newline linebreak
+\end_inset
+
+
 \family typewriter
 http://someplace.com/user/derek
 \family default
@@ -3853,7 +3857,10 @@ Req
 LiftRules.dispatch
 \family default
  then you'll have full access to the S object and LiftSession; if you use
- 
+\begin_inset Newline linebreak
+\end_inset
+
+
 \family typewriter
 LiftRules.statelessDispatchTable
 \family default
@@ -3996,7 +4003,30 @@ reference "lst:Hooking-dispatch-into-Boot"
 
 .
  In this case, we want state so that we can get the current user's chart,
- so we use LiftRules.dispatch
+ so we use 
+\family typewriter
+LiftRules.dispatch
+\family default
+ as opposed to 
+\family typewriter
+LiftRules.statelessDispatch
+\family default
+.
+ Because we're using a partial function to perform a Scala match operation,
+ the case that we define here uses the 
+\family typewriter
+Req
+\family default
+ object's 
+\family typewriter
+unapply
+\family default
+ method, which is why we only need to provide the 
+\family typewriter
+List[String]
+\family default
+ argument.
+ 
 \begin_inset listings
 inline false
 status open
@@ -4103,7 +4133,7 @@ height
 
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Standard
 Or you can use a slightly different approach:
 \end_layout
 
@@ -4139,13 +4169,18 @@ height
 
 \end_layout
 
-\begin_layout LyX-Code
-Where dmap is identical with map function except the first argument is the
- default value applicable in case that the Box is Empty.
-\end_layout
-
 \begin_layout Standard
-There are a number of other ListResponse subclasses to cover your needs,
+Where dmap is identical with map function except the first argument is the
+ default value applicable in case that the 
+\family typewriter
+Box
+\family default
+ is 
+\family typewriter
+Empty
+\family default
+.
+ There are a number of other ListResponse subclasses to cover your needs,
  including responses for XHTML, XML, Atom, Javascript, CSS, and JSON.
  We cover these in more detail in section 
 \begin_inset CommandInset ref
