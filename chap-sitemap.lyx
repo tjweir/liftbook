@@ -2296,7 +2296,7 @@ val userTitle = Title(() =>
 
 \begin_layout Plain Layout
 
-    Text(User.name + "'s Ledger")
+    Text(User.name + "'s Account")
 \end_layout
 
 \begin_layout Plain Layout
@@ -2657,7 +2657,31 @@ reference "sub:Type-Safe-Params"
 \begin_layout Standard
 These essentially mirror the params that are required when you use Loc.apply
  to generate a Loc.
- 
+ We're going to write our own Loc implementation for our Expenses in this
+ section to demonstrate how this works.
+ Because this overlaps with existing functionality in the PocketChange applicati
+on, we'll be using a branch in the PocketChange app.
+ You can pull the new branch with the command
+\end_layout
+
+\begin_layout LyX-Code
+git checkout --track -b custom-loc origin/custom-loc
+\end_layout
+
+\begin_layout Standard
+You can then switch back and forth between the branches with the commands:
+\end_layout
+
+\begin_layout LyX-Code
+git checkout master
+\end_layout
+
+\begin_layout LyX-Code
+git checkout custom-loc
+\end_layout
+
+\begin_layout Standard
+
 \end_layout
 
 \begin_layout Subsection
@@ -2992,11 +3016,9 @@ One of the nice features of Loc is that it allows you to rewrite requests
  The reason that this is type-safe is that we define our Loc on the type
  of the parameter itself.
  For instance, let's expand the functionality of our app so that we have
- a page called "ledger" that shows the ledger entries.
+ a page called "acct" that shows the expense entries for a given account.
  We would like this page to normally only be viewable by the owner of the
- ledger, but allow them to share it out to other members.
- We would also like to let the owner choose whether these other users can
- edit entires on a per-user basis.
+ account, but allow them to share it out to other members.
  Let's start by defining our type-safe parameter class as shown in listing
  
 \begin_inset CommandInset ref
@@ -3018,7 +3040,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Defining LedgerInfo
+Defining AccountInfo
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:Defining-LedgerInfo"
@@ -3035,32 +3057,27 @@ name "lst:Defining-LedgerInfo"
 
 \begin_layout Plain Layout
 
-abstract class LedgerInfo
+abstract class AccountInfo
 \end_layout
 
 \begin_layout Plain Layout
 
-case class NoSuchLedgerInfo extends LedgerInfo
+case object NoSuchAccount extends AccountInfo
 \end_layout
 
 \begin_layout Plain Layout
 
-case class NoPermsLedgerInfo extends LedgerInfo
+case object NotPublic extends AccountInfo
 \end_layout
 
 \begin_layout Plain Layout
 
-case class FullLedgerInfo(ledger : Ledger,
+case class FullAccountInfo(account : Account,
 \end_layout
 
 \begin_layout Plain Layout
 
-                          owner : Boolean,
-\end_layout
-
-\begin_layout Plain Layout
-
-                          editor : Boolean) extends LedgerInfo
+                           entries : List[Expense]) extends AccountInfo
 \end_layout
 
 \end_inset
@@ -3070,7 +3087,8 @@ case class FullLedgerInfo(ledger : Ledger,
 
 \begin_layout Standard
 We define a few case classes to indicate various states.
- The FullLedgerInfo holds the ledger itself as well as some flags for behavior.
+ The FullAccountInfo holds the account itself as well as some flags for
+ behavior.
  Now that we have our parameter type, we can start to define our Loc, as
  shown in listing 
 \begin_inset CommandInset ref
@@ -3109,7 +3127,7 @@ name "lst:Defining-a-Type-Safe-loc"
 
 \begin_layout Plain Layout
 
-class LedgerLoc extends Loc[LedgerInfo] {
+class AccountLoc extends Loc[AccountInfo] {
 \end_layout
 
 \begin_layout Plain Layout
@@ -3128,8 +3146,9 @@ class LedgerLoc extends Loc[LedgerInfo] {
 \end_layout
 
 \begin_layout Standard
-Assuming that a Ledger instance has a unique string ID, we would like to
- use URL rewriting so that we can access a ledger via "/ledger/<unique id>".
+Assuming that an Account instance has a unique string ID, we would like
+ to use URL rewriting so that we can access a ledger via "/acct/<unique
+ id>".
  Our rewrite function, shown in listing 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -3138,21 +3157,8 @@ reference "lst:The-Rewrite-Function"
 \end_inset
 
 , handles a few different things at once.
- It handles checking whether the user is logged in (since testAccess is
- fired after rewrite 
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-confirm
-\end_layout
-
-\end_inset
-
-), locating the correct ledger, and checking permissions if everything else
- is OK.
- If the user isn't logged in, we redirect to the login page and pass the
- original URI to it so that they can come back after login.
+ It handles locating the correct account and checking permissions if everything
+ else is OK.
 \end_layout
 
 \begin_layout Standard
@@ -3182,98 +3188,77 @@ name "lst:The-Rewrite-Function"
 
 \begin_layout Plain Layout
 
-def rewrite (req : RewriteRequest) = req match {
+override def rewrite = Full({
 \end_layout
 
 \begin_layout Plain Layout
 
-  case RewriteRequest(ParsePath("ledger" :: lid :: Nil, _, _), _, _) =>
- {
+  case RewriteRequest(ParsePath(List("acct", aid), _, _, _), _, _) => {
 \end_layout
 
 \begin_layout Plain Layout
 
-	val ledgerList = Ledger.findAll(By(Ledger.id, lid))
+    Account.findAll(By(Account.stringId, aid)) match {
 \end_layout
 
 \begin_layout Plain Layout
 
+  	case List(account) if account.is_public.is => {
 \end_layout
 
 \begin_layout Plain Layout
 
-    (ledgerList.size, User.loggedIn_?) match {
+  	  (RewriteResponse("account" :: Nil),
 \end_layout
 
 \begin_layout Plain Layout
 
-      case (0, _) => (RewriteResponse("ledger" :: Nil), NoSuchLedgerInfo)
+   	  FullAccountInfo(account, account.entries))
 \end_layout
 
 \begin_layout Plain Layout
 
-      case (_, false) => (RewriteResponse("login" :: Nil, "origURI" -> ("/ledger
-/" + lid)), NoPermsLedgerInfo)
+  	}
 \end_layout
 
 \begin_layout Plain Layout
 
-      case (_, true) => {
+  	case List(account) => {
 \end_layout
 
 \begin_layout Plain Layout
 
-        val ledger = ledgerList.head
+  	  (RewriteResponse("account" :: Nil),
 \end_layout
 
 \begin_layout Plain Layout
 
+   	  NotPublic)
 \end_layout
 
 \begin_layout Plain Layout
 
-        if (ledger.viewers.contains(User)) {
+  	}
 \end_layout
 
 \begin_layout Plain Layout
 
-          val owner = ledger.owner == User
+  	case _ => {
 \end_layout
 
 \begin_layout Plain Layout
 
-          val editor = owner || ledger.editors.contains(User)
+  	  (RewriteResponse("account" :: Nil),
 \end_layout
 
 \begin_layout Plain Layout
 
+         NoSuchAccount)
 \end_layout
 
 \begin_layout Plain Layout
 
-          (RewriteResponse("ledger" :: Nil), FullLedgerInfo(ledger, owner,
- editor))
-\end_layout
-
-\begin_layout Plain Layout
-
-        } else {
-\end_layout
-
-\begin_layout Plain Layout
-
-          (RewriteResponse("" :: Nil, "error" -> "You do not have permission
- to view this ledger"), NoPermsLedgerInfo)
-\end_layout
-
-\begin_layout Plain Layout
-
-        }
-\end_layout
-
-\begin_layout Plain Layout
-
-      }
+  	}
 \end_layout
 
 \begin_layout Plain Layout
@@ -3288,7 +3273,7 @@ def rewrite (req : RewriteRequest) = req match {
 
 \begin_layout Plain Layout
 
-}
+})
 \end_layout
 
 \end_inset
@@ -3298,12 +3283,11 @@ def rewrite (req : RewriteRequest) = req match {
 
 \begin_layout Standard
 Now that we've defined the transformation from URL to parameter, we need
- to define the behaviors based on the parameter.
- The ledger page will show a list of ledger entries, and if the user is
- an editor it will allow them to add new entries or edit the old ones.
- If the user is an owner they will also get a menu to control permissions.
+ to define the behaviors based on that parameter.
+ The account page will show a list of expense entries only if the account
+ is located and is public.
  For this example we'll use a single template and we'll change the snippet
- behavior based on our permissions, as shown in listing 
+ behavior based on our parameter, as shown in listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Defining-Snippet-Behavior"
@@ -3340,47 +3324,48 @@ name "lst:Defining-Snippet-Behavior"
 
 \begin_layout Plain Layout
 
-def snippets = {
+override def snippets = {
 \end_layout
 
 \begin_layout Plain Layout
 
-  case ("ledger", NoSuchLedgerInfo) => {ignore => Text("Could not find the
- requested ledger")}
+  case ("entries", Full(NoSuchAccount)) => {ignore : NodeSeq =>
 \end_layout
 
 \begin_layout Plain Layout
 
-  case ("ledger", NoPermsLedgerInfo) => {ignore => Text("You don't haver
- permission to view this ledger")}
+    Text("Could not locate the requested account")}
 \end_layout
 
 \begin_layout Plain Layout
 
-  case ("ledger", FullLedgerInfo(ledger, _, editor) => Ledger.show(ledger,
- editor) _
+  case ("entries", Full(NotPublic)) => {ignore : NodeSeq =>
 \end_layout
 
 \begin_layout Plain Layout
 
-  case ("addEntry", FullLedgerInfo(ledger, _, true) => Ledger.add(ledger)
- _
+    Text("This account is not publicly viewable")}
 \end_layout
 
 \begin_layout Plain Layout
 
-  case ("addEntry", _) => {ignore => Text("") }
+  case ("entries", Full(FullAccountInfo(account, List()))) => {ignore :
+ NodeSeq =>
 \end_layout
 
 \begin_layout Plain Layout
 
-  case ("ownerMenu", FullLedgerInfo(ledger, true, _) => Ledger.ownerOps(ledger)
- _
+    Text("No entries for " + account.name.is)}
 \end_layout
 
 \begin_layout Plain Layout
 
-  case ("ownerMenu", _) => {ignore => Text("") }
+  case ("entries", Full(FullAccountInfo(account, entries))) =>
+\end_layout
+
+\begin_layout Plain Layout
+
+    Accounts.show(entries) _ 
 \end_layout
 
 \begin_layout Plain Layout
@@ -3394,7 +3379,107 @@ def snippets = {
 \end_layout
 
 \begin_layout Standard
-We can also define the title of the page based on the parameter, as shown
+In this example, we simply return some text if the 
+\family typewriter
+Account
+\family default
+ can’t be located, isn’t public, or doesn’t have any 
+\family typewriter
+Expense
+\family default
+ entries.
+ Remember that this function needs to return a snippet function, which is
+ why we need to include the ignore parameter as part of our closures.
+ If our 
+\family typewriter
+Account
+\family default
+ does have entries, we return a real snippet method defined in our 
+\family typewriter
+Accounts
+\family default
+ object.
+ In our template, we simply use an entries snippet tag, as shown in listing
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Our-Public-Template"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Our Public Template
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Our-Public-Template"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<lift:surround with="default" at="content">
+\end_layout
+
+\begin_layout Plain Layout
+
+<lift:entries  eager_eval="true">
+\end_layout
+
+\begin_layout Plain Layout
+
+  <h1><lift:Menu.title /></h1>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <lift:embed what="entry_table" />
+\end_layout
+
+\begin_layout Plain Layout
+
+</lift:entries>
+\end_layout
+
+\begin_layout Plain Layout
+
+</lift:surround> 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We’re using our embedded table template for the body of the table along
+ with the 
+\family typewriter
+eager_eval
+\family default
+ attribute so that we can use the same markup for all occurrences of our
+ expense table display.
+ We can also define the title of the page based on the parameter, as shown
  in listing 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -3432,17 +3517,22 @@ name "lst:Defining-the-Title"
 
 \begin_layout Plain Layout
 
-def title (in : LedgerInfo) = in match {
+override def title(param : AccountInfo) = param match {
 \end_layout
 
 \begin_layout Plain Layout
 
-  case FullLedgerInfo(ledger, _, _) => Text("Ledger " + ledger.name)
+  case FullAccountInfo(acct, _) => 
 \end_layout
 
 \begin_layout Plain Layout
 
-  case _ => Text("No ledger available")
+    Text("Expense summary for " + acct.name.is)
+\end_layout
+
+\begin_layout Plain Layout
+
+  case _ => Text("No account")
 \end_layout
 
 \begin_layout Plain Layout
@@ -3460,17 +3550,85 @@ Conclusion
 \end_layout
 
 \begin_layout Standard
-As we've shown in this chapter, SiteMap offers a wide range of functionality
+As we’ve shown in this chapter, SiteMap offers a wide range of functionality
  to let you control site navigation and access.
- In addition to controlling specific portions of the behavior via individual
- LocParams, you can subclass Loc directly and gain the benefits of type-safe
- rewriting of your URLs.
- Together these offer a rich set of tools for building your website exactly
+ You can customize the display of your individual items using the 
+\family typewriter
+LinkText
+\family default
+ 
+\family typewriter
+LocParam
+\family default
+ as well as the functionality of the built-in 
+\family typewriter
+Menu
+\family default
+ 
+\family typewriter
+builder
+\family default
+ and 
+\family typewriter
+item
+\family default
+ snippets.
+ You can use the 
+\family typewriter
+If
+\family default
+ and 
+\family typewriter
+Unless
+\family default
+ 
+\family typewriter
+LocParam
+\family default
+s to control access to your pages programmatically, and you can use the
+ 
+\family typewriter
+Test
+\family default
+ 
+\family typewriter
+LocParam
+\family default
+ to check the request before it's even dispatched.
+ Page-specific rendering can be customized with the 
+\family typewriter
+Template
+\family default
+, 
+\family typewriter
+Snippet
+\family default
+, and 
+\family typewriter
+LocSnippet
+\family default
+ 
+\family typewriter
+LocParam
+\family default
+s, and you can group menu items together via the 
+\family typewriter
+LocGroup
+\family default
+ 
+\family typewriter
+LocParam
+\family default
+.
+ Finally, you can consolidate all of these functions by writing your own
+ 
+\family typewriter
+Loc
+\family default
+ trait subclass directly and gain the additional benefit of type-safe URL
+ rewriting.
+ Together these offer a rich set of tools for building your web site exactly
  how you want.
-\end_layout
-
-\begin_layout Standard
-""""
 \end_layout
 
 \end_body

@@ -1,4 +1,4 @@
-#LyX 1.6.0 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -698,8 +698,19 @@ onEnd
 \end_inset
 
  functions are used for logging.
- Note that LiftRules also have onBeginServicing and onEndServicing functions
- but theae are 
+ Note that the 
+\family typewriter
+LiftRules
+\family default
+ object also has 
+\family typewriter
+onBeginServicing
+\family default
+ and 
+\family typewriter
+onEndServicing
+\family default
+ functions but these are 
 \begin_inset Quotes eld
 \end_inset
 
@@ -707,7 +718,7 @@ wrapping
 \begin_inset Quotes erd
 \end_inset
 
- more Lift processing not only statefull processing.
+ more Lift processing and not just statefull processing.
 \end_layout
 
 \begin_layout Enumerate
@@ -796,6 +807,7 @@ getResourceAsStream
 \end_layout
 
 \begin_layout Enumerate
+<<<<<<< HEAD:chap-advanced.lyx
 If the template is still not found for classes in 
 \family typewriter
 view
@@ -818,6 +830,34 @@ LiftView
 dispatch
 \family default
  function.
+=======
+If Lift still can't find any templates, it will attempt to locate a View
+ class whose name matches the first component of the request path under
+ the 
+\family typewriter
+view
+\family default
+ folder of any packages defined by 
+\family typewriter
+LiftRules.addToPackages
+\family default
+ method.
+ If an 
+\family typewriter
+InsecureLiftView
+\family default
+ class is found, it will attempt to invoke a function on the class corresponding
+ to the second component of the request path.
+ If a 
+\family typewriter
+LiftView
+\family default
+ class is found, it will invoke the 
+\family typewriter
+dispatch
+\family default
+ method on the second component of the request path.
+>>>>>>> 6de18ccdf06ac74a9665e4757a66b47e7c7b0b3e:chap-advanced.lyx
 \end_layout
 
 \end_deeper
@@ -3242,6 +3282,10 @@ time
 
 \begin_layout Plain Layout
 
+<<<<<<< HEAD:chap-advanced.lyx
+=======
+/*here the date value*/
+>>>>>>> 6de18ccdf06ac74a9665e4757a66b47e7c7b0b3e:chap-advanced.lyx
 \end_layout
 
 \end_inset

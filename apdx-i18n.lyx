@@ -264,23 +264,11 @@ LiftRules.resourceNames
 \end_layout
 
 \begin_layout LyX-Code
-LiftRules.resourceNames = 
-\begin_inset Quotes eld
-\end_inset
+LiftRules.resourceNames = "DoorMessages" :: 
+\end_layout
 
-DoorMessages
-\begin_inset Quotes erd
-\end_inset
-
- :: 
-\begin_inset Quotes eld
-\end_inset
-
-DoorknobMessages
-\begin_inset Quotes erd
-\end_inset
-
- :: Nil
+\begin_layout LyX-Code
+                          "DoorknobMessages" :: Nil
 \end_layout
 
 \begin_layout Standard
@@ -391,15 +379,7 @@ var currentTmp : Double = getTemp()
 
 \begin_layout Plain Layout
 
-Text(S.?(
-\begin_inset Quotes eld
-\end_inset
-
-tempMsg
-\begin_inset Quotes erd
-\end_inset
-
-, currentTemp))
+Text(S.?("tempMsg", currentTemp))
 \end_layout
 
 \end_inset
@@ -490,15 +470,7 @@ name "lst:Using-the-loc-tag"
 
 \begin_layout Plain Layout
 
-<lift:loc locid=
-\begin_inset Quotes erd
-\end_inset
-
-openStatus
-\begin_inset Quotes erd
-\end_inset
-
->The door is open</lift:loc>
+<lift:loc locid="openStatus">The door is open</lift:loc>
 \end_layout
 
 \begin_layout Plain Layout

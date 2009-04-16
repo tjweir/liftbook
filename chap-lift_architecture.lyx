@@ -312,6 +312,11 @@ import _root_.net.liftweb.util._
 import Helpers._
 \end_layout
 
+\begin_layout Plain Layout
+
+import _root_.scala.xml._
+\end_layout
+
 \end_inset
 
 
@@ -637,7 +642,7 @@ reference "sec:URL-Rewriting"
 
 \end_inset
 
-
+.
 \end_layout
 
 \begin_layout Enumerate
@@ -649,38 +654,83 @@ reference "sec:Custom-dispatch-func"
 
 \end_inset
 
-
+.
 \end_layout
 
 \begin_layout Enumerate
-Check to see if the request should be handled by a View.
- This is covered in section 
+Locate the template to use for the request.
+ This is handled via three mechanisms:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Check the 
+\family typewriter
+LiftRules.viewDispatch
+\family default
+ 
+\family typewriter
+RulesSeq
+\family default
+ to see if any custom dispatch has been defined.
+ We cover custom view dispatch in section 
 \begin_inset CommandInset ref
-LatexCommand ref
-reference "sec:Views"
+LatexCommand vref
+reference "sec:Request/Response-Lifecycle"
 
 \end_inset
 
-
+.
 \end_layout
 
 \begin_layout Enumerate
-If the request is not handled by a View, find a template that matches and
- use it.
- We'll cover templates in section 
+If there is no matching 
+\family typewriter
+viewDispatch
+\family default
+, locate a template that matches and use it.
+ We'll cover templates, and how they're located, in section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Templates"
 
 \end_inset
 
+.
+\end_layout
 
+\begin_layout Enumerate
+If no templates match, attempt to locate a view based on matching a class
+ name and method dispatch.
+ We'll cover views in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Views"
+
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+In our experience views and templates will cover most of your needs, but
+ as we'll demonstrate in later chapters, Lift has plenty of ways to customize
+ the request handling.
 \end_layout
 
 \begin_layout Standard
-In our experience Views and Templates will cover most of your needs, but
- as we'll demonstrate in later chapters, Lift has plenty of ways to customize
- the request handling.
+The following sections cover each aspect of our rendering steps defined
+ above, but not in order.
+ We'll start with Templates, since those are by far the most common mechanism
+ for rendering content in Lift.
+ Next, we'll cover Views, which are essentially programmatic templates.
+ Third, we'll examing the various Lift tags for Template and View content.
+ Fourth, we'll take an in-depth look at Snippets, which are how you bridge
+ between your Template (XML) content and your Scala code.
+ Finally, we'll cover how you can provide highly customized processing of
+ your requests using URL rewriting and custom dispatch functions.
+ 
 \end_layout
 
 \begin_layout Section
@@ -1152,8 +1202,8 @@ Views
 
 \end_inset
 
- are implicitly defined custom dispatch methods; we'll cover explicit custom
- dispatch in more depth in section 
+ are generally used as implicitly defined custom dispatch methods; we'll
+ cover explicit custom dispatch in more depth in section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Custom-dispatch-func"
@@ -1161,10 +1211,10 @@ reference "sec:Custom-dispatch-func"
 \end_inset
 
 .
- A view is a normal Scala method that returns a 
-\family typewriter
-scala.xml.NodeSeq
-\family default
+ A view function is a normal Scala method of type 
+\begin_inset Formula $()\Rightarrow scala.xml.NodeSeq$
+\end_inset
+
 
 \begin_inset Index
 status collapsed
@@ -1175,17 +1225,31 @@ NodeSeq
 
 \end_inset
 
-; the main difference is that with custom dispatch we explicitly define
- the path that will lead to the method via LiftRules, whereas in a view,
- the class itself defines the path.
- In either case, View lookup and dispatch is done after template resolution,
- so templates take priority.
- 
+.
+ As we showed in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:The-Rendering-Process"
+
+\end_inset
+
+, there are two ways that a View can be invoked: the first is by defining
+ a partial function for 
+\family typewriter
+LiftRules.viewDispatch
+\family default
+.
+ This allows you to dispatch to a view for any arbitrary request path, but
+ is usually overkill for most use cases.
+ The second way that a View can be invoked is that if the first element
+ of the request path matches the class name of the View, then the second
+ element is used to lookup the View function depending on what trait the
+ View class implements.
 \end_layout
 
 \begin_layout Standard
-There are two options for implementing a view class: one is to extend the
- 
+There are two traits that you can use when implementing a view class: one
+ is to extend the 
 \family typewriter
 LiftView
 \family default
@@ -1199,7 +1263,7 @@ LiftView
 
 \end_inset
 
- trait, the other is to implement the 
+ trait, the other is to extend the 
 \family typewriter
 InsecureLiftView
 \family default
@@ -1266,13 +1330,17 @@ reflection
 
 \end_inset
 
- to get the method, so it can access any method in the class, 
-\emph on
-even ones marked private
-\emph default
-.
- A better way to do it is to use the LiftView trait, which defines a dispatch
- partial function.
+ to get the method with 
+\family typewriter
+InsecureLiftView
+\family default
+, so it can access any method in the class, even ones that you don't intend
+ to make public.
+ A better way to do it is to use the 
+\family typewriter
+LiftView
+\family default
+ trait, which defines a dispatch partial function.
  This dispatch function maps a string (the 
 \begin_inset Quotes eld
 \end_inset
@@ -1281,7 +1349,11 @@ method name
 \begin_inset Quotes erd
 \end_inset
 
-) to a function that will return a NodeSeq.
+) to a function that will return a 
+\family typewriter
+NodeSeq
+\family default
+.
  Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -1289,11 +1361,19 @@ reference "lst:Dispatch-in-LiftView"
 
 \end_inset
 
- shows a custom LiftView class where the path 
+ shows a custom 
+\family typewriter
+LiftView
+\family default
+ class where the path 
 \family typewriter
 /ExpenseView/enumerate
 \family default
- will map to the ExpenseView.doEnumerate method.
+ will map to the 
+\family typewriter
+ExpenseView.doEnumerate
+\family default
+ method.
  If someone attempts to go to 
 \family typewriter
 /ExpenseView/privateMethod
@@ -1400,7 +1480,10 @@ class ExpenseView extends LiftView {
 \end_layout
 
 \begin_layout Standard
-Another difference between custom dispatch and Views is that the NodeSeq
+Another difference between custom dispatch and Views is that the 
+\family typewriter
+NodeSeq
+\family default
  returned from the view method is processed for template tags including
  
 \family typewriter
@@ -1410,7 +1493,11 @@ surrounds
 \family typewriter
 includes
 \family default
-, just like snippets; dispatch methods, on the other hand, expect a LiftResponse.
+, just like snippets; dispatch methods, on the other hand, expect a 
+\family typewriter
+LiftResponse
+\family default
+.
  That means that you can use the full power of the templating system from
  within your View, as shown in listing 
 \begin_inset CommandInset ref
@@ -2185,7 +2272,7 @@ reference "lst:Ledger-Entry-Comet"
 
 \end_inset
 
- shows an example of a comet binding that displays ledger entries as they're
+ shows an example of a comet binding that displays expense entries as they're
  added.
  Comet is covered in more detail in chapter 
 \begin_inset CommandInset ref
@@ -2208,7 +2295,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Ledger Entry Comet
+Account Entry Comet
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:Ledger-Entry-Comet"
@@ -2225,17 +2312,17 @@ name "lst:Ledger-Entry-Comet"
 
 \begin_layout Plain Layout
 
-<div class="ledgerUpdates">
+<div class="accountUpdates">
 \end_layout
 
 \begin_layout Plain Layout
 
-  <lift:comet type="LedgerMonitor">
+  <lift:comet type="AccountMonitor">
 \end_layout
 
 \begin_layout Plain Layout
 
-    <ul><ledger:entries>
+    <ul><account:entries>
 \end_layout
 
 \begin_layout Plain Layout
@@ -2245,7 +2332,7 @@ name "lst:Ledger-Entry-Comet"
 
 \begin_layout Plain Layout
 
-    </ledger:entries></ul>
+    </account:entries></ul>
 \end_layout
 
 \begin_layout Plain Layout
@@ -2441,8 +2528,45 @@ NodeSeq
 
 \end_inset
 
- argument and is expected to return a NodeSeq.
- The argument passed to the method is the XML contents of the snippet tag;
+ argument and is expected to return a 
+\family typewriter
+NodeSeq
+\family default
+.
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Box Shadowbox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "75col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+Note: It's important to explicitly specify the return type of your snippet
+ methods as 
+\family typewriter
+NodeSeq
+\family default
+.
+ Failure to do so sometimes means that Lift can't locate the snippet method,
+ in which case the snippet may not execute!
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The argument passed to the method is the XML contents of the snippet tag;
  because Lift processes from the outside in, the contents are not processed
  before being passed to the snippet method unless you specify the eager_eval
  attribute (section 
@@ -3074,7 +3198,11 @@ target "http://tinyurl.com"
 \begin_layout Itemize
 Use portions of the URL to determine how a particular snippet or view responds.
  For example, you could make it so that a user's profile is displayed via
- a URL like 
+ a URL like
+\begin_inset Newline linebreak
+\end_inset
+
+
 \family typewriter
 http://someplace.com/user/derek
 \family default
@@ -3729,7 +3857,10 @@ Req
 LiftRules.dispatch
 \family default
  then you'll have full access to the S object and LiftSession; if you use
- 
+\begin_inset Newline linebreak
+\end_inset
+
+
 \family typewriter
 LiftRules.statelessDispatchTable
 \family default
@@ -3872,7 +4003,30 @@ reference "lst:Hooking-dispatch-into-Boot"
 
 .
  In this case, we want state so that we can get the current user's chart,
- so we use LiftRules.dispatch
+ so we use 
+\family typewriter
+LiftRules.dispatch
+\family default
+ as opposed to 
+\family typewriter
+LiftRules.statelessDispatch
+\family default
+.
+ Because we're using a partial function to perform a Scala match operation,
+ the case that we define here uses the 
+\family typewriter
+Req
+\family default
+ object's 
+\family typewriter
+unapply
+\family default
+ method, which is why we only need to provide the 
+\family typewriter
+List[String]
+\family default
+ argument.
+ 
 \begin_inset listings
 inline false
 status open
@@ -3979,7 +4133,7 @@ height
 
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Standard
 Or you can use a slightly different approach:
 \end_layout
 
@@ -4015,13 +4169,18 @@ height
 
 \end_layout
 
-\begin_layout LyX-Code
-Where dmap is identical with map function except the first argument is the
- default value applicable in case that the Box is Empty.
-\end_layout
-
 \begin_layout Standard
-There are a number of other ListResponse subclasses to cover your needs,
+Where dmap is identical with map function except the first argument is the
+ default value applicable in case that the 
+\family typewriter
+Box
+\family default
+ is 
+\family typewriter
+Empty
+\family default
+.
+ There are a number of other ListResponse subclasses to cover your needs,
  including responses for XHTML, XML, Atom, Javascript, CSS, and JSON.
  We cover these in more detail in section 
 \begin_inset CommandInset ref

@@ -68,6 +68,10 @@ morestring=[b]"}
 \paperorientation portrait
 \paperwidth 6.139in
 \paperheight 9.21in
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
 \secnumdepth 3
 \tocdepth 2
 \paragraph_separation indent
@@ -254,6 +258,14 @@ Acknowledgements
 \begin_layout Standard
 This book would not have been possible without the Lift Developers and especiall
 y David Pollak; without him, we wouldn't have this opportunity.
+\end_layout
+
+\begin_layout Standard
+We would also like to thank the Lift community, as well as the following
+ individuals, for valuable feedback on the content of this book: Adam Cimarosti,
+ Malcolm Gorman, Doug Holton, Hunter Kelly, James Matlik, Larry Morroni,
+ Jorge Ortiz, Tim Perrett, Tim Pigden, Dennis Przytarski, Thomas Sant Ana,
+ Heiko Seeberger, and Eric Willigers.
 \end_layout
 
 \begin_layout Standard

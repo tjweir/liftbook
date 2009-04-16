@@ -161,15 +161,7 @@ name "lst:An-example-form-template"
 
 \begin_layout Plain Layout
 
-<lift:Ledger.add form=
-\begin_inset Quotes erd
-\end_inset
-
-POST
-\begin_inset Quotes erd
-\end_inset
-
->
+<lift:Ledger.add form="POST">
 \end_layout
 
 \begin_layout Plain Layout
@@ -284,28 +276,12 @@ def add (xhtml : Group) : NodeSeq = {
 
 \begin_layout Plain Layout
 
-  var desc = 
-\begin_inset Quotes eld
-\end_inset
-
-
-\begin_inset Quotes erd
-\end_inset
-
-
+  var desc = ""
 \end_layout
 
 \begin_layout Plain Layout
 
-  var amount = 
-\begin_inset Quotes eld
-\end_inset
-
-0
-\begin_inset Quotes erd
-\end_inset
-
-
+  var amount = "0"
 \end_layout
 
 \begin_layout Plain Layout
@@ -324,54 +300,22 @@ def add (xhtml : Group) : NodeSeq = {
 
 \begin_layout Plain Layout
 
-  bind(
-\begin_inset Quotes eld
-\end_inset
-
-entry
-\begin_inset Quotes erd
-\end_inset
-
-, xhtml,
+  bind("entry", xhtml,
 \end_layout
 
 \begin_layout Plain Layout
 
-       
-\begin_inset Quotes eld
-\end_inset
-
-description
-\begin_inset Quotes erd
-\end_inset
-
- -> SHtml.text(desc, desc = _),
+       "description" -> SHtml.text(desc, desc = _),
 \end_layout
 
 \begin_layout Plain Layout
 
-       
-\begin_inset Quotes eld
-\end_inset
-
-amount
-\begin_inset Quotes erd
-\end_inset
-
- -> SHtml.text(amount, amount = _),
+       "amount" -> SHtml.text(amount, amount = _),
 \end_layout
 
 \begin_layout Plain Layout
 
-       
-\begin_inset Quotes eld
-\end_inset
-
-submit
-\begin_inset Quotes erd
-\end_inset
-
- -> SHtml.submit(
+       "submit" -> SHtml.submit(
 \begin_inset Quotes eld
 \end_inset
 
@@ -1037,12 +981,17 @@ def list (xhtml : Group) : NodeSeq = {
 
 \begin_layout Plain Layout
 
-  val entriesXml = entries.map( entry => 
+  val entriesXml = 
 \end_layout
 
 \begin_layout Plain Layout
 
-                     bind(
+    entries.map(entry => 
+\end_layout
+
+\begin_layout Plain Layout
+
+      bind(
 \begin_inset Quotes eld
 \end_inset
 
@@ -1071,12 +1020,12 @@ entries
 
 \begin_layout Plain Layout
 
-                     ...
+        ...
 \end_layout
 
 \begin_layout Plain Layout
 
-                     
+        
 \begin_inset Quotes eld
 \end_inset
 
@@ -1092,7 +1041,17 @@ edit
 \begin_inset Quotes erd
 \end_inset
 
-, () => currentLedgerEntry(Full(entry)), Text(
+, 
+\end_layout
+
+\begin_layout Plain Layout
+
+          () => currentLedgerEntry(Full(entry)),
+\end_layout
+
+\begin_layout Plain Layout
+
+          Text(
 \begin_inset Quotes eld
 \end_inset
 
@@ -1493,30 +1452,48 @@ import scala.collection.mutable.Set
 
 \begin_layout Plain Layout
 
-val possible = allCategories.map(c => (c.id.toString, c.name))
+...
 \end_layout
 
 \begin_layout Plain Layout
 
-val current = currentEntry.categories.map(c => c.id.toString)
+def mySnippet ...
+ {
 \end_layout
 
 \begin_layout Plain Layout
 
-val updated = Set.empty[Category]
+  val possible = allCategories.map(c => (c.id.toString, c.name))
 \end_layout
 
 \begin_layout Plain Layout
 
-bind (..., 
-\begin_inset Quotes eld
-\end_inset
+  val current = currentEntry.categories.map(c => c.id.toString)
+\end_layout
 
-categories
-\begin_inset Quotes erd
-\end_inset
+\begin_layout Plain Layout
 
- -> SHtml.multiselect(possible, current, updated += loadCategory(_)))
+  val updated = Set.empty[Category]
+\end_layout
+
+\begin_layout Plain Layout
+
+  bind (..., 
+\end_layout
+
+\begin_layout Plain Layout
+
+    "categories" -> 
+\end_layout
+
+\begin_layout Plain Layout
+
+      SHtml.multiselect(possible, current, updated += loadCategory(_)))
+\end_layout
+
+\begin_layout Plain Layout
+
+}
 \end_layout
 
 \end_inset
@@ -1591,41 +1568,17 @@ var myColor : Color = _
 
 \begin_layout Plain Layout
 
-val colorMap = Map(
-\begin_inset Quotes eld
-\end_inset
-
-Red
-\begin_inset Quotes erd
-\end_inset
-
- -> Color.red,
+val colorMap = Map("Red" -> Color.red,
 \end_layout
 
 \begin_layout Plain Layout
 
-                   
-\begin_inset Quotes eld
-\end_inset
-
-White
-\begin_inset Quotes erd
-\end_inset
-
- -> Color.white,
+                   "White" -> Color.white,
 \end_layout
 
 \begin_layout Plain Layout
 
-                   
-\begin_inset Quotes eld
-\end_inset
-
-Blue
-\begin_inset Quotes erd
-\end_inset
-
- -> Color.blue)
+                   "Blue" -> Color.blue)
 \end_layout
 
 \begin_layout Plain Layout

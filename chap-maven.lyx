@@ -1109,9 +1109,29 @@ zed layout for projects.
 \end_layout
 
 \begin_layout Description
+<application_root>/src/main/resources This directory is where you would
+ place any resources that you want to go into the WAR file.
+ Typically this is used if you want to add entries to the 
+\family typewriter
+META-INF
+\family default
+ directory in the WAR, since normal web resources should be placed under
+ the 
+\family typewriter
+webapp/WEB-INF
+\family default
+ directory.
+\end_layout
+
+\begin_layout Description
 <application_root>/src/main/webapp All of the web and static content for
  your application, such as images, XHTML templates, JavaScript and CSS are
  placed under this directory.
+ This is also where your 
+\family typewriter
+WEB-INF
+\family default
+ directory (and the configuration files it contains) goes.
  This directory is essentially what is packaged into the WAR in addition
  to the output from your Scala sources.
 \end_layout
