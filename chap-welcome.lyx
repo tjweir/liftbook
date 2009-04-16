@@ -369,7 +369,41 @@ A trait is a Scala construct that's almost like a Java interface.
 \end_layout
 
 \begin_layout Section
-For more information
+What You Should Know Before Starting
+\end_layout
+
+\begin_layout Standard
+First and foremost, this is a book on the Lift framework.
+ There are several things we expect you to be familiar with before progressing:
+\end_layout
+
+\begin_layout Itemize
+The Scala Language and standard Library.
+ This book is not intended to be an introduction to Scala; there are several
+ very good books available that fill that role.
+ You can find a list of Scala books at the Scala website, 
+\begin_inset CommandInset href
+LatexCommand href
+target "http://www.scala-lang.org/node/959"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+HTML and XML.
+ Lift relies heavily on XHTML for its template support, so you should understand
+ things like DocTypes, elements, attributes and namespaces.
+\end_layout
+
+\begin_layout Itemize
+General HTTP processing, including things like GET and POST submission as
+ well as response codes and content types.
+\end_layout
+
+\begin_layout Section
+For more information on Lift
 \begin_inset CommandInset label
 LatexCommand label
 name "sec:For-more-information"
