@@ -1,4 +1,4 @@
-#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.0 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -2124,7 +2124,7 @@ name "lst:Jx-trivial-example"
 \end_layout
 
 \begin_layout Standard
-This code generates the following HTML:
+This code generates the following JavaScript code:
 \end_layout
 
 \begin_layout Standard
@@ -2753,7 +2753,7 @@ name "lst:Ajax-JSON-response"
 
 \begin_layout Plain Layout
 
-  def ajaxFunc : JsCmd = {
+  def ajaxFunc() : JsCmd = {
 \end_layout
 
 \begin_layout Plain Layout
@@ -2810,7 +2810,7 @@ Press me
 \begin_inset Quotes erd
 \end_inset
 
-), ajaxFunc))
+), ajaxFunc _))
 \end_layout
 
 \begin_layout Plain Layout

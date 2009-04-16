@@ -778,8 +778,16 @@ LiftRules.viewDispatch
 
 ,LiftView].
  This allows you to either return the function for handling the view directly,
- or delegate to a LiftView subclass.
- LiftView is covered in section 
+ or delegate to a 
+\family typewriter
+LiftView
+\family default
+ subclass.
+ 
+\family typewriter
+LiftView
+\family default
+ is covered in section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Views"
@@ -799,6 +807,30 @@ getResourceAsStream
 \end_layout
 
 \begin_layout Enumerate
+<<<<<<< HEAD:chap-advanced.lyx
+If the template is still not found for classes in 
+\family typewriter
+view
+\family default
+ folder fom the paths declared in boot through 
+\family typewriter
+LiftRules.addToPackages
+\family default
+.
+ It will look for classes that extend 
+\family typewriter
+InsecureLiftView
+\family default
+ and invoke the coresponding function or classes that extend 
+\family typewriter
+LiftView
+\family default
+ and invoke the 
+\family typewriter
+dispatch
+\family default
+ function.
+=======
 If Lift still can't find any templates, it will attempt to locate a View
  class whose name matches the first component of the request path under
  the 
@@ -825,6 +857,7 @@ LiftView
 dispatch
 \family default
  method on the second component of the request path.
+>>>>>>> 6de18ccdf06ac74a9665e4757a66b47e7c7b0b3e:chap-advanced.lyx
 \end_layout
 
 \end_deeper
@@ -3234,7 +3267,7 @@ time
 \begin_inset Quotes erd
 \end_inset
 
- -> <span>{(new java.util.Date).toString}</span>
+ -> <span>{(new java.util.Date).toString}</span>)
 \end_layout
 
 \begin_layout Plain Layout
@@ -3249,7 +3282,10 @@ time
 
 \begin_layout Plain Layout
 
+<<<<<<< HEAD:chap-advanced.lyx
+=======
 /*here the date value*/
+>>>>>>> 6de18ccdf06ac74a9665e4757a66b47e7c7b0b3e:chap-advanced.lyx
 \end_layout
 
 \end_inset
