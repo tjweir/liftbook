@@ -110,8 +110,8 @@ JPA
  for short, is the evolution of a number of frameworks in Java to provide
  a simple database access layer for plain java objects (and, transitively,
  Scala objects).
- JPA was developed as part of the EJB3 specification, with the goal of simplifyi
-ng the persistence model.
+ JPA was developed as part of the Enterprise Java Beans 3 (EJB3) specification,
+ with the goal of simplifying the persistence model.
  Prior versions had used the Container Managed Persistence (CMP
 \begin_inset Index
 status collapsed
@@ -124,8 +124,8 @@ CMP
 
 ) framework, which required many boilerplate artifacts in the form of interfaces
  and XML descriptors.
- As part of the overarching theme of EJB3 to simplify and use configuration
- by convention, JPA uses sensible defaults and annotations
+ As part of the overarching theme of EJB3 to simplify and use convention
+ over configuration, JPA uses sensible defaults and annotations
 \begin_inset Index
 status collapsed
 
@@ -139,7 +139,7 @@ annotations
  JPA also does away with many of the interfaces used in CMP and provides
  a single 
 \family typewriter
-EntityManager
+javax.persistence.EntityManager
 \family default
 
 \begin_inset Index
@@ -151,7 +151,7 @@ EntityManager
 
 \end_inset
 
- object for all persistence operations.
+ class for all persistence operations.
  An additional benefit is that JPA was designed so that it could be used
  both inside and outside of the Enterprise container, and several projects
  (Hibernate
@@ -229,7 +229,7 @@ accessed objects in memory so that you avoid hitting the database entirely
 \end_layout
 
 \begin_layout Section
-Introduction to JPA
+Introducing JPA
 \end_layout
 
 \begin_layout Standard
@@ -361,8 +361,47 @@ mvn archetype:generate
 \begin_layout Standard
 This will use the JPA archetype to create a new project for you with modules
  for the persistence and web portions of the project.
- You will get a prompt asking you to confirm the settings we've chosen;
- just hit 
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Box Shadowbox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "75col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+Note: The reason we have split the module out into two projects is that
+ it aids deployment on Jave EE servers to have the Persistence module be
+ an independent JAR file.
+ If you don't need that, you can simply merge the contents of the two modules
+ into a single project and it will work standalone.
+ Note that you'll need to merge the pom.xml file's dependencies and plugin
+ configurations from all three POMs.
+ Lift comes with an archetype that handles this already, albeit without
+ the demo code we show here.
+ Simply use the lift-archetype-jpa-blank-single archetype and you'll get
+ a blank project (with minimal files for JPA and Lift) that you can use
+ for your app.
+ There's also a blank archetype that uses two modules if you want that,
+ called lift-archetype-jpa-blank.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+You will get a prompt asking you to confirm the settings we've chosen; just
+ hit 
 \family typewriter
 <enter>
 \family default
@@ -413,47 +452,15 @@ JPADemo
 
 \begin_layout Standard
 If you look at the source directories, you'll see that our code is already
- in place! If you were making your own application you could modify the
- POMs and create/edit/replace the existing Scala code and templates to match
+ in place! If you're making your own application you can either use the
+ previously mentioned blank archetypes to start from scratch, or use the
+ basic archetype and modify the POMs, Scala code and templates to match
  your needs.
- 
-\end_layout
-
-\begin_layout Standard
-\align center
-\begin_inset Box Shadowbox
-position "t"
-hor_pos "c"
-has_inner_box 1
-inner_pos "t"
-use_parbox 0
-width "75col%"
-special "none"
-height "1in"
-height_special "totalheight"
-status open
-
-\begin_layout Plain Layout
-Note: The reason we have split the module out into two projects is that
- it aids deployment on Jave EE servers to have the Persistence module be
- an independent JAR file.
- If you don't need that, you can simply merge the contents of the two modules
- into a single project and it will work standalone.
- Note that you'll need to merge the pom.xml file's dependencies and plugin
- configurations from all three POMs.
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Now let's go over the contents of the project.
+ For now, let's go over the contents of the project.
 \end_layout
 
 \begin_layout Subsection
-Entity Classes
+Using Entity Classes
 \begin_inset Index
 status collapsed
 
@@ -702,7 +709,14 @@ Author override
 \end_layout
 
 \begin_layout Subsection
-Object attachment and detachment
+Working with Attached and Detached Objects
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Working-with-Attached"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -735,7 +749,10 @@ getReference
 find
 \family default
  method.
- As soon as the session ends, any formerly attached objects are now considered
+\end_layout
+
+\begin_layout Standard
+As soon as the session ends, any formerly attached objects are now considered
  detached.
  You can still operate on them as normal objects but any changes are not
  directly applied to the database.
@@ -752,8 +769,2186 @@ merge
  then make modifications and merge in a different cycle.
 \end_layout
 
+\begin_layout Standard
+As an example, our library application provides a summary listing of authors
+ on one page (
+\family typewriter
+src/main/webapp/authors/list.html
+\family default
+) and allows editing of those entities on another (
+\family typewriter
+src/main/webapp/authors/add.html
+\family default
+).
+ We can use the 
+\family typewriter
+SHtml.link
+\family default
+ generator on our list page, combined with a 
+\family typewriter
+RequestVar
+\family default
+, to pass the instance (detached once we return from the list snippet) to
+ our edit snippet.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Passing-Detached-Instances"
+
+\end_inset
+
+ shows excerpts from our library application snippets demonstrating how
+ we hand off the instance and do a merge within our edit snippets submission
+ processing function (
+\family typewriter
+doAdd
+\family default
+).
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Passing Detached Instances Around an Application
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Passing-Detached-Instances"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// in src/main/scala/net/liftweb/jpademo/snippets/Author.scala
+\end_layout
+
+\begin_layout Plain Layout
+
+...package and imports ...
+ 
+\end_layout
+
+\begin_layout Plain Layout
+
+class AuthorOps {
+\end_layout
+
+\begin_layout Plain Layout
+
+  def list (xhtml : NodeSeq) : NodeSeq = {
+\end_layout
+
+\begin_layout Plain Layout
+
+    val authors = ...
+\end_layout
+
+\begin_layout Plain Layout
+
+    authors.flatMap(author => bind("author", xhtml, ...
+\end_layout
+
+\begin_layout Plain Layout
+
+        // use the link closure to capture the current
+\end_layout
+
+\begin_layout Plain Layout
+
+        // instance for edit insertion
+\end_layout
+
+\begin_layout Plain Layout
+
+        "edit" -> SHtml.link("add.html",
+\end_layout
+
+\begin_layout Plain Layout
+
+           () => authorVar(author), Text(?("Edit")))))
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+  ...
+\end_layout
+
+\begin_layout Plain Layout
+
+  // Set up a requestVar to track the author object for edits and adds
+\end_layout
+
+\begin_layout Plain Layout
+
+  object authorVar extends RequestVar(new Author())
+\end_layout
+
+\begin_layout Plain Layout
+
+  // helper def
+\end_layout
+
+\begin_layout Plain Layout
+
+  def author = authorVar.is
+\end_layout
+
+\begin_layout Plain Layout
+
+  def add (xhtml : NodeSeq) : NodeSeq = {
+\end_layout
+
+\begin_layout Plain Layout
+
+    def doAdd () = {
+\end_layout
+
+\begin_layout Plain Layout
+
+      ...
+\end_layout
+
+\begin_layout Plain Layout
+
+      // merge and save the detached instance
+\end_layout
+
+\begin_layout Plain Layout
+
+	  Model.mergeAndFlush(author)
+\end_layout
+
+\begin_layout Plain Layout
+
+      ...
+\end_layout
+
+\begin_layout Plain Layout
+
+    }
+\end_layout
+
+\begin_layout Plain Layout
+
+    // Hold a val here so that the closure grabs it instead of the def
+\end_layout
+
+\begin_layout Plain Layout
+
+    val current = author
+\end_layout
+
+\begin_layout Plain Layout
+
+    // Use a hidden element to reinsert the instance on form submission
+\end_layout
+
+\begin_layout Plain Layout
+
+    bind("author", xhtml,
+\end_layout
+
+\begin_layout Plain Layout
+
+      "id" -> SHtml.hidden(() => authorVar(current)), ...,
+\end_layout
+
+\begin_layout Plain Layout
+
+      "submit" -> SHtml.submit(?("Save"), doAdd))
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Obtaining-an-EM"
+
+\end_inset
+
+Obtaining a Per-Session EntityManager
+\end_layout
+
+\begin_layout Standard
+Ideally, we would like our JPA access to be as seamless as possible, particularl
+y when it comes to object lifecycle.
+ In JPA, objects can be attached to a current persistence session, or they
+ can be detached from a JPA session.
+ This gives us a lot of flexibility (which we'll use later) in dealing with
+ the objects themselves, but it also means that we need to be careful when
+ we're accessing object properties.
+ JPA can use lazy retrieval for instance properties; in particular, this
+ is the default behavior for collection-based properties.
+ What this means is that if we're working on a detached object and we attempt
+ to access a collection contained in the instance, we're going to get an
+ exception that the session that the object was loaded in is no longer live.
+ What we'd really like to do is have some hooks into Lift's request cycle
+ that allows us to set up a session when the request starts and properly
+ close it down when the request ends.
+ We still have to be careful with objects that have been passed into our
+ request (from form callbacks, for instance), but in general this will guarantee
+ us that once we've loaded an object in our snippet code we have full access
+ to all properties at any point within our snippets.
+\end_layout
+
+\begin_layout Standard
+Fortunately for us, Lift provides just such a mechanism.
+ In fact, Lift supports several related mechanisms for lifecycle management
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+Notably, 
+\family typewriter
+S.addAround
+\family default
+ with the 
+\family typewriter
+LoanWrapper
+\end_layout
+
+\end_inset
+
+, but for now we're going to focus on just one: the 
+\family typewriter
+RequestVar
+\family default
+
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+RequestVar
+\end_layout
+
+\end_inset
+
+.
+ A 
+\family typewriter
+RequestVar
+\family default
+ represents a variable associated with the lifetime of the request.
+ This is in contrast to 
+\family typewriter
+SessionVar
+\family default
+, which defines a variable for the lifetime of the user's session.
+ 
+\family typewriter
+RequestVar
+\family default
+ gives us several niceties over handling request parameters ourselves, including
+ type safety and a default value.
+ We go into more detail on 
+\family typewriter
+RequestVars
+\family default
+ and 
+\family typewriter
+SessionVars
+\family default
+ in section 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "sec:Session-and-Request"
+
+\end_inset
+
+.
+ In addition to the Lift facilities, we also use the ScalaJPA project
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://scala-tools.org/mvnsites-snapshots/scalajpa/
+\end_layout
+
+\end_inset
+
+, source code available at 
+\begin_inset CommandInset href
+LatexCommand href
+target "http://github.com/dchenbecker/scalajpa/tree"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ to handle some of the boilerplate of utilizing JPA.
+ ScalaJPA provides some nice traits that 
+\begin_inset Quotes eld
+\end_inset
+
+Scalafy
+\begin_inset Quotes erd
+\end_inset
+
+ the JPA 
+\family typewriter
+EntityManager
+\family default
+ and 
+\family typewriter
+Query
+\family default
+ interfaces, as well as accessors that make retrieving an EM simple.
+ To use ScalaJPA we simply add the following dependency to our POM.
+ 
+\end_layout
+
+\begin_layout LyX-Code
+<dependency>
+\end_layout
+
+\begin_layout LyX-Code
+  <groupId>org.scala-tools</groupId>
+\end_layout
+
+\begin_layout LyX-Code
+  <artifactId>scalajpa</artifactId>
+\end_layout
+
+\begin_layout LyX-Code
+  <version>1.0-SNAPSHOT</version>
+\end_layout
+
+\begin_layout LyX-Code
+</dependency>
+\end_layout
+
+\begin_layout Standard
+Note that at the time of writing the library is at 1.0-SNAPSHOT, but should
+ be promoted to 1.0 soon.
+\end_layout
+
+\begin_layout Standard
+We leverage ScalaJPA's 
+\family typewriter
+LocalEMF
+\family default
+ and 
+\family typewriter
+RequestVarEM
+\family default
+ traits to provide a simple 
+\family typewriter
+RequestVar
+\family default
+ interface to obtain the EM via local lookup (i.e.
+ via the 
+\family typewriter
+javax.persistence.\SpecialChar \-
+Persistence
+\family default
+ class), as shown in listing 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "lst:Setting-up-EM"
+
+\end_inset
+
+.
+ It's trivial to use JNDI instead by substituting the 
+\family typewriter
+JndiEMF
+\family default
+ trait for the 
+\family typewriter
+LocalEMF
+\family default
+ trait, but the details of setting up the JNDI persistence module are beyond
+ the scope of this book.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "breaklines=true,firstline=1,float,lastline=8,numbers=left,numberstyle={\tiny}"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Setting-up-EM"
+
+\end_inset
+
+Setting up an EntityManager via RequestVar
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import _root_.org.scala_libs.jpa._
+\end_layout
+
+\begin_layout Plain Layout
+
+object Model extends LocalEMF("jpaweb") with RequestVarEM
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Once we have this object set up, we can access all of the 
+\family typewriter
+ScalaEntityManager
+\family default
+ methods directly on 
+\family typewriter
+Model
+\family default
+.
+\end_layout
+
+\begin_layout Section
+Handling Transactions
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+Transactions
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We're not going to go into too much detail here; there are better documents
+ available
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://java.sun.com/developer/EJTechTips/2005/tt0125.html
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ if you want to go into depth on how the Java Transaction API (JTA) or general
+ transactions work.
+ Essentially, a transaction is a set of operations that are performed atomically
+; that is, they either all complete successfully or none of them do.
+ The classic example is transferring funds between two bank accounts: you
+ subtract the amount from one account and add it to the other.
+ If the addition fails and you're not operating in the context of a transaction,
+ the client has lost money!
+\end_layout
+
+\begin_layout Standard
+In JPA, transactions are required.
+ If you don't perform your operations within the scope of a transaction
+ you will either get an exception (if you're using JTA), or you will spend
+ many hours trying to figure out why nothing is being saved to the database.
+ There are two ways of handling transactions under JPA: resource local and
+ JTA.
+ Resource local transactions are what you use if you are managing the EM
+ factory yourself (corresponding to the 
+\family typewriter
+LocalEMF
+\family default
+ trait).
+ Similarly, JTA is what you use when you obtain your EM via JNDI.
+ Technically it's also possible to use JTA with a locally managed EM, but
+ that configuration is beyond the scope of this book.
+\end_layout
+
+\begin_layout Standard
+Generally, we would recommend using JTA where it’s free (i.e., when deploying
+ to a Java EE container) and using resource-local when you’re using a servlet
+ container such as Jetty or Tomcat.
+ If you will be accessing multiple databases or involving resources like
+ EJBs, it is much safer to use JTA so that you can utilize distributed transacti
+ons.
+ Choosing between the two is as simple as setting a property in your persistence.
+xml file (and changing the code to open and close the EM).
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Setting-the-transaction-type"
+
+\end_inset
+
+ shows examples of setting the 
+\family typewriter
+transaction-type
+\family default
+ attribute to 
+\family typewriter
+RESOURCE_LOCAL
+\family default
+ and to JTA.
+ If you want to use JTA, you can also omit the 
+\family typewriter
+transaction-type
+\family default
+ attribute since JTA is the default.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "float,language=XML"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Setting-the-transaction-type"
+
+\end_inset
+
+Setting the transaction type
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<persistence-unit name="jpaweb" transaction-type="RESOURCE_LOCAL">
+\end_layout
+
+\begin_layout Plain Layout
+
+  <non-jta-datasource>myDS</non-jta-datasource>
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<persistence-unit name="jpaweb" transaction-type="JTA">
+\end_layout
+
+\begin_layout Plain Layout
+
+  <jta-datasource>myDS</jta-datasource>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+You must make sure that your EM setup code matches what you have in your
+ 
+\family typewriter
+persistence.xml
+\family default
+.
+ Additionally, the database connection must match; with JTA, you 
+\emph on
+must
+\emph default
+ use a 
+\family typewriter
+jta-data-source
+\family default
+ (obtained via JNDI) for your database connection.
+ For resource-local, you can either use a 
+\family typewriter
+non-jta-datasource
+\family default
+ element or you can set the provider properties, as shown in listing 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "lst:Setting-resource-local-properties"
+
+\end_inset
+
+.
+ In this particular example we're setting the properties for Hibernate,
+ but similar properties exist for TopLink
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://www.oracle.com/technology/products/ias/toplink/JPA/essentials/toplink-jpa-e
+xtensions.html
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+, JPOX
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://www.jpox.org/docs/1_2/persistence_unit.html
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+, and others.
+\end_layout
+
+\begin_layout Standard
+If you'll be deploying into a JEE container, such as JBoss or GlassFish,
+ then you get JTA support almost for free since JTA is part of the JEE spec.
+ If you want to deploy your application on a lightweight container like
+ Jetty or Tomcat, we would recommend that you look into using an external
+ JTA coordinator such as JOTM, Atomikos, or JBoss Transaction Manager, since
+ embedding a JTA provider in your container is a nontrivial task.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "breaklines=true,float,language=XML,numbers=left,numberstyle={\tiny}"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Setting-resource-local-properties"
+
+\end_inset
+
+Setting resource-local properties for Hibernate
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<persistence>
+\end_layout
+
+\begin_layout Plain Layout
+
+   <persistence-unit name="jpaweb" transaction-type="RESOURCE_LOCAL">
+\end_layout
+
+\begin_layout Plain Layout
+
+      <properties>
+\end_layout
+
+\begin_layout Plain Layout
+
+         <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLD
+ialect"/>
+\end_layout
+
+\begin_layout Plain Layout
+
+         <property name="hibernate.connection.driver_class" value="org.postgresql.Dr
+iver"/>
+\end_layout
+
+\begin_layout Plain Layout
+
+         <property name="hibernate.connection.username" value="somUser"/>
+\end_layout
+
+\begin_layout Plain Layout
+
+         <property name="hibernate.connection.password" value="somePass"/>
+\end_layout
+
+\begin_layout Plain Layout
+
+         <property name="hibernate.connection.url" value="jdbc:postgresql:jpaweb"/
+>
+\end_layout
+
+\begin_layout Plain Layout
+
+      </properties>
+\end_layout
+
+\begin_layout Plain Layout
+
+   </persistence-unit>
+\end_layout
+
+\begin_layout Plain Layout
+
+</persistence>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+One final note in regard to transactions is how they're affected by Exceptions.
+ Per the spec, any exceptions thrown during the scope of a transaction,
+ other than
+\begin_inset Newline linebreak
+\end_inset
+
+
+\family typewriter
+javax.persistence.NoResultException
+\family default
+ or 
+\family typewriter
+javax.persistence.NonUniqueResultException
+\family default
+, will cause the transaction to be marked for rollback.
+\end_layout
+
+\begin_layout Section
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:ScalaEntityManager-and-ScalaQuery"
+
+\end_inset
+
+ScalaEntityManager and ScalaQuery
+\end_layout
+
+\begin_layout Standard
+Now that we've gone through setting up our 
+\family typewriter
+EntityManager
+\family default
+, let's look at how we actually use them in an application.
+ As a convenience, ScalaJPA defines two thin wrappers on the existing 
+\family typewriter
+EntityManager
+\family default
+
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://java.sun.com/javaee/5/docs/api/javax/persistence/EntityManager.html
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ and 
+\family typewriter
+Query
+\family default
+
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://java.sun.com/javaee/5/docs/api/javax/persistence/Query.html
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ interfaces to provide more Scala-friendly methods.
+ This means that we get Scala's collection types (i.e.
+ 
+\family typewriter
+List
+\family default
+ instead of 
+\family typewriter
+java.util.List
+\family default
+) and generic signatures so that we can avoid explicit casting.
+ The 
+\family typewriter
+ScalaEntityManager
+\family default
+ trait provides a wrapper on the 
+\family typewriter
+EntityManager
+\family default
+ class, and is included as part of the 
+\family typewriter
+RequestVarEM
+\family default
+ trait that we've mixed into our 
+\family typewriter
+Model
+\family default
+ object.
+ The API for 
+\family typewriter
+ScalaEntityManager
+\family default
+ can be found at 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://scala-tools.org/mvnsites/scalajpa/scaladocs/org/scala_libs/jpa/ScalaEntity
+Manager.html
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Next, we have the 
+\family typewriter
+ScalaQuery
+\family default
+ trait, with API docs at 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://scala-tools.org/mvnsites/scalajpa/scaladocs/org/scala_libs/jpa/ScalaQuery.h
+tml
+\end_layout
+
+\end_inset
+
+.
+ Like 
+\family typewriter
+ScalaEntityManager
+\family default
+, this is a thin wrapper on the 
+\family typewriter
+Query
+\family default
+ interface.
+ In particular, methods that return entities are typed against the 
+\family typewriter
+ScalaQuery
+\family default
+ itself, so that you don't need to do any explicit casting in your client
+ code.
+ We also have some utility methods to simplify setting a parameter list
+ as well as obtaining the result(s) of the query.
+ 
+\end_layout
+
+\begin_layout Section
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:JPA-Examples"
+
+\end_inset
+
+Operating on Entities
+\end_layout
+
+\begin_layout Standard
+In this section we'll demonstrate how to work with entities and cover some
+ important tips on using JPA effectively.
+\end_layout
+
 \begin_layout Subsection
-Support for user types
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Persisting,-merging-and-removing"
+
+\end_inset
+
+Persisting, Merging and Removing Entities
+\end_layout
+
+\begin_layout Standard
+The first step to working with any persistent entities is to actually persist
+ them.
+ If you have a brand new object, you can do this with the 
+\family typewriter
+persist
+\family default
+ method:
+\end_layout
+
+\begin_layout LyX-Code
+val myNewAuthor = new Author; myNewAuthor.name = "Wilma"
+\end_layout
+
+\begin_layout LyX-Code
+Model.persist(myNewAuthor)
+\end_layout
+
+\begin_layout Standard
+This attaches the 
+\family typewriter
+myNewAuthor
+\family default
+ object to the current persistence session.
+ Once the object is attached it should be visible in any subsequent queries,
+ although it may not be written to the database just yet (see section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:The-importance-of-flush"
+
+\end_inset
+
+).
+ Note that the 
+\family typewriter
+persist
+\family default
+ method is only intended for brand new objects.
+ If you have a detached object and you try to use 
+\family typewriter
+persist
+\family default
+ you will most likely get an 
+\family typewriter
+EntityExistsException
+\family default
+ as the instance you're merging is technically conflicting with itself.
+ Instead, you want to use the 
+\family typewriter
+merge
+\family default
+ method to re-attach detached objects:
+\end_layout
+
+\begin_layout LyX-Code
+val author = Model.merge(myOldAuthor)
+\end_layout
+
+\begin_layout Standard
+An important thing to note is that the 
+\family typewriter
+merge
+\family default
+ method doesn't actually attach the object passed to it; instead, it makes
+ an attached 
+\emph on
+copy
+\emph default
+ of the passed object and returns the copy.
+ If you mistakenly merge without using the returned value:
+\end_layout
+
+\begin_layout LyX-Code
+Model.merge(myOldAuthor)
+\end_layout
+
+\begin_layout LyX-Code
+myOldAuthor.name = 
+\begin_inset Quotes eld
+\end_inset
+
+Fred
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+you'll find that subsequent changes to the object won't be written to the
+ database.
+ One nice aspect of the 
+\family typewriter
+merge
+\family default
+ method is that it intelligently detects whether the entity you're merging
+ is a new object or a detached object.
+ That means that you can use 
+\family typewriter
+merge
+\family default
+ everywhere and let it sort out the semantics.
+ For example, in our library application, using 
+\family typewriter
+merge
+\family default
+ allows us to combine the adding and editing functionality into a single
+ snippet; if we want to edit an existing 
+\family typewriter
+Author
+\family default
+ we pass it into the method.
+ Otherwise, we pass a brand new 
+\family typewriter
+Author
+\family default
+ instance into the method and the merge takes care of either case appropriately.
+\end_layout
+
+\begin_layout Standard
+Removing an object is achieved by calling the 
+\family typewriter
+remove
+\family default
+ method:
+\end_layout
+
+\begin_layout LyX-Code
+Model.remove(myAuthor)
+\end_layout
+
+\begin_layout Standard
+The passed entity is detached from the session immediately and will be removed
+ from the database at the appropriate time.
+ If the entity has any associations on it (to collections or other entities),
+ they will be cascaded as indicated by the entity mapping.
+ An example of a cascade is shown in the 
+\family typewriter
+Author
+\family default
+ listing on page 
+\begin_inset CommandInset ref
+LatexCommand pageref
+reference "lst:Author.scala"
+
+\end_inset
+
+.
+ The books collection has the cascade set to REMOVE, which means that if
+ an author is deleted, all of the books by that author will be removed as
+ well.
+ The default is to not cascade anything, so it's important that you properly
+ set the cascade on collections to avoid constraint violations when you
+ remove entities.
+ It's also useful to point out that you don't actually need to have an entity
+ loaded to remove it.
+ You can use the 
+\family typewriter
+getReference
+\family default
+ method to obtain a proxy that will cause the corresponding database entry
+ to be removed:
+\end_layout
+
+\begin_layout LyX-Code
+Model.remove(Model.getReference(classOf[Author], someId))
+\end_layout
+
+\begin_layout Subsection
+Loading an Entity
+\end_layout
+
+\begin_layout Standard
+There are actually three ways to load an entity object in your client code:
+ using 
+\family typewriter
+find
+\family default
+, 
+\family typewriter
+getReference
+\family default
+ or a query.
+ The simplest is to use the 
+\family typewriter
+find
+\family default
+ method: 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Jorge has pointed out that this may change with Manifest: http://groups.google.com
+/group/liftweb/browse_thread/thread/874b38daa0d535f7
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+val myBook = Model.find(classOf[Book], someId)
+\end_layout
+
+\begin_layout Standard
+The 
+\family typewriter
+find
+\family default
+ method takes two parameters: the class that you're trying to load and the
+ value of the ID field of the entity.
+ In our example, the 
+\family typewriter
+Book
+\family default
+ class uses the 
+\family typewriter
+Long
+\family default
+ type for its ID, so we would put a 
+\family typewriter
+Long
+\family default
+ value here.
+ It returns either a 
+\family typewriter
+Full
+\family default
+ 
+\family typewriter
+Box
+\family default
+ (section 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "sec:Box-(or-Scala's"
+
+\end_inset
+
+) if the entity is found in the database, otherwise it returns 
+\family typewriter
+Empty
+\family default
+.
+ With 
+\family typewriter
+find
+\family default
+, the entity is loaded immediately from the database and can be used in
+ both attached and detached states.
+ 
+\end_layout
+
+\begin_layout Standard
+The next method you can use is the 
+\family typewriter
+getReference
+\family default
+ method:
+\end_layout
+
+\begin_layout LyX-Code
+val myBook = Model.getReference(classOf[Book], someId)
+\end_layout
+
+\begin_layout Standard
+This is very similar to the 
+\family typewriter
+find
+\family default
+ method with a few key differences.
+ First, the object that is returned is a lazy proxy for the entity.
+ That means that no database load is required to occur when you execute
+ the method, although providers may do at least a check on the existence
+ of the ID.
+ Because this is a lazy proxy, you usually don't want to use the returned
+ object in a detached state unless you've accessed its fields while the
+ session was open.
+ The normal use of 
+\family typewriter
+getReference
+\family default
+ is when you want to set up a relationship between two (or more) entities,
+ since you don't need to query all of the fields just to set a foreign key.
+ For example:
+\end_layout
+
+\begin_layout LyX-Code
+myBook.author = Model.getReference(classOf[Author], authorId)
+\end_layout
+
+\begin_layout Standard
+When 
+\family typewriter
+myBook
+\family default
+ is flushed to the database the EM will correctly set up the relationship.
+ The final difference is in how unknown entities are handled.
+ Recall that the 
+\family typewriter
+find
+\family default
+ method returns 
+\family typewriter
+Empty
+\family default
+ if the entity cannot be found; with 
+\family typewriter
+getReference
+\family default
+, however, we don't query the database until the reference is used.
+ Because of this, the 
+\family typewriter
+javax.persistence.EntityNotFoundException
+\family default
+ is thrown when you try to access an undefined entity for the first time
+ (this also marks the transaction for rollback).
+ 
+\end_layout
+
+\begin_layout Standard
+The third method for loading an entity would be to use a query (named or
+ otherwise) to fetch the entity.
+ As an example, here's a query equivalent of the 
+\family typewriter
+find
+\family default
+ method:
+\end_layout
+
+\begin_layout LyX-Code
+val myBook = 
+\end_layout
+
+\begin_layout LyX-Code
+  Model.createQuery[Book]("from Book bk where bk.id = :id")
+\end_layout
+
+\begin_layout LyX-Code
+       .setParams("id" -> someId).findOne
+\end_layout
+
+\begin_layout Standard
+The advantage here is that we have more control over what is selected by
+ using the query language to specify other properties.
+ One caveat is that when you use the 
+\family typewriter
+findOne
+\family default
+ method you need to ensure that the query will actually result in a unique
+ entity; otherwise, the EM will throw a 
+\family typewriter
+NonUniqueResultException
+\family default
+.
+\end_layout
+
+\begin_layout Subsection
+Loading Many Entities
+\end_layout
+
+\begin_layout Standard
+Corresponding to the 
+\family typewriter
+findOne
+\family default
+ method is the 
+\family typewriter
+findAll
+\family default
+ method, which returns all entities based on a query.
+ There are two ways to use 
+\family typewriter
+findAll
+\family default
+; the first is to use the convenience 
+\family typewriter
+findAll
+\family default
+ method defined in the 
+\family typewriter
+ScalaEntityManager
+\family default
+ class:
+\end_layout
+
+\begin_layout LyX-Code
+val myBooks = Model.findAll("booksByYear", "year" -> myYear)
+\end_layout
+
+\begin_layout Standard
+This requires the use of a named query for the first arg, and subsequent
+ args are of the form (
+\begin_inset Quotes eld
+\end_inset
+
+paramName
+\begin_inset Quotes erd
+\end_inset
+
+ -> value).
+ Named queries
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+named queries
+\end_layout
+
+\end_inset
+
+ can be defined in your orm.xml
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+orm.xml
+\end_layout
+
+\end_inset
+
+, as shown in section 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "sub:Using-the-orm.xml"
+
+\end_inset
+
+.
+ Named queries are highly recommended over ad-hoc queries since they allow
+ you to keep the queries in one location instead of being scattered all
+ over your code.
+ Named queries can also be pre-compiled by the JPA provider, which will
+ catch errors at startup (or in your unit tests, hint hint) instead of when
+ the query is run inside your code.
+\end_layout
+
+\begin_layout Standard
+The second method is to create a 
+\family typewriter
+ScalaQuery
+\family default
+ instance directly and then set parameters and execute it.
+ In reality this is exactly what the 
+\family typewriter
+Model.findAll
+\family default
+ method is doing.
+ The advantage here is that with the 
+\family typewriter
+ScalaQuery
+\family default
+ instance you can do things like set hinting, paging, and so on.
+ For instance, if you wanted to do paging on the books query, you could
+ do
+\end_layout
+
+\begin_layout LyX-Code
+val myBooks = Model.createNamedQuery(
+\begin_inset Quotes eld
+\end_inset
+
+booksByYear
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\begin_layout LyX-Code
+                   .setParams(
+\begin_inset Quotes eld
+\end_inset
+
+year
+\begin_inset Quotes erd
+\end_inset
+
+ -> myYear)
+\end_layout
+
+\begin_layout LyX-Code
+                   .setMaxResults(20)
+\end_layout
+
+\begin_layout LyX-Code
+                   .setFirstResult(pageOffset).findAll
+\end_layout
+
+\begin_layout Subsection
+Using Queries Wisely
+\end_layout
+
+\begin_layout Standard
+In general we recommend that you use named queries throughout your code.
+ In our experience, the extra effort involved in adding a named query is
+ more than offset by the time it saves you if you ever need to modify the
+ query.
+ Additionally, we recommend that you use named parameters in your queries.
+ Named parameters are just that: parameters that are inserted into your
+ query by name, in contrast to positional parameters.
+ As an example, here is the same query using named and positional parameters:
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Split this into listings
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+Named
+\begin_inset space ~
+\end_inset
+
+parameters 
+\family typewriter
+select user from User where (user.name like :searchString or user.email like
+ :searchString) and user.widgets > :widgetCount
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+Positional
+\begin_inset space ~
+\end_inset
+
+parameters 
+\family typewriter
+select user from User where (user.name like ? or user.email like ?) and user.widget
+s > ?
+\end_layout
+
+\begin_layout Standard
+This example shows several advantages of named parameters over positional
+ parameters:
+\end_layout
+
+\begin_layout Enumerate
+You can reuse the same parameter within the same query and you only set
+ it once.
+ In the example about we would set the same parameter twice using positional
+ params
+\end_layout
+
+\begin_layout Enumerate
+The parameters can have meaningful names.
+\end_layout
+
+\begin_layout Enumerate
+With positional params you may have to edit your code if you need to alter
+ your query to add or remove parameters
+\end_layout
+
+\begin_layout Standard
+In any case, you should generally use the parameterized query types as opposed
+ to hand constructing your queries; using things like string concatenation
+ opens up your site to SQL injection attacks unless you're very careful.
+ For more information on queries there's an excellent reference for the
+ EJBQL on the Hibernate website at 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://www.hibernate.org/hib_docs/entitymanager/reference/en/html/queryhql.html
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+Converting Collection Properties
+\end_layout
+
+\begin_layout Standard
+The 
+\family typewriter
+ScalaEntityManager
+\family default
+ and 
+\family typewriter
+ScalaQuery
+\family default
+ methods are already defined so that they return Scala-friendly collections
+ such as 
+\family typewriter
+scala.collection.jcl.BufferWrapper
+\family default
+ or 
+\family typewriter
+SetWrapper
+\family default
+.
+ We have to use Java Collections
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://java.sun.com/docs/books/tutorial/collections/index.html
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Quotes eld
+\end_inset
+
+under the hood
+\begin_inset Quotes erd
+\end_inset
+
+ and then wrap them because JPA doesn't understand Scala collections.
+ For the same reason, collections in your entity classes must also use the
+ Java Collections classes.
+ Fortunately, Scala has a very nice framework for wrapping Java collections.
+ In particular, the 
+\family typewriter
+scala.collection.jcl.Conversions
+\family default
+ class contains a number of implicit conversions
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+implicit conversions
+\end_layout
+
+\end_inset
+
+; all you have to do is import them at the top of your source file like
+ so:
+\end_layout
+
+\begin_layout LyX-Code
+import scala.collection.jcl.Conversions._
+\end_layout
+
+\begin_layout Standard
+Once you've done that the methods are automatically in scope and you can
+ use collections in your entities as if they were real Scala collections.
+ For example, we may want to see if our Author has written any mysteries:
+\end_layout
+
+\begin_layout LyX-Code
+val suspenseful = author.books.exists(_.genre = Genre.Mystery)
+\end_layout
+
+\begin_layout Subsection
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:The-importance-of-flush"
+
+\end_inset
+
+The importance of flush() and Exceptions
+\end_layout
+
+\begin_layout Standard
+It's important to understand that in JPA the provider isn't required to
+ write to the database until the session closes or is flushed.
+ That means that constraint violations aren't necessarily checked at the
+ time that you persist, merge or remove and object.
+ Using the flush method forces the provider to write any pending changes
+ to the database and immediately throw any exceptions resulting from any
+ violations.
+ As a convenience, we've written the 
+\family typewriter
+mergeAndFlush
+\family default
+, 
+\family typewriter
+persistAndFlush
+\family default
+, and 
+\family typewriter
+removeAndFlush
+\family default
+ methods to do persist, merge and remove with a subsequent flush, as shown
+ in listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Auto-flush-methods"
+
+\end_inset
+
+, taken from the Author snippet code.
+ You can also see that because we flush at this point, we can catch any
+ JPA-related exceptions and deal with them here.
+ If we don't flush at this point, the exception would be thrown when the
+ transaction commits, which is often very far (in code) from where you would
+ want to handle it.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Auto-flush methods
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Auto-flush-methods"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+def doAdd () = {
+\end_layout
+
+\begin_layout Plain Layout
+
+  if (author.name.length == 0) {
+\end_layout
+
+\begin_layout Plain Layout
+
+	error("emptyAuthor", "The author's name cannot be blank")
+\end_layout
+
+\begin_layout Plain Layout
+
+  } else {
+\end_layout
+
+\begin_layout Plain Layout
+
+	try {
+\end_layout
+
+\begin_layout Plain Layout
+
+      Model.mergeAndFlush(author)
+\end_layout
+
+\begin_layout Plain Layout
+
+     redirectTo("list.html")
+\end_layout
+
+\begin_layout Plain Layout
+
+	} catch {
+\end_layout
+
+\begin_layout Plain Layout
+
+	  case ee : EntityExistsException => error("Author already exists")
+\end_layout
+
+\begin_layout Plain Layout
+
+	  case pe : PersistenceException => 
+\end_layout
+
+\begin_layout Plain Layout
+
+        error("Error adding author"); Log.error("Error adding author", pe)
+\end_layout
+
+\begin_layout Plain Layout
+
+	}
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Although the combo methods simplify things, we recommend that if you will
+ be doing multiple operations in one session cycle that you use a single
+ flush at the end:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Multiple JPA ops
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Multiple-JPA-ops"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+val container = Model.find(classOf[Container], containerId)
+\end_layout
+
+\begin_layout Plain Layout
+
+Model.remove(container.widget)
+\end_layout
+
+\begin_layout Plain Layout
+
+container.widget = new Widget(
+\begin_inset Quotes eld
+\end_inset
+
+Foo!
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Plain Layout
+
+// next line only required if container.widget doesn't cascade PERSIST
+\end_layout
+
+\begin_layout Plain Layout
+
+Model.persist(container.widget)
+\end_layout
+
+\begin_layout Plain Layout
+
+Model.flush()
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Validating Entities
+\end_layout
+
+\begin_layout Standard
+Since we've already covered the Mapper framework and all of the extra functional
+ity that it provides beyond being a simple ORM, we felt that we should discuss
+ one of the more important aspects of data handling as it pertains to JPA:
+ validation of data.
+\end_layout
+
+\begin_layout Standard
+JPA itself doesn't come with a built-in validation framework, although the
+ upcoming JPA 2.0 may use the JSR 303 (Bean Validation) framework as its
+ default.
+ Currently, Hibernate Validator is one of the more popular libraries for
+ validating JPA entities, and can be used with any JPA provider.
+ More information is available at the project home page: 
+\begin_inset CommandInset href
+LatexCommand href
+target "http://www.hibernate.org/412.html"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+The validation of entities with Hibernate Validator is achieved, like the
+ JPA mappings, with annotations.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:The-Author-class-validations"
+
+\end_inset
+
+ shows a modified Author class with validations for the name.
+ In this case we have added a NotNull validation as well as a Length check
+ to ensure we are within limits.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace smallskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Box Shadowbox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "75col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+Note: Unfortunately, due to the way that the validator framework extracts
+ entity properties, we have to rework our entity to use a getter/setter
+ for any properties that we want to validate; even the 
+\family typewriter
+scala.reflect.BeanProperty
+\family default
+ annotation won't work.
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace smallskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Validation can be performed automatically via the 
+\family typewriter
+org.hibernate.validator.event.JPAValidateListener
+\family default
+ EntityListener, or programmatically via the 
+\family typewriter
+org.hibernate.validator.ClassValidator
+\family default
+ utility class.
+ In the listing we use 
+\family typewriter
+ClassValidator
+\family default
+ and match on the array returned from 
+\family typewriter
+getInvalidValues
+\family default
+ for processing.
+ Further usage and configuration is beyond the scope of this book.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+The Author class with Hibernate Validations
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:The-Author-class-validations"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+...
+\end_layout
+
+\begin_layout Plain Layout
+
+class Author {
+\end_layout
+
+\begin_layout Plain Layout
+
+  ...
+\end_layout
+
+\begin_layout Plain Layout
+
+  var name : String = ""
+\end_layout
+
+\begin_layout Plain Layout
+
+  @Column{val unique = true, val nullable = false}
+\end_layout
+
+\begin_layout Plain Layout
+
+  @NotNull
+\end_layout
+
+\begin_layout Plain Layout
+
+  @Length{val min = 3, val max = 100}
+\end_layout
+
+\begin_layout Plain Layout
+
+  def getName() = name
+\end_layout
+
+\begin_layout Plain Layout
+
+  def setName(nm : String) { name = nm }
+\end_layout
+
+\begin_layout Plain Layout
+
+  ...
+\end_layout
+
+\begin_layout Plain Layout
+
+} 
+\end_layout
+
+\begin_layout Plain Layout
+
+// In the snippet class
+\end_layout
+
+\begin_layout Plain Layout
+
+class AuthorOps {
+\end_layout
+
+\begin_layout Plain Layout
+
+  ...
+\end_layout
+
+\begin_layout Plain Layout
+
+  val authorValidator = new ClassValidator(classOf[Author])
+\end_layout
+
+\begin_layout Plain Layout
+
+  def add (xhtml : NodeSeq) : NodeSeq = {
+\end_layout
+
+\begin_layout Plain Layout
+
+    def doAdd () = {
+\end_layout
+
+\begin_layout Plain Layout
+
+      authorValidator.getInvalidValues(author) match {
+\end_layout
+
+\begin_layout Plain Layout
+
+	    case Array() =>
+\end_layout
+
+\begin_layout Plain Layout
+
+	      try {
+\end_layout
+
+\begin_layout Plain Layout
+
+	        Model.mergeAndFlush(author)
+\end_layout
+
+\begin_layout Plain Layout
+
+            ...
+\end_layout
+
+\begin_layout Plain Layout
+
+    	  } catch {
+\end_layout
+
+\begin_layout Plain Layout
+
+            ...
+\end_layout
+
+\begin_layout Plain Layout
+
+          } 	
+\end_layout
+
+\begin_layout Plain Layout
+
+        case errors => {
+\end_layout
+
+\begin_layout Plain Layout
+
+	      errors.foreach(err => S.error(err.toString)) 
+\end_layout
+
+\begin_layout Plain Layout
+
+	    }      
+\end_layout
+
+\begin_layout Plain Layout
+
+      }
+\end_layout
+
+\begin_layout Plain Layout
+
+	...
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Supporting User Types
 \end_layout
 
 \begin_layout Standard
@@ -1166,1830 +3361,12 @@ Using the @Type annotation
 
 \end_layout
 
-\begin_layout Standard
-Now that we have our objects defined, let's start using them.
-\end_layout
-
 \begin_layout Section
-\begin_inset CommandInset label
-LatexCommand label
-name "sec:Obtaining-an-EM"
-
-\end_inset
-
-Obtaining a Per-Session EntityManager
+Running the Application
 \end_layout
 
 \begin_layout Standard
-Ideally, we would like our JPA access to be as seamless as possible, particularl
-y when it comes to object lifecycle.
- In JPA, objects can be attached to a current persistence session, or they
- can be detached from a JPA session.
- This gives us a lot of flexibility (which we'll use later) in dealing with
- the objects themselves, but it also means that we need to be careful when
- we're accessing object properties.
- JPA can use lazy retrieval for instance properties; in particular, this
- is the default behavior for collection-based properties.
- What this means is that if we're working on a detached object and we attempt
- to access a collection contained in the instance, we're going to get an
- exception that the session that the object was loaded in is no longer live.
- What we're really like to do is have some hooks into Lift's request cycle
- that allows us to set up a session when the request starts and properly
- close it down when the request ends.
- We still have to be careful with objects that have been passed into our
- request (from form callbacks, for instance), but in general this will guarantee
- us that once we've loaded an object in our snippet code we have full access
- to all properties at any point within our snippets.
-\end_layout
-
-\begin_layout Standard
-Fortunately for us, Lift provides just such a mechanism.
- In fact, Lift supports several related mechanisms for lifecycle management
-\begin_inset Foot
-status open
-
-\begin_layout Plain Layout
-Notably, 
-\family typewriter
-S.addAround
-\family default
- with the 
-\family typewriter
-LoanWrapper
-\end_layout
-
-\end_inset
-
-, but for now we're going to focus on just one: the 
-\family typewriter
-RequestVar
-\family default
-
-\begin_inset Index
-status collapsed
-
-\begin_layout Plain Layout
-RequestVar
-\end_layout
-
-\end_inset
-
-.
- A 
-\family typewriter
-RequestVar
-\family default
- represents a variable associated with the lifetime of the request.
- This is in contrast to 
-\family typewriter
-SessionVar
-\family default
-, which defines a variable for the lifetime of the user's session.
- 
-\family typewriter
-RequestVar
-\family default
- gives us several niceties over handling request parameters ourselves, including
- type safety and a default value.
- We go into more detail on 
-\family typewriter
-RequestVars
-\family default
- and 
-\family typewriter
-SessionVars
-\family default
- in section 
-\begin_inset CommandInset ref
-LatexCommand vref
-reference "sec:Session-and-Request"
-
-\end_inset
-
-.
- In addition to the Lift facilities, we also use the ScalaJPA project
-\begin_inset Foot
-status open
-
-\begin_layout Plain Layout
-\begin_inset Flex URL
-status collapsed
-
-\begin_layout Plain Layout
-
-http://scala-tools.org/mvnsites-snapshots/scalajpa/
-\end_layout
-
-\end_inset
-
-, source code available at 
-\begin_inset CommandInset href
-LatexCommand href
-target "http://github.com/dchenbecker/scalajpa/tree"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
- to handle some of the boilerplate of utilizing JPA.
- ScalaJPA provides some nice traits that 
-\begin_inset Quotes eld
-\end_inset
-
-Scalafy
-\begin_inset Quotes erd
-\end_inset
-
- the JPA 
-\family typewriter
-EntityManager
-\family default
- and 
-\family typewriter
-Query
-\family default
- interfaces, as well as accessors that make retrieving an EM simple.
- To use ScalaJPA we simply add the following dependency to our POM.
- 
-\end_layout
-
-\begin_layout LyX-Code
-<dependency>
-\end_layout
-
-\begin_layout LyX-Code
-  <groupId>org.scala-tools</groupId>
-\end_layout
-
-\begin_layout LyX-Code
-  <artifactId>scalajpa</artifactId>
-\end_layout
-
-\begin_layout LyX-Code
-  <version>1.0-SNAPSHOT</version>
-\end_layout
-
-\begin_layout LyX-Code
-</dependency>
-\end_layout
-
-\begin_layout Standard
-Note that at the time of writing the library is at 1.0-SNAPSHOT, but should
- be promoted to 1.0 soon.
-\end_layout
-
-\begin_layout Standard
-We leverage ScalaJPA's 
-\family typewriter
-LocalEMF
-\family default
- and 
-\family typewriter
-RequestVarEM
-\family default
- traits to provide a simple 
-\family typewriter
-RequestVar
-\family default
- interface to obtain the EM via local lookup (i.e.
- via the 
-\family typewriter
-javax.persistence.\SpecialChar \-
-Persistence
-\family default
- class), as shown in listing 
-\begin_inset CommandInset ref
-LatexCommand vref
-reference "lst:Setting-up-EM"
-
-\end_inset
-
-.
- It's trivial to use JNDI instead by substituting the 
-\family typewriter
-JndiEMF
-\family default
- trait for the 
-\family typewriter
-LocalEMF
-\family default
- trait, but the details of setting up the JNDI persistence module are beyond
- the scope of this book.
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-lstparams "breaklines=true,firstline=1,float,lastline=8,numbers=left,numberstyle={\tiny}"
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-\begin_inset CommandInset label
-LatexCommand label
-name "lst:Setting-up-EM"
-
-\end_inset
-
-Setting up an EntityManager via RequestVar
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-object Model extends LocalEMF("jpaweb") with RequestVarEM
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Once we have this object set up, we can access all of the 
-\family typewriter
-ScalaEntityManager
-\family default
- methods directly on 
-\family typewriter
-Model
-\family default
-.
-\end_layout
-
-\begin_layout Subsection
-Transactions
-\begin_inset Index
-status collapsed
-
-\begin_layout Plain Layout
-Transactions
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-We're not going to go into too much detail here; there are better documents
- available
-\begin_inset Foot
-status open
-
-\begin_layout Plain Layout
-\begin_inset Flex URL
-status collapsed
-
-\begin_layout Plain Layout
-
-http://java.sun.com/developer/EJTechTips/2005/tt0125.html
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
- if you want to go into depth on how JTA or general transactions work.
- Essentially, a transaction is a set of operations that are performed atomically
-; that is, they either all complete successfully or none of them do.
- The classic example is transferring funds between two bank accounts: you
- subtract the amount from one account and add it to the other.
- If the addition fails and you're not operating in the context of a transaction,
- the client has lost money!
-\end_layout
-
-\begin_layout Standard
-In JPA, transactions are required.
- If you don't perform your operations within the scope of a transaction
- you will either get an exception (if you're using JTA), or you will spend
- many hours trying to figure out why nothing is being saved to the database.
- There are two ways of handling transactions under JPA: resource local and
- JTA.
- Resource local transactions are what you use if you are managing the EM
- factory yourself (corresponding to the 
-\family typewriter
-LocalEMF
-\family default
- trait).
- Similarly, JTA is what you use when you obtain your EM via JNDI.
- Technically it's also possible to use JTA with a locally managed EM, but
- that configuration is beyond the scope of this book.
- Choosing between the two is as simple as setting a property in your persistence.
-xml file (and changing the code to open and close the EM).
- Listing 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "lst:Setting-the-transaction-type"
-
-\end_inset
-
- shows examples of setting the 
-\family typewriter
-transaction-type
-\family default
- attribute to 
-\family typewriter
-RESOURCE_LOCAL
-\family default
- and to JTA.
- If you want to use JTA, you can also omit the 
-\family typewriter
-transaction-type
-\family default
- attribute since JTA is the default.
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-lstparams "float,language=XML"
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-\begin_inset CommandInset label
-LatexCommand label
-name "lst:Setting-the-transaction-type"
-
-\end_inset
-
-Setting the transaction type
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-<persistence-unit name="jpaweb" transaction-type="RESOURCE_LOCAL">
-\end_layout
-
-\begin_layout Plain Layout
-
-  <non-jta-datasource>myDS</non-jta-datasource>
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-<persistence-unit name="jpaweb" transaction-type="JTA">
-\end_layout
-
-\begin_layout Plain Layout
-
-  <jta-datasource>myDS</jta-datasource>
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-You must make sure that your EM setup code matches what you have in your
- persistence.xml.
- Additionally, the database connection must match; with JTA, you 
-\emph on
-must
-\emph default
- use a 
-\family typewriter
-jta-data-source
-\family default
- (obtained via JNDI) for your database connection.
- For resource-local, you can either use a 
-\family typewriter
-non-jta-datasource
-\family default
- element or you can set the provider properties, as shown in listing 
-\begin_inset CommandInset ref
-LatexCommand vref
-reference "lst:Setting-resource-local-properties"
-
-\end_inset
-
-.
- In this particular example we're setting the properties for Hibernate,
- but similar properties exist for TopLink
-\begin_inset Foot
-status open
-
-\begin_layout Plain Layout
-\begin_inset Flex URL
-status collapsed
-
-\begin_layout Plain Layout
-
-http://www.oracle.com/technology/products/ias/toplink/JPA/essentials/toplink-jpa-e
-xtensions.html
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-, JPOX
-\begin_inset Foot
-status open
-
-\begin_layout Plain Layout
-\begin_inset Flex URL
-status collapsed
-
-\begin_layout Plain Layout
-
-http://www.jpox.org/docs/1_2/persistence_unit.html
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-, and others.
-\end_layout
-
-\begin_layout Standard
-If you'll be deploying into a JEE container, such as JBoss or GlassFish,
- then you get JTA support almost for free since JTA is part of the JEE spec.
- If you want to deploy your application on a lightweight container like
- Jetty or Tomcat, the extra effort to set up JNDI and JTA in Jetty may or
- may not exceed the effort involved in coding and testing your app.
- 
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-lstparams "breaklines=true,float,language=XML,numbers=left,numberstyle={\tiny}"
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-\begin_inset CommandInset label
-LatexCommand label
-name "lst:Setting-resource-local-properties"
-
-\end_inset
-
-Setting resource-local properties for Hibernate
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-<persistence>
-\end_layout
-
-\begin_layout Plain Layout
-
-   <persistence-unit name="jpaweb" transaction-type="RESOURCE_LOCAL">
-\end_layout
-
-\begin_layout Plain Layout
-
-      <properties>
-\end_layout
-
-\begin_layout Plain Layout
-
-         <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLD
-ialect"/>
-\end_layout
-
-\begin_layout Plain Layout
-
-         <property name="hibernate.connection.driver_class" value="org.postgresql.Dr
-iver"/>
-\end_layout
-
-\begin_layout Plain Layout
-
-         <property name="hibernate.connection.username" value="somUser"/>
-\end_layout
-
-\begin_layout Plain Layout
-
-         <property name="hibernate.connection.password" value="somePass"/>
-\end_layout
-
-\begin_layout Plain Layout
-
-         <property name="hibernate.connection.url" value="jdbc:postgresql:jpaweb"/
->
-\end_layout
-
-\begin_layout Plain Layout
-
-      </properties>
-\end_layout
-
-\begin_layout Plain Layout
-
-   </persistence-unit>
-\end_layout
-
-\begin_layout Plain Layout
-
-</persistence>
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-One final note in regard to transactions is how they're affected by Exceptions.
- Per the spec, any exceptions thrown during the scope of a transaction,
- other than
-\begin_inset Newline linebreak
-\end_inset
-
-
-\family typewriter
-javax.persistence.NoResultException
-\family default
- or 
-\family typewriter
-javax.persistence.NonUniqueResultException
-\family default
-, will cause the transaction to be marked for rollback.
-\end_layout
-
-\begin_layout Section
-\begin_inset CommandInset label
-LatexCommand label
-name "sec:ScalaEntityManager-and-ScalaQuery"
-
-\end_inset
-
-ScalaEntityManager and ScalaQuery
-\end_layout
-
-\begin_layout Standard
-Now that we've gone through setting up our 
-\family typewriter
-EntityManager
-\family default
-, let's look at how we actually use them in an application.
- As a convenience, ScalaJPA defines two thin wrappers on the existing 
-\family typewriter
-EntityManager
-\family default
-
-\begin_inset Foot
-status collapsed
-
-\begin_layout Plain Layout
-\begin_inset Flex URL
-status collapsed
-
-\begin_layout Plain Layout
-
-http://java.sun.com/javaee/5/docs/api/javax/persistence/EntityManager.html
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
- and 
-\family typewriter
-Query
-\family default
-
-\begin_inset Foot
-status collapsed
-
-\begin_layout Plain Layout
-\begin_inset Flex URL
-status collapsed
-
-\begin_layout Plain Layout
-
-http://java.sun.com/javaee/5/docs/api/javax/persistence/Query.html
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
- interfaces to provide more Scala-friendly methods.
- This means that we get Scala's collection types (i.e.
- 
-\family typewriter
-List
-\family default
- instead of 
-\family typewriter
-java.util.List
-\family default
-) and generic signatures so that we can avoid explicit casting.
- The 
-\family typewriter
-ScalaEntityManager
-\family default
- trait provides a wrapper on the 
-\family typewriter
-EntityManager
-\family default
- class, and is included as part of the 
-\family typewriter
-RequestVarEM
-\family default
- trait that we've mixed into our 
-\family typewriter
-Model
-\family default
- object.
- The API ScalaDoc for 
-\family typewriter
-ScalaEntityManager
-\family default
- can be found at 
-\begin_inset Flex URL
-status collapsed
-
-\begin_layout Plain Layout
-
-http://scala-tools.org/mvnsites/scalajpa/scaladocs/org/scala_libs/jpa/ScalaEntity
-Manager.html
-\end_layout
-
-\end_inset
-
-.
-\end_layout
-
-\begin_layout Standard
-Next, we have the 
-\family typewriter
-ScalaQuery
-\family default
- trait, with API docs at 
-\begin_inset Flex URL
-status collapsed
-
-\begin_layout Plain Layout
-
-http://scala-tools.org/mvnsites/scalajpa/scaladocs/org/scala_libs/jpa/ScalaQuery.h
-tml
-\end_layout
-
-\end_inset
-
-.
- Like 
-\family typewriter
-ScalaEntityManager
-\family default
-, this is a thin wrapper on the 
-\family typewriter
-Query
-\family default
- interface.
- In particular, methods that return entities are typed against the 
-\family typewriter
-ScalaQuery
-\family default
- itself, so that you don't need to do any explicit casting in your client
- code.
- We also have some utility methods to simplify setting a parameter list
- as well as obtaining the result(s) of the query.
- 
-\end_layout
-
-\begin_layout Section
-\begin_inset CommandInset label
-LatexCommand label
-name "sec:JPA-Examples"
-
-\end_inset
-
-Examples and Tips
-\end_layout
-
-\begin_layout Standard
-We find it helpful to solidify what we've discussed here with some concrete
- examples.
- We'll also cover some useful information that should help you when using
- JPA from within Lift.
- Let's start with some basic operations
-\end_layout
-
-\begin_layout Subsection
-\begin_inset CommandInset label
-LatexCommand label
-name "sub:Persisting,-merging-and-removing"
-
-\end_inset
-
-Persisting, merging and removing
-\end_layout
-
-\begin_layout Standard
-The first step to working with any persistent entities is to actually persist
- them.
- If you have a brand new object, you can do this with the 
-\family typewriter
-persist
-\family default
- method:
-\end_layout
-
-\begin_layout LyX-Code
-Model.persist(myNewAuthor)
-\end_layout
-
-\begin_layout Standard
-This attaches the myNewAuthor object to the current persistence session.
- Once the object is attached it should be visible in any subsequent queries,
- although it may not be written to the database just yet (see section 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "sub:The-importance-of-flush"
-
-\end_inset
-
-).
- Note that the persist method is only intended for brand new objects.
- If you have a detached object and you try to use persist you will most
- likely get an EntityExistsException as the instance you're merging is technical
-ly conflicting with itself.
- Instead, you want to use the merge method to re-attach detached objects:
-\end_layout
-
-\begin_layout LyX-Code
-val author = Model.merge(myOldAuthor)
-\end_layout
-
-\begin_layout Standard
-An important thing to note is that the merge method doesn't actually attach
- the object passed to it; instead, it makes an attached 
-\emph on
-copy
-\emph default
- of the passed object and returns the copy.
- If you mistakenly merge without using the returned value:
-\end_layout
-
-\begin_layout LyX-Code
-Model.merge(myOldAuthor)
-\end_layout
-
-\begin_layout LyX-Code
-myOldAuthor.name = 
-\begin_inset Quotes eld
-\end_inset
-
-Fred
-\begin_inset Quotes erd
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-you'll find that subsequent changes to the object won't be written to the
- database.
- One nice aspect of the merge method is that it intelligently detects whether
- the entity you're merging is a new object or a detached object.
- That means that you can use merge everywhere and let it sort out the semantics.
- For example, in our library application, using merge allows us to combine
- the add and edit functionality into a single snippet; if we want to edit
- an existing Author we pass it into the method.
- Otherwise, we pass a brand new Author instance into the method and the
- merge takes care of either case appropriately.
-\end_layout
-
-\begin_layout Standard
-Removing an object is achieved by calling the 
-\family typewriter
-remove
-\family default
- method:
-\end_layout
-
-\begin_layout LyX-Code
-Model.remove(myAuthor)
-\end_layout
-
-\begin_layout Standard
-The passed entity is detached from the session immediately and will be removed
- from the database at the appropriate time.
- If the entity has any associations on it (to collections or other entities),
- they will be cascaded as indicated by the entity mapping.
- An example of a cascade is shown in the Author listing on page 
-\begin_inset CommandInset ref
-LatexCommand pageref
-reference "lst:Author.scala"
-
-\end_inset
-
-.
- The books collection has the cascade set to REMOVE, which means that if
- an author is deleted, all of the books by that author will be removed as
- well.
- The default is to not cascade anything, so it's important that you properly
- set the cascade on collections to avoid constraint violations when you
- remove entities.
- It's also useful to point out that you don't actually need to have an entity
- loaded to remove it.
- You can use the 
-\family typewriter
-getReference
-\family default
- method to obtain a proxy that will cause the corresponding database entry
- to be removed:
-\end_layout
-
-\begin_layout LyX-Code
-Model.remove(Model.getReference(classOf[Author], someId))
-\end_layout
-
-\begin_layout Subsection
-Loading an Entity
-\end_layout
-
-\begin_layout Standard
-There are actually three ways to load an entity object in your client code.
- The simplest is to use the 
-\family typewriter
-find
-\family default
- method: 
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Jorge has pointed out that this may change with Manifest: http://groups.google.com
-/group/liftweb/browse_thread/thread/874b38daa0d535f7
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout LyX-Code
-val myBook = Model.find(classOf[Book], someId)
-\end_layout
-
-\begin_layout Standard
-The 
-\family typewriter
-find
-\family default
- method takes two parameters: the class that you're trying to load and the
- value of the ID field of the entity.
- In our example, the Book class uses the Long type for its ID, so we would
- put a Long value here.
- It returns either a 
-\family typewriter
-Full
-\family default
- Box (section ???) if the entity is found in the database, otherwise it
- returns 
-\family typewriter
-Empty
-\family default
-.
- With 
-\family typewriter
-find
-\family default
-, the entity is loaded immediately from the database and can be used in
- both attached and detached states.
- The next method you can use is the 
-\family typewriter
-getReference
-\family default
- method:
-\end_layout
-
-\begin_layout LyX-Code
-val myBook = Model.getReference(classOf[Book], someId)
-\end_layout
-
-\begin_layout Standard
-This is very similar to the 
-\family typewriter
-find
-\family default
- method with a few key differences.
- First, the object that is returned is a lazy proxy for the entity.
- That means that no database load is required to occur when you execute
- the method, although providers may do at least a check on the existence
- of the ID.
- Because this is a lazy proxy, you usually don't want to use the returned
- object in a detached state unless you've accessed its fields while the
- session was open.
- The normal use of getReference is when you want to set up a relationship
- between two (or more) entities, since you don't need to query all of the
- fields just to set a foreign key.
- For example:
-\end_layout
-
-\begin_layout LyX-Code
-myBook.author = Model.getReference(classOf[Author], authorId)
-\end_layout
-
-\begin_layout Standard
-When myBook is flushed to the database the EM will correctly set up the
- relationship.
- The final difference is in how unknown entities are handled.
- Recall that the 
-\family typewriter
-find
-\family default
- method returns Empty if the entity cannot be found; with 
-\family typewriter
-getReference
-\family default
-, however, we don't query the database until the reference is used.
- Because of this, the javax.persistence.EntityNotFoundException is thrown
- when you try to access an undefined entity for the first time (this also
- marks the transaction for rollback).
- The third method for loading an entity would be to use a query (named or
- otherwise) to fetch the entity.
- As an example, here's a query equivalent of the 
-\family typewriter
-find
-\family default
- method:
-\end_layout
-
-\begin_layout LyX-Code
-val myBook = 
-\end_layout
-
-\begin_layout LyX-Code
-  Model.createQuery[Book](
-\begin_inset Quotes eld
-\end_inset
-
-from Book bk where bk.id = :id
-\begin_inset Quotes erd
-\end_inset
-
-)
-\end_layout
-
-\begin_layout LyX-Code
-       .setParams(
-\begin_inset Quotes eld
-\end_inset
-
-id
-\begin_inset Quotes erd
-\end_inset
-
- -> someId).findOne
-\end_layout
-
-\begin_layout Standard
-The advantage here is that we have more control over what is selected by
- using the query language to specify other properties.
- One caveat is that when you use the findOne method you need to ensure that
- the query will actually result in a unique entity; otherwise, the EM will
- throw a 
-\family typewriter
-NonUniqueResultException
-\family default
-.
-\end_layout
-
-\begin_layout Subsection
-Loading many entities
-\end_layout
-
-\begin_layout Standard
-Corresponding to the findOne method is the findAll method, which returns
- all entities based on a query.
- There are two ways to use findAll; the first is to use the convenience
- findAll method defined in the ScalaEntityManager class:
-\end_layout
-
-\begin_layout LyX-Code
-val myBooks = Model.findAll(
-\begin_inset Quotes eld
-\end_inset
-
-booksByYear
-\begin_inset Quotes erd
-\end_inset
-
-, 
-\begin_inset Quotes eld
-\end_inset
-
-year
-\begin_inset Quotes erd
-\end_inset
-
- -> myYear)
-\end_layout
-
-\begin_layout Standard
-This requires the use of a named query for the first arg, and subsequent
- args are of the form (
-\begin_inset Quotes eld
-\end_inset
-
-paramName
-\begin_inset Quotes erd
-\end_inset
-
- -> value).
- Named queries
-\begin_inset Index
-status collapsed
-
-\begin_layout Plain Layout
-named queries
-\end_layout
-
-\end_inset
-
- can be defined in your orm.xml
-\begin_inset Index
-status collapsed
-
-\begin_layout Plain Layout
-orm.xml
-\end_layout
-
-\end_inset
-
-, as shown in section 
-\begin_inset CommandInset ref
-LatexCommand vref
-reference "sub:Using-the-orm.xml"
-
-\end_inset
-
-.
- Named queries are highly recommended over ad-hoc queries since they allow
- you to keep the queries in one location instead of being scattered all
- over your code.
- Named queries can also be pre-compiled by the JPA provider, which will
- catch errors at startup (or in your unit tests, hint hint) instead of when
- the query is run inside your code.
-\end_layout
-
-\begin_layout Standard
-The second method is to create a ScalaQuery instance directly and then set
- parameters and execute it.
- In reality this is exactly what the Model.findAll method is doing.
- The advantage here is that with the ScalaQuery instance you can do things
- like set hinting, paging, etc.
- For instance, if you wanted to do paging on the books query, you could
- do
-\end_layout
-
-\begin_layout LyX-Code
-val myBooks = Model.createNamedQuery(
-\begin_inset Quotes eld
-\end_inset
-
-booksByYear
-\begin_inset Quotes erd
-\end_inset
-
-)
-\end_layout
-
-\begin_layout LyX-Code
-                   .setParams(
-\begin_inset Quotes eld
-\end_inset
-
-year
-\begin_inset Quotes erd
-\end_inset
-
- -> myYear)
-\end_layout
-
-\begin_layout LyX-Code
-                   .setMaxResults(20)
-\end_layout
-
-\begin_layout LyX-Code
-                   .setFirstResult(pageOffset).findAll
-\end_layout
-
-\begin_layout Subsection
-Tips for using queries
-\end_layout
-
-\begin_layout Standard
-In general we recommend that you use named queries throughout your code.
- In our experience, the extra effort involved in adding a named query is
- more than offset by the time it saves you if you ever need to modify the
- query.
- Additionally, we recommend that you use named parameters in your queries.
- Named parameters are just that: parameters that are inserted into your
- query by name, in contrast to positional parameters.
- As an example, here is the same query using named and positional parameters:
-\end_layout
-
-\begin_layout List
-\labelwidthstring 00.00.0000
-Named
-\begin_inset space ~
-\end_inset
-
-parameters 
-\family typewriter
-select user from User where (user.name like :searchString or user.email like
- :searchString) and user.widgets > :widgetCount
-\end_layout
-
-\begin_layout List
-\labelwidthstring 00.00.0000
-Positional
-\begin_inset space ~
-\end_inset
-
-parameters 
-\family typewriter
-select user from User where (user.name like ? or user.email like ?) and user.widget
-s > ?
-\end_layout
-
-\begin_layout Standard
-From this example we can show several advantages of named params over positional
- params
-\end_layout
-
-\begin_layout Enumerate
-You can reuse the same parameter within the same query and you only set
- it once.
- In the example about we would set the same parameter twice using positional
- params
-\end_layout
-
-\begin_layout Enumerate
-The parameters can have meaningful names.
-\end_layout
-
-\begin_layout Enumerate
-With positional params you may have to edit your code if you need to alter
- your query to add or remove parameters
-\end_layout
-
-\begin_layout Standard
-In any case, you should generally use the parameterized query types as opposed
- to hand constructing your queries; using things like string concatenation
- opens up your site to SQL injection attacks unless you're very careful.
- For more information on queries there's an excellent reference for the
- EJBQL on the Hibernate website at 
-\begin_inset Flex URL
-status collapsed
-
-\begin_layout Plain Layout
-
-http://www.hibernate.org/hib_docs/entitymanager/reference/en/html/queryhql.html
-\end_layout
-
-\end_inset
-
-.
-\end_layout
-
-\begin_layout Subsection
-Converting collection properties
-\end_layout
-
-\begin_layout Standard
-The ScalaEntityManager and ScalaQuery methods are already defined so that
- they return Scala-friendly collections such as 
-\family typewriter
-scala.collection.jcl.BufferWrapper
-\family default
- or SetWrapper.
- We have to use Java Collections
-\begin_inset Foot
-status collapsed
-
-\begin_layout Plain Layout
-\begin_inset Flex URL
-status collapsed
-
-\begin_layout Plain Layout
-
-http://java.sun.com/docs/books/tutorial/collections/index.html
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
- 
-\begin_inset Quotes eld
-\end_inset
-
-under the hood
-\begin_inset Quotes erd
-\end_inset
-
- and then wrap them because JPA doesn't understand Scala collections.
- For the same reason, collections in your entity classes must also use the
- Java Collections classes.
- Fortunately, Scala has a very nice framework for wrapping Java collections.
- In particular, the scala.collection.jcl.Conversions class contains a number
- of implicit conversions
-\begin_inset Index
-status collapsed
-
-\begin_layout Plain Layout
-implicit conversions
-\end_layout
-
-\end_inset
-
-; all you have to do is import them at the top of your source file like
- so:
-\end_layout
-
-\begin_layout LyX-Code
-import scala.collection.jcl.Conversions._
-\end_layout
-
-\begin_layout Standard
-Once you've done that the methods are automatically in scope and you can
- use collections in your entities as if they were real Scala collections.
- For example, we may want to see if our Author has written any mysteries:
-\end_layout
-
-\begin_layout LyX-Code
-val suspenseful = author.books.exists(_.genre = Genre.Mystery)
-\end_layout
-
-\begin_layout Subsection
-\begin_inset CommandInset label
-LatexCommand label
-name "sub:The-importance-of-flush"
-
-\end_inset
-
-The importance of flush() and Exceptions
-\end_layout
-
-\begin_layout Standard
-It's important to understand that in JPA the provider isn't required to
- write to the database until the session closes or is flushed.
- That means that constraint violations aren't necessarily checked at the
- time that you persist, merge or remove and object.
- Using the flush method forces the provider to write any pending changes
- to the database and immediately throw any exceptions resulting from any
- violations.
- As a convenience, we've written the 
-\family typewriter
-mergeAndFlush
-\family default
-, 
-\family typewriter
-persistAndFlush
-\family default
-, and 
-\family typewriter
-removeAndFlush
-\family default
- methods to do persist, merge and remove with a subsequent flush, as shown
- in listing 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "lst:Auto-flush-methods"
-
-\end_inset
-
-, taken from the Author snippet code.
- You can also see that because we flush at this point, we can catch any
- JPA-related exceptions and deal with them here.
- If we don't flush at this point, the exception would be thrown when the
- transaction commits, which is often very far (in code) from where you would
- want to handle it.
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-Auto-flush methods
-\begin_inset CommandInset label
-LatexCommand label
-name "lst:Auto-flush-methods"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-def doAdd () = {
-\end_layout
-
-\begin_layout Plain Layout
-
-  if (author.name.length == 0) {
-\end_layout
-
-\begin_layout Plain Layout
-
-	error("emptyAuthor", "The author's name cannot be blank")
-\end_layout
-
-\begin_layout Plain Layout
-
-  } else {
-\end_layout
-
-\begin_layout Plain Layout
-
-	try {
-\end_layout
-
-\begin_layout Plain Layout
-
-      Model.mergeAndFlush(author)
-\end_layout
-
-\begin_layout Plain Layout
-
-     redirectTo("list.html")
-\end_layout
-
-\begin_layout Plain Layout
-
-	} catch {
-\end_layout
-
-\begin_layout Plain Layout
-
-	  case ee : EntityExistsException => error("Author already exists")
-\end_layout
-
-\begin_layout Plain Layout
-
-	  case pe : PersistenceException => 
-\end_layout
-
-\begin_layout Plain Layout
-
-        error("Error adding author"); Log.error("Error adding author", pe)
-\end_layout
-
-\begin_layout Plain Layout
-
-	}
-\end_layout
-
-\begin_layout Plain Layout
-
-  }
-\end_layout
-
-\begin_layout Plain Layout
-
-}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Although the combo methods simplify things, we recommend that if you will
- be doing multiple operations in one session cycle that you use a single
- flush at the end:
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-Multiple JPA ops
-\begin_inset CommandInset label
-LatexCommand label
-name "lst:Multiple-JPA-ops"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-val container = Model.find(classOf[Container], containerId)
-\end_layout
-
-\begin_layout Plain Layout
-
-Model.remove(container.widget)
-\end_layout
-
-\begin_layout Plain Layout
-
-container.widget = new Widget(
-\begin_inset Quotes eld
-\end_inset
-
-Foo!
-\begin_inset Quotes erd
-\end_inset
-
-)
-\end_layout
-
-\begin_layout Plain Layout
-
-// next line only required if container.widget doesn't cascade PERSIST
-\end_layout
-
-\begin_layout Plain Layout
-
-Model.persist(container.widget)
-\end_layout
-
-\begin_layout Plain Layout
-
-Model.flush()
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Subsection
-Validating Entities
-\end_layout
-
-\begin_layout Standard
-Since we've already covered the Mapper framework and all of the extra functional
-ity that it provides beyond being a simple ORM, we felt that we should discuss
- one of the more important aspects of data handling as it pertains to JPA:
- validation of data.
-\end_layout
-
-\begin_layout Standard
-JPA itself doesn't come with a built-in validation framework, although the
- upcoming JPA 2.0 may use the JSR 303 Bean Validation framework as its default.
- Currently, Hibernate Validator is one of the more popular libraries for
- validating JPA entities, and can be used with any JPA provider.
- More information is available at the project home page: 
-\begin_inset CommandInset href
-LatexCommand href
-target "http://www.hibernate.org/412.html"
-
-\end_inset
-
-.
-\end_layout
-
-\begin_layout Standard
-The validation of entities with Hibernate Validator is achieved, like the
- JPA mappings, with annotations.
- Listing 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "lst:The-Author-class-validations"
-
-\end_inset
-
- shows a modified Author class with validations for the name.
- In this case we have added a NotNull validation as well as a Length check
- to ensure we are within limits.
- 
-\end_layout
-
-\begin_layout Standard
-\begin_inset VSpace smallskip
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\align center
-\begin_inset Box Shadowbox
-position "t"
-hor_pos "c"
-has_inner_box 1
-inner_pos "t"
-use_parbox 0
-width "75col%"
-special "none"
-height "1in"
-height_special "totalheight"
-status open
-
-\begin_layout Plain Layout
-Note: Unfortunately, due to the way that the validator framework extracts
- entity properties, we have to rework our entity to use a getter/setter
- for any properties that we want to validate; even the 
-\family typewriter
-scala.reflect.BeanProperty
-\family default
- annotation won't work.
- 
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset VSpace smallskip
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Validation can be performed automatically via the 
-\family typewriter
-org.hibernate.validator.event.JPAValidateListener
-\family default
- EntityListener, or programmatically via the 
-\family typewriter
-org.hibernate.validator.ClassValidator
-\family default
- utility class.
- In the listing we use 
-\family typewriter
-ClassValidator
-\family default
- and match on the array returned from 
-\family typewriter
-getInvalidValues
-\family default
- for processing.
- Further usage and configuration is beyond the scope of this book.
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-The Author class with Hibernate Validations
-\begin_inset CommandInset label
-LatexCommand label
-name "lst:The-Author-class-validations"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-...
-\end_layout
-
-\begin_layout Plain Layout
-
-class Author {
-\end_layout
-
-\begin_layout Plain Layout
-
-  ...
-\end_layout
-
-\begin_layout Plain Layout
-
-  var name : String = ""
-\end_layout
-
-\begin_layout Plain Layout
-
-  @Column{val unique = true, val nullable = false}
-\end_layout
-
-\begin_layout Plain Layout
-
-  @NotNull
-\end_layout
-
-\begin_layout Plain Layout
-
-  @Length{val min = 3, val max = 100}
-\end_layout
-
-\begin_layout Plain Layout
-
-  def getName() = name
-\end_layout
-
-\begin_layout Plain Layout
-
-  def setName(nm : String) { name = nm }
-\end_layout
-
-\begin_layout Plain Layout
-
-  ...
-\end_layout
-
-\begin_layout Plain Layout
-
-} 
-\end_layout
-
-\begin_layout Plain Layout
-
-// In the snippet class
-\end_layout
-
-\begin_layout Plain Layout
-
-class AuthorOps {
-\end_layout
-
-\begin_layout Plain Layout
-
-  ...
-\end_layout
-
-\begin_layout Plain Layout
-
-  val authorValidator = new ClassValidator(classOf[Author])
-\end_layout
-
-\begin_layout Plain Layout
-
-  def add (xhtml : NodeSeq) : NodeSeq = {
-\end_layout
-
-\begin_layout Plain Layout
-
-    def doAdd () = {
-\end_layout
-
-\begin_layout Plain Layout
-
-      authorValidator.getInvalidValues(author) match {
-\end_layout
-
-\begin_layout Plain Layout
-
-	    case Array() =>
-\end_layout
-
-\begin_layout Plain Layout
-
-	      try {
-\end_layout
-
-\begin_layout Plain Layout
-
-	        Model.mergeAndFlush(author)
-\end_layout
-
-\begin_layout Plain Layout
-
-            ...
-\end_layout
-
-\begin_layout Plain Layout
-
-    	  } catch {
-\end_layout
-
-\begin_layout Plain Layout
-
-            ...
-\end_layout
-
-\begin_layout Plain Layout
-
-          } 	
-\end_layout
-
-\begin_layout Plain Layout
-
-        case errors => {
-\end_layout
-
-\begin_layout Plain Layout
-
-	      errors.foreach(err => S.error(err.toString)) 
-\end_layout
-
-\begin_layout Plain Layout
-
-	    }      
-\end_layout
-
-\begin_layout Plain Layout
-
-      }
-\end_layout
-
-\begin_layout Plain Layout
-
-	...
-\end_layout
-
-\begin_layout Plain Layout
-
-  }
-\end_layout
-
-\begin_layout Plain Layout
-
-}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Section
-Running the App
-\end_layout
-
-\begin_layout Standard
-We just want to make a quick note on how to run the application.
+Now that we've gone over everything, it's time to run the application.
  Because we've split up the app into separate SPA and WEB modules, we need
  to first run
 \end_layout

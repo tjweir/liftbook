@@ -193,7 +193,13 @@ class Author {
 
 \begin_layout Plain Layout
 
-  @OneToMany(){val mappedBy = "author", val targetEntity = classOf[Book]}
+  @OneToMany(){val mappedBy = "author", val targetEntity = classOf[Book],
+ 
+\end_layout
+
+\begin_layout Plain Layout
+
+               val cascade = Array(CascadeType.REMOVE)}
 \end_layout
 
 \begin_layout Plain Layout

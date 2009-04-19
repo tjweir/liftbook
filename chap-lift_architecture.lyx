@@ -2976,7 +2976,7 @@ reference "sec:Cookies"
  This can be useful if you have data that you want persisted across sessions.
  The down side is that you have to manage the cookie as well as deal with
  any security implications for the data in the cookie since it's stored
- on the user's machine
+ on the user's machine.
 \end_layout
 
 \begin_layout Itemize
@@ -2992,14 +2992,43 @@ reference "sec:Session-and-Request"
  adding and removing the session data if you don't want it around for the
  duration of the session.
  Like a cookie, it's also global, which means that it will be the same for
- all snippet instances
+ all snippet instances.
+\end_layout
+
+\begin_layout Itemize
+Pass the state around in a RequestVar by setting 
+\begin_inset Quotes eld
+\end_inset
+
+injector
+\begin_inset Quotes erd
+\end_inset
+
+ functions in your page transition functions (e.g.
+ 
+\family typewriter
+SHtml.link
+\family default
+, 
+\family typewriter
+S.redirectTo
+\family default
+, etc).
+ We'll cover this technique in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Session-and-Request"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Itemize
 Use a StatefulSnippet subclass.
  This is ideal for small, conversational state, such as a form that spans
  multiple pages or for a page where you have multiple variables that you
- want to be able to tweak individually
+ want to be able to tweak individually.
 \end_layout
 
 \begin_layout Standard
@@ -4470,7 +4499,7 @@ name "lst:Defining-a-RequestVar"
 
 \begin_layout Plain Layout
 
-class Ledger {
+class AccountOps {
 \end_layout
 
 \begin_layout Plain Layout
@@ -4533,7 +4562,7 @@ name "lst:Accessing-the-RequestVar"
 
 \begin_layout Plain Layout
 
-query.setMaxResults(Ledger.pageSize.is)
+query.setMaxResults(AccountOps.pageSize.is)
 \end_layout
 
 \begin_layout Plain Layout
@@ -4543,7 +4572,7 @@ query.setMaxResults(Ledger.pageSize.is)
 
 \begin_layout Plain Layout
 
-Ledger.pageSize(50)
+AccountOps.pageSize(50)
 \end_layout
 
 \end_inset
@@ -4569,7 +4598,8 @@ reference "lst:Defining-a-Cleanup"
  you access it then you'll need to use the registerCleanupFunc instead.
  Also remember that you're responsible for handling any exceptions that
  might be thrown during either default initialization or cleanup.
- 
+ The information we've covered here is equally applicable to SessionVars;
+ the only difference between them is the scope of their respective lifecycles.
 \end_layout
 
 \begin_layout Standard
@@ -4626,8 +4656,272 @@ localhost:23
 \end_layout
 
 \begin_layout Standard
-The inormation we've covered here is equally applicable to SessionVars;
- the only difference between them is the scope of their respective lifecycles.
+Another common use of RequestVar is to pass state around between different
+ page views (requests).
+ We start by defining a RequestVar on an object so that it's accesible from
+ all of the snippet methods that will read and write to it.
+ It's also possible to define it on a class if all of the snippets that
+ will access it are in that class.
+ Then, in the parts of your code that will transition to a new page you
+ use the overloaded versions of SHtml.link or S.redirectTo that take a function
+ as a second argument to 
+\begin_inset Quotes eld
+\end_inset
+
+inject
+\begin_inset Quotes erd
+\end_inset
+
+ the value you want to pass via the RequestVar.
+ This is similar to using a query parameter on the URL to pass data, but
+ there are two important advantages:
+\end_layout
+
+\begin_layout Enumerate
+You can pass any type of data via a RequestVar, as opposed to just string
+ data in a query parameter.
+\end_layout
+
+\begin_layout Enumerate
+You're really only passing a reference to the injector function, as opposed
+ to the data itself.
+ This can be important if you don't want the user to be able to tamper with
+ the passed data.
+ One example would be passing the cost of an item from a 
+\begin_inset Quotes eld
+\end_inset
+
+view item
+\begin_inset Quotes erd
+\end_inset
+
+ page to an 
+\begin_inset Quotes eld
+\end_inset
+
+add to cart
+\begin_inset Quotes erd
+\end_inset
+
+ page.
+\end_layout
+
+\begin_layout Standard
+Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Passing-an-Account"
+
+\end_inset
+
+ shows how we pass an Account from a listing table to a specific Account
+ edit page using 
+\family typewriter
+SHtml.link
+\family default
+, as well as how we could transition from an edit page to a view page using
+ 
+\family typewriter
+S.redirectTo
+\family default
+.
+ Another example of passing is shown in listing 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "lst:Passing-Detached-Instances"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Passing an Account to View
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Passing-an-Account"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+class AccountOps {
+\end_layout
+
+\begin_layout Plain Layout
+
+  ...
+\end_layout
+
+\begin_layout Plain Layout
+
+  object currentAccountVar extends RequestVar[Account](null)
+\end_layout
+
+\begin_layout Plain Layout
+
+  ...
+\end_layout
+
+\begin_layout Plain Layout
+
+  def manage (xhtml : NodeSeq) ...
+ {
+\end_layout
+
+\begin_layout Plain Layout
+
+    ...
+\end_layout
+
+\begin_layout Plain Layout
+
+    User.currentUser.map({user => 
+\end_layout
+
+\begin_layout Plain Layout
+
+      user.accounts.flatMap({acct =>
+\end_layout
+
+\begin_layout Plain Layout
+
+        bind("acct", chooseTemplate("account", "entry", xhtml),
+\end_layout
+
+\begin_layout Plain Layout
+
+          ...
+\end_layout
+
+\begin_layout Plain Layout
+
+          // The second argument injects the "acct" val back
+\end_layout
+
+\begin_layout Plain Layout
+
+          // into the RequestVar
+\end_layout
+
+\begin_layout Plain Layout
+
+          link("/editAcct", () => currentAccountVar(acct), Text("Edit"))
+\end_layout
+
+\begin_layout Plain Layout
+
+      })
+\end_layout
+
+\begin_layout Plain Layout
+
+    })
+\end_layout
+
+\begin_layout Plain Layout
+
+    ...
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+  def edit (xhtml : NodeSeq) : NodeSeq = {
+\end_layout
+
+\begin_layout Plain Layout
+
+    def doSave () {
+\end_layout
+
+\begin_layout Plain Layout
+
+      ...
+\end_layout
+
+\begin_layout Plain Layout
+
+      val acct = currentAccountVar.is
+\end_layout
+
+\begin_layout Plain Layout
+
+      S.redirectTo("/view", () => currentAccountVar(acct))
+\end_layout
+
+\begin_layout Plain Layout
+
+    }
+\end_layout
+
+\begin_layout Plain Layout
+
+    ...
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+One important thing to note is that the injector variable is called in the
+ scope of the following request.
+ That means that if you want the value returned by the function at the point
+ where you call the link or redirectTo, you'll need to capture it in a val.
+ Otherwise, the function will be called after the redirect or link, which
+ may result in a different value than you expect.
+ As you can see in listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Passing-an-Account"
+
+\end_inset
+
+, we set up an acct val in our doSave method prior to redirecting.
+ If we tried to do something like
+\end_layout
+
+\begin_layout LyX-Code
+S.redirectTo("/view", () => currentAccountVar(currentAccountVar.is))
+\end_layout
+
+\begin_layout Standard
+instead, we would get the default value of our RequestVar (null in this
+ case).
 \end_layout
 
 \begin_layout Section
