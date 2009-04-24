@@ -61,7 +61,7 @@ Exploring Lift
 .
  We've created this book to educate you about Lift, which we think is a
  great framework for building compelling web applications.
- Lift is designed to make powerful techniques easily accessible, while keeping
+ Lift is designed to make powerful techniques easily accessible while keeping
  the overall framework simple and flexible.
  It may sound like a clich
 \family roman
@@ -91,13 +91,13 @@ Why Lift?
 
 \begin_layout Standard
 For those of you have experience with other web frameworks such as Struts,
- Tapestry, Rails, et cetera, you must be asking yourself "Why another framework?
- Does Lift really solve problems any differently or more effectively than
- the ones I've used before?" Based on our experience (and of others in the
- growing Lift community), the answer is an emphatic "Yes!" Lift has cherry-picke
-d the best ideas from a number of other frameworks, while creating some
- novel ideas of its own.
- It's this combination of solid foundation and new techniques that makes
+ Tapestry, Rails, et cetera, you must be asking yourself, "Why another framework
+? Does Lift really solve problems any differently or more effectively than
+ the ones I've used before?" Based on our experience (and that of others
+ in the growing Lift community), the answer is an emphatic, "Yes!" Lift
+ has cherry-picked the best ideas from a number of other frameworks, while
+ creating some novel ideas of its own.
+ It's this combination of a solid foundation and new techniques that makes
  Lift so powerful.
  At the same time, Lift has been able to avoid the mistakes made in the
  past by other frameworks.
@@ -105,20 +105,20 @@ d the best ideas from a number of other frameworks, while creating some
 \begin_inset Quotes eld
 \end_inset
 
-configuration by convention
+convention over configuration,
 \begin_inset Quotes erd
 \end_inset
 
-, Lift has sensible defaults for everything, while making it easy to customize
- precisely what you need to; no more and no less.
+ Lift has sensible defaults for everything while making it easy to customize
+ precisely what you need to: no more and no less.
  Gone are the days of XML file after XML file providing 
 \emph on
 basic configuration
 \emph default
  for your application.
- Instead, a basic Lift app only requires that you add the LiftFilter to
+ Instead, a simple Lift app requires only that you add the LiftFilter to
  your web.xml and add one or more lines telling Lift what package your classes
- sit in (section 
+ sit in (Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Bootstrap"
@@ -130,8 +130,9 @@ reference "sec:Bootstrap"
  (called a trait), although there are support traits that make things that
  much simpler.
  In short, you don't need to write anything that isn't explicitly necessary
- for the task at hand; Lift is intended to work out of the box, and to make
- you as efficient and productive as possible.
+ for the task at hand.
+ Lift is intended to work out of the box, and to make you as efficient and
+ productive as possible.
 \end_layout
 
 \begin_layout Standard
@@ -198,12 +199,12 @@ http://java.sun.com/products/jsp/
  HTML.
  While many modern programming and HTML editors have been modified to accomodate
  this mess, proper syntax highlighting and validation don't make up for
- the fact that you still have to switch back and forth between one or more
- files to follow the page flow.
+ having to switch back and forth between one or more files to follow the
+ page flow.
  Lift takes the approach that there should be no code in the presentation
  layer, but that the presentation layer has to be flexible enough to accomodate
- any conceivable uses.
- To that end, Lift uses a powerful templating system, a la Wicket
+ any conceivable use.
+ To that end, Lift uses a powerful templating system, à la Wicket
 \begin_inset Foot
 status open
 
@@ -225,22 +226,22 @@ http://wicket.apache.org/
 
 , to bind user-generated data into the presentation layer.
  Lift's templating is built on the XML processing capabilities of the Scala
- Language
+ language
 \begin_inset Foot
 status open
 
 \begin_layout Plain Layout
-Not only does Scala have some extensive library support for XML, but XML
- syntax is actually part of the language.
- We'll cover this in more detail as we go through the book
+Not only does Scala have extensive library support for XML, but XML syntax
+ is actually part of the language.
+ We'll cover this in more detail as we go through the book.
 \end_layout
 
 \end_inset
 
-, and allows things such as nested templates, simple injection of user-generated
+, and allows such things as nested templates, simple injection of user-generated
  content, and advanced data binding capabilities.
  For those coming from JSP, Lift's advanced template and XML processing
- allows you to essentially write custom tag libraries at a fraction of the
+ allows you essentially to write custom tag libraries at a fraction of the
  cost in time and effort.
 \end_layout
 
@@ -283,18 +284,18 @@ http://lamp.epfl.ch/~odersky/
  and his programming language research group at EPFL Switzerland.
  It compiles to Java bytecode and runs on the JVM, which means that you
  can leverage the vast ecosystem of Java libraries just as you would with
- any other java web framework.
+ any other Java web framework.
  At the same time, Scala introduces some very powerful features designed
  to make you, the developer, more productive.
  Among these features are an extremely rich type system along with powerful
  type inference, native XML processing, full support for closures and functions
  as objects, and an extensive high-level library.
- The power of the type system along with its type inference has led people
+ The power of the type system together with type inference has led people
  to call it 
 \begin_inset Quotes eld
 \end_inset
 
-the statically typed dynamic language
+the statically-typed dynamic language
 \begin_inset Quotes erd
 \end_inset
 
@@ -319,67 +320,70 @@ http://scala-blogs.org/2007/12/scala-statically-typed-dynamic-language.html
 \end_inset
 
 .
- That means you can write code as quickly as you could with dynamically
- typed languages (Python, Ruby, etc.), but you have the compile-time type
- safety of a statically typed language like Java.
- Scala is also a hybrid functional and Object-oriented language, which means
- you can get the power of the higher-level functional (or FP) languages
- (such as Haskell, Scheme, etc) while retaining the modularity and reusability
+ That means you can write code as quickly as you can with dynamically-typed
+ languages (e.g.
+ Python, Ruby, etc.), but you have the compile-time type safety of a statically-t
+yped language such as Java.
+ Scala is also a hybrid functional (FP) and object-oriented (OO) language,
+ which means that you can get the power of higher-level functional languages
+ such as Haskell or Scheme while retaining the modularity and reusability
  of OO components.
  In particular, the FP concept of immutability is encouraged by Scala, making
- it well-suited for writing highly concurrent programs that achieve high
+ it well-suited for writing highly-concurrent programs that achieve high
  throughput scalability.
  The hybrid model also means that if you haven't touched FP before, you
  can gradually ease into it.
- In our experience, Scala allows you to do more in Lift with less lines
- of code; remember, Lift is all about making you more productive!
+ In our experience, Scala allows you to do more in Lift with fewer lines
+ of code.
+ Remember, Lift is all about making you more productive!
 \end_layout
 
 \begin_layout Standard
 Lift strives to encompass advanced features in a very concise and straightforwar
 d manner.
- Lift's powerful support for AJAX and Comet allow you to use Web 2.0 features
+ Lift's powerful support for AJAX and Comet allows you to use Web 2.0 features
  with very little effort.
  Lift leverages Scala's Actor library to provide a message-driven framework
  for Comet updates.
- In most cases, adding Comet support to a page just involves extending a
- trait
+ In most cases, adding Comet support to a page involves nothing more than
+ extending a trait
 \begin_inset Foot
 status open
 
 \begin_layout Plain Layout
 A trait is a Scala construct that's almost like a Java interface.
- The main difference is that traits may implement methods and have fields
+ The main difference is that traits may implement methods and have fields.
 \end_layout
 
 \end_inset
 
  to define the rendering method of your page and adding an extra function
- call to your links to dispatch the update message; Lift handles all of
- the backend and page-side coding to effect the Comet polling.
+ call to your links to dispatch the update message.
+ Lift handles all of the back-end and page-side coding to provide the Comet
+ polling.
  AJAX support includes special handlers for doing AJAX form submission via
  JSON, and almost any link function can easily be turned into an AJAX version
  with a few keystrokes.
  In order to perform all of this client-side goodness, Lift has a class
- hierarchy for encapsulating Javascript calls via direct Javascript, jQuery
+ hierarchy for encapsulating JavaScript calls via direct JavaScript, jQuery,
  and YUI.
  The nice part is that you, too, can utilize these support classes so that
- code can be generated for you and you don't have to put Javascript logic
+ code can be generated for you and you don't have to put JavaScript logic
  into your templates.
 \end_layout
 
 \begin_layout Section
-What You Should Know Before Starting
+What You Should Know before Starting
 \end_layout
 
 \begin_layout Standard
 First and foremost, this is a book on the Lift framework.
- There are several things we expect you to be familiar with before progressing:
+ There are several things we expect you to be familiar with before continuing:
 \end_layout
 
 \begin_layout Itemize
-The Scala Language and standard Library.
- This book is not intended to be an introduction to Scala; there are several
+The Scala language and standard library.
+ This book is not intended to be an introduction to Scala: there are several
  very good books available that fill that role.
  You can find a list of Scala books at the Scala website, 
 \begin_inset CommandInset href
@@ -394,16 +398,16 @@ target "http://www.scala-lang.org/node/959"
 \begin_layout Itemize
 HTML and XML.
  Lift relies heavily on XHTML for its template support, so you should understand
- things like DocTypes, elements, attributes and namespaces.
+ such things as DocTypes, elements, attributes, and namespaces.
 \end_layout
 
 \begin_layout Itemize
-General HTTP processing, including things like GET and POST submission as
- well as response codes and content types.
+General HTTP processing, including GET and POST submission, response codes,
+ and content types.
 \end_layout
 
 \begin_layout Section
-For more information on Lift
+For More Information about Lift
 \begin_inset CommandInset label
 LatexCommand label
 name "sec:For-more-information"
@@ -437,34 +441,35 @@ http://blog.lostlake.org/
 
 \end_inset
 
-is constantly attending to the mailing list, answering questions and taking
- feature requests.
+, is constantly attending to the mailing list, answering questions, and
+ taking feature requests.
  There is a core group of developers who work on the project, but submissions
  are taken from anyone who makes a good case and can turn in good code.
- While we strive to cover everything you'll need to know in this book, here
+ While we strive to cover everything you'll need to know in this book, there
  are several additional resources available for information on Lift:
 \end_layout
 
 \begin_layout Enumerate
 The first place to look is the Wiki at 
 \begin_inset Flex URL
-status collapsed
+status open
 
 \begin_layout Plain Layout
 
-http://liftweb.net/index.php/Main_Page
+http://wiki.liftweb.net/index.php/Main_Page
 \end_layout
 
 \end_inset
 
 .
- The Wiki is maintained not only by David, but by many active members of
- the Lift community (including the authors).
- Portions of this book as inspired by and borrow from content on the Wiki.
+ The Wiki is maintained not only by David, but also by many active members
+ of the Lift community, including the authors.
+ Portions of this book are inspired by and borrow from content on the Wiki.
  In particular, it has links to all of the generated documentation not only
- for the stable branch, but for the unstable head if you're feeling adventurous.
+ for the stable branch, but also for the unstable head, if you're feeling
+ adventurous.
  There's also an extensive section of HowTos and articles on advanced topics
- that covers a wealth of information.
+ that cover a wealth of information.
 \end_layout
 
 \begin_layout Enumerate
@@ -479,11 +484,12 @@ http://groups.google.com/group/liftweb
 
 \end_inset
 
- is very active and if there are things that this book doesn't cover you
- can feel free to ask questions there; there are plenty of very knowledgeable
- people on the list that should be able to answer your questions.
+ is very active, and if there are things that this book doesn't cover, you
+ should feel free to ask questions there.
+ There are plenty of very knowledgeable people on the list that should be
+ able to answer your questions.
  Please post specific questions about the book to the Lift Book Google Group
- found 
+ at 
 \begin_inset Flex URL
 status collapsed
 
@@ -494,7 +500,8 @@ http://groups.google.com/group/the-lift-book
 
 \end_inset
 
-, anything else that is Lift-specific is fair game for the mailing list.
+.
+ Anything else that is Lift-specific is fair game for the mailing list.
 \end_layout
 
 \begin_layout Enumerate
@@ -509,12 +516,12 @@ irc://irc.freenode.net/lift
 
 \end_inset
 
- that usually has several people on at any given time.
+ that usually has several people on it at any given time.
  It's a great place to chat about issues and ideas concerning Lift.
 \end_layout
 
 \begin_layout Section
-Your first Lift application
+Your First Lift Application
 \end_layout
 
 \begin_layout Standard
@@ -532,8 +539,9 @@ Java
 \begin_inset space ~
 \end_inset
 
-JDK Lift runs on Scala, which runs on top of the JVM; the first thing you'll
- need to install is a modern version of the Java SE JVM, available at 
+JDK Lift runs on Scala, which runs on top of the JVM.
+ The first thing you'll need to install is a modern version of the Java
+ SE JVM, available at 
 \begin_inset Flex URL
 status collapsed
 
@@ -545,11 +553,12 @@ http://java.sun.com/
 \end_inset
 
 .
- Recently Scala's compiler was changed to target Java version 1.5; 1.4 is
- still available as a target, but we're going to assume you're using 1.5.
+ Recently Scala's compiler was changed to target Java version 1.5.
+ Version 1.4 is still available as a target, but we're going to assume you're
+ using 1.5.
  Examples in this book have only been tested with Sun's version of the JDK,
- although most likely other versions (Blackdown, OpenJDK) should work with
- little or no modification.
+ although most likely other versions (e.g.
+ Blackdown or OpenJDK) should work with little or no modification.
  
 \end_layout
 
@@ -568,11 +577,11 @@ Maven
 
 \end_inset
 
- is a project management tool which has extensive capabilities for building,
- dependency management, testing and reporting.
+ is a project management tool that has extensive capabilities for building,
+ dependency management, testing, and reporting.
  We assume that you are familiar with basic Maven usage for compilation,
- packaging and testing.
- If you haven't used Maven before you can get a brief overview in appendix
+ packaging, and testing.
+ If you haven't used Maven before, you can get a brief overview in appendix
  
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -609,16 +618,20 @@ http://maven.apache.org/download.html
 \end_layout
 
 \begin_layout Description
-Programming
+A
+\begin_inset space ~
+\end_inset
+
+programming
 \begin_inset space ~
 \end_inset
 
 editor This isn't a strict requirement for this example, but when we start
- getting into coding it's very helpful to have something a little more capable
- than notepad.
- If you'd like a full-blown IDE, with support for things like debugging,
- continuous compile checking, etc, there are plugins available on the Scala
- website at 
+ getting into coding, it's very helpful to have something a little more
+ capable than Notepad.
+ If you'd like a full-blown IDE with support for such things as debugging,
+ continuous compile checking, etc., then there are plugins available on the
+ Scala website at 
 \begin_inset Flex URL
 status collapsed
 
@@ -647,11 +660,8 @@ http://www.eclipse.org/
 
 \end_inset
 
- The Scala plugin developer recommends using the 
-\emph on
-Eclipse Classic
-\emph default
- version of the IDE
+ The Scala Plugin developer recommends using the Eclipse Classic version
+ of the IDE
 \end_layout
 
 \begin_layout List
@@ -667,7 +677,7 @@ http://www.netbeans.org
 
 \end_inset
 
- Requires using the NetBeans 6.5
+ Requires using NetBeans 6.5
 \end_layout
 
 \begin_layout List
@@ -683,12 +693,12 @@ http://www.jetbrains.com/idea/index.html
 
 \end_inset
 
- Requires version 8 beta
+ Requires Version 8 Beta
 \end_layout
 
 \begin_layout Standard
 If you'd like something more lightweight, the Scala language distribution
- comes with plugins for editors like VIM, Emacs, jedit, etc.
+ comes with plugins for editors such as Vim, Emacs, jEdit, etc.
  You can either download the full Scala distribution from 
 \begin_inset Flex URL
 status collapsed
@@ -704,7 +714,7 @@ http://www.scala-lang.org/
 \family typewriter
 misc/scala-tool-support
 \family default
-, or you can directly access the latest versions via the SVN (Subversion)
+, or you can access the latest versions directly via the SVN (Subversion)
  interface at 
 \begin_inset Flex URL
 status collapsed
@@ -730,7 +740,7 @@ status open
 
 \begin_layout Plain Layout
 An archetype is essentially a project template for Maven that provides prompt-dr
-iven customization of basic attributes
+iven customization of basic attributes.
 \end_layout
 
 \end_inset
@@ -798,7 +808,7 @@ mvn archetype:generate -U
 \end_layout
 
 \begin_layout Standard
-Maven should output several page's of text.
+Maven should output several pages of text.
  It may stop and ask you to confirm the properties configuration, in which
  case you can just hit 
 \family typewriter
@@ -867,18 +877,21 @@ http://localhost:8080/
 \begin_inset Quotes eld
 \end_inset
 
-Hello world!
+Hello, world!
 \begin_inset Quotes erd
 \end_inset
 
-.
- With just a few simple commands we've built a functional (albeit limited)
+ With just a few simple commands, we've built a functional (albeit limited)
  web app.
  Let's go into a little more detail and see exactly how these pieces fit
  together.
  First, let's examine the index page.
- Whenever Lift serves up a request where the URL ends in a forward slash,
- Lift automatically looks for a file called index.html
+ Whenever Lift serves up a request in which the URL ends with a forward
+ slash, Lift automatically looks for a file called 
+\family typewriter
+index.html
+\family default
+
 \begin_inset Foot
 status collapsed
 
@@ -905,7 +918,11 @@ TODO: Need a cross reference here
 \family typewriter
 http://localhost:8080/test/
 \family default
-, Lift would look for index.html under the 
+, Lift would look for 
+\family typewriter
+index.html
+\family default
+ under the 
 \family typewriter
 test/
 \family default
@@ -955,9 +972,9 @@ status open
 
 \begin_layout Standard
 This may look a little strange at first.
- For those with some XML experience you may recognize the use of prefixed
+ For those with some XML experience, you may recognize the use of prefixed
  elements here.
- For those who don't know what that is, a prefixed element is an XML element
+ For those who don't know what a prefixed element is, it's an XML element
  of the form
 \end_layout
 
@@ -987,7 +1004,7 @@ lift
 \begin_inset Quotes erd
 \end_inset
 
- prefix; they form the basis of lift's extensive templating support, which
+ prefix: they form the basis of lift's extensive templating support, which
  we will cover in more detail in section 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -1093,8 +1110,8 @@ META-INF
 \family typewriter
 templates-hidden
 \family default
- cannot be accessed directly by clients; they can, however be accessed when
- they're referenced by a 
+ cannot be accessed directly by clients; they can, however, be accessed
+ when they're referenced by a 
 \family typewriter
 <lift:surround>
 \family default
@@ -1206,8 +1223,8 @@ As you can see in the listing, this is a proper XHTML file, with
 <body>
 \family default
  tags.
- This is required since Lift doesn't add these itself; Lift simply processes
- the XML from each template it encounters.
+ This is required since Lift doesn't add these itself.
+ Lift simply processes the XML from each template it encounters.
  The 
 \family typewriter
 <head>
@@ -1234,8 +1251,11 @@ content
 
  />
 \family default
- element determines where the contents of our index.html file are bound (inserted
-).
+ element determines where the contents of our 
+\family typewriter
+index.html
+\family default
+ file are bound (inserted).
  The 
 \emph on
 name
@@ -1276,7 +1296,7 @@ reference "cha:SiteMap"
 ).
  The SiteMap is a high-level site directory component that not only provides
  a centralized place to define a site menu, but allows you to control when
- certain links are displayed (based on, say, whether a user is logged in
+ certain links are displayed (based on, say, whether users are logged in
  or what roles they have) and provides a page-level access control mechanism.
 \end_layout
 
@@ -1486,7 +1506,7 @@ import Helpers._
 
 \begin_layout Plain Layout
 
-  * to modify lift's environment
+  * to modify Lift's environment
 \end_layout
 
 \begin_layout Plain Layout
@@ -1594,8 +1614,8 @@ reference "sec:Views"
 demo.helloworld.views
 \family default
  package, etc.
- If you have more than one hierarchy (multiple packages) you can just call
- 
+ If you have more than one hierarchy (i.e.
+ multiple packages), you can just call 
 \family typewriter
 addToPackages
 \family default
@@ -1607,19 +1627,19 @@ addToPackages
 
 \begin_layout Standard
 Now that we've covered a basic example we hope you're beginning to see why
- Lift is so powerful and can make you more productive.
- We've barely scratched the surface on Lift's templating and binding capabilitie
+ Lift is so powerful and why it can make you more productive.
+ We've barely scratched the surface of Lift's templating and binding capabilitie
 s, but what we've shown here is already a big step.
- In roughly 10 lines of Scala code and about 30 in XML we have a functional
- site.
- If we wanted to add more pages we've already got our default template set
- up so we don't need to write the same boilerplate HTML multiple times.
+ In roughly ten lines of Scala code and about thirty in XML, we have a functiona
+l site.
+ If we wanted to add more pages, we've already got our default template
+ set up so we don't need to write the same boilerplate HTML multiple times.
  In our example we're directly generating the content for our 
 \family typewriter
 helloWorld.howdy
 \family default
- snippet, but in later examples we'll show just how easy it is to actually
- pull content 
+ snippet, but in later examples we'll show just how easy it is to pull content
+ 
 \emph on
 from the template itself
 \emph default
@@ -1645,7 +1665,7 @@ How to handle state within your application
 \end_layout
 
 \begin_layout Itemize
-Lift's ORM layer, Mapper (chapter 
+Lift's ORM layer, Mapper (Chapter 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "cha:mapper_and_record"

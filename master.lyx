@@ -121,7 +121,7 @@ Derek Chen-Becker, Marius Danciu and Tyler Weir
 
 \begin_layout Standard
 \noindent
-Copyright © 2008, Derek Chen-Becker, Marius Danciu and Tyler Weir.
+Copyright © 2008 by Derek Chen-Becker, Marius Danciu, and Tyler Weir.
 \begin_inset Newline newline
 \end_inset
 
@@ -179,7 +179,7 @@ Derek would like to thank his wife, Debbie, for her patience and support
 
 \begin_layout Standard
 \noindent
-Tyler would like to thank his wife Laura, for encouraging him.
+Tyler would like to thank his wife, Laura, for encouraging him.
 \begin_inset Newline newline
 \end_inset
 
@@ -188,7 +188,7 @@ Tyler would like to thank his wife Laura, for encouraging him.
 
 \begin_layout Standard
 \noindent
-Marius would like to thank his wife Alina, for her patience during long
+Marius would like to thank his wife, Alina, for her patience during long
  weekends and bearing with his monosyllabic answers while working on the
  book.
 \end_layout
@@ -199,7 +199,7 @@ Acknowledgements
 
 \begin_layout Standard
 This book would not have been possible without the Lift Developers and especiall
-y David Pollak; without him, we wouldn't have this opportunity.
+y David Pollak: without him, we wouldn't have this opportunity.
 \end_layout
 
 \begin_layout Standard
@@ -208,6 +208,11 @@ We would also like to thank the Lift community, as well as the following
  Malcolm Gorman, Doug Holton, Hunter Kelly, James Matlik, Larry Morroni,
  Jorge Ortiz, Tim Perrett, Tim Pigden, Dennis Przytarski, Thomas Sant Ana,
  Heiko Seeberger, and Eric Willigers.
+\end_layout
+
+\begin_layout Standard
+A huge thanks to Charles Munat for editing this work, and to Tim Perrett
+ for helping with the REST API in Chapter 13.
 \end_layout
 
 \begin_layout Standard
