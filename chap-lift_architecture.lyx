@@ -101,8 +101,12 @@ ef1115055a6
  not (in particular, static content).
  The filter acts as a thin wrapper on top of the existing LiftServlet (which
  still does all of the work), so don't be confused when you look at the
- ScalaDoc and see both classes.
- The main thing to remember is that your web.xml
+ Lift API and see both classes (LiftFilter and LiftServlet).
+ The main thing to remember is that your 
+\family typewriter
+web.xml
+\family default
+
 \begin_inset Index
 status collapsed
 
@@ -112,7 +116,7 @@ web.xml
 
 \end_inset
 
- should specify the filter and not the servlet, as shown in listing 
+ should specify the filter and not the servlet, as shown in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:LiftFilter-setup-in-web.xml"
@@ -139,7 +143,7 @@ name "lst:LiftFilter-setup-in-web.xml"
 
 \end_inset
 
-LiftFilter setup in web.xml
+LiftFilter Setup in web.xml
 \end_layout
 
 \end_inset
@@ -159,12 +163,12 @@ LiftFilter setup in web.xml
 
 \begin_layout Plain Layout
 
-PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+  PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 \end_layout
 
 \begin_layout Plain Layout
 
-"http://java.sun.com/j2ee/dtds/web-app_2_3.dtd">
+  "http://java.sun.com/j2ee/dtds/web-app_2_3.dtd">
 \end_layout
 
 \begin_layout Plain Layout
@@ -241,7 +245,11 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 \end_layout
 
 \begin_layout Standard
-A full web.xml example is shown in section 
+A full 
+\family typewriter
+web.xml
+\family default
+ example is shown in Section 
 \begin_inset CommandInset ref
 LatexCommand vref
 reference "lst:JPA-web.xml"
@@ -264,7 +272,7 @@ A Note on Standard Imports
 
 \begin_layout Standard
 For the sake of saving space, the following import statements are assumed
- for all example code through the rest of the book:
+ for all example code throughout the rest of the book:
 \end_layout
 
 \begin_layout Standard
@@ -277,7 +285,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Standard import statements
+Standard Import Statements
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:Standard-import-statements"
@@ -346,7 +354,7 @@ Bootstrap
 \begin_layout Standard
 When Lift starts up there are a number of things that you'll want to set
  up before any requests are processed.
- These things include setting up a SiteMap (chapter 
+ These things include setting up a SiteMap (Chapter 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "cha:SiteMap"
@@ -381,7 +389,7 @@ bootloader
 
 
 \family default
- init param for the LiftFilter as shown in listing 
+ init param for the LiftFilter as shown in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Overriding-bootloader"
@@ -402,7 +410,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Overriding the Boot loader class
+Overriding the Boot Loader Class
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:Overriding-bootloader"
@@ -493,10 +501,11 @@ LiftRules
 
 \end_inset
 
- object; LiftRules serves as a common location for almost everything configurabl
-e about Lift.
+ object.
+ LiftRules serves as a common location for almost everything configurable
+ about Lift.
  Because LiftRules spans such a diverse range of functionality, we're not
- going to cover it directly; rather, we will mention it as we cover each
+ going to cover it directly; rather, we will mention it as we discuss each
  of the aspects that it controls.
 \end_layout
 
@@ -512,15 +521,14 @@ name "sub:Class-Resolution"
 \end_layout
 
 \begin_layout Standard
-As part of our discussion of the Boot class, it's also important to cover
- a small detail of how Lift determines where to find classes for Views and
- Snippet rendering.
+As part of our discussion of the Boot class, it's also important to explain
+ how Lift determines where to find classes for Views and Snippet rendering.
  The 
 \family typewriter
 LiftRules.addToPackages
 \family default
- method tells lift what Scala packages to look in for a given class.
- Lift has implicit extensions to the paths you enter; in particular, if
+ method tells lift which Scala packages to look in for a given class.
+ Lift has implicit extensions to the paths you enter: in particular, if
  you tell Lift to use the 
 \family typewriter
 com.pocketchangeapp
@@ -552,7 +560,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Minimal Boot class
+A Minimal Boot Class
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:Minimal-Boot-class"
@@ -609,8 +617,8 @@ name "sec:The-Rendering-Process"
 \end_layout
 
 \begin_layout Standard
-Before we move on, we want to give a brief overview of the processes involved
- when Lift transforms a request into a response (AKA the rendering pipeline
+Before we move on, we want to give a brief overview of the processes by
+ which Lift transforms a request into a response (AKA the rendering pipeline
 \begin_inset Index
 status open
 
@@ -621,8 +629,8 @@ rendering pipeline
 \end_inset
 
 ).
- We're only going to touch on the major points here; a much more detailed
- tour of the pipeline is given in section 
+ We're only going to touch on the major points here.
+ A much more detailed tour of the pipeline is given in Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Request/Response-Lifecycle"
@@ -634,8 +642,8 @@ reference "sec:Request/Response-Lifecycle"
 \end_layout
 
 \begin_layout Enumerate
-Perform any URL rewriting.
- This is covered in section 
+URL rewriting.
+ This is covered in Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:URL-Rewriting"
@@ -646,8 +654,8 @@ reference "sec:URL-Rewriting"
 \end_layout
 
 \begin_layout Enumerate
-Execute any matching custom dispatch functions.
- This is covered in section 
+Executing any matching custom dispatch functions.
+ This is covered in Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Custom-dispatch-func"
@@ -658,13 +666,13 @@ reference "sec:Custom-dispatch-func"
 \end_layout
 
 \begin_layout Enumerate
-Locate the template to use for the request.
+Locating the template to use for the request.
  This is handled via three mechanisms:
 \end_layout
 
 \begin_deeper
 \begin_layout Enumerate
-Check the 
+Checking the 
 \family typewriter
 LiftRules.viewDispatch
 \family default
@@ -672,8 +680,8 @@ LiftRules.viewDispatch
 \family typewriter
 RulesSeq
 \family default
- to see if any custom dispatch has been defined.
- We cover custom view dispatch in section 
+ to see if any custom dispatch rules have been defined.
+ We cover custom view dispatch in Section 
 \begin_inset CommandInset ref
 LatexCommand vref
 reference "sec:Request/Response-Lifecycle"
@@ -688,8 +696,8 @@ If there is no matching
 \family typewriter
 viewDispatch
 \family default
-, locate a template that matches and use it.
- We'll cover templates, and how they're located, in section 
+, locating a template that matches and using it.
+ We'll cover templates, and how they're located, in Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Templates"
@@ -700,9 +708,9 @@ reference "sec:Templates"
 \end_layout
 
 \begin_layout Enumerate
-If no templates match, attempt to locate a view based on matching a class
+If no templates match, attempting to locate a view based on matching a class
  name and method dispatch.
- We'll cover views in section 
+ We'll cover views in Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Views"
@@ -716,17 +724,18 @@ reference "sec:Views"
 \begin_layout Standard
 In our experience views and templates will cover most of your needs, but
  as we'll demonstrate in later chapters, Lift has plenty of ways to customize
- the request handling.
+ request handling.
 \end_layout
 
 \begin_layout Standard
-The following sections cover each aspect of our rendering steps defined
- above, but not in order.
- We'll start with Templates, since those are by far the most common mechanism
+The following sections cover each aspect of the rendering steps defined
+ above, but in order of decreasing frequency of use, rather than the order
+ in which they occur in the pipeline.
+ We'll start with Templates, because those are by far the most common mechanism
  for rendering content in Lift.
  Next, we'll cover Views, which are essentially programmatic templates.
- Third, we'll examing the various Lift tags for Template and View content.
- Fourth, we'll take an in-depth look at Snippets, which are how you bridge
+ Then we'll examine the various Lift tags for Template and View content.
+ After that, we'll take an in-depth look at Snippets, which are the bridge
  between your Template (XML) content and your Scala code.
  Finally, we'll cover how you can provide highly customized processing of
  your requests using URL rewriting and custom dispatch functions.
@@ -763,9 +772,9 @@ reference "sec:ArchTags"
 
 \end_inset
 
- as well as whatever content you want returned to the user.
- Lift includes built-in Tags for specific actions and these are of the form
- 
+, as well as whatever content you want returned to the user.
+ Lift includes built-in Tags for specific actions.
+ These are of the form 
 \family typewriter
 <lift:snippet_name/>
 \family default
@@ -784,7 +793,7 @@ snippets
 
 \end_inset
 
- (section 
+ (Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Snippets"
@@ -795,7 +804,7 @@ reference "sec:Snippets"
  These user-defined tags are linked directly to Scala methods and these
  methods can process the XML contents of the snippet tag, or can generate
  their own content from scratch.
- A simple template is shown in listing 
+ A simple template is shown in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Sample-template"
@@ -816,7 +825,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Sample template
+A Sample Template
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:Sample-template"
@@ -871,14 +880,14 @@ Notice the tags that are of the form
  
 \family default
 These are two examples of Lift-specific tags.
- We'll discuss all of the tags that users will use in section 
+ We'll discuss all of the tags that users will use in Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:ArchTags"
 
 \end_inset
 
-, but let's discuss the two contained here.
+, but let's briefly discuss the two shown here.
  We use the built-in 
 \family typewriter
 <lift:surround>
@@ -893,7 +902,7 @@ lift:surround
 
 
 \family default
- tag (section 
+ tag (Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sub:surround-tag"
@@ -904,11 +913,7 @@ reference "sub:surround-tag"
 \begin_inset Quotes eld
 \end_inset
 
-
-\family typewriter
 default
-\family default
-
 \begin_inset Quotes erd
 \end_inset
 
@@ -918,7 +923,7 @@ default
 <lift:snippet>
 \family default
  tag (aliased to Hello.world) to execute a snippet that we defined.
- In this case we execute the method 
+ In this instance, we execute the method 
 \family typewriter
 world
 \family default
@@ -931,15 +936,15 @@ to generate some content.
 \end_layout
 
 \begin_layout Standard
-During template processing, Lift tries to locate a file in the WAR tree
- that matches the request.
+During template processing, Lift tries to locate a file in the template
+ directory tree (typically in a WAR archive) that matches the request.
  Lift tries several suffixes (html, xhtml, htm, and no suffix) and also
  tries to match based on the client's Accept-Language header.
  The pattern Lift uses is:
 \end_layout
 
 \begin_layout LyX-Code
-<path to template>[_<language, optional>][.<suffix>]
+<path to template>[_<language>][.<suffix>]
 \end_layout
 
 \begin_layout Standard
@@ -977,7 +982,7 @@ Because Lift will implicitly search for suffixes, it's best to leave the
 \begin_layout Standard
 then Lift will use the appropriate template based on the user's requested
  language if a corresponding template is available.
- For more information regarding internationalization please see appendix
+ For more information regarding internationalization please see Appendix
  
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -1002,8 +1007,8 @@ hidden templates
 \family typewriter
 /templates-hidden
 \family default
- directory of your web app; technically, Lift hides files in any directory
- ending in 
+ directory of your web app.
+ Technically, Lift hides files in any directory ending in 
 \begin_inset Quotes eld
 \end_inset
 
@@ -1017,8 +1022,8 @@ hidden templates
 WEB-XML
 \family default
  directory, the contents cannot be directly requested by clients.
- They can, however, be used by other templates through mechanisms like the
- 
+ They can, however, be used by other templates through mechanisms such as
+ the 
 \family typewriter
 <lift:surround>
 \family default
@@ -1026,7 +1031,7 @@ WEB-XML
 \family typewriter
 <lift:embed>
 \family default
- tags (section 
+ tags (Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sub:embed-tag"
@@ -1041,9 +1046,9 @@ reference "sub:embed-tag"
 \begin_layout Standard
 Once Lift has located the correct template, the next step is to process
  the contents.
- It is important to understand that Lift processes XML tags from the outside
- in.
- That means that in our example listing 
+ It is important to understand that Lift processes XML tags recursively,
+ from the outermost tag to the innermost tag.
+ That means that in our example Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Sample-template"
@@ -1096,7 +1101,7 @@ Hello
 
 >
 \family default
-) then Lift will attempt to call the 
+), then Lift will attempt to call the 
 \family typewriter
 render
 \family default
@@ -1104,13 +1109,453 @@ render
 \end_layout
 
 \begin_layout Standard
+To give a more complex example that illustrates the order of tag processing,
+ consider Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:A-Recursive-Tag"
+
+\end_inset
+
+.
+ In this example we have several nested snippet tags, starting with 
+\family typewriter
+<A.snippet />
+\family default
+.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Recursive-Tag-Snippets"
+
+\end_inset
+
+ shows the backing code for this example.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=XML"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+A Recursive Tag Processing Example
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:A-Recursive-Tag"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<lift:A.snippet>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <p>Hello, <A:name />!</p>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <p>
+\end_layout
+
+\begin_layout Plain Layout
+
+    <lift:B.snippet>
+\end_layout
+
+\begin_layout Plain Layout
+
+      <B:title />
+\end_layout
+
+\begin_layout Plain Layout
+
+      <lift:C.snippet />
+\end_layout
+
+\begin_layout Plain Layout
+
+    </lift:B.snippet>
+\end_layout
+
+\begin_layout Plain Layout
+
+  </p>
+\end_layout
+
+\begin_layout Plain Layout
+
+</lift:A.snippet>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The first thing that happens is that the contents of the 
+\family typewriter
+<lift:A.snippet>
+\family default
+ tag are passed as a 
+\family typewriter
+NodeSeq
+\family default
+ argument to the 
+\family typewriter
+A.snippet
+\family default
+ method.
+ In the 
+\family typewriter
+A.snippet
+\family default
+ method we bind, or replace, the 
+\family typewriter
+<A:name />
+\family default
+ tag with an XML Text node of 
+\begin_inset Quotes eld
+\end_inset
+
+The A snippet
+\begin_inset Quotes erd
+\end_inset
+
+.
+ The rest of the input is left as-is and is returned to Lift for more processing.
+ Lift examines the returned 
+\family typewriter
+NodeSeq
+\family default
+ for more lift tags and finds the 
+\family typewriter
+<lift:B.snippet>
+\family default
+ tag.
+ The contents of the 
+\family typewriter
+<lift:B.snippet>
+\family default
+ tag are passed as a 
+\family typewriter
+NodeSeq
+\family default
+ argument to the 
+\family typewriter
+B.snippet
+\family default
+ method, where the 
+\family typewriter
+<B.title />
+\family default
+ tag is bound with the XML Text node 
+\begin_inset Quotes eld
+\end_inset
+
+The B snippet
+\begin_inset Quotes erd
+\end_inset
+
+.
+ The rest of the contents are left unchanged and the transformed 
+\family typewriter
+NodeSeq
+\family default
+ is returned to Lift, which scans for and finds the 
+\family typewriter
+<lift:C.snippet />
+\family default
+ tag.
+ Since there are no child elements for the 
+\family typewriter
+<lift:C.snippet />
+\family default
+ tag, the 
+\family typewriter
+C.snippet
+\family default
+ method is invoked with an empty 
+\family typewriter
+NodeSeq
+\family default
+ and the 
+\family typewriter
+C.snippet
+\family default
+ returns the Text node 
+\begin_inset Quotes eld
+\end_inset
+
+The C snippet
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+The Recursive Tag Snippets Code
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Recursive-Tag-Snippets"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+...
+ standard Lift imports ...
+\end_layout
+
+\begin_layout Plain Layout
+
+class A {
+\end_layout
+
+\begin_layout Plain Layout
+
+  def snippet (xhtml : NodeSeq) : NodeSeq = 
+\end_layout
+
+\begin_layout Plain Layout
+
+    bind("A", xhtml, "name" -> Text("The A snippet"))
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+class B {
+\end_layout
+
+\begin_layout Plain Layout
+
+  def snippet (xhtml : NodeSeq) : NodeSeq =
+\end_layout
+
+\begin_layout Plain Layout
+
+    bind("B", xhtml, "title" -> Text("The B snippet"))
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+class C {
+\end_layout
+
+\begin_layout Plain Layout
+
+  def snippet (xhtml : NodeSeq) : NodeSeq = Text("The C snippet")
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+While the contents of the 
+\family typewriter
+A.snippet
+\family default
+ tag are passed to the 
+\family typewriter
+A.snippet
+\family default
+ method, there's no requirement that the contents are actually used.
+ For example, consider what would happen if we swapped the B and C snippet
+ tags in our template, as shown in Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:The-Swapped-Recursive"
+
+\end_inset
+
+.
+ In this example, the 
+\family typewriter
+C.snippet
+\family default
+ method is called before the 
+\family typewriter
+B.snippet
+\family default
+ method.
+ Since our 
+\family typewriter
+C.snippet
+\family default
+ method returns straight XML that doesn't contain the B snippet tag, the
+ B snippet will never be executed! We'll cover how the 
+\family typewriter
+eager_eval
+\family default
+ tag attribute can be used to reverse this behavior in Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Eager-Eval"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=XML"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+The Swapped Recursive Snippet Template
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:The-Swapped-Recursive"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<lift:A.snippet>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <p>Hello, <A:name />!</p>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <p>
+\end_layout
+
+\begin_layout Plain Layout
+
+    <lift:C.snippet>
+\end_layout
+
+\begin_layout Plain Layout
+
+      <lift:B.snippet>
+\end_layout
+
+\begin_layout Plain Layout
+
+        <B:title />
+\end_layout
+
+\begin_layout Plain Layout
+
+      </lift:B.snippet>
+\end_layout
+
+\begin_layout Plain Layout
+
+    </lift:C.snippet>
+\end_layout
+
+\begin_layout Plain Layout
+
+  </p>
+\end_layout
+
+\begin_layout Plain Layout
+
+</lift:A.snippet>
+\end_layout
+
+\begin_layout Plain Layout
+
+<!-- After the A and C snippets have been processed: -->
+\end_layout
+
+\begin_layout Plain Layout
+
+<p>Hello, The A snippet</p>
+\end_layout
+
+\begin_layout Plain Layout
+
+<p>The C snippet</p>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 As you can see, templates are a nice way of setting up your layout and then
  writing a few methods to fill in the XML fragments that make up your web
  applications.
  They provide a simple way to generate a uniform look for your site, particularl
-y if you composite your templates using the surround and embed tags.
+y if you assemble your templates using the surround and embed tags.
  If you'd like more control or don't need a template for a certain section,
- you'll want to use a View, which is coming up in the next section.
+ you'll want to use a View, which is discussed in the next section below.
 \end_layout
 
 \begin_layout Standard
@@ -1147,7 +1592,7 @@ outside
  In general, we've never found a case where we required this functionality;
  usually you can accomplish the same thing by using a RedirectResponse and
  attaching your state to it via the Map parameter.
- For more details, see section 
+ For more details, see Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:HTTP-redirects"
@@ -1171,23 +1616,12 @@ name "sec:Views"
 \end_inset
 
 
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Convert examples to PocketChange...
- aka, work on PocketChange :)
-\end_layout
-
-\end_inset
-
-
 \end_layout
 
 \begin_layout Standard
 We just discussed Templates and saw that through a combination of an XML
  file, Lift tags, and Scala code we can respond to requests made by a user.
- You can also generate those responses entirely in code by using Views.
+ You can also generate a response entirely in code using a View.
  
 \end_layout
 
@@ -1202,8 +1636,8 @@ Views
 
 \end_inset
 
- are generally used as implicitly defined custom dispatch methods; we'll
- cover explicit custom dispatch in more depth in section 
+ are generally used as implicitly defined custom dispatch methods.
+ We'll cover explicit custom dispatch in more depth in Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Custom-dispatch-func"
@@ -1226,30 +1660,31 @@ NodeSeq
 \end_inset
 
 .
- As we showed in section 
+ As we showed in Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:The-Rendering-Process"
 
 \end_inset
 
-, there are two ways that a View can be invoked: the first is by defining
- a partial function for 
+, there are two ways that a View can be invoked.
+ The first is by defining a partial function for 
 \family typewriter
 LiftRules.viewDispatch
 \family default
 .
  This allows you to dispatch to a view for any arbitrary request path, but
- is usually overkill for most use cases.
+ it is usually overkill for most use cases.
  The second way that a View can be invoked is that if the first element
  of the request path matches the class name of the View, then the second
  element is used to lookup the View function depending on what trait the
  View class implements.
+ The following paragraph will make this clearer.
 \end_layout
 
 \begin_layout Standard
 There are two traits that you can use when implementing a view class: one
- is to extend the 
+ is the 
 \family typewriter
 LiftView
 \family default
@@ -1263,7 +1698,7 @@ LiftView
 
 \end_inset
 
- trait, the other is to extend the 
+ trait, the other is the 
 \family typewriter
 InsecureLiftView
 \family default
@@ -1282,13 +1717,13 @@ InsecureLiftView
 status open
 
 \begin_layout Plain Layout
-Both under the net.liftweb.http package
+Both can be found under the net.liftweb.http package.
 \end_layout
 
 \end_inset
 
 .
- As you may be able to tell from the names, we would prefer that you use
+ As you may be able to tell from the names, we would prefer that you extend
  the 
 \family typewriter
 LiftView
@@ -1300,7 +1735,7 @@ InsecureLiftView
 \family default
  determines method dispatch by turning a request path into a class and method
  name.
- For instance, if we have a path 
+ For example, if we have a path 
 \family typewriter
 /MyStuff/enumerate
 \family default
@@ -1308,19 +1743,27 @@ InsecureLiftView
 \family typewriter
 MyStuff
 \family default
- in the view subpackage (class resolution is covered in section 
+ in the view subpackage (class resolution is covered in Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sub:Class-Resolution"
 
 \end_inset
 
-) and if it finds it and it has a method called 
+) and if it finds 
+\family typewriter
+MyStuff
+\family default
+ and it has a method called 
 \family typewriter
 enumerate
 \family default
-, then Lift will execute the method and return its results to the user.
- The main issue there is that Lift uses reflection
+, then Lift will execute the 
+\family typewriter
+enumerate
+\family default
+ method and return its result to the user.
+ The main concern here is that Lift uses reflection
 \begin_inset Index
 status collapsed
 
@@ -1336,7 +1779,7 @@ InsecureLiftView
 \family default
 , so it can access any method in the class, even ones that you don't intend
  to make public.
- A better way to do it is to use the 
+ A better way to invoke a View is to extend the 
 \family typewriter
 LiftView
 \family default
@@ -1374,11 +1817,15 @@ LiftView
 ExpenseView.doEnumerate
 \family default
  method.
- If someone attempts to go to 
+ If a user attempts to go to 
 \family typewriter
 /ExpenseView/privateMethod
 \family default
- they'll get a 404 since it's not defined in the dispatch function.
+ they'll get a 404 because 
+\family typewriter
+privateMethod
+\family default
+ is not defined in the dispatch method.
 \end_layout
 
 \begin_layout Standard
@@ -1484,7 +1931,7 @@ Another difference between custom dispatch and Views is that the
 \family typewriter
 NodeSeq
 \family default
- returned from the view method is processed for template tags including
+ returned from the View method is processed for template tags including
  
 \family typewriter
 surrounds
@@ -1493,13 +1940,14 @@ surrounds
 \family typewriter
 includes
 \family default
-, just like snippets; dispatch methods, on the other hand, expect a 
+, just as it would be for a snippet.
+ Dispatch methods, on the other hand, expect a 
 \family typewriter
 LiftResponse
 \family default
 .
  That means that you can use the full power of the templating system from
- within your View, as shown in listing 
+ within your View, as shown in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Dispatch-in-LiftView"
@@ -1514,8 +1962,8 @@ doEnumerate
 \end_layout
 
 \begin_layout Standard
-Since you can choose to not include any of the pre-defined template XHTML,
- you can easily generate any XML-based content such as Atom or RSS feeds
+Since you can choose not to include any of the pre-defined template XHTML,
+ you can easily generate any XML-based content, such as Atom or RSS feeds,
  using a View.
 \end_layout
 
@@ -1532,7 +1980,7 @@ name "sec:ArchTags"
 
 \begin_layout Standard
 In the earlier sections on Templates and Views we briefly touched on some
- of Lift's built-in tags, namely 
+ of Lift's built-in tags, namely, 
 \family typewriter
 snippet
 \family default
@@ -1613,7 +2061,7 @@ The snippet tag is the workhorse of Lift.
  In our experience, most of the functionality of your web apps will be handled
  via snippets.
  They're so important that we're going to cover their mechanism separately
- in section 
+ in Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Snippets"
@@ -1681,7 +2129,7 @@ render
 \end_layout
 
 \begin_layout Standard
-Classes are resolved as specified in section 
+Classes are resolved as specified in Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sub:Class-Resolution"
@@ -1697,6 +2145,31 @@ reference "lst:Snippet-tag-equivalence"
 \end_inset
 
  shows three equivalent snippet tags.
+ Note: these are only equivalent because the method name is 
+\begin_inset Quotes eld
+\end_inset
+
+render.
+\begin_inset Quotes erd
+\end_inset
+
+ If we had chose a different method, e.g., 
+\begin_inset Quotes eld
+\end_inset
+
+list,
+\begin_inset Quotes erd
+\end_inset
+
+ then the third example below will still call a 
+\begin_inset Quotes eld
+\end_inset
+
+render
+\begin_inset Quotes erd
+\end_inset
+
+ method.
 \end_layout
 
 \begin_layout Standard
@@ -1709,7 +2182,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Snippet tag equivalence
+Snippet Tag Equivalence
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:Snippet-tag-equivalence"
@@ -1769,7 +2242,19 @@ form
  is included then an appropriate form tag will be emitted into the XHTML
  using the specified submission method
 \family typewriter
-.
+ 
+\family default
+(
+\family typewriter
+POST 
+\family default
+or
+\family typewriter
+ GET
+\family default
+).
+
+\family typewriter
  
 \family default
 The 
@@ -1777,8 +2262,8 @@ The
 multipart
 \family default
  attribute is a boolean, and specifies whether a generated form tag should
- be set to use multipart form submission; this is most typically used for
- file uploads (section 
+ be set to use multipart form submission.
+ This is most typically used for file uploads (Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:File-Uploads"
@@ -1826,19 +2311,25 @@ binding
 \end_layout
 
 \begin_layout Standard
-Surrounds the child nodes with the named template; the child nodes are inserted
- into the named template at the binding point specified by the 
+The 
+\family typewriter
+surround
+\family default
+ tag surrounds the child nodes with the named template.
+ The child nodes are inserted into the named template at the binding point
+ specified by the 
 \family typewriter
 at
 \family default
- parameter (we'll cover the bind tag in section 
+ parameter (we'll cover the bind tag in Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sub:bind-tag"
 
 \end_inset
 
-) Typically templates that will be used to surround other templates are
+).
+ Typically, templates that will be used to surround other templates are
  incomplete by themselves, so we usually store them in the 
 \family typewriter
 <app
@@ -1848,9 +2339,21 @@ reference "sub:bind-tag"
 root>/templates-hidden
 \family default
  subdirectory so that they can't be accessed directly.
- Having said that, it's not required that the templates be in any specific
- location (except for WEB-INF, obviously).
- The most common usage of surround is so that you can use a 
+ Having said that, 
+\begin_inset Quotes eld
+\end_inset
+
+incomplete
+\begin_inset Quotes erd
+\end_inset
+
+ templates may be placed in any directory that templates would normally
+ go in.
+ The most common usage of 
+\family typewriter
+surround
+\family default
+ is to permit you to use a 
 \begin_inset Quotes eld
 \end_inset
 
@@ -1859,7 +2362,11 @@ master
 \end_inset
 
  template for your site CSS, menu, etc.
- An example use of surround is shown in listing 
+ An example use of 
+\family typewriter
+surround
+\family default
+ is shown in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Surrounding-your-page"
@@ -1868,8 +2375,8 @@ reference "lst:Surrounding-your-page"
 
 .
  We'll show the counterpart master template in the section on the bind tag.
- One more note is that the surrounding template name can either be a fully-quali
-fied path (i.e.
+ Note also that the surrounding template name can be either a fully-qualified
+ path (i.e.
  
 \begin_inset Quotes eld
 \end_inset
@@ -1878,7 +2385,7 @@ fied path (i.e.
 \begin_inset Quotes erd
 \end_inset
 
-), or can just be the base filename (
+), or just the base filename (
 \begin_inset Quotes eld
 \end_inset
 
@@ -1887,7 +2394,7 @@ default
 \end_inset
 
 ).
- In the latter case Lift will search all subdirectories of the app root
+ In the latter case, Lift will search all subdirectories of the app root
  for the template.
 \end_layout
 
@@ -1902,7 +2409,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Surrounding your page
+Surrounding Your Page
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:Surrounding-your-page"
@@ -1950,7 +2457,11 @@ Note that you can use multiple surround templates for different functionality,
  and surrounds can be nested.
  For example, you might want to have a separate template for your administrative
  pages that adds a menu to your default template.
- In that case, your admin.html could look like listing 
+ In that case, your 
+\family typewriter
+admin.html
+\family default
+ could look like Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Adding-an-Admin-menu"
@@ -1958,7 +2469,7 @@ reference "lst:Adding-an-Admin-menu"
 \end_inset
 
 .
- As you can see, we've named our bind in the admin template to also be 
+ As you can see, we've named our bind point in the admin template 
 \begin_inset Quotes eld
 \end_inset
 
@@ -1967,6 +2478,45 @@ content
 \end_inset
 
  so that we keep things consistent for the rest of our templates.
+ So if, for example, we were going to nest the template in Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Surrounding-your-page"
+
+\end_inset
+
+ above into the 
+\family typewriter
+admin.html
+\family default
+ template in Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Adding-an-Admin-menu"
+
+\end_inset
+
+, all we'd need to do is change it's 
+\family typewriter
+with
+\family default
+ attribute from 
+\begin_inset Quotes eld
+\end_inset
+
+default
+\begin_inset Quotes erd
+\end_inset
+
+ to 
+\begin_inset Quotes eld
+\end_inset
+
+admin.
+\begin_inset Quotes erd
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -2096,7 +2646,7 @@ binding_name
 \end_layout
 
 \begin_layout Standard
-The bind tag is the counterpart to the surround tag; it specifies where
+The bind tag is the counterpart to the surround tag: it specifies where
  in the 
 \begin_inset Quotes eld
 \end_inset
@@ -2106,7 +2656,7 @@ surrounding
 \end_inset
 
  template the content will be placed.
- An example is shown in listing 
+ An example is shown in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Binding-in-Templates"
@@ -2153,7 +2703,7 @@ name "lst:Binding-in-Templates"
 
 \begin_layout Plain Layout
 
-  <lift:bind name=
+    <lift:bind name=
 \begin_inset Quotes erd
 \end_inset
 
@@ -2197,9 +2747,13 @@ Usage:
 \end_layout
 
 \begin_layout Standard
-The embed tag allows you to embed a template within another template.
- This can be used to compose your pages from multiple smaller templates,
- and it also allows you to access templates from javascript commands (chapter
+The 
+\family typewriter
+embed
+\family default
+ tag allows you to embed a template within another template.
+ This can be used to assemble your pages from multiple smaller templates,
+ and it also allows you to access templates from JavaScript commands (Chapter
  
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -2208,8 +2762,12 @@ reference "cha:Lift-and-Javascript"
 \end_inset
 
 ).
- Like the surround tag, the template name can either be the base filename
- or a fully-qualified path.
+ As with the 
+\family typewriter
+surround
+\family default
+ tag, the template name can be either the base filename or a fully-qualified
+ path.
 \end_layout
 
 \begin_layout Standard
@@ -2230,9 +2788,9 @@ status open
 
 \size small
 Note that if you use the embed tag to access templates from within a JsCmd
- (typically an Ajax call), any javascript in the embedded template won't
+ (typically an AJAX call), any JavaScript in the embedded template won't
  be executed.
- This includes, but is not limited to Comet widgets.
+ This includes, but is not limited to, Comet widgets.
 \end_layout
 
 \end_inset
@@ -2259,12 +2817,24 @@ optional
 \end_layout
 
 \begin_layout Standard
-The comet tag embeds a comet actor into your page.
- The class of the comet actor is specified by the type attribute.
- The name attribute tells Lift to create a unique instance of the Comet
- actor; for example, you could have one comet actor for site updates and
- another for admin messages.
- The contents of the tag are used by the comet actor to bind a response.
+The 
+\family typewriter
+comet
+\family default
+ tag embeds a Comet actor into your page.
+ The class of the Comet actor is specified by the 
+\family typewriter
+type
+\family default
+ attribute.
+ The 
+\family typewriter
+name
+\family default
+ attribute tells Lift to create a unique instance of the Comet actor; for
+ example, you could have one Comet actor for site updates and another for
+ admin messages.
+ The contents of the tag are used by the Comet actor to bind a response.
  Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -2272,9 +2842,9 @@ reference "lst:Ledger-Entry-Comet"
 
 \end_inset
 
- shows an example of a comet binding that displays expense entries as they're
+ shows an example of a Comet binding that displays expense entries as they're
  added.
- Comet is covered in more detail in chapter 
+ Comet is covered in more detail in Chapter 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "cha:AJAX-and-COMET"
@@ -2351,8 +2921,12 @@ name "lst:Ledger-Entry-Comet"
 \end_layout
 
 \begin_layout Standard
-As we mentioned in the embed tag documentation, mixing Comet with AJAX responses
- can be a bit tricky due to the embedded Javascript that Comet uses.
+As we mentioned in the 
+\family typewriter
+embed
+\family default
+ tag documentation, mixing Comet with AJAX responses can be a bit tricky
+ due to the embedded JavaScript that Comet uses.
 \end_layout
 
 \begin_layout Section
@@ -2382,8 +2956,12 @@ head
 
 \end_inset
 
- tag from within a template.
- In our example listing 
+ element in a template with the 
+\family typewriter
+head
+\family default
+ element in the surrounding template.
+ In our example, Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Sample-template"
@@ -2395,15 +2973,30 @@ reference "lst:Sample-template"
 head
 \family default
  tag inside the template.
- Without the head merge, this head tag would show up in the default template
- where our template gets bound.
- Lift is smart about this, though, and instead takes the contents of the
- head tag and merges it into the outer template's head tag.
- This means that you can use a surround tag to keep a uniform default template,
- but still change things like the title of the page, add in scripts or special
- CSS, etc.
+ Without the head merge, this 
+\family typewriter
+head
+\family default
+ tag would show up in the default template where our template gets bound.
+ Lift is smart about this, though, and instead takes the content of the
+ 
+\family typewriter
+head
+\family default
+ element and merges it into the outer template's 
+\family typewriter
+head
+\family default
+ element.
+ This means that you can use a 
+\family typewriter
+surround
+\family default
+ tag to keep a uniform default template, but still do things such as changing
+ the title of the page, adding scripts or special CSS, etc.
  For example, if you have a table in a page that you'd like to style with
- jQuery's TableSorter, you would add a head tag:
+ jQuery's TableSorter, you could add a head element to insert the appropriate
+ script:
 \end_layout
 
 \begin_layout Standard
@@ -2473,11 +3066,11 @@ foo
 \end_layout
 
 \begin_layout Standard
-And just for this snippet, you'll import TableSorter.
+In this manner, you'll import TableSorter for this template alone.
 \end_layout
 
 \begin_layout Section
-Notice/Warning/Error messages
+Notices, Warnings, and Error Messages
 \begin_inset CommandInset label
 LatexCommand label
 name "sub:Notices/Warnings/Errors-messages"
@@ -2488,11 +3081,12 @@ name "sub:Notices/Warnings/Errors-messages"
 \end_layout
 
 \begin_layout Standard
-Feedback for the user is important for modern applications: error messages
- for issues, status messages for update and general notifications.
+Feedback to the user is important.
+ The application must be able to notify the user of errors, warn the user
+ of potential problems, and notify the user when system status changes.
  Lift provides a unified model for such messages that can be used for static
- pages as well as for Ajax and Comet calls.
- We cover the messaging support in appendix 
+ pages as well as for AJAX and Comet calls.
+ We cover messaging support in Appendix 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "cha:Message-Handling"
@@ -2514,7 +3108,7 @@ name "sec:Snippets"
 \end_layout
 
 \begin_layout Standard
-A snippet is a function that takes a single 
+A snippet is a method that takes a single 
 \family typewriter
 scala.xml.NodeSeq
 \family default
@@ -2550,8 +3144,8 @@ height_special "totalheight"
 status open
 
 \begin_layout Plain Layout
-Note: It's important to explicitly specify the return type of your snippet
- methods as 
+Note: Although Scala can often infer return types, it's important to explicitly
+ specify the return type of your snippet methods as 
 \family typewriter
 NodeSeq
 \family default
@@ -2566,10 +3160,19 @@ NodeSeq
 \end_layout
 
 \begin_layout Standard
-The argument passed to the method is the XML contents of the snippet tag;
- because Lift processes from the outside in, the contents are not processed
- before being passed to the snippet method unless you specify the eager_eval
- attribute (section 
+The argument passed to the snippet method is the XML content of the snippet
+ tag.
+ Because Lift processes starting with the outer tag and working in, the
+ contents of the outer tag are processed 
+\emph on
+after
+\emph default
+ the snippet method processes them.
+ You may change the order of processing by specifying the 
+\family typewriter
+eager_eval
+\family default
+ attribute on the tag (Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sub:Eager-Eval"
@@ -2600,7 +3203,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-A simple snippet
+A Simple Snippet
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:a-simple-snippet"
@@ -2642,8 +3245,8 @@ class Ledger {
 
 \begin_layout Standard
 We simply return an XML Text node with the formatted balance.
- Note that the XML that a snippet returns is further processed from the
- outside in, so if your snippet instead looked like:
+ Note that the XML that a snippet returns is itself processed recursively,
+ so if your snippet instead looked like:
 \end_layout
 
 \begin_layout Standard
@@ -2656,7 +3259,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Returning tags from a snippet
+Returning Tags from a Snippet
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:Returning-tags-snippet"
@@ -2709,9 +3312,9 @@ lift:Util.time
  snippet will be processed as well after our snippet method returns.
  It is this hierarchical processing of template tags that makes Lift so
  flexible.
- For those of you coming here with some JSP experience, Lift is designed
- to let you write your own tag libraries, except much more powerful and
- much simpler to use.
+ For those of you coming to Lift with some JSP experience, Lift is designed
+ to let you write your own tag libraries, but libraries that are much more
+ powerful and much simpler to use.
 \end_layout
 
 \begin_layout Subsection
@@ -2745,7 +3348,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Snippet tag children
+Snippet Tag Children
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:Snippet-tag-children"
@@ -2822,8 +3425,7 @@ net.liftweb.util.Helpers.
 \end_layout
 
 \begin_layout Enumerate
-The prefix of the elements you wish to bind.
- In our example the prefix is 
+The prefix for the tags you wish to bind, in this instance, 
 \begin_inset Quotes eld
 \end_inset
 
@@ -2835,12 +3437,11 @@ ledger
 \end_layout
 
 \begin_layout Enumerate
-The NodeSeq that contains the elements you wish to bind
+The NodeSeq that contains the tags you wish to bind
 \end_layout
 
 \begin_layout Enumerate
-One or more BindParam elements that maps the element name to a replacement
- value
+One or more BindParam elements that map the tag name to a replacement value
 \end_layout
 
 \begin_layout Standard
@@ -2852,7 +3453,14 @@ Helpers._
 , which among other things contains an implicit conversion from Pair to
  BindParam.
  With this knowledge in hand, we can change our previous definition of the
- balance method to
+ balance method to that in Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Binding-the-ledger-balance"
+
+\end_inset
+
+ below.
 \end_layout
 
 \begin_layout Standard
@@ -2865,7 +3473,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Binding the ledger balance
+Binding the Ledger Balance
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:Binding-the-ledger-balance"
@@ -2892,41 +3500,17 @@ class Ledger {
 
 \begin_layout Plain Layout
 
-    bind (
-\begin_inset Quotes eld
-\end_inset
-
-ledger
-\begin_inset Quotes erd
-\end_inset
-
-, content,
+    bind ("ledger", content,
 \end_layout
 
 \begin_layout Plain Layout
 
-          
-\begin_inset Quotes eld
-\end_inset
-
-balance
-\begin_inset Quotes erd
-\end_inset
-
- -> Text(currentLegdger.formattedBalance),
+          "balance" -> Text(currentLegdger.formattedBalance),
 \end_layout
 
 \begin_layout Plain Layout
 
-          
-\begin_inset Quotes eld
-\end_inset
-
-time
-\begin_inset Quotes erd
-\end_inset
-
- -> Text((new java.util.Date).toString))
+          "time" -> Text((new java.util.Date).toString))
 \end_layout
 
 \begin_layout Plain Layout
@@ -2957,15 +3541,16 @@ name "sub:Stateless-versus-Stateful"
 \end_layout
 
 \begin_layout Standard
-The lifecycle of a snippet by default is stateless.
+The lifecycle of a snippet is stateless by default.
  That means that for each request, Lift creates a new instance of the snippet
- class to execute; any changes you make to instance variables will be discarded
- after the request is processed.
- If you want to keep some state around you have a couple of options:
+ class to execute.
+ Any changes you make to instance variables will be discarded after the
+ request is processed.
+ If you want to keep some state around, you have a couple of options:
 \end_layout
 
 \begin_layout Itemize
-Store the state in a cookie (section 
+Store the state in a cookie (Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Cookies"
@@ -2973,14 +3558,14 @@ reference "sec:Cookies"
 \end_inset
 
 ).
- This can be useful if you have data that you want persisted across sessions.
+ This can be useful if you have data that you want to persist across sessions.
  The down side is that you have to manage the cookie as well as deal with
- any security implications for the data in the cookie since it's stored
- on the user's machine.
+ any security implications for the data in the cookie as it's stored on
+ the user's machine.
 \end_layout
 
 \begin_layout Itemize
-Store the state in a SessionVar (section 
+Store the state in a SessionVar (Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Session-and-Request"
@@ -2988,10 +3573,10 @@ reference "sec:Session-and-Request"
 \end_inset
 
 ).
- This is a little easier to manage than cookies but you still have to manage
+ This is a little easier to manage than cookies, but you still have to handle
  adding and removing the session data if you don't want it around for the
  duration of the session.
- Like a cookie, it's also global, which means that it will be the same for
+ As with a cookie, it is global, which means that it will be the same for
  all snippet instances.
 \end_layout
 
@@ -3014,7 +3599,7 @@ SHtml.link
 S.redirectTo
 \family default
 , etc).
- We'll cover this technique in section 
+ We'll cover this technique in Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Session-and-Request"
@@ -3032,46 +3617,57 @@ Use a StatefulSnippet subclass.
 \end_layout
 
 \begin_layout Standard
-Using a StatefulSnippet is very similar to a normal snippet, with the addition
- of a few mechanisms.
- First, the StatefulSnippet trait defines a dispatch method of type PartialFunct
-ion[String, () => NodeSeq].
+Using a StatefulSnippet is very similar to using a normal snippet but with
+ the addition of a few mechanisms.
+ First, the StatefulSnippet trait defines a 
+\family typewriter
+dispatch
+\family default
+ method of type 
+\family typewriter
+PartialFunction[String, () => NodeSeq]
+\family default
+.
  This lets you define which methods handle which snippets.
- Because the def dispatch in the base DispatchSnippet can be overridden
- with a var, it also lets you redefine this behavior as a result of snippet
- processing.
+ Because the 
+\family typewriter
+dispatch
+\family default
+ method in the base DispatchSnippet can be overridden with a var, it also
+ lets you redefine this behavior as a result of snippet processing.
  
 \end_layout
 
 \begin_layout Standard
-Another key to using StatefulSnippets is that when you render a form, a
- hidden field is added to that form that causes the same instance to be
- used on the page that is the target of the form submission.
+Another thing to remember when using StatefulSnippets is that when you render
+ a form, a hidden field is added to the form that permits the same instance
+ of the StatefulSnippet that created the form to be the target of the form
+ submission.
  If you need to link to a different page, but would like the same snippet
- instance to handle snippets on that page, use the StatefulSnippet.link method
- (instead of SHtml.link); likewise, if you need to redirect to a different
- page, the StatefulSnippet trait defines a redirectTo method.
- In either of these cases a function map is added to the link or redirect,
- respectively, that cause the instance to be reattached.
+ instance to handle snippets on that page, use the 
+\family typewriter
+StatefulSnippet.link
+\family default
+ method (instead of 
+\family typewriter
+SHtml.link
+\family default
+); similarly, if you need to redirect to a different page, the StatefulSnippet
+ trait defines a 
+\family typewriter
+redirectTo
+\family default
+ method.
+ In either of these instances, a function map is added to the link or redirect,
+ respectively, that causes the instance to be reattached.
 \end_layout
 
 \begin_layout Standard
-As an example of when you might use a stateful snippet, consider a graph
- that shows your spending for some time period and also allows you to specify
- criteria for selecting the data to graph.
- Say you've changed the time span from the default 1 month to 3 months.
- Now you'd like to limit the expense categories to show only 
-\begin_inset Quotes eld
-\end_inset
-
-Food.
-\begin_inset Quotes erd
-\end_inset
-
- More than likely, you'll want the application to respect the change in
- time-span as well.
- This is a case where keeping a bit of state around will allow you to do
- this.
+When might you use a stateful snippet? Consider a multi-part form where
+ you'd like to have a user enter data over several pages.
+ You'll want the application to maintain the previously entered data while
+ you validate the current entry, but you don't want to have to deal with
+ a lot of hidden form variables.
  Using a StatefulSnippet instance greatly simplifies writing the snippet
  because you can keep all of your pertinent information around as instance
  variables instead of having to insert and extract them from every request,
@@ -3079,15 +3675,463 @@ Food.
 \end_layout
 
 \begin_layout Standard
-Below is an example of a stateful snippet that handles the above example.
+Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Using-a-StatefulSnippet"
+
+\end_inset
+
+ shows an example of a stateful snippet that handles the above example.
+ Note that for this example, the URL (and therefore, the template) don't
+ change between pages.
+ The template we use is shown in Listing .
 \end_layout
 
 \begin_layout Standard
-\begin_inset Note Note
+\begin_inset listings
+inline false
 status open
 
 \begin_layout Plain Layout
-Write and then steal from PocketChange
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Using a StatefulSnippet
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Using-a-StatefulSnippet"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+...
+ standard Lift imports ...
+\end_layout
+
+\begin_layout Plain Layout
+
+import _root_.scala.xml.Text
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+class BridgeKeeper extends StatefulSnippet {
+\end_layout
+
+\begin_layout Plain Layout
+
+  // Define the dispatch for snippets.
+ Note that we are defining
+\end_layout
+
+\begin_layout Plain Layout
+
+  // it as a var so that the snippet for each portion of the 
+\end_layout
+
+\begin_layout Plain Layout
+
+  // multi-part form can update it after validation.
+\end_layout
+
+\begin_layout Plain Layout
+
+  var dispatch : DispatchIt = {
+\end_layout
+
+\begin_layout Plain Layout
+
+    // We default to dispatching the "challenge" snippet to our
+\end_layout
+
+\begin_layout Plain Layout
+
+    // namePage snippet method.
+ We'll update this below
+\end_layout
+
+\begin_layout Plain Layout
+
+    case "challenge" => namePage _
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  // Define our state variables:
+\end_layout
+
+\begin_layout Plain Layout
+
+  var name = ""
+\end_layout
+
+\begin_layout Plain Layout
+
+  var quest = ""
+\end_layout
+
+\begin_layout Plain Layout
+
+  var color = ""
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  // Our first form page
+\end_layout
+
+\begin_layout Plain Layout
+
+  def firstPage (xhtml : NodeSeq) : NodeSeq = {
+\end_layout
+
+\begin_layout Plain Layout
+
+    def processName () {
+\end_layout
+
+\begin_layout Plain Layout
+
+      if (name != "") {
+\end_layout
+
+\begin_layout Plain Layout
+
+        dispatch = { case "challenge" => questPage _ }
+\end_layout
+
+\begin_layout Plain Layout
+
+      } else {
+\end_layout
+
+\begin_layout Plain Layout
+
+        S.error("You must provide a name!")
+\end_layout
+
+\begin_layout Plain Layout
+
+      }
+\end_layout
+
+\begin_layout Plain Layout
+
+    }
+\end_layout
+
+\begin_layout Plain Layout
+
+    bind("form", xhtml,
+\end_layout
+
+\begin_layout Plain Layout
+
+         "question" -> Text("What is your name?"),
+\end_layout
+
+\begin_layout Plain Layout
+
+         "answer" -> SHtml.text(name, name = _))
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  def questPage (xhtml : NodeSeq) : NodeSeq = {
+\end_layout
+
+\begin_layout Plain Layout
+
+    def processQuest () {
+\end_layout
+
+\begin_layout Plain Layout
+
+      if (quest != "") {
+\end_layout
+
+\begin_layout Plain Layout
+
+        dispatch = { 
+\end_layout
+
+\begin_layout Plain Layout
+
+          case "challenge" if name == "Arthur
+\begin_inset Quotes erd
+\end_inset
+
+ => swallowPage _
+\end_layout
+
+\begin_layout Plain Layout
+
+          case "challenge" => colorPage _ 
+\end_layout
+
+\begin_layout Plain Layout
+
+        }
+\end_layout
+
+\begin_layout Plain Layout
+
+      } else {
+\end_layout
+
+\begin_layout Plain Layout
+
+        S.error("You must provide a quest!")
+\end_layout
+
+\begin_layout Plain Layout
+
+      }
+\end_layout
+
+\begin_layout Plain Layout
+
+    }
+\end_layout
+
+\begin_layout Plain Layout
+
+    bind("form", xhtml,
+\end_layout
+
+\begin_layout Plain Layout
+
+         "question" -> Text("What is your quest?"),
+\end_layout
+
+\begin_layout Plain Layout
+
+         "answer" -> SHtml.text(quest, quest = _))
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  def colorPage (xhtml : NodeSeq) : NodeSeq = {
+\end_layout
+
+\begin_layout Plain Layout
+
+    def processColor () {
+\end_layout
+
+\begin_layout Plain Layout
+
+      if (color.toLowercase.contains "No,") {
+\end_layout
+
+\begin_layout Plain Layout
+
+        // This is a cleanup that removes the mapping for this
+\end_layout
+
+\begin_layout Plain Layout
+
+        // StatefulSnippet from the session.
+ This will happen 
+\end_layout
+
+\begin_layout Plain Layout
+
+        // over time with GC, but it's best practice to manually 
+\end_layout
+
+\begin_layout Plain Layout
+
+        // do this when you're finished with the snippet
+\end_layout
+
+\begin_layout Plain Layout
+
+        this.unregisterThisSnippet()
+\end_layout
+
+\begin_layout Plain Layout
+
+        S.redirectTo("/pitOfEternalPeril")
+\end_layout
+
+\begin_layout Plain Layout
+
+      } else if (color != "") {
+\end_layout
+
+\begin_layout Plain Layout
+
+        this.unregisterThisSnippet()
+\end_layout
+
+\begin_layout Plain Layout
+
+        S.redirectTo("/scene24")
+\end_layout
+
+\begin_layout Plain Layout
+
+      } else {
+\end_layout
+
+\begin_layout Plain Layout
+
+        S.error("You must provide a color!")
+\end_layout
+
+\begin_layout Plain Layout
+
+      }
+\end_layout
+
+\begin_layout Plain Layout
+
+    }
+\end_layout
+
+\begin_layout Plain Layout
+
+    bind("form", xhtml,
+\end_layout
+
+\begin_layout Plain Layout
+
+         "question" -> Text("What is your favorite color?"),
+\end_layout
+
+\begin_layout Plain Layout
+
+         "answer" -> SHtml.text(color, color = _))
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+  // and so on for the swallowPage snippet
+\end_layout
+
+\begin_layout Plain Layout
+
+  ...
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=XML"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+The StatefulSnippet Example Template
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:The-StatefulSnippet-Example"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<lift:surround with="default" at="content">
+\end_layout
+
+\begin_layout Plain Layout
+
+  <lift:BridgeKeeper.challenge form="POST">
+\end_layout
+
+\begin_layout Plain Layout
+
+    <form:question /> : <form:answer /> <br />
+\end_layout
+
+\begin_layout Plain Layout
+
+    <input type="submit" value="Answer" />
+\end_layout
+
+\begin_layout Plain Layout
+
+  </lift:BridgeKeeper.challenge>
+\end_layout
+
+\begin_layout Plain Layout
+
+</lift:surround>
 \end_layout
 
 \end_inset
@@ -3107,7 +4151,7 @@ name "sub:Eager-Eval"
 \end_layout
 
 \begin_layout Standard
-As we mentioned in section 
+As we mentioned in Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Snippets"
@@ -3150,7 +4194,7 @@ true
 \end_layout
 
 \begin_layout Standard
-This is especially useful if you're using an embedded template (section
+This is especially useful if you're using an embedded template (Section
  
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -3158,13 +4202,153 @@ reference "sub:embed-tag"
 
 \end_inset
 
-); without the eager_eval attribute your snippet just sees the <lift:embed>
- tag, but with eager_eval set to true you can put 
-\emph on
-bindable
-\emph default
- common snippet content into a single embedded template instead of copying
- it between templates.
+).
+ Consider Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Embedding-and-eager"
+
+\end_inset
+
+: in this case, the 
+\family typewriter
+eager_eval
+\family default
+ parameter makes Lift process the 
+\family typewriter
+<lift:embed />
+\family default
+ tag before it executes the 
+\family typewriter
+Hello.world
+\family default
+ snippet method.
+ If the 
+\begin_inset Quotes eld
+\end_inset
+
+formTemplate
+\begin_inset Quotes erd
+\end_inset
+
+ template looks like Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:The-formTemplate-template"
+
+\end_inset
+
+, then the 
+\family typewriter
+Hello.world
+\family default
+ snippet sees the 
+\family typewriter
+<hello:name />
+\family default
+ and 
+\family typewriter
+<hello:time />
+\family default
+ XML tags as its NodeSeq input.
+ If the 
+\family typewriter
+eager_eval
+\family default
+ attribute is removed, however, the Hello.world snippet sees only a 
+\family typewriter
+<lift:embed />
+\family default
+ tag.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=XML"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Embedding and eager evaluation
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Embedding-and-eager"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<lift:Hello.world eager_eval="true">
+\end_layout
+
+\begin_layout Plain Layout
+
+  <lift:embed what="formTemplate" />
+\end_layout
+
+\begin_layout Plain Layout
+
+</lift:Hello.world>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=XML"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+The formTemplate template
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:The-formTemplate-template"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<hello:name />
+\end_layout
+
+\begin_layout Plain Layout
+
+<hello:time />
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section
@@ -3179,9 +4363,9 @@ name "sec:URL-Rewriting"
 \end_layout
 
 \begin_layout Standard
-Now that we've gone over Templates, Views, Snippets, and how the dispatching
- of a request to a Class.method works we can discuss how to intercept requests
- and handle them any way we want.
+Now that we've gone over Templates, Views, Snippets, and how requests are
+ dispatched to a Class.method, we can discuss how to intercept requests and
+ handle them the way we want to.
  URL rewriting
 \begin_inset Index
 status open
@@ -3227,7 +4411,7 @@ target "http://tinyurl.com"
 \begin_layout Itemize
 Use portions of the URL to determine how a particular snippet or view responds.
  For example, you could make it so that a user's profile is displayed via
- a URL like
+ a URL such as
 \begin_inset Newline linebreak
 \end_inset
 
@@ -3242,19 +4426,25 @@ http://someplace.com/user/derek
 The mechanism is fairly simple to set up.
  We need to write a partial function from a RewriteRequest to a RewriteResponse
  to determine if and how we want to rewrite particular requests.
- Once we have the partial function we modify the 
+ Once we have the partial function, we modify the 
 \family typewriter
 LiftRules.rewrite
 \family default
  configuration to hook into Lift's processing chain.
- The simplest way to write a partial function is with Scala's match statement
+ The simplest way to write a partial function is with Scala's match statement,
  which will allow us to selectively match on some or all of the request
  information.
- It is important to understand that the Lift session is not created at the
- point when the rewrite functions run; that means that you generally can't
- set or access properties in the S object.
- RewriteRequest is a case object that contains three items: the parsed path,
- the request type and the original HttpServletRequest
+ (Recall that for a partial function, the matches do not have to be exhaustive.
+ In the instance that no RewriteRequest matches, no RewriteResponse will
+ be generated.) It is also important to understand that when the rewrite
+ functions run, the Lift session has not yet been created.
+ This means that you generally can't set or access properties in the S object.
+ RewriteRequest is a 
+\family typewriter
+case
+\family default
+ object that contains three items: the parsed path, the request type and
+ the original HttpServletRequest
 \begin_inset Index
 status collapsed
 
@@ -3265,10 +4455,17 @@ HttpServletRequest
 \end_inset
 
  object.
+ (If you are not familiar with case classes, you may wish to review the
+ Scala documentation for them.
+ Adding the 
+\family typewriter
+case
+\family default
+ modifier to a class results in some nice syntactic conveniences.)
 \end_layout
 
 \begin_layout Standard
-The parsed path of the request in a ParsePath
+The parsed path of the request is in a ParsePath
 \begin_inset Index
 status collapsed
 
@@ -3278,7 +4475,11 @@ ParsePath
 
 \end_inset
 
- case class instance.
+ 
+\family typewriter
+case
+\family default
+ class instance.
  The ParsePath class contains
 \end_layout
 
@@ -3308,11 +4509,10 @@ xml
 \end_layout
 
 \begin_layout Enumerate
-Whether the path is absolute.
- Actually it indicates if this path is root relative path.
- It starts with /<context-path> and then followed by the other path parts.
- For example assume you application is deployed on the app context path
- (
+Whether this path is root-relative path.
+ If true, then it will start with /<context-path>, followed by the rest
+ of the path.
+ For example, if your application is deployed on the app context path (
 \begin_inset Quotes eld
 \end_inset
 
@@ -3320,8 +4520,8 @@ Whether the path is absolute.
 \begin_inset Quotes erd
 \end_inset
 
-) and we want to reference the file <webapp-folder>/pages/index.html is /app/page
-s/index.html.
+) and we want to reference the file <webapp-folder>/pages/index.html, then
+ the root-relative path will be /app/pages/index.html.
  
 \end_layout
 
@@ -3515,17 +4715,17 @@ item
 \end_layout
 
 \begin_layout Standard
-The RequestType basically maps to the five HTTP methods: GET, POST, HEAD,
- PUT and DELETE.
- These are represented by the corresponding GetRequest, PostRequest, etc
+The RequestType maps to one of the five HTTP methods: GET, POST, HEAD, PUT
+ and DELETE.
+ These are represented by the corresponding GetRequest, PostRequest, etc.
  case classes, with an UnknownRequest case class to cover anything strange.
 \end_layout
 
 \begin_layout Standard
 The flexibility of Scala's matching system is what really makes this powerful.
- With matching on Lists in particular, we can match parts of the path and
+ In particular, when matching on Lists, we can match parts of the path and
  capture others.
- For instance, for our second example we'd like to rewrite the 
+ For example, suppose we'd like to rewrite the 
 \family typewriter
 /account/<account name>
 \family default
@@ -3533,7 +4733,7 @@ The flexibility of Scala's matching system is what really makes this powerful.
 \family typewriter
 /viewAcct
 \family default
- template as shown in listing 
+ template as shown in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Simple-rewrite-example"
@@ -3541,8 +4741,37 @@ reference "lst:Simple-rewrite-example"
 \end_inset
 
 .
- In this case we provide two rewrites so that someone could specify an optional
- tag for filtering the account view.
+ In this case we provide two rewrites.
+ The first matches /account/<account name> and redirects it to the /viewAcct
+ template, passing the acctName as a 
+\begin_inset Quotes eld
+\end_inset
+
+name
+\begin_inset Quotes erd
+\end_inset
+
+ parameter.
+ The second matches /account/<account name>/<tag>, redirecting it to /viewAcct
+ as before, but passing both the 
+\begin_inset Quotes eld
+\end_inset
+
+name
+\begin_inset Quotes erd
+\end_inset
+
+ and a 
+\begin_inset Quotes eld
+\end_inset
+
+tag
+\begin_inset Quotes erd
+\end_inset
+
+ parameter with the acctName and tag matches from the ParsePath, respectively.
+ Remember that the underscore (_) in these matching statements means that
+ we don't care what that parameter is, i.e., match anything in that spot.
 \end_layout
 
 \begin_layout Standard
@@ -3555,7 +4784,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Simple rewrite example
+A Simple Rewrite Example
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:Simple-rewrite-example"
@@ -3635,7 +4864,8 @@ RewriteResponse
 
 \end_inset
 
- simply contains the new path to send and can also take a Map
+ simply contains the new path to follow.
+ It can also take a Map
 \begin_inset Index
 status collapsed
 
@@ -3678,7 +4908,7 @@ S
 \end_inset
 
  result code that forwards the client to a new request.
- Because of that, even if you could set data in LiftSession or S it would
+ Because of that, even if you could set data in LiftSession or S, it would
  disappear when the redirect occurs.
 \end_layout
 
@@ -3717,7 +4947,15 @@ RESTful
 
 \end_inset
 
- interface through an existing template, we could redirect it like so:
+ interface through an existing template, we could redirect as shown in Listing
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Complex-rewrite-example"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
@@ -3730,7 +4968,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Complex rewrite example
+A Complex Rewrite Example
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:Complex-rewrite-example"
@@ -3802,7 +5040,7 @@ SiteMap
 
 \end_inset
 
- (chapter 
+ (Chapter 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "cha:SiteMap"
@@ -3813,7 +5051,7 @@ reference "cha:SiteMap"
 \end_layout
 
 \begin_layout Section
-Custom Dispatch functions 
+Custom Dispatch Functions 
 \begin_inset CommandInset label
 LatexCommand label
 name "sec:Custom-dispatch-func"
@@ -3825,11 +5063,12 @@ name "sec:Custom-dispatch-func"
 
 \begin_layout Standard
 Once the rewriting phase is complete (whether we pass through or are redirected)
-, the next phase is to determine if there should be a custom dispatch for
- the request.
+, the next phase is to determine whether there should be a custom dispatch
+ for the request.
  A custom dispatch allows you to handle a matching request directly by a
- method instead of going through the template lookup system; because it
- bypasses templating, you're responsible for the full content of the response.
+ method instead of going through the template lookup system.
+ Because it bypasses templating, you're responsible for the full content
+ of the response.
  A typical use case would be a web service
 \begin_inset Index
 status collapsed
@@ -3865,7 +5104,7 @@ web.xml
 \end_layout
 
 \begin_layout Standard
-Custom dispatch is realized, like rewriting, via a partial function.
+As with rewriting, custom dispatch is realized via a partial function.
  In this case, it's a function of type 
 \family typewriter
 PartialFunction[Req,
@@ -3874,13 +5113,13 @@ PartialFunction[Req,
 
 ]
 \family default
- that will do the work.
+ that does the work.
  The 
 \family typewriter
 Req
 \family default
- is similar to the the RewriteRequest case class; it provides the path as
- a List[String], the suffix of the request, and the RequestType.
+ is similar to the RewriteRequest case class: it provides the path as a
+ List[String], the suffix of the request, and the RequestType.
  If you attach the dispatch function via 
 \family typewriter
 LiftRules.dispatch
@@ -3893,7 +5132,7 @@ LiftRules.dispatch
 \family typewriter
 LiftRules.statelessDispatchTable
 \family default
- instead then these aren't available.
+ instead, then these aren't available.
  The result of the dispatch should be a function that returns a 
 \family typewriter
 Box[LiftResponse]
@@ -3903,11 +5142,11 @@ Box[LiftResponse]
 \family typewriter
 Empty
 \family default
- then Lift returns a 
+, then Lift returns a 
 \begin_inset Quotes eld
 \end_inset
 
-404 not found
+404 Not Found
 \begin_inset Quotes erd
 \end_inset
 
@@ -3933,7 +5172,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Charting method
+A Charting Method
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:Charting-method"
@@ -3970,12 +5209,48 @@ def chart (endDate : String) : Box[LiftResponse] = {
 
 \begin_layout Plain Layout
 
+  // InMemoryResponse is a subclass of LiftResponse
+\end_layout
+
+\begin_layout Plain Layout
+
+  // it takes an Array of Bytes, a List[(String,String)] of
+\end_layout
+
+\begin_layout Plain Layout
+
+  // headers, a List[Cookie] of Cookies, and an integer
+\end_layout
+
+\begin_layout Plain Layout
+
+  // return code (here 200 for HTTP 200: OK)
+\end_layout
+
+\begin_layout Plain Layout
+
   Full(InMemoryResponse(chartImage, 
 \end_layout
 
 \begin_layout Plain Layout
 
-                        (Content-Type -> image/png) :: Nil,
+                        (
+\begin_inset Quotes eld
+\end_inset
+
+Content-Type
+\begin_inset Quotes erd
+\end_inset
+
+ -> 
+\begin_inset Quotes eld
+\end_inset
+
+image/png
+\begin_inset Quotes erd
+\end_inset
+
+) :: Nil,
 \end_layout
 
 \begin_layout Plain Layout
@@ -4023,7 +5298,7 @@ Type
 
  header.
  Now we just need to hook the request into the dispatch table from the Boot
- class as shown in listing 
+ class as shown in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Hooking-dispatch-into-Boot"
@@ -4031,8 +5306,8 @@ reference "lst:Hooking-dispatch-into-Boot"
 \end_inset
 
 .
- In this case, we want state so that we can get the current user's chart,
- so we use 
+ In this instance, we want state so that we can get the current user's chart.
+ For this reason, we use 
 \family typewriter
 LiftRules.dispatch
 \family default
@@ -4065,7 +5340,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Hooking dispatch into Boot
+Hooking Dispatch into Boot
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:Hooking-dispatch-into-Boot"
@@ -4124,14 +5399,14 @@ balances
 \begin_layout Standard
 As you can see, we capture the endDate parameter from the path and pass
  it into our chart method.
- This means we can use a URL like 
+ This means that we can use a URL like 
 \family typewriter
 http://foo.com/chart/balances/20080401
 \family default
  to obtain the image.
- Since the dispatch function has an associated lift session, we can also
- use the S.param method to get query string parameters, in case we wanted
- to allow someone to send an optional width and height:
+ Since the dispatch function has an associated Lift session, we can also
+ use the S.param method to get query string parameters, if, for example,
+ we wanted to allow someone to send an optional width and height:
 \end_layout
 
 \begin_layout LyX-Code
@@ -4199,8 +5474,8 @@ height
 \end_layout
 
 \begin_layout Standard
-Where dmap is identical with map function except the first argument is the
- default value applicable in case that the 
+Where dmap is identical with map function except that the first argument
+ is the default value to use if the 
 \family typewriter
 Box
 \family default
@@ -4211,7 +5486,7 @@ Empty
 .
  There are a number of other ListResponse subclasses to cover your needs,
  including responses for XHTML, XML, Atom, Javascript, CSS, and JSON.
- We cover these in more detail in section 
+ We cover these in more detail in Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:LiftResponse-in-Detail"
@@ -4239,9 +5514,14 @@ HTTP redirects are an important part of many web applications.
 
 \begin_layout Enumerate
 Call S.redirectTo.
- When you do this, Lift throws an exception and catches it later on; that
- means that any of your code following the redirect is skipped.
- If you're using a StatefulSnippet (section 
+ When you do this, Lift throws an exception and catches it later on.
+ This means that any code following the redirect is skipped.
+ It also means that if you use S.redirectTo within a try/catch block, you'll
+ need to make sure that you aren't catching the redirect exception (Scala
+ usesunchecked exceptions), or test for the redirect's exception and rethrow
+ it.
+ Ifyou mistakenly catch the redirect exception, then no redirect will occur.
+ If you're using a StatefulSnippet (Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sub:Stateless-versus-Stateful"
@@ -4256,16 +5536,15 @@ this.redirectTo
 \end_layout
 
 \begin_layout Enumerate
-When you need to return a LiftResponse you can just return a RedirectResponse
+When you need to return a LiftResponse, you can simply return a RedirectResponse
  or a RedirectWithState response.
 \end_layout
 
 \begin_layout Standard
-The RedirectWithState allows you to specify a function to be executed when
- the redirected request is processed.
- You can also sent Lift notices (see S.notice, S.warning, S.error) that would
- be rendered in the redirected page, as well as cookies to be set on the
- redirect.
+The RedirectWithState response allows you to specify a function to be executed
+ when the redirected request is processed.
+ You can also send Lift messages (notices, warnings, and errors) that will
+ be rendered in the redirected page, as well as cookies to be set on redirect.
  Similarly, there is an overloaded version of S.redirectTo that allows you
  to specify a function to be executed when the redirect is processed.
 \end_layout
@@ -4331,12 +5610,13 @@ target "http://www.cookiecentral.com/faq/"
 
 \end_inset
 
- for details on cookies and their security issues
+ for details on cookies and their security issues.
 \end_layout
 
 \end_inset
 
-; there have been a number of browser bugs related to data in cookies being
+.
+ There have been a number of browser bugs related to data in cookies being
  read by viruses or other sites
 \end_layout
 
@@ -4347,7 +5627,7 @@ Cookies are easy to fake, so you need to ensure that you validate any sensitive
 
 \begin_layout Standard
 Using Cookies in Lift is very easy.
- In a stateful context, everything you need is covered by a few methods
+ In a stateful context, everything you need is provided by a few methods
  on the S object:
 \end_layout
 
@@ -4356,8 +5636,8 @@ addCookie Adds a cookie to be sent in the response
 \end_layout
 
 \begin_layout Description
-deleteCookie Deletes a cookie (technically, this adds a cookie with a maxage
- of zero so that the browser removes it).
+deleteCookie Deletes a cookie (technically, this adds a cookie with a maximum
+ age of zero so that the browser removes it).
  You can either delete a cookie by name, or with a Cookie object
 \end_layout
 
@@ -4378,18 +5658,26 @@ responseCookies Returns a List[Cookie] of the cookies that will be sent
 
 \begin_layout Standard
 If you need to work with cookies in a stateless context, many of the ListRespons
-e classes (section 
+e classes (Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:LiftResponse-in-Detail"
 
 \end_inset
 
-) include a List[Cookie] in their constructor or apply arguments.
- Simply provide a list of the cookies you want set an they'll be sent in
- the response.
- If you want to delete a cookie in a LiftResponse you have to do it manually
- by adding a cookie with the same name and a maxage of zero.
+) include a List[Cookie] in their constructor or 
+\family typewriter
+apply
+\family default
+ arguments.
+ Simply provide a list of the cookies you want to set, and they'll be sent
+ in the response.
+ If you want to delete a cookie in a LiftResponse, you have to do it manually
+ by adding a cookie with the same name and a 
+\family typewriter
+maxage
+\family default
+ of zero.
  
 \end_layout
 
@@ -4435,13 +5723,13 @@ request parameters
 \end_inset
 
  via the S.param method, which returns a Box[String].
- Note that HTTP request parameters (sent either via GET or POST) differ
- from RequestVars in that query parameters are string values sent as part
- of the request; RequestVars, by contrast, use an internal per-request Map
- so that they can hold any type, and are initialized entirely in code.
- At this point you might ask what RequestVars can be used for; a typical
- example would be sharing state between different snippets, since there
- is no connection between snippets other than at the template level.
+ Note that HTTP request parameters (sent via GET or POST) differ from RequestVar
+s in that query parameters are string values sent as part of the request;
+ RequestVars, in contrast, use an internal per-request Map so that they
+ can hold any type, and are initialized entirely in code.
+ At this point you might ask what RequestVars can be used for.
+ A typical example would be sharing state between different snippets, since
+ there is no connection between snippets other than at the template level.
 \end_layout
 
 \begin_layout Standard
@@ -4459,17 +5747,18 @@ reference "lst:Defining-a-RequestVar"
  We start by defining the object as extending the RequestVar.
  You must provide the type of the RequestVar so that Lift knows what to
  accept and return.
+ In this instance, the type is an Int.
  The constructor argument is a by-name parameter which must evaluate to
- the var's type; in our case, we attempt to use the HTTP request variable
- 
+ the var's type.
+ In our case, we attempt to use the HTTP request variable 
 \begin_inset Quotes eld
 \end_inset
 
-pageSize
+pageSize,
 \begin_inset Quotes erd
 \end_inset
 
-, and if that isn't present or isn't an integer we default to 25.
+ and if that isn't present or isn't an integer, then we default to 25.
 \end_layout
 
 \begin_layout Standard
@@ -4531,8 +5820,21 @@ pageSize
 \end_layout
 
 \begin_layout Standard
-Accessing the value of the RequestVar is handled via the is method.
- You can also set the value using the apply method:
+Accessing the value of the RequestVar is handled via the 
+\family typewriter
+is
+\family default
+ method.
+ You can also set the value using the 
+\family typewriter
+apply
+\family default
+ method.
+ (If you're unfamiliar with the uses of the 
+\family typewriter
+apply
+\family default
+ method, check the Scala documentation.)
 \end_layout
 
 \begin_layout Standard
@@ -4582,7 +5884,7 @@ AccountOps.pageSize(50)
 
 \begin_layout Standard
 In addition to taking a parameter that defines a default value for setup,
- you can also handle cleaning up the value when the variable ends it lifecycle.
+ you can also clean up the value when the variable ends it lifecycle.
  Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -4591,15 +5893,72 @@ reference "lst:Defining-a-Cleanup"
 \end_inset
 
  shows an example of opening a socket and closing it at the end of the request.
- You can see that we override cleanupFunc and return a Full Box with the
- cleanup function.
- It's important to note that the cleanupFunc method is only used if the
- default value is used; if you always set the value of the RequestVar before
- you access it then you'll need to use the registerCleanupFunc instead.
- Also remember that you're responsible for handling any exceptions that
- might be thrown during either default initialization or cleanup.
- The information we've covered here is equally applicable to SessionVars;
- the only difference between them is the scope of their respective lifecycles.
+ This is all handled by passing a function to the 
+\family typewriter
+registerCleanupFunc
+\family default
+ method.
+ The type of the function that you need to pass is 
+\begin_inset Formula $CleanUpParam\Rightarrow Unit$
+\end_inset
+
+, where 
+\family typewriter
+CleanUpParam
+\family default
+ is defined based on whether you're using a 
+\family typewriter
+RequestVar
+\family default
+ or a 
+\family typewriter
+SessionVar
+\family default
+.
+ With 
+\family typewriter
+RequestVar
+\family default
+, 
+\family typewriter
+CleanUpParam
+\family default
+ is of type 
+\family typewriter
+Box[LiftSession]
+\family default
+, reflecting that the session may not be in scope when the cleanup function
+ executes.
+ For a 
+\family typewriter
+SessionVar
+\family default
+ the 
+\family typewriter
+CleanUpParam
+\family default
+ is of type 
+\family typewriter
+LiftSession
+\family default
+, since the session is always in scope for a 
+\family typewriter
+SessionVar
+\family default
+ (it holds a reference to the session).
+ In our example in Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Defining-a-Cleanup"
+
+\end_inset
+
+ we simply ignore the input parameter to the cleanup function, since closing
+ the socket is independent of any session state.
+ Another important thing to remember is that you're responsible for handling
+ any exceptions that might be thrown during either default initialization
+ or cleanup.
+ 
 \end_layout
 
 \begin_layout Standard
@@ -4642,7 +6001,7 @@ localhost:23
 
 \begin_layout Plain Layout
 
-  override def cleanupFunc = Full(() => this.is.close)
+  registerCleanupFunc(ignore => this.is.close)
 \end_layout
 
 \begin_layout Plain Layout
@@ -4656,15 +6015,34 @@ localhost:23
 \end_layout
 
 \begin_layout Standard
-Another common use of RequestVar is to pass state around between different
- page views (requests).
- We start by defining a RequestVar on an object so that it's accesible from
- all of the snippet methods that will read and write to it.
+The information we've covered here is equally applicable to SessionVars;
+ the only difference between them is the scope of their respective lifecycles.
+\end_layout
+
+\begin_layout Standard
+Another common use of 
+\family typewriter
+RequestVar
+\family default
+ is to pass state around between different page views (requests).
+ We start by defining a 
+\family typewriter
+RequestVar
+\family default
+ on an object so that it's accesible from all of the snippet methods that
+ will read and write to it.
  It's also possible to define it on a class if all of the snippets that
  will access it are in that class.
  Then, in the parts of your code that will transition to a new page you
- use the overloaded versions of SHtml.link or S.redirectTo that take a function
- as a second argument to 
+ use the overloaded versions of 
+\family typewriter
+SHtml.link
+\family default
+ or
+\family typewriter
+ S.redirectTo
+\family default
+ that take a function as a second argument to 
 \begin_inset Quotes eld
 \end_inset
 
@@ -4672,14 +6050,21 @@ inject
 \begin_inset Quotes erd
 \end_inset
 
- the value you want to pass via the RequestVar.
+ the value you want to pass via the 
+\family typewriter
+RequestVar
+\family default
+.
  This is similar to using a query parameter on the URL to pass data, but
  there are two important advantages:
 \end_layout
 
 \begin_layout Enumerate
-You can pass any type of data via a RequestVar, as opposed to just string
- data in a query parameter.
+You can pass any type of data via a 
+\family typewriter
+RequestVar
+\family default
+, as opposed to just string data in a query parameter.
 \end_layout
 
 \begin_layout Enumerate
@@ -4725,7 +6110,7 @@ SHtml.link
 S.redirectTo
 \family default
 .
- Another example of passing is shown in listing 
+ Another example of passing is shown in Listing 
 \begin_inset CommandInset ref
 LatexCommand vref
 reference "lst:Passing-Detached-Instances"
@@ -4745,7 +6130,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Passing an Account to View
 \begin_inset CommandInset label
 LatexCommand label
@@ -4899,12 +6283,19 @@ class AccountOps {
 
 \begin_layout Standard
 One important thing to note is that the injector variable is called in the
- scope of the following request.
- That means that if you want the value returned by the function at the point
+ scope of the 
+\emph on
+following
+\emph default
+ request.
+ This means that if you want the value returned by the function at the point
  where you call the link or redirectTo, you'll need to capture it in a val.
- Otherwise, the function will be called after the redirect or link, which
- may result in a different value than you expect.
- As you can see in listing 
+ Otherwise, the function will be called 
+\emph on
+after
+\emph default
+ the redirect or link, which may result in a different value than you expect.
+ As you can see in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Passing-an-Account"
@@ -4950,28 +6341,28 @@ name "sub:S-object"
 The S object represents the state of the current request.
  As such, it is used to retrieve information about the request and modify
  information that is sent in the response.
- Among other things, it can be used for notices (section 
+ Among other things, it can be used for notices (Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "cha:Message-Handling"
 
 \end_inset
 
-) , cookie management (section 
+) , cookie management (Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Cookies"
 
 \end_inset
 
-), localization/internationalization (chapter 
+), localization/internationalization (Chapter 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "cha:Internationalization"
 
 \end_inset
 
-) and redirection (section 
+) and redirection (Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:HTTP-redirects"
@@ -4995,7 +6386,7 @@ name "sub:SHtml"
 \begin_layout Standard
 The SHtml object's main purpose is to define HTML generation functions,
  particularly those having to do with form elements.
- We cover forms in detail in chapter 
+ We cover forms in detail in Chapter 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "cha:Forms-in-Lift"
@@ -5003,8 +6394,8 @@ reference "cha:Forms-in-Lift"
 \end_inset
 
 ).
- In addition to normal form elements, SHtml defines functions for Ajax and
- JSON form elements (chapters 
+ In addition to normal form elements, SHtml defines functions for AJAX and
+ JSON form elements (Chapters 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "cha:AJAX-and-COMET"
