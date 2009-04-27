@@ -75,19 +75,31 @@ name "sec:Entry-into-Lift"
 
 \begin_layout Standard
 The first step in Lift's request processing is intercepting the HTTP request.
- Originally, Lift used a Servlet instance to process incoming requests.
- This was changed to use a Filter instance
+ Originally, Lift used a 
+\family typewriter
+java.servlet.Servlet
+\family default
+ instance to process incoming requests.
+ This was changed to use a 
+\family typewriter
+java.servlet.Filter
+\family default
+ instance
 \begin_inset Foot
 status open
 
 \begin_layout Plain Layout
+
+You can see the discussion on the Lift mailing list that lead to this change
+ here: 
+\lang english
+
 \begin_inset Flex URL
 status open
 
 \begin_layout Plain Layout
 
-http://groups.google.com/group/liftweb/browse_thread/thread/b484ea2a13b6f84b/90ba1
-ef1115055a6
+http://tinyurl.com/dy9u9d
 \end_layout
 
 \end_inset
@@ -1144,7 +1156,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 A Recursive Tag Processing Example
 \begin_inset CommandInset label
 LatexCommand label
@@ -1322,7 +1333,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 The Recursive Tag Snippets Code
 \begin_inset CommandInset label
 LatexCommand label
@@ -1462,7 +1472,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 The Swapped Recursive Snippet Template
 \begin_inset CommandInset label
 LatexCommand label
@@ -3698,7 +3707,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Using a StatefulSnippet
 \begin_inset CommandInset label
 LatexCommand label
@@ -4088,7 +4096,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 The StatefulSnippet Example Template
 \begin_inset CommandInset label
 LatexCommand label
@@ -4273,7 +4280,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Embedding and eager evaluation
 \begin_inset CommandInset label
 LatexCommand label
@@ -4320,7 +4326,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 The formTemplate template
 \begin_inset CommandInset label
 LatexCommand label
@@ -4344,6 +4349,19 @@ name "lst:The-formTemplate-template"
 \begin_layout Plain Layout
 
 <hello:time />
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Add example of same snippet on multiple pages.
 \end_layout
 
 \end_inset
@@ -5433,16 +5451,12 @@ height
 ).map(_.toInt) openOr 300
 \end_layout
 
-\begin_layout LyX-Code
-
-\end_layout
-
 \begin_layout Standard
-Or you can use a slightly different approach:
-\end_layout
-
-\begin_layout LyX-Code
-
+Or you can use a slightly different approach by using the 
+\family typewriter
+Box.dmap
+\family default
+ method:
 \end_layout
 
 \begin_layout LyX-Code
@@ -5467,10 +5481,6 @@ height
 \end_inset
 
 ).dmap(300)(_.toInt)
-\end_layout
-
-\begin_layout LyX-Code
-
 \end_layout
 
 \begin_layout Standard

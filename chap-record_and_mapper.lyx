@@ -196,7 +196,7 @@ Field
 
 .
  The MappedField trait lets you define the individual validators as well
- as things transform filters and filed name.
+ as filters to transform the data and the field name.
  Under Record, Field adds some functionality like tab order and default
  error messages for form input handling.
 \end_layout
@@ -308,7 +308,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Mapper Imports
 \end_layout
 
