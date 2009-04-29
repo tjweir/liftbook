@@ -56,7 +56,7 @@ name "cha:Forms-in-Lift"
 \begin_layout Standard
 In this chapter we're going to discuss the specifics of how you generate
  and process forms with Lift.
- Besides standard GET/POST form processing, Lift provides Ajax forms (chapter
+ Besides standard GET/POST form processing, Lift provides AJAX forms (Chapter
  
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -64,7 +64,7 @@ reference "cha:AJAX-and-COMET"
 
 \end_inset
 
-) as well as JSON form processing (section 
+) as well as JSON form processing (Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sub:JSON-forms"
@@ -99,20 +99,20 @@ name "sec:Form-Fundamentals"
 
 \begin_layout Standard
 Let's start with the basics of Lift form processing.
- A form in lift is usually produced via a snippet that contains the additional
+ A form in Lift is usually produced via a snippet that contains the additional
  
 \family typewriter
 form
 \family default
  attribute.
- As we mentioned in section 
+ As we mentioned in Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sub:snippet-tag"
 
 \end_inset
 
-, this attribute takes the values GET and POST, and when present makes the
+, this attribute takes the value GET or POST, and when present makes the
  snippet code embed the proper form tags around the snippet HTML.
  Listing 
 \begin_inset CommandInset ref
@@ -144,7 +144,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-An example form template
+An Example Form Template
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:An-example-form-template"
@@ -185,9 +185,9 @@ name "lst:An-example-form-template"
 \end_layout
 
 \begin_layout Standard
-The first thing to understand about Lift's form support is that you don't
- generally use the HTML tags for form elements directly, but rather you
- use generator functions on SHtml
+The first thing to understand about Lift's form support is that you generally
+ don't use the HTML tags for form elements directly, but rather you use
+ generator functions on SHtml
 \begin_inset Foot
 status open
 
@@ -197,9 +197,10 @@ net.liftweb.http.SHtml
 
 \end_inset
 
-; the main reason for this is that it allows Lift to set up all of the internal
+.
+ The main reason for this is that it allows Lift to set up all of the internal
  plumbing so that you keep your code simple.
- Additionally, we use Lift's binding mechanism (section 
+ Additionally, we use Lift's binding mechanism (Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sub:Binding-Values-in-snippets"
@@ -215,19 +216,19 @@ attach
 \end_inset
 
  the form elements in the proper location.
- In our example in listing 
+ In our example in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:An-example-form-template"
 
 \end_inset
 
- we have bindings for a description field, an amount, and a submit button.
+, we have bindings for a description field, an amount, and a submit button.
 \end_layout
 
 \begin_layout Standard
 Our next step is to define the form snippet itself.
- Corresponding to our example template is listing 
+ Corresponding to our example template is Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:An-example-form-snippet"
@@ -254,7 +255,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-An example form snippet
+An Example Form Snippet
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:An-example-form-snippet"
@@ -355,7 +356,7 @@ closure
 , reference variables in local scope, Scala magically transforms them to
  heap variables behind the scenes.
  Lift, in turn, adds the function callbacks for each form element into its
- session state so that when the form is submitted the appropriate closure
+ session state so that when the form is submitted, the appropriate closure
  is called and the state is updated.
  This is also why we define the 
 \family typewriter
@@ -395,7 +396,7 @@ One important thing to remember, however, is that each new invocation of
  the add method (for each page view) wil get its own unique instance of
  the variables that we've defined.
  That means that if you want to retain values between submission and re-renderin
-g of the form, you'll want to use RequestVars instead (section 
+g of the form, you'll want to use RequestVars instead (Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Session-and-Request"
@@ -404,7 +405,7 @@ reference "sec:Session-and-Request"
 
 ).
  An example would be if you want to do form validation and retain submitted
- values if validation fails, as shown in listing 
+ values if validation fails, as shown in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Using-RequestVars-with-forms"
@@ -412,7 +413,7 @@ reference "lst:Using-RequestVars-with-forms"
 \end_inset
 
 .
- In this case, we set an error message (more in chapter 
+ In this instance, we set an error message (more in Chapter 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "cha:Message-Handling"
@@ -429,7 +430,7 @@ action
 \begin_inset Quotes erd
 \end_inset
 
- for a page in Lift is the page itself) and the current request var value
+ for a page in Lift is the page itself) and the current RequestVar value
  of description is used as the default value of the text box.
 \end_layout
 
@@ -443,7 +444,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Using RequestVars with forms
+Using RequestVars with Forms
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:Using-RequestVars-with-forms"
@@ -482,6 +483,10 @@ object amount extends RequestVar(
 \end_inset
 
 )
+\end_layout
+
+\begin_layout Plain Layout
+
 \end_layout
 
 \begin_layout Plain Layout
@@ -583,12 +588,12 @@ The next thing to look at is how the form elements are generated.
  We use the SHtml helper object to generate a form element of the appropriate
  type for each variable.
  In our case, we just want text fields for the description and amount, but
- SHtml provides a number of other form element types which we'll be covering
+ SHtml provides a number of other form element types that we'll be covering
  later in this section.
  Generally, an element generator takes an argument for the initial value
  as well as a function to process the submitted value.
  Usually both of these arguments will use a variable, but there's nothing
- stopping you from doing something like
+ stopping you from doing something such as
 \end_layout
 
 \begin_layout LyX-Code
@@ -623,7 +628,7 @@ Finally, our submit function executes the partially applied
 \family typewriter
 processEntryAdd
 \family default
- function, which through access to the variables we've defined can do whatever
+ function, which, having access to the variables we've defined, can do whatever
  it needs to do when the submit button is pressed.
 \end_layout
 
@@ -638,7 +643,7 @@ a
 \family typewriter
 ajax
 \family default
-* methods are specific to Ajax forms, which are covered in detail in chapter
+* methods are specific to AJAX forms, which are covered in detail in Chapter
  
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -651,7 +656,7 @@ reference "cha:AJAX-and-COMET"
 \family typewriter
 json*
 \family default
- methods are covered in section 
+ methods are covered in Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sub:JSON-forms"
@@ -659,7 +664,7 @@ reference "sub:JSON-forms"
 \end_inset
 
 .
- We'll be covering the fileUpload method in detail in section 
+ We'll be covering the fileUpload method in detail in Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:File-Uploads"
@@ -739,7 +744,7 @@ Box[String]
 Pair(String,String)
 \family default
  so that you can provide any other attributes you'd like.
- For example, listing 
+ For example, Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:A-checkbox-example"
@@ -754,7 +759,15 @@ snazzy
 \begin_inset Quotes erd
 \end_inset
 
- and a special css class.
+ and a class attribute set to 
+\begin_inset Quotes eld
+\end_inset
+
+woohoo.
+\begin_inset Quotes erd
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -767,7 +780,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-A checkbox example
+A Checkbox Example
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:A-checkbox-example"
@@ -832,7 +845,7 @@ hidden
 \end_inset
 
  argument that is called when the form is submitted.
- As with most of the other generators it also takes a final varargs sequence
+ As with most of the other generators, it also takes a final varargs sequence
  of 
 \family typewriter
 Pair[String,String]
@@ -854,6 +867,17 @@ log
 \end_inset
 
  information.
+ (When the form is submitted, 
+\begin_inset Quotes eld
+\end_inset
+
+Form was submitted
+\begin_inset Quotes erd
+\end_inset
+
+ will be printed to stdout.
+ This can be a useful trick for debugging if you're not using a full-blown
+ IDE.)
 \end_layout
 
 \begin_layout Standard
@@ -866,7 +890,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-A hidden example
+A Hidden Example
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:A-hidden-example"
@@ -949,7 +973,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-A link example
+A Link Example
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:A-link-example"
@@ -967,6 +991,10 @@ name "lst:A-link-example"
 \begin_layout Plain Layout
 
 object currentLedgerEntry extends RequestVar[Box[LedgerEntry]](Empty)
+\end_layout
+
+\begin_layout Plain Layout
+
 \end_layout
 
 \begin_layout Plain Layout
@@ -1082,7 +1110,18 @@ text and password
 \end_layout
 
 \begin_layout Standard
-The text and password methods generate standard text and password input
+The text and password methods generate standard 
+\family typewriter
+text
+\family default
+ and 
+\family typewriter
+password
+\family default
+ 
+\family typewriter
+input
+\family default
  fields, respectively.
  While both take string default values and 
 \begin_inset Formula $(String)\Rightarrow Any$
@@ -1110,7 +1149,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-A text field example
+A Text Field Example
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:A-text-field"
@@ -1248,13 +1287,28 @@ textarea
 \end_layout
 
 \begin_layout Standard
-The textarea method generates a textare HTML form element.
+The textarea method generates a 
+\family typewriter
+textarea
+\family default
+ HTML form element.
  Generally the functionality mirrors that of 
 \family typewriter
 text
 \family default
-, although you can add attributes to control textarea width and height as
- shown in listing ???.
+, although because it's a 
+\family typewriter
+textarea
+\family default
+, you can control width and height as shown in Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:A-textarea-example"
+
+\end_inset
+
+.
+ (You can, of course, add any other HTML attributes in the same manner.)
 \end_layout
 
 \begin_layout Standard
@@ -1267,7 +1321,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-A textarea example
+A Textarea Example
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:A-textarea-example"
@@ -1351,7 +1405,7 @@ Submit generates the submit form element (typically a button).
  that can be used to process your form results.
  One important thing to note about submit is that form elements are processed
  in the order that they appear in the HTML document.
- This means that you should put your submit element last in your forms;
+ This means that you should put your submit element last in your forms:
  any items after the submit element won't have been 
 \begin_inset Quotes eld
 \end_inset
@@ -1368,8 +1422,9 @@ multiselect
 \end_layout
 
 \begin_layout Standard
-Up to this point we've covered some fairly simple form elements; multiselect
- is a bit more complex in that it doesn't just process single values.
+Up to this point we've covered some fairly simple form elements.
+ Multiselect is a bit more complex in that it doesn't just process single
+ values.
  Instead, it allows you to select multiple elements out of an initial Seq
  and then process each selected element individually.
  Listing 
@@ -1395,8 +1450,8 @@ display
 ) strings.
  The value is what will be returned to our processing function, while the
  display string is what will be shown in the select box for the user.
- Next, we turn the current entry's categories into a Seq of just value strings;
- we also set up a Set variable to hold the returned values.
+ Next, we turn the current entry's categories into a Seq of just value strings,
+ and we create a Set variable to hold the returned values.
  Finally, we do our form binding.
  In this example we use a helper function, 
 \family typewriter
@@ -1416,7 +1471,7 @@ Set[String]
 \family default
 .
  This is also why we have to use our own set to manage the values.
- Depending on your use case you may or may not need to store the returned
+ Depending on your use case, you may or may not need to store the returned
  values in a collection.
 \end_layout
 
@@ -1511,8 +1566,9 @@ The radio method generates a set of radio buttons that take String values
  The values are used as labels for the Radio buttons, so you may need to
  set up a Map to translate back into useful values.
  The radio method also takes a Box[String] that can be used to pre-select
- one of the buttons; the value of the Box must match one of the option values,
- or if you pass Empty no buttons will be selected.
+ one of the buttons.
+ The value of the Box must match one of the option values, or if you pass
+ Empty no buttons will be selected.
  Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -1521,7 +1577,7 @@ reference "lst:Using-radio-for"
 \end_inset
 
  shows an example of using radio to select a color.
- In this example we use a Map from color names to the actual color values
+ In this example, we use a Map from color names to the actual color values
  for the translation.
  To minimize errors, we use the 
 \family typewriter
@@ -1541,7 +1597,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Using radio for colors
+Using radio for Colors
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:Using-radio-for"
@@ -1598,12 +1654,9 @@ select
 \begin_layout Standard
 The select method is very similar to the multiselect method except that
  only one item may be selected from the list of options.
- That also means that the default option is a 
-\family typewriter
-Box[String]
-\family default
- instead of a Seq[String].
- As with multiselect, you pass a sequence of (value,display) pairs as the
+ That also means that the default option is a Box[String] instead of a Seq[Strin
+g].
+ As with multiselect, you pass a sequence of (value, display) pairs as the
  options for the select, and process the return with a 
 \begin_inset Formula $(String)\Rightarrow Any$
 \end_inset
@@ -1640,7 +1693,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-A select example
+A select Example
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:A-select-example"
@@ -1668,7 +1721,23 @@ val accounts = User.accounts.map(acc => (acc.id.toString, acc.name))
 \begin_layout Plain Layout
 
 val chooseAccount = SHtml.select(accounts, Empty, selectedAccount = loadAccount(_
-))
+), 
+\begin_inset Quotes eld
+\end_inset
+
+class
+\begin_inset Quotes erd
+\end_inset
+
+ -> 
+\begin_inset Quotes eld
+\end_inset
+
+myselect
+\begin_inset Quotes erd
+\end_inset
+
+)
 \end_layout
 
 \end_inset
@@ -1678,9 +1747,9 @@ val chooseAccount = SHtml.select(accounts, Empty, selectedAccount = loadAccount(
 
 \begin_layout Standard
 An important thing to note is that Lift will verify that the value submitted
- in the form matches one of the options that was passed in; if you need
- to do dynamic updating of the list you'll need to use untrustedSelect (section
- 
+ in the form matches one of the options that was passed in.
+ If you need to do dynamic updating of the list, then you'll need to use
+ untrustedSelect (Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sub:untrustedSelect"
@@ -1698,14 +1767,22 @@ selectObj
 One of the drawbacks with the select and multiselect generators is that
  they deal only in Strings; if you want to select objects you need to provide
  your own code for mapping from the strings.
- The selectObj generator method handles all of this for you by .
+ The 
+\family typewriter
+selectObj
+\family default
+ generator method handles all of this for you.
  Instead of passing a sequence of (value string, display string) pairs,
- you pass in a sequence of (object,display string) pairs.
+ you pass in a sequence of (object, display string) pairs.
  Similarly, the default value is a Box[T] and the callback function is 
 \begin_inset Formula $(T)\Rightarrow Any$
 \end_inset
 
- , where T is the type of the object (selectObj is a generic function).
+ , where T is the type of the object (
+\family typewriter
+selectObj
+\family default
+ is a generic function).
  Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -1713,7 +1790,7 @@ reference "lst:Using-selectObj-for"
 
 \end_inset
 
- shows a reworking of our radio example (listing 
+ shows a reworking of our radio example (Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Using-radio-for"
@@ -1785,9 +1862,13 @@ name "sub:untrustedSelect"
 \end_layout
 
 \begin_layout Standard
-The untrustedSelect generator is essentially the same as the select generator,
- except that the value returned in the form isn't validated against the
- original option sequence.
+The 
+\family typewriter
+untrustedSelect
+\family default
+ generator is essentially the same as the select generator, except that
+ the value returned in the form isn't validated against the original option
+ sequence.
  This can be useful if you want to update the selection on the client side
  using JavaScript.
 \end_layout
@@ -1804,14 +1885,18 @@ name "sec:File-Uploads"
 \end_layout
 
 \begin_layout Standard
-File uploads are a special case of form submission that allows the client
+File uploads are a special case of form submission that allow the client
  to send a local file to the server.
- This is accomplished by using multipart forms; you can enable this by setting
- the 
+ This is accomplished by using multipart forms.
+ You can enable this by setting the 
 \family typewriter
 multipart
 \family default
- attribute on your snippet tag to true.
+ attribute on your snippet tag to 
+\family typewriter
+true
+\family default
+.
  Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -1820,8 +1905,21 @@ reference "lst:File-upload-template"
 \end_inset
 
  shows how we can add a file upload to our existing expense entry form so
- that someone can attach a scanned receipt to their expense.
- We modify our template to add a new form
+ that users can attach scanned receipts to their expenses.
+ We modify our template to add a new form, shown below.
+ Note the 
+\family typewriter
+multipart=
+\begin_inset Quotes erd
+\end_inset
+
+true
+\begin_inset Quotes erd
+\end_inset
+
+ 
+\family default
+attribute.
 \end_layout
 
 \begin_layout Standard
@@ -1834,7 +1932,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-File upload template
+File Upload Template
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:File-upload-template"
@@ -1892,7 +1990,7 @@ name "lst:File-upload-template"
 \end_layout
 
 \begin_layout Standard
-On the server side, listing 
+On the server side, Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:File-upload-snippet"
@@ -1933,7 +2031,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-File upload snippet
+File Upload Snippet
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:File-upload-snippet"
@@ -2001,6 +2099,11 @@ class AddEntry {
 \begin_layout Plain Layout
 
       if (fileHolder.mimeType.startsWith("image/")) {
+\end_layout
+
+\begin_layout Plain Layout
+
+        // Set the receipt and the receipt mime type
 \end_layout
 
 \begin_layout Plain Layout
@@ -2118,9 +2221,9 @@ class AddEntry {
 
 \begin_layout Standard
 In our example, we want to save the file data into a MappedBinary field
- on our expense entry; you could just as easily process the data in place
- using a scala.io.Source or java.io.ByteArrayInputStream, or output it using
- a java.io.FileOutputStream.
+ on our expense entry.
+ You could just as easily process the data in place using a scala.io.Source
+ or java.io.ByteArrayInputStream, or output it using a java.io.FileOutputStream.
 \end_layout
 
 \end_body
