@@ -1,4 +1,4 @@
-#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.2 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -1311,6 +1311,12 @@ case Full(user)
 
 .
  See Box in the Lift API.
+ We also
+\end_layout
+
+\begin_layout Plain Layout
+
+  // briefly discuss Box in Appendix C.
 \end_layout
 
 \begin_layout Plain Layout
@@ -2403,8 +2409,8 @@ name "lst:Embedded-Expense-table"
 \end_layout
 
 \begin_layout Standard
-Before we get into the AJAX portion of the code, let's define a helper method,
- shown in Listing 
+Before we get into the AJAX portion of the code, let's define a helper method
+ in our Accounts snippet class, shown in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:The-table-helper-function"
@@ -2421,7 +2427,14 @@ reference "lst:The-table-helper-function"
 \family typewriter
 Helpers.chooseTemplate
 \family default
- method, Section ???) and binds each 
+ method, Section 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "sec:BindHelpers"
+
+\end_inset
+
+) and binds each 
 \family typewriter
 Expense
 \family default
@@ -2460,52 +2473,87 @@ name "lst:The-table-helper-function"
 
 \begin_layout Plain Layout
 
-def buildExpenseTable(entries : List[Expense], template : NodeSeq) = {
+package com.pocketchangeapp.snippet
 \end_layout
 
 \begin_layout Plain Layout
 
-  // Calls bind repeatedly, once for each Entry in entries
+...
+ imports ...
 \end_layout
 
 \begin_layout Plain Layout
 
-  entries.flatMap({ entry =>
 \end_layout
 
 \begin_layout Plain Layout
 
-    bind("entry", chooseTemplate("acct", "tableEntry", template),
+class Accounts {
 \end_layout
 
 \begin_layout Plain Layout
 
-         "date" -> Text(Util.slashDate.format(entry.dateOf.is)),
+  ...
 \end_layout
 
 \begin_layout Plain Layout
 
-         "desc" -> Text(entry.description.is),
+  def buildExpenseTable(entries : List[Expense], template : NodeSeq) = {
 \end_layout
 
 \begin_layout Plain Layout
 
-         "tags" -> Text(entry.tags.map(_.tag.is).mkString(", ")),
+    // Calls bind repeatedly, once for each Entry in entries
 \end_layout
 
 \begin_layout Plain Layout
 
-         "amt" -> Text(entry.amount.toString),
+    entries.flatMap({ entry =>
 \end_layout
 
 \begin_layout Plain Layout
 
-         "balance" -> Text(entry.currentBalance.toString))
+      bind("entry", chooseTemplate("acct", "tableEntry", template),
 \end_layout
 
 \begin_layout Plain Layout
 
- })
+           "date" -> Text(Util.slashDate.format(entry.dateOf.is)),
+\end_layout
+
+\begin_layout Plain Layout
+
+           "desc" -> Text(entry.description.is),
+\end_layout
+
+\begin_layout Plain Layout
+
+           "tags" -> Text(entry.tags.map(_.tag.is).mkString(", ")),
+\end_layout
+
+\begin_layout Plain Layout
+
+           "amt" -> Text(entry.amount.toString),
+\end_layout
+
+\begin_layout Plain Layout
+
+           "balance" -> Text(entry.currentBalance.toString))
+\end_layout
+
+\begin_layout Plain Layout
+
+   })
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+  ...
 \end_layout
 
 \begin_layout Plain Layout

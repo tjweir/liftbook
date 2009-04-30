@@ -1,4 +1,4 @@
-#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.2 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -89,11 +89,8 @@ java.servlet.Filter
 status open
 
 \begin_layout Plain Layout
-
 You can see the discussion on the Lift mailing list that lead to this change
  here: 
-\lang english
-
 \begin_inset Flex URL
 status open
 
@@ -340,6 +337,137 @@ import _root_.scala.xml._
 \end_inset
 
 
+\end_layout
+
+\begin_layout Section
+Lift's Main Objects
+\end_layout
+
+\begin_layout Standard
+Before we dive into Lift's fundamentals, we want to briefly discuss three
+ objects you will use heavily in your Lift code.
+ We'll be covering these in more detail later in this chapter and in further
+ chapters, so feel free to skip ahead if you want more details.
+\end_layout
+
+\begin_layout Subsection
+S object
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:S-object"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The 
+\family typewriter
+net.liftweb.http.S
+\family default
+ object represents the state of the current request (according to David
+ Pollak, 
+\begin_inset Quotes eld
+\end_inset
+
+S
+\begin_inset Quotes erd
+\end_inset
+
+ is for Stateful).
+ As such, it is used to retrieve information about the request and modify
+ information that is sent in the response.
+ Among other things, it can be used for notices (Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "cha:Message-Handling"
+
+\end_inset
+
+) , cookie management (Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Cookies"
+
+\end_inset
+
+), localization/internationalization (Chapter 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "cha:Internationalization"
+
+\end_inset
+
+) and redirection (Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:HTTP-redirects"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Subsection
+SHtml
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:SHtml"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The 
+\family typewriter
+net.liftweb.http.SHtml
+\family default
+ object's main purpose is to define HTML generation functions, particularly
+ those having to do with form elements.
+ We cover forms in detail in Chapter 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "cha:Forms-in-Lift"
+
+\end_inset
+
+).
+ In addition to normal form elements, SHtml defines functions for AJAX and
+ JSON form elements (Chapters 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "cha:AJAX-and-COMET"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "cha:Lift-and-Javascript"
+
+\end_inset
+
+, respectively).
+\end_layout
+
+\begin_layout Subsection
+LiftRules
+\end_layout
+
+\begin_layout Standard
+The 
+\family typewriter
+net.liftweb.http.LiftRules
+\family default
+ object is where the vast majority of Lift's global configuration is handled.
+ Almost everything that is configurable about Lift is set up based on variables
+ in LiftRules.
+ We won't be covering LiftRules directly, but as we discuss each Lift mechanism
+ we'll touch on the LiftRules variables and methods related to the configuration
+ of that mechanism.
 \end_layout
 
 \begin_layout Section
@@ -4921,13 +5049,20 @@ S
 \begin_inset Quotes eld
 \end_inset
 
-302 Moved Temporarily
+307 Temporary Redirect
 \begin_inset Quotes erd
 \end_inset
 
  result code that forwards the client to a new request.
  Because of that, even if you could set data in LiftSession or S, it would
  disappear when the redirect occurs.
+ Unlike some other web frameworks, Lift doesn't have a concept of an internal
+ redirect since logic is handled at the snippet level instead of the template
+ level.
+ You can approximate this behavior by using Views, and having one View function
+ call another View function (or return a different template), but in our
+ experience the lack of an internal redirect is not a significant factor
+ in workflows.
 \end_layout
 
 \begin_layout Standard
@@ -5830,7 +5965,11 @@ pageSize
 \end_layout
 
 \begin_layout Standard
-Accessing the value of the RequestVar is handled via the 
+Accessing the value of the 
+\family typewriter
+RequestVar
+\family default
+ is done via the 
 \family typewriter
 is
 \family default
@@ -5839,12 +5978,33 @@ is
 \family typewriter
 apply
 \family default
- method.
- (If you're unfamiliar with the uses of the 
+ method, which in Scala is syntactically like using the 
+\family typewriter
+RequestVar
+\family default
+ as a function.
+ Common uses of apply in Scala include array element access by index and
+ companion object methods that can approximate custom constructors.
+ For example, the 
+\family typewriter
+Loc
+\family default
+ object (which we'll cover in Chapter 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "cha:SiteMap"
+
+\end_inset
+
+), has an overloaded 
 \family typewriter
 apply
 \family default
- method, check the Scala documentation.)
+ method that creates a new 
+\family typewriter
+Loc
+\family default
+ class instance based on input parameters.
 \end_layout
 
 \begin_layout Standard
@@ -5874,17 +6034,37 @@ name "lst:Accessing-the-RequestVar"
 
 \begin_layout Plain Layout
 
+// get the value contained in the AccountOps.pageSize RequestVar
+\end_layout
+
+\begin_layout Plain Layout
+
 query.setMaxResults(AccountOps.pageSize.is)
 \end_layout
 
 \begin_layout Plain Layout
 
-// Change the value
+\end_layout
+
+\begin_layout Plain Layout
+
+// Change the value of the RequestVar.
+ The following two lines
+\end_layout
+
+\begin_layout Plain Layout
+
+// of code are equivalent:
 \end_layout
 
 \begin_layout Plain Layout
 
 AccountOps.pageSize(50)
+\end_layout
+
+\begin_layout Plain Layout
+
+AccountOps.pageSize.apply(50)
 \end_layout
 
 \end_inset
@@ -6323,103 +6503,6 @@ S.redirectTo("/view", () => currentAccountVar(currentAccountVar.is))
 \begin_layout Standard
 instead, we would get the default value of our RequestVar (null in this
  case).
-\end_layout
-
-\begin_layout Section
-More Useful Objects
-\end_layout
-
-\begin_layout Standard
-In addition to what we've covered so far, there a few more objects that
- are important to understand.
- We're going to cover these in detail in later sections, but we want to
- briefly mention each one here just so you're aware of them.
-\end_layout
-
-\begin_layout Subsection
-S object
-\begin_inset CommandInset label
-LatexCommand label
-name "sub:S-object"
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-The S object represents the state of the current request.
- As such, it is used to retrieve information about the request and modify
- information that is sent in the response.
- Among other things, it can be used for notices (Section 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "cha:Message-Handling"
-
-\end_inset
-
-) , cookie management (Section 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "sec:Cookies"
-
-\end_inset
-
-), localization/internationalization (Chapter 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "cha:Internationalization"
-
-\end_inset
-
-) and redirection (Section 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "sec:HTTP-redirects"
-
-\end_inset
-
-).
-\end_layout
-
-\begin_layout Subsection
-SHtml
-\begin_inset CommandInset label
-LatexCommand label
-name "sub:SHtml"
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-The SHtml object's main purpose is to define HTML generation functions,
- particularly those having to do with form elements.
- We cover forms in detail in Chapter 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "cha:Forms-in-Lift"
-
-\end_inset
-
-).
- In addition to normal form elements, SHtml defines functions for AJAX and
- JSON form elements (Chapters 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "cha:AJAX-and-COMET"
-
-\end_inset
-
- and 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "cha:JSON-Handling"
-
-\end_inset
-
-, respectively).
 \end_layout
 
 \begin_layout Section
