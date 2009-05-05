@@ -1,4 +1,4 @@
-#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.2 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -65,22 +65,17 @@ name "sec:Introduction"
 \end_layout
 
 \begin_layout Standard
-Lift provides a a pretty consistent collection of helper artifacts.
- The helpers are essentially utility functions that helps you avoid boilerplate
- code.
- Hence it is important to be aware what is provided by Lift already for
- you to use so you wont have to spend time coding something that already
- exists.
- We won't be detailing here every single helper or helper function as you
- can easily discover them and enjoy using them in your applciation.
-\end_layout
-
-\begin_layout Standard
-Pretty much all Lift's helpers live in 
+Lift provides a fairly useful collection of helper artifacts.
+ The helpers are essentially utility functions that minimize the need for
+ boilerplate code.
+ This appendix is intended to introduce some of the more common utility
+ classes and objects to you so that you’re familiar with them.
+ If you would like more details, you can look at the API documentation for
+ the 
 \family typewriter
-net.liftweb.util
+net.liftweb.util package
 \family default
- package.
+.
 \end_layout
 
 \begin_layout Section
@@ -95,48 +90,86 @@ name "sec:Box-(or-Scala's"
 \end_layout
 
 \begin_layout Standard
-The Box is a utility that is built on top of Scala's Option Type (also heavily
- used inside Lift ), so let's take a quick look at Option first.
- The Option class allows for typesafe method of dealing with a situation
- where you may or may not have a result.
- Option has two values, either Some(value) where value is actually the value
- and None which is used to represent nothing.
- A typical example for Option is outlined using Scala's Map type.
- Below you'll see a definition of a Map, a successful attempt to get the
- value of key 
-\begin_inset Quotes eld
-\end_inset
 
-a
-\begin_inset Quotes erd
-\end_inset
-
- and an attempt to get the value of key 
-\begin_inset Quotes eld
-\end_inset
-
-i
-\begin_inset Quotes erd
-\end_inset
-
-.Notice that when there was an existing key-value pair for 
-\begin_inset Quotes eld
-\end_inset
-
-a
-\begin_inset Quotes erd
-\end_inset
-
- the value was returned as Some(A) and when we asked for the value of key
+\family typewriter
+net.liftweb.util.Box
+\family default
+ (or Scala’s 
+\family typewriter
+scala.Option
+\family default
+ class on steroids) is a utility class that mimics Scala’s 
+\family typewriter
+Option
+\family default
+ type (also heavily used inside Lift).
+ To understand some of the underlying concepts and assumptions, let’s take
+ a quick look at 
+\family typewriter
+Option
+\family default
+ class first.
+ The 
+\family typewriter
+Option
+\family default
+ class allows a type-safe way of dealing with a situation where you may
+ or may not have a result.
  
-\begin_inset Quotes eld
+\family typewriter
+Option
+\family default
+ has two values, either 
+\family typewriter
+Some(value)
+\family default
+, where 
+\family typewriter
+value
+\family default
+ is actually the value, and 
+\family typewriter
+None
+\family default
+, which is used to represent nothing.
+ A typical example for 
+\family typewriter
+Option
+\family default
+ is outlined using Scala’s Map type.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Option-and-Map"
+
 \end_inset
 
+ shows a definition of a 
+\family typewriter
+Map
+\family default
+, a successful attempt to get the value of key 
+\family typewriter
+a
+\family default
+, and an attempt to get the value of key 
+\family typewriter
 i
-\begin_inset Quotes erd
-\end_inset
-
- we received None.
+\family default
+.
+ Notice that when we retrieved the existing key-value pair for 
+\family typewriter
+a
+\family default
+, the value returned was 
+\family typewriter
+Some(A)
+\family default
+ and when we asked for the value of key 
+\family typewriter
+i
+\family default
+, we received None.
 \end_layout
 
 \begin_layout LyX-Code
@@ -221,7 +254,22 @@ res2: Option[java.lang.String] = None
 \end_layout
 
 \begin_layout Standard
-Getting the value out of an Option is usually handled via map, for example:
+Getting the value out of an 
+\family typewriter
+Option
+\family default
+ is usually handled via Scala’s matching mechanism or via the 
+\family typewriter
+getOrElse
+\family default
+ function, as shown in Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Fetch-value-from"
+
+\end_inset
+
+:
 \end_layout
 
 \begin_layout Standard
@@ -304,27 +352,116 @@ res8: String = Nothing found.
 \end_layout
 
 \begin_layout Standard
-Box in Lift may seem very similar in functionality with Option.
- But Box is taking Option at the next level.
- If we have an Option that is None at some point we can not really tell
- why that Option is None although in many situation it would be quite helpful.
- With Box, on the other hand, and Empty Box can be a Failure incorporating
- the cause for the failure.
- So you can think of Box as a container that can either contain something
- or to be empty.
- A Box can be empty from various causes including some error conditions.
- This is why we also have Failure which is an Empty Box but contains information
- about the error.
- See 
+
 \family typewriter
-case class Failure(msg: String, exception: Box[Throwable], chain: Box[Failure])
+Box
 \family default
-.
- Of course, the usability doesn;t stop here.
- Lots of times when writing code we have to do a bunch of null checks than
- perform that operation then other null checks, other operations and so
- on.
- So we would have something like:
+ in Lift covers the same base functionality as 
+\family typewriter
+Option
+\family default
+ but expands the semantics for missing values.
+ If we have an 
+\family typewriter
+Option
+\family default
+ that is 
+\family typewriter
+None
+\family default
+ at some point, we can’t really tell why that 
+\family typewriter
+Option
+\family default
+ is 
+\family typewriter
+None
+\family default
+, although in many situations, knowing why would be quite helpful.
+ With 
+\family typewriter
+Box
+\family default
+, on the other hand, you have either have a 
+\family typewriter
+Full
+\family default
+ instance (corresponding to 
+\family typewriter
+Some
+\family default
+ with 
+\family typewriter
+Option
+\family default
+) or an instance that subclasses 
+\family typewriter
+EmptyBox
+\family default
+ (corresponding to 
+\family typewriter
+None
+\family default
+).
+ 
+\family typewriter
+EmptyBox
+\family default
+ can either be an 
+\family typewriter
+Empty
+\family default
+ instance or a 
+\family typewriter
+Failure
+\family default
+ instance incorporating the cause for the failure.
+ So you can think of 
+\family typewriter
+Box
+\family default
+ as a container with three states: full, empty, or empty for a particular
+ reason.
+ The 
+\family typewriter
+Failure
+\family default
+ case class takes three arguments: a 
+\family typewriter
+String
+\family default
+ message to describe the failure, a 
+\family typewriter
+Box[Throwable]
+\family default
+ for an optional exception related to the failure, and a 
+\family typewriter
+Box[Failure]
+\family default
+ for chaining based on earlier 
+\family typewriter
+Failure
+\family default
+s.
+ 
+\end_layout
+
+\begin_layout Standard
+As an example of how we can use 
+\family typewriter
+Box
+\family default
+ instances in real code, consider the case where we have to do a bunch of
+ null checks, perform an operation, and then perform more null checks, other
+ operations, and so on.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Pseudocode-nested-operations"
+
+\end_inset
+
+ shows an example of this sort of structure.
 \end_layout
 
 \begin_layout Standard
@@ -397,10 +534,19 @@ name "lst:Pseudocode-nested-operations"
 \end_layout
 
 \begin_layout Standard
-...
- so you got the picture.
- Needless to say how tedious such style is in practice.
- Now let's see if we can do better with Lift's Box.
+This is tedious and error-prone in practice.
+ Now let’s see if we can do better by combining Lift’s 
+\family typewriter
+Box
+\family default
+ with Scala’s for comprehensions as shown in Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Scala-nested-operations"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
@@ -478,41 +624,168 @@ name "lst:Scala-nested-operations"
 \end_layout
 
 \begin_layout Standard
-In the above example we have to values x and y and we want to do some computatio
-n with these values.
- But we must ensure that computation is done on the correct data.
- For instance the computation can not be done if 
+In Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Scala-nested-operations"
+
+\end_inset
+
+, we have two values, 
 \family typewriter
-getSomeValue()
+x
+\family default
+ and 
+\family typewriter
+y
+\family default
+, and we want to do some computation with these values.
+ But we must ensure that computation is done on the correct data.
+ For instance, the computation cannot be done if 
+\family typewriter
+getSomeValue
 \family default
  returns no value.
- In this context the two function return a Box[Int].
- The interesting part is that if either of the two functions or both return
- an Empty Box instead of Full (Empty impersonating the non-existence of
- the value) the res value will also be Empty.
- However if both functions return a Full (like in the very example) the
- computation is called and res will be a 
+ In this context, the two function return a 
+\family typewriter
+Box[Int]
+\family default
+.
+ The interesting part is that if either or both of the two functions return
+ an 
+\family typewriter
+Empty
+\family default
+ Box instead of 
+\family typewriter
+Full
+\family default
+ (
+\family typewriter
+Empty
+\family default
+ impersonating the nonexistence of the value), the 
+\family typewriter
+res
+\family default
+ value will also be 
+\family typewriter
+Empty
+\family default
+.
+ However, if both functions return a 
+\family typewriter
+Full
+\family default
+ (like in Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Scala-nested-operations"
+
+\end_inset
+
+), the computation is called.
+ In our example the two functions return 
+\family typewriter
+Full(12)
+\family default
+ and 
+\family typewriter
+Full(2)
+\family default
+, so 
+\family typewriter
+res
+\family default
+ will be a 
 \family typewriter
 Full(24)
 \family default
 .
- But we have something else interesting here: 
-\family typewriter
-if x > 10
-\family default
-.
- If we would make getSomeValue to return a value less or equal with 10 the
- res value will be Empty.
- The point of all this is to exemplify the power of Box and for comprehentions
- in Scala and how it can be used to build quite complex expressions and
- yet keep an impressive code claririty.
 \end_layout
 
 \begin_layout Standard
-Lift's Box extends Option with a few ideas, mainly the fact that you can
- add a message about why a Box is Empty.
- Empty corresponds to Option's None and Full to Option's Some.
- So you can pattern match against a Box like:
+But we have something else interesting here: the 
+\family typewriter
+if x > 10
+\family default
+ statement (this is called a “guard” in Scala).
+ If the call to 
+\family typewriter
+getSomeValue
+\family default
+ returns a value less than or equal to 10, the 
+\family typewriter
+y
+\family default
+ variable won’t be initialized, and the res value will be 
+\family typewriter
+Empty
+\family default
+.
+ This is just a taste of some of the power of using 
+\family typewriter
+Box
+\family default
+ for comprehensions; for more details on for comprehensions, see 
+\emph on
+The Scala Language Specification
+\emph default
+, section 6.19, or one of the many Scala books available.
+\end_layout
+
+\begin_layout Standard
+Lift’s 
+\family typewriter
+Box
+\family default
+ extends 
+\family typewriter
+Option
+\family default
+ with a few ideas, mainly the fact that you can add a message about why
+ a 
+\family typewriter
+Box
+\family default
+ is 
+\family typewriter
+Empty
+\family default
+.
+ 
+\family typewriter
+Empty
+\family default
+ corresponds to 
+\family typewriter
+Option
+\family default
+’s 
+\family typewriter
+None
+\family default
+ and 
+\family typewriter
+Full
+\family default
+ to 
+\family typewriter
+Option
+\family default
+’s Some.
+ So you can pattern match against a 
+\family typewriter
+Box
+\family default
+ as shown in Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Box-example"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
@@ -627,7 +900,29 @@ def confirmDelete {
 \end_layout
 
 \begin_layout Standard
-In conjunction with the above example we have.
+In conjunction with Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Box-example"
+
+\end_inset
+
+, we can use other 
+\family typewriter
+Box
+\family default
+ functions, such as the 
+\family typewriter
+openOr
+\family default
+ function shown in Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:openOr-example"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
@@ -1042,22 +1337,69 @@ myBox isA[Person]
 \end_layout
 
 \begin_layout Standard
-Note that Box contains a set of implicit conversion functions form/to Option
- and from/to Iterable.
+Note that 
+\family typewriter
+Box
+\family default
+ contains a set of implicit conversion functions from/to 
+\family typewriter
+Option
+\family default
+ and from/to 
+\family typewriter
+Iterable
+\family default
+.
 \end_layout
 
 \begin_layout Standard
 Remember that Box is heavily used in Lift and most of the Lift's API's operates
- with Box-es.
- The rationale is to avoid null references and to operate safely in context
- where values may be missing.
- Of course that programmatically a variabel of type Box can be set to null
- manually but we strongly recommend against such practices.
- There are cases however where you are using some third party Java libraries
- and their API's return null values.
- To cope with such cases in Lift you can use the !! function to Box that
+ with 
+\family typewriter
+Box
+\family default
+es.
+ The rationale is to avoid 
+\family typewriter
+n
+\family default
+ull references and to operate safely in context where values may be missing.
+ Of course, a 
+\family typewriter
+Box
+\family default
+ can be set to 
+\family typewriter
+null
+\family default
+ manually but we strongly recommend against doing so.
+ There are cases, however, where you are using some third party Java libraries
+ with APIs that return 
+\family typewriter
+null
+\family default
+ values.
+ To cope with such cases in Lift you can use the 
+\family typewriter
+!!
+\family default
+ function to 
+\family typewriter
+Box
+\family default
+ that value.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Null-example"
+
+\end_inset
+
+ shows how we can deal with a possible 
+\family typewriter
+null
+\family default
  value.
- For instance:
 \end_layout
 
 \begin_layout Standard
@@ -1113,8 +1455,31 @@ var boxified = Box !! x
 \end_layout
 
 \begin_layout Standard
-In this case the boxified variable will be Empty if x is null or Full if
- x is a valid value/reference..
+In this case the 
+\family typewriter
+boxified
+\family default
+ variable will be 
+\family typewriter
+Empty
+\family default
+ if 
+\family typewriter
+x
+\family default
+ is 
+\family typewriter
+null
+\family default
+ or 
+\family typewriter
+Full(x)
+\family default
+ if 
+\family typewriter
+x
+\family default
+ is a valid value/reference..
 \end_layout
 
 \begin_layout Section
@@ -1951,7 +2316,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Choose template Scala code
 \end_layout
 
