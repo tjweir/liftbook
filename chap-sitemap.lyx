@@ -56,15 +56,15 @@ name "cha:SiteMap"
 \begin_layout Standard
 SiteMap is a very powerful part of Lift that does essentially what it says:
  provides a map (menu) for your site.
- Of course, if all it did was generate a set of links on your pages we wouldn't
+ Of course, if all it did was generate a set of links on your page, we wouldn't
  have a whole chapter dedicated to it.
- SiteMap not only handles the basic menu generation functionality, but it
- also provides:
+ SiteMap not only handles the basic menu generation functionality, but also
+ provides:
 \end_layout
 
 \begin_layout Itemize
-Access control mechanisms that dela not only with whether a menu item is
- visible, but whether the page it points to is accessible
+Access control mechanisms that deal not only with whether a menu item is
+ visible, but also whether the page it points to is accessible
 \end_layout
 
 \begin_layout Itemize
@@ -73,11 +73,11 @@ Grouping of menu items so that you can easily display portions of menus
 \end_layout
 
 \begin_layout Itemize
-Nested Menus so you can have hierarchies
+Nested menus so you can have hierarchies
 \end_layout
 
 \begin_layout Itemize
-Request rewriting (similar to section 
+Request rewriting (similar to Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:URL-Rewriting"
@@ -88,13 +88,13 @@ reference "sec:URL-Rewriting"
 \end_layout
 
 \begin_layout Itemize
-State-dependent computations for things like page title, page-specific snippets,
- etc.
+State-dependent computations for such things as page titles, page-specific
+ snippets, etc.
 \end_layout
 
 \begin_layout Standard
 The beauty of SiteMap is that it's very easy to start out with the basic
- functionality and expand it as needed as you grow.
+ functionality and then expand on it as you grow.
 \end_layout
 
 \begin_layout Section
@@ -120,26 +120,26 @@ Revise this as needed to match reality, and verify all code in this chapter
 \end_inset
 
 .
- To keep things simple, we'll just define four menu items at the beginning:
+ To keep things simple, we'll just define four menu items to begin:
 \end_layout
 
 \begin_layout Enumerate
-The Homepage.
- Depending on whether the user is logged in or not, this page should display
- either the user's entries or a welcome page 
+A home page that displays the user's entries when the user is logged in,
+ or a welcome page when the user is not
 \end_layout
 
 \begin_layout Enumerate
-Login and registration links if the user isn't logged in, a logout link
- if they are
+A logout link when the user is logged in, log in and registration links
+ and pages when the user is not
 \end_layout
 
 \begin_layout Enumerate
-View/edit profile if the user is logged in
+Pages to view or edit the user's profile, available only when the user is
+ logged in
 \end_layout
 
 \begin_layout Enumerate
-A help page
+A help page, available whether the user is logged in or not
 \end_layout
 
 \begin_layout Standard
@@ -159,7 +159,7 @@ logout
 \family typewriter
 profile
 \family default
-" written and functional.
+," written and functional.
  We'll also assume that the help page(s) reside under the "
 \family typewriter
 help
@@ -216,7 +216,47 @@ reference "lst:Link-Path-Components"
 \end_inset
 
  shows how you would use Link to represent the "/utils/index" page.
- 
+ Of course, instead of 
+\family typewriter
+
+\begin_inset Quotes eld
+\end_inset
+
+utils
+\begin_inset Quotes erd
+\end_inset
+
+ :: 
+\begin_inset Quotes eld
+\end_inset
+
+index
+\begin_inset Quotes erd
+\end_inset
+
+ :: Nil
+\family default
+, you could as easily use 
+\family typewriter
+List(
+\begin_inset Quotes eld
+\end_inset
+
+utils
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+index
+\begin_inset Quotes erd
+\end_inset
+
+)
+\family default
+ if you prefer.
 \end_layout
 
 \begin_layout Standard
@@ -263,7 +303,7 @@ Prefix matching allows the path components you specify to match any longer
 \family typewriter
 true
 \family default
-, as shown in listing 
+, as shown in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Link-Prefix-Matching"
@@ -416,7 +456,7 @@ net.liftweb.sitemap.Loc
 \end_inset
 
  trait instance, which is where most of the interesting things happen.
- A menu can also hold one or more child menus, which we'll cover in section
+ A menu can also hold one or more child menus, which we'll cover in Section
  
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -447,9 +487,9 @@ net.liftweb.sitemap.Loc._
 \end_layout
 
 \begin_layout Enumerate
-The name of the Loc.
- This must be unique across your sitemap because it can be used to look
- up specific Menu items if you customize your menu display (section 
+The name of the Loc: this must be unique across your sitemap because it
+ can be used to look up specific Menu items if you customize your menu display
+ (Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sub:Using-lift-Menu"
@@ -460,9 +500,9 @@ reference "sub:Using-lift-Menu"
 \end_layout
 
 \begin_layout Enumerate
-The link that the Loc refers to.
- Usually this will refer to a specific page, but Lift allows a single Loc
- to match based on prefix as well (section 
+The link to which the Loc refers: usually this will referernce a specific
+ page, but Lift allows a single Loc to match based on prefix as well (Section
+ 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sub:The-Link-Class"
@@ -473,10 +513,8 @@ reference "sub:The-Link-Class"
 \end_layout
 
 \begin_layout Enumerate
-The text of the menu item.
- This what will be displayed to the user.
- You can use a static string or you can generate it with a function (section
- 
+The text of the menu item, which will be displayed to the user: you can
+ use a static string or you can generate it with a function (Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sub:menu-LinkText"
@@ -487,9 +525,8 @@ reference "sub:menu-LinkText"
 \end_layout
 
 \begin_layout Enumerate
-An optional set of LocParam parameters that control behavior and appearance
- of the menu item.
- These parameters are covered in sections 
+An optional set of LocParam parameters that control the behavior and appearance
+ of the menu item (see Sections 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Customizing-Display"
@@ -517,13 +554,13 @@ reference "sec:Page-Specific-Rendering"
 
 \end_inset
 
-
+)
 \end_layout
 
 \begin_layout Standard
-For our example we'll tackle the help page link first, since it's the simplest
- (a static link, essentially).
- The definition is shown in listing 
+For our example, we'll tackle the help page link first, because it's the
+ simplest (essentially, it's a static link).
+ The definition is shown in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Help-Menu-Definition"
@@ -532,8 +569,9 @@ reference "lst:Help-Menu-Definition"
 
 .
  We're assuming that you've imported the Loc implicit methods to keep things
- simple; we'll cover instantiating the classes directly in later sections
- of this chapter.
+ simple.
+ We'll cover instantiating the classes directly in later sections of this
+ chapter.
 \end_layout
 
 \begin_layout Standard
@@ -582,14 +620,23 @@ val helpMenu = Menu(Loc("helpHome",
 \end_layout
 
 \begin_layout Standard
-For our example we've named this menu item "helpHome".
+Here we've named the menu item "helpHome." We can use this name to refer
+ back to this menu item elsewhere in our code.
  The second parameter is a 
 \family typewriter
 Pair[List[String],Boolean]
 \family default
- which converts directly to a Link class with the given parameters.
- In our case, by passing in true, we're saying that anything under the help
- directory will also match.
+ which converts directly to a Link class with the given parameters (see
+ Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:The-Link-Class"
+
+\end_inset
+
+ above).
+ In this instance, by passing in true, we're saying that anything under
+ the help directory will also match.
  If you just use a List[String], the implicit conversion is to a Link with
  prefix matching disabled.
  Note that SiteMap won't allow access to any pages that don't match any
@@ -605,8 +652,8 @@ emphasize
 
 , so by doing this we're allowing full access to all of the help files without
  having to specify a menu entry for each.
- The final parameter, "Help", is the text for the menu link.
- 
+ The final parameter, "Help," is the text for the menu link, should we choose
+ to generate a menu link from this SiteMap entry.
 \end_layout
 
 \begin_layout Subsection
@@ -621,10 +668,10 @@ name "sub:Nested-Menus"
 \end_layout
 
 \begin_layout Standard
-The Menu class supports child menus simply by passing them in as final construct
-or parameters.
+The Menu class supports child menus by passing them in as final constructor
+ parameters.
  For instance, if we wanted to have an "about" menu under Help, we could
- define the menu as shown in listing 
+ define the menu as shown in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Nested-Menu-Definition"
@@ -678,7 +725,7 @@ val helpMenu = Menu(Loc(...as defined above...), aboutMenu)
 When the menu is rendered it will have a child menu for About.
  Child menus are only rendered by default when the current page matches
  their parent's Loc.
- That means that, for instance the following links would show an "About"
+ That means that, for instance the following links would show in an "About"
  child menu item:
 \end_layout
 
@@ -711,7 +758,7 @@ But the following would not:
 \end_layout
 
 \begin_layout Standard
-We'll cover how you can customize the rendering of the menus in section
+We'll cover how you can customize the rendering of the menus in Section
  
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -727,13 +774,13 @@ Setting the Global SiteMap
 \end_layout
 
 \begin_layout Standard
-Once you have all of your menus items defined, you need to set them as your
+Once you have all of your menu items defined, you need to set them as your
  SiteMap.
  As usual, we do this in the Boot class by calling the 
 \family typewriter
 setSiteMap
 \family default
- method on LiftRules, as shown in listing 
+ method on LiftRules, as shown in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Setting-the-SiteMap"
@@ -741,8 +788,12 @@ reference "lst:Setting-the-SiteMap"
 \end_inset
 
 .
- The setSiteMap method takes a SiteMap object that can be constructed using
- your menu items as arguments.
+ The 
+\family typewriter
+setSiteMap
+\family default
+ method takes a SiteMap object that can be constructed using your menu items
+ as arguments.
 \end_layout
 
 \begin_layout Standard
@@ -782,7 +833,14 @@ LiftRules.setSiteMap(SiteMap(homeMenu, profileMenu, ...))
 
 \begin_layout Standard
 When you're dealing with large menus, and in particular when your model
- objects create their own menus (MegaProtoUser, section 
+ objects create their own menus (see MegaProtoUser, Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:ProtoUser-and-MegaProtoUser"
+
+\end_inset
+
+ 
 \begin_inset Note Note
 status open
 
@@ -873,9 +931,10 @@ name "sec:Customizing-Display"
 \begin_layout Standard
 There are many cases where you may want to change the way that particular
  menu items are displayed.
- For instance, if you're using a Menu item for access control a subdirectory,
+ For instance, if you're using a Menu item for access control on a subdirectory,
  you may not want the menu item displayed at all.
- We'll discuss how you can control appearance, text, etc in this section.
+ We'll discuss how you can control appearance, text, etc.
+ in this section.
 \end_layout
 
 \begin_layout Subsection
@@ -892,24 +951,29 @@ name "sub:menu-Hidden"
 \begin_layout Standard
 The Hidden LocParam does exactly what it says: hides the menu item from
  the menu display.
- Other than not showing the item the rest of the menu functionality is still
- fully operable.
- A typical example, shown in listing 
+ All other menu features still work.
+ There is a variety of reasons why you might not want a link displayed.
+ A common use, shown in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Hidden-Menus"
 
 \end_inset
 
-, is to restrict access to a particular subdirectory based on some condition.
- We'll cover the If tag in section 
+, is where the point of the item is to restrict access to a particular subdirect
+ory based on some condition.
+ (We'll cover the 
+\family typewriter
+If
+\family default
+ tag in Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sub:menu-If"
 
 \end_inset
 
-.
+.)
 \end_layout
 
 \begin_layout Standard
@@ -1019,8 +1083,9 @@ Loc
 \family typewriter
 String
 \family default
- for the parameter; that means you can just as easily pass in a function
- to generate the link text as a static string.
+ for the parameter.
+ This means that you can just as easily pass in a function to generate the
+ link text as a static string.
  For example, with our profile link we may want to make the link say "<username>
 's profile".
  Listing 
@@ -1030,7 +1095,7 @@ reference "lst:Customizing-Link-Text"
 
 \end_inset
 
- shows how we can do it by defining a helper method, assuming that there's
+ shows how we can do this by defining a helper method, assuming that there's
  another method that will return the current user's name (we use the ubiquitous
  
 \family typewriter
@@ -1094,8 +1159,7 @@ Of course, if you want you can construct the
 \family typewriter
 LinkText
 \family default
- instance directly, just passing in a constructor function that returns
- a 
+ instance directly by passing in a constructor function that returns a 
 \family typewriter
 NodeSeq
 \family default
@@ -1105,7 +1169,7 @@ NodeSeq
 LinkText
 \family default
  takes a type-safe input parameter, which we'll discuss in more detail in
- section 
+ Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sub:Type-Safe-Params"
@@ -1144,7 +1208,7 @@ net.liftweb.builtin.snippet.Menu
 
 \end_inset
 
- to handle several rendering functions.
+ to provide several rendering methods.
  The most commonly used method is the 
 \family typewriter
 Menu.builder
@@ -1257,10 +1321,11 @@ li_item
 \family typewriter
 li_path
 \family default
- - Adds the specified attribute to the current page's breadcrumb path.
- The breadcrumb path is the set of menu items leading to this one.
+ - Adds the specified attribute to the current page's breadcrumb trail (the
+ breadcrumb trail is the set of menu items that are direct ancestors in
+ the menu tree)
 \begin_inset Note Note
-status open
+status collapsed
 
 \begin_layout Plain Layout
 Verify and clarify
@@ -1272,8 +1337,9 @@ Verify and clarify
 \end_layout
 
 \begin_layout Standard
-The suffix of the attributes can be anything, and will be passed directly
- through.
+The suffix of the attributes represents the name of the HTML attribute that
+ will be added to that element, and can be anything.
+ It will be passed directly through.
  For instance, we can add CSS
 \begin_inset Index
 status open
@@ -1284,7 +1350,7 @@ CSS
 
 \end_inset
 
- classes to our menu and elements fairly easily, as shown in listing 
+ classes to our menu and elements fairly easily, as shown in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Using-Attribues-with-Menu.builder"
@@ -1292,7 +1358,7 @@ reference "lst:Using-Attribues-with-Menu.builder"
 \end_inset
 
 .
- Notice that we also add a little javascript to our current menu item.
+ Notice that we also add a little JavaScript to our current menu item.
 \end_layout
 
 \begin_layout Standard
@@ -1347,7 +1413,7 @@ name "lst:Using-Attribues-with-Menu.builder"
 \end_layout
 
 \begin_layout Standard
-In addition to rendering the menu itself, the Menu class has a few other
+In addition to rendering the menu itself, the Menu class offers a few other
  tricks.
  The 
 \family typewriter
@@ -1365,7 +1431,7 @@ Menu.title
 
  snippet can be used to render the title of the page, which by default is
  the name parameter of the Loc for the menu (the first parameter).
- If you write your own Loc implementation (section 
+ If you write your own Loc implementation (Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Writing-Your-Own-Loc"
@@ -1386,7 +1452,7 @@ Title
 \family typewriter
 LocParam
 \family default
- (section 
+ (Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sub:menu-Title"
@@ -1455,7 +1521,7 @@ val MyMenu = Menu(Loc("Home Page", "index" :: Nil, "Home"))
 
 \begin_layout Plain Layout
 
-<title><lift:Menu.title></title>
+<title><lift:Menu.title/></title>
 \end_layout
 
 \end_inset
@@ -1464,14 +1530,18 @@ val MyMenu = Menu(Loc("Home Page", "index" :: Nil, "Home"))
 \end_layout
 
 \begin_layout Standard
-The next snippet in the Menu class is item.
+The next snippet in the Menu class is 
+\family typewriter
+item
+\family default
+.
  The 
 \family typewriter
 Menu.item
 \family default
  snippet allows you to render a particular menu item by specifying the name
  attribute (matching the first parameter to Loc).
- Like 
+ As with 
 \family typewriter
 Menu.builder
 \family default
@@ -1483,7 +1553,7 @@ Menu.builder
 a
 \family default
 ".
- Additionally, if you specify child elements for the snippet tag, it will
+ Additionally, if you specify child elements for the snippet tag, they will
  be used instead of the default link text.
  Listing 
 \begin_inset CommandInset ref
@@ -1496,14 +1566,15 @@ reference "lst:Using-Menu.item"
 \family typewriter
 Home Page
 \family default
-" menu item defined in listing 
+" menu item defined in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Rendering-the-Title"
 
 \end_inset
 
-; as you can see, we've added some replacement text as well as specifying
+.
+ As you can see, we've added some replacement text as well as specifying
  a CSS
 \begin_inset Index
 status open
@@ -1578,7 +1649,7 @@ Menu.group
 \family typewriter
 Menu.group
 \family default
- in detail in section 
+ in detail in Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sub:LocGroup"
@@ -1600,11 +1671,12 @@ name "sec:Access-Control"
 \end_layout
 
 \begin_layout Standard
-So far we've covered how to control the display side of Menus, so now we
- can cover some of the plumbing behind the scenes.
- One important function of Menus is that they control access to the pages
- in your app; if no Menus match a given request then the user gets a 404
- (not found) error.
+So far we've covered how to control the display side of Menus; now we'll
+ take a look at some of the plumbing behind the scenes.
+ One important function of a Menu is that it controls access to the pages
+ in your application.
+ If no Menu matches a given request, then the user gets a 404 Not Found
+ error.
  Other than this binary control of "matches
 \begin_inset Formula $\rightarrow$
 \end_inset
@@ -1705,13 +1777,10 @@ RedirectWithState
 
 \end_inset
 
- instance (section 
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Cross-ref
-\end_layout
+ instance (Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:HTTP-redirects"
 
 \end_inset
 
@@ -1747,7 +1816,7 @@ reference "lst:Using-the-If-LocParam"
 
 \end_inset
 
- shows a revision of the profile menu that we defined in listing 
+ shows a revision of the profile menu that we defined in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Customizing-Link-Text"
@@ -1903,16 +1972,16 @@ LocParam
 \end_inset
 
 .
- Going back to our example menus (section 
+ Going back to our example menus (Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Basic-SiteMap-Definition"
 
 \end_inset
 
-), we'd like the welcome page to either show the user's entries or a plain
+), we'd like the welcome page to show either the user's entries or a plain
  welcome screen depending on whether they're logged in.
- One approach to this is shown in listing 
+ One approach to this is shown in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Override-Templates"
@@ -1920,7 +1989,7 @@ reference "lst:Override-Templates"
 \end_inset
 
 .
- In this example we create a 
+ In this example, we create a 
 \family typewriter
 Template
 \family default
@@ -1930,7 +1999,7 @@ Template
 Loc
 \family default
 .
- 
+ (See the Lift API for more on the Template class.)
 \end_layout
 
 \begin_layout Standard
@@ -2046,9 +2115,10 @@ reference "lst:Using-the-Snippet-locparam"
 \end_inset
 
  shows how we could use Snippet to achieve the same result for the home
- page rendering as we just did with the Template Parameter.
+ page rendering as we just did with the Template parameter.
  All we need to do is use the <lift:homepage> snippet on our main page and
  the snippet mapping will dispatch based on the state.
+ (Here we've moved the welcome text into a Utils.welcome snippet.)
 \end_layout
 
 \begin_layout Standard
@@ -2127,8 +2197,8 @@ val homeMenu = Menu(Loc("Home Page",
 \end_layout
 
 \begin_layout Standard
-The LocSnippets trait extends the concept of Snippet to providing a full
- dispatch partial function.
+The LocSnippets trait extends the concept of Snippet to provide a full dispatch
+ partial function.
  This allows you to define multiple snippet mappings associated with a particula
 r Loc.
  To simplify things, Lift provides a DispatchLocSnippets trait that has
@@ -2227,7 +2297,7 @@ name "sub:menu-Title"
 \end_layout
 
 \begin_layout Standard
-As we mentioned in section 
+As we mentioned in Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sub:Using-lift-Menu"
@@ -2240,7 +2310,7 @@ reference "sub:Using-lift-Menu"
 \begin_inset Formula $(T)\Rightarrow NodeSeq$
 \end_inset
 
-, where T is a type-safe parameter (we'll cover this in section 
+, where T is a type-safe parameter (we'll cover this in Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sub:Type-Safe-Params"
@@ -2248,8 +2318,8 @@ reference "sub:Type-Safe-Params"
 \end_inset
 
 ).
- Generally you can ignore it if you want, which is what we do in listing
- 
+ Generally you can ignore this parameter if you want to, which is what we
+ do in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Customizing-the-Title"
@@ -2374,7 +2444,8 @@ Test is intended to be used to ensure that a given request has the proper
  Returning a false means that this Loc doesn't match the request, so SiteMap
  will continue to search through your Menus to find an appropriate Loc.
  As an example, we could check to make sure that a given request comes from
- Opera with the code in listing 
+ Opera (the Req object provides convenience methods to test for different
+ browsers; see the Lift API for a full list) with the code in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Testing-the-Request"
@@ -2448,17 +2519,21 @@ name "sub:LocGroup"
 
 \begin_layout Standard
 The LocGroup param allows you to categorize your menu items.
- Using the Menu.group snippet (mentioned in section 
+ The 
+\family typewriter
+Menu.group
+\family default
+ snippet (mentioned in Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sub:Using-lift-Menu"
 
 \end_inset
 
-) allows you to render the menu items for a specific group in place.
- First, to set up the groups for a Menu item, simply add a LocGroup param
- with one or more string arguments for the group names, as shown in listing
- 
+) allows you to render the menu items for a specific group.
+ A menu item may be associated with one or more groups.
+ Simply add a LocGroup param with string arguments for the group names,
+ as shown in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Categorizing-your-Menu"
@@ -2478,7 +2553,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Categorizing your Menu
+Categorizing Your Menu
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:Categorizing-your-Menu"
@@ -2504,8 +2579,8 @@ val siteMenu = Menu(Loc(...,LocGroup("admin", "site")))
 \end_layout
 
 \begin_layout Standard
-In your templates, you would then specify the binding of the menu as shown
- in listing 
+In your templates, you then specify the binding of the menu as shown in
+ Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Binding-a-Menu-group"
@@ -2615,36 +2690,34 @@ name "sec:Writing-Your-Own-Loc"
 \begin_layout Standard
 As we've shown, there's a lot of functionality available for your Menu items.
  If you need more control, though, the Loc trait offers some functionality,
- like rewriting, that doesn't have a direct correspondence in a LocParam
+ such as rewriting, that doesn't have a direct correspondence in a LocParam
  element.
  The basic definition of a Loc implementation covers a lot of the same things.
- The following vals and defs are abstract, so you must provide them:
+ The following vals and defs are abstract, so you must implement them yourself:
 \end_layout
 
 \begin_layout Itemize
-def name - This is the name that can be used to retrieve the menu via Menu.item
+def name: the name that can be used to retrieve the menu via Menu.item
 \end_layout
 
 \begin_layout Itemize
-def link - This represents the actual link.
- You can use the implicit conversions from List[String] or Pair[List[String],Boo
-lean], or you can create the Link object yourself
+def link: the actual link; you can use the implicit conversions from List[String
+] or Pair[List[String],Boolean], or you can create the Link object yourself
 \end_layout
 
 \begin_layout Itemize
-def text - Represents the text that will be displayed to the user.
- You can use the implicit conversion from String, or you can provide your
- own LinkText instance
+def text: the text that will be displayed to the user; you can use the implicit
+ conversion from String, or you can provide your own LinkText instance
 \end_layout
 
 \begin_layout Itemize
-def params - Must return a List[LocParam] that is used to control behavior
+def params: must return a List[LocParam] that is used to control behavior
  as we've shown in the previous sections
 \end_layout
 
 \begin_layout Itemize
-def defaultParams - This is used for type-safe rewriting, which we'll cover
- in section 
+def defaultParams: used for type-safe rewriting, which we'll cover in Section
+ 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sub:Type-Safe-Params"
@@ -2655,7 +2728,7 @@ reference "sub:Type-Safe-Params"
 \end_layout
 
 \begin_layout Standard
-These essentially mirror the params that are required when you use Loc.apply
+Essentially, these mirror the params that are required when you use Loc.apply
  to generate a Loc.
  We're going to write our own Loc implementation for our Expenses in this
  section to demonstrate how this works.
@@ -2696,8 +2769,8 @@ reference "tab:LocParam-Methods-in-loc"
 
 \end_inset
 
- lists the LocParams and their corresponding method in Loc, with notes concernin
-g any differences in definition or usage.
+ lists the LocParams and their corresponding methods in Loc, with notes
+ to explain any differences in definition or usage.
  If yould prefer to use the LocParams instead, just define the 
 \family typewriter
 params
@@ -2865,7 +2938,7 @@ override snippets
 \begin_inset Text
 
 \begin_layout Plain Layout
-snippets is a PartialFunction[String, Box[ParamType]), NodeSeq => NodeSeq],
+Snippet is a PartialFunction[String, Box[ParamType]), NodeSeq => NodeSeq],
  which lets you use the type-safe parameter to control behavior.
 \end_layout
 
@@ -3011,15 +3084,16 @@ name "sub:Type-Safe-Params"
 One of the nice features of Loc is that it allows you to rewrite requests
  in a type-safe manner.
  What this means is that we can define a rewrite function on our Loc instance
- that not only return a standard RewriteResponse, but also a parameter that
- we can define to pass information back to our menu to control behavior.
+ that returns not only a standard RewriteResponse, but also a parameter
+ that we can define to pass information back to our menu to control behavior.
  The reason that this is type-safe is that we define our Loc on the type
  of the parameter itself.
  For instance, let's expand the functionality of our app so that we have
  a page called "acct" that shows the expense entries for a given account.
- We would like this page to normally only be viewable by the owner of the
- account, but allow them to share it out to other members.
- Let's start by defining our type-safe parameter class as shown in listing
+ We would like this page to be viewable only by the owner of the account
+ under normal circumstances, but to allow them to share it with other members
+ if they wish to.
+ Let's start by defining our type-safe parameter class as shown in Listing
  
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -3090,7 +3164,7 @@ We define a few case classes to indicate various states.
  The FullAccountInfo holds the account itself as well as some flags for
  behavior.
  Now that we have our parameter type, we can start to define our Loc, as
- shown in listing 
+ shown in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Defining-a-Type-Safe-loc"
@@ -3149,7 +3223,7 @@ class AccountLoc extends Loc[AccountInfo] {
 Assuming that an Account instance has a unique string ID, we would like
  to use URL rewriting so that we can access a ledger via "/acct/<unique
  id>".
- Our rewrite function, shown in listing 
+ Our rewrite function, shown in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:The-Rewrite-Function"
@@ -3157,8 +3231,8 @@ reference "lst:The-Rewrite-Function"
 \end_inset
 
 , handles a few different things at once.
- It handles locating the correct account and checking permissions if everything
- else is OK.
+ It handles locating the correct account and then checking the permissions
+ if everything else is OK.
 \end_layout
 
 \begin_layout Standard
@@ -3287,7 +3361,7 @@ Now that we've defined the transformation from URL to parameter, we need
  The account page will show a list of expense entries only if the account
  is located and is public.
  For this example we'll use a single template and we'll change the snippet
- behavior based on our parameter, as shown in listing 
+ behavior based on our parameter, as shown in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Defining-Snippet-Behavior"
@@ -3388,8 +3462,13 @@ Account
 Expense
 \family default
  entries.
- Remember that this function needs to return a snippet function, which is
- why we need to include the ignore parameter as part of our closures.
+ Remember that this function needs to return a snippet function, which expects
+ a NodeSeq parameter.
+ This is why we need to include the 
+\family typewriter
+ignore
+\family default
+ parameter as part of our closures.
  If our 
 \family typewriter
 Account
@@ -3399,7 +3478,7 @@ Account
 Accounts
 \family default
  object.
- In our template, we simply use an entries snippet tag, as shown in listing
+ In our template, we simply use an entries snippet tag, as shown in Listing
  
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -3442,22 +3521,22 @@ name "lst:Our-Public-Template"
 
 \begin_layout Plain Layout
 
-<lift:entries  eager_eval="true">
+  <lift:entries  eager_eval="true">
 \end_layout
 
 \begin_layout Plain Layout
 
-  <h1><lift:Menu.title /></h1>
+    <h1><lift:Menu.title /></h1>
 \end_layout
 
 \begin_layout Plain Layout
 
-  <lift:embed what="entry_table" />
+    <lift:embed what="entry_table" />
 \end_layout
 
 \begin_layout Plain Layout
 
-</lift:entries>
+  </lift:entries>
 \end_layout
 
 \begin_layout Plain Layout
@@ -3478,8 +3557,11 @@ eager_eval
 \family default
  attribute so that we can use the same markup for all occurrences of our
  expense table display.
- We can also define the title of the page based on the parameter, as shown
- in listing 
+ We can also define the title of the page based on the 
+\family typewriter
+title
+\family default
+ parameter, as shown in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Defining-the-Title"
@@ -3559,7 +3641,7 @@ LinkText
 \family typewriter
 LocParam
 \family default
- as well as the functionality of the built-in 
+ as well as through the functionality of the built-in 
 \family typewriter
 Menu
 \family default
@@ -3624,10 +3706,10 @@ LocParam
 \family typewriter
 Loc
 \family default
- trait subclass directly and gain the additional benefit of type-safe URL
+ trait subclass directly, and gain the additional benefit of type-safe URL
  rewriting.
  Together these offer a rich set of tools for building your web site exactly
- how you want.
+ they way you want to.
 \end_layout
 
 \end_body
