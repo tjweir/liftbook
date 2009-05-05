@@ -1,4 +1,4 @@
-#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.2 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -341,7 +341,7 @@ DBVendor
  This object extends the net.liftweb.mapper.ConnectionManager trait and must
  implement two methods: newConnection and releaseConnection.
  You can make this as sophisticated as you want, with pooling, caching,
- etc, but for now, listing 
+ etc, but for now, Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Setting-up-the-database"
@@ -602,7 +602,7 @@ Given these requirements we can declare our
 \family typewriter
 Expense
 \family default
- class as shown in listing 
+ class as shown in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Entry-class-mapper"
@@ -684,7 +684,7 @@ class Expense extends LongKeyedMapper[Expense] with IdPK {
 \end_layout
 
 \begin_layout Standard
-For comparison, the Record version is shown in listing 
+For comparison, the Record version is shown in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Entry-class-record"
@@ -1011,7 +1011,7 @@ KeyedMetaMapper
 
 \end_inset
 
- object as the singleton for our entity, as shown in listing 
+ object as the singleton for our entity, as shown in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:EntryMeta-object"
@@ -1131,7 +1131,7 @@ Since fields aren't actually instance members, operations on them are slightly
  different that a regular var.
  The biggest difference is in how we set fields: we use the apply method.
  In addition, field access can be chained so that you can set multiple field
- values in one statement, as shown in listing 
+ values in one statement, as shown in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Setting-field-values"
@@ -1190,7 +1190,7 @@ is
 \family typewriter
 value
 \family default
- method in Record) as shown in listing 
+ method in Record) as shown in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Accessing-field-values"
@@ -1291,7 +1291,7 @@ Often it's appropriate to have relationships between different entities.
  The archetypical example of this is the parent-child relationship.
  In SQL, a relationship can be defined with a foreign key that associates
  one table to another based on the primary key of the associated table.
- As we showed in listing 
+ As we showed in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Entry-class-mapper"
@@ -1336,7 +1336,7 @@ one
 \end_inset
 
  side that delegate to queries.
- We'll cover queries in a moment, but listing 
+ We'll cover queries in a moment, but Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Accessing-Foreign-Objects"
@@ -1455,7 +1455,7 @@ join
 \family typewriter
 Tag
 \family default
- entity, as shown in listing
+ entity, as shown in Listing
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Tag-Entity"
@@ -1531,7 +1531,7 @@ object Tag extends Tag with LongKeyedMetaMapper[Tag] {
 \end_layout
 
 \begin_layout Standard
-Next, we define our join entity, as shown in listing 
+Next, we define our join entity, as shown in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Join-Entity"
@@ -1646,7 +1646,7 @@ many-to-many
 \end_inset
 
  accessible as a field on our entities, we can use the HasManyThrough trait,
- as shown in listing 
+ as shown in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:HasManyThrough-for-Many-to-Many"
@@ -2382,7 +2382,7 @@ new
 \family typewriter
 join
 \family default
- method in listing 
+ method in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Join-Entity"
@@ -2426,7 +2426,7 @@ clean_?
 \family typewriter
 join
 \family default
- method in listing 
+ method in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Join-Entity"
@@ -2543,7 +2543,7 @@ reference "sub:Querying-for-Entities"
 
 \end_inset
 
- (an example is in listing 
+ (an example is in Listing 
 \begin_inset CommandInset ref
 LatexCommand vref
 reference "lst:Bulk-Deletion"
@@ -2716,7 +2716,7 @@ By
 \end_inset
 
  in SQL.
- For instance, listing 
+ For instance, Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Retrieving-by-account"
@@ -3134,7 +3134,7 @@ IN
 \end_inset
 
  portion of the where clause.
- An example in listing 
+ An example in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Using-InRaw"
@@ -3267,7 +3267,7 @@ BySql
 , which lets you use a complete SQL fragment that gets put into the where
  clause.
  An example of this would be if we want to find all expense entries within
- the last 30 days, as shown in listing 
+ the last 30 days, as shown in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Using-BySql"
@@ -3348,7 +3348,7 @@ BySql
 \family typewriter
 BySql
 \family default
- supports parameterized queries as shown in listing 
+ supports parameterized queries as shown in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Parameterized-BySql"
@@ -3595,7 +3595,7 @@ StartAt
 \family typewriter
 MaxRows
 \family default
-, as shown in listing 
+, as shown in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Pagination-of-Results"
@@ -3653,7 +3653,7 @@ An important feature of the methods that take
 QueryParams
 \family default
  is that they can take multiple params, as shown in this example.
- A more complex example is shown in listing 
+ A more complex example is shown in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Multiple-QueryParams"
@@ -3850,7 +3850,7 @@ In case you would prefer to keep your queries type-safe but you want a little
 \family typewriter
 Expense
 \family default
-, as shown in listing 
+, as shown in Listing 
 \begin_inset CommandInset ref
 LatexCommand pageref
 reference "lst:Join-Convenience-Method"
@@ -3969,7 +3969,7 @@ asHtml
 \family typewriter
 dateOf
 \family default
- field we could modify the field as shown in listing
+ field we could modify the field as shown in Listing
 \end_layout
 
 \begin_layout Standard
@@ -4127,7 +4127,7 @@ n (when the user hits enter in a text field, for instance).
 toForm
 \family default
  method simply takes a function to process the submitted form and returns
- the XHTML as shown in listing 
+ the XHTML as shown in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Default-toForm-method"
@@ -4181,7 +4181,7 @@ toForm
 \family default
  method allows you to provide a URL which the Mapper will redirect to if
  validation succeeds on form submission (this is not provided in Record).
- This can be used for something like a login form, as shown in listing 
+ This can be used for something like a login form, as shown in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Custom-form-redirect"
@@ -4339,7 +4339,7 @@ name=
 
 \begin_layout Standard
 As an example, if we wanted to use tables to lay out the form for our ledger
- entry, the row for the description field could look like listing 
+ entry, the row for the description field could look like Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Custom-form-template"
@@ -4410,7 +4410,7 @@ reference "cha:Message-Handling"
 \end_inset
 
 ) based on the field's uniqueId, so you can set your own messages outside
- of validation using the S.{error,notice,warning} methods as shown in listing
+ of validation using the S.{error,notice,warning} methods as shown in Listing
  
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -4564,7 +4564,7 @@ DateTimeField
 List
 \family default
 .
- We show a simple function in listing 
+ We show a simple function in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Date-validation"
@@ -4664,7 +4664,7 @@ The next step is to tie the validation into the field itself.
 \family typewriter
 date
 \family default
- to set our list of validators as shown in listing 
+ to set our list of validators as shown in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Setting-validators"
@@ -4731,10 +4731,10 @@ CRUD Support
 Adding CRUD support to your Mapper classes is very simple.
  We just mix in the 
 \family typewriter
-CRUDify
+net.liftweb.mapper.CRUDify
 \family default
- trait to our class and it provides a full set of add, edit, list, delete
- and view pages automatically.
+ trait to our meta object and it provides a full set of add, edit, list,
+ delete and view pages automatically.
  Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -4746,7 +4746,7 @@ reference "lst:Mixing-in-CRUDify"
 \family typewriter
 Expense
 \family default
- class with 
+ meta object with 
 \family typewriter
 CRUDify
 \family default
@@ -4780,8 +4780,8 @@ name "lst:Mixing-in-CRUDify"
 
 \begin_layout Plain Layout
 
-class Expense extends LongKeyedMapper[Expense] with CRUDify[Long,Expense]
- {
+object Expense extends Expense LongKeyedMetaMapper[Expense] with CRUDify[Long,Ex
+pense] {
 \end_layout
 
 \begin_layout Plain Layout
@@ -4811,9 +4811,25 @@ class Expense extends LongKeyedMapper[Expense] with CRUDify[Long,Expense]
 \end_layout
 
 \begin_layout Standard
-The CRUDify behavior is very flexible, with plenty of defs you can override
- to control the templates for pages or whether pages are shown at all (as
- we do in our example).
+The CRUDify behavior is very flexible, and you can control the templates
+ for pages or whether pages are shown at all (as we do in our example) by
+ overriding defs that are provided on the CRUDify trait.
+ In our example Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Mixing-in-CRUDify"
+
+\end_inset
+
+, we disable the delete menu by overriding the 
+\family typewriter
+deleteMenuLoc
+\family default
+ method to return 
+\family typewriter
+Empty
+\family default
+.
  As an added bonus, CRUDify automatically creates a set of menus for SiteMap
  (chapter 
 \begin_inset CommandInset ref
@@ -4823,7 +4839,7 @@ reference "cha:SiteMap"
 \end_inset
 
 ) that we can use by appending them onto the rest of our menus as shown
- in listing 
+ in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Using-CRUDify-Menus"
@@ -4930,7 +4946,7 @@ Expense
 \family typewriter
 Expense
 \family default
- class as shown in listing 
+ class as shown in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Lifecycle-Callbacks"
@@ -5959,7 +5975,7 @@ The code is checked into the wip-dcb-decimal-maprec branch of liftweb as
 
 .
  Our first task is to specify the class signature and constructors, as shown
- in listing 
+ in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:MappedDecimal-constructors"
@@ -6444,7 +6460,7 @@ String
 BigDecimal
 \family default
 .
- Our implementation of these two methods is shown in listing 
+ Our implementation of these two methods is shown in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:setFrom...-Methods"
@@ -6616,7 +6632,7 @@ BigDecimal
 
 \begin_layout Standard
 Our final step is to define the database-specific methods for our field,
- as shown in listing 
+ as shown in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Database-Specific-Methods"
@@ -7178,7 +7194,7 @@ object EmployeeDB extends ConnectionIdentifier {
 Simple enough.
  Now, we need to create connection managers for each one, or we can combine
  the functionality into a single manager.
- To keep things clean we'll use a single manager, as shown in listing 
+ To keep things clean we'll use a single manager, as shown in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Multi-database-Connection-Manager"
@@ -7883,7 +7899,7 @@ DB.prepareStatement
 \family default
  method allows you to create a prepared statement and then apply a function
  to it.
- You can combine these methods to run any arbitrary SQL, as shown in listing
+ You can combine these methods to run any arbitrary SQL, as shown in Listing
  
 \begin_inset CommandInset ref
 LatexCommand ref

@@ -710,7 +710,55 @@ Pair(String,String)
 \family default
  so that you can provide any XML attributes that you'd like to have on the
  checkbox element.
- For example, Listing 
+ Because more than one XML node is returned by the generator, you can’t
+ just use the % metadata mechanism to set attributes on the check box element.
+ 
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Box Shadowbox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "75col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+Note The % metadata mechanism is actually part of the Scala XML library.
+ Specifically, 
+\family typewriter
+scala.xml.Elem
+\family default
+ has a 
+\family typewriter
+%
+\family default
+ method that allows the user to update the attributes on a given XML element.
+ We suggest reading more about this in the Scala API documents, or in the
+ Scala XML docbook at 
+\begin_inset CommandInset href
+LatexCommand href
+target "http://burak.emir.googlepages.com/scalaxbook.docbk.html"
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+For example, Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:A-checkbox-example"
@@ -763,12 +811,12 @@ name "lst:A-checkbox-example"
 
 \begin_layout Plain Layout
 
-SHtml.checkbox(false, if (_) frobnicate(), 
+SHtml.checkbox_id(false, if (_) frobnicate(), 
 \end_layout
 
 \begin_layout Plain Layout
 
-               "id" -> "snazzy", "class" -> "woohoo")
+                  Full("snazzy"), "class" -> "woohoo")
 \end_layout
 
 \end_inset
