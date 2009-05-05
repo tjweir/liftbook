@@ -1,4 +1,4 @@
-#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.2 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -754,16 +754,16 @@ name "sub:AJAX-Generators-in-detail"
 \end_layout
 
 \begin_layout Standard
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-This should be turned into subsections
-\end_layout
-
+The following table provides a brief synopsis of the AJAX generator methods
+ on the
+\begin_inset Newline linebreak
 \end_inset
 
-
+ 
+\family typewriter
+net.liftweb.http.SHtml
+\family default
+ object:
 \end_layout
 
 \begin_layout Standard
@@ -771,7 +771,7 @@ This should be turned into subsections
 <lyxtabular version="3" rows="15" columns="2">
 <features>
 <column alignment="left" valignment="top" width="0">
-<column alignment="left" valignment="top" width="0">
+<column alignment="left" valignment="top" width="4in">
 <row>
 <cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
