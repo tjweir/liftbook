@@ -1155,6 +1155,7 @@ default
 \begin_layout Plain Layout
 If the argument is null in will return an Empty, otherwise a Full containing
  the arguent's value.
+ Note this this is a method on the Box object, not a given Box instance.
 \end_layout
 
 \end_inset
@@ -1163,7 +1164,7 @@ If the argument is null in will return an Empty, otherwise a Full containing
 \begin_inset Text
 
 \begin_layout Plain Layout
-myBox !! (<a reference>)
+Box !! (<a reference>)
 \end_layout
 
 \end_inset
