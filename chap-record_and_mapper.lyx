@@ -348,12 +348,12 @@ reference "lst:Setting-up-the-database"
 
 \end_inset
 
-shows a basic implementation to set up a PostgreSQL driver.
+ shows a basic implementation to set up a PostgreSQL driver.
 \end_layout
 
 \begin_layout Standard
 \begin_inset listings
-lstparams "breaklines=true,numbers=left,numberstyle={\tiny}"
+lstparams "breaklines=true"
 inline false
 status open
 
@@ -2228,7 +2228,19 @@ Expense.countByInsecureSQL(
 \begin_inset Quotes eld
 \end_inset
 
-select count(amount) from Expense where amount > 20
+select count(amount) 
+\begin_inset Quotes eld
+\end_inset
+
+ +
+\end_layout
+
+\begin_layout LyX-Code
+  
+\begin_inset Quotes eld
+\end_inset
+
+from Expense where amount > 20
 \begin_inset Quotes erd
 \end_inset
 
@@ -3304,7 +3316,7 @@ Tags
 
 \begin_layout Standard
 \begin_inset listings
-lstparams "breaklines=true,numbers=left,numberstyle={\tiny}"
+lstparams "breaklines=true"
 inline false
 status open
 
@@ -4064,7 +4076,12 @@ name "lst:Join-Convenience-Method"
 
 \begin_layout Plain Layout
 
-def tags = ExpenseTag.findAll(By(ExpenseTag.expense, this.id)).map(_.tag.obj.open_!)
+def tags = 
+\end_layout
+
+\begin_layout Plain Layout
+
+  ExpenseTag.findAll(By(ExpenseTag.expense, this.id)).map(_.tag.obj.open_!)
 \end_layout
 
 \end_inset
@@ -4224,7 +4241,11 @@ dateOf
 \family typewriter
 java.util.Calendar
 \family default
- instance and not a 
+ instance and not a
+\begin_inset Newline linebreak
+\end_inset
+
+ 
 \family typewriter
 java.util.Date
 \family default
@@ -4540,7 +4561,7 @@ reference "lst:Custom-form-template"
 
 \begin_layout Standard
 \begin_inset listings
-lstparams "basicstyle={\scriptsize},language=XML"
+lstparams "language=XML"
 inline false
 status open
 
@@ -4581,8 +4602,12 @@ name "lst:Custom-form-template"
 
 \begin_layout Plain Layout
 
-  <td><lift:field name="description" /> <lift:field_msg name="description"
- /></td>
+  <td><lift:field name="description" /> 
+\end_layout
+
+\begin_layout Plain Layout
+
+      <lift:field_msg name="description" /></td>
 \end_layout
 
 \begin_layout Plain Layout
@@ -4931,6 +4956,10 @@ CRUD Support
 Adding CRUD support to your Mapper classes is very simple.
  We just mix in the 
 \family typewriter
+
+\begin_inset Newline linebreak
+\end_inset
+
 net.liftweb.mapper.CRUDify
 \family default
  trait to our meta object and it provides a full set of add, edit, list,
@@ -4980,8 +5009,12 @@ name "lst:Mixing-in-CRUDify"
 
 \begin_layout Plain Layout
 
-object Expense extends Expense LongKeyedMetaMapper[Expense] with CRUDify[Long,Ex
-pense] {
+object Expense extends Expense LongKeyedMetaMapper[Expense] 
+\end_layout
+
+\begin_layout Plain Layout
+
+    with CRUDify[Long,Expense] {
 \end_layout
 
 \begin_layout Plain Layout
@@ -5021,7 +5054,11 @@ reference "lst:Mixing-in-CRUDify"
 
 \end_inset
 
-, we disable the delete menu by overriding the 
+, we disable the delete menu by overriding the
+\begin_inset Newline linebreak
+\end_inset
+
+ 
 \family typewriter
 deleteMenuLoc
 \family default
@@ -5252,9 +5289,9 @@ The Record and Mapper frameworks define several basic field types.
 \begin_inset Tabular
 <lyxtabular version="3" rows="28" columns="3">
 <features islongtable="true">
+<column alignment="center" valignment="top" width="1.5in">
 <column alignment="center" valignment="top" width="0">
-<column alignment="center" valignment="top" width="0">
-<column alignment="left" valignment="top" width="3.75in">
+<column alignment="left" valignment="top" width="3.5in">
 <row endhead="true" endfirsthead="true">
 <cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
@@ -6723,7 +6760,6 @@ coerce
 
 \begin_layout Standard
 \begin_inset listings
-lstparams "numbers=left,numberstyle={\tiny}"
 inline false
 status open
 
@@ -6965,7 +7001,7 @@ fieldCreatorString
 
 \begin_layout Standard
 \begin_inset listings
-lstparams "numbers=left,numberstyle={\tiny},showstringspaces=false"
+lstparams "showstringspaces=false"
 inline false
 status open
 
@@ -7056,8 +7092,12 @@ def buildSetBooleanValue(accessor : Method, columnName : String) :
 
 \begin_layout Plain Layout
 
-def buildSetDateValue(accessor : Method, columnName : String) : (T, Date)
- => Unit =
+def buildSetDateValue(accessor : Method, columnName : String) : 
+\end_layout
+
+\begin_layout Plain Layout
+
+    (T, Date) => Unit =
 \end_layout
 
 \begin_layout Plain Layout
@@ -7102,8 +7142,12 @@ def buildSetDateValue(accessor : Method, columnName : String) : (T, Date)
 
 \begin_layout Plain Layout
 
-def buildSetStringValue(accessor: Method, columnName: String): (T, String)
- => Unit =
+def buildSetStringValue(accessor: Method, columnName: String) : 
+\end_layout
+
+\begin_layout Plain Layout
+
+    (T, String) => Unit =
 \end_layout
 
 \begin_layout Plain Layout
@@ -7138,18 +7182,22 @@ def buildSetStringValue(accessor: Method, columnName: String): (T, String)
 \begin_layout Plain Layout
 
 // Convert from a Long to a BigDecimal.
- This is slightly more complex than for a 
+ This is slightly more complex than 
 \end_layout
 
 \begin_layout Plain Layout
 
-// String, since we need to check for null values.
+// for a String, since we need to check for null values.
 \end_layout
 
 \begin_layout Plain Layout
 
-def buildSetLongValue(accessor: Method, columnName : String) : (T, Long,
- Boolean) => Unit = 
+def buildSetLongValue(accessor: Method, columnName : String) : 
+\end_layout
+
+\begin_layout Plain Layout
+
+    (T, Long, Boolean) => Unit = 
 \end_layout
 
 \begin_layout Plain Layout
@@ -7164,8 +7212,12 @@ def buildSetLongValue(accessor: Method, columnName : String) : (T, Long,
 
 \begin_layout Plain Layout
 
-      case f: MappedDecimal[T] => f.st(if (isNull) defaultValue else coerce(BigDe
-cimal(v)))
+      case f: MappedDecimal[T] => 
+\end_layout
+
+\begin_layout Plain Layout
+
+        f.st(if (isNull) defaultValue else coerce(BigDecimal(v)))
 \end_layout
 
 \begin_layout Plain Layout
@@ -7180,7 +7232,12 @@ cimal(v)))
 \begin_layout Plain Layout
 
 // Convert from an AnyRef (Object).
- We simply use the String value of the input here.
+ We simply use the String value 
+\end_layout
+
+\begin_layout Plain Layout
+
+// of the input here.
 \end_layout
 
 \begin_layout Plain Layout
@@ -7378,7 +7435,11 @@ ProtoUser
 \family typewriter
 MegaProtoUser
 \family default
- (and its associated meta object, 
+ (and its associated meta object,
+\begin_inset Newline linebreak
+\end_inset
+
+ 
 \family typewriter
 MetaMegaProtoUser
 \family default
@@ -8026,7 +8087,11 @@ SuperConnection.html
 
 \end_inset
 
- and returns a 
+ and returns a
+\begin_inset Newline linebreak
+\end_inset
+
+ 
 \family typewriter
 PreparedStatement
 \family default
@@ -8141,7 +8206,11 @@ findAllByInsecureSql
 \family default
  method goes even further, executing the string you submit directly as a
  statement without any checks.
- The same general rules apply as for 
+ The same general rules apply as for
+\begin_inset Newline linebreak
+\end_inset
+
+ 
 \family typewriter
 findAllByPreparedStatement
 \family default
@@ -8379,19 +8448,31 @@ DB.use(DefaultConnectionIdentifier) { conn =>
 \begin_layout Plain Layout
 
     DB.exec(conn, 
-\begin_inset Quotes eld
-\end_inset
-
-select sum(ex.amount) from Expense ex where ex.account = 
-\begin_inset Quotes eld
-\end_inset
-
- + myAccount.id) {
 \end_layout
 
 \begin_layout Plain Layout
 
-      rs => if (!rs.next) BigDecimal(0) else (new BigDecimal(rs.getBigDecimal(1)))
+      "select sum(ex.amount) from Expense ex where ex.account = " 
+\end_layout
+
+\begin_layout Plain Layout
+
+      + myAccount.id) {
+\end_layout
+
+\begin_layout Plain Layout
+
+      rs => 
+\end_layout
+
+\begin_layout Plain Layout
+
+       if (!rs.next) BigDecimal(0) 
+\end_layout
+
+\begin_layout Plain Layout
+
+       else (new BigDecimal(rs.getBigDecimal(1)))
 \end_layout
 
 \begin_layout Plain Layout
@@ -8401,11 +8482,13 @@ select sum(ex.amount) from Expense ex where ex.account =
 
 \begin_layout Plain Layout
 
-  DB.prepareStatement("update Account set balance = ? where Account.id = ?
-\begin_inset Quotes erd
-\end_inset
+  DB.prepareStatement("update Account set balance = ? where Account.id = ",
+ 
+\end_layout
 
-, conn) { stmt =>
+\begin_layout Plain Layout
+
+                      conn) { stmt =>
 \end_layout
 
 \begin_layout Plain Layout
