@@ -63,7 +63,7 @@ name "cha:mapper_and_record"
 \end_layout
 
 \begin_layout Standard
-In our experience, most webapps end up wanting to store user data somewhere.
+In our experience, most webapps end up needing to store user data somewhere.
  Once you start working with user data, though, you start dealing with issues
  like coding up input forms, validation
 \begin_inset Index
@@ -75,15 +75,16 @@ validation
 
 \end_inset
 
-, persistence, etc to handle the data.
+, persistence, etc.
+ to handle the data.
  That's where the Mapper and Record frameworks come in.
  These frameworks provides a scaffolding for all of your data manipulation
  needs.
- Mapper is the original Lift persistence framework, and is closely tied
+ Mapper is the original Lift persistence framework, and it is closely tied
  to JDBC for its storage.
  Record is a new refactorization of Mapper that is backing-store agnostic
  at its core, so it doesn't matter whether you want to save your data to
- JDBC, JPA, or even something like XML.
+ JDBC, JPA, or even something such as XML.
  With Record, selecting the proper driver will be as simple as hooking the
  proper traits into your class.
 \end_layout
@@ -181,12 +182,12 @@ per-instance
 global
 \emph default
  operations for your class and provides a common location to define per-class
- static specializations of things like field order, form generation and
+ static specializations of things like field order, form generation, and
  HTML representation.
  In fact, many of the Mapper methods actually delegate to methods on MetaMapper.
- In addition to Mapper and MetaMapper there is a third trait, MappedField,
+ In addition to Mapper and MetaMapper, there is a third trait, MappedField,
  that provides the per-field functionality for your class.
- In Record the trait is simply called 
+ In Record, the trait is simply called 
 \begin_inset Quotes eld
 \end_inset
 
@@ -197,7 +198,7 @@ Field
 .
  The MappedField trait lets you define the individual validators as well
  as filters to transform the data and the field name.
- Under Record, Field adds some functionality like tab order and default
+ Under Record, Field adds some functionality such as tab order and default
  error messages for form input handling.
 \end_layout
 
@@ -331,17 +332,16 @@ Setting Up the Database Connection
 \end_layout
 
 \begin_layout Standard
-The first step you need to get out of the way is defining the database connectio
-n.
+The first thing you need to do is to define the database connection.
  We do this by defining an object called 
 \family typewriter
 DBVendor
 \family default
- (you can call it whatever you want).
+ (but you can call it whatever you want).
  This object extends the net.liftweb.mapper.ConnectionManager trait and must
  implement two methods: newConnection and releaseConnection.
  You can make this as sophisticated as you want, with pooling, caching,
- etc, but for now, Listing 
+ etc., but for now, Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Setting-up-the-database"
@@ -362,7 +362,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Setting up the Database
+Setting Up the Database
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:Setting-up-the-database"
@@ -520,11 +520,11 @@ The
 \family typewriter
 name
 \family default
- parameter for newConnection can be used in case you need to have connections
+ parameter for newConnection can be used if you need to have connections
  to multiple distinct databases.
  One specialized case of this is when you're doing DB sharding (horizontal
  scaling).
- Multiple database usage is covered in more depth in section 
+ Multiple database usage is covered in more depth in Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sub:Multiple-Databases"
@@ -564,7 +564,7 @@ DB.defineConnectionManager
 \end_layout
 
 \begin_layout Subsection
-Constructing a Mapper-enabled class
+Constructing a Mapper-enabled Class
 \begin_inset CommandInset label
 LatexCommand label
 name "sub:Constructing-a-Mapper-enabled-class"
@@ -586,11 +586,11 @@ Date
 \end_layout
 
 \begin_layout Itemize
-Description, with a max length of 100 chars
+Description: a string with a max length of 100 chars
 \end_layout
 
 \begin_layout Itemize
-Amount, a decimal value with a precision of 16 digits and two decimal places
+Amount: a decimal value with a precision of 16 digits and two decimal places
 \end_layout
 
 \begin_layout Itemize
@@ -623,7 +623,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Expense class in Mapper
+Expense Class in Mapper
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:Entry-class-mapper"
@@ -641,6 +641,10 @@ name "lst:Entry-class-mapper"
 \begin_layout Plain Layout
 
 import _root_.java.math.MathContext
+\end_layout
+
+\begin_layout Plain Layout
+
 \end_layout
 
 \begin_layout Plain Layout
@@ -729,7 +733,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Entry class in Record
+Entry Class in Record
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:Entry-class-record"
@@ -752,6 +756,10 @@ import _root_.java.math.MathContext
 \begin_layout Plain Layout
 
 import _root_.net.liftweb.record._
+\end_layout
+
+\begin_layout Plain Layout
+
 \end_layout
 
 \begin_layout Plain Layout
@@ -899,7 +907,7 @@ KeyedMapper[String,...]
 \family default
  and provide the field definition yourself.
  It's possible to use some other type for your primary key, but you'll need
- to roll your own (section 
+ to roll your own (Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sub:Defining-Custom-Field-types-mapper"
@@ -921,16 +929,16 @@ Int
 \family typewriter
 Int
 \family default
- for the primary key you may not be able to do a relationship with other
- objects (section 
+ for the primary key, you may not be able to add a relationship to another
+ object (Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sub:Object-Relationships"
 
 \end_inset
 
-) unless you write your own.
- Record is a little more flexible in primary key selection since it uses,
+), unless you write your own.
+ Record is a little more flexible in primary key selection because it uses,
  in effect, a marker trait (
 \family typewriter
 KeyField
@@ -946,8 +954,8 @@ table name
 
 \end_inset
 
- for your entity defaults to the name of the class (Expense in our case).
- If you want to change this then you just need to override the 
+ for your entity defaults to the name of the class (Expense, in our case).
+ If you want to change this, then you just need to override the 
 \family typewriter
 dbTableName
 \family default
@@ -986,7 +994,7 @@ The authors are working on adding this to the core library soon after Lift
 
 \end_inset
 
-, which we'll cover in section 
+, which we'll cover in Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sub:Defining-Custom-Field-types-mapper"
@@ -1019,19 +1027,20 @@ reference "lst:EntryMeta-object"
 \end_inset
 
 .
- The Meta object (whether MetMapper or MetaRecord) is where you define most
- behavior that is common across all of your instances.
- In our examples we've decided to name the meta object and instance class
- the same; we don't feel that this is unclear since the two together are
- what really define the ORM behavior for a 
+ The Meta object (whether MetaMapper or MetaRecord) is where you define
+ most behavior that is common across all of your instances.
+ In our examples, we've decided to name the meta object and instance class
+ the same.
+ We don't feel that this is unclear because the two together are what really
+ define the ORM behavior for a 
 \begin_inset Quotes eld
 \end_inset
 
-type
+type.
 \begin_inset Quotes erd
 \end_inset
 
-.
+
 \end_layout
 
 \begin_layout Standard
@@ -1080,8 +1089,8 @@ object Expense extends Expense with LongKeyedMetaMapper[Expense] {
 \end_layout
 
 \begin_layout Standard
-In our case we're simply defining the order of fields as they'll be displayed
- in XHTML
+In this instance, we're simply defining the order of fields as they'll be
+ displayed in XHTML
 \begin_inset Index
 status collapsed
 
@@ -1107,11 +1116,12 @@ fieldOrder
 \family default
  method.
  The default behavior is an empty list, which means no fields are involved
- in display or form generation; generally you will want to override 
+ in display or form generation.
+ Generally, you will want to override 
 \family typewriter
 fieldOrder
 \family default
- since this is not very useful.
+ because this is not very useful.
  If you don't want a particular field to show up in forms or XHTML output,
  simply omit it from the fieldOrder
 \begin_inset Index
@@ -1127,9 +1137,9 @@ fieldOrder
 \end_layout
 
 \begin_layout Standard
-Since fields aren't actually instance members, operations on them are slightly
- different that a regular var.
- The biggest difference is in how we set fields: we use the apply method.
+Because fields aren't actually instance members, operations on them are
+ slightly different than with a regular var.
+ The biggest difference is how we set fields: we use the apply method.
  In addition, field access can be chained so that you can set multiple field
  values in one statement, as shown in Listing 
 \begin_inset CommandInset ref
@@ -1151,7 +1161,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Setting field values
+Setting Field Values
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:Setting-field-values"
@@ -1186,7 +1196,7 @@ The underlying value of a given field can be retrieved with the
 \family typewriter
 is
 \family default
- method (
+ method (the 
 \family typewriter
 value
 \family default
@@ -1210,7 +1220,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Accessing field values in Record
+Accessing Field Values in Record
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:Accessing-field-values"
@@ -1448,9 +1458,8 @@ join
  class with foreign keys to both of your mapped entities.
  An example would be if we wanted to have tags (categories) for our ledger
  entries and wanted to be able to have a given entry have multiple tags
- (i.e.
- you purchase a book for your mother's birthday, so it has the tags Gift,
- Mom and Books).
+ (e.g., you purchase a book for your mother's birthday, so it has the tags
+ Gift, Mom, and Books).
  First we define the 
 \family typewriter
 Tag
@@ -1732,7 +1741,7 @@ Although the field is defined as a query, the field is actually lazy and
 \begin_layout Standard
 If you want a way to retrieve the joined results such that it pulls fresh
  from the database each time, you can instead define a helper join method
- as shown in section
+ as shown in Section
 \begin_inset CommandInset ref
 LatexCommand vref
 reference "sub:helper-joins"
@@ -1788,7 +1797,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Indexing a field
+Indexing a Field
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:Indexing-a-field"
@@ -1873,7 +1882,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-More complex indices
+More Complex Indices
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:More-complex-indices"
@@ -1958,7 +1967,7 @@ Schemifier
 
 \end_inset
 
- object is what does all of the work for you; you simply pass in the 
+ object is what does all of the work for you: you simply pass in the 
 \family typewriter
 MetaMapper
 \family default
@@ -1976,13 +1985,14 @@ Schemifier
 \family default
  to set up the database for our example objects.
  The first argument controls whether an actual write will be performed on
- the database; if false, 
+ the database.
+ If false, 
 \family typewriter
 Schemifier
 \family default
  will log all of the DDL statements that it would like to apply, but no
  changes will be made to the database.
- The second argument is a logging function (logging is covered in appendix
+ The second argument is a logging function (logging is covered in Appendix
  
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -1995,8 +2005,9 @@ reference "cha:Logging-in-Lift"
 \family typewriter
 MetaMapper
 \family default
- objects that you would like to have schemified; you need to be careful
- and remember to include all objects, otherwise tables won't be created.
+ objects that you would like to have schemified.
+ You need to be careful to remember to include all of the objects, otherwise
+ the tables won't be created.
 \end_layout
 
 \begin_layout Standard
@@ -2035,7 +2046,7 @@ Schemifier.schemify(true, Log.infoF _, User, Expense, Account, Tag, ExpenseTag)
 \end_layout
 
 \begin_layout Standard
-As we mentioned in section 
+As we mentioned in Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sub:Constructing-a-Mapper-enabled-class"
@@ -2116,7 +2127,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Setting a custom column name
+Setting a Custom Column Name
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:Custom-column-name"
@@ -2229,7 +2240,7 @@ We'll cover the
 \family typewriter
 IHaveValidatedThisSQL
 \family default
- parameter in a moment
+ parameter in a moment.
 \end_layout
 
 \end_deeper
@@ -2237,15 +2248,16 @@ IHaveValidatedThisSQL
 There are also quite a few methods available for retrieving instances from
  the database.
  Each of these methods comes in two varieties: one that uses the default
- database connection and one that allows you to specify the connection to
- use (section 
+ database connection, and one that allows you to specify the connection
+ to use (Section 
 \begin_inset CommandInset ref
 LatexCommand vref
 reference "lst:Multi-database-Connection-Manager"
 
 \end_inset
 
-); the latter typically has 
+).
+ The latter typically has 
 \begin_inset Quotes eld
 \end_inset
 
@@ -2271,7 +2283,7 @@ reference "sub:Querying-for-Entities"
 
 \end_inset
 
-
+.
 \end_layout
 
 \begin_layout Description
@@ -2281,7 +2293,7 @@ findAllByInsecureSQL Retrieves a list of instances based on a raw SQL query.
 \family typewriter
 BySQL
 \family default
- QueryParameter to cover most of the same functionality
+ QueryParameter to cover most of the same functionality.
 \end_layout
 
 \begin_layout Description
@@ -2289,8 +2301,8 @@ findAllByPreparedStatement Similar to
 \family typewriter
 findAllByInsecureSQL
 \family default
- except that prepared statements are used which usually means that the driver
- will handle properly escaping arguments in the query string
+ except that prepared statements are used, which usually means that the
+ driver will handle properly escaping arguments in the query string.
 \end_layout
 
 \begin_layout Description
@@ -2299,8 +2311,9 @@ findAllFields This allows you to do a normal query returning only certain
  For example, if you only wanted the amount from the transaction table you
  would use this method.
  Note that any fields that aren't specified in the query will return their
- default value; generally this method is only useful for read access to
- data because saving any retrieved instances could overwrite real data
+ default value.
+ Generally, this method is only useful for read access to data because saving
+ any retrieved instances could overwrite real data.
 \end_layout
 
 \begin_layout Description
@@ -2377,7 +2390,7 @@ new
  operator because the framework has to set up internal data for the instance
  such as field owner, etc.
  This is important to remember, since nothing will prevent you from creating
- an instance manually; you may just get errors when you go to use the instance.
+ an instance manually: you may just get errors when you go to use the instance.
  The 
 \family typewriter
 join
@@ -2489,7 +2502,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Example deletion
+Example Deletion
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:Example-deletion"
@@ -2536,7 +2549,7 @@ MetaMapper
 .
  This method allows you to specify query parameters to control which entities
  are deleted.
- We will cover query parameters in section 
+ We will cover query parameters in Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sub:Querying-for-Entities"
@@ -2608,7 +2621,7 @@ findAll...
 
 \family default
  method has a corresponding method that takes a database connection for
- sharding or multiple database usage (see sharding in section 
+ sharding or multiple database usage (see sharding in Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sub:Multiple-Databases"
@@ -2668,7 +2681,7 @@ Control - These are items that control things like sort order and pagination
 Although Mapper provides a large amount of the functionality in SQL, some
  features are not covered directly or at all.
  In some cases we can define helper methods to make querying easier, particularl
-y for joins (section 
+y for joins (Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sub:helper-joins"
@@ -2701,12 +2714,12 @@ By
 
 \end_inset
 
- object, and its related objects.
+ object and its related objects.
  
 \family typewriter
 By
 \family default
- is used for a direct value comparison of a given field, essentially an
+ is used for a direct value comparison of a given field: essentially an
  
 \begin_inset Quotes eld
 \end_inset
@@ -2736,7 +2749,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Retrieving by account id
+Retrieving by Account ID
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:Retrieving-by-account"
@@ -2762,20 +2775,34 @@ val myEntries = Expense.findAll(By(Expense.account, myAccount.id))
 \end_layout
 
 \begin_layout Standard
-Note that we specify the account primary key (id) on the right side.
- This is because the type of 
+Note that our By criterion is comparing the 
 \family typewriter
 Expense.account
 \family default
- is really 
+ field to the primary key (
+\family typewriter
+id
+\family default
+ field) of our account instead of to the account instance itself.
+ This is because the 
+\family typewriter
+Expense.account
+\family default
+ field is a 
+\family typewriter
+MappedForeignKey
+\family default
+ field, which uses the type of the key instead of the type of the entity
+ as its underlying value.
+ In this instance, that means that any queries using 
+\family typewriter
+Expense.account
+\family default
+ need to use a 
 \family typewriter
 Long
 \family default
-, not 
-\family typewriter
-Account
-\family default
-, so we need to match the type.
+ to match the underlying type.
  Besides 
 \family typewriter
 By
@@ -2957,7 +2984,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-An example of ByRef
+An Example of ByRef
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:An-example-of-byref"
@@ -3023,7 +3050,7 @@ IN
 \end_inset
 
  clause with a subselect in an SQL statement.
- As an example, let's say we wanted to get all of the entries that belong
+ For example, let's say we wanted to get all of the entries that belong
  to tags that start with the letter 
 \begin_inset Quotes eld
 \end_inset
@@ -3041,9 +3068,6 @@ reference "lst:Using-In"
 \end_inset
 
  shows the full breakdown.
- Note that we use List.removeDuplicates to make the List contain unique entities
- (this requires overriding the equals and hashCode methods, which we don't
- show here).
 \end_layout
 
 \begin_layout Standard
@@ -3102,6 +3126,132 @@ val cExpenses =
 \end_layout
 
 \begin_layout Standard
+Note that we use the 
+\family typewriter
+List.removeDuplicates
+\family default
+ method to make sure that the List contains unique entities.
+ This requires overriding the 
+\family typewriter
+equals
+\family default
+ and 
+\family typewriter
+hashCode
+\family default
+ methods on the Expense class, which we show in Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Overriding-equalshash-expense"
+
+\end_inset
+
+.
+ In our example we're using the primary key (
+\family typewriter
+id
+\family default
+ field) to define object 
+\begin_inset Quotes eld
+\end_inset
+
+identity
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Overriding 
+\family typewriter
+equals
+\family default
+ and 
+\family typewriter
+hashcode
+\family default
+ on the Expense entity
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Overriding-equalshash-expense"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+class Expense ...
+ {
+\end_layout
+
+\begin_layout Plain Layout
+
+  ...
+\end_layout
+
+\begin_layout Plain Layout
+
+  override def equals (other : Any) = other match {
+\end_layout
+
+\begin_layout Plain Layout
+
+    case e : Expense if e.id.is == this.id.is => true
+\end_layout
+
+\begin_layout Plain Layout
+
+    case _ => false
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  override def hashCode = this.id.is.hashCode
+\end_layout
+
+\begin_layout Plain Layout
+
+  ...
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 We use the 
 \family typewriter
 ByRef
@@ -3134,14 +3284,18 @@ IN
 \end_inset
 
  portion of the where clause.
- An example in Listing 
+ Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Using-InRaw"
 
 \end_inset
 
- shows how we could use this to find 
+ shows an example of how we could use 
+\family typewriter
+InRaw
+\family default
+ to find 
 \family typewriter
 Tags
 \family default
@@ -3231,7 +3385,7 @@ findAllByInsecureSql
 \family typewriter
 findAllByPreparedStatement
 \family default
- methods, which are covered later in this section on page 
+ methods, which are covered later in this section on page number 
 \begin_inset CommandInset ref
 LatexCommand pageref
 reference "sub:SQL-based-queries"
@@ -3249,10 +3403,11 @@ IHaveValidatedThisSQL
 \family default
  acts as a code audit mechanism that says that someone has checked the SQL
  to make sure it's safe to use.
- Since the query fragment is added to the master query as-is, no escaping
- or other filtering is performed on the string.
- That means that if you take user input you need to be very careful about
- it or you run the risk of an SQL injection attack on your site.
+ The query fragment is added to the master query as-is: no escaping or other
+ filtering is performed on the string.
+ That means that if you take user input.
+ then you need to be very careful about it or you run the risk of an SQL
+ injection attack on your site.
 \end_layout
 
 \begin_layout Standard
@@ -3401,22 +3556,22 @@ val amountRange = Expense.findAll(
 \end_layout
 
 \begin_layout Standard
-As we mentioned in section 
+As we mentioned in Section 
 \begin_inset CommandInset ref
 LatexCommand vref
 reference "sub:Deleting-an-Instance"
 
 \end_inset
 
-, we can use the query parameters to effect bulk deletes in addition to
- querying for instances.
+, we can use the query parameters to do bulk deletes in addition to querying
+ for instances.
  Simply use the 
 \family typewriter
 QueryParam
 \family default
  classes to constrain what you want to delete.
- Obviously the control params that we'll cover next make no sense but the
- compiler won't complain.
+ Obviously, the control params that we'll cover next make no sense in this
+ context, but the compiler won't complain.
  Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -3490,7 +3645,7 @@ OrderBy
 \family default
 .
  This operates exactly like the order by clause in SQL, and allows you to
- order on a given field in either ascending or descending order.
+ sort on a given field in either ascending or descending order.
  Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -3516,7 +3671,7 @@ Descending
 \family typewriter
 OrderBySql
 \family default
- case class operates similarly except you provide your own SQL fragment
+ case class operates similarly, except that you provide your own SQL fragment
  for the ordering, as shown in the example.
  Again, you need to validate this SQL.
 \end_layout
@@ -3603,7 +3758,7 @@ reference "lst:Pagination-of-Results"
 \end_inset
 
 .
- In this example we take the offset from a parameter passed to our snippet,
+ In this example, we take the offset from a parameter passed to our snippet,
  with a default of zero.
 \end_layout
 
@@ -3661,11 +3816,11 @@ reference "lst:Multiple-QueryParams"
 \end_inset
 
 .
- In this example we're doing a query using a 
+ In this example, we're querying with a 
 \family typewriter
 Like
 \family default
- clause, ordering on the date of the entries, and paginating the results,
+ clause, sorting on the date of the entries, and paginating the results,
  all in one statement!
 \end_layout
 
@@ -3729,8 +3884,9 @@ QueryParam
 Distinct
 \family default
  case class, which acts exactly the same way as the DISTINCT keyword in
- SQL; one caveat is that Mapper doesn't support explicit joins, so this
- restricts the situations in which you can use 
+ SQL.
+ One caveat is that Mapper doesn't support explicit joins, so this restricts
+ the situations in which you can use 
 \family typewriter
 Distinct
 \family default
@@ -3766,8 +3922,8 @@ PreCache
  Normally, when Mapper loads your main entity it leaves the foreign key
  field in a lazy state, so that the query to get the foreign object isn't
  executed until you access the field.
- This can obviously be inefficient when you have a whole lot of entities
- loaded that you need to access, so the 
+ This can obviously be inefficient when you have many entities loaded that
+ you need to access, so the 
 \family typewriter
 PreCache
 \family default
@@ -3779,7 +3935,11 @@ reference "lst:Using-PreCache"
 
 \end_inset
 
- shows how we could use this to fetch an 
+ shows how we can use 
+\family typewriter
+PreCache
+\family default
+ to fetch an 
 \family typewriter
 Expense
 \family default
@@ -3843,10 +4003,10 @@ name "sub:helper-joins"
 \end_layout
 
 \begin_layout Standard
-In case you would prefer to keep your queries type-safe but you want a little
- more convenience in your joins between entities, you can define helper
- methods on your entities.
- One example would be finding all of the tags for a given 
+If you prefer to keep your queries type-safe, but you want a little more
+ convenience in your joins between entities, you can define helper methods
+ on your entities.
+ One example is finding all of the tags for a given 
 \family typewriter
 Expense
 \family default
@@ -3862,8 +4022,19 @@ reference "lst:Join-Convenience-Method"
 \family typewriter
 HasManyThrough
 \family default
- in that it will pull from the database each time instead of just once at
- query.
+: 
+\family typewriter
+hasManyThrough
+\family default
+ is a lazy value that will only retrieve data from the database once per
+ request.
+ Using a 
+\family typewriter
+findAll
+\family default
+ will retrieve data from the database every time.
+ This may be important if you add data to the database during a request,
+ or if you expect things to change between queries.
 \end_layout
 
 \begin_layout Standard
@@ -3909,18 +4080,18 @@ Utility Functionality
 In addition to the first-class persistence support in Mapper and Record,
  the frameworks provide additional functionality to make writing data-driven
  applications much simpler.
- This includes things like automatic XHtml representation of objects and
- support for generating everything from simple forms for an entity up to
- a full-fledged CRUD
+ This includes things such as automatic XHTML representation of objects
+ and support for generating everything from simple forms for an individual
+ entity to a full-fledged CRUD
 \begin_inset Foot
 status open
 
 \begin_layout Plain Layout
-An abbreviation (Create, Read, Update and Delete) representing the standard
- operations that are performed on database records.
+An acronym (Create, Read, Update and Delete) representing the standard operation
+s that are performed on database records.
  Taken from 
 \begin_inset Flex URL
-status collapsed
+status open
 
 \begin_layout Plain Layout
 
@@ -3929,7 +4100,7 @@ http://provost.uiowa.edu/maui/Glossary.html
 
 \end_inset
 
-
+.
 \end_layout
 
 \end_inset
@@ -3938,11 +4109,11 @@ http://provost.uiowa.edu/maui/Glossary.html
 \end_layout
 
 \begin_layout Subsection
-Display generation
+Display Generation
 \end_layout
 
 \begin_layout Standard
-If you want to display a mapper instance as XHTML, simply call the 
+If you want to display a Mapper instance as XHTML, simply call the 
 \family typewriter
 asHtml
 \family default
@@ -3959,7 +4130,7 @@ Text
 \family typewriter
 toString
 \family default
- method and concatenates the results, separated by newlines.
+ method and concatenates the results separated by newlines.
  If you want to change this behavior, override the 
 \family typewriter
 asHtml
@@ -3969,7 +4140,14 @@ asHtml
 \family typewriter
 dateOf
 \family default
- field we could modify the field as shown in Listing
+ field, we could modify the field as shown in Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Custom-field-display"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
@@ -3982,7 +4160,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Custom field display
+Custom Field Display
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:Custom-field-display"
@@ -4069,7 +4247,7 @@ asJs
 \end_layout
 
 \begin_layout Subsection
-Form generation
+Form Generation
 \begin_inset CommandInset label
 LatexCommand label
 name "sub:Form-generation"
@@ -4147,7 +4325,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Default toForm method
+Default toForm Method
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:Default-toForm-method"
@@ -4201,7 +4379,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Custom submit button
+Custom Submit Button
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:Custom-form-redirect"
@@ -4240,6 +4418,16 @@ redo
  This allows you to keep the current state of the snippet when validation
  fails so that the user doesn't have to re-enter all of the data in the
  form.
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Add a redo snippet example
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -4266,11 +4454,11 @@ formTemplate
 \end_inset
 
  var.
- The template may contain any XHTML you want, but specifically, the 
+ The template may contain any XHTML you want, but the 
 \family typewriter
 toForm
 \family default
- method will do special handling for the following tags:
+ method will provide special handling for the following tags:
 \end_layout
 
 \begin_layout Description
@@ -4339,7 +4527,8 @@ name=
 
 \begin_layout Standard
 As an example, if we wanted to use tables to lay out the form for our ledger
- entry, the row for the description field could look like Listing 
+ entry, the row for the description field might look like that in Listing
+ 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Custom-form-template"
@@ -4360,7 +4549,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Custom form template
+Custom Form Template
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:Custom-form-template"
@@ -4373,6 +4562,11 @@ name "lst:Custom-form-template"
 \end_inset
 
 
+\end_layout
+
+\begin_layout Plain Layout
+
+<!-- Example description field row for Record's toForm method -->
 \end_layout
 
 \begin_layout Plain Layout
@@ -4402,16 +4596,23 @@ name "lst:Custom-form-template"
 \end_layout
 
 \begin_layout Standard
-Technically, the field_msg binding looks up lift messages (chapter 
+Technically, the 
+\family typewriter
+field_msg
+\family default
+ binding looks up Lift messages (Chapter 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "cha:Message-Handling"
 
 \end_inset
 
-) based on the field's uniqueId, so you can set your own messages outside
- of validation using the S.{error,notice,warning} methods as shown in Listing
- 
+) based on the field's 
+\family typewriter
+uniqueId
+\family default
+, so you can set your own messages outside of validation using the S.{error,
+ notice, warning} methods as shown in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Setting-messages-via-S"
@@ -4431,7 +4632,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Setting messages via S
+Setting Messages via S
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:Setting-messages-via-S"
@@ -4468,8 +4669,7 @@ S.warning("amount_id", "This is brittle")
 
 \begin_layout Standard
 For most purposes, though, using the validation mechanism discussed in the
- next section would be the appropriate way to handle error checking and
- reporting.
+ next section is the appropriate way to handle error checking and reporting.
 \end_layout
 
 \begin_layout Subsection
@@ -4528,7 +4728,7 @@ FieldError
 \family typewriter
 Expense
 \family default
- entry in the future.
+ entry for a date in the future.
  First, we need to define a function for our 
 \family typewriter
 dateOf
@@ -4551,11 +4751,11 @@ Calendar
 
 \end_inset
 
- and not 
+, not 
 \family typewriter
 Date
 \family default
- is the actual value type of 
+, is the actual value type of 
 \family typewriter
 DateTimeField
 \family default
@@ -4572,7 +4772,7 @@ reference "lst:Date-validation"
 \end_inset
 
 .
- In the method we simply check to see if the millisecond count is greater
+ In the method, we simply check to see if the millisecond count is greater
  than 
 \begin_inset Quotes eld
 \end_inset
@@ -4594,7 +4794,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Date validation
+Date Validation
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:Date-validation"
@@ -4684,7 +4884,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Setting validators
+Setting Validators
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:Setting-validators"
@@ -4831,7 +5031,7 @@ Empty
 \family default
 .
  As an added bonus, CRUDify automatically creates a set of menus for SiteMap
- (chapter 
+ (Chapter 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "cha:SiteMap"
@@ -4923,7 +5123,7 @@ Lifecycle Callbacks
 Mapper and Record provide for a set of callbacks that allow you to perform
  actions at various points during the lifecycle of a given instance.
  If you want to define your own handling for one of the lifecycle events,
- all you need to do is override and define the callback, since 
+ all you need to do is override and define the callback because 
 \family typewriter
 MetaMapper
 \family default
@@ -4936,13 +5136,13 @@ LifecycleCallbacks
 \family typewriter
 LifecycleCallbacks
 \family default
- trait in each of the record and mapper pacakges, so make sure that you
+ trait in each of the record and mapper packages, so make sure that you
  import the correct one.
- For example, if we wanted to notify a comet actor whenever a new 
+ For example, if we want to notify a Comet actor whenever a new 
 \family typewriter
 Expense
 \family default
- entry is saved, we could change our 
+ entry is saved, we can change our 
 \family typewriter
 Expense
 \family default
@@ -4966,7 +5166,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Lifecycle callbacks
+Lifecycle Callbacks
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:Lifecycle-Callbacks"
@@ -5819,7 +6019,7 @@ Represents a String field that stores to a CLOB column in the database.
 \begin_inset Text
 
 \begin_layout Plain Layout
-MappedTextArea
+MappedTextarea
 \end_layout
 
 \end_inset
@@ -5931,7 +6131,7 @@ The basic
 MappedField
 \family default
  types cover a wide range of needs, but sometimes you may find yourself
- wanting to cover a specific type.
+ wanting to use a specific type.
  In our example, we would like a decimal value for our expense amount and
  account balance.
  Using a double would be inappropriate due to imprecision and rounding errors
@@ -5961,14 +6161,14 @@ scala.BigDecimal
 \family default
 .
  We're going to provide an abridged version of the code that will end up
- in the Lift library; feel free to examine the source to see the constructors
- and methods that we've omitted
+ in the Lift library.
+ Feel free to examine the source to see the constructors and methods that
+ we've omitted
 \begin_inset Foot
 status open
 
 \begin_layout Plain Layout
-The code is checked into the wip-dcb-decimal-maprec branch of liftweb as
- of the time of writing
+The code is checked into the master branch of the liftweb Git repository.
 \end_layout
 
 \end_inset
@@ -6010,7 +6210,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-MappedDecimal constructors
+MappedDecimal Constructors
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:MappedDecimal-constructors"
@@ -6028,6 +6228,10 @@ name "lst:MappedDecimal-constructors"
 \begin_layout Plain Layout
 
 import _root_.java.math.{MathContext, RoundingMode}
+\end_layout
+
+\begin_layout Plain Layout
+
 \end_layout
 
 \begin_layout Plain Layout
@@ -6127,7 +6331,7 @@ target "http://www.scala-lang.org/node/136"
 
 \end_inset
 
-
+.
 \end_layout
 
 \end_inset
@@ -6190,9 +6394,9 @@ setScale
  method returns a new instance.
  We also provide the vars and methods that handle the before and after values
  of the field.
- These values are used to handle persistence state; if you change the value
- of the field, the original value is held until the instance is saved to
- the database.
+ These values are used to handle persistence state.
+ If you change the value of the field, then the original value is held until
+ the instance is saved to the database.
  The 
 \family typewriter
 st
@@ -6219,7 +6423,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Setting a default value
+Setting a Default Value
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:Setting-a-default-value"
@@ -6255,6 +6459,16 @@ name "lst:Setting-a-default-value"
 
 \begin_layout Plain Layout
 
+  // The data and orgData variables are used so that
+\end_layout
+
+\begin_layout Plain Layout
+
+  // we know when the field has been modified by the user
+\end_layout
+
+\begin_layout Plain Layout
+
   private var data : BigDecimal = defaultValue
 \end_layout
 
@@ -6281,6 +6495,32 @@ name "lst:Setting-a-default-value"
 \begin_layout Plain Layout
 
   }
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\end_layout
+
+\begin_layout Plain Layout
+
+  // The i_is_! and i_was_! methods are used internally to
+\end_layout
+
+\begin_layout Plain Layout
+
+  // keep track of when the field value is changed.
+ In our 
+\end_layout
+
+\begin_layout Plain Layout
+
+  // instance they delegate directly to the data and orgData 
+\end_layout
+
+\begin_layout Plain Layout
+
+  // variables
 \end_layout
 
 \begin_layout Plain Layout
@@ -6337,7 +6577,7 @@ real_i_set_!
 \family typewriter
 i_obscure_!
 \family default
- method returns the a value that is used then the user doesn't have read
+ method returns the a value that is used when the user doesn't have read
  permissions.
  The 
 \family typewriter
@@ -6478,6 +6718,7 @@ coerce
 \family default
  method so that we have a common place to properly set scale and rounding
  modes on the value of the field.
+ 
 \end_layout
 
 \begin_layout Standard
@@ -6515,6 +6756,11 @@ name "lst:setFrom...-Methods"
 \begin_layout Plain Layout
 
     in match {
+\end_layout
+
+\begin_layout Plain Layout
+
+      case bd : BigDecimal => setAll(bd)
 \end_layout
 
 \begin_layout Plain Layout
@@ -6573,6 +6819,20 @@ name "lst:setFrom...-Methods"
 \begin_layout Plain Layout
 
   protected def setAll (in : BigDecimal) = set(coerce(in))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  // Make a separate method for properly adjusting scale and rounding.
+\end_layout
+
+\begin_layout Plain Layout
+
+  // We'll use this method later in the class as well.
 \end_layout
 
 \begin_layout Plain Layout
@@ -6651,8 +6911,8 @@ targetSQLType
 \family typewriter
 jdbcFriendly
 \family default
- method returns a value that can be used in a JDBC statement; here's where
- we need to use the 
+ method returns a value that can be used in a JDBC statement.
+ Here's where we need to use the 
 \family typewriter
 bigDecimal
 \family default
@@ -6664,7 +6924,7 @@ scala.BigDecimal
 \family typewriter
 java.math.BigDecimal
 \family default
- instance from whatever our current value is.
+ instance.
  Similarly, the 
 \family typewriter
 real_convertToJDBCFriendly
@@ -6685,17 +6945,22 @@ buildSet...
 \family default
  methods return functions that can be used to set the value of our field
  based on different input types.
- These are essentially conversion functions.
+ These are essentially conversion functions that are used by Lift to convert
+ data retrieved in a 
+\family typewriter
+ResultSet
+\family default
+ into actual field values.
  Finally, the 
 \family typewriter
 fieldCreatorString
 \family default
  specifices what we would need in a CREATE TABLE statement to define this
  column.
- In our case we need to take into account the precision and scale of ; we
- use default precision if we're set to unlimited, but it's important to
- understand that actual precision for the default DECIMAL type varies between
- RDBMS vendors.
+ In this instance, we need to take into account the precision and scale.
+ We use default precision if we're set to unlimited, but it's important
+ to understand that actual precision for the default DECIMAL type varies
+ between RDBMS vendors.
 \end_layout
 
 \begin_layout Standard
@@ -6745,8 +7010,48 @@ def real_convertToJDBCFriendly(value: BigDecimal): Object = value.bigDecimal
 
 \begin_layout Plain Layout
 
-def buildSetBooleanValue(accessor : Method, columnName : String) : (T, Boolean,
- Boolean) => Unit = null
+// The following methods are used internally by Lift to
+\end_layout
+
+\begin_layout Plain Layout
+
+// process values retrieved from the database.
+ 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// We don't convert from Boolean values to a BigDecimal, so this returns
+ null
+\end_layout
+
+\begin_layout Plain Layout
+
+def buildSetBooleanValue(accessor : Method, columnName : String) : 
+\end_layout
+
+\begin_layout Plain Layout
+
+  (T, Boolean, Boolean) => Unit = null
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// Convert from a Date to a BigDecimal.
+ Our assumption here is that we can take
+\end_layout
+
+\begin_layout Plain Layout
+
+// The milliseconds value of the Date.
 \end_layout
 
 \begin_layout Plain Layout
@@ -6757,8 +7062,42 @@ def buildSetDateValue(accessor : Method, columnName : String) : (T, Date)
 
 \begin_layout Plain Layout
 
-  (inst, v) => doField(inst, accessor, {case f: MappedDecimal[T] => f.st(if
- (v == null) defaultValue else coerce(BigDecimal(v.getTime)))})
+  (inst, v) => 
+\end_layout
+
+\begin_layout Plain Layout
+
+    doField(inst, accessor,{
+\end_layout
+
+\begin_layout Plain Layout
+
+      case f: MappedDecimal[T] => 
+\end_layout
+
+\begin_layout Plain Layout
+
+        f.st(if (v == null) defaultValue else coerce(BigDecimal(v.getTime)))
+\end_layout
+
+\begin_layout Plain Layout
+
+    })
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// Convert from a String to a BigDecimal.
+ Since the BigDecimal object can
+\end_layout
+
+\begin_layout Plain Layout
+
+// directly convert a String, we just pass the String directly.
 \end_layout
 
 \begin_layout Plain Layout
@@ -6769,32 +7108,110 @@ def buildSetStringValue(accessor: Method, columnName: String): (T, String)
 
 \begin_layout Plain Layout
 
-  (inst, v) => doField(inst, accessor, {case f: MappedDecimal[T] => f.st(coerce(B
-igDecimal(v)))})
+  (inst, v) => 
+\end_layout
+
+\begin_layout Plain Layout
+
+    doField(inst, accessor,{
+\end_layout
+
+\begin_layout Plain Layout
+
+      case f: MappedDecimal[T] => 
+\end_layout
+
+\begin_layout Plain Layout
+
+        f.st(coerce(BigDecimal(v)))
+\end_layout
+
+\begin_layout Plain Layout
+
+    })
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// Convert from a Long to a BigDecimal.
+ This is slightly more complex than for a 
+\end_layout
+
+\begin_layout Plain Layout
+
+// String, since we need to check for null values.
 \end_layout
 
 \begin_layout Plain Layout
 
 def buildSetLongValue(accessor: Method, columnName : String) : (T, Long,
- Boolean) =>
+ Boolean) => Unit = 
 \end_layout
 
 \begin_layout Plain Layout
 
-  Unit = (inst, v, isNull) => doField(inst, accessor, {case f: MappedDecimal[T]
- => f.st(if (isNull) defaultValue else coerce(BigDecimal(v)))})
+  (inst, v, isNull) => 
+\end_layout
+
+\begin_layout Plain Layout
+
+    doField(inst, accessor, {
+\end_layout
+
+\begin_layout Plain Layout
+
+      case f: MappedDecimal[T] => f.st(if (isNull) defaultValue else coerce(BigDe
+cimal(v)))
+\end_layout
+
+\begin_layout Plain Layout
+
+    })
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// Convert from an AnyRef (Object).
+ We simply use the String value of the input here.
 \end_layout
 
 \begin_layout Plain Layout
 
 def buildSetActualValue(accessor: Method, data: AnyRef, columnName: String)
- : (T, AnyRef) =>
+ : 
 \end_layout
 
 \begin_layout Plain Layout
 
-  Unit = (inst, v) => doField(inst, accessor, {case f: MappedDecimal[T]
- => f.st(coerce(BigDecimal(v.toString)))})
+    (T, AnyRef) => Unit =
+\end_layout
+
+\begin_layout Plain Layout
+
+  (inst, v) => 
+\end_layout
+
+\begin_layout Plain Layout
+
+    doField(inst, accessor, {
+\end_layout
+
+\begin_layout Plain Layout
+
+      case f: MappedDecimal[T] => f.st(coerce(BigDecimal(v.toString)))
+\end_layout
+
+\begin_layout Plain Layout
+
+    })
 \end_layout
 
 \begin_layout Plain Layout
@@ -6850,7 +7267,7 @@ name "sub:ProtoUser-and-MegaProtoUser"
 \begin_layout Standard
 In addition to all of the database-related features, Mapper contains an
  extra goody to help you quickly set up small sites.
- The 
+ 
 \family typewriter
 ProtoUser
 \family default
@@ -6858,7 +7275,7 @@ ProtoUser
 \family typewriter
 MegaProtoUser
 \family default
- traits are two built-in traits that define a simple user account.
+ are two built-in traits that define a simple user account.
  The 
 \family typewriter
 ProtoUser
@@ -6907,7 +7324,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-A simple ProtoUser
+A Simple ProtoUser
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:A-simple-ProtoUser"
@@ -7382,7 +7799,7 @@ http://highscalability.com/unorthodox-approach-database-design-coming-shard
 \end_layout
 
 \begin_layout Itemize
-Sharding increases the complexity of your code
+Sharding increases the complexity of your code.
 \end_layout
 
 \begin_layout Itemize
@@ -7391,12 +7808,11 @@ To get the most benefit out of sharding, you need to carefully choose and
 \begin_inset Quotes eld
 \end_inset
 
-selector
+selector.
 \begin_inset Quotes erd
 \end_inset
 
-.
- If you're not careful you can get an uneven distribution where some servers
+ If you're not careful, you can get an uneven distribution where some servers
  handle significantly more load than others, defeating the purpose of sharding.
  The example we've given here of using the last name is, in practice, a
  very poor choice.
@@ -7411,7 +7827,7 @@ target "http://startuplessonslearned.blogspot.com/2009/01/sharding-for-startups.
 \end_layout
 
 \begin_layout Itemize
-When you use sharding, you can't just use normal joins anymore, since the
+When you use sharding, you can't just use normal joins anymore because the
  data isn't all within one instance.
  This means more work on your part to properly retrieve and associate data
 \end_layout
@@ -7433,14 +7849,14 @@ for sharding that allows you to choose which database connection you want
 \family typewriter
 dbSelectDBConnectionForFind
 \family default
-, and 
+ and 
 \family typewriter
 dbCalculateConnectionIdentifier
 \family default
 .
  dbSelect...
- is used in a find by primary key, and takes a partial function (typically
- a match clause) to determine which connection to use.
+ is used to find an instance by primary key, and takes a partial function
+ (typically a match clause) to determine which connection to use.
  dbCalculate...
  is used when a new instance is created to decide where to store the new
  instance.
@@ -7583,8 +7999,8 @@ http://java.sun.com/javase/6/docs/api/java/sql/PreparedStatement.html
 \family typewriter
 findAllByPreparedStatement
 \family default
- method takes a single function parameter; this function needs to take a
- 
+ method takes a single function parameter.
+ This function takes a 
 \family typewriter
 SuperConnection
 \family default
@@ -7610,7 +8026,7 @@ SuperConnection.html
 
 \end_inset
 
- and return a 
+ and returns a 
 \family typewriter
 PreparedStatement
 \family default
@@ -7622,7 +8038,7 @@ reference "lst:Using-findAllByPreparedStatement"
 
 \end_inset
 
- shows our previous example of looking up all 
+ shows our previous example in which we looked up all 
 \family typewriter
 Tag
 \family default
@@ -7630,14 +8046,14 @@ s for recent
 \family typewriter
 Expense
 \family default
- entries using 
+ entries, but here using 
 \family typewriter
 findAllByPreparedStatement
 \family default
  instead.
  The query that you provide must at least return the fields that are mapped
  by your entity, but you can return other columns as well (they'll just
- be ignored) in case you just want to do a 
+ be ignored), so you may choose to do a 
 \begin_inset Quotes eld
 \end_inset
 
@@ -7645,7 +8061,7 @@ select *
 \begin_inset Quotes erd
 \end_inset
 
-.
+ if you prefer.
 \end_layout
 
 \begin_layout Standard
@@ -7748,7 +8164,7 @@ DB.runQuery
 \family default
 .
  This method allows you to provide a full SQL query string, and is overloaded
- to take a parameterized query if you desire.
+ to take a parameterized query.
  It returns a 
 \family typewriter
 Pair[List[String],List[List[String]]
@@ -7869,7 +8285,11 @@ If you need full control over the query and full access to the result set,
 DB.use
 \family default
 , which takes a connection identifier as well as a function that takes a
- SuperConnection (a thin wrapper on JDBC's connection).
+ 
+\family typewriter
+SuperConnection
+\family default
+ (a thin wrapper on JDBC's connection).
  This forms a loan pattern
 \begin_inset Foot
 status open
@@ -7891,8 +8311,8 @@ target "http://scala.sygneca.com/patterns/loan"
 \family typewriter
 DB.exec
 \family default
- method takes a provided connection and execute an arbitrary SQL statement
- on it, then applying a provided function to the result set.
+ method takes a provided connection and executes an arbitrary SQL statement
+ on it, then applies a provided function to the result set.
  Similarly, the 
 \family typewriter
 DB.prepareStatement
@@ -7952,7 +8372,7 @@ DB.use(DefaultConnectionIdentifier) { conn =>
 
 \begin_layout Plain Layout
 
-    // Should us a prepared statement here.
+    // Should use a prepared statement here.
  This is for example only
 \end_layout
 
@@ -8023,16 +8443,17 @@ Summary
 \end_layout
 
 \begin_layout Standard
-In this chapter we discussed the two major ORMs included in Lift, Mapper
+In this chapter, we discussed the two major ORMs included in Lift: Mapper
  and Record.
  We’ve shown how you can define entities using the Mapper field types and
  how to coordinate between the entity and its Meta-object.
  We’ve shown how you can customize the display and schema of your behavior
- with custom form control, CRUD support and indexing, as well as how to
- query for entities using Mapper’s type-safe query support.
- Finally, we showed how you can do in-depth customization of Mapper behavior
- by writing your own field types, using multiple databases, and using raw
- SQL queries.
+ with custom form control, CRUD support, and indexing.
+ And we've show you how to query for entities using Mapper’s type-safe query
+ support.
+ Finally, we showed you how you can do in-depth customization of Mapper
+ behavior by writing your own field types, using multiple databases, and
+ using raw SQL queries.
 \end_layout
 
 \end_body

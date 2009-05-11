@@ -54,6 +54,19 @@ name "cha:AJAX-and-COMET"
 \end_layout
 
 \begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Copy back major changes from the APress version!
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 In this chapter we're going to discuss AJAX and COMET, two approaches to
  improving the user experience through dynamic web pages.
  While a full treatment of the techniques and technologies behind these
@@ -605,6 +618,25 @@ class SimpleSnippet {
 
 \begin_layout Plain Layout
 
+  import _root_.net.liftweb.http.js.{JE,JsCmd,JsCmds}
+\end_layout
+
+\begin_layout Plain Layout
+
+  import JsCmds._ // For implicits
+\end_layout
+
+\begin_layout Plain Layout
+
+  import JE.{JsRaw,Str}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
   def ajaxFunc1() : JsCmd = JsRaw("alert('Button1 clicked')")
 \end_layout
 
@@ -619,15 +651,7 @@ class SimpleSnippet {
 
 \begin_layout Plain Layout
 
-	println(
-\begin_inset Quotes eld
-\end_inset
-
-Received 
-\begin_inset Quotes erd
-\end_inset
-
- + str)
+	println("Received " + str)
 \end_layout
 
 \begin_layout Plain Layout
@@ -665,34 +689,38 @@ Received
 
 \begin_layout Plain Layout
 
-			"button1" -> SHtml.ajaxButton(
-\begin_inset Quotes eld
-\end_inset
-
-Press me
-\begin_inset Quotes erd
-\end_inset
-
-, ajaxFunc1 _),
+			"button1" -> SHtml.ajaxButton("Press me", ajaxFunc1 _),
 \end_layout
 
 \begin_layout Plain Layout
 
-			"button2" -> <button onclick={SHtml.ajaxCall(Str(
-\begin_inset Quotes eld
-\end_inset
-
-Button-2
-\begin_inset Quotes erd
-\end_inset
-
-), ajaxFunc2 _)}>Press me 2</button>,
+			"button2" -> 
 \end_layout
 
 \begin_layout Plain Layout
 
-			"button3" -> <button onclick={SHtml.ajaxInvoke(ajaxFunc3 _)}>Press me
- 3</button>)
+              <button onclick={SHtml.ajaxCall(Str("Button-2"), ajaxFunc2
+ _)._2}>
+\end_layout
+
+\begin_layout Plain Layout
+
+                Press me 2</button>,
+\end_layout
+
+\begin_layout Plain Layout
+
+			"button3" -> 
+\end_layout
+
+\begin_layout Plain Layout
+
+              <button onclick={SHtml.ajaxInvoke(ajaxFunc3 _)._2}>
+\end_layout
+
+\begin_layout Plain Layout
+
+                Press me 3</button>)
 \end_layout
 
 \begin_layout Plain Layout
@@ -720,26 +748,14 @@ Basically here we made a trivial example how to create three Ajax buttons
  The difference between ajaxCall and ajaxInvoke is that for ajaxCall you
  can specify a parameter that will be sent to server.
  This parameter is te result of the JsExp computation.
- For an overview of SHtml functions please see 
-\begin_inset Quotes eld
-\end_inset
-
-SHtml object
-\begin_inset Quotes erd
-\end_inset
-
- section.
- 
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-How to make a cross reference here to this section from another lyx?
-\end_layout
+ For an overview of SHtml functions please see Chapter 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "cha:Forms-in-Lift"
 
 \end_inset
 
-
+.
 \end_layout
 
 \begin_layout Section
@@ -769,10 +785,10 @@ net.liftweb.http.SHtml
 \begin_layout Standard
 \begin_inset Tabular
 <lyxtabular version="3" rows="15" columns="2">
-<features>
+<features islongtable="true" headBottomDL="true">
 <column alignment="left" valignment="top" width="0">
 <column alignment="left" valignment="top" width="4in">
-<row>
+<row endhead="true">
 <cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
