@@ -1,4 +1,4 @@
-#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.2 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -1396,8 +1396,11 @@ class HelloWorld {
 
 \begin_layout Standard
 As you can see, the howdy method is pretty straightforward.
- Lift binds the result of executing the method into the location of the
- snippet element (in this case a span).
+ Lift binds the result of executing the method (in this case a 
+\family typewriter
+span
+\family default
+) into the location of the snippet element.
  It's interesting to note that a method may itself return other 
 \family typewriter
 <lift:...>
