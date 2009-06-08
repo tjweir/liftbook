@@ -1,4 +1,4 @@
-#LyX 1.6.2 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.3 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -5045,24 +5045,7 @@ S
  As we stated before, the LiftSession (and therefore most of S) isn't available
  at this time, so the Map is the only way to pass information on to the
  rewritten location.
- Technically, a rewrite results in a 
-\begin_inset Quotes eld
-\end_inset
-
-307 Temporary Redirect
-\begin_inset Quotes erd
-\end_inset
-
- result code that forwards the client to a new request.
- Because of that, even if you could set data in LiftSession or S, it would
- disappear when the redirect occurs.
- Unlike some other web frameworks, Lift doesn't have a concept of an internal
- redirect since logic is handled at the snippet level instead of the template
- level.
- You can approximate this behavior by using Views, and having one View function
- call another View function (or return a different template), but in our
- experience the lack of an internal redirect is not a significant factor
- in workflows.
+ 
 \end_layout
 
 \begin_layout Standard
