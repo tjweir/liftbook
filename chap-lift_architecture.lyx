@@ -3642,7 +3642,7 @@ class Ledger {
 
 \begin_layout Plain Layout
 
-          "balance" -> Text(currentLegdger.formattedBalance),
+          "balance" -> Text(currentLedger.formattedBalance),
 \end_layout
 
 \begin_layout Plain Layout
@@ -3904,7 +3904,7 @@ class BridgeKeeper extends StatefulSnippet {
 
 \begin_layout Plain Layout
 
-    case "challenge" => namePage _
+    case "challenge" => firstPage _
 \end_layout
 
 \begin_layout Plain Layout
