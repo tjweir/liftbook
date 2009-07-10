@@ -2533,6 +2533,33 @@ default
 ).
  In the latter case, Lift will search all subdirectories of the app root
  for the template.
+ By default, Lift will use 
+\begin_inset Quotes eld
+\end_inset
+
+/templates-hidden/default
+\begin_inset Quotes erd
+\end_inset
+
+ if you don't specify a 
+\family typewriter
+with
+\family default
+ attribute, so Listings 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Surrounding-your-page"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Surrounding-with-the-default-template"
+
+\end_inset
+
+ are equivalent.
 \end_layout
 
 \begin_layout Standard
@@ -2564,6 +2591,60 @@ name "lst:Surrounding-your-page"
 \begin_layout Plain Layout
 
 <lift:surround with="default" at=
+\begin_inset Quotes erd
+\end_inset
+
+content
+\begin_inset Quotes erd
+\end_inset
+
+>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <p>Welcome to PocketChange!</p>
+\end_layout
+
+\begin_layout Plain Layout
+
+</lift:surround>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Surrounding with the default template
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Surrounding-with-the-default-template"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<lift:surround at=
 \begin_inset Quotes erd
 \end_inset
 
@@ -2683,23 +2764,7 @@ name "lst:Adding-an-Admin-menu"
 
 \begin_layout Plain Layout
 
-<lift:surround with=
-\begin_inset Quotes erd
-\end_inset
-
-default
-\begin_inset Quotes erd
-\end_inset
-
- at=
-\begin_inset Quotes erd
-\end_inset
-
-content
-\begin_inset Quotes erd
-\end_inset
-
->
+<lift:surround with="default" at="content">
 \end_layout
 
 \begin_layout Plain Layout
@@ -2709,15 +2774,7 @@ content
 
 \begin_layout Plain Layout
 
-  <lift:bind name=
-\begin_inset Quotes erd
-\end_inset
-
-content
-\begin_inset Quotes erd
-\end_inset
-
- />
+  <lift:bind name="content" />
 \end_layout
 
 \begin_layout Plain Layout
@@ -2840,15 +2897,7 @@ name "lst:Binding-in-Templates"
 
 \begin_layout Plain Layout
 
-    <lift:bind name=
-\begin_inset Quotes erd
-\end_inset
-
-content
-\begin_inset Quotes erd
-\end_inset
-
- />
+    <lift:bind name="content" />
 \end_layout
 
 \begin_layout Plain Layout
@@ -3163,23 +3212,7 @@ name "lst:Using-Head-Merge"
 
 \begin_layout Plain Layout
 
-<lift:surround with=
-\begin_inset Quotes erd
-\end_inset
-
-default
-\begin_inset Quotes erd
-\end_inset
-
- at=
-\begin_inset Quotes erd
-\end_inset
-
-foo
-\begin_inset Quotes erd
-\end_inset
-
->
+<lift:surround with="default" at="foo">
 \end_layout
 
 \begin_layout Plain Layout
@@ -5370,23 +5403,7 @@ def chart (endDate : String) : Box[LiftResponse] = {
 
 \begin_layout Plain Layout
 
-                        (
-\begin_inset Quotes eld
-\end_inset
-
-Content-Type
-\begin_inset Quotes erd
-\end_inset
-
- -> 
-\begin_inset Quotes eld
-\end_inset
-
-image/png
-\begin_inset Quotes erd
-\end_inset
-
-) :: Nil,
+                        ("Content-Type" -> "image/png") :: Nil,
 \end_layout
 
 \begin_layout Plain Layout
@@ -5498,23 +5515,7 @@ LiftRules.dispatch.append {
 
 \begin_layout Plain Layout
 
-  case Req(
-\begin_inset Quotes eld
-\end_inset
-
-chart
-\begin_inset Quotes erd
-\end_inset
-
- :: 
-\begin_inset Quotes eld
-\end_inset
-
-balances
-\begin_inset Quotes erd
-\end_inset
-
- :: endDate :: Nil, _, _) =>
+  case Req("chart" :: "balances" :: endDate :: Nil, _, _) =>
 \end_layout
 
 \begin_layout Plain Layout
@@ -5921,15 +5922,8 @@ class AccountOps {
 
 \begin_layout Plain Layout
 
-  object pageSize extends RequestVar[Int](S.param(
-\begin_inset Quotes eld
-\end_inset
-
-pageSize
-\begin_inset Quotes erd
-\end_inset
-
-).map(_.toInt) openOr 25)
+  object pageSize extends RequestVar[Int](S.param("pageSize").map(_.toInt)
+ openOr 25)
 \end_layout
 
 \begin_layout Plain Layout
@@ -6161,15 +6155,7 @@ name "lst:Defining-a-Cleanup"
 
 \begin_layout Plain Layout
 
-object mySocket extends RequestVar[Socket](new Socket(
-\begin_inset Quotes eld
-\end_inset
-
-localhost:23
-\begin_inset Quotes erd
-\end_inset
-
-)) {
+object mySocket extends RequestVar[Socket](new Socket("localhost:23")) {
 \end_layout
 
 \begin_layout Plain Layout
