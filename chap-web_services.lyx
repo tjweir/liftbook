@@ -2086,12 +2086,10 @@ object RestAPI extends XMLApiHelper {
 \begin_layout Plain Layout
 
     case Req(List("api", "expense", eid, 
-\begin_inset Quotes eld
-\end_inset
+"
 
 xml
-\begin_inset Quotes erd
-\end_inset
+"
 
 ), "", GetRequest) => 
 \end_layout
@@ -2104,12 +2102,10 @@ xml
 \begin_layout Plain Layout
 
     case Req(List("api", "expense", eid, 
-\begin_inset Quotes eld
-\end_inset
+"
 
 atom
-\begin_inset Quotes erd
-\end_inset
+"
 
 ), "", GetRequest) => 
 \end_layout

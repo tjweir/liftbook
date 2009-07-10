@@ -2157,12 +2157,10 @@ class ExpenseTag ...
 \begin_layout Plain Layout
 
     override def dbColumnName = 
-\begin_inset Quotes eld
-\end_inset
+"
 
 expense_id
-\begin_inset Quotes erd
-\end_inset
+"
 
 
 \end_layout

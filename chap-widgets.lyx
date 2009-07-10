@@ -243,20 +243,16 @@ TableSorter Template
 \begin_layout Plain Layout
 
     <table id=
-\begin_inset Quotes erd
-\end_inset
+"
 
 table-id
-\begin_inset Quotes erd
-\end_inset
+"
 
  class=
-\begin_inset Quotes erd
-\end_inset
+"
 
 tablesorter
-\begin_inset Quotes erd
-\end_inset
+"
 
 > ...
  </table>
@@ -1662,12 +1658,10 @@ def loadTree () = {
 \begin_layout Plain Layout
 
   Tree(
-\begin_inset Quotes eld
-\end_inset
+"
 
 No children
-\begin_inset Quotes erd
-\end_inset
+"
 
 ) :: 
 \end_layout
@@ -1675,20 +1669,16 @@ No children
 \begin_layout Plain Layout
 
   Tree(
-\begin_inset Quotes eld
-\end_inset
+"
 
 One static child
-\begin_inset Quotes erd
-\end_inset
+"
 
 , Tree(
-\begin_inset Quotes eld
-\end_inset
+"
 
 Lone child
-\begin_inset Quotes erd
-\end_inset
+"
 
 ) :: Nil) ::
 \end_layout
@@ -1696,20 +1686,16 @@ Lone child
 \begin_layout Plain Layout
 
   Tree(
-\begin_inset Quotes eld
-\end_inset
+"
 
 Dynamic node
-\begin_inset Quotes erd
-\end_inset
+"
 
 , 
-\begin_inset Quotes eld
-\end_inset
+"
 
 myDynamic
-\begin_inset Quotes erd
-\end_inset
+"
 
 , true) :: Nil
 \end_layout
@@ -1731,12 +1717,10 @@ def loadNode (id : String) : List[Tree] = id match {
 \begin_layout Plain Layout
 
   case 
-\begin_inset Quotes eld
-\end_inset
+"
 
 myDynamic
-\begin_inset Quotes erd
-\end_inset
+"
 
  => 
 \end_layout
@@ -1744,12 +1728,10 @@ myDynamic
 \begin_layout Plain Layout
 
     Tree(
-\begin_inset Quotes eld
-\end_inset
+"
 
 Child one
-\begin_inset Quotes erd
-\end_inset
+"
 
 ) ::
 \end_layout
@@ -1757,12 +1739,10 @@ Child one
 \begin_layout Plain Layout
 
     Tree(
-\begin_inset Quotes eld
-\end_inset
+"
 
 Child two
-\begin_inset Quotes erd
-\end_inset
+"
 
 ) :: Nil
 \end_layout
@@ -2213,12 +2193,10 @@ class IFrameWidget {
 \begin_layout Plain Layout
 
       <link type="text/css" rel=
-\begin_inset Quotes erd
-\end_inset
+"
 
 stylesheet
-\begin_inset Quotes erd
-\end_inset
+"
 
  
 \end_layout
@@ -2236,12 +2214,10 @@ stylesheet
 \begin_layout Plain Layout
 
     <div class=
-\begin_inset Quotes erd
-\end_inset
+"
 
 iframeDiv
-\begin_inset Quotes erd
-\end_inset
+"
 
 >
 \end_layout

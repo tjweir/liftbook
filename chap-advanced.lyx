@@ -1178,12 +1178,10 @@ def greet (xhtml : NodeSeq) : NodeSeq = {
 \begin_layout Plain Layout
 
   var name = 
-\begin_inset Quotes eld
-\end_inset
+"
 
 
-\begin_inset Quotes erd
-\end_inset
+"
 
 
 \end_layout
@@ -1206,20 +1204,16 @@ def greet (xhtml : NodeSeq) : NodeSeq = {
 \begin_layout Plain Layout
 
   bind(
-\begin_inset Quotes eld
-\end_inset
+"
 
 form
-\begin_inset Quotes erd
-\end_inset
+"
 
 , xhtml, 
-\begin_inset Quotes eld
-\end_inset
+"
 
 name
-\begin_inset Quotes erd
-\end_inset
+"
 
  -> SHtml.text(name, name = _),
 \end_layout
@@ -1227,20 +1221,16 @@ name
 \begin_layout Plain Layout
 
                       
-\begin_inset Quotes eld
-\end_inset
+"
 
 greet
-\begin_inset Quotes erd
-\end_inset
+"
 
  -> SHtml.submit(
-\begin_inset Quotes eld
-\end_inset
+"
 
 Greet
-\begin_inset Quotes erd
-\end_inset
+"
 
 , process))
 \end_layout
@@ -1294,20 +1284,16 @@ name "lst:Function-binding-template"
 \begin_layout Plain Layout
 
 <lift:surround with=
-\begin_inset Quotes erd
-\end_inset
+"
 
 default
-\begin_inset Quotes erd
-\end_inset
+"
 
  at=
-\begin_inset Quotes erd
-\end_inset
+"
 
 content
-\begin_inset Quotes erd
-\end_inset
+"
 
 >
 \end_layout
@@ -1315,12 +1301,10 @@ content
 \begin_layout Plain Layout
 
   <lift:Test.greet form=
-\begin_inset Quotes erd
-\end_inset
+"
 
 GET
-\begin_inset Quotes erd
-\end_inset
+"
 
 >
 \end_layout
@@ -1908,12 +1892,10 @@ LiftRules.dispatch.prepend {
 \begin_layout Plain Layout
 
 	       				RedirectState(() => println(
-\begin_inset Quotes eld
-\end_inset
+"
 
 Called on redirect!
-\begin_inset Quotes erd
-\end_inset
+"
 
 ), 
 \end_layout
@@ -2770,12 +2752,10 @@ Snippet attributes
 \begin_layout Plain Layout
 
 <lift:Ledger.balance default=
-\begin_inset Quotes erd
-\end_inset
+"
 
 10
-\begin_inset Quotes erd
-\end_inset
+"
 
 >
 \end_layout
@@ -2835,20 +2815,16 @@ class Ledger {
 \begin_layout Plain Layout
 
 	val dflt = S.attr(
-\begin_inset Quotes eld
-\end_inset
+"
 
 default
-\begin_inset Quotes erd
-\end_inset
+"
 
 ) openOr 
-\begin_inset Quotes eld
-\end_inset
+"
 
 0
-\begin_inset Quotes erd
-\end_inset
+"
 
 ;
 \end_layout
@@ -2856,12 +2832,10 @@ default
 \begin_layout Plain Layout
 
     bind (
-\begin_inset Quotes eld
-\end_inset
+"
 
 ledger
-\begin_inset Quotes erd
-\end_inset
+"
 
 , content,
 \end_layout
@@ -2869,12 +2843,10 @@ ledger
 \begin_layout Plain Layout
 
           
-\begin_inset Quotes eld
-\end_inset
+"
 
 balance
-\begin_inset Quotes erd
-\end_inset
+"
 
  -> Text(currentLegdger.formattedBalance),
 \end_layout
@@ -2882,12 +2854,10 @@ balance
 \begin_layout Plain Layout
 
           
-\begin_inset Quotes eld
-\end_inset
+"
 
 time
-\begin_inset Quotes erd
-\end_inset
+"
 
  -> Text((new java.util.Date).toString))
 \end_layout
@@ -3048,20 +3018,16 @@ class Ledger {
 \begin_layout Plain Layout
 
 	val dflt = S.attr(
-\begin_inset Quotes eld
-\end_inset
+"
 
 default
-\begin_inset Quotes erd
-\end_inset
+"
 
 ) openOr 
-\begin_inset Quotes eld
-\end_inset
+"
 
 0
-\begin_inset Quotes erd
-\end_inset
+"
 
 ;
 \end_layout
@@ -3069,12 +3035,10 @@ default
 \begin_layout Plain Layout
 
     bind (
-\begin_inset Quotes eld
-\end_inset
+"
 
 ledger
-\begin_inset Quotes erd
-\end_inset
+"
 
 , content,
 \end_layout
@@ -3082,12 +3046,10 @@ ledger
 \begin_layout Plain Layout
 
           
-\begin_inset Quotes eld
-\end_inset
+"
 
 balance
-\begin_inset Quotes erd
-\end_inset
+"
 
  -> Text(currentLegdger.formattedBalance),
 \end_layout
@@ -3095,20 +3057,16 @@ balance
 \begin_layout Plain Layout
 
           
-\begin_inset Quotes eld
-\end_inset
+"
 
 time
-\begin_inset Quotes erd
-\end_inset
+"
 
  -> {node: NodeSeq => println(BindHelpers.attr(
-\begin_inset Quotes eld
-\end_inset
+"
 
 ampm
-\begin_inset Quotes erd
-\end_inset
+"
 
 )); Text((new java.util.Date).toString))}
 \end_layout
@@ -3206,12 +3164,10 @@ name "lst:Snippet-mixin-attributes"
 \begin_layout Plain Layout
 
   <ledger:time ledger:id=
-\begin_inset Quotes erd
-\end_inset
+"
 
 myId
-\begin_inset Quotes erd
-\end_inset
+"
 
 />
 \end_layout
@@ -3247,12 +3203,10 @@ class Ledger {
 \begin_layout Plain Layout
 
 	bind (
-\begin_inset Quotes eld
-\end_inset
+"
 
 ledger
-\begin_inset Quotes erd
-\end_inset
+"
 
 , content,
 \end_layout
@@ -3260,12 +3214,10 @@ ledger
 \begin_layout Plain Layout
 
           
-\begin_inset Quotes eld
-\end_inset
+"
 
 time
-\begin_inset Quotes erd
-\end_inset
+"
 
  -> <span>{(new java.util.Date).toString}</span>)
 \end_layout
@@ -3911,12 +3863,10 @@ class Boot {
 \begin_layout Plain Layout
 
       case (ParsePath("users" :: _, _, _, _)) => Full(AuthRole(
-\begin_inset Quotes eld
-\end_inset
+"
 
 admin
-\begin_inset Quotes erd
-\end_inset
+"
 
 ))
 \end_layout
@@ -3949,12 +3899,10 @@ admin
 \begin_layout Plain Layout
 
 	    userRoles(AuthRole(
-\begin_inset Quotes eld
-\end_inset
+"
 
 admin
-\begin_inset Quotes erd
-\end_inset
+"
 
 )) 
 \end_layout
@@ -4167,12 +4115,10 @@ class Boot {
 \begin_layout Plain Layout
 
 	val roles = AuthRole(
-\begin_inset Quotes eld
-\end_inset
+"
 
 Admin
-\begin_inset Quotes erd
-\end_inset
+"
 
 , 
 \end_layout
@@ -4180,12 +4126,10 @@ Admin
 \begin_layout Plain Layout
 
 		AuthRole(
-\begin_inset Quotes eld
-\end_inset
+"
 
 Site-Admin
-\begin_inset Quotes erd
-\end_inset
+"
 
 ),
 \end_layout
@@ -4193,12 +4137,10 @@ Site-Admin
 \begin_layout Plain Layout
 
 		AuthRole(
-\begin_inset Quotes eld
-\end_inset
+"
 
 User-Admin
-\begin_inset Quotes erd
-\end_inset
+"
 
 , 
 \end_layout
@@ -4206,12 +4148,10 @@ User-Admin
 \begin_layout Plain Layout
 
 			AuthRole(
-\begin_inset Quotes eld
-\end_inset
+"
 
 Romania-Admin
-\begin_inset Quotes erd
-\end_inset
+"
 
 ),
 \end_layout
@@ -4219,12 +4159,10 @@ Romania-Admin
 \begin_layout Plain Layout
 
 			AuthRole(
-\begin_inset Quotes eld
-\end_inset
+"
 
 US-Admin
-\begin_inset Quotes erd
-\end_inset
+"
 
 ),
 \end_layout
@@ -4232,12 +4170,10 @@ US-Admin
 \begin_layout Plain Layout
 
 			AuthRole(
-\begin_inset Quotes eld
-\end_inset
+"
 
 UK-Admin
-\begin_inset Quotes erd
-\end_inset
+"
 
 )
 \end_layout
@@ -4260,12 +4196,10 @@ UK-Admin
 \begin_layout Plain Layout
 
       case (ParsePath("users" :: _, _, _, _)) => roles.getRoleByName(
-\begin_inset Quotes eld
-\end_inset
+"
 
 Romania-Admin
-\begin_inset Quotes erd
-\end_inset
+"
 
 )
 \end_layout
@@ -4432,12 +4366,10 @@ class Boot {
 \begin_layout Plain Layout
 
 	val roles = AuthRole(
-\begin_inset Quotes eld
-\end_inset
+"
 
 Admin
-\begin_inset Quotes erd
-\end_inset
+"
 
 ,
 \end_layout
@@ -4445,12 +4377,10 @@ Admin
 \begin_layout Plain Layout
 
 		AuthRole(
-\begin_inset Quotes eld
-\end_inset
+"
 
 Site-Admin
-\begin_inset Quotes erd
-\end_inset
+"
 
 ),
 \end_layout
@@ -4458,12 +4388,10 @@ Site-Admin
 \begin_layout Plain Layout
 
 		AuthRole(
-\begin_inset Quotes eld
-\end_inset
+"
 
 User-Admin
-\begin_inset Quotes erd
-\end_inset
+"
 
 ,
 \end_layout
@@ -4471,12 +4399,10 @@ User-Admin
 \begin_layout Plain Layout
 
 			AuthRole(
-\begin_inset Quotes eld
-\end_inset
+"
 
 Romania-Admin
-\begin_inset Quotes erd
-\end_inset
+"
 
 ),
 \end_layout
@@ -4484,12 +4410,10 @@ Romania-Admin
 \begin_layout Plain Layout
 
 			AuthRole(
-\begin_inset Quotes eld
-\end_inset
+"
 
 US-Admin
-\begin_inset Quotes erd
-\end_inset
+"
 
 ),
 \end_layout
@@ -4497,12 +4421,10 @@ US-Admin
 \begin_layout Plain Layout
 
 			AuthRole(
-\begin_inset Quotes eld
-\end_inset
+"
 
 UK-Admin
-\begin_inset Quotes erd
-\end_inset
+"
 
 )
 \end_layout
@@ -4525,12 +4447,10 @@ UK-Admin
 \begin_layout Plain Layout
 
       case (ParsePath("users" :: _, _, _, _)) => roles.getRoleByName(
-\begin_inset Quotes eld
-\end_inset
+"
 
 Romania-Admin
-\begin_inset Quotes erd
-\end_inset
+"
 
 )
 \end_layout

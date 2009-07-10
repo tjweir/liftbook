@@ -2337,12 +2337,10 @@ name "lst:Snippet-tag-equivalence"
 \begin_layout Plain Layout
 
 <lift:snippet type=
-\begin_inset Quotes erd
-\end_inset
+"
 
 MyClass:render
-\begin_inset Quotes erd
-\end_inset
+"
 
  />
 \end_layout
@@ -2591,12 +2589,10 @@ name "lst:Surrounding-your-page"
 \begin_layout Plain Layout
 
 <lift:surround with="default" at=
-\begin_inset Quotes erd
-\end_inset
+"
 
 content
-\begin_inset Quotes erd
-\end_inset
+"
 
 >
 \end_layout
@@ -2645,12 +2641,10 @@ name "lst:Surrounding-with-the-default-template"
 \begin_layout Plain Layout
 
 <lift:surround at=
-\begin_inset Quotes erd
-\end_inset
+"
 
 content
-\begin_inset Quotes erd
-\end_inset
+"
 
 >
 \end_layout
@@ -4065,8 +4059,7 @@ class BridgeKeeper extends StatefulSnippet {
 \begin_layout Plain Layout
 
           case "challenge" if name == "Arthur
-\begin_inset Quotes erd
-\end_inset
+"
 
  => swallowPage _
 \end_layout

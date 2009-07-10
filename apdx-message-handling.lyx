@@ -382,12 +382,10 @@ name "lst:Per-id-messages"
 \begin_layout Plain Layout
 
 <lift:Stuff.addNote form=
-\begin_inset Quotes erd
-\end_inset
+"
 
 POST
-\begin_inset Quotes erd
-\end_inset
+"
 
 >
 \end_layout
@@ -395,20 +393,16 @@ POST
 \begin_layout Plain Layout
 
   <form:note /><lift:Msg id=
-\begin_inset Quotes erd
-\end_inset
+"
 
 noteField
-\begin_inset Quotes erd
-\end_inset
+"
 
  errorClass=
-\begin_inset Quotes erd
-\end_inset
+"
 
 redtext
-\begin_inset Quotes erd
-\end_inset
+"
 
  />
 \end_layout

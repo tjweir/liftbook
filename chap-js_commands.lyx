@@ -297,12 +297,10 @@ import JE._
 \begin_layout Plain Layout
 
 var myName = 
-\begin_inset Quotes eld
-\end_inset
+"
 
 
-\begin_inset Quotes erd
-\end_inset
+"
 
 
 \end_layout
@@ -315,28 +313,22 @@ bind(...
 \begin_layout Plain Layout
 
   
-\begin_inset Quotes eld
-\end_inset
+"
 
 name
-\begin_inset Quotes erd
-\end_inset
+"
 
  -> text(myName, myName = _, 
-\begin_inset Quotes eld
-\end_inset
+"
 
 id
-\begin_inset Quotes erd
-\end_inset
+"
 
  -> 
-\begin_inset Quotes eld
-\end_inset
+"
 
 myName
-\begin_inset Quotes erd
-\end_inset
+"
 
 ),
 \end_layout
@@ -344,28 +336,22 @@ myName
 \begin_layout Plain Layout
 
   
-\begin_inset Quotes eld
-\end_inset
+"
 
 submit
-\begin_inset Quotes erd
-\end_inset
+"
 
  -> submit(
-\begin_inset Quotes eld
-\end_inset
+"
 
 Save
-\begin_inset Quotes erd
-\end_inset
+"
 
 , ..., 
-\begin_inset Quotes eld
-\end_inset
+"
 
 onclick
-\begin_inset Quotes erd
-\end_inset
+"
 
  -> 
 \end_layout
@@ -373,20 +359,16 @@ onclick
 \begin_layout Plain Layout
 
     JsIf(JsEq(ValById(
-\begin_inset Quotes eld
-\end_inset
+"
 
 myName
-\begin_inset Quotes erd
-\end_inset
+"
 
 ), 
-\begin_inset Quotes eld
-\end_inset
+"
 
 
-\begin_inset Quotes erd
-\end_inset
+"
 
 ), 
 \end_layout
@@ -394,12 +376,10 @@ myName
 \begin_layout Plain Layout
 
       Alert(
-\begin_inset Quotes eld
-\end_inset
+"
 
 You must provide a name
-\begin_inset Quotes erd
-\end_inset
+"
 
 ) & JsReturn(false))
 \end_layout
@@ -2257,20 +2237,16 @@ var list = {
 \begin_layout Plain Layout
 
 		{name: 
-\begin_inset Quotes eld
-\end_inset
+"
 
 Thor
-\begin_inset Quotes erd
-\end_inset
+"
 
 , race: 
-\begin_inset Quotes eld
-\end_inset
+"
 
 Asgard
-\begin_inset Quotes erd
-\end_inset
+"
 
 }, 
 \end_layout
@@ -2278,20 +2254,16 @@ Asgard
 \begin_layout Plain Layout
 
 		{name: 
-\begin_inset Quotes eld
-\end_inset
+"
 
 Todd
-\begin_inset Quotes erd
-\end_inset
+"
 
 , race: 
-\begin_inset Quotes eld
-\end_inset
+"
 
 Wraith
-\begin_inset Quotes erd
-\end_inset
+"
 
 }, 
 \end_layout
@@ -2299,20 +2271,16 @@ Wraith
 \begin_layout Plain Layout
 
 		{name: 
-\begin_inset Quotes eld
-\end_inset
+"
 
 Rodney
-\begin_inset Quotes erd
-\end_inset
+"
 
 , race: 
-\begin_inset Quotes eld
-\end_inset
+"
 
 Human
-\begin_inset Quotes erd
-\end_inset
+"
 
 }
 \end_layout
@@ -2455,12 +2423,10 @@ status open
 \begin_layout Plain Layout
 
  <li class=
-\begin_inset Quotes erd
-\end_inset
+"
 
 item_header
-\begin_inset Quotes erd
-\end_inset
+"
 
 >Thor is Asgard</li>
 \end_layout
@@ -2468,12 +2434,10 @@ item_header
 \begin_layout Plain Layout
 
  <li class=
-\begin_inset Quotes erd
-\end_inset
+"
 
 item_header
-\begin_inset Quotes erd
-\end_inset
+"
 
 >Todd is Wraith</li>
 \end_layout
@@ -2481,12 +2445,10 @@ item_header
 \begin_layout Plain Layout
 
  <li class=
-\begin_inset Quotes erd
-\end_inset
+"
 
 item_header
-\begin_inset Quotes erd
-\end_inset
+"
 
 >Rodney is Human</li>
 \end_layout
@@ -2803,12 +2765,10 @@ name "lst:Ajax-JSON-response"
 \begin_layout Plain Layout
 
 			"button" -> SHtml.ajaxButton(Text(
-\begin_inset Quotes eld
-\end_inset
+"
 
 Press me
-\begin_inset Quotes erd
-\end_inset
+"
 
 ), ajaxFunc _))
 \end_layout

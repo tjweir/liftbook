@@ -542,12 +542,10 @@ import _root_.net.liftweb.util.Empty
 \begin_layout Plain Layout
 
 // and mixes in trait IdPK, which adds a primary key called 
-\begin_inset Quotes eld
-\end_inset
+"
 
 id
-\begin_inset Quotes erd
-\end_inset
+"
 
 .
 \end_layout
@@ -1042,12 +1040,10 @@ name "lst:The-welcome-template"
 
            in the AddEntry snippet.
  A form element with method 
-\begin_inset Quotes eld
-\end_inset
+"
 
 POST
-\begin_inset Quotes erd
-\end_inset
+"
 
  will
 \end_layout
@@ -1265,12 +1261,10 @@ class HomePage {
 \begin_layout Plain Layout
 
   // User.currentUser returns a 
-\begin_inset Quotes eld
-\end_inset
+"
 
 Box
-\begin_inset Quotes erd
-\end_inset
+"
 
  object, which is either Full
 \end_layout
@@ -1289,12 +1283,10 @@ Box
 \begin_layout Plain Layout
 
   // on whether the Box is Full, or not (
-\begin_inset Quotes eld
-\end_inset
+"
 
 case _
-\begin_inset Quotes erd
-\end_inset
+"
 
  catches anything
 \end_layout
@@ -1302,12 +1294,10 @@ case _
 \begin_layout Plain Layout
 
   // not caught by 
-\begin_inset Quotes eld
-\end_inset
+"
 
 case Full(user)
-\begin_inset Quotes erd
-\end_inset
+"
 
 .
  See Box in the Lift API.
@@ -1607,20 +1597,16 @@ class AddEntry extends StatefulSnippet {
 \begin_layout Plain Layout
 
   // This maps the 
-\begin_inset Quotes eld
-\end_inset
+"
 
 addentry
-\begin_inset Quotes erd
-\end_inset
+"
 
  XML element to the 
-\begin_inset Quotes eld
-\end_inset
+"
 
 add
-\begin_inset Quotes erd
-\end_inset
+"
 
  method below
 \end_layout
@@ -1667,28 +1653,22 @@ add
 \begin_layout Plain Layout
 
   // S.param(
-\begin_inset Quotes eld
-\end_inset
+"
 
 tag
-\begin_inset Quotes erd
-\end_inset
+"
 
 ) returns a 
-\begin_inset Quotes eld
-\end_inset
+"
 
 Box
-\begin_inset Quotes erd
-\end_inset
+"
 
  and the 
-\begin_inset Quotes eld
-\end_inset
+"
 
 openOr
-\begin_inset Quotes erd
-\end_inset
+"
 
  method returns
 \end_layout
@@ -1696,12 +1676,10 @@ openOr
 \begin_layout Plain Layout
 
   // either the contents of that box (if it is 
-\begin_inset Quotes eld
-\end_inset
+"
 
 Full
-\begin_inset Quotes erd
-\end_inset
+"
 
 ), or the empty
 \end_layout
@@ -1709,12 +1687,10 @@ Full
 \begin_layout Plain Layout
 
   // String passed to it, if the Box is 
-\begin_inset Quotes eld
-\end_inset
+"
 
 Empty
-\begin_inset Quotes erd
-\end_inset
+"
 
 .
  The S.param method
@@ -1729,12 +1705,10 @@ Empty
 \begin_layout Plain Layout
 
   // name of the parameter is 
-\begin_inset Quotes eld
-\end_inset
+"
 
 tag
-\begin_inset Quotes erd
-\end_inset
+"
 
 .
 \end_layout
@@ -1984,12 +1958,10 @@ tag
 \begin_layout Plain Layout
 
       // Parse through the NodeSeq passed as 
-\begin_inset Quotes eld
-\end_inset
+"
 
 in
-\begin_inset Quotes erd
-\end_inset
+"
 
  looking for tags
 \end_layout
@@ -1997,12 +1969,10 @@ in
 \begin_layout Plain Layout
 
       // prefixed with 
-\begin_inset Quotes eld
-\end_inset
+"
 
 e
-\begin_inset Quotes erd
-\end_inset
+"
 
 .
  When found, replace the tag with a NodeSeq
@@ -2683,12 +2653,10 @@ class Accounts {
 \begin_layout Plain Layout
 
     // If the 
-\begin_inset Quotes eld
-\end_inset
+"
 
 name
-\begin_inset Quotes erd
-\end_inset
+"
 
  param was passed by the browser...
 \end_layout
@@ -2726,12 +2694,10 @@ name
 \begin_layout Plain Layout
 
           // Here is Lift's 
-\begin_inset Quotes eld
-\end_inset
+"
 
 Box
-\begin_inset Quotes erd
-\end_inset
+"
 
  in action: we are creating
 \end_layout
@@ -2744,12 +2710,10 @@ Box
 \begin_layout Plain Layout
 
           // to 
-\begin_inset Quotes eld
-\end_inset
+"
 
 Empty
-\begin_inset Quotes erd
-\end_inset
+"
 
  (Empty is a subclass of Box)
 \end_layout
@@ -2854,12 +2818,10 @@ Empty
 \begin_layout Plain Layout
 
           // prefix 
-\begin_inset Quotes eld
-\end_inset
+"
 
 acct
-\begin_inset Quotes erd
-\end_inset
+"
 
  according to the map below.
 \end_layout
@@ -2927,12 +2889,10 @@ acct
 \begin_layout Plain Layout
 
     // The S.param 
-\begin_inset Quotes eld
-\end_inset
+"
 
 name
-\begin_inset Quotes erd
-\end_inset
+"
 
  was empty
 \end_layout
