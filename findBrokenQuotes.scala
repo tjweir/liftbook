@@ -3,6 +3,7 @@ import scala.io.Source
 sealed abstract class State
 case object Normal extends State
 case object InListing extends State
+case object InQuotes extends State
 
 var state: State = Normal
 var insetDepth = 0
@@ -22,18 +23,25 @@ for (file <- args) {
 	  
 	if (line.matches("""(?s)\\begin_inset Quotes e[lr]d.*""")) {
 	  printf("Bad quotes at %s : %d\n", file, index + 1)
-	  output = "\""
-	}
-	if (line.matches("""(?s)\\begin_inset.*""")) {
-	  insetDepth += 1
-	}
-	if (line.matches("""(?s)\\end_inset.*""")) {
-	  insetDepth -= 1
-	}
-	if (insetDepth == 0) {
+	  output = "\"\n"
+	  state = InQuotes
+	} else {
+	  if (line.matches("""(?s)\\begin_inset.*""")) {
+	    insetDepth += 1
+	  }
+	  if (line.matches("""(?s)\\end_inset.*""")) {
+	    insetDepth -= 1
+	  }
+	  if (insetDepth == 0) {
 	    state = Normal
+	  }
 	}
       }
+      case InQuotes if line.matches("""(?s)\\end_inset.*""") => {
+	output = ""
+	state = InListing
+      }
+      case InQuotes => output = ""
       case Normal =>
 	// ok
     } 
