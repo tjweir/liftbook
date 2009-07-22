@@ -1,4 +1,4 @@
-#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.2 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -401,7 +401,7 @@ status open
 
 \begin_layout Plain Layout
 
-http://liftweb.net/index.php/Main_Page
+http://wiki.liftweb.net/index.php/Main_Page
 \end_layout
 
 \end_inset
@@ -1450,7 +1450,7 @@ class Boot {
 
 \begin_layout Plain Layout
 
-    val entries = Menu(Loc("Home", "/", "Home")) :: Nil 
+    val entries = Menu(Loc("Home", List("index"), "Home")) :: Nil 
 \end_layout
 
 \begin_layout Plain Layout
