@@ -1,4 +1,4 @@
-#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.3 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -807,8 +807,8 @@ getResourceAsStream
 \end_layout
 
 \begin_layout Enumerate
-<<<<<<< HEAD:chap-advanced.lyx
-If the template is still not found for classes in 
+<<<<<<< HEAD:chap-advanced.lyxIf the template is still not found for classes
+ in 
 \family typewriter
 view
 \family default
@@ -829,11 +829,9 @@ LiftView
 \family typewriter
 dispatch
 \family default
- function.
-=======
-If Lift still can't find any templates, it will attempt to locate a View
- class whose name matches the first component of the request path under
- the 
+ function.=======If Lift still can't find any templates, it will attempt
+ to locate a View class whose name matches the first component of the request
+ path under the 
 \family typewriter
 view
 \family default
@@ -856,8 +854,8 @@ LiftView
 \family typewriter
 dispatch
 \family default
- method on the second component of the request path.
->>>>>>> 6de18ccdf06ac74a9665e4757a66b47e7c7b0b3e:chap-advanced.lyx
+ method on the second component of the request path.>>>>>>> 6de18ccdf06ac74a9665e
+4757a66b47e7c7b0b3e:chap-advanced.lyx
 \end_layout
 
 \end_deeper
@@ -1177,13 +1175,7 @@ def greet (xhtml : NodeSeq) : NodeSeq = {
 
 \begin_layout Plain Layout
 
-  var name = 
-"
-
-
-"
-
-
+  var name = ""
 \end_layout
 
 \begin_layout Plain Layout
@@ -1203,36 +1195,12 @@ def greet (xhtml : NodeSeq) : NodeSeq = {
 
 \begin_layout Plain Layout
 
-  bind(
-"
-
-form
-"
-
-, xhtml, 
-"
-
-name
-"
-
- -> SHtml.text(name, name = _),
+  bind("form", xhtml, "name" -> SHtml.text(name, name = _),
 \end_layout
 
 \begin_layout Plain Layout
 
-                      
-"
-
-greet
-"
-
- -> SHtml.submit(
-"
-
-Greet
-"
-
-, process))
+                      "greet" -> SHtml.submit("Greet", process))
 \end_layout
 
 \begin_layout Plain Layout
@@ -1283,30 +1251,12 @@ name "lst:Function-binding-template"
 
 \begin_layout Plain Layout
 
-<lift:surround with=
-"
-
-default
-"
-
- at=
-"
-
-content
-"
-
->
+<lift:surround with="default" at="content">
 \end_layout
 
 \begin_layout Plain Layout
 
-  <lift:Test.greet form=
-"
-
-GET
-"
-
->
+  <lift:Test.greet form="GET">
 \end_layout
 
 \begin_layout Plain Layout
@@ -1619,7 +1569,7 @@ def chart (endDate : String) : Box[LiftResponse] = {
 
 \begin_layout Plain Layout
 
-                        0, // We don't know the size ahead of time
+                        -1, // We don't know the size ahead of time
 \end_layout
 
 \begin_layout Plain Layout
@@ -1891,13 +1841,7 @@ LiftRules.dispatch.prepend {
 
 \begin_layout Plain Layout
 
-	       				RedirectState(() => println(
-"
-
-Called on redirect!
-"
-
-), 
+	       				RedirectState(() => println("Called on redirect!"), 
 \end_layout
 
 \begin_layout Plain Layout
@@ -2751,13 +2695,7 @@ Snippet attributes
 
 \begin_layout Plain Layout
 
-<lift:Ledger.balance default=
-"
-
-10
-"
-
->
+<lift:Ledger.balance default="10">
 \end_layout
 
 \begin_layout Plain Layout
@@ -2814,52 +2752,22 @@ class Ledger {
 
 \begin_layout Plain Layout
 
-	val dflt = S.attr(
-"
-
-default
-"
-
-) openOr 
-"
-
-0
-"
-
-;
+	val dflt = S.attr("default") openOr "0";
 \end_layout
 
 \begin_layout Plain Layout
 
-    bind (
-"
-
-ledger
-"
-
-, content,
+    bind ("ledger", content,
 \end_layout
 
 \begin_layout Plain Layout
 
-          
-"
-
-balance
-"
-
- -> Text(currentLegdger.formattedBalance),
+          "balance" -> Text(currentLegdger.formattedBalance),
 \end_layout
 
 \begin_layout Plain Layout
 
-          
-"
-
-time
-"
-
- -> Text((new java.util.Date).toString))
+          "time" -> Text((new java.util.Date).toString))
 \end_layout
 
 \begin_layout Plain Layout
@@ -3017,58 +2925,23 @@ class Ledger {
 
 \begin_layout Plain Layout
 
-	val dflt = S.attr(
-"
-
-default
-"
-
-) openOr 
-"
-
-0
-"
-
-;
+	val dflt = S.attr("default") openOr "0";
 \end_layout
 
 \begin_layout Plain Layout
 
-    bind (
-"
-
-ledger
-"
-
-, content,
+    bind ("ledger", content,
 \end_layout
 
 \begin_layout Plain Layout
 
-          
-"
-
-balance
-"
-
- -> Text(currentLegdger.formattedBalance),
+          "balance" -> Text(currentLegdger.formattedBalance),
 \end_layout
 
 \begin_layout Plain Layout
 
-          
-"
-
-time
-"
-
- -> {node: NodeSeq => println(BindHelpers.attr(
-"
-
-ampm
-"
-
-)); Text((new java.util.Date).toString))}
+          "time" -> {node: NodeSeq => println(BindHelpers.attr("ampm"));
+ Text((new java.util.Date).toString))}
 \end_layout
 
 \begin_layout Plain Layout
@@ -3163,13 +3036,7 @@ name "lst:Snippet-mixin-attributes"
 
 \begin_layout Plain Layout
 
-  <ledger:time ledger:id=
-"
-
-myId
-"
-
-/>
+  <ledger:time ledger:id="myId"/>
 \end_layout
 
 \begin_layout Plain Layout
@@ -3202,24 +3069,12 @@ class Ledger {
 
 \begin_layout Plain Layout
 
-	bind (
-"
-
-ledger
-"
-
-, content,
+	bind ("ledger", content,
 \end_layout
 
 \begin_layout Plain Layout
 
-          
-"
-
-time
-"
-
- -> <span>{(new java.util.Date).toString}</span>)
+          "time" -> <span>{(new java.util.Date).toString}</span>)
 \end_layout
 
 \begin_layout Plain Layout
@@ -3234,10 +3089,8 @@ time
 
 \begin_layout Plain Layout
 
-<<<<<<< HEAD:chap-advanced.lyx
-=======
-/*here the date value*/
->>>>>>> 6de18ccdf06ac74a9665e4757a66b47e7c7b0b3e:chap-advanced.lyx
+<<<<<<< HEAD:chap-advanced.lyx=======/*here the date value*/>>>>>>> 6de18ccdf06ac
+74a9665e4757a66b47e7c7b0b3e:chap-advanced.lyx
 \end_layout
 
 \end_inset
@@ -3862,13 +3715,7 @@ class Boot {
 
 \begin_layout Plain Layout
 
-      case (ParsePath("users" :: _, _, _, _)) => Full(AuthRole(
-"
-
-admin
-"
-
-))
+      case (ParsePath("users" :: _, _, _, _)) => Full(AuthRole("admin"))
 \end_layout
 
 \begin_layout Plain Layout
@@ -3898,13 +3745,7 @@ admin
 
 \begin_layout Plain Layout
 
-	    userRoles(AuthRole(
-"
-
-admin
-"
-
-)) 
+	    userRoles(AuthRole("admin")) 
 \end_layout
 
 \begin_layout Plain Layout
@@ -4114,68 +3955,32 @@ class Boot {
 
 \begin_layout Plain Layout
 
-	val roles = AuthRole(
-"
-
-Admin
-"
-
-, 
+	val roles = AuthRole("Admin", 
 \end_layout
 
 \begin_layout Plain Layout
 
-		AuthRole(
-"
-
-Site-Admin
-"
-
-),
+		AuthRole("Site-Admin"),
 \end_layout
 
 \begin_layout Plain Layout
 
-		AuthRole(
-"
-
-User-Admin
-"
-
-, 
+		AuthRole("User-Admin", 
 \end_layout
 
 \begin_layout Plain Layout
 
-			AuthRole(
-"
-
-Romania-Admin
-"
-
-),
+			AuthRole("Romania-Admin"),
 \end_layout
 
 \begin_layout Plain Layout
 
-			AuthRole(
-"
-
-US-Admin
-"
-
-),
+			AuthRole("US-Admin"),
 \end_layout
 
 \begin_layout Plain Layout
 
-			AuthRole(
-"
-
-UK-Admin
-"
-
-)
+			AuthRole("UK-Admin")
 \end_layout
 
 \begin_layout Plain Layout
@@ -4195,13 +4000,8 @@ UK-Admin
 
 \begin_layout Plain Layout
 
-      case (ParsePath("users" :: _, _, _, _)) => roles.getRoleByName(
-"
-
-Romania-Admin
-"
-
-)
+      case (ParsePath("users" :: _, _, _, _)) => roles.getRoleByName("Romania-Adm
+in")
 \end_layout
 
 \begin_layout Plain Layout
@@ -4365,68 +4165,32 @@ class Boot {
 
 \begin_layout Plain Layout
 
-	val roles = AuthRole(
-"
-
-Admin
-"
-
-,
+	val roles = AuthRole("Admin",
 \end_layout
 
 \begin_layout Plain Layout
 
-		AuthRole(
-"
-
-Site-Admin
-"
-
-),
+		AuthRole("Site-Admin"),
 \end_layout
 
 \begin_layout Plain Layout
 
-		AuthRole(
-"
-
-User-Admin
-"
-
-,
+		AuthRole("User-Admin",
 \end_layout
 
 \begin_layout Plain Layout
 
-			AuthRole(
-"
-
-Romania-Admin
-"
-
-),
+			AuthRole("Romania-Admin"),
 \end_layout
 
 \begin_layout Plain Layout
 
-			AuthRole(
-"
-
-US-Admin
-"
-
-),
+			AuthRole("US-Admin"),
 \end_layout
 
 \begin_layout Plain Layout
 
-			AuthRole(
-"
-
-UK-Admin
-"
-
-)
+			AuthRole("UK-Admin")
 \end_layout
 
 \begin_layout Plain Layout
@@ -4446,13 +4210,8 @@ UK-Admin
 
 \begin_layout Plain Layout
 
-      case (ParsePath("users" :: _, _, _, _)) => roles.getRoleByName(
-"
-
-Romania-Admin
-"
-
-)
+      case (ParsePath("users" :: _, _, _, _)) => roles.getRoleByName("Romania-Adm
+in")
 \end_layout
 
 \begin_layout Plain Layout

@@ -1,4 +1,4 @@
-#LyX 1.6.2 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.3 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -245,7 +245,6 @@ processEntryAdd
 
 \begin_layout Standard
 \begin_inset listings
-
 inline false
 status open
 
@@ -315,11 +314,7 @@ def add (xhtml : NodeSeq) : NodeSeq = {
 
 \begin_layout Plain Layout
 
-       "submit" -> SHtml.submit(
-"
-Add
-"
-, processEntryAdd))
+       "submit" -> SHtml.submit("Add", processEntryAdd))
 \end_layout
 
 \begin_layout Plain Layout
@@ -393,7 +388,7 @@ Scala Language Specification
 \end_inset
 
  to define our functions.
- ur description processing function could also be defined as:
+ Your description processing function could also be defined as:
 \end_layout
 
 \begin_layout LyX-Code
@@ -402,7 +397,7 @@ newDesc => description = newDesc
 
 \begin_layout Standard
 One important thing to remember, however, is that each new invocation of
- the add method (for each page view) wil get its own unique instance of
+ the add method (for each page view) will get its own unique instance of
  the variables that we've defined.
  That means that if you want to retain values between submission and re-renderin
 g of the form, you'll want to use 

@@ -1,4 +1,4 @@
-#LyX 1.6.2 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.3 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -2156,13 +2156,7 @@ class ExpenseTag ...
 
 \begin_layout Plain Layout
 
-    override def dbColumnName = 
-"
-
-expense_id
-"
-
-
+    override def dbColumnName = "expense_id"
 \end_layout
 
 \begin_layout Plain Layout
@@ -3182,7 +3176,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Overriding 
 \family typewriter
 equals
@@ -4843,32 +4836,170 @@ import _root_.java.util.Date
 
 \begin_layout Plain Layout
 
-def noFutureDates (time : Date) = {
+class Expense extends LongKeyedMapper[Expense] with IdPK {
 \end_layout
 
 \begin_layout Plain Layout
 
-  if (time.getTime > System.currentTimeMillis) {
+  ...
 \end_layout
 
 \begin_layout Plain Layout
 
-    List(FieldError(this, "You cannot make future expense entries"))
+  object dateOf extends MappedDateTime(this) {
 \end_layout
 
 \begin_layout Plain Layout
 
-  } else {
+    def noFutureDates (time : Date) = {
 \end_layout
 
 \begin_layout Plain Layout
 
-    List[FieldError]()
+      if (time.getTime > System.currentTimeMillis) {
+\end_layout
+
+\begin_layout Plain Layout
+
+        List(FieldError(this, "You cannot make future expense entries"))
+\end_layout
+
+\begin_layout Plain Layout
+
+      } else {
+\end_layout
+
+\begin_layout Plain Layout
+
+        List[FieldError]()
+\end_layout
+
+\begin_layout Plain Layout
+
+      }
+\end_layout
+
+\begin_layout Plain Layout
+
+    }
 \end_layout
 
 \begin_layout Plain Layout
 
   }
+\end_layout
+
+\begin_layout Plain Layout
+
+  ...
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The first argument for the FieldError is the field itself, so you could
+ use the alternate definition shown in Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Alternate-Date-Validation"
+
+\end_inset
+
+ if you would prefer to define your validation functions elsewhere (if they're
+ common to more than one entity, for example).
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Alternate Date Validation
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Alternate-Date-Validation"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import _root_.java.util.Date
+\end_layout
+
+\begin_layout Plain Layout
+
+import _root_.net.liftweb.http.FieldIdentifier
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+object ValidationMethods {
+\end_layout
+
+\begin_layout Plain Layout
+
+  def noFutureDates (field : FieldIdentifier)(time : Date) = {
+\end_layout
+
+\begin_layout Plain Layout
+
+    if (time.getTime > System.currentTimeMillis) {
+\end_layout
+
+\begin_layout Plain Layout
+
+      List(FieldError(field, "You cannot make future expense entries"))
+\end_layout
+
+\begin_layout Plain Layout
+
+    } else {
+\end_layout
+
+\begin_layout Plain Layout
+
+      List[FieldError]()
+\end_layout
+
+\begin_layout Plain Layout
+
+    }
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+  ...
 \end_layout
 
 \begin_layout Plain Layout
@@ -4924,7 +5055,38 @@ object dateOf extends MappedDateTime(this) {
 
 \begin_layout Plain Layout
 
+  def noFutureDates (time : Date) = { ...
+ }
+\end_layout
+
+\begin_layout Plain Layout
+
   override def validations = noFutureDates _ :: Nil
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// Using the alternate definition:
+\end_layout
+
+\begin_layout Plain Layout
+
+object dateOf extends MappedDateTime(this) {
+\end_layout
+
+\begin_layout Plain Layout
+
+  override def validations = ValidationMethods.noFutureDates(dateOf) _ ::
+ Nil
 \end_layout
 
 \begin_layout Plain Layout
