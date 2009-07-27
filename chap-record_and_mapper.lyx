@@ -1314,7 +1314,20 @@ MappedForeignKey
 \family default
  trait, with concrete implementations for Long and String foreign keys.
  Once we have this defined, accessing the object via the relationship is
- achieved by using the obj method on the foreign key field.
+ achieved by using the 
+\family typewriter
+obj
+\family default
+ method on the foreign key field.
+ Note that the 
+\family typewriter
+obj
+\family default
+ method returns a 
+\family typewriter
+Box
+\family default
+, so you need to do some further processing with it before you can use it.
  With the foreign key functionality you can easily do one-to-many and many-to-on
 e
 \begin_inset Index
@@ -1398,7 +1411,12 @@ class Expense extends LongKeyedMapper[Expense] with IdPK {
 
 \begin_layout Plain Layout
 
-  def accountName = Text("My account is " + account.obj.name.is)
+  def accountName = 
+\end_layout
+
+\begin_layout Plain Layout
+
+    Text("My account is " + (account.obj.map(_.name.is) openOr "Unknown"))
 \end_layout
 
 \begin_layout Plain Layout
@@ -4927,7 +4945,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Alternate Date Validation
 \begin_inset CommandInset label
 LatexCommand label
