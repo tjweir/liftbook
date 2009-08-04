@@ -2336,13 +2336,7 @@ name "lst:Snippet-tag-equivalence"
 
 \begin_layout Plain Layout
 
-<lift:snippet type=
-"
-
-MyClass:render
-"
-
- />
+<lift:snippet type="MyClass:render" />
 \end_layout
 
 \begin_layout Plain Layout
@@ -2588,13 +2582,7 @@ name "lst:Surrounding-your-page"
 
 \begin_layout Plain Layout
 
-<lift:surround with="default" at=
-"
-
-content
-"
-
->
+<lift:surround with="default" at="content">
 \end_layout
 
 \begin_layout Plain Layout
@@ -2622,7 +2610,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Surrounding with the default template
 \begin_inset CommandInset label
 LatexCommand label
@@ -2640,13 +2627,7 @@ name "lst:Surrounding-with-the-default-template"
 
 \begin_layout Plain Layout
 
-<lift:surround at=
-"
-
-content
-"
-
->
+<lift:surround at="content">
 \end_layout
 
 \begin_layout Plain Layout
@@ -3979,7 +3960,12 @@ class BridgeKeeper extends StatefulSnippet {
 
 \begin_layout Plain Layout
 
-    def processName () {
+    def processName (nm : String) {
+\end_layout
+
+\begin_layout Plain Layout
+
+      name = nm
 \end_layout
 
 \begin_layout Plain Layout
@@ -4024,7 +4010,7 @@ class BridgeKeeper extends StatefulSnippet {
 
 \begin_layout Plain Layout
 
-         "answer" -> SHtml.text(name, name = _))
+         "answer" -> SHtml.text(name, processName))
 \end_layout
 
 \begin_layout Plain Layout
@@ -4043,7 +4029,12 @@ class BridgeKeeper extends StatefulSnippet {
 
 \begin_layout Plain Layout
 
-    def processQuest () {
+    def processQuest (qst : String) {
+\end_layout
+
+\begin_layout Plain Layout
+
+      quest = qst
 \end_layout
 
 \begin_layout Plain Layout
@@ -4058,10 +4049,7 @@ class BridgeKeeper extends StatefulSnippet {
 
 \begin_layout Plain Layout
 
-          case "challenge" if name == "Arthur
-"
-
- => swallowPage _
+          case "challenge" if name == "Arthur" => swallowPage _
 \end_layout
 
 \begin_layout Plain Layout
@@ -4106,7 +4094,7 @@ class BridgeKeeper extends StatefulSnippet {
 
 \begin_layout Plain Layout
 
-         "answer" -> SHtml.text(quest, quest = _))
+         "answer" -> SHtml.text(quest, processQuest))
 \end_layout
 
 \begin_layout Plain Layout
@@ -4125,7 +4113,12 @@ class BridgeKeeper extends StatefulSnippet {
 
 \begin_layout Plain Layout
 
-    def processColor () {
+    def processColor (clr : String) {
+\end_layout
+
+\begin_layout Plain Layout
+
+      color = clr
 \end_layout
 
 \begin_layout Plain Layout
@@ -4211,7 +4204,7 @@ class BridgeKeeper extends StatefulSnippet {
 
 \begin_layout Plain Layout
 
-         "answer" -> SHtml.text(color, color = _))
+         "answer" -> SHtml.text(color, processColor))
 \end_layout
 
 \begin_layout Plain Layout
@@ -5270,7 +5263,7 @@ As with rewriting, custom dispatch is realized via a partial function.
  In this case, it's a function of type 
 \family typewriter
 PartialFunction[Req,
-\begin_inset Formula $()\Rightarrow Can[LiftResponse]$
+\begin_inset Formula $()\Rightarrow Box[LiftResponse]$
 \end_inset
 
 ]
