@@ -1,4 +1,4 @@
-#LyX 1.6.0 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.3 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -296,13 +296,7 @@ import JE._
 
 \begin_layout Plain Layout
 
-var myName = 
-"
-
-
-"
-
-
+var myName = ""
 \end_layout
 
 \begin_layout Plain Layout
@@ -312,76 +306,22 @@ bind(...
 
 \begin_layout Plain Layout
 
-  
-"
-
-name
-"
-
- -> text(myName, myName = _, 
-"
-
-id
-"
-
- -> 
-"
-
-myName
-"
-
-),
+  "name" -> text(myName, myName = _, "id" -> "myName"),
 \end_layout
 
 \begin_layout Plain Layout
 
-  
-"
-
-submit
-"
-
- -> submit(
-"
-
-Save
-"
-
-, ..., 
-"
-
-onclick
-"
-
- -> 
+  "submit" -> submit("Save", ..., "onclick" -> 
 \end_layout
 
 \begin_layout Plain Layout
 
-    JsIf(JsEq(ValById(
-"
-
-myName
-"
-
-), 
-"
-
-
-"
-
-), 
+    JsIf(JsEq(ValById("myName"), ""), 
 \end_layout
 
 \begin_layout Plain Layout
 
-      Alert(
-"
-
-You must provide a name
-"
-
-) & JsReturn(false))
+      Alert("You must provide a name") & JsReturn(false))
 \end_layout
 
 \begin_layout Plain Layout
@@ -2236,53 +2176,17 @@ var list = {
 
 \begin_layout Plain Layout
 
-		{name: 
-"
-
-Thor
-"
-
-, race: 
-"
-
-Asgard
-"
-
-}, 
+		{name: "Thor", race: "Asgard"}, 
 \end_layout
 
 \begin_layout Plain Layout
 
-		{name: 
-"
-
-Todd
-"
-
-, race: 
-"
-
-Wraith
-"
-
-}, 
+		{name: "Todd", race: "Wraith"}, 
 \end_layout
 
 \begin_layout Plain Layout
 
-		{name: 
-"
-
-Rodney
-"
-
-, race: 
-"
-
-Human
-"
-
-}
+		{name: "Rodney", race: "Human"}
 \end_layout
 
 \begin_layout Plain Layout
@@ -2422,35 +2326,17 @@ status open
 
 \begin_layout Plain Layout
 
- <li class=
-"
-
-item_header
-"
-
->Thor is Asgard</li>
+ <li class="item_header">Thor is Asgard</li>
 \end_layout
 
 \begin_layout Plain Layout
 
- <li class=
-"
-
-item_header
-"
-
->Todd is Wraith</li>
+ <li class="item_header">Todd is Wraith</li>
 \end_layout
 
 \begin_layout Plain Layout
 
- <li class=
-"
-
-item_header
-"
-
->Rodney is Human</li>
+ <li class="item_header">Rodney is Human</li>
 \end_layout
 
 \begin_layout Plain Layout
@@ -2764,13 +2650,7 @@ name "lst:Ajax-JSON-response"
 
 \begin_layout Plain Layout
 
-			"button" -> SHtml.ajaxButton(Text(
-"
-
-Press me
-"
-
-), ajaxFunc _))
+			"button" -> SHtml.ajaxButton(Text("Press me"), ajaxFunc _))
 \end_layout
 
 \begin_layout Plain Layout
@@ -3145,7 +3025,32 @@ class JSONForm {
 
 \begin_layout Plain Layout
 
-	def head = <head>{Script(json.jsCmd)}</head> 
+	def head = 
+\end_layout
+
+\begin_layout Plain Layout
+
+    <head>
+\end_layout
+
+\begin_layout Plain Layout
+
+    <script type="text/javascript" 
+\end_layout
+
+\begin_layout Plain Layout
+
+            src={"/" + LiftRules.resourceServerPath + "/jlift.js"} />
+\end_layout
+
+\begin_layout Plain Layout
+
+    {Script(json.jsCmd)}
+\end_layout
+
+\begin_layout Plain Layout
+
+    </head> 
 \end_layout
 
 \begin_layout Plain Layout
@@ -3189,7 +3094,7 @@ class JSONForm {
 
 \begin_layout Plain Layout
 
-			case j @ JsonCmd("processForm", _, p: Map[String, _], _) => {
+			case JsonCmd("processForm", _, p: Map[String, _], _) => {
 \end_layout
 
 \begin_layout Plain Layout
