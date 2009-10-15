@@ -1,4 +1,4 @@
-#LyX 1.6.3 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.4 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -807,31 +807,9 @@ getResourceAsStream
 \end_layout
 
 \begin_layout Enumerate
-<<<<<<< HEAD:chap-advanced.lyxIf the template is still not found for classes
- in 
-\family typewriter
-view
-\family default
- folder fom the paths declared in boot through 
-\family typewriter
-LiftRules.addToPackages
-\family default
-.
- It will look for classes that extend 
-\family typewriter
-InsecureLiftView
-\family default
- and invoke the coresponding function or classes that extend 
-\family typewriter
-LiftView
-\family default
- and invoke the 
-\family typewriter
-dispatch
-\family default
- function.=======If Lift still can't find any templates, it will attempt
- to locate a View class whose name matches the first component of the request
- path under the 
+If Lift still can't find any templates, it will attempt to locate a View
+ class whose name matches the first component of the request path under
+ the 
 \family typewriter
 view
 \family default
@@ -854,8 +832,7 @@ LiftView
 \family typewriter
 dispatch
 \family default
- method on the second component of the request path.>>>>>>> 6de18ccdf06ac74a9665e
-4757a66b47e7c7b0b3e:chap-advanced.lyx
+ method on the second component of the request path.
 \end_layout
 
 \end_deeper
@@ -2996,7 +2973,14 @@ time
 \begin_layout Standard
 It is sometimes more convenient to just put node attributes in the markup
  and just not worry about them in the Scala code.
- Consider this:
+ Consider Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Snippet-mixin-attributes"
+
+\end_inset
+
+:
 \end_layout
 
 \begin_layout Standard
@@ -3050,7 +3034,7 @@ name "lst:Snippet-mixin-attributes"
 
 \begin_layout Plain Layout
 
-// The snipppet class
+// The snippet class
 \end_layout
 
 \begin_layout Plain Layout
@@ -3087,19 +3071,13 @@ class Ledger {
 }
 \end_layout
 
-\begin_layout Plain Layout
-
-<<<<<<< HEAD:chap-advanced.lyx=======/*here the date value*/>>>>>>> 6de18ccdf06ac
-74a9665e4757a66b47e7c7b0b3e:chap-advanced.lyx
-\end_layout
-
 \end_inset
 
 
 \end_layout
 
 \begin_layout Standard
-Now what we just did was to preffix the 
+Now what we just did was to prefix the 
 \family typewriter
 id
 \family default
@@ -3120,7 +3098,19 @@ myId
 \begin_inset Quotes erd
 \end_inset
 
->Sat Mar 28 16:43:48 EET 2009</span>.
+>Sat Mar 28 16:43:48 EET 2009</span>
+\family default
+
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Is this still valid in 1.1?
+\end_layout
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Section
