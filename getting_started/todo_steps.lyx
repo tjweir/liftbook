@@ -1,4 +1,4 @@
-#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.4 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -3325,12 +3325,12 @@ index.html inside <lift:Util.in/>
 
 \begin_layout Plain Layout
 
-<lift:TD.list all_id="all_todos">
+<div id="all_todos">
 \end_layout
 
 \begin_layout Plain Layout
 
-  <div id="all_todos">
+  <lift:TD.list all_id="all_todos">
 \end_layout
 
 \begin_layout Plain Layout
@@ -3395,12 +3395,12 @@ index.html inside <lift:Util.in/>
 
 \begin_layout Plain Layout
 
-  </div>
+  </lift:TD.list>
 \end_layout
 
 \begin_layout Plain Layout
 
-</lift:TD.list>
+</div>
 \end_layout
 
 \end_inset
