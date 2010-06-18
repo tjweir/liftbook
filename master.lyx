@@ -6,6 +6,7 @@
 \begin_preamble
 \usepackage[notbib]{tocbibind}
 \usepackage{breakurl}
+\usepackage{textcomp}
 
 % redefine the \LyX macro for PDF bookmarks
 \def\LyX{\texorpdfstring{%
@@ -24,7 +25,7 @@ morestring=[b]"}
 %\renewcommand{\ttdefault}{Inconsolata}
 
 % Default settings for code listings
-\lstset{frame=tb,language=scala,aboveskip=3mm,belowskip=3mm,showstringspaces=false,columns=flexible,basicstyle={\small\ttfamily}}
+\lstset{frame=tb,language=scala,aboveskip=3mm,belowskip=3mm,showstringspaces=false,columns=flexible,basicstyle={\small\ttfamily},upquote=true,showtabs=true,tab=BADTAB}
 
 % Fix the List of Listings title
 \renewcommand{\lstlistlistingname}{List of Listings}
