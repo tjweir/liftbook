@@ -1,4 +1,4 @@
-#LyX 1.6.4 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.5 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -2631,27 +2631,66 @@ This feature allows you use a resource before Lift does and release them
 \end_layout
 
 \begin_layout Subsection
-Additional Snippet Features
-\begin_inset CommandInset label
-LatexCommand label
-name "sub:Additional-Snippet-Features"
+Passing Template Parameters to Snippets
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Parameters
+\end_layout
 
 \end_inset
 
 
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Snippet parameters
+\end_layout
+
+\end_inset
+
+ 
 \end_layout
 
 \begin_layout Standard
-By now you already have a fairly good idea how snippets work, how you can
- use them etc.
- There are a few things that were not revealed yet to you, such as:
+In addition to the standard attributes for snippets, outlined in Section
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:snippet-tag"
+
+\end_inset
+
+, you can set your own attributes on the snippet element.
+ Attributes used in this manner are called 
+\begin_inset Quotes eld
+\end_inset
+
+parameters
+\begin_inset Quotes erd
+\end_inset
+
+.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Snippet-parameter-template"
+
+\end_inset
+
+ shows us setting a 
+\family typewriter
+default
+\family default
+ parameter on our 
+\family typewriter
+Ledger.balance
+\family default
+ snippet.
 \end_layout
 
-\begin_layout Enumerate
-Ability to pass parameters to snippets:
-\end_layout
-
-\begin_deeper
 \begin_layout Standard
 \begin_inset listings
 inline false
@@ -2662,7 +2701,13 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Snippet attributes
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Snippet-parameter-template"
+
+\end_inset
+
+Defining a Snippet Parameter
 \end_layout
 
 \end_inset
@@ -2691,12 +2736,19 @@ Snippet attributes
 \end_layout
 
 \begin_layout Standard
-How do we read the 
-\emph on
-default
-\emph default
- attribute from the snippet code? Actualy it is only about calling S.attr
- function.
+The 
+\family typewriter
+S.attr
+\family default
+ function allows us to access all parameters defined on the snippet element
+ itself, as shown in Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Snippet-parameter-code"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
@@ -2709,7 +2761,13 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Snippet attributes
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Snippet-parameter-code"
+
+\end_inset
+
+Accessing a Snippet Parameter
 \end_layout
 
 \end_inset
@@ -2729,7 +2787,7 @@ class Ledger {
 
 \begin_layout Plain Layout
 
-	val dflt = S.attr("default") openOr "0";
+    val dflt = S.attr("default") openOr "0";
 \end_layout
 
 \begin_layout Plain Layout
@@ -2766,12 +2824,31 @@ class Ledger {
 
 \end_layout
 
-\end_deeper
-\begin_layout Enumerate
-Use snippets for tag attributes:
+\begin_layout Subsection
+Computing Attributes with Snippets
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+Attributes ! computing via snippet
 \end_layout
 
-\begin_deeper
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+You can use snippets to compute tag attributes, as shown in Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Using-a-Snippet-compute-attr"
+
+\end_inset
+
+:
+\end_layout
+
 \begin_layout Standard
 \begin_inset listings
 inline false
@@ -2782,7 +2859,13 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Attribute Snippet
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Using-a-Snippet-compute-attr"
+
+\end_inset
+
+Using a Snippet to Compute an Attribute
 \end_layout
 
 \end_inset
@@ -2835,20 +2918,27 @@ class MyDivThing {
 
 \end_layout
 
-\begin_layout Standard
-The utility of this support is quite obvious in so many situations.
- For instance when supporting right-to-left languages you can add the direction
- of the page to be rtl quite easily.
+\begin_layout Subsection
+Processing Element Attributes
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Attributes ! retrieving from elements
 \end_layout
 
-\end_deeper
+\end_inset
+
+
+\end_layout
+
 \begin_layout Standard
 Now we have seen how we can pass xml parameters to snippets but what if
- we want to pass parameters to the nodes that will be bound? For instance
- in Listing 1.3 we also want to pass the am/pm information:
+ we want to pass parameters on the nodes that will be bound? For instance,
+ we may want to pass the am/pm information on the time element such as:
 \end_layout
 
-\begin_layout Standard
+\begin_layout LyX-Code
 
 \family typewriter
 <ledger:time ampm=
@@ -2860,9 +2950,22 @@ true
 \end_inset
 
 /> 
+\end_layout
+
+\begin_layout Standard
+to control the time display format.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Element-attribute-retrieval"
+
+\end_inset
+
+ shows how we can use the 
+\family typewriter
+BindHelpers
 \family default
-where the time will be displayed in AM-PM format as opposed to 24h format.
- But how can we access the ampm parameter?
+ object to retrieve the current element's attributes.
 \end_layout
 
 \begin_layout Standard
@@ -2875,10 +2978,10 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Snippet attributes 
+Retrieving Element Attributes with BindHelpers
 \begin_inset CommandInset label
 LatexCommand label
-name "lst:Snippet-attributes"
+name "lst:Element-attribute-retrieval"
 
 \end_inset
 
@@ -2902,7 +3005,7 @@ class Ledger {
 
 \begin_layout Plain Layout
 
-	val dflt = S.attr("default") openOr "0";
+    val dflt = S.attr("default") openOr "0";
 \end_layout
 
 \begin_layout Plain Layout
@@ -2917,8 +3020,22 @@ class Ledger {
 
 \begin_layout Plain Layout
 
-          "time" -> {node: NodeSeq => println(BindHelpers.attr("ampm"));
- Text((new java.util.Date).toString))}
+          "time" -> {
+\end_layout
+
+\begin_layout Plain Layout
+
+            node: NodeSeq => println(BindHelpers.attr("ampm")); 
+\end_layout
+
+\begin_layout Plain Layout
+
+            Text((new java.util.Date).toString))
+\end_layout
+
+\begin_layout Plain Layout
+
+          })
 \end_layout
 
 \begin_layout Plain Layout
@@ -2941,10 +3058,34 @@ class Ledger {
 \end_layout
 
 \begin_layout Standard
-The key aspect here is the BindHelpers object.
- You can use it for obtaining information about node attributes.
- This context is maintained internally using ThreadLocals and closures.
- Note that the context is cleared after bind method is executed.
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Is that 
+\begin_inset Quotes eld
+\end_inset
+
+node:NodeSeq
+\begin_inset Quotes erd
+\end_inset
+
+ necessary?
+\end_layout
+
+\end_inset
+
+You can use the 
+\family typewriter
+BindHelpers
+\family default
+ object for obtaining information about node attributes.
+ This context is maintained internally using 
+\family typewriter
+ThreadLocal
+\family default
+s and closures.
+ Note that the context is cleared after the bind method is executed.
  In our example above for 
 \begin_inset Quotes eld
 \end_inset
@@ -2968,149 +3109,6 @@ time
  is turned into a BindParam object using implicit conversions.
  It is important to note that BindParam.calcValue function is called in the
  correct context so that BindHelpers can be safely used.
-\end_layout
-
-\begin_layout Standard
-It is sometimes more convenient to just put node attributes in the markup
- and just not worry about them in the Scala code.
- Consider Listing 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "lst:Snippet-mixin-attributes"
-
-\end_inset
-
-:
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-Snippet mixin attributes 
-\begin_inset CommandInset label
-LatexCommand label
-name "lst:Snippet-mixin-attributes"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-// the markup
-\end_layout
-
-\begin_layout Plain Layout
-
-<lift:Ledger.balance>
-\end_layout
-
-\begin_layout Plain Layout
-
-  <ledger:time ledger:id="myId"/>
-\end_layout
-
-\begin_layout Plain Layout
-
-</lift:Ledger.balance>
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-// The snippet class
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-class Ledger {
-\end_layout
-
-\begin_layout Plain Layout
-
-  def balance (content : NodeSeq ) : NodeSeq = {
-\end_layout
-
-\begin_layout Plain Layout
-
-	bind ("ledger", content,
-\end_layout
-
-\begin_layout Plain Layout
-
-          "time" -> <span>{(new java.util.Date).toString}</span>)
-\end_layout
-
-\begin_layout Plain Layout
-
-  }
-\end_layout
-
-\begin_layout Plain Layout
-
-}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Now what we just did was to prefix the 
-\family typewriter
-id
-\family default
- attribute for the time node.
- Lift will automatically add the attributes preffixed with the same node
- preffix to the resulting bind element for 
-\family typewriter
-time
-\family default
-.
- Thefore the resulting node will be something like 
-\family typewriter
-<span id=
-\begin_inset Quotes erd
-\end_inset
-
-myId
-\begin_inset Quotes erd
-\end_inset
-
->Sat Mar 28 16:43:48 EET 2009</span>
-\family default
-
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Is this still valid in 1.1?
-\end_layout
-
-\end_inset
-
-.
 \end_layout
 
 \begin_layout Section
@@ -3208,7 +3206,11 @@ The
 \family typewriter
  S.timeZone
 \family default
- function returns the current timezone as computed by the 
+ function returns the current timezone as computed by the
+\begin_inset Newline linebreak
+\end_inset
+
+
 \family typewriter
 LiftRules.timeZoneCalculator
 \family default

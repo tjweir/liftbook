@@ -1,4 +1,4 @@
-#LyX 1.6.3 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.5 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -166,7 +166,7 @@ name "lst:An-example-form-template"
 
 \begin_layout Plain Layout
 
-  <entry:description /> <entry.amount /><br />
+  <entry:description /> <entry:amount /><br />
 \end_layout
 
 \begin_layout Plain Layout
@@ -616,6 +616,118 @@ processEntryAdd
 \family default
  function, which, having access to the variables we've defined, can do whatever
  it needs to do when the submit button is pressed.
+ 
+\end_layout
+
+\begin_layout Section
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Attributes-for-Form-Elems"
+
+\end_inset
+
+Attributes for Form Elements
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Attributes ! in form elements
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In addition to the approaches shown in Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Handling-XHTML-Attributes"
+
+\end_inset
+
+, the SHtml generator functions allow you to apply attributes by passing
+ the attribute name/value pairs as final arguments.
+ This is usually simpler, and in some cases is much simpler than using the
+ 
+\begin_inset Quotes eld
+\end_inset
+
+%
+\begin_inset Quotes erd
+\end_inset
+
+ operator directly.
+ For example, checkbox and radio form elements are acutally returned as
+ ChoiceHolder instances, which do not directly support the 
+\begin_inset Quotes eld
+\end_inset
+
+%
+\begin_inset Quotes erd
+\end_inset
+
+ operator.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Applying-Attributes-vararg"
+
+\end_inset
+
+ shows how to apply the same attributes as Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Applying-Attributes-percent"
+
+\end_inset
+
+ using the varargs approach.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+val myInput = SHtml.text("", processText(_), "id" -> "inputField",
+\end_layout
+
+\begin_layout Plain Layout
+
+  "class" -> "highlighted")
+\end_layout
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Applying-Attributes-vararg"
+
+\end_inset
+
+Applying Attributes as Varargs
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+An Overview of Form Elements
 \end_layout
 
 \begin_layout Standard
@@ -692,61 +804,17 @@ an unchecked checkbox is not actually submitted as part of a form
  Lift works around this by adding a hidden form element for each checkbox
  with the same element name, but with a false value, to ensure that the
  callback function is always called.
- 
-\end_layout
-
-\begin_layout Standard
-Both overloads for checkbox take a final varargs sequence of 
-\family typewriter
-Pair(String,String)
-\family default
- so that you can provide any XML attributes that you'd like to have on the
- checkbox element.
  Because more than one XML node is returned by the generator, you can’t
- just use the % metadata mechanism to set attributes on the check box element.
- 
-\end_layout
-
-\begin_layout Standard
-\align center
-\begin_inset Box Shadowbox
-position "t"
-hor_pos "c"
-has_inner_box 1
-inner_pos "t"
-use_parbox 0
-width "75col%"
-special "none"
-height "1in"
-height_special "totalheight"
-status open
-
-\begin_layout Plain Layout
-Note The % metadata mechanism is actually part of the Scala XML library.
- Specifically, 
-\family typewriter
-scala.xml.Elem
-\family default
- has a 
-\family typewriter
-%
-\family default
- method that allows the user to update the attributes on a given XML element.
- We suggest reading more about this in the Scala API documents, or in the
- Scala XML docbook at 
-\begin_inset CommandInset href
-LatexCommand href
-target "http://burak.emir.googlepages.com/scalaxbook.docbk.html"
+ use the % metadata mechanism to set attributes on the check box element.
+ Instead, use attribute pairs as arguments to the generator function as
+ outlined in Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Direct-Manipulation-in"
 
 \end_inset
 
 .
- 
-\end_layout
-
-\end_inset
-
-
 \end_layout
 
 \begin_layout Standard

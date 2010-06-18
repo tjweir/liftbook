@@ -1,4 +1,4 @@
-#LyX 1.6.3 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.5 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -1367,7 +1367,17 @@ A.snippet
 \family typewriter
 A.snippet
 \family default
- method we bind, or replace, the 
+ method we bind
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+bind
+\end_layout
+
+\end_inset
+
+, or replace, the 
 \family typewriter
 <A:name />
 \family default
@@ -3674,6 +3684,38 @@ As you can see here, we actually gain a line of code over our previous effort,
  by editing the template.
 \end_layout
 
+\begin_layout Standard
+One last aspect of binding that we want to discuss is that any attributes
+ set on the input elements that are being bound will be discarded
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Attributes ! discarded in bind
+\end_layout
+
+\end_inset
+
+ if you use the 
+\begin_inset Quotes eld
+\end_inset
+
+->
+\begin_inset Quotes erd
+\end_inset
+
+ binding operator.
+ See Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Handling-XHTML-Attributes"
+
+\end_inset
+
+ for more details on how you manipulate attributes in bindings, including
+ how you can retain attributes on binding elements from your templates.
+\end_layout
+
 \begin_layout Subsection
 Stateless versus Stateful Snippets
 \begin_inset CommandInset label
@@ -4514,6 +4556,401 @@ Add example of same snippet on multiple pages.
 \end_inset
 
 
+\end_layout
+
+\begin_layout Section
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Handling-XHTML-Attributes"
+
+\end_inset
+
+Handling XHTML Attributes
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Attributes
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+It's a common requirement that elements contain XHTML attributes to control
+ things like style, provide an id, register javascript event handlers, and
+ other functionality.
+ Lift provides two main approaches to applying attributes to elements either
+ in your Scala code or directly in the XHTML template.
+\end_layout
+
+\begin_layout Subsection
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Direct-attr-manip"
+
+\end_inset
+
+Direct Manipulation in Code
+\end_layout
+
+\begin_layout Standard
+You can apply attributes directly to XHTML elements using the 
+\begin_inset Quotes eld
+\end_inset
+
+%
+\begin_inset Quotes erd
+\end_inset
+
+ operator
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Attributes ! % operator
+\end_layout
+
+\end_inset
+
+ to apply a
+\begin_inset Newline linebreak
+\end_inset
+
+
+\family typewriter
+scala.xml.UnprefixedAttribute
+\family default
+ instance
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+there's a corresponding 
+\family typewriter
+PrefixedAttribute
+\family default
+ as well
+\end_layout
+
+\end_inset
+
+ to an element.
+ Lift's 
+\family typewriter
+net.liftweb.util.Helpers
+\family default
+ trait contains an implicit conversion from a 
+\family typewriter
+Pair[String,_]
+\family default
+ to an 
+\family typewriter
+UnprefixedAttribute
+\family default
+ called 
+\family typewriter
+pairToUnprefixed
+\family default
+ that allows you to use a simpler syntax.
+ You may chain invocations of 
+\begin_inset Quotes eld
+\end_inset
+
+%
+\begin_inset Quotes erd
+\end_inset
+
+ to apply multiple attributes.
+ For example, Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Applying-Attributes-percent"
+
+\end_inset
+
+ shows how you can apply an 
+\begin_inset Quotes eld
+\end_inset
+
+id
+\begin_inset Quotes erd
+\end_inset
+
+ and 
+\begin_inset Quotes eld
+\end_inset
+
+class
+\begin_inset Quotes erd
+\end_inset
+
+ attribute to a text box and to a normal paragraph.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+val myInput = SHtml.text("", processText(_)) % ("id" -> "inputField") % 
+\end_layout
+
+\begin_layout Plain Layout
+
+  ("class" -> "highlighted")
+\end_layout
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Applying-Attributes-percent"
+
+\end_inset
+
+Applying Attributes with 
+\family typewriter
+%
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Box Shadowbox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "75col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+Note that the % metadata mechanism is actually part of the Scala XML library.
+ Specifically, 
+\family typewriter
+scala.xml.Elem
+\family default
+ has a 
+\family typewriter
+%
+\family default
+ method that allows the user to update the attributes on a given XML element
+ by passing in a 
+\family typewriter
+scala.xml.UnprefixedAttribute
+\family default
+.
+ We suggest reading more about this in the Scala API documents, or in the
+ Scala XML docbook at 
+\begin_inset CommandInset href
+LatexCommand href
+target "http://burak.emir.googlepages.com/scalaxbook.docbk.html"
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:XHTML-Attribute-Pass-through"
+
+\end_inset
+
+XHTML Attribute Pass-through
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Attributes ! binding
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The second main approach to modifying XHTML attributes is to specify them
+ directly in your templates.
+ This has the benefit of allowing your template designers to directly manipulate
+ things like style-related attributes and keeping the markup and the logic
+ separate.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Snippet-mixin-attributes"
+
+\end_inset
+
+ shows how you can utilize the 
+\begin_inset Quotes eld
+\end_inset
+
+-%>
+\begin_inset Quotes erd
+\end_inset
+
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Attributes ! -%> operator
+\end_layout
+
+\end_inset
+
+ binding operator instead of 
+\begin_inset Quotes eld
+\end_inset
+
+->
+\begin_inset Quotes erd
+\end_inset
+
+ to preserve attributes.
+ Note that you need to prefix attributes that you want to retain with the
+ same prefix as the element in which they're defined.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Snippet mixin attributes 
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Snippet-mixin-attributes"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// the markup
+\end_layout
+
+\begin_layout Plain Layout
+
+<lift:Ledger.balance>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <ledger:time ledger:id="myId"/>
+\end_layout
+
+\begin_layout Plain Layout
+
+</lift:Ledger.balance>
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// The snippet class
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+class Ledger {
+\end_layout
+
+\begin_layout Plain Layout
+
+  def balance (content : NodeSeq ) : NodeSeq = {
+\end_layout
+
+\begin_layout Plain Layout
+
+	bind ("ledger", content,
+\end_layout
+
+\begin_layout Plain Layout
+
+          "time" -%> <span>{(new java.util.Date).toString}</span>)
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The resulting node will be something like
+\end_layout
+
+\begin_layout LyX-Code
+
+\family typewriter
+<span id=
+\begin_inset Quotes erd
+\end_inset
+
+myId
+\begin_inset Quotes erd
+\end_inset
+
+>Sat Mar 28 16:43:48 EET 2009</span>
 \end_layout
 
 \begin_layout Section

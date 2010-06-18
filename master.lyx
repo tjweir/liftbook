@@ -1,4 +1,4 @@
-#LyX 1.6.2 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.5 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -121,7 +121,8 @@ Derek Chen-Becker, Marius Danciu and Tyler Weir
 
 \begin_layout Standard
 \noindent
-Copyright © 2008, 2009 by Derek Chen-Becker, Marius Danciu, and Tyler Weir.
+Copyright © 2008, 2009, 2010 by Derek Chen-Becker, Marius Danciu, David
+ Pollak, and Tyler Weir.
 \begin_inset Newline newline
 \end_inset
 
