@@ -491,37 +491,37 @@ name "lst:Pseudocode-nested-operations"
 
 \begin_layout Plain Layout
 
-	x = getSomeValue();
+    x = getSomeValue();
 \end_layout
 
 \begin_layout Plain Layout
 
-	if (x != null) {
+    if (x != null) {
 \end_layout
 
 \begin_layout Plain Layout
 
-  	y = getSomeOtherValue();
+      y = getSomeOtherValue();
 \end_layout
 
 \begin_layout Plain Layout
 
-  	if (y != null) {
+      if (y != null) {
 \end_layout
 
 \begin_layout Plain Layout
 
-    	compute(x, y);
+        compute(x, y);
 \end_layout
 
 \begin_layout Plain Layout
 
-  	}
+      }
 \end_layout
 
 \begin_layout Plain Layout
 
-	}
+    }
 \end_layout
 
 \begin_layout Plain Layout
@@ -610,7 +610,7 @@ name "lst:Scala-nested-operations"
 
 \begin_layout Plain Layout
 
-    	            y <- getSomeOtherValue() if x > 10) yield compute(x, y)
+                    y <- getSomeOtherValue() if x > 10) yield compute(x, y)
 \end_layout
 
 \begin_layout Plain Layout
@@ -2134,7 +2134,7 @@ def boot(){
 
 \begin_layout Plain Layout
 
-	LiftRules.fixCSS("styles" :: "theme" :: Nil, Empty)
+    LiftRules.fixCSS("styles" :: "theme" :: Nil, Empty)
 \end_layout
 
 \begin_layout Plain Layout

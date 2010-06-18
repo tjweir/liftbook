@@ -2171,27 +2171,27 @@ var list = {
 
 \begin_layout Plain Layout
 
-	persons: [
+    persons: [
 \end_layout
 
 \begin_layout Plain Layout
 
-		{name: "Thor", race: "Asgard"}, 
+        {name: "Thor", race: "Asgard"}, 
 \end_layout
 
 \begin_layout Plain Layout
 
-		{name: "Todd", race: "Wraith"}, 
+        {name: "Todd", race: "Wraith"}, 
 \end_layout
 
 \begin_layout Plain Layout
 
-		{name: "Rodney", race: "Human"}
+        {name: "Rodney", race: "Human"}
 \end_layout
 
 \begin_layout Plain Layout
 
-	]
+    ]
 \end_layout
 
 \begin_layout Plain Layout
@@ -2606,27 +2606,27 @@ name "lst:Ajax-JSON-response"
 
 \begin_layout Plain Layout
 
-	JsCrVar("myObject", JsObj(("persons", JsArray(
+    JsCrVar("myObject", JsObj(("persons", JsArray(
 \end_layout
 
 \begin_layout Plain Layout
 
-		JsObj(("name", "Thor"), ("race", "Asgard")),
+        JsObj(("name", "Thor"), ("race", "Asgard")),
 \end_layout
 
 \begin_layout Plain Layout
 
-		JsObj(("name", "Todd"), ("race", "Wraith")),
+        JsObj(("name", "Todd"), ("race", "Wraith")),
 \end_layout
 
 \begin_layout Plain Layout
 
-		JsObj(("name", "Rodney"), ("race", "Human"))
+        JsObj(("name", "Rodney"), ("race", "Human"))
 \end_layout
 
 \begin_layout Plain Layout
 
-	)))) & JsRaw("alert(myObject.persons[0].name)")
+    )))) & JsRaw("alert(myObject.persons[0].name)")
 \end_layout
 
 \begin_layout Plain Layout
@@ -2650,7 +2650,7 @@ name "lst:Ajax-JSON-response"
 
 \begin_layout Plain Layout
 
-			"button" -> SHtml.ajaxButton(Text("Press me"), ajaxFunc _))
+            "button" -> SHtml.ajaxButton(Text("Press me"), ajaxFunc _))
 \end_layout
 
 \begin_layout Plain Layout
@@ -2711,22 +2711,22 @@ name "lst:AJAX-Template"
 
 \begin_layout Plain Layout
 
-	<lift:SimpleSnippet.renderAjaxButton>
+    <lift:SimpleSnippet.renderAjaxButton>
 \end_layout
 
 \begin_layout Plain Layout
 
-		<ex:button/>
+        <ex:button/>
 \end_layout
 
 \begin_layout Plain Layout
 
-	</lift:SimpleSnippet.renderAjaxButton>
+    </lift:SimpleSnippet.renderAjaxButton>
 \end_layout
 
 \begin_layout Plain Layout
 
-	...
+    ...
 \end_layout
 
 \end_inset
@@ -2799,7 +2799,7 @@ var myObject = {'persons': [{'name': 'Thor', 'race': 'Asgard'},
 
 \begin_layout Plain Layout
 
-							{'name': 'Rodney', 'race': 'Human'}]}; 
+                            {'name': 'Rodney', 'race': 'Human'}]}; 
 \end_layout
 
 \begin_layout Plain Layout
@@ -2892,97 +2892,97 @@ name "lst:A-Simple-JSON-form"
 
 \begin_layout Plain Layout
 
-	<lift:JSONForm.head />      
+    <lift:JSONForm.head />      
 \end_layout
 
 \begin_layout Plain Layout
 
-	<lift:JSONForm.show>
+    <lift:JSONForm.show>
 \end_layout
 
 \begin_layout Plain Layout
 
-	  <input type="text" name="name" />
+      <input type="text" name="name" />
 \end_layout
 
 \begin_layout Plain Layout
 
-	  <br />
+      <br />
 \end_layout
 
 \begin_layout Plain Layout
 
-	  <input type="text" name="value" /> 
+      <input type="text" name="value" /> 
 \end_layout
 
 \begin_layout Plain Layout
 
-	  <br />  
+      <br />  
 \end_layout
 
 \begin_layout Plain Layout
 
-	  <input type="radio" name="vehicle" value="Bike" /> 
+      <input type="radio" name="vehicle" value="Bike" /> 
 \end_layout
 
 \begin_layout Plain Layout
 
-	  <input type="radio" name="vehicle" value="Car" /> 
+      <input type="radio" name="vehicle" value="Car" /> 
 \end_layout
 
 \begin_layout Plain Layout
 
-	  <input type="radio" name="vehicle" value="Airplane" /> 
+      <input type="radio" name="vehicle" value="Airplane" /> 
 \end_layout
 
 \begin_layout Plain Layout
 
-	  <br /> 
+      <br /> 
 \end_layout
 
 \begin_layout Plain Layout
 
-	  <select name="cars">
+      <select name="cars">
 \end_layout
 
 \begin_layout Plain Layout
 
-	    <option value="volvo">Volvo</option> 
+        <option value="volvo">Volvo</option> 
 \end_layout
 
 \begin_layout Plain Layout
 
-		<option value="saab">Saab</option> 
+        <option value="saab">Saab</option> 
 \end_layout
 
 \begin_layout Plain Layout
 
-		<option value="opel">Opel</option>  
+        <option value="opel">Opel</option>  
 \end_layout
 
 \begin_layout Plain Layout
 
-	    <option value="audi">Audi</option>  
+        <option value="audi">Audi</option>  
 \end_layout
 
 \begin_layout Plain Layout
 
-	  </select>
+      </select>
 \end_layout
 
 \begin_layout Plain Layout
 
-	  <button type="submit">Submit</button>
+      <button type="submit">Submit</button>
 \end_layout
 
 \begin_layout Plain Layout
 
-	</lift:JSONForm.show>
+    </lift:JSONForm.show>
 \end_layout
 
 \begin_layout Plain Layout
 
-	<div id="json_result"></div> 
+    <div id="json_result"></div> 
 \end_layout
 
 \begin_layout Plain Layout
@@ -3020,12 +3020,12 @@ JSON Form Snippet Code
 
 \begin_layout Plain Layout
 
-class JSONForm {  	
+class JSONForm {      
 \end_layout
 
 \begin_layout Plain Layout
 
-	def head = 
+    def head = 
 \end_layout
 
 \begin_layout Plain Layout
@@ -3060,17 +3060,17 @@ class JSONForm {
 
 \begin_layout Plain Layout
 
-	def show(html: Group): NodeSeq = {
+    def show(html: Group): NodeSeq = {
 \end_layout
 
 \begin_layout Plain Layout
 
-		SHtml.jsonForm(json, html) 
+        SHtml.jsonForm(json, html) 
 \end_layout
 
 \begin_layout Plain Layout
 
-	} 
+    } 
 \end_layout
 
 \begin_layout Plain Layout
@@ -3079,63 +3079,63 @@ class JSONForm {
 
 \begin_layout Plain Layout
 
-	import JsCmds._ 
+    import JsCmds._ 
 \end_layout
 
 \begin_layout Plain Layout
 
-	object json extends JsonHandler {
+    object json extends JsonHandler {
 \end_layout
 
 \begin_layout Plain Layout
 
-		def apply(in: Any): JsCmd = SetHtml("json_result", in match { 
+        def apply(in: Any): JsCmd = SetHtml("json_result", in match { 
 \end_layout
 
 \begin_layout Plain Layout
 
-			case JsonCmd("processForm", _, p: Map[String, _], _) => {
+            case JsonCmd("processForm", _, p: Map[String, _], _) => {
 \end_layout
 
 \begin_layout Plain Layout
 
-				// process the form or whatever 
+                // process the form or whatever 
 \end_layout
 
 \begin_layout Plain Layout
 
-				println("Cars = " + urlDecode(p("cars"))) 
+                println("Cars = " + urlDecode(p("cars"))) 
 \end_layout
 
 \begin_layout Plain Layout
 
-				println("Name = " + urlDecode(p("name"))) 
+                println("Name = " + urlDecode(p("name"))) 
 \end_layout
 
 \begin_layout Plain Layout
 
-				<b>{p}</b> 
+                <b>{p}</b> 
 \end_layout
 
 \begin_layout Plain Layout
 
-			}
+            }
 \end_layout
 
 \begin_layout Plain Layout
 
-			case x => <b>Problem...
+            case x => <b>Problem...
  didn't handle JSON message {x}</b>
 \end_layout
 
 \begin_layout Plain Layout
 
-		})
+        })
 \end_layout
 
 \begin_layout Plain Layout
 
-	}
+    }
 \end_layout
 
 \begin_layout Plain Layout
@@ -3275,7 +3275,7 @@ Example template
 
 \begin_layout Plain Layout
 
-  <lift:Hello.ajaxian>    		
+  <lift:Hello.ajaxian>            
 \end_layout
 
 \begin_layout Plain Layout
@@ -3413,7 +3413,7 @@ def ajaxian(html: Group) : NodeSeq = {
 
                                     JxMap(JsVar("it"), Jx(<li><a href="">{JsVar(
 "it")}</a></li>))                                   }                  
-           	   </ul>).toJs) &
+                  </ul>).toJs) &
 \end_layout
 
 \begin_layout Plain Layout

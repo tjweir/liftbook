@@ -1803,7 +1803,7 @@ LiftRules.dispatch.prepend {
 
 \begin_layout Plain Layout
 
-	Full(RedirectWithState("/page1", "My error" -> Error))
+    Full(RedirectWithState("/page1", "My error" -> Error))
 \end_layout
 
 \begin_layout Plain Layout
@@ -1813,17 +1813,17 @@ LiftRules.dispatch.prepend {
 
 \begin_layout Plain Layout
 
-	Full(RedirectWithState("/page2", 
+    Full(RedirectWithState("/page2", 
 \end_layout
 
 \begin_layout Plain Layout
 
-	       				RedirectState(() => println("Called on redirect!"), 
+                           RedirectState(() => println("Called on redirect!"), 
 \end_layout
 
 \begin_layout Plain Layout
 
-			  		   				"My error" -> Error)))     
+                                         "My error" -> Error)))     
 \end_layout
 
 \begin_layout Plain Layout
@@ -1951,27 +1951,27 @@ LiftRules.dispatch.prepend {
 
 \begin_layout Plain Layout
 
-		<persons>
+        <persons>
 \end_layout
 
 \begin_layout Plain Layout
 
-			<name>John</name>
+            <name>John</name>
 \end_layout
 
 \begin_layout Plain Layout
 
-			<name>Jane</name>
+            <name>Jane</name>
 \end_layout
 
 \begin_layout Plain Layout
 
-		</persons>
+        </persons>
 \end_layout
 
 \begin_layout Plain Layout
 
-	))
+    ))
 \end_layout
 
 \begin_layout Plain Layout
@@ -2467,7 +2467,7 @@ LoanWrapper example
 
 \begin_layout Plain Layout
 
-		println("Y -> goodbye!")  
+        println("Y -> goodbye!")  
 \end_layout
 
 \begin_layout Plain Layout
@@ -3732,17 +3732,17 @@ class Boot {
 
 \begin_layout Plain Layout
 
-	    println("John is authenticated!")
+        println("John is authenticated!")
 \end_layout
 
 \begin_layout Plain Layout
 
-	    userRoles(AuthRole("admin")) 
+        userRoles(AuthRole("admin")) 
 \end_layout
 
 \begin_layout Plain Layout
 
-	    true    
+        true    
 \end_layout
 
 \begin_layout Plain Layout
@@ -3947,42 +3947,42 @@ class Boot {
 
 \begin_layout Plain Layout
 
-	val roles = AuthRole("Admin", 
+    val roles = AuthRole("Admin", 
 \end_layout
 
 \begin_layout Plain Layout
 
-		AuthRole("Site-Admin"),
+        AuthRole("Site-Admin"),
 \end_layout
 
 \begin_layout Plain Layout
 
-		AuthRole("User-Admin", 
+        AuthRole("User-Admin", 
 \end_layout
 
 \begin_layout Plain Layout
 
-			AuthRole("Romania-Admin"),
+            AuthRole("Romania-Admin"),
 \end_layout
 
 \begin_layout Plain Layout
 
-			AuthRole("US-Admin"),
+            AuthRole("US-Admin"),
 \end_layout
 
 \begin_layout Plain Layout
 
-			AuthRole("UK-Admin")
+            AuthRole("UK-Admin")
 \end_layout
 
 \begin_layout Plain Layout
 
-		)
+        )
 \end_layout
 
 \begin_layout Plain Layout
 
-	)
+    )
 \end_layout
 
 \begin_layout Plain Layout
@@ -4018,17 +4018,17 @@ in")
 
 \begin_layout Plain Layout
 
-	    println("John is authenticated !")
+        println("John is authenticated !")
 \end_layout
 
 \begin_layout Plain Layout
 
-	    userRoles(AuthRole("User-Admin")) 
+        userRoles(AuthRole("User-Admin")) 
 \end_layout
 
 \begin_layout Plain Layout
 
-	    true    
+        true    
 \end_layout
 
 \begin_layout Plain Layout
@@ -4157,42 +4157,42 @@ class Boot {
 
 \begin_layout Plain Layout
 
-	val roles = AuthRole("Admin",
+    val roles = AuthRole("Admin",
 \end_layout
 
 \begin_layout Plain Layout
 
-		AuthRole("Site-Admin"),
+        AuthRole("Site-Admin"),
 \end_layout
 
 \begin_layout Plain Layout
 
-		AuthRole("User-Admin",
+        AuthRole("User-Admin",
 \end_layout
 
 \begin_layout Plain Layout
 
-			AuthRole("Romania-Admin"),
+            AuthRole("Romania-Admin"),
 \end_layout
 
 \begin_layout Plain Layout
 
-			AuthRole("US-Admin"),
+            AuthRole("US-Admin"),
 \end_layout
 
 \begin_layout Plain Layout
 
-			AuthRole("UK-Admin")
+            AuthRole("UK-Admin")
 \end_layout
 
 \begin_layout Plain Layout
 
-		)
+        )
 \end_layout
 
 \begin_layout Plain Layout
 
-	)
+    )
 \end_layout
 
 \begin_layout Plain Layout

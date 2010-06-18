@@ -1,4 +1,4 @@
-#LyX 1.6.2 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.5 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -541,13 +541,7 @@ import _root_.net.liftweb.util.Empty
 
 \begin_layout Plain Layout
 
-// and mixes in trait IdPK, which adds a primary key called 
-"
-
-id
-"
-
-.
+// and mixes in trait IdPK, which adds a primary key called "id".
 \end_layout
 
 \begin_layout Plain Layout
@@ -1039,13 +1033,7 @@ name "lst:The-welcome-template"
 \begin_layout Plain Layout
 
            in the AddEntry snippet.
- A form element with method 
-"
-
-POST
-"
-
- will
+ A form element with method "POST" will
 \end_layout
 
 \begin_layout Plain Layout
@@ -1260,13 +1248,7 @@ class HomePage {
 
 \begin_layout Plain Layout
 
-  // User.currentUser returns a 
-"
-
-Box
-"
-
- object, which is either Full
+  // User.currentUser returns a "Box" object, which is either Full
 \end_layout
 
 \begin_layout Plain Layout
@@ -1282,24 +1264,12 @@ Box
 
 \begin_layout Plain Layout
 
-  // on whether the Box is Full, or not (
-"
-
-case _
-"
-
- catches anything
+  // on whether the Box is Full, or not ("case _" catches anything
 \end_layout
 
 \begin_layout Plain Layout
 
-  // not caught by 
-"
-
-case Full(user)
-"
-
-.
+  // not caught by "case Full(user)".
  See Box in the Lift API.
  We also
 \end_layout
@@ -1596,19 +1566,7 @@ class AddEntry extends StatefulSnippet {
 
 \begin_layout Plain Layout
 
-  // This maps the 
-"
-
-addentry
-"
-
- XML element to the 
-"
-
-add
-"
-
- method below
+  // This maps the "addentry" XML element to the "add" method below
 \end_layout
 
 \begin_layout Plain Layout
@@ -1652,47 +1610,17 @@ add
 
 \begin_layout Plain Layout
 
-  // S.param(
-"
-
-tag
-"
-
-) returns a 
-"
-
-Box
-"
-
- and the 
-"
-
-openOr
-"
-
- method returns
+  // S.param("tag") returns a "Box" and the "openOr" method returns
 \end_layout
 
 \begin_layout Plain Layout
 
-  // either the contents of that box (if it is 
-"
-
-Full
-"
-
-), or the empty
+  // either the contents of that box (if it is "Full"), or the empty
 \end_layout
 
 \begin_layout Plain Layout
 
-  // String passed to it, if the Box is 
-"
-
-Empty
-"
-
-.
+  // String passed to it, if the Box is "Empty".
  The S.param method
 \end_layout
 
@@ -1704,13 +1632,7 @@ Empty
 
 \begin_layout Plain Layout
 
-  // name of the parameter is 
-"
-
-tag
-"
-
-.
+  // name of the parameter is "tag".
 \end_layout
 
 \begin_layout Plain Layout
@@ -1784,7 +1706,7 @@ tag
 
 \begin_layout Plain Layout
 
-	      // We need to determine the last serial number and balance
+          // We need to determine the last serial number and balance
 \end_layout
 
 \begin_layout Plain Layout
@@ -1805,7 +1727,7 @@ tag
 
 \begin_layout Plain Layout
 
-	      val (entrySerial, entryBalance) = 
+          val (entrySerial, entryBalance) = 
 \end_layout
 
 \begin_layout Plain Layout
@@ -1815,12 +1737,12 @@ tag
 
 \begin_layout Plain Layout
 
-	  
+      
 \end_layout
 
 \begin_layout Plain Layout
 
-	      val e = Expense.create.account(account)
+          val e = Expense.create.account(account)
 \end_layout
 
 \begin_layout Plain Layout
@@ -1835,7 +1757,7 @@ tag
 
 \begin_layout Plain Layout
 
-	                .description(desc)
+                    .description(desc)
 \end_layout
 
 \begin_layout Plain Layout
@@ -1845,7 +1767,7 @@ tag
 
 \begin_layout Plain Layout
 
-		            .currentBalance(entryBalance + amount)
+                    .currentBalance(entryBalance + amount)
 \end_layout
 
 \begin_layout Plain Layout
@@ -1864,7 +1786,7 @@ tag
 
 \begin_layout Plain Layout
 
-	      e.validate match {
+          e.validate match {
 \end_layout
 
 \begin_layout Plain Layout
@@ -1874,7 +1796,7 @@ tag
 
 \begin_layout Plain Layout
 
-	          Expense.updateEntries(entrySerial + 1, amount)
+              Expense.updateEntries(entrySerial + 1, amount)
 \end_layout
 
 \begin_layout Plain Layout
@@ -1884,17 +1806,17 @@ tag
 
 \begin_layout Plain Layout
 
-  	        val acct = Account.find(account).open_!
+              val acct = Account.find(account).open_!
 \end_layout
 
 \begin_layout Plain Layout
 
-	          val newBalance = acct.balance.is + e.amount.is
+              val newBalance = acct.balance.is + e.amount.is
 \end_layout
 
 \begin_layout Plain Layout
 
-	          acct.balance(newBalance).save
+              acct.balance(newBalance).save
 \end_layout
 
 \begin_layout Plain Layout
@@ -1909,12 +1831,12 @@ tag
 
 \begin_layout Plain Layout
 
-	          unregisterThisSnippet() 
+              unregisterThisSnippet() 
 \end_layout
 
 \begin_layout Plain Layout
 
-	        }
+            }
 \end_layout
 
 \begin_layout Plain Layout
@@ -1924,7 +1846,7 @@ tag
 
 \begin_layout Plain Layout
 
-	      }
+          }
 \end_layout
 
 \begin_layout Plain Layout
@@ -1957,24 +1879,12 @@ tag
 
 \begin_layout Plain Layout
 
-      // Parse through the NodeSeq passed as 
-"
-
-in
-"
-
- looking for tags
+      // Parse through the NodeSeq passed as "in" looking for tags
 \end_layout
 
 \begin_layout Plain Layout
 
-      // prefixed with 
-"
-
-e
-"
-
-.
+      // prefixed with "e".
  When found, replace the tag with a NodeSeq
 \end_layout
 
@@ -2652,13 +2562,7 @@ class Accounts {
 
 \begin_layout Plain Layout
 
-    // If the 
-"
-
-name
-"
-
- param was passed by the browser...
+    // If the "name" param was passed by the browser...
 \end_layout
 
 \begin_layout Plain Layout
@@ -2683,23 +2587,17 @@ name
 
 \begin_layout Plain Layout
 
-	    case acct :: Nil => {
+        case acct :: Nil => {
 \end_layout
 
 \begin_layout Plain Layout
 
-	      // Some closure state for the AJAX calls
+          // Some closure state for the AJAX calls
 \end_layout
 
 \begin_layout Plain Layout
 
-          // Here is Lift's 
-"
-
-Box
-"
-
- in action: we are creating
+          // Here is Lift's "Box" in action: we are creating
 \end_layout
 
 \begin_layout Plain Layout
@@ -2709,23 +2607,17 @@ Box
 
 \begin_layout Plain Layout
 
-          // to 
-"
-
-Empty
-"
-
- (Empty is a subclass of Box)
+          // to "Empty" (Empty is a subclass of Box)
 \end_layout
 
 \begin_layout Plain Layout
 
-	      var startDate : Box[Date] = Empty
+          var startDate : Box[Date] = Empty
 \end_layout
 
 \begin_layout Plain Layout
 
-	      var endDate : Box[Date] = Empty
+          var endDate : Box[Date] = Empty
 \end_layout
 
 \begin_layout Plain Layout
@@ -2734,7 +2626,7 @@ Empty
 
 \begin_layout Plain Layout
 
-	      // AJAX utility methods.
+          // AJAX utility methods.
  Defined here to capture the closure
 \end_layout
 
@@ -2745,7 +2637,7 @@ Empty
 
 \begin_layout Plain Layout
 
-	      def entryTable = buildExpenseTable(
+          def entryTable = buildExpenseTable(
 \end_layout
 
 \begin_layout Plain Layout
@@ -2764,22 +2656,22 @@ Empty
 
 \begin_layout Plain Layout
 
-	      def updateStartDate (date : String) = {
+          def updateStartDate (date : String) = {
 \end_layout
 
 \begin_layout Plain Layout
 
-	        startDate = Util.parseDate(date, Util.slashDate.parse)
+            startDate = Util.parseDate(date, Util.slashDate.parse)
 \end_layout
 
 \begin_layout Plain Layout
 
-	        JsCmds.SetHtml("entry_table", entryTable)
+            JsCmds.SetHtml("entry_table", entryTable)
 \end_layout
 
 \begin_layout Plain Layout
 
-	      }
+          }
 \end_layout
 
 \begin_layout Plain Layout
@@ -2788,22 +2680,22 @@ Empty
 
 \begin_layout Plain Layout
 
-	      def updateEndDate (date : String) = {
+          def updateEndDate (date : String) = {
 \end_layout
 
 \begin_layout Plain Layout
 
-	        endDate = Util.parseDate(date, Util.slashDate.parse)
+            endDate = Util.parseDate(date, Util.slashDate.parse)
 \end_layout
 
 \begin_layout Plain Layout
 
-	        JsCmds.SetHtml("entry_table", entryTable)
+            JsCmds.SetHtml("entry_table", entryTable)
 \end_layout
 
 \begin_layout Plain Layout
 
-	      }
+          }
 \end_layout
 
 \begin_layout Plain Layout
@@ -2817,13 +2709,7 @@ Empty
 
 \begin_layout Plain Layout
 
-          // prefix 
-"
-
-acct
-"
-
- according to the map below.
+          // prefix "acct" according to the map below.
 \end_layout
 
 \begin_layout Plain Layout
@@ -2858,7 +2744,7 @@ acct
 
 \begin_layout Plain Layout
 
-	    }
+        }
 \end_layout
 
 \begin_layout Plain Layout
@@ -2888,13 +2774,7 @@ acct
 
 \begin_layout Plain Layout
 
-    // The S.param 
-"
-
-name
-"
-
- was empty
+    // The S.param "name" was empty
 \end_layout
 
 \begin_layout Plain Layout

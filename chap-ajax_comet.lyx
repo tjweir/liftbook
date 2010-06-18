@@ -497,12 +497,12 @@ def myFunc(html: NodeSeq) : NodeSeq = {
 
 \begin_layout Plain Layout
 
-	Log.info("Got an AJAX call")
+    Log.info("Got an AJAX call")
 \end_layout
 
 \begin_layout Plain Layout
 
-	SetHtml("my-div", Text("That's it")) 
+    SetHtml("my-div", Text("That's it")) 
 \end_layout
 
 \begin_layout Plain Layout
@@ -685,12 +685,12 @@ class SimpleSnippet {
 
 \begin_layout Plain Layout
 
-	println("Received " + str)
+    println("Received " + str)
 \end_layout
 
 \begin_layout Plain Layout
 
-	JsRaw("alert('Button2 clicked')")
+    JsRaw("alert('Button2 clicked')")
 \end_layout
 
 \begin_layout Plain Layout
@@ -723,12 +723,12 @@ class SimpleSnippet {
 
 \begin_layout Plain Layout
 
-			"button1" -> SHtml.ajaxButton("Press me", ajaxFunc1 _),
+            "button1" -> SHtml.ajaxButton("Press me", ajaxFunc1 _),
 \end_layout
 
 \begin_layout Plain Layout
 
-			"button2" -> 
+            "button2" -> 
 \end_layout
 
 \begin_layout Plain Layout
@@ -761,7 +761,7 @@ class SimpleSnippet {
 
 \begin_layout Plain Layout
 
-			"button3" -> 
+            "button3" -> 
 \end_layout
 
 \begin_layout Plain Layout
@@ -1627,7 +1627,7 @@ object PingPong extends Application {
 
 \begin_layout Plain Layout
 
-		  exit()
+          exit()
 \end_layout
 
 \begin_layout Plain Layout
@@ -1912,12 +1912,12 @@ name "lst:Comet-Clock-markup"
 
 \begin_layout Plain Layout
 
-		Current Time: <clk:time>Missing Clock</clk:time>
+        Current Time: <clk:time>Missing Clock</clk:time>
 \end_layout
 
 \begin_layout Plain Layout
 
-	</lift:comet>  
+    </lift:comet>  
 \end_layout
 
 \begin_layout Plain Layout

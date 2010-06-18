@@ -3277,52 +3277,52 @@ override def rewrite = Full({
 
 \begin_layout Plain Layout
 
-  	case List(account) if account.is_public.is => {
+      case List(account) if account.is_public.is => {
 \end_layout
 
 \begin_layout Plain Layout
 
-  	  (RewriteResponse("account" :: Nil),
+        (RewriteResponse("account" :: Nil),
 \end_layout
 
 \begin_layout Plain Layout
 
-   	  FullAccountInfo(account, account.entries))
+         FullAccountInfo(account, account.entries))
 \end_layout
 
 \begin_layout Plain Layout
 
-  	}
+      }
 \end_layout
 
 \begin_layout Plain Layout
 
-  	case List(account) => {
+      case List(account) => {
 \end_layout
 
 \begin_layout Plain Layout
 
-  	  (RewriteResponse("account" :: Nil),
+        (RewriteResponse("account" :: Nil),
 \end_layout
 
 \begin_layout Plain Layout
 
-   	  NotPublic)
+         NotPublic)
 \end_layout
 
 \begin_layout Plain Layout
 
-  	}
+      }
 \end_layout
 
 \begin_layout Plain Layout
 
-  	case _ => {
+      case _ => {
 \end_layout
 
 \begin_layout Plain Layout
 
-  	  (RewriteResponse("account" :: Nil),
+        (RewriteResponse("account" :: Nil),
 \end_layout
 
 \begin_layout Plain Layout
@@ -3332,7 +3332,7 @@ override def rewrite = Full({
 
 \begin_layout Plain Layout
 
-  	}
+      }
 \end_layout
 
 \begin_layout Plain Layout

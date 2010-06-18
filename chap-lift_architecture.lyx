@@ -583,7 +583,7 @@ name "lst:Overriding-bootloader"
 
 \begin_layout Plain Layout
 
-	<param-name>bootloader</param-name>
+    <param-name>bootloader</param-name>
 \end_layout
 
 \begin_layout Plain Layout
@@ -4912,7 +4912,7 @@ class Ledger {
 
 \begin_layout Plain Layout
 
-	bind ("ledger", content,
+    bind ("ledger", content,
 \end_layout
 
 \begin_layout Plain Layout

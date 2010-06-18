@@ -237,7 +237,7 @@ TableSorter Template
 
 \begin_layout Plain Layout
 
-	<lift:TableSorterDemo/>
+    <lift:TableSorterDemo/>
 \end_layout
 
 \begin_layout Plain Layout
@@ -481,7 +481,7 @@ name "lst:Month-view-template"
 
 \begin_layout Plain Layout
 
-   		<cal:widget/>
+           <cal:widget/>
 \end_layout
 
 \begin_layout Plain Layout

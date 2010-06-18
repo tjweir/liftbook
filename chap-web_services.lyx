@@ -2338,32 +2338,32 @@ Response:
 
 \begin_layout Plain Layout
 
-Expires	Thu, 01 Jan 1970 00:00:00 GMT 
+Expires    Thu, 01 Jan 1970 00:00:00 GMT 
 \end_layout
 
 \begin_layout Plain Layout
 
-Set-Cookie	JSESSIONID=1bq219bmoevv1;Path=/ 
+Set-Cookie    JSESSIONID=1bq219bmoevv1;Path=/ 
 \end_layout
 
 \begin_layout Plain Layout
 
-Content-Length	353 
+Content-Length    353 
 \end_layout
 
 \begin_layout Plain Layout
 
-Content-Type	application/atom+xml 
+Content-Type    application/atom+xml 
 \end_layout
 
 \begin_layout Plain Layout
 
-X-Lift-Version	
+X-Lift-Version    
 \end_layout
 
 \begin_layout Plain Layout
 
-0.11-SNAPSHOT Server	
+0.11-SNAPSHOT Server    
 \end_layout
 
 \begin_layout Plain Layout

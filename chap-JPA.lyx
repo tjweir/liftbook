@@ -935,7 +935,7 @@ class AuthorOps {
 
 \begin_layout Plain Layout
 
-	  Model.mergeAndFlush(author)
+      Model.mergeAndFlush(author)
 \end_layout
 
 \begin_layout Plain Layout
@@ -2511,7 +2511,7 @@ def doAdd () = {
 
 \begin_layout Plain Layout
 
-	error("emptyAuthor", "The author's name cannot be blank")
+    error("emptyAuthor", "The author's name cannot be blank")
 \end_layout
 
 \begin_layout Plain Layout
@@ -2521,7 +2521,7 @@ def doAdd () = {
 
 \begin_layout Plain Layout
 
-	try {
+    try {
 \end_layout
 
 \begin_layout Plain Layout
@@ -2536,17 +2536,17 @@ def doAdd () = {
 
 \begin_layout Plain Layout
 
-	} catch {
+    } catch {
 \end_layout
 
 \begin_layout Plain Layout
 
-	  case ee : EntityExistsException => error("Author already exists")
+      case ee : EntityExistsException => error("Author already exists")
 \end_layout
 
 \begin_layout Plain Layout
 
-	  case pe : PersistenceException => 
+      case pe : PersistenceException => 
 \end_layout
 
 \begin_layout Plain Layout
@@ -2556,7 +2556,7 @@ def doAdd () = {
 
 \begin_layout Plain Layout
 
-	}
+    }
 \end_layout
 
 \begin_layout Plain Layout
@@ -2872,27 +2872,17 @@ class AuthorOps {
 
 \begin_layout Plain Layout
 
-	    case Array() =>
+        case Array() =>
 \end_layout
 
 \begin_layout Plain Layout
 
-	      try {
+          try {
 \end_layout
 
 \begin_layout Plain Layout
 
-	        Model.mergeAndFlush(author)
-\end_layout
-
-\begin_layout Plain Layout
-
-            ...
-\end_layout
-
-\begin_layout Plain Layout
-
-    	  } catch {
+            Model.mergeAndFlush(author)
 \end_layout
 
 \begin_layout Plain Layout
@@ -2902,7 +2892,17 @@ class AuthorOps {
 
 \begin_layout Plain Layout
 
-          } 	
+          } catch {
+\end_layout
+
+\begin_layout Plain Layout
+
+            ...
+\end_layout
+
+\begin_layout Plain Layout
+
+          }     
 \end_layout
 
 \begin_layout Plain Layout
@@ -2912,12 +2912,12 @@ class AuthorOps {
 
 \begin_layout Plain Layout
 
-	      errors.foreach(err => S.error(err.toString)) 
+          errors.foreach(err => S.error(err.toString)) 
 \end_layout
 
 \begin_layout Plain Layout
 
-	    }      
+        }      
 \end_layout
 
 \begin_layout Plain Layout
@@ -2927,7 +2927,7 @@ class AuthorOps {
 
 \begin_layout Plain Layout
 
-	...
+    ...
 \end_layout
 
 \begin_layout Plain Layout

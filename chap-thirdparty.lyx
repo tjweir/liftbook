@@ -283,7 +283,7 @@ class OpenID {
 
 \begin_layout Plain Layout
 
-	SimpleOpenIdVendor.loginForm
+    SimpleOpenIdVendor.loginForm
 \end_layout
 
 \begin_layout Plain Layout
@@ -957,7 +957,7 @@ class ExampleStringAMQPListener {
 
 \begin_layout Plain Layout
 
-	    case msg@AMQPMessage(contents: String) => println("received: " + msg);
+        case msg@AMQPMessage(contents: String) => println("received: " + msg);
  act
 \end_layout
 
@@ -1251,7 +1251,7 @@ object MyPayPalIPN extends PayPalIPN {
 
 \begin_layout Plain Layout
 
-	case (ClearedPayment, info, req) => // do your processing here
+    case (ClearedPayment, info, req) => // do your processing here
 \end_layout
 
 \begin_layout Plain Layout
