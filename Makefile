@@ -7,7 +7,7 @@ html	: master.tex master.aux
 pdf	: master.aux
 master.pdf	: master.aux
 
-master.tex	: master.lyx
+master.tex	: *.lyx
 	@echo [Exporting PDFLaTeX]
 	@lyx -e pdflatex master.lyx
 
