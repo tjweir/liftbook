@@ -1,4 +1,4 @@
-#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.5 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -72,9 +72,138 @@ Primarily java.util.Locale and java.util.ResourceBundle
  presented to the user, but also number and date formatting, among others.
  If you want more details on the underlying foundation of Java I18N we suggest
  you visit the Internationalization Homepage at 
-\begin_inset CommandInset href
-LatexCommand href
-target "http://java.sun.com/javase/technologies/core/basic/intl/"
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+http://java.sun.com/javase/technologies/core/basic/intl/
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Another note is that languages are selected in Lift using language tags,
+ as defined in 
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+http://www.w3.org/International/articles/language-tags/
+\end_layout
+
+\end_inset
+
+.
+ Language tags are base on the ISO 639 standard
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+.
+ In general, you should keep language tags as short as possible and avoid
+ adding information (such as regional specifiers) that does not provide
+ otherwise distinguishing information.
+ For example, if your Spanish page will be used for both Mexican and Spanish
+ clients without modification, simply use 
+\family typewriter
+es
+\family default
+ and not 
+\family typewriter
+es_MX
+\family default
+ or 
+\family typewriter
+es_ES
+\family default
+.
+\end_layout
+
+\begin_layout Section
+Localized Templates
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Localized-Templates"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+As we described in Section 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "sec:Templates"
+
+\end_inset
+
+, Lift automatically chooses the template for a request based on the current
+ locale by appending the locale's variants.
+ That means that a request for 
+\family typewriter
+/index
+\family default
+ with a calculated locale of 
+\family typewriter
+en_US
+\family default
+ will try these filenames, in order:
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+index_en_US.html
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+index_en.html
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+index.html
+\end_layout
+
+\begin_layout Standard
+Note that Java upper-cases the country portion of the locale, so you need
+ to make sure you name your templates accordingly.
+ For instance, in the above example a file named 
+\family typewriter
+index_en_us.html
+\family default
+ wouldn't match
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+I tested this locally.
+ Not sure if this is something we would want to fix in Lift
+\end_layout
 
 \end_inset
 
@@ -99,7 +228,9 @@ status open
 
 \begin_layout Plain Layout
 Technically, they can have other formats, but Lift generally only deals
- with PropertyResourceBundles
+ with 
+\family typewriter
+PropertyResourceBundles
 \end_layout
 
 \end_inset
@@ -107,12 +238,16 @@ Technically, they can have other formats, but Lift generally only deals
  that contain keyed strings for your application to use in messages.
  In addition to the key/value pair contents of the files, the filename itself
  is significant.
- When a ResourceBundle is specified by name, the base name is used as the
- default, and additional files with names of the form 
+ When a 
+\family typewriter
+ResourceBundle
+\family default
+ is specified by name, the base name is used as the default, and additional
+ files with names of the form 
 \begin_inset Quotes eld
 \end_inset
 
-<base name>_<ISO language code>
+<base name>_<language tag>
 \begin_inset Quotes erd
 \end_inset
 
@@ -139,7 +274,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Default door bundle
+Default Door Bundle
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:Default-door-bundle"
@@ -207,7 +342,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Spanish door bundle
+Spanish Door Bundle
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:Spanish-door-bundle"
@@ -243,6 +378,7 @@ When you want to retrieve a message (covered in the next two sections) Lift
  available for it.
  If so, it uses the messages in that file; otherwise, it uses the default
  bundle.
+ 
 \end_layout
 
 \begin_layout Standard
@@ -283,7 +419,9 @@ WEB-INF/classes
 status open
 
 \begin_layout Plain Layout
-The properties files are retrieved with ClassLoader.getResourceAsStream
+The properties files are retrieved with 
+\family typewriter
+ClassLoader.getResourceAsStream
 \end_layout
 
 \end_inset
@@ -297,6 +435,13 @@ src/main/resources
 
 \begin_layout Section
 Localized Strings in Scala Code
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Localized-Strings-in-Scala"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -342,7 +487,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Formatted bundles
+Formatted Bundles
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:Formatted-bundles"
@@ -396,11 +541,128 @@ S.??
 \family typewriter
 S.?
 \family default
- but uses the ResourceBundle for internal Lift strings.
+ but uses the 
+\family typewriter
+ResourceBundle
+\family default
+ for internal Lift strings.
  Lift's resource-bundles are located in the i18n folder with the name lift-core.p
-roperties The resource-bundle name is given by LiftRules.liftCoreResourceName
+roperties The resource-bundle name is given by 
+\family typewriter
+LiftRules.liftCoreResourceName
+\family default
  variable.
  Generally you won't use this method.
+\end_layout
+
+\begin_layout Section
+Formatting Localized Strings
+\end_layout
+
+\begin_layout Standard
+While Lift provides facilities for retrieving strings from localized property
+ bundles (Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Localized-Strings-in-Scala"
+
+\end_inset
+
+), it does not provide direct support for localized formatting of those
+ strings.
+ There is an 
+\family typewriter
+S.?
+\family default
+ method which takes additional parameters, but it uses 
+\family typewriter
+String.format
+\family default
+ (and printf syntax) to format the strings and does not properly support
+ date/time formatting.
+ Instead, we recommend you use java.text.MessageFormat for localized strings
+ that will use parameters.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:A-Utility-Method-l10n"
+
+\end_inset
+
+ shows a utility method that you can use in your code to localize strings
+ with parameters.
+ Note that if you have a lot of Lift's implicit conversions in scope you
+ may need to explicitly type some arguments as we have in this example.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+A Utility Method for Localizing Strings
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:A-Utility-Method-l10n"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+private def i10n(key : String, args : Object*) = {
+\end_layout
+
+\begin_layout Plain Layout
+
+ import java.text.{FieldPosition,MessageFormat}
+\end_layout
+
+\begin_layout Plain Layout
+
+ val formatter = new MessageFormat(S.?(key), S.locale)
+\end_layout
+
+\begin_layout Plain Layout
+
+ formatter.format(args.toArray, new StringBuffer, new FieldPosition(0)).toString
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// Usage:
+\end_layout
+
+\begin_layout Plain Layout
+
+<span>{i10n("welcome", new java.util.Date, 6 : Integer)}</span>
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section
@@ -465,7 +727,7 @@ name "lst:Using-the-loc-tag"
 
 \begin_layout Plain Layout
 
-<!-- using explicit key -->
+<!-- using explicit key (preferred) -->
 \end_layout
 
 \begin_layout Plain Layout
@@ -479,7 +741,12 @@ name "lst:Using-the-loc-tag"
 
 \begin_layout Plain Layout
 
-<!-- should be the same result -->
+<!-- should be the same result, but a missing bundle
+\end_layout
+
+\begin_layout Plain Layout
+
+     will result in the key being displayed -->
 \end_layout
 
 \begin_layout Plain Layout
@@ -497,7 +764,11 @@ Calculating Locale
 \end_layout
 
 \begin_layout Standard
-The Locale for a given request is calculated by the function set in
+The 
+\family typewriter
+Locale
+\family default
+ for a given request is calculated by the function set in
 \family typewriter
  LiftRules.localeCalculator
 \family default
@@ -506,10 +777,306 @@ The Locale for a given request is calculated by the function set in
 \end_inset
 
 .
- The default behavior is to call getLocale on the HttpServletRequest, which
- allows the server to set it if your clients send locale preferences.
- If that call returns null, then Locale.getDefault is used.
+ The default behavior is to call 
+\family typewriter
+getLocale
+\family default
+ on the 
+\family typewriter
+HTTPRequest
+\family default
+, which allows the server to set it if your clients send locale preferences.
+ If that call returns null, then 
+\family typewriter
+Locale.getDefault
+\family default
+ is used.
  You can provide your own function for calculating locales if you desire.
+ 
+\end_layout
+
+\begin_layout Standard
+Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Calculating-Locale-Based"
+
+\end_inset
+
+ shows how you can use a cookie in addition to a URL query parameter to
+ select the locale for your pages
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+Thanks to Tim Perret for the original examples at 
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+http://blog.getintheloop.eu/2009/7/26/how-to-extensive-localization-with-the-liftw
+eb-framework
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+.
+ This code would be placed in your 
+\family typewriter
+Boot.boot
+\family default
+ method.
+ Lines 2-3 define some imports beyond the standard imports (see Section
+ 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "lst:Standard-import-statements"
+
+\end_inset
+
+).
+ Lines 6-10 define a utility function to convert a language tag string into
+ a 
+\family typewriter
+Locale
+\family default
+.
+ Line 13 defines the name of the cookie that will store your locale choice.
+ Lines 15-34 define the partial function that will be used to compute the
+ new 
+\family typewriter
+Locale
+\family default
+.
+ First, we only do computation if the 
+\family typewriter
+LiftRules.localeCalculator
+\family default
+ method is invoked with an 
+\family typewriter
+HTTPRequest
+\family default
+ (line 16).
+ Our next step is to determine the current locale by checking whether there
+ is an existing locale cookie set (lines 18-20), or by utilizing the default
+ Lift locale calculator (line 21).
+ Our next check is to determine if the user has explicitly requested a locale
+ via a query parameter (line 24).
+ If the parameter is set (and not 
+\family typewriter
+null
+\family default
+), we construct a new 
+\family typewriter
+Locale
+\family default
+ from the value (line 26), set the cookie so that the request is remembered
+ (line 27), and return the new locale.
+ If there is no request parameter then we use the current locale as defined
+ on line 18.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "numbers=left"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Calculating Locale Based on Cookies and Parameters
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Calculating-Locale-Based"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// Import the classes we'll be using beyond the standard imports
+\end_layout
+
+\begin_layout Plain Layout
+
+import java.util.Locale
+\end_layout
+
+\begin_layout Plain Layout
+
+import provider.{HTTPCookie,HTTPRequest}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// Properly convert a language tag to a Locale
+\end_layout
+
+\begin_layout Plain Layout
+
+def computeLocale(tag : String) = tag.split(Array('-', '_')) match {
+\end_layout
+
+\begin_layout Plain Layout
+
+  case Array(lang) => new Locale(lang)
+\end_layout
+
+\begin_layout Plain Layout
+
+  case Array(lang, country) => new Locale(lang, country)
+\end_layout
+
+\begin_layout Plain Layout
+
+  case Array(lang, country, variant) => new Locale(lang, country, variant)
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// Define this to be whatever name you want
+\end_layout
+
+\begin_layout Plain Layout
+
+val LOCALE_COOKIE_NAME = "SelectedLocale"
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+LiftRules.localeCalculator = {
+\end_layout
+
+\begin_layout Plain Layout
+
+  case fullReq @ Full(req) => {
+\end_layout
+
+\begin_layout Plain Layout
+
+    // Check against a set cookie, or the locale sent in the request 
+\end_layout
+
+\begin_layout Plain Layout
+
+    def currentLocale : Locale = 
+\end_layout
+
+\begin_layout Plain Layout
+
+      S.findCookie(LOCALE_COOKIE_NAME).flatMap { 
+\end_layout
+
+\begin_layout Plain Layout
+
+        cookie => cookie.value.map(computeLocale) 
+\end_layout
+
+\begin_layout Plain Layout
+
+      } openOr LiftRules.defaultLocaleCalculator(fullReq)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    // Check to see if the user explicitly requests a new locale 
+\end_layout
+
+\begin_layout Plain Layout
+
+    S.param("locale") match { 
+\end_layout
+
+\begin_layout Plain Layout
+
+      case Full(requestedLocale) if requestedLocale != null => { 
+\end_layout
+
+\begin_layout Plain Layout
+
+        val computedLocale = computeLocale(requestedLocale) 
+\end_layout
+
+\begin_layout Plain Layout
+
+        S.addCookie(HTTPCookie(LOCALE_COOKIE_NAME, requestedLocale)) 
+\end_layout
+
+\begin_layout Plain Layout
+
+        computedLocale 
+\end_layout
+
+\begin_layout Plain Layout
+
+      }
+\end_layout
+
+\begin_layout Plain Layout
+
+      case _ => currentLocale 
+\end_layout
+
+\begin_layout Plain Layout
+
+    } 
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+  case _ => Locale.getDefault 
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \end_body

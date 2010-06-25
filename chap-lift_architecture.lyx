@@ -1084,7 +1084,7 @@ During template processing, Lift tries to locate a file in the template
 \end_layout
 
 \begin_layout LyX-Code
-<path to template>[_<language>][.<suffix>]
+<path to template>[_<language tag>][.<suffix>]
 \end_layout
 
 \begin_layout Standard
@@ -1110,7 +1110,7 @@ Because Lift will implicitly search for suffixes, it's best to leave the
 \begin_layout Itemize
 
 \family typewriter
-/test/template_es-ES.xhtml
+/test/template_es_ES.xhtml (Spanish localized for Spain)
 \end_layout
 
 \begin_layout Itemize
