@@ -89,7 +89,7 @@ java.servlet.Filter
 status open
 
 \begin_layout Plain Layout
-You can see the discussion on the Lift mailing list that lead to this change
+You can see the discussion on the Lift mailing list that led to this change
  here: 
 \begin_inset Flex URL
 status open
@@ -2300,7 +2300,7 @@ render.
 \begin_inset Quotes erd
 \end_inset
 
- If we had chose a different method, e.g., 
+ If we had chosen a different method, e.g., 
 \begin_inset Quotes eld
 \end_inset
 
