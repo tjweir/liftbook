@@ -706,7 +706,6 @@ val myInput = SHtml.text("", processText(_), "id" -> "inputField",
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:Applying-Attributes-vararg"
@@ -1300,12 +1299,12 @@ def login(xhtml : NodeSeq) : NodeSeq = {
 
 \begin_layout Plain Layout
 
-       "user" -> SHtml.text(user.is, user(_), "maxlength" -> "40")
+       "user" -> SHtml.text(user.is, user(_), "maxlength" -> "40"),
 \end_layout
 
 \begin_layout Plain Layout
 
-       "pass" -> SHtml.password(pass, pass = _)
+       "pass" -> SHtml.password(pass, pass = _),
 \end_layout
 
 \begin_layout Plain Layout
