@@ -1,4 +1,4 @@
-#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.5 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -66,11 +66,11 @@ JPA Library Demo
 The full library demo is available under the main Lift Git repository at
  
 \begin_inset Flex URL
-status collapsed
+status open
 
 \begin_layout Plain Layout
 
-http://github.com/dpp/liftweb/tree/master
+http://github.com/lift/lift/tree/master/examples/JPADemo/
 \end_layout
 
 \end_inset
