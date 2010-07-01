@@ -4838,8 +4838,6 @@ Attributes ! -%> operator
 \end_inset
 
  to preserve attributes.
- Note that you need to prefix attributes that you want to retain with the
- same prefix as the element in which they're defined.
 \end_layout
 
 \begin_layout Standard
@@ -4879,7 +4877,7 @@ name "lst:Snippet-mixin-attributes"
 
 \begin_layout Plain Layout
 
-  <ledger:time ledger:id="myId"/>
+  <ledger:time id="myId"/>
 \end_layout
 
 \begin_layout Plain Layout
@@ -4965,6 +4963,16 @@ name "sec:URL-Rewriting"
 \end_layout
 
 \begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+In 2.0 this bifurcates into stateful vs stateless rewrite, so we need to
+ discuss both
+\end_layout
+
+\end_inset
+
 Now that we've gone over Templates, Views, Snippets, and how requests are
  dispatched to a Class.method, we can discuss how to intercept requests and
  handle them the way we want to.
@@ -6068,11 +6076,6 @@ HTTP redirects are an important part of many web applications.
 Call S.redirectTo.
  When you do this, Lift throws an exception and catches it later on.
  This means that any code following the redirect is skipped.
- It also means that if you use S.redirectTo within a try/catch block, you'll
- need to make sure that you aren't catching the redirect exception (Scala
- usesunchecked exceptions), or test for the redirect's exception and rethrow
- it.
- Ifyou mistakenly catch the redirect exception, then no redirect will occur.
  If you're using a StatefulSnippet (Section 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -6087,6 +6090,38 @@ this.redirectTo
  so that your snippet instance is used when the redirect is processed.
 \end_layout
 
+\begin_deeper
+\begin_layout Standard
+\begin_inset Box Shadowbox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "80col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+
+\series bold
+Important:
+\series default
+ if you use S.redirectTo within a try/catch block, you'll need to make sure
+ that you aren't catching the redirect exception (Scala uses unchecked exception
+s), or test for the redirect's exception and rethrow it.
+ Ifyou mistakenly catch the redirect exception, then no redirect will occur.
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
 \begin_layout Enumerate
 When you need to return a LiftResponse, you can simply return a RedirectResponse
  or a RedirectWithState response.
