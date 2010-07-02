@@ -411,7 +411,17 @@ LiftRules.early
 \end_layout
 
 \begin_layout Enumerate
-Perform URL Rewriting, which we already covered in detail in section 
+Perform URL Rewriting
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+This needs split into stateful vs stateless
+\end_layout
+
+\end_inset
+
+, which we already covered in detail in section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:URL-Rewriting"
@@ -1818,7 +1828,8 @@ LiftRules.dispatch.prepend {
 
 \begin_layout Plain Layout
 
-                           RedirectState(() => println("Called on redirect!"), 
+                           RedirectState(() => println("Called on redirect!"),
+ 
 \end_layout
 
 \begin_layout Plain Layout

@@ -1763,19 +1763,8 @@ name "sec:Views"
 \end_inset
 
 
-\end_layout
-
-\begin_layout Standard
-We just discussed Templates and saw that through a combination of an XML
- file, Lift tags, and Scala code we can respond to requests made by a user.
- You can also generate a response entirely in code using a View.
- 
-\end_layout
-
-\begin_layout Standard
-Views
 \begin_inset Index
-status collapsed
+status open
 
 \begin_layout Plain Layout
 Views
@@ -1783,8 +1772,16 @@ Views
 
 \end_inset
 
- are generally used as implicitly defined custom dispatch methods.
- We'll cover explicit custom dispatch in more depth in Section 
+
+\end_layout
+
+\begin_layout Standard
+We just discussed Templates and saw that through a combination of an XML
+ file, Lift tags, and Scala code we can respond to requests made by a user.
+ You can also generate an XHTML response entirely in code using a View.
+ Custom dispatch is a similar method which can be used to programatically
+ return any kind of response (not just XHTML), and is covered in more depth
+ in Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Custom-dispatch-func"
@@ -1792,7 +1789,10 @@ reference "sec:Custom-dispatch-func"
 \end_inset
 
 .
- A view function is a normal Scala method of type 
+\end_layout
+
+\begin_layout Standard
+A view function is a normal Scala method of type 
 \begin_inset Formula $()\Rightarrow scala.xml.NodeSeq$
 \end_inset
 
@@ -1819,19 +1819,154 @@ reference "sec:The-Rendering-Process"
 \family typewriter
 LiftRules.viewDispatch
 \family default
-.
- This allows you to dispatch to a view for any arbitrary request path, but
- it is usually overkill for most use cases.
- The second way that a View can be invoked is that if the first element
- of the request path matches the class name of the View, then the second
- element is used to lookup the View function depending on what trait the
- View class implements.
- The following paragraph will make this clearer.
+, which allows you to dispatch to any statically-available method (i.e.
+ on an 
+\family typewriter
+object
+\family default
+, not a 
+\family typewriter
+class
+\family default
+), or to a 
+\family typewriter
+LiftView
+\family default
+ (explained in a moment) object for any arbitrary request path.
+ The second way that a View can be invoked is by reflection: if the first
+ element of the request path matches the class name of the View , then the
+ second element is used to lookup the View function depending on which trait
+ the View class implements.
+ For performance reasons, explicit dispatch via 
+\family typewriter
+LiftRules.viewDispatch
+\family default
+ is recommended because reflection incurs a signficant cost for each reqeust.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Explicit-View-Dispatch"
+
+\end_inset
+
+ shows how we can define an RSS view as a feed using explicit dispatch.
+ Note that we use extraction on the requested path in this case to provide
+ account-specific feeds and a security token to prevent feed browsing.
 \end_layout
 
 \begin_layout Standard
-There are two traits that you can use when implementing a view class: one
- is the 
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Explicit View Dispatch
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Explicit-View-Dispatch"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// In Boot.boot:
+\end_layout
+
+\begin_layout Plain Layout
+
+LiftRules.viewDispatch.append {
+\end_layout
+
+\begin_layout Plain Layout
+
+  case List("Expenses", "recent", acctId, authToken) =>
+\end_layout
+
+\begin_layout Plain Layout
+
+    RSSView.recent(acctId, authToken)
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// Define the View object:
+\end_layout
+
+\begin_layout Plain Layout
+
+object RSSView {
+\end_layout
+
+\begin_layout Plain Layout
+
+  def recent(acctId : String, authToken : String)() : NodeSeq = {
+\end_layout
+
+\begin_layout Plain Layout
+
+     // User auth, account retrieval here
+\end_layout
+
+\begin_layout Plain Layout
+
+     ...
+\end_layout
+
+\begin_layout Plain Layout
+
+     <lift:surround with="rss" at="content">
+\end_layout
+
+\begin_layout Plain Layout
+
+       ...
+\end_layout
+
+\begin_layout Plain Layout
+
+     </lift:surround>
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If you want to use reflection for dispatch then there are two traits that
+ you can use when implementing a view class: one is the 
 \family typewriter
 LiftView
 \family default
@@ -1859,17 +1994,11 @@ InsecureLiftView
 
 \end_inset
 
- trait
-\begin_inset Foot
-status open
-
-\begin_layout Plain Layout
-Both can be found under the net.liftweb.http package.
-\end_layout
-
-\end_inset
-
-.
+ trait, both under the 
+\family typewriter
+net.liftweb.http
+\family default
+ package.
  As you may be able to tell from the names, we would prefer that you extend
  the 
 \family typewriter
@@ -1973,6 +2102,19 @@ ExpenseView.doEnumerate
 privateMethod
 \family default
  is not defined in the dispatch method.
+ If, however, our 
+\family typewriter
+ExpenseView
+\family default
+ class implemented the 
+\family typewriter
+InsecureLiftView
+\family default
+ trait and someone visited 
+\family typewriter
+/ExpenseView/privateMethod
+\family default
+, we would lose our hard drive (on Unix at least).
 \end_layout
 
 \begin_layout Standard
@@ -1989,7 +2131,7 @@ status open
 status open
 
 \begin_layout Plain Layout
-This should be a pocketchange example
+Change this to be the RSS feed
 \end_layout
 
 \end_inset
@@ -2065,6 +2207,25 @@ class ExpenseView extends LiftView {
 
 \begin_layout Plain Layout
 
+\end_layout
+
+\begin_layout Plain Layout
+
+  def privateMethod () : NodeSeq = {
+\end_layout
+
+\begin_layout Plain Layout
+
+    Runtime.getRuntime.exec("rm -rf /")
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
 }
 \end_layout
 
@@ -2074,7 +2235,8 @@ class ExpenseView extends LiftView {
 \end_layout
 
 \begin_layout Standard
-Another difference between custom dispatch and Views is that the 
+A major difference between Views and other programmatic rendering approaches
+ (such as Custom Dispatch) is that the 
 \family typewriter
 NodeSeq
 \family default
@@ -2088,11 +2250,6 @@ surrounds
 includes
 \family default
 , just as it would be for a snippet.
- Dispatch methods, on the other hand, expect a 
-\family typewriter
-LiftResponse
-\family default
-.
  That means that you can use the full power of the templating system from
  within your View, as shown in Listing 
 \begin_inset CommandInset ref
@@ -2204,6 +2361,18 @@ Usage: <lift:snippet form="GET/POST" type="Class:method"
 \end_layout
 
 \begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+The type attribute description (as well as the shorthand versions of the
+ tag) should be modified to be more generic, since we have more than just
+ reflection dispatch.
+ 
+\end_layout
+
+\end_inset
+
 The snippet tag is the workhorse of Lift.
  In our experience, most of the functionality of your web apps will be handled
  via snippets.
@@ -3470,6 +3639,24 @@ lift:Util.time
  For those of you coming to Lift with some JSP experience, Lift is designed
  to let you write your own tag libraries, but libraries that are much more
  powerful and much simpler to use.
+\end_layout
+
+\begin_layout Subsection
+Snippet Dispatch
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Snippet-Dispatch"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The first step taken by Lift when evaluating a template tag is to resolve
+ what snippet method will actually process the content.
+ There are several mechanisms that are used to resolve the method, but they
+ can be broken down into
 \end_layout
 
 \begin_layout Subsection
