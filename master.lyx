@@ -7,6 +7,7 @@
 \usepackage[notbib]{tocbibind}
 \usepackage{breakurl}
 \usepackage{textcomp}
+\usepackage[htt]{hyphenat}
 
 % redefine the \LyX macro for PDF bookmarks
 \def\LyX{\texorpdfstring{%
