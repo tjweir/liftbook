@@ -1,4 +1,4 @@
-#LyX 1.6.2 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.5 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -1832,7 +1832,25 @@ CometActor
 CometActor
 \family default
  with your own class and fill in some implementation methods.
- Note that your CometActor classes needs to exist in a 
+ 
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Box Shadowbox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "75col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+Note that your CometActor classes needs to exist in a 
 \family typewriter
 comet
 \family default
@@ -1858,6 +1876,11 @@ com.myapp
 com.myapp.comet
 \family default
  package.
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -2012,6 +2035,15 @@ name "lst:Clock-Comet-Actor"
 
 \end_inset
 
+
+\end_layout
+
+\begin_layout Plain Layout
+
+package com.myapp.comet
+\end_layout
+
+\begin_layout Plain Layout
 
 \end_layout
 
@@ -2387,7 +2419,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Singleton Actor
 \begin_inset CommandInset label
 LatexCommand label
@@ -2528,7 +2559,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Modified Clock Class
 \begin_inset CommandInset label
 LatexCommand label
@@ -2618,7 +2648,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 The Admin Tick
 \begin_inset CommandInset label
 LatexCommand label
