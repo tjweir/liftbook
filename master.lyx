@@ -15,7 +15,7 @@
   {LyX }}
 
 % "define" Scala
-\lstdefinelanguage{scala}{morekeywords={class,object,trait,extends,with,new,if,while,for,def,val,var,this},
+\lstdefinelanguage{scala}{morekeywords={class,object,trait,extends,with,new,if,while,for,def,val,var,this,import,package,override,case,private,public,protected,super},
 otherkeywords={->,=>},
 sensitive=true,
 morecomment=[l]{//},
