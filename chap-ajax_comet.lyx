@@ -224,7 +224,7 @@ name "subfig:Traditional-Application-Model"
 
 \begin_layout Plain Layout
 \begin_inset Graphics
-	filename images/Traditional Model.pdf
+	filename images/Traditional_Model.pdf
 	width 3in
 
 \end_inset
@@ -261,7 +261,7 @@ name "subfig:AJAX-Application-Model"
 
 \begin_layout Plain Layout
 \begin_inset Graphics
-	filename images/Ajax Model.pdf
+	filename images/Ajax_Model.pdf
 	width 3in
 
 \end_inset
@@ -305,7 +305,7 @@ name "subfig:COMET-Application-Model"
 
 \begin_layout Plain Layout
 \begin_inset Graphics
-	filename images/COMET Model.pdf
+	filename images/COMET_Model.pdf
 	width 3in
 
 \end_inset
