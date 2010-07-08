@@ -1864,7 +1864,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Explicit View Dispatch
 \begin_inset CommandInset label
 LatexCommand label
@@ -2298,194 +2297,71 @@ surround
 \end_layout
 
 \begin_layout Subsection
-snippet
-\begin_inset CommandInset label
-LatexCommand label
-name "sub:snippet-tag"
-
-\end_inset
-
-
+a
 \end_layout
 
-\begin_layout LyX-Code
-
-\family typewriter
-Usage: <lift:snippet form="GET/POST" type="Class:method" 
-\end_layout
-
-\begin_layout LyX-Code
-
-\family typewriter
-           multipart="true/false" />
-\end_layout
-
-\begin_layout LyX-Code
-       <lift:Class.method form=
-\begin_inset Quotes erd
-\end_inset
-
-...
-\begin_inset Quotes erd
-\end_inset
-
- multipart=
-\begin_inset Quotes erd
-\end_inset
-
-...
-\begin_inset Quotes erd
-\end_inset
-
- />
-\end_layout
-
-\begin_layout LyX-Code
-       <lift:Class form=
-\begin_inset Quotes erd
-\end_inset
-
-...
-\begin_inset Quotes erd
-\end_inset
-
- multipart=
-\begin_inset Quotes erd
-\end_inset
-
-...
-\begin_inset Quotes erd
-\end_inset
-
- />
-\end_layout
-
-\begin_layout Standard
-\begin_inset Note Note
+\begin_layout Subsection
+bind
+\begin_inset Index
 status open
 
 \begin_layout Plain Layout
-The type attribute description (as well as the shorthand versions of the
- tag) should be modified to be more generic, since we have more than just
- reflection dispatch.
- 
+bind
 \end_layout
 
 \end_inset
 
-The snippet tag is the workhorse of Lift.
- In our experience, most of the functionality of your web apps will be handled
- via snippets.
- They're so important that we're going to cover their mechanism separately
- in Section 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "sec:Snippets"
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Tags ! bind
+\end_layout
 
 \end_inset
 
-.
- In this section, however, we'll cover the specifics of the snippet tag.
-\end_layout
 
-\begin_layout Standard
-The most important part of the tag is the class and method definition.
- There are three ways to specify this:
-\end_layout
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:bind-tag"
 
-\begin_layout Enumerate
-Via the type attribute.
- The value should be 
-\begin_inset Quotes eld
 \end_inset
 
 
-\family typewriter
-ClassName
-\family default
-:
-\family typewriter
-method
-\family default
+\end_layout
 
+\begin_layout LyX-Code
+Usage: <lift:bind name=
 \begin_inset Quotes erd
 \end_inset
 
- for the particular snippet method you want to have handle the tag
-\end_layout
-
-\begin_layout Enumerate
-Via a tag suffix of 
-\family typewriter
-Class.method
-\family default
-.
- This is the same as specifying the type=
+binding_name
 \begin_inset Quotes erd
 \end_inset
 
-Class:method
-\begin_inset Quotes erd
-\end_inset
-
- attribute
-\end_layout
-
-\begin_layout Enumerate
-Via a tag suffix of just 
-\family typewriter
-Class
-\family default
-.
- This will use the 
-\family typewriter
-render
-\family default
- method on the specified class to handle the tag
+ />
 \end_layout
 
 \begin_layout Standard
-Classes are resolved as specified in Section 
+The bind tag is the counterpart to the surround tag: it specifies where
+ in the 
+\begin_inset Quotes eld
+\end_inset
+
+surrounding
+\begin_inset Quotes erd
+\end_inset
+
+ template the content will be placed.
+ An example is shown in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "sub:Class-Resolution"
+reference "lst:Binding-in-Templates"
 
 \end_inset
 
 .
- Listing 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "lst:Snippet-tag-equivalence"
-
-\end_inset
-
- shows three equivalent snippet tags.
- Note: these are only equivalent because the method name is 
-\begin_inset Quotes eld
-\end_inset
-
-render.
-\begin_inset Quotes erd
-\end_inset
-
- If we had chosen a different method, e.g., 
-\begin_inset Quotes eld
-\end_inset
-
-list,
-\begin_inset Quotes erd
-\end_inset
-
- then the third example below will still call a 
-\begin_inset Quotes eld
-\end_inset
-
-render
-\begin_inset Quotes erd
-\end_inset
-
- method.
 \end_layout
 
 \begin_layout Standard
@@ -2498,10 +2374,10 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Snippet Tag Equivalence
+Binding in Templates
 \begin_inset CommandInset label
 LatexCommand label
-name "lst:Snippet-tag-equivalence"
+name "lst:Binding-in-Templates"
 
 \end_inset
 
@@ -2515,17 +2391,118 @@ name "lst:Snippet-tag-equivalence"
 
 \begin_layout Plain Layout
 
-<lift:snippet type="MyClass:render" />
+<html>
 \end_layout
 
 \begin_layout Plain Layout
 
-<lift:MyClass.render />
+  <body>
 \end_layout
 
 \begin_layout Plain Layout
 
-<lift:MyClass />
+    <lift:bind name="content" />
+\end_layout
+
+\begin_layout Plain Layout
+
+  </body>
+\end_layout
+
+\begin_layout Plain Layout
+
+</html>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+bind-at
+\end_layout
+
+\begin_layout Subsection
+children
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Tags ! children
+\end_layout
+
+\end_inset
+
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+children
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+Usage: <lift:children>...multiple xml nodes here...</lift:children>
+\end_layout
+
+\begin_layout Standard
+The purpose of the 
+\family typewriter
+children
+\family default
+ tag is to allow you to create fragment templates with more than one root
+ element that still parse as valid XML.
+ For example, Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:A-Non-Conforming-XML"
+
+\end_inset
+
+ shows a template that we might want to embed into other templates.
+ The problem is that XML requires a single root element, and in this case
+ we have two.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+A Non-Conforming XML Fragment
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:A-Non-Conforming-XML"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<div>First Div</div>
+\end_layout
+
+\begin_layout Plain Layout
+
+<div>Second Div</div>
 \end_layout
 
 \end_inset
@@ -2534,55 +2511,389 @@ name "lst:Snippet-tag-equivalence"
 \end_layout
 
 \begin_layout Standard
-The 
+By using the 
 \family typewriter
-form
+<lift:children/>
 \family default
- and 
-\family typewriter
-multipart
-\family default
- attributes are optional.
- If 
-\family typewriter
-form
-\family default
- is included then an appropriate form tag will be emitted into the XHTML
- using the specified submission method
-\family typewriter
- 
-\family default
-(
-\family typewriter
-POST 
-\family default
-or
-\family typewriter
- GET
-\family default
-).
-
-\family typewriter
- 
-\family default
-The 
-\family typewriter
-multipart
-\family default
- attribute is a boolean, and specifies whether a generated form tag should
- be set to use multipart form submission.
- This is most typically used for file uploads (Section 
+ tag, as shown in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "sec:File-Uploads"
+reference "lst:A-Conforming-XML"
+
+\end_inset
+
+, we have a valid XML file.
+ Lift essentially replaces the 
+\family typewriter
+<lift:children/>
+\family default
+ tag with its contents.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=XML"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+A Conforming XML Fragment
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:A-Conforming-XML"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<lift:children>
+\end_layout
+
+\begin_layout Plain Layout
+
+<div>First Div</div>
+\end_layout
+
+\begin_layout Plain Layout
+
+<div>Second Div</div>
+\end_layout
+
+\begin_layout Plain Layout
+
+</lift:children>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+comet
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Tags ! comet
+\end_layout
+
+\end_inset
+
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Comet
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+
+\family typewriter
+Usage: <lift:comet type="ClassName" name=
+\begin_inset Quotes erd
+\end_inset
+
+optional
+\begin_inset Quotes erd
+\end_inset
+
+/>
+\end_layout
+
+\begin_layout Standard
+The 
+\family typewriter
+comet
+\family default
+ tag embeds a Comet actor into your page.
+ The class of the Comet actor is specified by the 
+\family typewriter
+type
+\family default
+ attribute.
+ The 
+\family typewriter
+name
+\family default
+ attribute tells Lift to create a unique instance of the Comet actor; for
+ example, you could have one Comet actor for site updates and another for
+ admin messages.
+ The contents of the tag are used by the Comet actor to bind a response.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Ledger-Entry-Comet"
+
+\end_inset
+
+ shows an example of a Comet binding that displays expense entries as they're
+ added.
+ Comet is covered in more detail in Chapter 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "cha:AJAX-and-COMET"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "basicstyle={\footnotesize},language=Java,numbers=left,numberstyle={\tiny}"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Account Entry Comet
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Ledger-Entry-Comet"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<div class="accountUpdates">
+\end_layout
+
+\begin_layout Plain Layout
+
+  <lift:comet type="AccountMonitor">
+\end_layout
+
+\begin_layout Plain Layout
+
+    <ul><account:entries>
+\end_layout
+
+\begin_layout Plain Layout
+
+      <li><entry:time/> : <entry:user /> : <entry:amount /></li>
+\end_layout
+
+\begin_layout Plain Layout
+
+    </account:entries></ul>
+\end_layout
+
+\begin_layout Plain Layout
+
+  </lift:comet>
+\end_layout
+
+\begin_layout Plain Layout
+
+</div>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+As we mentioned in the 
+\family typewriter
+embed
+\family default
+ tag documentation, mixing Comet with AJAX responses can be a bit tricky
+ due to the embedded JavaScript that Comet uses.
+\end_layout
+
+\begin_layout Subsection
+CSS
+\end_layout
+
+\begin_layout Subsection
+embed
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+embed
+\end_layout
+
+\end_inset
+
+
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:embed-tag"
+
+\end_inset
+
+ 
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Tags ! embed
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+Usage:
+\family typewriter
+ <lift:embed what="template_name" />
+\end_layout
+
+\begin_layout Standard
+The 
+\family typewriter
+embed
+\family default
+ tag allows you to embed a template within another template.
+ This can be used to assemble your pages from multiple smaller templates,
+ and it also allows you to access templates from JavaScript commands (Chapter
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "cha:Lift-and-Javascript"
 
 \end_inset
 
 ).
+ As with the 
+\family typewriter
+surround
+\family default
+ tag, the template name can be either the base filename or a fully-qualified
+ path.
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Box Shadowbox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "75col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+
+\size small
+Note that if you use the embed tag to access templates from within a JsCmd
+ (typically an AJAX call), any JavaScript in the embedded template won't
+ be executed.
+ This includes, but is not limited to, Comet widgets.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+form
+\end_layout
+
+\begin_layout Subsection
+HTML5
+\end_layout
+
+\begin_layout Subsection
+ignore
+\end_layout
+
+\begin_layout Subsection
+lazy-load
+\end_layout
+
+\begin_layout Subsection
+loc
+\end_layout
+
+\begin_layout Subsection
+Menu
+\end_layout
+
+\begin_layout Subsection
+Msgs
+\end_layout
+
+\begin_layout Subsection
+SkipDocType
+\end_layout
+
+\begin_layout Subsection
+snippet
+\end_layout
+
+\begin_layout Standard
+The snippet tag is covered in detail in Section 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "sec:The-Snippet-Tag"
+
+\end_inset
+
+, part of the chapter on snippets.
 \end_layout
 
 \begin_layout Subsection
 surround
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+surround
+\end_layout
+
+\end_inset
+
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Tags ! surround
+\end_layout
+
+\end_inset
+
+
 \begin_inset CommandInset label
 LatexCommand label
 name "sub:surround-tag"
@@ -2971,302 +3282,27 @@ You cannot have a hidden template with the same name as a sub-directory
 \end_layout
 
 \begin_layout Subsection
-bind
-\begin_inset CommandInset label
-LatexCommand label
-name "sub:bind-tag"
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout LyX-Code
-Usage: <lift:bind name=
-\begin_inset Quotes erd
-\end_inset
-
-binding_name
-\begin_inset Quotes erd
-\end_inset
-
- />
-\end_layout
-
-\begin_layout Standard
-The bind tag is the counterpart to the surround tag: it specifies where
- in the 
-\begin_inset Quotes eld
-\end_inset
-
-surrounding
-\begin_inset Quotes erd
-\end_inset
-
- template the content will be placed.
- An example is shown in Listing 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "lst:Binding-in-Templates"
-
-\end_inset
-
-.
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-Binding in Templates
-\begin_inset CommandInset label
-LatexCommand label
-name "lst:Binding-in-Templates"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-<html>
-\end_layout
-
-\begin_layout Plain Layout
-
-  <body>
-\end_layout
-
-\begin_layout Plain Layout
-
-    <lift:bind name="content" />
-\end_layout
-
-\begin_layout Plain Layout
-
-  </body>
-\end_layout
-
-\begin_layout Plain Layout
-
-</html>
-\end_layout
-
-\end_inset
-
-
+tail
 \end_layout
 
 \begin_layout Subsection
-embed
-\begin_inset CommandInset label
-LatexCommand label
-name "sub:embed-tag"
-
-\end_inset
-
- 
-\end_layout
-
-\begin_layout LyX-Code
-Usage:
-\family typewriter
- <lift:embed what="template_name" />
-\end_layout
-
-\begin_layout Standard
-The 
-\family typewriter
-embed
-\family default
- tag allows you to embed a template within another template.
- This can be used to assemble your pages from multiple smaller templates,
- and it also allows you to access templates from JavaScript commands (Chapter
- 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "cha:Lift-and-Javascript"
-
-\end_inset
-
-).
- As with the 
-\family typewriter
-surround
-\family default
- tag, the template name can be either the base filename or a fully-qualified
- path.
-\end_layout
-
-\begin_layout Standard
-\align center
-\begin_inset Box Shadowbox
-position "t"
-hor_pos "c"
-has_inner_box 1
-inner_pos "t"
-use_parbox 0
-width "75col%"
-special "none"
-height "1in"
-height_special "totalheight"
-status open
-
-\begin_layout Plain Layout
-
-\size small
-Note that if you use the embed tag to access templates from within a JsCmd
- (typically an AJAX call), any JavaScript in the embedded template won't
- be executed.
- This includes, but is not limited to, Comet widgets.
-\end_layout
-
-\end_inset
-
-
+TestCond
 \end_layout
 
 \begin_layout Subsection
-comet 
+with-param
 \end_layout
 
-\begin_layout LyX-Code
-
-\family typewriter
-Usage: <lift:comet type="ClassName" name=
-\begin_inset Quotes erd
-\end_inset
-
-optional
-\begin_inset Quotes erd
-\end_inset
-
-/>
+\begin_layout Subsection
+with-resource-id
 \end_layout
 
-\begin_layout Standard
-The 
-\family typewriter
-comet
-\family default
- tag embeds a Comet actor into your page.
- The class of the Comet actor is specified by the 
-\family typewriter
-type
-\family default
- attribute.
- The 
-\family typewriter
-name
-\family default
- attribute tells Lift to create a unique instance of the Comet actor; for
- example, you could have one Comet actor for site updates and another for
- admin messages.
- The contents of the tag are used by the Comet actor to bind a response.
- Listing 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "lst:Ledger-Entry-Comet"
-
-\end_inset
-
- shows an example of a Comet binding that displays expense entries as they're
- added.
- Comet is covered in more detail in Chapter 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "cha:AJAX-and-COMET"
-
-\end_inset
-
-.
+\begin_layout Subsection
+VersionInfo
 \end_layout
 
-\begin_layout Standard
-\begin_inset listings
-lstparams "basicstyle={\footnotesize},language=Java,numbers=left,numberstyle={\tiny}"
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-Account Entry Comet
-\begin_inset CommandInset label
-LatexCommand label
-name "lst:Ledger-Entry-Comet"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-<div class="accountUpdates">
-\end_layout
-
-\begin_layout Plain Layout
-
-  <lift:comet type="AccountMonitor">
-\end_layout
-
-\begin_layout Plain Layout
-
-    <ul><account:entries>
-\end_layout
-
-\begin_layout Plain Layout
-
-      <li><entry:time/> : <entry:user /> : <entry:amount /></li>
-\end_layout
-
-\begin_layout Plain Layout
-
-    </account:entries></ul>
-\end_layout
-
-\begin_layout Plain Layout
-
-  </lift:comet>
-\end_layout
-
-\begin_layout Plain Layout
-
-</div>
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-As we mentioned in the 
-\family typewriter
-embed
-\family default
- tag documentation, mixing Comet with AJAX responses can be a bit tricky
- due to the embedded JavaScript that Comet uses.
+\begin_layout Subsection
+XmlGroup
 \end_layout
 
 \begin_layout Section
@@ -3418,1331 +3454,6 @@ reference "cha:Message-Handling"
 \end_inset
 
 .
-\end_layout
-
-\begin_layout Section
-Snippets
-\begin_inset CommandInset label
-LatexCommand label
-name "sec:Snippets"
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-A snippet is a method that takes a single 
-\family typewriter
-scala.xml.NodeSeq
-\family default
-
-\begin_inset Index
-status collapsed
-
-\begin_layout Plain Layout
-NodeSeq
-\end_layout
-
-\end_inset
-
- argument and is expected to return a 
-\family typewriter
-NodeSeq
-\family default
-.
-\end_layout
-
-\begin_layout Standard
-\align center
-\begin_inset Box Shadowbox
-position "t"
-hor_pos "c"
-has_inner_box 1
-inner_pos "t"
-use_parbox 0
-width "75col%"
-special "none"
-height "1in"
-height_special "totalheight"
-status open
-
-\begin_layout Plain Layout
-Note: Although Scala can often infer return types, it's important to explicitly
- specify the return type of your snippet methods as 
-\family typewriter
-NodeSeq
-\family default
-.
- Failure to do so sometimes means that Lift can't locate the snippet method,
- in which case the snippet may not execute!
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-The argument passed to the snippet method is the XML content of the snippet
- tag.
- Because Lift processes starting with the outer tag and working in, the
- contents of the outer tag are processed 
-\emph on
-after
-\emph default
- the snippet method processes them.
- You may change the order of processing by specifying the 
-\family typewriter
-eager_eval
-\family default
- attribute on the tag (Section 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "sub:Eager-Eval"
-
-\end_inset
-
-).
- As an example, let's say we wanted a snippet that would output the current
- balance of our ledger.
- Listing 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "lst:a-simple-snippet"
-
-\end_inset
-
- shows what our snippet method looks like.
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-lstparams "frame=single"
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-A Simple Snippet
-\begin_inset CommandInset label
-LatexCommand label
-name "lst:a-simple-snippet"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-class Ledger {
-\end_layout
-
-\begin_layout Plain Layout
-
-  def balance (content : NodeSeq) : NodeSeq = 
-\end_layout
-
-\begin_layout Plain Layout
-
-    Text(currentLedger.formattedBalance)
-\end_layout
-
-\begin_layout Plain Layout
-
-}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-We simply return an XML Text node with the formatted balance.
- Note that the XML that a snippet returns is itself processed recursively,
- so if your snippet instead looked like:
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-Returning Tags from a Snippet
-\begin_inset CommandInset label
-LatexCommand label
-name "lst:Returning-tags-snippet"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-class Ledger {
-\end_layout
-
-\begin_layout Plain Layout
-
-  def balance (content : NodeSeq) : NodeSeq = 
-\end_layout
-
-\begin_layout Plain Layout
-
-    <p>{currentLedger.formattedBalance}
-\end_layout
-
-\begin_layout Plain Layout
-
-      as of <lift:Util.time /></p>
-\end_layout
-
-\begin_layout Plain Layout
-
-}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-then the 
-\family typewriter
-lift:Util.time
-\family default
- snippet will be processed as well after our snippet method returns.
- It is this hierarchical processing of template tags that makes Lift so
- flexible.
- For those of you coming to Lift with some JSP experience, Lift is designed
- to let you write your own tag libraries, but libraries that are much more
- powerful and much simpler to use.
-\end_layout
-
-\begin_layout Subsection
-Snippet Dispatch
-\begin_inset CommandInset label
-LatexCommand label
-name "sub:Snippet-Dispatch"
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-The first step taken by Lift when evaluating a template tag is to resolve
- what snippet method will actually process the content.
- There are several mechanisms that are used to resolve the method, but they
- can be broken down into
-\end_layout
-
-\begin_layout Subsection
-Binding Values in Snippets
-\begin_inset CommandInset label
-LatexCommand label
-name "sub:Binding-Values-in-snippets"
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-So far we've only shown our snippets generating complete output and ignoring
- the input to the method.
- Lift actually provides some very nice facilities for using the input NodeSeq
- within your snippet to help keep presentation and code separate.
- First, remember that the input NodeSeq consists of the child elements for
- the snippet tag in your template.
- That is, given a template containing
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-Snippet Tag Children
-\begin_inset CommandInset label
-LatexCommand label
-name "lst:Snippet-tag-children"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-<lift:Ledger.balance>
-\end_layout
-
-\begin_layout Plain Layout
-
-  <ledger:balance/> as of <ledger:time />
-\end_layout
-
-\begin_layout Plain Layout
-
-</lift:Ledger.balance>
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Then the Ledger.balance method receives
-\end_layout
-
-\begin_layout LyX-Code
-<ledger:balance/> as of <ledger:time />
-\end_layout
-
-\begin_layout Standard
-as its input parameter.
- This is perfectly correct XML, although it may look a little strange at
- first unless you've used prefixed elements in XML before.
- The key is that Lift allows you to selectively 
-\begin_inset Quotes eld
-\end_inset
-
-bind
-\begin_inset Quotes erd
-\end_inset
-
-, or replace, these elements with data inside your snippet.
- The 
-\family typewriter
-Helpers.bind
-\family default
-
-\begin_inset Foot
-status open
-
-\begin_layout Plain Layout
-net.liftweb.util.Helpers.
- Technically the bind method is overloaded, and can even fill in values
- for the lift:bind tag, but this is advanced usage and we're not going to
- cover that here.
-\end_layout
-
-\end_inset
-
- method takes three arguments:
-\end_layout
-
-\begin_layout Enumerate
-The prefix for the tags you wish to bind, in this instance, 
-\begin_inset Quotes eld
-\end_inset
-
-ledger
-\begin_inset Quotes erd
-\end_inset
-
-
-\end_layout
-
-\begin_layout Enumerate
-The NodeSeq that contains the tags you wish to bind
-\end_layout
-
-\begin_layout Enumerate
-One or more BindParam elements that map the tag name to a replacement value
-\end_layout
-
-\begin_layout Standard
-While you can create your own BindParam instances by hand, we generally
- recommend importing 
-\family typewriter
-Helpers._
-\family default
-, which among other things contains an implicit conversion from Pair to
- BindParam.
- With this knowledge in hand, we can change our previous definition of the
- balance method to that in Listing 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "lst:Binding-the-ledger-balance"
-
-\end_inset
-
- below.
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-Binding the Ledger Balance
-\begin_inset CommandInset label
-LatexCommand label
-name "lst:Binding-the-ledger-balance"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-class Ledger {
-\end_layout
-
-\begin_layout Plain Layout
-
-  def balance (content : NodeSeq ) : NodeSeq = 
-\end_layout
-
-\begin_layout Plain Layout
-
-    bind ("ledger", content,
-\end_layout
-
-\begin_layout Plain Layout
-
-          "balance" -> Text(currentLedger.formattedBalance),
-\end_layout
-
-\begin_layout Plain Layout
-
-          "time" -> Text((new java.util.Date).toString))
-\end_layout
-
-\begin_layout Plain Layout
-
-}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-As you can see here, we actually gain a line of code over our previous effort,
- but the trade-off makes it far simpler for us to change the layout just
- by editing the template.
-\end_layout
-
-\begin_layout Standard
-One last aspect of binding that we want to discuss is that any attributes
- set on the input elements that are being bound will be discarded
-\begin_inset Index
-status open
-
-\begin_layout Plain Layout
-Attributes ! discarded in bind
-\end_layout
-
-\end_inset
-
- if you use the 
-\begin_inset Quotes eld
-\end_inset
-
-->
-\begin_inset Quotes erd
-\end_inset
-
- binding operator.
- See Section 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "sec:Handling-XHTML-Attributes"
-
-\end_inset
-
- for more details on how you manipulate attributes in bindings, including
- how you can retain attributes on binding elements from your templates.
-\end_layout
-
-\begin_layout Subsection
-Stateless versus Stateful Snippets
-\begin_inset CommandInset label
-LatexCommand label
-name "sub:Stateless-versus-Stateful"
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-The lifecycle of a snippet is stateless by default.
- That means that for each request, Lift creates a new instance of the snippet
- class to execute.
- Any changes you make to instance variables will be discarded after the
- request is processed.
- If you want to keep some state around, you have a couple of options:
-\end_layout
-
-\begin_layout Itemize
-Store the state in a cookie (Section 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "sec:Cookies"
-
-\end_inset
-
-).
- This can be useful if you have data that you want to persist across sessions.
- The down side is that you have to manage the cookie as well as deal with
- any security implications for the data in the cookie as it's stored on
- the user's machine.
-\end_layout
-
-\begin_layout Itemize
-Store the state in a SessionVar (Section 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "sec:Session-and-Request"
-
-\end_inset
-
-).
- This is a little easier to manage than cookies, but you still have to handle
- adding and removing the session data if you don't want it around for the
- duration of the session.
- As with a cookie, it is global, which means that it will be the same for
- all snippet instances.
-\end_layout
-
-\begin_layout Itemize
-Pass the state around in a RequestVar by setting 
-\begin_inset Quotes eld
-\end_inset
-
-injector
-\begin_inset Quotes erd
-\end_inset
-
- functions in your page transition functions (e.g.
- 
-\family typewriter
-SHtml.link
-\family default
-, 
-\family typewriter
-S.redirectTo
-\family default
-, etc).
- We'll cover this technique in Section 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "sec:Session-and-Request"
-
-\end_inset
-
-.
-\end_layout
-
-\begin_layout Itemize
-Use a StatefulSnippet subclass.
- This is ideal for small, conversational state, such as a form that spans
- multiple pages or for a page where you have multiple variables that you
- want to be able to tweak individually.
-\end_layout
-
-\begin_layout Standard
-Using a StatefulSnippet is very similar to using a normal snippet but with
- the addition of a few mechanisms.
- First, the StatefulSnippet trait defines a 
-\family typewriter
-dispatch
-\family default
- method of type 
-\family typewriter
-PartialFunction[String, () => NodeSeq]
-\family default
-.
- This lets you define which methods handle which snippets.
- Because the 
-\family typewriter
-dispatch
-\family default
- method in the base DispatchSnippet can be overridden with a var, it also
- lets you redefine this behavior as a result of snippet processing.
- 
-\end_layout
-
-\begin_layout Standard
-Another thing to remember when using StatefulSnippets is that when you render
- a form, a hidden field is added to the form that permits the same instance
- of the StatefulSnippet that created the form to be the target of the form
- submission.
- If you need to link to a different page, but would like the same snippet
- instance to handle snippets on that page, use the 
-\family typewriter
-StatefulSnippet.link
-\family default
- method (instead of 
-\family typewriter
-SHtml.link
-\family default
-); similarly, if you need to redirect to a different page, the StatefulSnippet
- trait defines a 
-\family typewriter
-redirectTo
-\family default
- method.
- In either of these instances, a function map is added to the link or redirect,
- respectively, that causes the instance to be reattached.
-\end_layout
-
-\begin_layout Standard
-When might you use a stateful snippet? Consider a multi-part form where
- you'd like to have a user enter data over several pages.
- You'll want the application to maintain the previously entered data while
- you validate the current entry, but you don't want to have to deal with
- a lot of hidden form variables.
- Using a StatefulSnippet instance greatly simplifies writing the snippet
- because you can keep all of your pertinent information around as instance
- variables instead of having to insert and extract them from every request,
- link, etc.
-\end_layout
-
-\begin_layout Standard
-Listing 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "lst:Using-a-StatefulSnippet"
-
-\end_inset
-
- shows an example of a stateful snippet that handles the above example.
- Note that for this example, the URL (and therefore, the template) don't
- change between pages.
- The template we use is shown in Listing .
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-Using a StatefulSnippet
-\begin_inset CommandInset label
-LatexCommand label
-name "lst:Using-a-StatefulSnippet"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-...
- standard Lift imports ...
-\end_layout
-
-\begin_layout Plain Layout
-
-import _root_.scala.xml.Text
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-class BridgeKeeper extends StatefulSnippet {
-\end_layout
-
-\begin_layout Plain Layout
-
-  // Define the dispatch for snippets.
- Note that we are defining
-\end_layout
-
-\begin_layout Plain Layout
-
-  // it as a var so that the snippet for each portion of the 
-\end_layout
-
-\begin_layout Plain Layout
-
-  // multi-part form can update it after validation.
-\end_layout
-
-\begin_layout Plain Layout
-
-  var dispatch : DispatchIt = {
-\end_layout
-
-\begin_layout Plain Layout
-
-    // We default to dispatching the "challenge" snippet to our
-\end_layout
-
-\begin_layout Plain Layout
-
-    // namePage snippet method.
- We'll update this below
-\end_layout
-
-\begin_layout Plain Layout
-
-    case "challenge" => firstPage _
-\end_layout
-
-\begin_layout Plain Layout
-
-  }
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-  // Define our state variables:
-\end_layout
-
-\begin_layout Plain Layout
-
-  var name = ""
-\end_layout
-
-\begin_layout Plain Layout
-
-  var quest = ""
-\end_layout
-
-\begin_layout Plain Layout
-
-  var color = ""
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-  // Our first form page
-\end_layout
-
-\begin_layout Plain Layout
-
-  def firstPage (xhtml : NodeSeq) : NodeSeq = {
-\end_layout
-
-\begin_layout Plain Layout
-
-    def processName (nm : String) {
-\end_layout
-
-\begin_layout Plain Layout
-
-      name = nm
-\end_layout
-
-\begin_layout Plain Layout
-
-      if (name != "") {
-\end_layout
-
-\begin_layout Plain Layout
-
-        dispatch = { case "challenge" => questPage _ }
-\end_layout
-
-\begin_layout Plain Layout
-
-      } else {
-\end_layout
-
-\begin_layout Plain Layout
-
-        S.error("You must provide a name!")
-\end_layout
-
-\begin_layout Plain Layout
-
-      }
-\end_layout
-
-\begin_layout Plain Layout
-
-    }
-\end_layout
-
-\begin_layout Plain Layout
-
-    bind("form", xhtml,
-\end_layout
-
-\begin_layout Plain Layout
-
-         "question" -> Text("What is your name?"),
-\end_layout
-
-\begin_layout Plain Layout
-
-         "answer" -> SHtml.text(name, processName))
-\end_layout
-
-\begin_layout Plain Layout
-
-  }
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-  def questPage (xhtml : NodeSeq) : NodeSeq = {
-\end_layout
-
-\begin_layout Plain Layout
-
-    def processQuest (qst : String) {
-\end_layout
-
-\begin_layout Plain Layout
-
-      quest = qst
-\end_layout
-
-\begin_layout Plain Layout
-
-      if (quest != "") {
-\end_layout
-
-\begin_layout Plain Layout
-
-        dispatch = { 
-\end_layout
-
-\begin_layout Plain Layout
-
-          case "challenge" if name == "Arthur" => swallowPage _
-\end_layout
-
-\begin_layout Plain Layout
-
-          case "challenge" => colorPage _ 
-\end_layout
-
-\begin_layout Plain Layout
-
-        }
-\end_layout
-
-\begin_layout Plain Layout
-
-      } else {
-\end_layout
-
-\begin_layout Plain Layout
-
-        S.error("You must provide a quest!")
-\end_layout
-
-\begin_layout Plain Layout
-
-      }
-\end_layout
-
-\begin_layout Plain Layout
-
-    }
-\end_layout
-
-\begin_layout Plain Layout
-
-    bind("form", xhtml,
-\end_layout
-
-\begin_layout Plain Layout
-
-         "question" -> Text("What is your quest?"),
-\end_layout
-
-\begin_layout Plain Layout
-
-         "answer" -> SHtml.text(quest, processQuest))
-\end_layout
-
-\begin_layout Plain Layout
-
-  }
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-  def colorPage (xhtml : NodeSeq) : NodeSeq = {
-\end_layout
-
-\begin_layout Plain Layout
-
-    def processColor (clr : String) {
-\end_layout
-
-\begin_layout Plain Layout
-
-      color = clr
-\end_layout
-
-\begin_layout Plain Layout
-
-      if (color.toLowercase.contains "No,") {
-\end_layout
-
-\begin_layout Plain Layout
-
-        // This is a cleanup that removes the mapping for this
-\end_layout
-
-\begin_layout Plain Layout
-
-        // StatefulSnippet from the session.
- This will happen 
-\end_layout
-
-\begin_layout Plain Layout
-
-        // over time with GC, but it's best practice to manually 
-\end_layout
-
-\begin_layout Plain Layout
-
-        // do this when you're finished with the snippet
-\end_layout
-
-\begin_layout Plain Layout
-
-        this.unregisterThisSnippet()
-\end_layout
-
-\begin_layout Plain Layout
-
-        S.redirectTo("/pitOfEternalPeril")
-\end_layout
-
-\begin_layout Plain Layout
-
-      } else if (color != "") {
-\end_layout
-
-\begin_layout Plain Layout
-
-        this.unregisterThisSnippet()
-\end_layout
-
-\begin_layout Plain Layout
-
-        S.redirectTo("/scene24")
-\end_layout
-
-\begin_layout Plain Layout
-
-      } else {
-\end_layout
-
-\begin_layout Plain Layout
-
-        S.error("You must provide a color!")
-\end_layout
-
-\begin_layout Plain Layout
-
-      }
-\end_layout
-
-\begin_layout Plain Layout
-
-    }
-\end_layout
-
-\begin_layout Plain Layout
-
-    bind("form", xhtml,
-\end_layout
-
-\begin_layout Plain Layout
-
-         "question" -> Text("What is your favorite color?"),
-\end_layout
-
-\begin_layout Plain Layout
-
-         "answer" -> SHtml.text(color, processColor))
-\end_layout
-
-\begin_layout Plain Layout
-
-  }
-\end_layout
-
-\begin_layout Plain Layout
-
-  // and so on for the swallowPage snippet
-\end_layout
-
-\begin_layout Plain Layout
-
-  ...
-\end_layout
-
-\begin_layout Plain Layout
-
-}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-lstparams "language=XML"
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-The StatefulSnippet Example Template
-\begin_inset CommandInset label
-LatexCommand label
-name "lst:The-StatefulSnippet-Example"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-<lift:surround with="default" at="content">
-\end_layout
-
-\begin_layout Plain Layout
-
-  <lift:BridgeKeeper.challenge form="POST">
-\end_layout
-
-\begin_layout Plain Layout
-
-    <form:question /> : <form:answer /> <br />
-\end_layout
-
-\begin_layout Plain Layout
-
-    <input type="submit" value="Answer" />
-\end_layout
-
-\begin_layout Plain Layout
-
-  </lift:BridgeKeeper.challenge>
-\end_layout
-
-\begin_layout Plain Layout
-
-</lift:surround>
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Subsection
-Eager Evaluation
-\begin_inset CommandInset label
-LatexCommand label
-name "sub:Eager-Eval"
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-As we mentioned in Section 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "sec:Snippets"
-
-\end_inset
-
-, Lift processes the contents of a snippet tag after it processes the tag
- itself.
- If you want the contents of a snippet tag to be processed 
-\emph on
-before
-\emph default
- the snippet, then you need to specify the 
-\family typewriter
-eager_eval
-\family default
-
-\begin_inset Index
-status open
-
-\begin_layout Plain Layout
-eager eval
-\end_layout
-
-\end_inset
-
- attribute on the tag:
-\end_layout
-
-\begin_layout LyX-Code
-<lift:Hello.world eager_eval=
-\begin_inset Quotes erd
-\end_inset
-
-true
-\begin_inset Quotes erd
-\end_inset
-
->...</lift:Hello.world>
-\end_layout
-
-\begin_layout Standard
-This is especially useful if you're using an embedded template (Section
- 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "sub:embed-tag"
-
-\end_inset
-
-).
- Consider Listing 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "lst:Embedding-and-eager"
-
-\end_inset
-
-: in this case, the 
-\family typewriter
-eager_eval
-\family default
- parameter makes Lift process the 
-\family typewriter
-<lift:embed />
-\family default
- tag before it executes the 
-\family typewriter
-Hello.world
-\family default
- snippet method.
- If the 
-\begin_inset Quotes eld
-\end_inset
-
-formTemplate
-\begin_inset Quotes erd
-\end_inset
-
- template looks like Listing 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "lst:The-formTemplate-template"
-
-\end_inset
-
-, then the 
-\family typewriter
-Hello.world
-\family default
- snippet sees the 
-\family typewriter
-<hello:name />
-\family default
- and 
-\family typewriter
-<hello:time />
-\family default
- XML tags as its NodeSeq input.
- If the 
-\family typewriter
-eager_eval
-\family default
- attribute is removed, however, the Hello.world snippet sees only a 
-\family typewriter
-<lift:embed />
-\family default
- tag.
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-lstparams "language=XML"
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-Embedding and eager evaluation
-\begin_inset CommandInset label
-LatexCommand label
-name "lst:Embedding-and-eager"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-<lift:Hello.world eager_eval="true">
-\end_layout
-
-\begin_layout Plain Layout
-
-  <lift:embed what="formTemplate" />
-\end_layout
-
-\begin_layout Plain Layout
-
-</lift:Hello.world>
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-lstparams "language=XML"
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-The formTemplate template
-\begin_inset CommandInset label
-LatexCommand label
-name "lst:The-formTemplate-template"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-<hello:name />
-\end_layout
-
-\begin_layout Plain Layout
-
-<hello:time />
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Add example of same snippet on multiple pages.
-\end_layout
-
-\end_inset
-
-
 \end_layout
 
 \begin_layout Section

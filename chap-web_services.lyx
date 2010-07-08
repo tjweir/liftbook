@@ -1,4 +1,4 @@
-#LyX 1.6.2 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.5 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -44,6 +44,13 @@
 
 \begin_layout Chapter
 Web Services
+\begin_inset CommandInset label
+LatexCommand label
+name "cha:Web-Services"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section
@@ -1036,7 +1043,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 REST Handler Methods
 \begin_inset CommandInset label
 LatexCommand label
@@ -1053,48 +1059,53 @@ name "lst:REST-Handler-Methods"
 \end_layout
 
 \begin_layout Plain Layout
+
 // reacts to the GET Request
 \end_layout
 
 \begin_layout Plain Layout
+
 def showExpense(eid: String): LiftResponse = { 
 \end_layout
 
 \begin_layout Plain Layout
+
   val e: Box[NodeSeq] = 
 \end_layout
 
 \begin_layout Plain Layout
 
-    
-\lang english
-for(r <- Expense.find(By(Expense.id, eid.toLong))) yield { 
+    for(r <- Expense.find(By(Expense.id, eid.toLong))) yield { 
 \end_layout
 
 \begin_layout Plain Layout
+
      wrapXmlBody(
 \end_layout
 
 \begin_layout Plain Layout
 
-       
-\lang english
-<operation id="show_expense" success="true">{e.toXML}</operation>) 
+       <operation id="show_expense" success="true">{e.toXML}</operation>)
+ 
 \end_layout
 
 \begin_layout Plain Layout
+
   }
 \end_layout
 
 \begin_layout Plain Layout
+
   
 \end_layout
 
 \begin_layout Plain Layout
+
   e
 \end_layout
 
 \begin_layout Plain Layout
+
 }
 \end_layout
 
@@ -1103,156 +1114,193 @@ for(r <- Expense.find(By(Expense.id, eid.toLong))) yield {
 \end_layout
 
 \begin_layout Plain Layout
+
 private def getAccount(e: String, n: String): Account = {     
 \end_layout
 
 \begin_layout Plain Layout
+
   val u = User.find(By(User.email, e))         
 \end_layout
 
 \begin_layout Plain Layout
+
   val a = Account.findByName(u.open_!, n) match {       
 \end_layout
 
 \begin_layout Plain Layout
+
     case acct :: Nil => acct       
 \end_layout
 
 \begin_layout Plain Layout
+
     case _ => new Account     
 \end_layout
 
 \begin_layout Plain Layout
+
   }
 \end_layout
 
 \begin_layout Plain Layout
+
     
 \end_layout
 
 \begin_layout Plain Layout
+
   a   
 \end_layout
 
 \begin_layout Plain Layout
+
 }
 \end_layout
 
 \begin_layout Plain Layout
+
   
 \end_layout
 
 \begin_layout Plain Layout
+
 // reacts to the PUT Request   
 \end_layout
 
 \begin_layout Plain Layout
+
 def addExpense(req: Req): LiftResponse = {     
 \end_layout
 
 \begin_layout Plain Layout
+
   var tempEmail = ""     
 \end_layout
 
 \begin_layout Plain Layout
+
   var tempAccountName = ""
 \end_layout
 
 \begin_layout Plain Layout
+
   var expense = new Expense     
 \end_layout
 
 \begin_layout Plain Layout
+
   req.xml match {       
 \end_layout
 
 \begin_layout Plain Layout
+
     case Full(<expense>{parameters @ _*}</expense>) => {         
 \end_layout
 
 \begin_layout Plain Layout
+
       for(parameter <- parameters){ 
 \end_layout
 
 \begin_layout Plain Layout
+
         parameter match {           
 \end_layout
 
 \begin_layout Plain Layout
+
           case <email>{email}</email> => tempEmail = email.text         
   
 \end_layout
 
 \begin_layout Plain Layout
+
           case <accountName>{name}</accountName> => tempAccountName = name.text
    
 \end_layout
 
 \begin_layout Plain Layout
+
           case <dateOf>{dateof}</dateOf> => 
 \end_layout
 
 \begin_layout Plain Layout
+
             expense.dateOf(new java.util.Date(dateof.text)     
 \end_layout
 
 \begin_layout Plain Layout
+
           case <amount>{value}</amount> => expense.amount(BigDecimal(value.text))
    
 \end_layout
 
 \begin_layout Plain Layout
+
           case <desc>{description}</desc> => expense.description(description.text)
    
 \end_layout
 
 \begin_layout Plain Layout
+
           case _ =>         
 \end_layout
 
 \begin_layout Plain Layout
+
         }       
 \end_layout
 
 \begin_layout Plain Layout
+
       }
 \end_layout
 
 \begin_layout Plain Layout
+
       try {         
 \end_layout
 
 \begin_layout Plain Layout
+
         val currentAccount = getAccount(tempEmail, tempAccountName)    
      
 \end_layout
 
 \begin_layout Plain Layout
+
         expense.account(currentAccount.id.is)
 \end_layout
 
 \begin_layout Plain Layout
+
         
 \end_layout
 
 \begin_layout Plain Layout
+
         val (entrySerial,entryBalance) = Expense.getLastExpenseData(currentAccoun
 t,
 \end_layout
 
 \begin_layout Plain Layout
+
           expense.dateOf)
 \end_layout
 
 \begin_layout Plain Layout
+
         
 \end_layout
 
 \begin_layout Plain Layout
+
         expense.account(currentAccount).serialNumber(entrySerial + 1)
 \end_layout
 
 \begin_layout Plain Layout
+
           .tags("api").currentBalance(entryBalance + expense.amount)
 \end_layout
 
@@ -1261,19 +1309,23 @@ t,
 \end_layout
 
 \begin_layout Plain Layout
+
         expense.validate match {           
 \end_layout
 
 \begin_layout Plain Layout
+
           case Nil =>             
 \end_layout
 
 \begin_layout Plain Layout
+
             Expense.updateEntries(entrySerial + 1, expense.amount.is)     
         
 \end_layout
 
 \begin_layout Plain Layout
+
             expense.save             
 \end_layout
 
@@ -1282,27 +1334,33 @@ t,
 \end_layout
 
 \begin_layout Plain Layout
+
             val newBalance = currentAccount.balance.is + expense.amount.is
 \end_layout
 
 \begin_layout Plain Layout
+
             currentAccount.balance(newBalance).save 
 \end_layout
 
 \begin_layout Plain Layout
+
            
 \end_layout
 
 \begin_layout Plain Layout
+
             CreatedResponse(
 \end_layout
 
 \begin_layout Plain Layout
+
               wrapXmlBody(<operation id="add_expense" success="true"></operation
 >),
 \end_layout
 
 \begin_layout Plain Layout
+
               "text/xml")           
 \end_layout
 
@@ -1311,51 +1369,63 @@ t,
 \end_layout
 
 \begin_layout Plain Layout
+
           case _ =>             
 \end_layout
 
 \begin_layout Plain Layout
+
             CreatedResponse(wrapXmlBody(<operation id="add_expense"
 \end_layout
 
 \begin_layout Plain Layout
+
               success="false"></operation>), "text/xml")         
 \end_layout
 
 \begin_layout Plain Layout
+
         }       
 \end_layout
 
 \begin_layout Plain Layout
+
       }       
 \end_layout
 
 \begin_layout Plain Layout
+
       catch {         
 \end_layout
 
 \begin_layout Plain Layout
+
         case e => Log.error("Could not add expense", e); BadResponse()  
      
 \end_layout
 
 \begin_layout Plain Layout
+
       }     
 \end_layout
 
 \begin_layout Plain Layout
+
     }     
 \end_layout
 
 \begin_layout Plain Layout
+
     case _ => Log.error("Request was malformed"); BadResponse()     
 \end_layout
 
 \begin_layout Plain Layout
+
   }   
 \end_layout
 
 \begin_layout Plain Layout
+
 }
 \end_layout
 
@@ -1387,7 +1457,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Expense Entity REST Helper
 \begin_inset CommandInset label
 LatexCommand label
@@ -1404,42 +1473,52 @@ name "lst:Expense-Entity-REST"
 \end_layout
 
 \begin_layout Plain Layout
+
 // look up the account name for the expense
 \end_layout
 
 \begin_layout Plain Layout
+
 private def getAccountName(id: Long): String = {     
 \end_layout
 
 \begin_layout Plain Layout
+
   Account.find(By(Account.id, id)) match {       
 \end_layout
 
 \begin_layout Plain Layout
+
     case Empty => "No Account Name"       
 \end_layout
 
 \begin_layout Plain Layout
+
     case Full(a) => a.name.is     
 \end_layout
 
 \begin_layout Plain Layout
+
   }   
 \end_layout
 
 \begin_layout Plain Layout
+
 }
 \end_layout
 
 \begin_layout Plain Layout
+
  
 \end_layout
 
 \begin_layout Plain Layout
+
 // get a list of tags of the form <tag>tagname1</tag><tag>tagname2</tag>
 \end_layout
 
 \begin_layout Plain Layout
+
 def showXMLTags: NodeSeq = tags.map(t => <tag>{t.name.is}</tag>)
 \end_layout
 
@@ -1448,63 +1527,78 @@ def showXMLTags: NodeSeq = tags.map(t => <tag>{t.name.is}</tag>)
 \end_layout
 
 \begin_layout Plain Layout
+
 // 
 \end_layout
 
 \begin_layout Plain Layout
+
 def toXML: NodeSeq = {    
 \end_layout
 
 \begin_layout Plain Layout
+
   val id = "http://www.pocketchangeapp.com/api/expense/" + this.id    
 \end_layout
 
 \begin_layout Plain Layout
+
   val formatter = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
     
 \end_layout
 
 \begin_layout Plain Layout
+
   val edate = formatter.format(this.dateOf.is)
 \end_layout
 
 \begin_layout Plain Layout
+
     
 \end_layout
 
 \begin_layout Plain Layout
+
   <expense>       
 \end_layout
 
 \begin_layout Plain Layout
+
     <id>{id}</id>       
 \end_layout
 
 \begin_layout Plain Layout
+
     <accountname>{getAccountName(account.is)}</accountname>       
 \end_layout
 
 \begin_layout Plain Layout
+
     <date>{edate}</date>       
 \end_layout
 
 \begin_layout Plain Layout
+
     <description>{description.is}</description>       
 \end_layout
 
 \begin_layout Plain Layout
+
     <amount>{amount.is.toString}</amount>       
 \end_layout
 
 \begin_layout Plain Layout
+
     <tags>{showXMLTags}</tags>     
 \end_layout
 
 \begin_layout Plain Layout
+
   </expense>
 \end_layout
 
 \begin_layout Plain Layout
+
 }  
 \end_layout
 
@@ -1549,7 +1643,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Request and Response for GET for Our API
 \begin_inset CommandInset label
 LatexCommand label
@@ -1695,7 +1788,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Request and Response for PUT for Our API
 \begin_inset CommandInset label
 LatexCommand label
@@ -1861,7 +1953,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 The toAtom Method
 \begin_inset CommandInset label
 LatexCommand label
@@ -1990,7 +2081,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 New Format Selection URLs
 \begin_inset CommandInset label
 LatexCommand label
@@ -2047,7 +2137,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 The Modified Dispatch Function
 \begin_inset CommandInset label
 LatexCommand label
@@ -2085,13 +2174,7 @@ object RestAPI extends XMLApiHelper {
 
 \begin_layout Plain Layout
 
-    case Req(List("api", "expense", eid, 
-"
-
-xml
-"
-
-), "", GetRequest) => 
+    case Req(List("api", "expense", eid, "xml"), "", GetRequest) => 
 \end_layout
 
 \begin_layout Plain Layout
@@ -2101,13 +2184,7 @@ xml
 
 \begin_layout Plain Layout
 
-    case Req(List("api", "expense", eid, 
-"
-
-atom
-"
-
-), "", GetRequest) => 
+    case Req(List("api", "expense", eid, "atom"), "", GetRequest) => 
 \end_layout
 
 \begin_layout Plain Layout
@@ -2188,7 +2265,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 New Show Methods
 \begin_inset CommandInset label
 LatexCommand label
@@ -2301,7 +2377,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Atom Request and Response
 \begin_inset CommandInset label
 LatexCommand label

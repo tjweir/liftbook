@@ -283,6 +283,16 @@ filename "chap-lift_architecture.lyx"
 \begin_layout Standard
 \begin_inset CommandInset include
 LatexCommand include
+filename "chap-snippets.lyx"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand include
 filename "chap-forms.lyx"
 
 \end_inset
