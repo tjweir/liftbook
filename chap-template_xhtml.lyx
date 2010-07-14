@@ -1,0 +1,2748 @@
+#LyX 1.6.5 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
+\begin_document
+\begin_header
+\textclass book
+\use_default_options true
+\language english
+\inputencoding auto
+\font_roman palatino
+\font_sans helvet
+\font_typewriter courier
+\font_default_family default
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\cite_engine basic
+\use_bibtopic false
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\author "" 
+\author "" 
+\end_header
+
+\begin_body
+
+\begin_layout Chapter
+Templates in Lift
+\end_layout
+
+\begin_layout Standard
+An XHTML page, being the central component of a web application, is likewise
+ the central component of Lift's request processing.
+ In Lift, we go a step further and utilize a flexible yet powerful templating
+ engine that allows us to compose an XHTML
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+XHTML
+\end_layout
+
+\end_inset
+
+ page not only out of one or more XML
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+XML
+\end_layout
+
+\end_inset
+
+ files, but also from methods that can programatticaly generate template
+ XML.
+ In this chapter we'll discuss the template XML capabilities and syntax,
+ including XML tags provided by Lift that perform special template processing
+ (Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:ArchTags"
+
+\end_inset
+
+).
+ We will also cover how you can write your own View classes, Scala code
+ that can programatically generate template XML (Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Views"
+
+\end_inset
+
+).
+ We'll finish up the chapter with some discussion on miscellaneous templating
+ functionality.
+\end_layout
+
+\begin_layout Section
+Template XML
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Templates"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Templates
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+Templates
+\end_layout
+
+\end_inset
+
+ form the backbone of Lift's flexibility and power.
+ A template is an XML document that contains Lift-specific tags, see 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:ArchTags"
+
+\end_inset
+
+, as well as whatever content you want returned to the user.
+ 
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Box Shadowbox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "75col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+A note on nomenclature: typically when people discuss 
+\begin_inset Quotes eld
+\end_inset
+
+templates
+\begin_inset Quotes erd
+\end_inset
+
+ in books or on the mailing list they're talking about XML files.
+ We'll cover programmatic generation of template XML in Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Views"
+
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Lift includes several built-in XML tags for specific actions.
+ These utilize prefixed XML elements and are of the form 
+\family typewriter
+<lift:tag_name/>
+\family default
+.
+ Lift also allows you to define your own tags, which are called 
+\emph on
+snippets
+\emph default
+
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+snippets
+\end_layout
+
+\end_inset
+
+ (Chapter 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "cha:Snippets"
+
+\end_inset
+
+).
+ These user-defined tags are linked to Scala methods and these methods can
+ process the XML contents of the snippet tag, or can generate their own
+ content from scratch.
+ A simple template is shown in Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Sample-template"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=XML"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+A Sample Template
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Sample-template"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<lift:surround with="default" at="content">
+\end_layout
+
+\begin_layout Plain Layout
+
+  <head><title>Hello!</title></head>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <lift:Hello.world />
+\end_layout
+
+\begin_layout Plain Layout
+
+</lift:surround>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Notice the tags that are of the form 
+\family typewriter
+<lift:name>
+\family default
+ which in this case are 
+\family typewriter
+<lift:surround>
+\family default
+ and 
+\family typewriter
+<lift:snippet>.
+ 
+\family default
+These are two examples of Lift-specific tags.
+ We'll discuss all of the tags that users will use in Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:ArchTags"
+
+\end_inset
+
+, but let's briefly discuss the two shown here.
+ We use the built-in 
+\family typewriter
+<lift:surround>
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+lift:surround
+\end_layout
+
+\end_inset
+
+
+\family default
+ tag (Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:surround-tag"
+
+\end_inset
+
+) to make Lift embed our current template inside the 
+\begin_inset Quotes eld
+\end_inset
+
+default
+\begin_inset Quotes erd
+\end_inset
+
+ template.
+ We also use 
+\family typewriter
+<lift:snippet>
+\family default
+ tag (aliased to Hello.world) to execute a snippet that we defined.
+ In this instance, we execute the method 
+\family typewriter
+world
+\family default
+ in the class 
+\family typewriter
+Hello 
+\family default
+to generate some content.
+\end_layout
+
+\begin_layout Subsection
+Locating Template XML
+\end_layout
+
+\begin_layout Standard
+During request processing, Lift first tries to match against the 
+\family typewriter
+LiftRules.viewDispatch
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+
+\family typewriter
+viewDispatch
+\end_layout
+
+\end_inset
+
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+
+\family typewriter
+Views ! explicit dispatch
+\end_layout
+
+\end_inset
+
+
+\family default
+ function to see if an explicit View method is defined for the request.
+ If there isn't a 
+\family typewriter
+viewDispatch
+\family default
+ match, then Lift next tries to locate a file in the template directory
+ tree (typically in a WAR archive) that matches the request.
+ Lift tries several suffixes (html, xhtml, htm, and no suffix) and also
+ tries to match based on the client's 
+\family typewriter
+Accept-Language
+\family default
+ header.
+ The pattern Lift uses is:
+\end_layout
+
+\begin_layout LyX-Code
+<path to template>[_<language tag>][.<suffix>]
+\end_layout
+
+\begin_layout Standard
+Because Lift will implicitly search for suffixes, it's best to leave the
+ suffix off of your links within the web app.
+ If you have a link with an href of 
+\family typewriter
+/test/template.xhtml
+\family default
+, it will only match that file, but if you use 
+\family typewriter
+/test/template
+\family default
+ for the href and you have the following templates in your web app:
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+/test/template.xhtml
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+/test/template_es_ES.xhtml (Spanish localized for Spain)
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+/test/template_ja.xhtml
+\end_layout
+
+\begin_layout Standard
+then Lift will use the appropriate template based on the user's requested
+ language if a corresponding template is available.
+ For more information regarding internationalization please see Appendix
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "cha:Internationalization"
+
+\end_inset
+
+.
+ In addition to normal templates, your application can make use of hidden
+ templates
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+hidden templates
+\end_layout
+
+\end_inset
+
+.
+ These are templates that are located under the 
+\family typewriter
+/templates-hidden
+\family default
+ directory of your web app.
+ Technically, Lift hides files in any directory ending in 
+\begin_inset Quotes eld
+\end_inset
+
+-hidden
+\begin_inset Quotes erd
+\end_inset
+
+, but templates-hidden is somewhat of a de facto standard.
+ Like the 
+\family typewriter
+WEB-XML
+\family default
+ directory, the contents cannot be directly requested by clients.
+ They can, however, be used by other templates through mechanisms such as
+ the 
+\family typewriter
+<lift:surround>
+\family default
+ and 
+\family typewriter
+<lift:embed>
+\family default
+ tags (Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:embed-tag"
+
+\end_inset
+
+).
+ If a static file can't be located then Lift will attempt to locate a View
+ class (Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Views"
+
+\end_inset
+
+) that will process the request.
+ If Lift cannot locate an appropriate template based on the request path
+ then it will return a 404 to the user.
+\end_layout
+
+\begin_layout Subsection
+Processing Template XML
+\end_layout
+
+\begin_layout Standard
+Once Lift has located the correct template, the next step is to process
+ the contents.
+ It is important to understand that Lift processes XML tags recursively,
+ from the outermost tag to the innermost tag.
+ That means that in our example Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Sample-template"
+
+\end_inset
+
+, the surround tag gets processed first.
+ In this case the surround loads the default template and embeds our content
+ at the appropriate location.
+ The next tag to be processed is the 
+\family typewriter
+<lift:Hello.world/>
+\family default
+ snippet.
+ This tag is essentially an alias for the lift:snippet tag (specifically,
+ 
+\family typewriter
+<lift:snippet type=
+\begin_inset Quotes eld
+\end_inset
+
+Hello:world
+\begin_inset Quotes erd
+\end_inset
+
+>
+\family default
+) , and will locate the Hello class and execute the world method on it.
+ If you omit the 
+\begin_inset Quotes eld
+\end_inset
+
+method
+\begin_inset Quotes erd
+\end_inset
+
+ part of the type and only specify the class (
+\family typewriter
+<lift:Hello>
+\family default
+ or 
+\family typewriter
+<lift:snippet type=
+\begin_inset Quotes eld
+\end_inset
+
+Hello
+\begin_inset Quotes erd
+\end_inset
+
+>
+\family default
+), then Lift will attempt to call the 
+\family typewriter
+render
+\family default
+ method of the class.
+\end_layout
+
+\begin_layout Standard
+To give a more complex example that illustrates the order of tag processing,
+ consider Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:A-Recursive-Tag"
+
+\end_inset
+
+.
+ In this example we have several nested snippet tags, starting with 
+\family typewriter
+<A.snippet />
+\family default
+.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Recursive-Tag-Snippets"
+
+\end_inset
+
+ shows the backing code for this example.
+ Snippets are covered in more detail in Chapter 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "cha:Snippets"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=XML"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+A Recursive Tag Processing Example
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:A-Recursive-Tag"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<lift:A.snippet>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <p>Hello, <A:name />!</p>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <p>
+\end_layout
+
+\begin_layout Plain Layout
+
+    <lift:B.snippet>
+\end_layout
+
+\begin_layout Plain Layout
+
+      <B:title />
+\end_layout
+
+\begin_layout Plain Layout
+
+      <lift:C.snippet />
+\end_layout
+
+\begin_layout Plain Layout
+
+    </lift:B.snippet>
+\end_layout
+
+\begin_layout Plain Layout
+
+  </p>
+\end_layout
+
+\begin_layout Plain Layout
+
+</lift:A.snippet>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The first thing that happens is that the contents of the 
+\family typewriter
+<lift:A.snippet>
+\family default
+ tag are passed as a 
+\family typewriter
+NodeSeq
+\family default
+ argument to the 
+\family typewriter
+A.snippet
+\family default
+ method.
+ In the 
+\family typewriter
+A.snippet
+\family default
+ method we bind
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+bind
+\end_layout
+
+\end_inset
+
+, or replace, the 
+\family typewriter
+<A:name />
+\family default
+ tag with an XML Text node of 
+\begin_inset Quotes eld
+\end_inset
+
+The A snippet
+\begin_inset Quotes erd
+\end_inset
+
+.
+ The rest of the input is left as-is and is returned to Lift for more processing.
+ Lift examines the returned 
+\family typewriter
+NodeSeq
+\family default
+ for more lift tags and finds the 
+\family typewriter
+<lift:B.snippet>
+\family default
+ tag.
+ The contents of the 
+\family typewriter
+<lift:B.snippet>
+\family default
+ tag are passed as a 
+\family typewriter
+NodeSeq
+\family default
+ argument to the 
+\family typewriter
+B.snippet
+\family default
+ method, where the 
+\family typewriter
+<B.title />
+\family default
+ tag is bound with the XML Text node 
+\begin_inset Quotes eld
+\end_inset
+
+The B snippet
+\begin_inset Quotes erd
+\end_inset
+
+.
+ The rest of the contents are left unchanged and the transformed 
+\family typewriter
+NodeSeq
+\family default
+ is returned to Lift, which scans for and finds the 
+\family typewriter
+<lift:C.snippet />
+\family default
+ tag.
+ Since there are no child elements for the 
+\family typewriter
+<lift:C.snippet />
+\family default
+ tag, the 
+\family typewriter
+C.snippet
+\family default
+ method is invoked with an empty 
+\family typewriter
+NodeSeq
+\family default
+ and the 
+\family typewriter
+C.snippet
+\family default
+ returns the Text node 
+\begin_inset Quotes eld
+\end_inset
+
+The C snippet
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+The Recursive Tag Snippets Code
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Recursive-Tag-Snippets"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+...
+ standard Lift imports ...
+\end_layout
+
+\begin_layout Plain Layout
+
+class A {
+\end_layout
+
+\begin_layout Plain Layout
+
+  def snippet (xhtml : NodeSeq) : NodeSeq = 
+\end_layout
+
+\begin_layout Plain Layout
+
+    bind("A", xhtml, "name" -> Text("The A snippet"))
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+class B {
+\end_layout
+
+\begin_layout Plain Layout
+
+  def snippet (xhtml : NodeSeq) : NodeSeq =
+\end_layout
+
+\begin_layout Plain Layout
+
+    bind("B", xhtml, "title" -> Text("The B snippet"))
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+class C {
+\end_layout
+
+\begin_layout Plain Layout
+
+  def snippet (xhtml : NodeSeq) : NodeSeq = Text("The C snippet")
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+While the contents of the 
+\family typewriter
+A.snippet
+\family default
+ tag are passed to the 
+\family typewriter
+A.snippet
+\family default
+ method, there's no requirement that the contents are actually used.
+ For example, consider what would happen if we swapped the B and C snippet
+ tags in our template, as shown in Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:The-Swapped-Recursive"
+
+\end_inset
+
+.
+ In this example, the 
+\family typewriter
+C.snippet
+\family default
+ method is called before the 
+\family typewriter
+B.snippet
+\family default
+ method.
+ Since our 
+\family typewriter
+C.snippet
+\family default
+ method returns straight XML that doesn't contain the B snippet tag, the
+ B snippet will never be executed! We'll cover how the 
+\family typewriter
+eager_eval
+\family default
+ tag attribute can be used to reverse this behavior in Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Eager-Eval"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=XML"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+The Swapped Recursive Snippet Template
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:The-Swapped-Recursive"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<lift:A.snippet>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <p>Hello, <A:name />!</p>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <p>
+\end_layout
+
+\begin_layout Plain Layout
+
+    <lift:C.snippet>
+\end_layout
+
+\begin_layout Plain Layout
+
+      <lift:B.snippet>
+\end_layout
+
+\begin_layout Plain Layout
+
+        <B:title />
+\end_layout
+
+\begin_layout Plain Layout
+
+      </lift:B.snippet>
+\end_layout
+
+\begin_layout Plain Layout
+
+    </lift:C.snippet>
+\end_layout
+
+\begin_layout Plain Layout
+
+  </p>
+\end_layout
+
+\begin_layout Plain Layout
+
+</lift:A.snippet>
+\end_layout
+
+\begin_layout Plain Layout
+
+<!-- After the A and C snippets have been processed: -->
+\end_layout
+
+\begin_layout Plain Layout
+
+<p>Hello, The A snippet</p>
+\end_layout
+
+\begin_layout Plain Layout
+
+<p>The C snippet</p>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+As you can see, templates are a nice way of setting up your layout and then
+ writing a few methods to fill in the XML fragments that make up your web
+ applications.
+ They provide a simple way to generate a uniform look for your site, particularl
+y if you assemble your templates using the surround and embed tags.
+ If you'd like programmatic control over the template XML used for a particular
+ request, you'll want to use a View, which is discussed in the next section.
+\end_layout
+
+\begin_layout Section
+Views
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Views"
+
+\end_inset
+
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Views
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We just discussed Templates and saw that through a combination of an XML
+ file, Lift tags, and Scala code we can respond to requests made by a user.
+ You can also generate an XHTML response entirely in code using a View.
+ Custom dispatch is a similar method which can be used to programatically
+ return any kind of response (not just XHTML), and is covered in more depth
+ in Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Custom-dispatch-func"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+A view function is a normal Scala method of type 
+\begin_inset Formula $()\Rightarrow scala.xml.NodeSeq$
+\end_inset
+
+
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+NodeSeq
+\end_layout
+
+\end_inset
+
+.
+ The 
+\family typewriter
+NodeSeq
+\family default
+ that's returned from a view is processed for template tags in the same
+ way that XML loaded from a static file would be.
+ As we showed in Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:The-Rendering-Process"
+
+\end_inset
+
+, there are two ways that a View can be invoked.
+ The first is by defining a partial function for 
+\family typewriter
+LiftRules.viewDispatch
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+
+\family typewriter
+viewDispatch
+\end_layout
+
+\end_inset
+
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+
+\family typewriter
+Views ! explicit dispatch
+\end_layout
+
+\end_inset
+
+
+\family default
+, which allows you to dispatch to any statically-available method (i.e.
+ on an 
+\family typewriter
+object
+\family default
+, not a 
+\family typewriter
+class
+\family default
+), or to a 
+\family typewriter
+LiftView
+\family default
+ (explained in a moment) object for any arbitrary request path.
+ The second way that a View can be invoked is by reflection: if the first
+ element of the request path matches the class name of the View (as defined
+ in Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Class-Resolution"
+
+\end_inset
+
+), then the second element is used to lookup the View function depending
+ on which trait the View class implements.
+ For performance reasons, explicit dispatch via 
+\family typewriter
+LiftRules.viewDispatch
+\family default
+ is recommended because reflection incurs a signficant cost for each reqeust.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Explicit-View-Dispatch"
+
+\end_inset
+
+ shows how we can define an RSS view as a feed using explicit dispatch.
+ Note that we use extraction on the requested path in this case to provide
+ account-specific feeds and a security token to prevent feed browsing.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Explicit View Dispatch
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Explicit-View-Dispatch"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// In Boot.boot:
+\end_layout
+
+\begin_layout Plain Layout
+
+LiftRules.viewDispatch.append {
+\end_layout
+
+\begin_layout Plain Layout
+
+  case List("Expenses", "recent", acctId, authToken) =>
+\end_layout
+
+\begin_layout Plain Layout
+
+    RSSView.recent(acctId, authToken)
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// Define the View object:
+\end_layout
+
+\begin_layout Plain Layout
+
+object RSSView {
+\end_layout
+
+\begin_layout Plain Layout
+
+  def recent(acctId : String, authToken : String)() : NodeSeq = {
+\end_layout
+
+\begin_layout Plain Layout
+
+     // User auth, account retrieval here
+\end_layout
+
+\begin_layout Plain Layout
+
+     ...
+\end_layout
+
+\begin_layout Plain Layout
+
+     <lift:surround with="rss" at="content">
+\end_layout
+
+\begin_layout Plain Layout
+
+       ...
+\end_layout
+
+\begin_layout Plain Layout
+
+     </lift:surround>
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If you want to use reflection for dispatch
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Views ! implicit dispatch
+\end_layout
+
+\end_inset
+
+ then there are two traits that you can use when implementing a view class:
+ one is the 
+\family typewriter
+LiftView
+\family default
+
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+LiftView
+\end_layout
+
+\end_inset
+
+ trait, the other is the 
+\family typewriter
+InsecureLiftView
+\family default
+
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+InsecureLiftView
+\end_layout
+
+\end_inset
+
+ trait, both under the 
+\family typewriter
+net.liftweb.http
+\family default
+ package.
+ As you may be able to tell from the names, we would prefer that you extend
+ the 
+\family typewriter
+LiftView
+\family default
+ trait.
+ The 
+\family typewriter
+InsecureLiftView
+\family default
+ determines method dispatch by turning a request path into a class and method
+ name.
+ For example, if we have a path 
+\family typewriter
+/MyStuff/enumerate
+\family default
+, then Lift will look for a class called 
+\family typewriter
+MyStuff
+\family default
+ in the view subpackage (class resolution is covered in Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Class-Resolution"
+
+\end_inset
+
+) and if it finds 
+\family typewriter
+MyStuff
+\family default
+ and it has a method called 
+\family typewriter
+enumerate
+\family default
+, then Lift will execute the 
+\family typewriter
+enumerate
+\family default
+ method and return its result to the user.
+ The main concern here is that Lift uses reflection
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+reflection
+\end_layout
+
+\end_inset
+
+ to get the method with 
+\family typewriter
+InsecureLiftView
+\family default
+, so it can access any method in the class, even ones that you don't intend
+ to make public.
+ A better way to invoke a View is to extend the 
+\family typewriter
+LiftView
+\family default
+ trait, which defines a dispatch partial function.
+ This dispatch function maps a string (the 
+\begin_inset Quotes eld
+\end_inset
+
+method name
+\begin_inset Quotes erd
+\end_inset
+
+) to a function that will return a 
+\family typewriter
+NodeSeq
+\family default
+.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Dispatch-in-LiftView"
+
+\end_inset
+
+ shows a custom 
+\family typewriter
+LiftView
+\family default
+ class where the path 
+\family typewriter
+/ExpenseView/enumerate
+\family default
+ will map to the 
+\family typewriter
+ExpenseView.doEnumerate
+\family default
+ method.
+ If a user attempts to go to 
+\family typewriter
+/ExpenseView/privateMethod
+\family default
+ they'll get a 404 because 
+\family typewriter
+privateMethod
+\family default
+ is not defined in the dispatch method.
+ If, however, our 
+\family typewriter
+ExpenseView
+\family default
+ class implemented the 
+\family typewriter
+InsecureLiftView
+\family default
+ trait and someone visited 
+\family typewriter
+/ExpenseView/privateMethod
+\family default
+, we would lose our hard drive (on Unix at least).
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Change this to be the RSS feed
+\end_layout
+
+\end_inset
+
+Dispatch in LiftView
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Dispatch-in-LiftView"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+class ExpenseView extends LiftView {
+\end_layout
+
+\begin_layout Plain Layout
+
+  override def dispatch = {
+\end_layout
+
+\begin_layout Plain Layout
+
+    case "enumerate" => doEnumerate _
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  def doEnumerate () : NodeSeq = {  
+\end_layout
+
+\begin_layout Plain Layout
+
+    ...
+\end_layout
+
+\begin_layout Plain Layout
+
+    <lift:surround with="default" at="content">
+\end_layout
+
+\begin_layout Plain Layout
+
+     { expenseItems.toTable }
+\end_layout
+
+\begin_layout Plain Layout
+
+    </lift:surround>
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  def privateMethod () : NodeSeq = {
+\end_layout
+
+\begin_layout Plain Layout
+
+    Runtime.getRuntime.exec("rm -rf /")
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+A major difference between Views and other programmatic rendering approaches
+ (such as Custom Dispatch) is that the 
+\family typewriter
+NodeSeq
+\family default
+ returned from the View method is processed for template tags including
+ 
+\family typewriter
+surrounds
+\family default
+ and 
+\family typewriter
+includes
+\family default
+, just as it would be for a snippet.
+ That means that you can use the full power of the templating system from
+ within your View, as shown in Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Dispatch-in-LiftView"
+
+\end_inset
+
+'s 
+\family typewriter
+doEnumerate
+\family default
+ method.
+\end_layout
+
+\begin_layout Standard
+Since you can choose not to include any of the pre-defined template XHTML,
+ you can easily generate any XML-based content, such as Atom or RSS feeds,
+ using a View.
+\end_layout
+
+\begin_layout Section
+Tags
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:ArchTags"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In the earlier sections on Templates and Views we briefly touched on some
+ of Lift's built-in tags, namely, 
+\family typewriter
+snippet
+\family default
+ and 
+\family typewriter
+surround
+\family default
+.
+ In this section we'll go into more detail on those tags as well as cover
+ the rest of Lift's tags.
+\end_layout
+
+\begin_layout Subsection
+a
+\end_layout
+
+\begin_layout Subsection
+bind
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+bind
+\end_layout
+
+\end_inset
+
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Tags ! bind
+\end_layout
+
+\end_inset
+
+
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:bind-tag"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+Usage: <lift:bind name=
+\begin_inset Quotes erd
+\end_inset
+
+binding_name
+\begin_inset Quotes erd
+\end_inset
+
+ />
+\end_layout
+
+\begin_layout Standard
+The bind tag is the counterpart to the surround tag: it specifies where
+ in the 
+\begin_inset Quotes eld
+\end_inset
+
+surrounding
+\begin_inset Quotes erd
+\end_inset
+
+ template the content will be placed.
+ An example is shown in Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Binding-in-Templates"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Binding in Templates
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Binding-in-Templates"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<html>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <body>
+\end_layout
+
+\begin_layout Plain Layout
+
+    <lift:bind name="content" />
+\end_layout
+
+\begin_layout Plain Layout
+
+  </body>
+\end_layout
+
+\begin_layout Plain Layout
+
+</html>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+bind-at
+\end_layout
+
+\begin_layout Subsection
+children
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Tags ! children
+\end_layout
+
+\end_inset
+
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+children
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+Usage: <lift:children>...multiple xml nodes here...</lift:children>
+\end_layout
+
+\begin_layout Standard
+The purpose of the 
+\family typewriter
+children
+\family default
+ tag is to allow you to create fragment templates with more than one root
+ element that still parse as valid XML.
+ For example, Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:A-Non-Conforming-XML"
+
+\end_inset
+
+ shows a template that we might want to embed into other templates.
+ The problem is that XML requires a single root element, and in this case
+ we have two.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+A Non-Conforming XML Fragment
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:A-Non-Conforming-XML"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<div>First Div</div>
+\end_layout
+
+\begin_layout Plain Layout
+
+<div>Second Div</div>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+By using the 
+\family typewriter
+<lift:children/>
+\family default
+ tag, as shown in Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:A-Conforming-XML"
+
+\end_inset
+
+, we have a valid XML file.
+ Lift essentially replaces the 
+\family typewriter
+<lift:children/>
+\family default
+ tag with its contents.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=XML"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+A Conforming XML Fragment
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:A-Conforming-XML"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<lift:children>
+\end_layout
+
+\begin_layout Plain Layout
+
+<div>First Div</div>
+\end_layout
+
+\begin_layout Plain Layout
+
+<div>Second Div</div>
+\end_layout
+
+\begin_layout Plain Layout
+
+</lift:children>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+comet
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Tags ! comet
+\end_layout
+
+\end_inset
+
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Comet
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+
+\family typewriter
+Usage: <lift:comet type="ClassName" name=
+\begin_inset Quotes erd
+\end_inset
+
+optional
+\begin_inset Quotes erd
+\end_inset
+
+/>
+\end_layout
+
+\begin_layout Standard
+The 
+\family typewriter
+comet
+\family default
+ tag embeds a Comet actor into your page.
+ The class of the Comet actor is specified by the 
+\family typewriter
+type
+\family default
+ attribute.
+ The 
+\family typewriter
+name
+\family default
+ attribute tells Lift to create a unique instance of the Comet actor; for
+ example, you could have one Comet actor for site updates and another for
+ admin messages.
+ The contents of the tag are used by the Comet actor to bind a response.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Ledger-Entry-Comet"
+
+\end_inset
+
+ shows an example of a Comet binding that displays expense entries as they're
+ added.
+ Comet is covered in more detail in Chapter 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "cha:AJAX-and-COMET"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "basicstyle={\footnotesize},language=Java,numbers=left,numberstyle={\tiny}"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Account Entry Comet
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Ledger-Entry-Comet"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<div class="accountUpdates">
+\end_layout
+
+\begin_layout Plain Layout
+
+  <lift:comet type="AccountMonitor">
+\end_layout
+
+\begin_layout Plain Layout
+
+    <ul><account:entries>
+\end_layout
+
+\begin_layout Plain Layout
+
+      <li><entry:time/> : <entry:user /> : <entry:amount /></li>
+\end_layout
+
+\begin_layout Plain Layout
+
+    </account:entries></ul>
+\end_layout
+
+\begin_layout Plain Layout
+
+  </lift:comet>
+\end_layout
+
+\begin_layout Plain Layout
+
+</div>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+As we mentioned in the 
+\family typewriter
+embed
+\family default
+ tag documentation, mixing Comet with AJAX responses can be a bit tricky
+ due to the embedded JavaScript that Comet uses.
+\end_layout
+
+\begin_layout Subsection
+CSS
+\end_layout
+
+\begin_layout Subsection
+embed
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+embed
+\end_layout
+
+\end_inset
+
+
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:embed-tag"
+
+\end_inset
+
+ 
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Tags ! embed
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+Usage:
+\family typewriter
+ <lift:embed what="template_name" />
+\end_layout
+
+\begin_layout Standard
+The 
+\family typewriter
+embed
+\family default
+ tag allows you to embed a template within another template.
+ This can be used to assemble your pages from multiple smaller templates,
+ and it also allows you to access templates from JavaScript commands (Chapter
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "cha:Lift-and-Javascript"
+
+\end_inset
+
+).
+ As with the 
+\family typewriter
+surround
+\family default
+ tag, the template name can be either the base filename or a fully-qualified
+ path.
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Box Shadowbox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "75col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+
+\size small
+Note that if you use the embed tag to access templates from within a JsCmd
+ (typically an AJAX call), any JavaScript in the embedded template won't
+ be executed.
+ This includes, but is not limited to, Comet widgets.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+form
+\end_layout
+
+\begin_layout Subsection
+HTML5
+\end_layout
+
+\begin_layout Subsection
+ignore
+\end_layout
+
+\begin_layout Subsection
+lazy-load
+\end_layout
+
+\begin_layout Subsection
+loc
+\end_layout
+
+\begin_layout Subsection
+Menu
+\end_layout
+
+\begin_layout Subsection
+Msgs
+\end_layout
+
+\begin_layout Subsection
+SkipDocType
+\end_layout
+
+\begin_layout Subsection
+snippet
+\end_layout
+
+\begin_layout Standard
+The snippet tag is covered in detail in Section 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "sec:The-Snippet-Tag"
+
+\end_inset
+
+, part of the chapter on snippets.
+\end_layout
+
+\begin_layout Subsection
+surround
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+surround
+\end_layout
+
+\end_inset
+
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Tags ! surround
+\end_layout
+
+\end_inset
+
+
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:surround-tag"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+Usage:
+\family typewriter
+ <lift:surround with="template_name" at=
+\begin_inset Quotes erd
+\end_inset
+
+binding
+\begin_inset Quotes erd
+\end_inset
+
+>
+\end_layout
+
+\begin_layout LyX-Code
+
+\family typewriter
+         children
+\end_layout
+
+\begin_layout LyX-Code
+
+\family typewriter
+       </lift:surround>
+\end_layout
+
+\begin_layout Standard
+The 
+\family typewriter
+surround
+\family default
+ tag surrounds the child nodes with the named template.
+ The child nodes are inserted into the named template at the binding point
+ specified by the 
+\family typewriter
+at
+\family default
+ parameter (we'll cover the bind tag in Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:bind-tag"
+
+\end_inset
+
+).
+ Typically, templates that will be used to surround other templates are
+ incomplete by themselves, so we usually store them in the 
+\family typewriter
+<app
+\begin_inset space ~
+\end_inset
+
+root>/templates-hidden
+\family default
+ subdirectory so that they can't be accessed directly.
+ Having said that, 
+\begin_inset Quotes eld
+\end_inset
+
+incomplete
+\begin_inset Quotes erd
+\end_inset
+
+ templates may be placed in any directory that templates would normally
+ go in.
+ The most common usage of 
+\family typewriter
+surround
+\family default
+ is to permit you to use a 
+\begin_inset Quotes eld
+\end_inset
+
+master
+\begin_inset Quotes erd
+\end_inset
+
+ template for your site CSS, menu, etc.
+ An example use of 
+\family typewriter
+surround
+\family default
+ is shown in Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Surrounding-your-page"
+
+\end_inset
+
+.
+ We'll show the counterpart master template in the section on the bind tag.
+ Note also that the surrounding template name can be either a fully-qualified
+ path (i.e.
+ 
+\begin_inset Quotes eld
+\end_inset
+
+/templates-hidden/default
+\begin_inset Quotes erd
+\end_inset
+
+), or just the base filename (
+\begin_inset Quotes eld
+\end_inset
+
+default
+\begin_inset Quotes erd
+\end_inset
+
+).
+ In the latter case, Lift will search all subdirectories of the app root
+ for the template.
+ By default, Lift will use 
+\begin_inset Quotes eld
+\end_inset
+
+/templates-hidden/default
+\begin_inset Quotes erd
+\end_inset
+
+ if you don't specify a 
+\family typewriter
+with
+\family default
+ attribute, so Listings 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Surrounding-your-page"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Surrounding-with-the-default-template"
+
+\end_inset
+
+ are equivalent.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "breaklines=true,language=XML"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Surrounding Your Page
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Surrounding-your-page"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<lift:surround with="default" at="content">
+\end_layout
+
+\begin_layout Plain Layout
+
+  <p>Welcome to PocketChange!</p>
+\end_layout
+
+\begin_layout Plain Layout
+
+</lift:surround>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Surrounding with the default template
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Surrounding-with-the-default-template"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<lift:surround at="content">
+\end_layout
+
+\begin_layout Plain Layout
+
+  <p>Welcome to PocketChange!</p>
+\end_layout
+
+\begin_layout Plain Layout
+
+</lift:surround>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Note that you can use multiple surround templates for different functionality,
+ and surrounds can be nested.
+ For example, you might want to have a separate template for your administrative
+ pages that adds a menu to your default template.
+ In that case, your 
+\family typewriter
+admin.html
+\family default
+ could look like Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Adding-an-Admin-menu"
+
+\end_inset
+
+.
+ As you can see, we've named our bind point in the admin template 
+\begin_inset Quotes eld
+\end_inset
+
+content
+\begin_inset Quotes erd
+\end_inset
+
+ so that we keep things consistent for the rest of our templates.
+ So if, for example, we were going to nest the template in Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Surrounding-your-page"
+
+\end_inset
+
+ above into the 
+\family typewriter
+admin.html
+\family default
+ template in Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Adding-an-Admin-menu"
+
+\end_inset
+
+, all we'd need to do is change it's 
+\family typewriter
+with
+\family default
+ attribute from 
+\begin_inset Quotes eld
+\end_inset
+
+default
+\begin_inset Quotes erd
+\end_inset
+
+ to 
+\begin_inset Quotes eld
+\end_inset
+
+admin.
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Adding an Admin Menu
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Adding-an-Admin-menu"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<lift:surround with="default" at="content">
+\end_layout
+
+\begin_layout Plain Layout
+
+  <lift:Admin.menu />
+\end_layout
+
+\begin_layout Plain Layout
+
+  <lift:bind name="content" />
+\end_layout
+
+\begin_layout Plain Layout
+
+</lift:surround>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Box Shadowbox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "75col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+
+\size small
+You cannot have a hidden template with the same name as a sub-directory
+ of your webapp directory.
+ For example, if you had an admin.html template in /templates-hidden, you
+ could not also have an admin directory.
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+tail
+\end_layout
+
+\begin_layout Subsection
+TestCond
+\end_layout
+
+\begin_layout Subsection
+with-param
+\end_layout
+
+\begin_layout Subsection
+with-resource-id
+\end_layout
+
+\begin_layout Subsection
+VersionInfo
+\end_layout
+
+\begin_layout Subsection
+XmlGroup
+\end_layout
+
+\begin_layout Section
+Head Merge
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Head-Merge"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Another feature of Lift's template processing is the ability to merge the
+ HTML 
+\family typewriter
+head
+\family default
+
+\begin_inset Index
+status collapsed
+
+\begin_layout Plain Layout
+head
+\end_layout
+
+\end_inset
+
+ element in a template with the 
+\family typewriter
+head
+\family default
+ element in the surrounding template.
+ In our example, Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Sample-template"
+
+\end_inset
+
+, notice that we've specified a 
+\family typewriter
+head
+\family default
+ tag inside the template.
+ Without the head merge, this 
+\family typewriter
+head
+\family default
+ tag would show up in the default template where our template gets bound.
+ Lift is smart about this, though, and instead takes the content of the
+ 
+\family typewriter
+head
+\family default
+ element and merges it into the outer template's 
+\family typewriter
+head
+\family default
+ element.
+ This means that you can use a 
+\family typewriter
+surround
+\family default
+ tag to keep a uniform default template, but still do things such as changing
+ the title of the page, adding scripts or special CSS, etc.
+ For example, if you have a table in a page that you'd like to style with
+ jQuery's TableSorter, you could add a head element to insert the appropriate
+ script:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Using Head Merge
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Using-Head-Merge"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<lift:surround with="default" at="foo">
+\end_layout
+
+\begin_layout Plain Layout
+
+<head><script src="/scripts/tablesorter.js" type="text/javascript" /><head>
+\end_layout
+
+\begin_layout Plain Layout
+
+...
+\end_layout
+
+\begin_layout Plain Layout
+
+</lift:surround>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In this manner, you'll import TableSorter for this template alone.
+\end_layout
+
+\end_body
+\end_document

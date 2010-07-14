@@ -281,7 +281,27 @@ GET
 \end_layout
 
 \begin_layout Description
-multipart The 
+multipart 
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Forms ! multipart
+\end_layout
+
+\end_inset
+
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Forms ! file upload
+\end_layout
+
+\end_inset
+
+The 
 \family typewriter
 multipart
 \family default
@@ -327,8 +347,17 @@ form
 \end_layout
 
 \begin_layout Description
-eager_eval The eager_eval attribute is a boolean (the default is false,
- specify 
+eager_eval 
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Snippets ! eager_eval
+\end_layout
+
+\end_inset
+
+The eager_eval attribute is a boolean (the default is false, specify 
 \begin_inset Quotes eld
 \end_inset
 
@@ -372,6 +401,16 @@ Snippet Dispatch
 \begin_inset CommandInset label
 LatexCommand label
 name "sub:Snippet-Dispatch"
+
+\end_inset
+
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Snippets ! Dispatch
+\end_layout
 
 \end_inset
 
@@ -941,6 +980,23 @@ DispatchSnippet
 
 \begin_layout Subsection
 Explicit Dispatch
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Snippets ! Explicit Dispatch
+\end_layout
+
+\end_inset
+
+
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Explicit-Dispatch"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -1431,6 +1487,16 @@ class Boot {
 
 \begin_layout Subsection
 Per-request Remapping
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Snippets ! Per-request remapping
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -1589,7 +1655,9 @@ Must revise from here down
 \end_layout
 
 \begin_layout Standard
-A snippet is a method that takes a single 
+Now that we've examined how Lift determines which snippet to execute, let's
+ look at what a snippet method actually does.
+ A snippet method is essentially a transform, taking a single 
 \family typewriter
 scala.xml.NodeSeq
 \family default
@@ -1603,7 +1671,7 @@ NodeSeq
 
 \end_inset
 
- argument and is expected to return a 
+ argument and returning a 
 \family typewriter
 NodeSeq
 \family default
@@ -1650,13 +1718,13 @@ reference "sub:Implicit-Dispatch-Via"
 \begin_layout Standard
 The argument passed to the snippet method is the XML content of the snippet
  tag.
- Because Lift processes starting with the outer tag and working in, the
- contents of the outer tag are processed 
+ Because Lift processes XML from the root element down to the child elements
+ (outside-in), the contents of the snippet tag aren't processed until 
 \emph on
 after
 \emph default
  the snippet method processes them.
- You may change the order of processing by specifying the 
+ You may reverse the order of processing by specifying the 
 \family typewriter
 eager_eval
 \family default
@@ -1669,72 +1737,21 @@ reference "sub:Eager-Eval"
 
 ).
  As an example, let's say we wanted a snippet that would output the current
- balance of our ledger.
- Listing 
+ balance of our ledger, shown in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "lst:a-simple-snippet"
+reference "lst:Returning-tags-snippet"
 
 \end_inset
 
- shows what our snippet method looks like.
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-lstparams "frame=single"
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-A Simple Snippet
-\begin_inset CommandInset label
-LatexCommand label
-name "lst:a-simple-snippet"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-class Ledger {
-\end_layout
-
-\begin_layout Plain Layout
-
-  def balance (content : NodeSeq) : NodeSeq = 
-\end_layout
-
-\begin_layout Plain Layout
-
-    Text(currentLedger.formattedBalance)
-\end_layout
-
-\begin_layout Plain Layout
-
-}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-We simply return an XML Text node with the formatted balance.
- Note that the XML that a snippet returns is itself processed recursively,
- so if your snippet instead looked like:
+.
+ We simply return an XML Text node with the formatted balance.
+ Note that the XML result from a snippet is itself processed recursively,
+ so the 
+\family typewriter
+lift:Util.time
+\family default
+ snippet will be processed after our snippet method returns.
 \end_layout
 
 \begin_layout Standard
@@ -1793,16 +1810,10 @@ class Ledger {
 \end_layout
 
 \begin_layout Standard
-then the 
-\family typewriter
-lift:Util.time
-\family default
- snippet will be processed as well after our snippet method returns.
- It is this hierarchical processing of template tags that makes Lift so
- flexible.
+It is this hierarchical processing of template tags that makes Lift so flexible.
  For those of you coming to Lift with some JSP experience, Lift is designed
- to let you write your own tag libraries, but libraries that are much more
- powerful and much simpler to use.
+ to let you write something similar to tag libraries, but that are much
+ more powerful and much simpler to use.
 \end_layout
 
 \begin_layout Subsection
@@ -1814,10 +1825,30 @@ name "sub:Binding-Values-in-snippets"
 \end_inset
 
 
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Binding
+\end_layout
+
+\end_inset
+
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Snippets ! binding
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
-So far we've only shown our snippets generating complete output and ignoring
+So far we've shown our snippets generating complete output and ignoring
  the input to the method.
  Lift actually provides some very nice facilities for using the input 
 \family typewriter
@@ -1829,7 +1860,6 @@ NodeSeq
 NodeSeq
 \family default
  consists of the child elements for the snippet tag in your template.
- That is, given a template containing
 \end_layout
 
 \begin_layout Standard
@@ -1878,7 +1908,15 @@ name "lst:Snippet-tag-children"
 \end_layout
 
 \begin_layout Standard
-Then the Ledger.balance method receives
+For example, given a template containing the snippet tag shown in Listing
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Snippet-tag-children"
+
+\end_inset
+
+, the Ledger.balance method receives
 \end_layout
 
 \begin_layout LyX-Code
@@ -1931,23 +1969,49 @@ ledger
 \end_layout
 
 \begin_layout Enumerate
-The NodeSeq that contains the tags you wish to bind
+The 
+\family typewriter
+NodeSeq
+\family default
+ that contains the tags you wish to bind
 \end_layout
 
 \begin_layout Enumerate
-One or more BindParam elements that map the tag name to a replacement value
+One or more 
+\family typewriter
+BindParam
+\family default
+ elements that map the tag name to a replacement value
 \end_layout
 
 \begin_layout Standard
-While you can create your own BindParam instances by hand, we generally
- recommend importing 
+While you can create your own 
+\family typewriter
+BindParam
+\family default
+ instances by hand, we generally recommend importing 
 \family typewriter
 Helpers._
 \family default
-, which among other things contains an implicit conversion from Pair to
- BindParam.
+, which among other things contains a convenient implicit conversion to
+ BindParam using the 
+\begin_inset Quotes eld
+\end_inset
+
+->
+\begin_inset Quotes erd
+\end_inset
+
+ operator.
  With this knowledge in hand, we can change our previous definition of the
- balance method to that in Listing 
+ balance method in Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Returning-tags-snippet"
+
+\end_inset
+
+ to that in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Binding-the-ledger-balance"
@@ -2052,7 +2116,26 @@ reference "sec:Handling-XHTML-Attributes"
 \end_inset
 
  for more details on how you manipulate attributes in bindings, including
- how you can retain attributes on binding elements from your templates.
+ how you can retain attributes on binding elements from your templates by
+ using the 
+\begin_inset Quotes eld
+\end_inset
+
+-%>
+\begin_inset Quotes erd
+\end_inset
+
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Attributes ! -%> operator
+\end_layout
+
+\end_inset
+
+ binding operator instead.
 \end_layout
 
 \begin_layout Subsection
@@ -2064,19 +2147,57 @@ name "sub:Stateless-versus-Stateful"
 \end_inset
 
 
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+StatefulSnippet
+\end_layout
+
+\end_inset
+
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Snippets ! stateful vs stateless
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
 The lifecycle of a snippet is stateless by default.
  That means that for each request, Lift creates a new instance of the snippet
- class to execute.
+ class to execute (or uses the same staic method if using explicit dispatch,
+ Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Explicit-Dispatch"
+
+\end_inset
+
+).
  Any changes you make to instance variables will be discarded after the
  request is processed.
  If you want to keep some state around, you have a couple of options:
 \end_layout
 
 \begin_layout Itemize
-Store the state in a cookie (Section 
+Store the state in a cookie
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+cookie
+\end_layout
+
+\end_inset
+
+ (Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Cookies"
@@ -2091,7 +2212,21 @@ reference "sec:Cookies"
 \end_layout
 
 \begin_layout Itemize
-Store the state in a SessionVar (Section 
+Store the state in a 
+\family typewriter
+SessionVar
+\family default
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+SessionVar
+\end_layout
+
+\end_inset
+
+ (Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Session-and-Request"
@@ -2103,11 +2238,25 @@ reference "sec:Session-and-Request"
  adding and removing the session data if you don't want it around for the
  duration of the session.
  As with a cookie, it is global, which means that it will be the same for
- all snippet instances.
+ all snippet instances for a given session.
 \end_layout
 
 \begin_layout Itemize
-Pass the state around in a RequestVar by setting 
+Pass the state around in a 
+\family typewriter
+RequestVar
+\family default
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+RequestVar
+\end_layout
+
+\end_inset
+
+ by setting 
 \begin_inset Quotes eld
 \end_inset
 
@@ -2125,7 +2274,7 @@ SHtml.link
 S.redirectTo
 \family default
 , etc).
- We'll cover this technique in Section 
+ We cover this technique in Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Session-and-Request"
@@ -2136,39 +2285,78 @@ reference "sec:Session-and-Request"
 \end_layout
 
 \begin_layout Itemize
-Use a StatefulSnippet subclass.
+Use a 
+\family typewriter
+StatefulSnippet
+\family default
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+StatefulSnippet
+\end_layout
+
+\end_inset
+
+ subclass.
  This is ideal for small, conversational state, such as a form that spans
  multiple pages or for a page where you have multiple variables that you
  want to be able to tweak individually.
 \end_layout
 
 \begin_layout Standard
-Using a StatefulSnippet is very similar to using a normal snippet but with
- the addition of a few mechanisms.
- First, the StatefulSnippet trait defines a 
+Using a 
+\family typewriter
+StatefulSnippet
+\family default
+ is very similar to using a normal snippet but with the addition of a few
+ mechanisms.
+ First, the 
+\family typewriter
+State
+\family default
+fulSnippet trait extends 
+\family typewriter
+DispatchSnippet
+\family default
+ (see Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Implicit-Dispatch-Via"
+
+\end_inset
+
+), allowing you to define which methods handle which snippets based on the
+ 
 \family typewriter
 dispatch
 \family default
- method of type 
+ method.
+ Because Scala allows 
 \family typewriter
-PartialFunction[String, () => NodeSeq]
+def
 \family default
-.
- This lets you define which methods handle which snippets.
- Because the 
+s to be implemented by 
 \family typewriter
-dispatch
+var
 \family default
- method in the base DispatchSnippet can be overridden with a var, it also
- lets you redefine this behavior as a result of snippet processing.
+s in subclasses, we can redefine the dispatch behavior as a result of snippet
+ processing.
  
 \end_layout
 
 \begin_layout Standard
-Another thing to remember when using StatefulSnippets is that when you render
- a form, a hidden field is added to the form that permits the same instance
- of the StatefulSnippet that created the form to be the target of the form
- submission.
+Another thing to remember when using 
+\family typewriter
+StatefulSnippet
+\family default
+s is that when you render a form, a hidden field is added to the form that
+ permits the same instance of the 
+\family typewriter
+StatefulSnippet
+\family default
+ that created the form to be the target of the form submission.
  If you need to link to a different page, but would like the same snippet
  instance to handle snippets on that page, use the 
 \family typewriter
@@ -2178,7 +2366,10 @@ StatefulSnippet.link
 \family typewriter
 SHtml.link
 \family default
-); similarly, if you need to redirect to a different page, the StatefulSnippet
+); similarly, if you need to redirect to a different page, the 
+\family typewriter
+StatefulSnippet
+\family default
  trait defines a 
 \family typewriter
 redirectTo
@@ -2190,14 +2381,27 @@ redirectTo
 
 \begin_layout Standard
 When might you use a stateful snippet? Consider a multi-part form where
- you'd like to have a user enter data over several pages.
+ you'd like to have a user enter data over several pages
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Might need a better example now that we have Screen/Wizard
+\end_layout
+
+\end_inset
+
+.
  You'll want the application to maintain the previously entered data while
  you validate the current entry, but you don't want to have to deal with
  a lot of hidden form variables.
- Using a StatefulSnippet instance greatly simplifies writing the snippet
- because you can keep all of your pertinent information around as instance
- variables instead of having to insert and extract them from every request,
- link, etc.
+ Using a 
+\family typewriter
+StatefulSnippet
+\family default
+ instance greatly simplifies writing the snippet because you can keep all
+ of your pertinent information around as instance variables instead of having
+ to insert and extract them from every request, link, etc.
 \end_layout
 
 \begin_layout Standard
@@ -2211,7 +2415,20 @@ reference "lst:Using-a-StatefulSnippet"
  shows an example of a stateful snippet that handles the above example.
  Note that for this example, the URL (and therefore, the template) don't
  change between pages.
- The template we use is shown in Listing .
+ The template we use is shown in Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:The-StatefulSnippet-Example"
+
+\end_inset
+
+.
+ Remember to call 
+\family typewriter
+unregisterThisSnippet()
+\family default
+ when you're finished with your workflow in order to stop the current instance
+ from being used.
 \end_layout
 
 \begin_layout Standard
@@ -2247,7 +2464,7 @@ name "lst:Using-a-StatefulSnippet"
 
 \begin_layout Plain Layout
 
-import _root_.scala.xml.Text
+import scala.xml.Text
 \end_layout
 
 \begin_layout Plain Layout
@@ -2312,17 +2529,7 @@ class BridgeKeeper extends StatefulSnippet {
 
 \begin_layout Plain Layout
 
-  var name = ""
-\end_layout
-
-\begin_layout Plain Layout
-
-  var quest = ""
-\end_layout
-
-\begin_layout Plain Layout
-
-  var color = ""
+  var (name,quest,color) = ("","","")
 \end_layout
 
 \begin_layout Plain Layout
@@ -2674,6 +2881,163 @@ name "lst:The-StatefulSnippet-Example"
 
 \end_layout
 
+\begin_layout Standard
+If you're using implicit dispatch (Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Implicit-Dispatch-Via"
+
+\end_inset
+
+), then you're done.
+ If you want to use explicit dispatch
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Snippets ! explicit dispatch with StatefulSnippet
+\end_layout
+
+\end_inset
+
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+StatefulSnippet ! explicit dispatch
+\end_layout
+
+\end_inset
+
+, however, you need to do a little more work than usual in the 
+\family typewriter
+LiftRules.snippetDispatch
+\family default
+ setup.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Explicit-Dispatch-with-stateful"
+
+\end_inset
+
+ shows how we can bind our own StatefulSnippet classes without using reflection.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Explicit Dispatch with Stateful Snippets
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Explicit-Dispatch-with-stateful"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// In your boot method:
+\end_layout
+
+\begin_layout Plain Layout
+
+LiftRules.snippetDispatch.append {
+\end_layout
+
+\begin_layout Plain Layout
+
+  // S.snippetForClass checks to see if an instance has already
+\end_layout
+
+\begin_layout Plain Layout
+
+  // registered.
+ This is the case after form submission or when
+\end_layout
+
+\begin_layout Plain Layout
+
+  // we use the StatefulSnippet.link or .redirectTo methods
+\end_layout
+
+\begin_layout Plain Layout
+
+  case "BridgeKeeper" => S.snippetForClass("TestHello") openOr {
+\end_layout
+
+\begin_layout Plain Layout
+
+    // If we haven't already registered an instance, create one
+\end_layout
+
+\begin_layout Plain Layout
+
+    val inst = new com.test.TestHello
+\end_layout
+
+\begin_layout Plain Layout
+
+    // The name is what Lift uses to locate an instance (S.snippetForClass)
+\end_layout
+
+\begin_layout Plain Layout
+
+    // We need to add it so that the Stateful callback functions can
+\end_layout
+
+\begin_layout Plain Layout
+
+    // self-register
+\end_layout
+
+\begin_layout Plain Layout
+
+    inst.addName("TestHello")
+\end_layout
+
+\begin_layout Plain Layout
+
+    // Register this instance for the duration of the request
+\end_layout
+
+\begin_layout Plain Layout
+
+    S.overrideSnippetForClass("TestHello", inst)
+\end_layout
+
+\begin_layout Plain Layout
+
+    inst
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Subsection
 Eager Evaluation
 \begin_inset CommandInset label
@@ -2729,8 +3093,37 @@ true
 \end_layout
 
 \begin_layout Standard
-This is especially useful if you're using an embedded template (Section
- 
+This is especially useful if you're using an embedded
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+embed
+\end_layout
+
+\end_inset
+
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Templates ! embedded
+\end_layout
+
+\end_inset
+
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Tags ! embed
+\end_layout
+
+\end_inset
+
+ template (Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sub:embed-tag"
@@ -2785,7 +3178,11 @@ Hello.world
 \family typewriter
 <hello:time />
 \family default
- XML tags as its NodeSeq input.
+ XML tags as its 
+\family typewriter
+NodeSeq
+\family default
+ input.
  If the 
 \family typewriter
 eager_eval
@@ -2794,7 +3191,7 @@ eager_eval
 \family typewriter
 <lift:embed />
 \family default
- tag.
+ tag that will be processed after it returns.
 \end_layout
 
 \begin_layout Standard
@@ -2905,6 +3302,399 @@ Add example of same snippet on multiple pages.
 \end_inset
 
 
+\end_layout
+
+\begin_layout Section
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Handling-XHTML-Attributes"
+
+\end_inset
+
+Handling XHTML Attributes in Snippets
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Attributes
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+It's a common requirement that elements contain XHTML attributes to control
+ things like style, provide an id, register javascript event handlers, and
+ other functionality.
+ Lift provides two main approaches to applying attributes to elements either
+ in your snippet code or directly in the XHTML template.
+\end_layout
+
+\begin_layout Subsection
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Direct-attr-manip"
+
+\end_inset
+
+Direct Manipulation in Code
+\end_layout
+
+\begin_layout Standard
+You can apply attributes directly to XHTML elements using the 
+\begin_inset Quotes eld
+\end_inset
+
+%
+\begin_inset Quotes erd
+\end_inset
+
+ operator
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Attributes ! % operator
+\end_layout
+
+\end_inset
+
+ to apply a
+\begin_inset Newline linebreak
+\end_inset
+
+
+\family typewriter
+scala.xml.UnprefixedAttribute
+\family default
+ instance
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+there's a corresponding 
+\family typewriter
+PrefixedAttribute
+\family default
+ as well
+\end_layout
+
+\end_inset
+
+ to an element.
+ Lift's 
+\family typewriter
+net.liftweb.util.Helpers
+\family default
+ trait contains an implicit conversion from a 
+\family typewriter
+Pair[String,_]
+\family default
+ to an 
+\family typewriter
+UnprefixedAttribute
+\family default
+ called 
+\family typewriter
+pairToUnprefixed
+\family default
+ that allows you to use a simpler syntax.
+ You may chain invocations of 
+\begin_inset Quotes eld
+\end_inset
+
+%
+\begin_inset Quotes erd
+\end_inset
+
+ to apply multiple attributes.
+ For example, Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Applying-Attributes-percent"
+
+\end_inset
+
+ shows how you can apply an 
+\begin_inset Quotes eld
+\end_inset
+
+id
+\begin_inset Quotes erd
+\end_inset
+
+ and 
+\begin_inset Quotes eld
+\end_inset
+
+class
+\begin_inset Quotes erd
+\end_inset
+
+ attribute to a text box and to a normal paragraph.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+val myInput = SHtml.text("", processText(_)) % ("id" -> "inputField") % 
+\end_layout
+
+\begin_layout Plain Layout
+
+  ("class" -> "highlighted")
+\end_layout
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Applying-Attributes-percent"
+
+\end_inset
+
+Applying Attributes with 
+\family typewriter
+%
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Box Shadowbox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "75col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+Note that the % metadata mechanism is actually part of the Scala XML library.
+ Specifically, 
+\family typewriter
+scala.xml.Elem
+\family default
+ has a 
+\family typewriter
+%
+\family default
+ method that allows the user to update the attributes on a given XML element
+ by passing in a 
+\family typewriter
+scala.xml.UnprefixedAttribute
+\family default
+.
+ We suggest reading more about this in the Scala API documents, or in the
+ Scala XML docbook at 
+\begin_inset CommandInset href
+LatexCommand href
+target "http://burak.emir.googlepages.com/scalaxbook.docbk.html"
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:XHTML-Attribute-Pass-through"
+
+\end_inset
+
+XHTML Attribute Pass-through
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Attributes ! binding
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The second main approach to modifying XHTML attributes is to specify them
+ directly in your templates.
+ This has the benefit of allowing your template designers to directly manipulate
+ things like style-related attributes and keeping the markup and the logic
+ separate.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Snippet-mixin-attributes"
+
+\end_inset
+
+ shows how you can utilize the 
+\begin_inset Quotes eld
+\end_inset
+
+-%>
+\begin_inset Quotes erd
+\end_inset
+
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Attributes ! -%> operator
+\end_layout
+
+\end_inset
+
+ binding operator instead of 
+\begin_inset Quotes eld
+\end_inset
+
+->
+\begin_inset Quotes erd
+\end_inset
+
+ to preserve attributes.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Snippet mixin attributes 
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Snippet-mixin-attributes"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// the markup
+\end_layout
+
+\begin_layout Plain Layout
+
+<lift:Ledger.balance>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <ledger:time id="myId"/>
+\end_layout
+
+\begin_layout Plain Layout
+
+</lift:Ledger.balance>
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// The snippet class
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+class Ledger {
+\end_layout
+
+\begin_layout Plain Layout
+
+  def balance (content : NodeSeq ) : NodeSeq = {
+\end_layout
+
+\begin_layout Plain Layout
+
+    bind ("ledger", content,
+\end_layout
+
+\begin_layout Plain Layout
+
+          "time" -%> <span>{(new java.util.Date).toString}</span>)
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The resulting node will be something like
+\end_layout
+
+\begin_layout LyX-Code
+
+\family typewriter
+<span id=
+\begin_inset Quotes erd
+\end_inset
+
+myId
+\begin_inset Quotes erd
+\end_inset
+
+>Sat Mar 28 16:43:48 EET 2009</span>
 \end_layout
 
 \end_body

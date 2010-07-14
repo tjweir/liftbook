@@ -841,6 +841,16 @@ woohoo.
 \end_inset
 
 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Discuss toForm here
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -1629,6 +1639,16 @@ keys
 \family default
  property of the Map to generate the list of options.
  
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Discuss the toForm method here.
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard

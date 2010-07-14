@@ -114,6 +114,10 @@ Exploring Lift
 \end_layout
 
 \begin_layout Author
+Lift 2.0 Edition
+\end_layout
+
+\begin_layout Author
 Written by 
 \end_layout
 
@@ -274,6 +278,16 @@ filename "chap-demoapp.lyx"
 \begin_inset CommandInset include
 LatexCommand include
 filename "chap-lift_architecture.lyx"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand include
+filename "chap-template_xhtml.lyx"
 
 \end_inset
 
