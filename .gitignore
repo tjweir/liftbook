@@ -18,3 +18,5 @@ master/
 *.out
 *.toc
 *pk
+*.ilg
+*.ind

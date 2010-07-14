@@ -6,7 +6,7 @@ html	: master.tex master.aux
 	
 pdf	: master.aux
 
-master.pdf	: master.aux
+master.pdf	: master.aux master.ind
 
 master.tex	: *.lyx
 	@echo [Exporting PDFLaTeX]
@@ -17,5 +17,7 @@ master.aux	: master.tex
 	@bash -c "while pdflatex master.tex && grep -q \"Rerun to get cross-references right\" master.log ; do echo \"  Rebuilding references\" ; done"
 	@echo [Built PDF]
 
+master.ind	: master.idx
+	makeindex master.idx
 clean:
 	rm -f *.tex images/*.eps *.toc *.aux *.dvi *.idx *.lof *.log *.out *.toc *.lol
