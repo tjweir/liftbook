@@ -109,7 +109,7 @@ name "sec:Templates"
 \begin_layout Standard
 Templates
 \begin_inset Index
-status collapsed
+status open
 
 \begin_layout Plain Layout
 Templates
@@ -288,7 +288,7 @@ reference "sec:ArchTags"
 \family typewriter
 <lift:surround>
 \begin_inset Index
-status collapsed
+status open
 
 \begin_layout Plain Layout
 lift:surround
@@ -342,8 +342,6 @@ LiftRules.viewDispatch
 status open
 
 \begin_layout Plain Layout
-
-\family typewriter
 viewDispatch
 \end_layout
 
@@ -354,9 +352,7 @@ viewDispatch
 status open
 
 \begin_layout Plain Layout
-
-\family typewriter
-Views ! explicit dispatch
+Views ! Explicit dispatch
 \end_layout
 
 \end_inset
@@ -430,7 +426,7 @@ reference "cha:Internationalization"
  In addition to normal templates, your application can make use of hidden
  templates
 \begin_inset Index
-status collapsed
+status open
 
 \begin_layout Plain Layout
 hidden templates
@@ -1066,7 +1062,7 @@ A view function is a normal Scala method of type
 
 
 \begin_inset Index
-status collapsed
+status open
 
 \begin_layout Plain Layout
 NodeSeq
@@ -1096,8 +1092,6 @@ LiftRules.viewDispatch
 status open
 
 \begin_layout Plain Layout
-
-\family typewriter
 viewDispatch
 \end_layout
 
@@ -1108,9 +1102,7 @@ viewDispatch
 status open
 
 \begin_layout Plain Layout
-
-\family typewriter
-Views ! explicit dispatch
+Views ! Explicit dispatch
 \end_layout
 
 \end_inset
@@ -1274,7 +1266,17 @@ If you want to use reflection for dispatch
 status open
 
 \begin_layout Plain Layout
-Views ! implicit dispatch
+Views ! Implicit dispatch
+\end_layout
+
+\end_inset
+
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Views ! Reflection dispatch
 \end_layout
 
 \end_inset

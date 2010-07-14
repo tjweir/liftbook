@@ -5,6 +5,7 @@ html	: master.tex master.aux
 	latex2html -split 3 -local_icons master.tex
 	
 pdf	: master.aux
+
 master.pdf	: master.aux
 
 master.tex	: *.lyx

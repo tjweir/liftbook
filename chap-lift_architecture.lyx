@@ -125,7 +125,7 @@ web.xml
 \family default
 
 \begin_inset Index
-status collapsed
+status open
 
 \begin_layout Plain Layout
 web.xml
@@ -366,8 +366,6 @@ bootloader
 status open
 
 \begin_layout Plain Layout
-
-\family typewriter
 bootloader
 \end_layout
 
@@ -946,8 +944,6 @@ LiftRules.viewDispatch
 status open
 
 \begin_layout Plain Layout
-
-\family typewriter
 viewDispatch
 \end_layout
 
@@ -958,9 +954,7 @@ viewDispatch
 status open
 
 \begin_layout Plain Layout
-
-\family typewriter
-Views ! explicit dispatch
+Views ! Explicit dispatch
 \end_layout
 
 \end_inset

@@ -809,7 +809,7 @@ an unchecked checkbox is not actually submitted as part of a form
  outlined in Section 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "sub:Direct-Manipulation-in"
+reference "sub:Direct-attr-manip"
 
 \end_inset
 
