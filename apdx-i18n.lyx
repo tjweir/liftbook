@@ -434,6 +434,136 @@ src/main/resources
 \end_layout
 
 \begin_layout Section
+An Important Note on Resource Bundle Resolution
+\end_layout
+
+\begin_layout Standard
+Per Java’s documentation on 
+\begin_inset CommandInset href
+LatexCommand href
+name "ResourceBundle"
+target "http://java.sun.com/javase/6/docs/api/java/util/ResourceBundle.html#getBundle(java.lang.String,%20java.util.Locale,%20java.lang.ClassLoader)"
+
+\end_inset
+
+, resolution of property files is done in this order:
+\end_layout
+
+\begin_layout Itemize
+baseName + “_” + language1 + “_” + country1 + “_” + variant1
+\end_layout
+
+\begin_layout Itemize
+baseName + “_” + language1 + “_” + country1
+\end_layout
+
+\begin_layout Itemize
+baseName + “_” + language1
+\end_layout
+
+\begin_layout Itemize
+baseName + “_” + language2 + “_” + country2 + “_” + variant2
+\end_layout
+
+\begin_layout Itemize
+baseName + “_” + language2 + “_” + country2
+\end_layout
+
+\begin_layout Itemize
+baseName + “_” + language2
+\end_layout
+
+\begin_layout Itemize
+baseName
+\end_layout
+
+\begin_layout Standard
+where “language1”, “country1”, and “variant1” are the requested locale parameter
+s, and “language2”, “country2”, “variant2” are the default locale parameters.
+\end_layout
+
+\begin_layout Standard
+For example, if the default locale for your computer is “en_GB”, someone
+ requests a page for “ja”, and you have the following property files defined:
+\end_layout
+
+\begin_layout Itemize
+Messages_fr_FR.properties
+\end_layout
+
+\begin_layout Itemize
+Messages_en_GB.properties
+\end_layout
+
+\begin_layout Itemize
+Messages.properties
+\end_layout
+
+\begin_layout Standard
+then the 
+\series bold
+Messages_en_GB.properties
+\series default
+ file, and not 
+\series bold
+Messages.properties
+\series default
+ will be used.
+ If you want to change this behavior so that any undefined locales utilize
+ the base properties file, set your default Locale to the ROOT locale in
+ your 
+\family typewriter
+Boot.scala
+\family default
+ with the code shown in Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Setting-the-ROOT-locale"
+
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Setting-the-ROOT-locale"
+
+\end_inset
+
+Setting the ROOT Default Locale
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+import java.util.Locale
+\end_layout
+
+\begin_layout Plain Layout
+Locale.setDefault(Locale.ROOT)
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Section
 Localized Strings in Scala Code
 \begin_inset CommandInset label
 LatexCommand label
@@ -605,7 +735,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 A Utility Method for Localizing Strings
 \begin_inset CommandInset label
 LatexCommand label
