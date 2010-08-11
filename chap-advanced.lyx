@@ -732,9 +732,10 @@ wrapping
 \end_layout
 
 \begin_layout Enumerate
-Check the user-defined dispatch functions that are set per-session (
+Check the user-defined dispatch functions that are set per-session (see
+ 
 \family typewriter
-see S.addHighLevelSessionDispatcher
+S.addHighLevelSessionDispatcher
 \family default
 ).
  This is similar to 

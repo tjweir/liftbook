@@ -1864,17 +1864,124 @@ PartialFunction[Req,
 \family typewriter
 Req
 \family default
- is similar to the RewriteRequest case class: it provides the path as a
- List[String], the suffix of the request, and the RequestType.
- If you attach the dispatch function via 
+ is similar to the 
+\family typewriter
+RewriteRequest
+\family default
+ case class: it provides the path as a 
+\family typewriter
+List[String]
+\family default
+, the suffix of the request, and the 
+\family typewriter
+RequestType
+\family default
+.
+ There are three ways that you can set up a custom dispatch function:
+\end_layout
+
+\begin_layout Enumerate
+Globally, via 
 \family typewriter
 LiftRules.dispatch
 \family default
- then you'll have full access to the S object and LiftSession; if you use
-\begin_inset Newline linebreak
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+LiftRules ! dispatch
+\end_layout
+
 \end_inset
 
 
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Custom dispatch ! stateful
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Globally, via 
+\family typewriter
+LiftRules.statelessDispatchTable
+\family default
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+LiftRules ! statelessDispatchTable
+\end_layout
+
+\end_inset
+
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Custom dispatch ! stateless
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Per-Session, via 
+\family typewriter
+S.addHighLevelSessionDispatcher
+\family default
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+S ! addHighLevelSessionDispatcher
+\end_layout
+
+\end_inset
+
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Custom dispatch ! per-session
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If you attach the dispatch function via 
+\family typewriter
+LiftRules.dispatch
+\family default
+ or 
+\family typewriter
+S.addHighLevelSessionDispatcher
+\family default
+, then you'll have full access to the 
+\family typewriter
+S
+\family default
+ object and 
+\family typewriter
+LiftSession
+\family default
+; if you use 
 \family typewriter
 LiftRules.statelessDispatchTable
 \family default
