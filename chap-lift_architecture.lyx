@@ -2309,6 +2309,19 @@ reference "sec:LiftResponse-in-Detail"
 .
 \end_layout
 
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Make note of multipart mime handling, Req.uploadedFiles
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Section
 HTTP Redirects 
 \begin_inset CommandInset label

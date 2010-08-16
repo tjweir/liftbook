@@ -1139,6 +1139,50 @@ reference "sub:Class-Resolution"
 LiftRules.viewDispatch
 \family default
  is recommended because reflection incurs a signficant cost for each reqeust.
+ When you use 
+\family typewriter
+LiftRules.viewDispatch
+\family default
+, you need to provide an instance of 
+\family typewriter
+scala.lang.Either
+\family default
+ to differentiate the dispatch type: a 
+\family typewriter
+scala.lang.Left
+\family default
+ indicates a method returning a 
+\family typewriter
+Box[NodeSeq]
+\family default
+, while a 
+\family typewriter
+scala.lang.Right
+\family default
+ indicates a 
+\family typewriter
+LiftView
+\family default
+ object.
+ If you want to dispatch a request to a 
+\family typewriter
+LiftView
+\family default
+ object, the match in the 
+\family typewriter
+LiftRules.viewDispatch
+\family default
+ is made on all path components except the last one (e.g.
+ 
+\family typewriter
+List.init
+\family default
+), and that object's 
+\family typewriter
+dispatch
+\family default
+ method is checked against the last component of the path to further determine
+ which method on the object will handle the request.
  Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -1188,12 +1232,48 @@ LiftRules.viewDispatch.append {
 
 \begin_layout Plain Layout
 
+  // This is an explicit dispatch to a particular method based on the path
+\end_layout
+
+\begin_layout Plain Layout
+
   case List("Expenses", "recent", acctId, authToken) =>
 \end_layout
 
 \begin_layout Plain Layout
 
-    RSSView.recent(acctId, authToken)
+    Left(() => Full(RSSView.recent(acctId, authToken)))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  // This is a dispatch via the same LiftView object.
+ The path
+\end_layout
+
+\begin_layout Plain Layout
+
+  // "/Site/news" will match this dispatch because of our dispatch
+\end_layout
+
+\begin_layout Plain Layout
+
+  // method defined in RSSView.
+ The path "/Site/stuff/news" will not
+\end_layout
+
+\begin_layout Plain Layout
+
+  // match because the dispatch will be attempted on List("Site","stuff")
+\end_layout
+
+\begin_layout Plain Layout
+
+  case List("Site") => Right(RSSView)
 \end_layout
 
 \begin_layout Plain Layout
@@ -1212,7 +1292,26 @@ LiftRules.viewDispatch.append {
 
 \begin_layout Plain Layout
 
-object RSSView {
+object RSSView extends LiftView {
+\end_layout
+
+\begin_layout Plain Layout
+
+  def dispatch = {
+\end_layout
+
+\begin_layout Plain Layout
+
+    case "news" => siteNews
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
 \end_layout
 
 \begin_layout Plain Layout
@@ -1248,6 +1347,21 @@ object RSSView {
 \begin_layout Plain Layout
 
   }
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  // Display a general RSS feed for the entire site
+\end_layout
+
+\begin_layout Plain Layout
+
+  def siteNews() : NodeSeq = { ...
+ }
 \end_layout
 
 \begin_layout Plain Layout
