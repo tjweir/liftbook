@@ -3318,6 +3318,16 @@ Attributes
 \end_inset
 
 
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+XML ! attribute handling
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -3538,6 +3548,16 @@ Attributes ! binding
 \end_inset
 
 
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+XML ! preserving attributes
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -3710,7 +3730,17 @@ _id_>
 \begin_inset Quotes erd
 \end_inset
 
- operator, which uses the element's name as its 
+ 
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+_id_> operator
+\end_layout
+
+\end_inset
+
+operator, which uses the element's name as its 
 \begin_inset Quotes eld
 \end_inset
 

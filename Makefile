@@ -4,9 +4,9 @@ html	: master.tex master.aux
 	@echo [Building HTML]
 	latex2html -split 3 -local_icons master.tex
 	
-pdf	: master.aux
+pdf	: master.pdf
 
-master.pdf	: master.aux master.ind
+master.pdf	: master.aux
 
 master.tex	: *.lyx
 	@echo [Exporting PDFLaTeX]
@@ -14,10 +14,10 @@ master.tex	: *.lyx
 
 master.aux	: master.tex
 	@echo [Building PDF]
+	pdflatex master.tex
+	makeindex master.idx
 	@bash -c "while pdflatex master.tex && grep -q \"Rerun to get cross-references right\" master.log ; do echo \"  Rebuilding references\" ; done"
 	@echo [Built PDF]
 
-master.ind	: master.idx
-	makeindex master.idx
 clean:
 	rm -f *.tex images/*.eps *.toc *.aux *.dvi *.idx *.lof *.log *.out *.toc *.lol
