@@ -1672,7 +1672,7 @@ class AddEntry extends StatefulSnippet {
 
 \begin_layout Plain Layout
 
-          error("We're going to need at least one tag.")
+          S.error("We're going to need at least one tag.")
 \end_layout
 
 \begin_layout Plain Layout
@@ -1821,7 +1821,7 @@ class AddEntry extends StatefulSnippet {
 
 \begin_layout Plain Layout
 
-              notice("Entry added!")
+              S.notice("Entry added!")
 \end_layout
 
 \begin_layout Plain Layout

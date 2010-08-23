@@ -1549,16 +1549,6 @@ name "lst:Using-multiselect"
 
 \begin_layout Plain Layout
 
-import scala.collection.mutable.Set
-\end_layout
-
-\begin_layout Plain Layout
-
-...
-\end_layout
-
-\begin_layout Plain Layout
-
 def mySnippet ...
  {
 \end_layout
@@ -1575,7 +1565,7 @@ def mySnippet ...
 
 \begin_layout Plain Layout
 
-  val updated = Set.empty[Category]
+  var updated = Set.empty[Category]
 \end_layout
 
 \begin_layout Plain Layout
@@ -2002,6 +1992,26 @@ name "sec:File-Uploads"
 \end_inset
 
 
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+File uploads
+\end_layout
+
+\end_inset
+
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Forms ! File uploads
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -2141,11 +2151,73 @@ fileUpload
 FileParamHolder
 \family default
 , a special case class that contains information about the uploaded file.
- Unlike some other web frameworks, Lift doesn't store the file on the local
- system and then give you the filename; instead, Lift reads the whole file
- into memory and gives you the array of bytes to work with.
- Usually this isn't an issue, since the web server itself will have meaningful
- limits on POST sizes.
+ The FileParamHolder case class has four parameters:
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+
+\family typewriter
+name
+\family default
+ The name of the form field that this file is associated with, as sent by
+ the client
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+
+\family typewriter
+mimeType
+\family default
+ The mime type as sent by the client
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+
+\family typewriter
+filename
+\family default
+ The filename as sent by the client
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+
+\family typewriter
+file
+\family default
+ An 
+\family typewriter
+Array[Byte]
+\family default
+ containing the uploaded file contents
+\end_layout
+
+\begin_layout Standard
+In our example, we want to save the file data into a 
+\family typewriter
+MappedBinary
+\family default
+ field on our expense entry.
+ You could just as easily process the data in place using a 
+\family typewriter
+scala.io.Source
+\family default
+ or
+\begin_inset Newline linebreak
+\end_inset
+
+ 
+\family typewriter
+java.io.ByteArrayInputStream
+\family default
+, or output it using a 
+\family typewriter
+java.io.FileOutputStream
+\family default
+.
 \end_layout
 
 \begin_layout Standard
@@ -2210,12 +2282,27 @@ class AddEntry {
 
 \begin_layout Plain Layout
 
-  // Add the optional receipt if it's the correct type
+    val e : Expense = ...
+\end_layout
+
+\begin_layout Plain Layout
+
+    // Add the optional receipt if it's the correct type
 \end_layout
 
 \begin_layout Plain Layout
 
     val receiptOk = fileHolder match {
+\end_layout
+
+\begin_layout Plain Layout
+
+      // An empty upload gets reported with a null mime type,
+\end_layout
+
+\begin_layout Plain Layout
+
+      // so we need to handle this special case
 \end_layout
 
 \begin_layout Plain Layout
@@ -2347,28 +2434,112 @@ class AddEntry {
 \end_layout
 
 \begin_layout Standard
-In our example, we want to save the file data into a 
-\family typewriter
-MappedBinary
-\family default
- field on our expense entry.
- You could just as easily process the data in place using a 
-\family typewriter
-scala.io.Source
-\family default
- or
-\begin_inset Newline linebreak
+By default
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Forms ! saving file uploads to disk
+\end_layout
+
 \end_inset
 
+, Lift will utilize the 
+\family typewriter
+InMemoryFileParamHolder
+\family default
  
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+InMemoryFileParamHolder
+\end_layout
+
+\end_inset
+
+to represent uploaded file data.
+ This implementation reads the uploaded data directly into memory (you retrieve
+ the byte array with the 
 \family typewriter
-java.io.ByteArrayInputStream
+file
 \family default
-, or output it using a 
+ val).
+ If you would prefer to have Lift write uploaded data to disk and then give
+ you a server-local filename to work with, you can use the 
 \family typewriter
-java.io.FileOutputStream
+LiftRules.handleMimeFile
 \family default
+ configuration hook to instead use the 
+\family typewriter
+OnDiskFileParamHolder
+\family default
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+OnDiskFileParamHolder
+\end_layout
+
+\end_inset
+
+, as shown in Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Using-OnDiskFileParamHolder"
+
+\end_inset
+
 .
+ The OnDiskFileParamHolder class has an additional property, 
+\family typewriter
+localFile
+\family default
+, that is a 
+\family typewriter
+java.io.File
+\family default
+ object for the temporary upload file.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Using-OnDiskFileParamHolder"
+
+\end_inset
+
+Using OnDiskFileParamHolder
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// in Boot.boot:
+\end_layout
+
+\begin_layout Plain Layout
+
+LiftRules.handleMimeFile = OnDiskFileParamHolder.apply
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \end_body

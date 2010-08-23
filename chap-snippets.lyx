@@ -1103,7 +1103,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Defining an Explicit Snippet Object
 \begin_inset CommandInset label
 LatexCommand label
@@ -1280,7 +1279,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Binding Our Explicit Snippet Object
 \begin_inset CommandInset label
 LatexCommand label
@@ -1534,7 +1532,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Remapping A Snippet
 \begin_inset CommandInset label
 LatexCommand label
@@ -2936,7 +2933,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Explicit Dispatch with Stateful Snippets
 \begin_inset CommandInset label
 LatexCommand label
@@ -3695,6 +3691,147 @@ myId
 \end_inset
 
 >Sat Mar 28 16:43:48 EET 2009</span>
+\end_layout
+
+\begin_layout Standard
+In addition to the 
+\begin_inset Quotes eld
+\end_inset
+
+-%>
+\begin_inset Quotes erd
+\end_inset
+
+ binding operator, there is also the 
+\begin_inset Quotes eld
+\end_inset
+
+_id_>
+\begin_inset Quotes erd
+\end_inset
+
+ operator, which uses the element's name as its 
+\begin_inset Quotes eld
+\end_inset
+
+id
+\begin_inset Quotes erd
+\end_inset
+
+ attribute.
+ Listing shows a snippet method using the 
+\begin_inset Quotes eld
+\end_inset
+
+_id_>
+\begin_inset Quotes erd
+\end_inset
+
+ attribute and Listing shows the resulting markup.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Binding-with-the_id_"
+
+\end_inset
+
+Binding with the _id_> operator
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def idByName (xhtml : NodeSeq) : NodeSeq = 
+\end_layout
+
+\begin_layout Plain Layout
+
+  bind("example", xhtml, "name" _id_> <span>Fred</span>)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=XML"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Markup-bound-using_id_"
+
+\end_inset
+
+Markup bound using _id_>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<!-- Input: -->
+\end_layout
+
+\begin_layout Plain Layout
+
+<lift:HelloWorld.idByName>
+\end_layout
+
+\begin_layout Plain Layout
+
+  Hi, <example:name /> 
+\end_layout
+
+\begin_layout Plain Layout
+
+</lift:HelloWorld.idByName>
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<!-- Output: -->
+\end_layout
+
+\begin_layout Plain Layout
+
+Hi, <span id="name">Fred</span> 
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \end_body
