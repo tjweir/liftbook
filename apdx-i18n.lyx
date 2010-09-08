@@ -51,6 +51,27 @@ name "cha:Internationalization"
 \end_inset
 
 
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Internationalization | see
+ I18N
+\end_layout
+
+\end_inset
+
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+I18N
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -144,6 +165,16 @@ Localized Templates
 \begin_inset CommandInset label
 LatexCommand label
 name "sec:Localized-Templates"
+
+\end_inset
+
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+I18N ! Localized templates
+\end_layout
 
 \end_inset
 
@@ -433,8 +464,103 @@ src/main/resources
  directory.
 \end_layout
 
+\begin_layout Standard
+\align center
+\begin_inset Box Shadowbox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "75col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+Note: According to the 
+\family typewriter
+Properties
+\family default
+ documentation
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+http://download.oracle.com/javase/6/docs/api/java/util/Properties.html
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+, keys 
+\emph on
+must
+\emph default
+ escape significant whitespace, colons or equals signs in the key itself
+ with backslashes.
+ For example, to specify 
+\begin_inset Quotes eld
+\end_inset
+
+this = that
+\begin_inset Quotes erd
+\end_inset
+
+ as a key, you would have to write it as 
+\begin_inset Quotes eld
+\end_inset
+
+this
+\backslash
+ 
+\backslash
+=
+\backslash
+ that
+\begin_inset Quotes erd
+\end_inset
+
+ in the properties file.
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+I18N ! whitespace in keys
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Section
 An Important Note on Resource Bundle Resolution
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+I18N ! Resource bundle resolution
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -525,7 +651,7 @@ reference "lst:Setting-the-ROOT-locale"
 :
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Standard
 \begin_inset listings
 inline false
 status open
@@ -535,7 +661,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:Setting-the-ROOT-locale"
@@ -551,10 +676,12 @@ Setting the ROOT Default Locale
 \end_layout
 
 \begin_layout Plain Layout
+
 import java.util.Locale
 \end_layout
 
 \begin_layout Plain Layout
+
 Locale.setDefault(Locale.ROOT)
 \end_layout
 
@@ -594,7 +721,10 @@ LiftRules.localizationLookupFailureNotice
 S.?
 \family default
  with more than one argument, the first argument is still the key to look
- up, but any remaining arguments are used as format parameters for String.format
+ up, but any remaining arguments are used as format parameters for 
+\family typewriter
+String.format
+\family default
  executed on the retrieved value.
  For example, listing 
 \begin_inset CommandInset ref
@@ -710,8 +840,11 @@ String.format
 \family default
  (and printf syntax) to format the strings and does not properly support
  date/time formatting.
- Instead, we recommend you use java.text.MessageFormat for localized strings
- that will use parameters.
+ Instead, we recommend you use 
+\family typewriter
+java.text.MessageFormat
+\family default
+ for localized strings that will use parameters.
  Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -796,11 +929,24 @@ private def i10n(key : String, args : Object*) = {
 
 \begin_layout Section
 Localized Strings in Templates
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+I18N ! Localized templates
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
-You can add localized strings directly in your templates through the <lift:loc
- /> tag.
+You can add localized strings directly in your templates through the 
+\family typewriter
+<lift:loc />
+\family default
+ tag.
  You can either provide a locid attribute on the tag which is used as the
  lookup key, or if you don't provide one, the contents of the tag will be
  used as the key.
@@ -890,6 +1036,26 @@ name "lst:Using-the-loc-tag"
 
 \begin_layout Section
 Calculating Locale
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+I18N ! Calculating locale
+\end_layout
+
+\end_inset
+
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Locale ! calculating
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
