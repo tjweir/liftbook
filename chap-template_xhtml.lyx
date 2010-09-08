@@ -1729,6 +1729,44 @@ surround
 
 \begin_layout Subsection
 a
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+SHtml ! a
+\end_layout
+
+\end_inset
+
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+AJAX ! anchor tag
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The 
+\family typewriter
+<lift:a/>
+\family default
+ tag is used internally by SHtml.a to create an anchor tag that will call
+ an AJAX function when clicked.
+ This tag is generally not used directly by developers.
+ See Section 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "sub:AJAX-Generators-in-detail"
+
+\end_inset
+
+ for more details.
 \end_layout
 
 \begin_layout Subsection
@@ -1775,8 +1813,15 @@ binding_name
 \end_layout
 
 \begin_layout Standard
-The bind tag is the counterpart to the surround tag: it specifies where
- in the 
+The 
+\family typewriter
+<lift:bind/>
+\family default
+ tag is the counterpart to the 
+\family typewriter
+<lift:surround/>
+\family default
+ tag: it specifies where in the 
 \begin_inset Quotes eld
 \end_inset
 
@@ -1852,6 +1897,30 @@ name "lst:Binding-in-Templates"
 
 \begin_layout Subsection
 bind-at
+\end_layout
+
+\begin_layout LyX-Code
+Usage: <lift:bind-at name=
+\begin_inset Quotes erd
+\end_inset
+
+binding_name
+\begin_inset Quotes erd
+\end_inset
+
+>contents</lift:bind-at>
+\end_layout
+
+\begin_layout Standard
+The bind-at tag is used in conjunction with 
+\family typewriter
+<lift:bind/>
+\family default
+ and 
+\family typewriter
+<lift:surround/>
+\family default
+ to allow additional named sections to be placed withing a surrounding template.
 \end_layout
 
 \begin_layout Subsection
@@ -2270,6 +2339,27 @@ ignore
 
 \begin_layout Subsection
 lazy-load
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Cover 
+\begin_inset Quotes eld
+\end_inset
+
+template
+\begin_inset Quotes erd
+\end_inset
+
+ attribute
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
