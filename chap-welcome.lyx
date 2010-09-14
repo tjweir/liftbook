@@ -1,4 +1,4 @@
-#LyX 1.6.3 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.5 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -780,13 +780,13 @@ mvn archetype:generate -U
 \end_layout
 
 \begin_layout LyX-Code
-  -DarchetypeVersion=1.0 
+  -DarchetypeVersion=2.0 
 \backslash
 
 \end_layout
 
 \begin_layout LyX-Code
-  -DremoteRepositories=http://scala-tools.org/repo-releases 
+  -DarchetypeRepository=http://scala-tools.org/repo-releases 
 \backslash
 
 \end_layout
