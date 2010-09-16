@@ -886,7 +886,7 @@ class SomeSnippetClass extends DispatchSnippet {
 
 \begin_layout Plain Layout
 
-  def dispatch = {
+  def dispatch : DispatchIt = {
 \end_layout
 
 \begin_layout Plain Layout
@@ -1168,7 +1168,7 @@ object HelloWorld extends DispatchSnippet {
 
 \begin_layout Plain Layout
 
-  val dispatch = {
+  val dispatch : DispatchIt = {
 \end_layout
 
 \begin_layout Plain Layout
@@ -3770,7 +3770,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:Binding-with-the_id_"
