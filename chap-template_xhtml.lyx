@@ -70,7 +70,7 @@ XML
 
 \end_inset
 
- files, but also from methods that can programatticaly generate template
+ files, but also from methods that can programmaticaly generate template
  XML.
  In this chapter we'll discuss the template XML capabilities and syntax,
  including XML tags provided by Lift that perform special template processing
@@ -83,7 +83,7 @@ reference "sec:ArchTags"
 
 ).
  We will also cover how you can write your own View classes, Scala code
- that can programatically generate template XML (Section 
+ that can programmatically generate template XML (Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Views"
@@ -1043,7 +1043,7 @@ Views
 We just discussed Templates and saw that through a combination of an XML
  file, Lift tags, and Scala code we can respond to requests made by a user.
  You can also generate an XHTML response entirely in code using a View.
- Custom dispatch is a similar method which can be used to programatically
+ Custom dispatch is a similar method which can be used to programmatically
  return any kind of response (not just XHTML), and is covered in more depth
  in Section 
 \begin_inset CommandInset ref
@@ -1132,13 +1132,13 @@ reference "sub:Class-Resolution"
 
 \end_inset
 
-), then the second element is used to lookup the View function depending
+), then the second element is used to look up the View function depending
  on which trait the View class implements.
  For performance reasons, explicit dispatch via 
 \family typewriter
 LiftRules.viewDispatch
 \family default
- is recommended because reflection incurs a signficant cost for each reqeust.
+ is recommended because reflection incurs a significant cost for each request.
  When you use 
 \family typewriter
 LiftRules.viewDispatch
