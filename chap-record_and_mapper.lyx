@@ -1,4 +1,4 @@
-#LyX 1.6.3 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.5 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -4739,7 +4739,7 @@ List
  of functions on a field that take the field value as input and return a
  
 \family typewriter
-List[FieldError]]
+List[FieldError]
 \family default
  (
 \family typewriter
