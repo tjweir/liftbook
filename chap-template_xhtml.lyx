@@ -1716,19 +1716,36 @@ name "sec:ArchTags"
 In the earlier sections on Templates and Views we briefly touched on some
  of Lift's built-in tags, namely, 
 \family typewriter
-snippet
+<lift:snippet/>
 \family default
  and 
 \family typewriter
-surround
+<lift:surround
 \family default
-.
+/>.
  In this section we'll go into more detail on those tags as well as cover
  the rest of Lift's tags.
 \end_layout
 
 \begin_layout Subsection
 a
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:a-tag"
+
+\end_inset
+
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Tags ! a
+\end_layout
+
+\end_inset
+
+
 \begin_inset Index
 status open
 
@@ -1756,8 +1773,11 @@ The
 \family typewriter
 <lift:a/>
 \family default
- tag is used internally by SHtml.a to create an anchor tag that will call
- an AJAX function when clicked.
+ tag is used internally by 
+\family typewriter
+SHtml.a
+\family default
+ to create an anchor tag that will call an AJAX function when clicked.
  This tag is generally not used directly by developers.
  See Section 
 \begin_inset CommandInset ref
@@ -1771,12 +1791,9 @@ reference "sub:AJAX-Generators-in-detail"
 
 \begin_layout Subsection
 bind
-\begin_inset Index
-status open
-
-\begin_layout Plain Layout
-bind
-\end_layout
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:bind-tag"
 
 \end_inset
 
@@ -1791,9 +1808,12 @@ Tags ! bind
 \end_inset
 
 
-\begin_inset CommandInset label
-LatexCommand label
-name "sub:bind-tag"
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+binding
+\end_layout
 
 \end_inset
 
@@ -1817,86 +1837,55 @@ The
 \family typewriter
 <lift:bind/>
 \family default
- tag is the counterpart to the 
+ tag is used as a placeholder for insertion of content within included templates
+ when using the 
 \family typewriter
-<lift:surround/>
+<lift:surround/> and
 \family default
- tag: it specifies where in the 
-\begin_inset Quotes eld
-\end_inset
-
-surrounding
-\begin_inset Quotes erd
-\end_inset
-
- template the content will be placed.
- An example is shown in Listing 
+ 
+\family typewriter
+<lift:embed/>
+\family default
+ tags.
+ See Section 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "lst:Binding-in-Templates"
+reference "sec:Binding"
 
 \end_inset
 
-.
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-Binding in Templates
-\begin_inset CommandInset label
-LatexCommand label
-name "lst:Binding-in-Templates"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-<html>
-\end_layout
-
-\begin_layout Plain Layout
-
-  <body>
-\end_layout
-
-\begin_layout Plain Layout
-
-    <lift:bind name="content" />
-\end_layout
-
-\begin_layout Plain Layout
-
-  </body>
-\end_layout
-
-\begin_layout Plain Layout
-
-</html>
-\end_layout
-
-\end_inset
-
-
+ for examples and discussion.
 \end_layout
 
 \begin_layout Subsection
 bind-at
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:bind-at-tag"
+
+\end_inset
+
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Tags ! bind-at
+\end_layout
+
+\end_inset
+
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+binding
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code
@@ -1912,19 +1901,42 @@ binding_name
 \end_layout
 
 \begin_layout Standard
-The bind-at tag is used in conjunction with 
+The 
+\family typewriter
+<lift:bind-at/>
+\family default
+ tag is used to replace named 
 \family typewriter
 <lift:bind/>
 \family default
- and 
+ tags within 
 \family typewriter
 <lift:surround/>
 \family default
- to allow additional named sections to be placed withing a surrounding template.
+ and 
+\family typewriter
+<lift:embed/>
+\family default
+ tags.
+ See Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Binding"
+
+\end_inset
+
+ for examples and discussion.
 \end_layout
 
 \begin_layout Subsection
 children
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:children-tag"
+
+\end_inset
+
+
 \begin_inset Index
 status open
 
@@ -1954,7 +1966,7 @@ Usage: <lift:children>...multiple xml nodes here...</lift:children>
 \begin_layout Standard
 The purpose of the 
 \family typewriter
-children
+<lift:children/>
 \family default
  tag is to allow you to create fragment templates with more than one root
  element that still parse as valid XML.
@@ -2083,6 +2095,13 @@ name "lst:A-Conforming-XML"
 
 \begin_layout Subsection
 comet
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:comet-tag"
+
+\end_inset
+
+
 \begin_inset Index
 status open
 
@@ -2122,7 +2141,7 @@ optional
 \begin_layout Standard
 The 
 \family typewriter
-comet
+<lift:comet/>
 \family default
  tag embeds a Comet actor into your page.
  The class of the Comet actor is specified by the 
@@ -2224,7 +2243,7 @@ name "lst:Ledger-Entry-Comet"
 \end_layout
 
 \begin_layout Standard
-As we mentioned in the 
+As we mention in the 
 \family typewriter
 embed
 \family default
@@ -2234,6 +2253,69 @@ embed
 
 \begin_layout Subsection
 CSS
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:CSS-tag"
+
+\end_inset
+
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Tags ! CSS
+\end_layout
+
+\end_inset
+
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+CSS
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+Usage: <lift:CSS.blueprint />
+\end_layout
+
+\begin_layout LyX-Code
+       <lift:CSS.fancyType />
+\end_layout
+
+\begin_layout Standard
+The 
+\family typewriter
+<lift:CSS/>
+\family default
+ tag is used to insert either the blueprint
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+http://www.blueprintcss.org/
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ or fancy
 \end_layout
 
 \begin_layout Subsection
@@ -2827,10 +2909,10 @@ XmlGroup
 \end_layout
 
 \begin_layout Section
-Head Merge
+Head and Tail Merge
 \begin_inset CommandInset label
 LatexCommand label
-name "sec:Head-Merge"
+name "sec:Head-Tail-Merge"
 
 \end_inset
 
@@ -2845,7 +2927,7 @@ head
 \family default
 
 \begin_inset Index
-status collapsed
+status open
 
 \begin_layout Plain Layout
 head
@@ -2948,6 +3030,17 @@ name "lst:Using-Head-Merge"
 
 \begin_layout Standard
 In this manner, you'll import TableSorter for this template alone.
+\end_layout
+
+\begin_layout Section
+Binding
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Binding"
+
+\end_inset
+
+
 \end_layout
 
 \end_body

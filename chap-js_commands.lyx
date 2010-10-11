@@ -1,4 +1,4 @@
-#LyX 1.6.5 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.7 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -2534,6 +2534,16 @@ The basic application of the transformation from a NodeSeq to the JavaScript
 
 \begin_layout Section
 JSON
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Need to add details on lift-json as well
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard

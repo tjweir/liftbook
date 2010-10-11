@@ -1,4 +1,4 @@
-#LyX 1.6.5 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.7 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -43,7 +43,7 @@
 \begin_body
 
 \begin_layout Chapter
-Web Services
+RESTful Web Services
 \begin_inset CommandInset label
 LatexCommand label
 name "cha:Web-Services"
@@ -51,10 +51,6 @@ name "cha:Web-Services"
 \end_inset
 
 
-\end_layout
-
-\begin_layout Section
-Why Add an API to Your Web Application?
 \end_layout
 
 \begin_layout Standard
@@ -110,12 +106,26 @@ target "http://flickrvision.com/"
  examples.
 \end_layout
 
-\begin_layout Standard
-We're going to focus on what it takes to offer a simple RESTful web api
- for PocketChange.
+\begin_layout Section
+Some Background on REST
 \end_layout
 
-\begin_layout Section
+\begin_layout Standard
+Before we dive into the details of building a RESTful API with Lift, let's
+ start by discussing a little about REST and the protocol that it sits atop:
+ HTTP.
+ If you're already familiar with REST and HTTP, feel free to skip to the
+ implementation in Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:A-Simple-API-pocketchange"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
 A Little Bit about HTTP
 \end_layout
 
@@ -133,7 +143,7 @@ Hypertext Transfer Protocol
 
  requests and responses.
  If you're comfortable with the Request-Response cycle then feel free to
- jump to 
+ jump to Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:What-is-REST?"
@@ -205,7 +215,7 @@ name "lst:cURL-Output"
 
 \begin_layout Plain Layout
 
-]> curl -v http://demo.liftweb.net/ 
+$ curl -v http://demo.liftweb.net/ 
 \end_layout
 
 \begin_layout Plain Layout
@@ -508,7 +518,7 @@ http://www.ietf.org/rfc/rfc2616.txt
  we got into building a REST API.
 \end_layout
 
-\begin_layout Section
+\begin_layout Subsection
 Defining REST
 \begin_inset CommandInset label
 LatexCommand label
@@ -520,8 +530,28 @@ name "sec:What-is-REST?"
 \end_layout
 
 \begin_layout Standard
-Roy Fielding defined REST in his dissertation and defined the main tenet
- of the architecture to be a uniform interface to resources.
+Roy Fielding defined REST in his dissertation
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+http://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ and defined the main tenet of the architecture to be a uniform interface
+ to resources.
  “Resources” refers to pieces of information that are named and have representat
 ions.
  Examples include an image, a Twitter status, or a timely item such as a
@@ -576,27 +606,9 @@ URL addressability: URLs should allow for the addressing of representation
 Fielding’s goal was to define a method that allowed machine-to-machine communica
 tion to mimic that of browser-to-server communication and to take advantage
  of HTTP as the underlying protocol.
- You can find Fielding’s dissertation at 
-\begin_inset Flex URL
-status open
-
-\begin_layout Plain Layout
-
-http://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm
 \end_layout
 
-\end_inset
-
-.
-\end_layout
-
-\begin_layout Standard
-You’ll see how Lift allows you to create RESTful web services in the rest
- of this chapter.
- 
-\end_layout
-
-\begin_layout Section
+\begin_layout Subsection
 Comparing XML-RPC to REST Architectures
 \end_layout
 
@@ -638,17 +650,50 @@ RESTful architectures embrace HTTP.
 
 \begin_layout Section
 A Simple API for PocketChange
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:A-Simple-API-pocketchange"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
-We're going to start with a simple example, but we're going to skip some
- of the more complex steps of building a web service, such as authorization.
+We're going to start with a simple example, so we'll only touch on some
+ of the more complex steps of building a web service, such as authentication
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+HTTP ! authentication
 \end_layout
 
-\begin_layout Standard
-We're going to model two calls to the server: a GET request that responds
- with the details of an expense, and a PUT to add a new expense.The URLs
- will be:
+\end_inset
+
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Authentication
+\end_layout
+
+\end_inset
+
+ and authorization.
+ If you would like to see the code involved in performing authentication
+ and authorization for our REST API, see Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:HTTP-Authentication"
+
+\end_inset
+
+.
+ For the purposes of this example, we're going to model two calls to the
+ server: a GET request that responds with the details of an expense, and
+ a PUT to add a new expense.The URLs will be:
 \end_layout
 
 \begin_layout Itemize
@@ -657,33 +702,20 @@ A GET request sent to URI:
 
 \begin_deeper
 \begin_layout LyX-Code
-http://www.pocketchangeapp.com/api/expense/<expense_id>
-\end_layout
-
-\begin_layout Standard
-where 
-\family typewriter
-expense_id
-\family default
- is the Expense ID
+http://www.pocketchangeapp.com/api/expense/<expense id>
 \end_layout
 
 \end_deeper
 \begin_layout Itemize
-A PUT request + an XML Body sent to URI:
+A PUT request containing a new expense sent to URI:
 \end_layout
 
 \begin_deeper
 \begin_layout LyX-Code
-http://www.pocketchangeapp.com/api/expense
+http://www.pocketchangeapp.com/api/account/<account id>
 \end_layout
 
 \end_deeper
-\begin_layout Standard
-The URLs are almost the same and as we will show, we can pattern-match on
- the type of request in addition to the URI.
-\end_layout
-
 \begin_layout Standard
 \align center
 \begin_inset Box Shadowbox
@@ -705,9 +737,13 @@ Note that a URL (Uniform Resource Locator) is a type of URI in which the
  name to a resource without specifying an actual location, though it may
  look a lot like a URL.
  For more information on the distinctions among URIs, see 
-\begin_inset CommandInset href
-LatexCommand href
-target "http://en.wikipedia.org/wiki/Uniform_Resource_Name"
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+http://en.wikipedia.org/wiki/Uniform_Resource_Name
+\end_layout
 
 \end_inset
 
@@ -719,8 +755,657 @@ target "http://en.wikipedia.org/wiki/Uniform_Resource_Name"
 
 \end_layout
 
+\begin_layout Standard
+We would like the REST API to support both XML and JSON for this data.
+ Additionally, we would like to support an Atom feed on an account so that
+ people can track expenses as they're added.
+ The URL for the Atom feed will be a GET of the form:
+\end_layout
+
+\begin_layout LyX-Code
+http://www.pocketchangeapp.com/api/account/<account id>
+\end_layout
+
+\begin_layout Standard
+In the next few sections we'll show how you can easily add support for these
+ methods and formats using Lift.
+\end_layout
+
 \begin_layout Section
-Pattern Matching for the URLs
+Adding REST Helper Methods to our Entities
+\end_layout
+
+\begin_layout Standard
+In order to simplify our REST handler code, we would like to add some helper
+ methods for our 
+\family typewriter
+Expense
+\family default
+ entity to support generation of both XML and JSON for our consumers.
+ We'll add these to a new 
+\family typewriter
+RestFormatters
+\family default
+ object inside the 
+\family typewriter
+src/main/scala/com/pocketchangeapp/RestFormatters.scala
+\family default
+ source file.
+ First, we add some common functionality in Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Common-Expense-REST-helpers"
+
+\end_inset
+
+ by adding several helper methods for computing REST header values.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Common Expense REST Helpers
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Common-Expense-REST-helpers"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  /* The REST timestamp format.
+ Not threadsafe, so we create
+\end_layout
+
+\begin_layout Plain Layout
+
+   * a new one each time.
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+  def timestamp = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  // A simple helper to generate the REST ID of an Expense
+\end_layout
+
+\begin_layout Plain Layout
+
+  def restId (e : Expense) =
+\end_layout
+
+\begin_layout Plain Layout
+
+    "http://www.pocketchangeapp.com/api/expense/" + e.id
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  // A simple helper to generate the REST timestamp of an Expense
+\end_layout
+
+\begin_layout Plain Layout
+
+  def restTimestamp (e : Expense) : String =
+\end_layout
+
+\begin_layout Plain Layout
+
+    timestamp.format(e.dateOf.is)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Expense-Entity-JSON"
+
+\end_inset
+
+ shows a helper method for generating a proper JSON representation of a
+ given 
+\family typewriter
+Expense
+\family default
+ using the Lift JSON DSL.
+ Although 
+\family typewriter
+Expense
+\family default
+ is a 
+\family typewriter
+Mapper
+\family default
+ entity, we don't use the 
+\family typewriter
+Expense.asJs
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Mapper ! asJs
+\end_layout
+
+\end_inset
+
+
+\family default
+ method inherited from 
+\family typewriter
+Mapper
+\family default
+ because we want to better control the format.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Expense Entity JSON Formatters
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Expense-Entity-JSON"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Generates the JSON REST representation of an Expense
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+def toJSON (e : Expense) : JValue = {
+\end_layout
+
+\begin_layout Plain Layout
+
+  import net.liftweb.json.JsonDSL._
+\end_layout
+
+\begin_layout Plain Layout
+
+  import net.liftweb.json.JsonAST._
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  ("expense" ->
+\end_layout
+
+\begin_layout Plain Layout
+
+    ("id" -> restId(e)) ~
+\end_layout
+
+\begin_layout Plain Layout
+
+    ("date" -> restTimestamp(e)) ~
+\end_layout
+
+\begin_layout Plain Layout
+
+    ("description" -> e.description.is) ~
+\end_layout
+
+\begin_layout Plain Layout
+
+    ("accountname" -> e.accountName) ~
+\end_layout
+
+\begin_layout Plain Layout
+
+    ("accountid" -> e.account.obj.open_!.id.is) ~
+\end_layout
+
+\begin_layout Plain Layout
+
+    ("amount" -> e.amount.is.toString) ~
+\end_layout
+
+\begin_layout Plain Layout
+
+    ("tags" -> e.tags.map(_.name.is).mkString(",")))
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Finally, Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Expense-Entity-REST-XML"
+
+\end_inset
+
+ shows the 
+\family typewriter
+toXML
+\family default
+ method, which will generate properly formatted XML for a given 
+\family typewriter
+Expense
+\family default
+.
+ Like 
+\family typewriter
+toJSON
+\family default
+, we don't use the 
+\family typewriter
+Expense.toXml
+\family default
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Mapper ! toXml
+\end_layout
+
+\end_inset
+
+ method because we want more control over the generated format.
+ Instead, we simply convert the result of 
+\family typewriter
+toJSON
+\family default
+ into XML using the 
+\family typewriter
+net.liftweb.json.Xml
+\family default
+ helper object.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Expense Entity XML REST Formatter
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Expense-Entity-REST-XML"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import net.liftweb.json.Xml
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Generates the XML REST representation of an Expense
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+def toXML (e : Expense) : Node = Xml.toXml(toJSON(e)).first
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Multiple Approaches to REST Handling
+\end_layout
+
+\begin_layout Standard
+As Lift has evolved, two main approaches have emerged that allow you to
+ perform RESTful operations.
+ In Lift 1.0 and up, you can add custom dispatch (Section 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "sec:Custom-dispatch-func"
+
+\end_inset
+
+) on your API URLs to call custom handlers for your REST data.
+ In Lift 2.0, the new 
+\family typewriter
+net.liftweb.http.rest.RestHelper
+\family default
+ was introduced that vastly simplifies not only the dispatch for given operation
+s, but also assists with conversion of requests and responses to both XML
+ and JSON.
+ Because custom dispatch is still very much a first-class feature of Lift
+ we will cover both approaches here.
+\end_layout
+
+\begin_layout Standard
+Before we get into the details of each method, there are two last helpers
+ we'd like to define.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Adding-an-Extractor-expense"
+
+\end_inset
+
+ shows an 
+\family typewriter
+unapply
+\family default
+ method that we add to our 
+\family typewriter
+Expense
+\family default
+ 
+\family typewriter
+MetaMapper
+\family default
+ so that we can use 
+\family typewriter
+Expense
+\family default
+ as an extractor in pattern matching.
+ In this code we not only attempt to match by using a provided 
+\family typewriter
+String
+\family default
+ as the 
+\family typewriter
+Expense
+\family default
+'s primary key, but we also compute whether the 
+\family typewriter
+Expense
+\family default
+ is in a public account.
+ This assists us in determining authorization for viewing a given 
+\family typewriter
+Expense
+\family default
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Adding an Extractor for Expense
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Adding-an-Extractor-expense"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import net.liftweb.util.ControlHelpers.tryo
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Define an extractor that can be used to locate an Expense based
+\end_layout
+
+\begin_layout Plain Layout
+
+ * on its ID.
+ Returns a tuple of the Expense and whether the
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Expense's account is public.
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+def unapply (id : String) : Option[(Expense,Boolean)] = tryo {
+\end_layout
+
+\begin_layout Plain Layout
+
+  find(By(Expense.id, id.toLong)).map { expense =>
+\end_layout
+
+\begin_layout Plain Layout
+
+     (expense,
+\end_layout
+
+\begin_layout Plain Layout
+
+      expense.account.obj.open_!.is_public.is)
+\end_layout
+
+\begin_layout Plain Layout
+
+  }.toOption
+\end_layout
+
+\begin_layout Plain Layout
+
+} openOr None
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Similarly, Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Adding-an-Extractor-account"
+
+\end_inset
+
+ shows an extractor on the 
+\family typewriter
+Account
+\family default
+ 
+\family typewriter
+MetaMapper
+\family default
+ that matches an 
+\family typewriter
+Account
+\family default
+ based on its primary key.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Adding an Extractor for Account
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Adding-an-Extractor-account"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import net.liftweb.util.Helpers.tryo
+\end_layout
+
+\begin_layout Plain Layout
+
+/**
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Define an extractor that can be used to locate an Account based
+\end_layout
+
+\begin_layout Plain Layout
+
+ * on its ID.
+\end_layout
+
+\begin_layout Plain Layout
+
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+def unapply (id : String) : Option[Account] = tryo {
+\end_layout
+
+\begin_layout Plain Layout
+
+  find(By(Account.id, id.toLong)).toOption
+\end_layout
+
+\begin_layout Plain Layout
+
+} openOr None
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Using Custom Dispatch
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:REST-Custom-Dispatch"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -732,24 +1417,51 @@ com.pocketchangeapp.api
 \family default
 , we have an object named 
 \family typewriter
-RestAPI, which we've
+DispatchRestAPI, which we've
 \family default
  defined in 
 \family typewriter
-com/pocketchangeapp/api/RestAPI.scala
+src/main/scala/com/pocketchangeapp/api/RestAPI.scala
 \family default
 .
-\end_layout
-
-\begin_layout Standard
-The block of code to handle the routing is shown in Listing 
+ In 
+\family typewriter
+DispatchRestAPI
+\family default
+, we define a custom dispatch function to pattern match on the request and
+ delegate to a handler method.
+ The custom dispatch function is shown in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:REST-Method-Routing"
 
 \end_inset
 
-:
+.
+ You can see that we use our extractors in the matching for both 
+\family typewriter
+Expense
+\family default
+s and 
+\family typewriter
+Account
+\family default
+s.
+ We'll cover the processing of PUTs in Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Processing-Expense-PUTs"
+
+\end_inset
+
+, and the Atom processing in Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Servicing-Atom"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
@@ -779,7 +1491,12 @@ name "lst:REST-Method-Routing"
 
 \begin_layout Plain Layout
 
-package com.pocketchangeapp.api
+// Import our methods for converting things around
+\end_layout
+
+\begin_layout Plain Layout
+
+import RestFormatters._
 \end_layout
 
 \begin_layout Plain Layout
@@ -788,13 +1505,54 @@ package com.pocketchangeapp.api
 
 \begin_layout Plain Layout
 
-...
- standard imports...
+def dispatch: LiftRules.DispatchPF = {
 \end_layout
 
 \begin_layout Plain Layout
 
-import net.liftweb.http.rest.XMLApiHelper
+  // Define our getters first
+\end_layout
+
+\begin_layout Plain Layout
+
+  case Req(List("api", "expense", Expense(expense,_)), _, GetRequest) =>
+\end_layout
+
+\begin_layout Plain Layout
+
+     () => nodeSeqToResponse(toXML(expense)) // default to XML
+\end_layout
+
+\begin_layout Plain Layout
+
+  case Req(List("api", "expense", Expense(expense,_), "xml"), _, GetRequest)
+ =>
+\end_layout
+
+\begin_layout Plain Layout
+
+     () => nodeSeqToResponse(toXML(expense))
+\end_layout
+
+\begin_layout Plain Layout
+
+  case Req(List("api", "expense", Expense(expense,_), "json"), _, GetRequest)
+ =>
+\end_layout
+
+\begin_layout Plain Layout
+
+     () => JsonResponse(toJSON(expense))
+\end_layout
+
+\begin_layout Plain Layout
+
+  case Req(List("api", "account", Account(account)), _, GetRequest) =>
+\end_layout
+
+\begin_layout Plain Layout
+
+     () => AtomResponse(toAtom(account))
 \end_layout
 
 \begin_layout Plain Layout
@@ -803,52 +1561,77 @@ import net.liftweb.http.rest.XMLApiHelper
 
 \begin_layout Plain Layout
 
-object RestAPI extends XMLApiHelper {
+  // Define the PUT handler for both XML and JSON MIME types
 \end_layout
 
 \begin_layout Plain Layout
 
-  def dispatch: LiftRules.DispatchPF = {     
+  case request @ Req(List("api", "account", Account(account)), _, PutRequest)
 \end_layout
 
 \begin_layout Plain Layout
 
-    case Req(List("api", "expense", eid), "", GetRequest) => 
+    if request.xml_? =>
 \end_layout
 
 \begin_layout Plain Layout
 
-      () => showExpense(eid) 
+      () => addExpense(fromXML(request.xml,account),
 \end_layout
 
 \begin_layout Plain Layout
 
-    case r @ Req(List("api", "expense", "", PutRequest) => 
+                       account,
 \end_layout
 
 \begin_layout Plain Layout
 
-      () => addExpense(r)
+                       result => CreatedResponse(toXML(result), "text/xml"))
 \end_layout
 
 \begin_layout Plain Layout
 
-    
+  case request @ Req(List("api", "account", Account(account)), _, PutRequest)
 \end_layout
 
 \begin_layout Plain Layout
 
-    // Invalid API request - route to our error handler
+    if request.json_? =>
 \end_layout
 
 \begin_layout Plain Layout
 
-    case Req(List("api", _), "", _) => failure _ 
+      () => addExpense(fromJSON(request.body,account),
 \end_layout
 
 \begin_layout Plain Layout
 
-  }
+                       account,
+\end_layout
+
+\begin_layout Plain Layout
+
+                       result => JsonResponse(toJSONExp(result), Nil, Nil,
+ 201))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  // Invalid API request - route to our error handler
+\end_layout
+
+\begin_layout Plain Layout
+
+  case Req("api" :: x :: Nil, "", _) =>
+\end_layout
+
+\begin_layout Plain Layout
+
+    () => BadResponse() // Everything else fails
 \end_layout
 
 \begin_layout Plain Layout
@@ -862,15 +1645,48 @@ object RestAPI extends XMLApiHelper {
 \end_layout
 
 \begin_layout Standard
+Our 
+\family typewriter
+DispatchRestAPI
+\family default
+ object mixes in the 
+\family typewriter
+net.liftweb.http.rest.XMLApiHelper
+\family default
+ trait, which includes several implicit conversions to simplify writing
+ our REST API.
+ Remember that 
+\family typewriter
+LiftRules.DispatchPF
+\family default
+ must return a function 
+\begin_inset Formula $()\Rightarrow Box[LiftResponse]$
+\end_inset
+
+ (Section 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "sec:Custom-dispatch-func"
+
+\end_inset
+
+), so we're using the implicit 
+\family typewriter
+putResponseInBox
+\family default
+ as well as explicitly calling 
+\family typewriter
+nodeSeqToResponse
+\family default
+ to convert our API return values into the proper format.
+\end_layout
+
+\begin_layout Standard
 The server will now service 
 \family typewriter
 GET
 \family default
- requests with 
-\family typewriter
-showExpense
-\family default
- and will handle 
+ requests with the appropriate formatter function and will handle 
 \family typewriter
 PUT
 \family default
@@ -879,50 +1695,23 @@ PUT
 addExpense
 \family default
  method (which we'll define later in this chapter).
- One thing to note is we are pattern matching on the 
-\family typewriter
-Req
-\family default
- object and in the 
-\family typewriter
-PUT
-\family default
- request, we extract the 
-\family typewriter
-Req
-\family default
- and pass it as a parameter to 
-\family typewriter
-addExpense
-\family default
-.
- This is because we're passing in an XML body with the information for the
  
-\family typewriter
-Expense
-\family default
-.
 \end_layout
 
 \begin_layout Standard
-As we discussed in Section 
+We hook our new dispatch function into LiftRules by adding the code shown
+ in Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "sec:Custom-dispatch-func"
+reference "lst:Setting-up-REST"
 
 \end_inset
 
-, Lift uses dispatch rules to route requests.
- Because we want to intercept and reroute requests to certain URLs, we need
- to update the dispatch rules.
-\end_layout
-
-\begin_layout Standard
-This is accomplished by adding the code shown in Listing to 
+ to our 
 \family typewriter
-Boot.scala
+Boot.boot
 \family default
-:
+ method.
 \end_layout
 
 \begin_layout Standard
@@ -952,46 +1741,7 @@ name "lst:Setting-up-REST"
 
 \begin_layout Plain Layout
 
-import com.pocketchangeapp.api.RestAPI
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-class Boot {
-\end_layout
-
-\begin_layout Plain Layout
-
-  def boot {
-\end_layout
-
-\begin_layout Plain Layout
-
-    ...
-\end_layout
-
-\begin_layout Plain Layout
-
-    LiftRules.dispatch.prepend(RestAPI.dispatch) 
-\end_layout
-
-\begin_layout Plain Layout
-
-    ...
-\end_layout
-
-\begin_layout Plain Layout
-
-  }
-\end_layout
-
-\begin_layout Plain Layout
-
-}
+LiftRules.dispatch.prepend(DispatchRestAPI.dispatch)
 \end_layout
 
 \end_inset
@@ -999,38 +1749,199 @@ class Boot {
 
 \end_layout
 
+\begin_layout Subsection
+Using the RestHelper Trait
+\end_layout
+
 \begin_layout Standard
-This will cause Lift to intercept incoming requests to URIs beginning with
- 
+New in Lift 2.0 is the 
 \family typewriter
-/api/
+net.liftweb.http.rest.RestHelper
 \family default
- and to pass them along to the appropriate methods.
-\end_layout
-
-\begin_layout Section
-API Service Code
-\end_layout
-
-\begin_layout Standard
-Now that we're handling the API calls, we'll need to write the code to process
- and respond to requests.
- In 
+ trait.
+ This trait simplifies the creation of REST APIs that support both XML and
+ JSON.
+ For our example, we'll define the 
+\family typewriter
+RestHelperAPI
+\family default
+ object in our 
 \family typewriter
 RestAPI.scala
 \family default
-, we'll add the methods shown in Listing 
+ source file.
+\end_layout
+
+\begin_layout Standard
+Before we get into the details of actual processing with 
+\family typewriter
+RestHelper
+\family default
+, we want to point out some useful parts of its API.
+ First, 
+\family typewriter
+RestHelper
+\family default
+ provides a number of built-in extractors for matching not only what HTTP
+ verb a given request uses, but also the format of the request (JSON or
+ XML).
+ These extractors are:
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+Get
+\family default
+, 
+\family typewriter
+JsonGet
+\family default
+, 
+\family typewriter
+XmlGet
+\family default
+ - matches a raw GET, or a GET of the specified format
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+Post
+\family default
+, 
+\family typewriter
+JsonPost
+\family default
+, 
+\family typewriter
+XmlPost
+\family default
+ - matches a raw POST, or a POST of the specified format
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+Put
+\family default
+, 
+\family typewriter
+JsonPut
+\family default
+, 
+\family typewriter
+XmlPut
+\family default
+ - matches a raw PUT, or a PUT of the specified format
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+Delete
+\family default
+ - matches a DELETE request
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+JsonReq
+\family default
+ - matches a request with the Accept header containing 
+\begin_inset Quotes eld
+\end_inset
+
+application/json
+\begin_inset Quotes erd
+\end_inset
+
+, or whose Accept header contains 
+\begin_inset Quotes eld
+\end_inset
+
+*/*
+\begin_inset Quotes erd
+\end_inset
+
+ and whose path suffix is 
+\begin_inset Quotes eld
+\end_inset
+
+json
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+XmlReq
+\family default
+ - matches a request with the Accept header containing 
+\begin_inset Quotes eld
+\end_inset
+
+text/xml
+\begin_inset Quotes erd
+\end_inset
+
+, or whose Accept header contains 
+\begin_inset Quotes eld
+\end_inset
+
+*/*
+\begin_inset Quotes erd
+\end_inset
+
+ and whose path suffix is 
+\begin_inset Quotes eld
+\end_inset
+
+xml
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We'll demonstrate in the following sections how to use these extractors.
+ Note that you can add additional rules for the 
+\family typewriter
+JsonReq
+\family default
+ and 
+\family typewriter
+XmlReq
+\family default
+ extractors by overriding the 
+\family typewriter
+
+\begin_inset Newline linebreak
+\end_inset
+
+RestHelper.suplimentalJsonResponse_?
+\family default
+ and 
+\family typewriter
+suplimentalXmlResponse_?
+\family default
+ (yes, those are spelled incorrectly) methods to perform additional tests
+ on the request.
+ For example, Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "lst:REST-Handler-Methods"
+reference "lst:Using-a-Cookie-request-type"
 
 \end_inset
 
- to the 
-\family typewriter
-RestAPI
-\family default
- object:
+ shows how we can use the existence of a given header to determine whether
+ a request is XML or JSON.
+ 
 \end_layout
 
 \begin_layout Standard
@@ -1043,10 +1954,10 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-REST Handler Methods
+Using a Cookie to Determine the Request Type
 \begin_inset CommandInset label
 LatexCommand label
-name "lst:REST-Handler-Methods"
+name "lst:Using-a-Cookie-request-type"
 
 \end_inset
 
@@ -1060,53 +1971,845 @@ name "lst:REST-Handler-Methods"
 
 \begin_layout Plain Layout
 
-// reacts to the GET Request
+override def suplimentalJsonResponse_? (in : Req) = 
 \end_layout
 
 \begin_layout Plain Layout
 
-def showExpense(eid: String): LiftResponse = { 
+  in.header("This-Is-A-JSON-Request").isDefined
 \end_layout
 
 \begin_layout Plain Layout
 
-  val e: Box[NodeSeq] = 
+override def suplimentalXmlResponse_? (in : Req) = 
 \end_layout
 
 \begin_layout Plain Layout
 
-    for(r <- Expense.find(By(Expense.id, eid.toLong))) yield { 
+  in.header("This-Is-A-XML-Request").isDefined
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Box Shadowbox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "75col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status collapsed
+
+\begin_layout Plain Layout
+One important difference between 
+\family typewriter
+RestHelper
+\family default
+ and our 
+\family typewriter
+DispatchRestAPI
+\family default
+ examples that we want to point out is that 
+\family typewriter
+RestHelper
+\family default
+ determines whether a request is XML or JSON based on the Accept header
+ and/or the suffix of the path (e.g.
+ 
+\family typewriter
+/api/expense/1.xml
+\family default
+), whereas our DispatchRestAPI used the last component of the path (
+\family typewriter
+/api/expense/1/xml
+\family default
+).
+ Either approach is valid, just be aware if you're copying this example
+ code.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Next, like the 
+\family typewriter
+XMLApiHelper
+\family default
+ trait, 
+\family typewriter
+RestHelper
+\family default
+ provides a number of implicit conversions to 
+\family typewriter
+LiftResponse
+\family default
+ from a variety of inputs.
+ We're not going to cover these directly here, but we'll point out where
+ we use them in this section.
+\end_layout
+
+\begin_layout Standard
+Similar to our 
+\family typewriter
+DispatchRestAPI
+\family default
+ handler, we need to define a set of patterns that we can match against.
+ Unlike 
+\family typewriter
+DispatchRestAPI
+\family default
+, however, 
+\family typewriter
+RestHelper
+\family default
+ defines four 
+\family typewriter
+PartialFunction
+\family default
+ methods where we can add our patterns: 
+\family typewriter
+serve
+\family default
+, 
+\family typewriter
+serveJx
+\family default
+, 
+\family typewriter
+serveJxa
+\family default
+ and 
+\family typewriter
+serveType
+\family default
+.
+ These functions provide increasing automation (and control) over what gets
+ served when the request matches a pattern.
+ We won't be covering 
+\family typewriter
+serveType
+\family default
+ here, since it's essentially the generalized version that 
+\family typewriter
+serve
+\family default
+, 
+\family typewriter
+serveJx
+\family default
+ and 
+\family typewriter
+serveJxa
+\family default
+ use behind the scenes.
+\end_layout
+
+\begin_layout Subsubsection
+The serve Method
+\end_layout
+
+\begin_layout Standard
+Let's start with the 
+\family typewriter
+serve
+\family default
+ method.
+ This method essentially corresponds one-to-one with our 
+\family typewriter
+DispatchRestAPI.dispatch
+\family default
+ method.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Using-RestHelper.serve"
+
+\end_inset
+
+ shows how we could handle Atom requests, as well as requests that don't
+ specify a format, using 
+\family typewriter
+RestHelper
+\family default
+.
+ Note our use of the 
+\family typewriter
+RestHelper
+\family default
+ extractors to match the HTTP Verb being used.
+ Also note that we're using an implicit conversion from a Box[T] to a Box[LiftRe
+sponse] when an implicit function is in scope that can convert T into a
+ LiftResponse.
+ In our example, 
+\family typewriter
+Full(toXML(expense))
+\family default
+ is equivalent to 
+\family typewriter
+boxToResp(Full(toXML(expense)))(nodeToResp)
+\family default
+.
+ Finally, the serve method can be invoked multiple times and the 
+\family typewriter
+PartialFunctions
+\family default
+ will be chained together.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Using RestHelper.serve
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Using-RestHelper.serve"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Plain Layout
 
-     wrapXmlBody(
+// Service Atom and requests that don't request a specific format
 \end_layout
 
 \begin_layout Plain Layout
 
-       <operation id="show_expense" success="true">{e.toXML}</operation>)
+serve {
+\end_layout
+
+\begin_layout Plain Layout
+
+  // Default to XML
+\end_layout
+
+\begin_layout Plain Layout
+
+  case Get(List("api", "expense", Expense(expense,_)), _) =>
+\end_layout
+
+\begin_layout Plain Layout
+
+    () => Full(toXML(expense))
+\end_layout
+
+\begin_layout Plain Layout
+
+  case Get(List("api", "account", Account(account)), _) =>
+\end_layout
+
+\begin_layout Plain Layout
+
+    () => Full(AtomResponse(toAtom(account)))
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We use similar calls to hook our PUT handlers, shown in Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Using-serve-to-handle-PUT"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Using serve to handle PUTs
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Using-serve-to-handle-PUT"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// Hook our PUT handlers
+\end_layout
+
+\begin_layout Plain Layout
+
+import DispatchRestAPI.addExpense
+\end_layout
+
+\begin_layout Plain Layout
+
+serve {
+\end_layout
+
+\begin_layout Plain Layout
+
+  case XmlPut(List("api", "account", Account(account)), (body, request))
+ =>
+\end_layout
+
+\begin_layout Plain Layout
+
+    () => Full(addExpense(fromXML(Full(body),account),
+\end_layout
+
+\begin_layout Plain Layout
+
+                          account,
+\end_layout
+
+\begin_layout Plain Layout
+
+                          result => CreatedResponse(toXML(result), "text/xml")))
+\end_layout
+
+\begin_layout Plain Layout
+
+  case JsonPut(List("api", "account", Account(account)), (_, request)) 
+ =>
+\end_layout
+
+\begin_layout Plain Layout
+
+    () => Full(addExpense(fromJSON(request.body,account),
+\end_layout
+
+\begin_layout Plain Layout
+
+                          account,
+\end_layout
+
+\begin_layout Plain Layout
+
+                          result => JsonResponse(toJSON(result), Nil, Nil,
+ 201)))
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+The serveJx Method
+\end_layout
+
+\begin_layout Standard
+Like the serve method, 
+\family typewriter
+serveJx
+\family default
+ performs pattern matching on the request.
+ However, 
+\family typewriter
+serveJx
+\family default
+ allows you to specify a conversion function that matches against the requested
+ format
+\begin_inset Newline linebreak
+\end_inset
+
+(
+\family typewriter
+net.liftweb.http.rest.JsonSelect
+\family default
+ or 
+\family typewriter
+net.liftweb.http.rest.XmlSelect
+\family default
+) and perform your conversion there.
+ Then, all you need to do is match once against a given path and 
+\family typewriter
+serveJx
+\family default
+ will utilize your conversion function to return the proper result.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Using-RestHelper.serveJx"
+
+\end_inset
+
+ shows how we can use a new implicit conversion to handle our format-specific
+ GETs.
+ The single match in our 
+\family typewriter
+serveJx
+\family default
+ call replaces two lines in our 
+\family typewriter
+DispatchRestAPI.dispatch
+\family default
+ method.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Using RestHelper.serveJx
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Using-RestHelper.serveJx"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// Define an implicit conversion from an Expense to XML or JSON
+\end_layout
+
+\begin_layout Plain Layout
+
+import net.liftweb.http.rest.{JsonSelect,XmlSelect}
+\end_layout
+
+\begin_layout Plain Layout
+
+implicit def expenseToRestResponse : JxCvtPF[Expense] = {
+\end_layout
+
+\begin_layout Plain Layout
+
+  case (JsonSelect, e, _) => toJSON(e)
+\end_layout
+
+\begin_layout Plain Layout
+
+  case (XmlSelect, e, _) => toXML(e)
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+serveJx {
+\end_layout
+
+\begin_layout Plain Layout
+
+  case Get(List("api", "expense", Expense(expense,_)), _) => Full(expense)
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In addition to providing your own conversion function, 
+\family typewriter
+serveJx
+\family default
+ can utilize the 
+\family typewriter
+RestHelper
+\family default
+ autoconversion functionality.
+ To use this, simply use the 
+\family typewriter
+auto
+\family default
+ method to wrap whatever you want to return.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Using-auto-to-convert-returns"
+
+\end_inset
+
+ shows an example of returning a contrived data object with 
+\family typewriter
+auto
+\family default
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Using auto to Convert Return Values
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Using-auto-to-convert-returns"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// Just an example of autoconversion
+\end_layout
+
+\begin_layout Plain Layout
+
+serveJx {
+\end_layout
+
+\begin_layout Plain Layout
+
+  case Get(List("api", "greet", name),_) =>
+\end_layout
+
+\begin_layout Plain Layout
+
+     auto(Map("greeting" ->
+\end_layout
+
+\begin_layout Plain Layout
+
+              Map("who" -> name,
+\end_layout
+
+\begin_layout Plain Layout
+
+                  "what" -> ("Hello at " + new java.util.Date))))
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The conversion is actually performed with the 
+\family typewriter
+net.liftweb.json.Extraction
+\family default
+ object
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+
+\series medium
+Extraction
+\end_layout
+
+\end_inset
+
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+
+\series medium
+JSON ! extraction
+\end_layout
+
+\end_inset
+
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+
+\series medium
+Autoconversion
+\end_layout
+
+\end_inset
+
+, so you can autoconvert anything that 
+\family typewriter
+Extraction
+\family default
+ can handle.
+ This includes:
+\end_layout
+
+\begin_layout Itemize
+Primitives
+\end_layout
+
+\begin_layout Itemize
+Maps
+\end_layout
+
+\begin_layout Itemize
+Arrays
+\end_layout
+
+\begin_layout Itemize
+Collections
+\end_layout
+
+\begin_layout Itemize
+Options
+\end_layout
+
+\begin_layout Itemize
+Case classes
+\end_layout
+
+\begin_layout Subsubsection
+The serveJxa Method
+\end_layout
+
+\begin_layout Standard
+The 
+\family typewriter
+serveJxa
+\family default
+ method is basically the same as the 
+\family typewriter
+serve
+\family default
+ and 
+\family typewriter
+serveJx
+\family default
+ methods, except that anything that is returned will be automatically converted
+ to JSON via the
+\begin_inset Newline linebreak
+\end_inset
+
+
+\family typewriter
+net.liftweb.json.Extraction.decompose
+\family default
+ method.
+\end_layout
+
+\begin_layout Section
+Processing Expense PUTs
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Processing-Expense-PUTs"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now that we're handling the API calls, we'll need to write the code to process
+ and respond to requests.
+ The first thing we need to do is deserialize the 
+\family typewriter
+Expense
+\family default
+ from the either an XML or JSON request.
+\end_layout
+
+\begin_layout Standard
+In PocketChange our use of 
+\family typewriter
+BigDecimal
+\family default
+ values to represent currency amounts means that we can't simply use the
+ lift-json deserialization support (Section 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "sec:JSON"
+
+\end_inset
+
+).
+ While lift-json is very good and would make this much simpler, it parses
+ decimal values as doubles which can lead to rounding and precision issues
+ when working with decimal values.
+ Instead, we will need to write our own conversion functions.
  
 \end_layout
 
+\begin_layout Standard
+To simplify error handling, we break this processing up into two format-specific
+ methods that convert to a 
+\family typewriter
+Map
+\family default
+ representation of the data, and another method that converts the intermediate
+ 
+\family typewriter
+Map
+\family default
+/
+\family typewriter
+List
+\family default
+ into an 
+\family typewriter
+Expense
+\family default
+.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Deserializing-XML-to-Expense"
+
+\end_inset
+
+ shows the 
+\family typewriter
+fromXML
+\family default
+ method in the 
+\family typewriter
+RestFormatters
+\family default
+ object.
+ This method performs some basic validation to make sure we have the required
+ parameters, but otherwise doesn't validate the values of those parameters.
+ Note that we provide the 
+\family typewriter
+Account
+\family default
+ to 
+\family typewriter
+fromXML
+\family default
+ so that we can resolve tag names in the 
+\family typewriter
+fromMap
+\family default
+ method (which we'll cover momentarily).
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
 \begin_layout Plain Layout
 
-  }
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Deserializing XML to an Expense
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Deserializing-XML-to-Expense"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Plain Layout
 
-  
+def fromXML (rootNode : Box[Elem], account : Account) : Box[Expense] = 
 \end_layout
 
 \begin_layout Plain Layout
 
-  e
+ rootNode match {
 \end_layout
 
 \begin_layout Plain Layout
 
-}
+  case Full(<expense>{parameters @ _*}</expense>) => {
+\end_layout
+
+\begin_layout Plain Layout
+
+    var data = Map[String,String]()
 \end_layout
 
 \begin_layout Plain Layout
@@ -1115,141 +2818,42 @@ def showExpense(eid: String): LiftResponse = {
 
 \begin_layout Plain Layout
 
-private def getAccount(e: String, n: String): Account = {     
+    for(parameter <- parameters) {
 \end_layout
 
 \begin_layout Plain Layout
 
-  val u = User.find(By(User.email, e))         
+      parameter match {
 \end_layout
 
 \begin_layout Plain Layout
 
-  val a = Account.findByName(u.open_!, n) match {       
+        case <date>{date}</date> => data += "date" -> date.text
 \end_layout
 
 \begin_layout Plain Layout
 
-    case acct :: Nil => acct       
+        case <description>{description}</description> =>
 \end_layout
 
 \begin_layout Plain Layout
 
-    case _ => new Account     
+          data += "description" -> description.text
 \end_layout
 
 \begin_layout Plain Layout
 
-  }
+        case <amount>{amount}</amount> => data += "amount" -> amount.text
 \end_layout
 
 \begin_layout Plain Layout
 
-    
+        case <tags>{ tags }</tags> => data += "tags" -> tags.text
 \end_layout
 
 \begin_layout Plain Layout
 
-  a   
-\end_layout
-
-\begin_layout Plain Layout
-
-}
-\end_layout
-
-\begin_layout Plain Layout
-
-  
-\end_layout
-
-\begin_layout Plain Layout
-
-// reacts to the PUT Request   
-\end_layout
-
-\begin_layout Plain Layout
-
-def addExpense(req: Req): LiftResponse = {     
-\end_layout
-
-\begin_layout Plain Layout
-
-  var tempEmail = ""     
-\end_layout
-
-\begin_layout Plain Layout
-
-  var tempAccountName = ""
-\end_layout
-
-\begin_layout Plain Layout
-
-  var expense = new Expense     
-\end_layout
-
-\begin_layout Plain Layout
-
-  req.xml match {       
-\end_layout
-
-\begin_layout Plain Layout
-
-    case Full(<expense>{parameters @ _*}</expense>) => {         
-\end_layout
-
-\begin_layout Plain Layout
-
-      for(parameter <- parameters){ 
-\end_layout
-
-\begin_layout Plain Layout
-
-        parameter match {           
-\end_layout
-
-\begin_layout Plain Layout
-
-          case <email>{email}</email> => tempEmail = email.text         
-  
-\end_layout
-
-\begin_layout Plain Layout
-
-          case <accountName>{name}</accountName> => tempAccountName = name.text
-   
-\end_layout
-
-\begin_layout Plain Layout
-
-          case <dateOf>{dateof}</dateOf> => 
-\end_layout
-
-\begin_layout Plain Layout
-
-            expense.dateOf(new java.util.Date(dateof.text)     
-\end_layout
-
-\begin_layout Plain Layout
-
-          case <amount>{value}</amount> => expense.amount(BigDecimal(value.text))
-   
-\end_layout
-
-\begin_layout Plain Layout
-
-          case <desc>{description}</desc> => expense.description(description.text)
-   
-\end_layout
-
-\begin_layout Plain Layout
-
-          case _ =>         
-\end_layout
-
-\begin_layout Plain Layout
-
-        }       
+        case _ => // Ignore (could be whitespace)
 \end_layout
 
 \begin_layout Plain Layout
@@ -1259,49 +2863,7 @@ def addExpense(req: Req): LiftResponse = {
 
 \begin_layout Plain Layout
 
-      try {         
-\end_layout
-
-\begin_layout Plain Layout
-
-        val currentAccount = getAccount(tempEmail, tempAccountName)    
-     
-\end_layout
-
-\begin_layout Plain Layout
-
-        expense.account(currentAccount.id.is)
-\end_layout
-
-\begin_layout Plain Layout
-
-        
-\end_layout
-
-\begin_layout Plain Layout
-
-        val (entrySerial,entryBalance) = Expense.getLastExpenseData(currentAccoun
-t,
-\end_layout
-
-\begin_layout Plain Layout
-
-          expense.dateOf)
-\end_layout
-
-\begin_layout Plain Layout
-
-        
-\end_layout
-
-\begin_layout Plain Layout
-
-        expense.account(currentAccount).serialNumber(entrySerial + 1)
-\end_layout
-
-\begin_layout Plain Layout
-
-          .tags("api").currentBalance(entryBalance + expense.amount)
+    }
 \end_layout
 
 \begin_layout Plain Layout
@@ -1310,118 +2872,17 @@ t,
 
 \begin_layout Plain Layout
 
-        expense.validate match {           
+    fromMap(data, account)
 \end_layout
 
 \begin_layout Plain Layout
 
-          case Nil =>             
+  }
 \end_layout
 
 \begin_layout Plain Layout
 
-            Expense.updateEntries(entrySerial + 1, expense.amount.is)     
-        
-\end_layout
-
-\begin_layout Plain Layout
-
-            expense.save             
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-            val newBalance = currentAccount.balance.is + expense.amount.is
-\end_layout
-
-\begin_layout Plain Layout
-
-            currentAccount.balance(newBalance).save 
-\end_layout
-
-\begin_layout Plain Layout
-
-           
-\end_layout
-
-\begin_layout Plain Layout
-
-            CreatedResponse(
-\end_layout
-
-\begin_layout Plain Layout
-
-              wrapXmlBody(<operation id="add_expense" success="true"></operation
->),
-\end_layout
-
-\begin_layout Plain Layout
-
-              "text/xml")           
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-          case _ =>             
-\end_layout
-
-\begin_layout Plain Layout
-
-            CreatedResponse(wrapXmlBody(<operation id="add_expense"
-\end_layout
-
-\begin_layout Plain Layout
-
-              success="false"></operation>), "text/xml")         
-\end_layout
-
-\begin_layout Plain Layout
-
-        }       
-\end_layout
-
-\begin_layout Plain Layout
-
-      }       
-\end_layout
-
-\begin_layout Plain Layout
-
-      catch {         
-\end_layout
-
-\begin_layout Plain Layout
-
-        case e => Log.error("Could not add expense", e); BadResponse()  
-     
-\end_layout
-
-\begin_layout Plain Layout
-
-      }     
-\end_layout
-
-\begin_layout Plain Layout
-
-    }     
-\end_layout
-
-\begin_layout Plain Layout
-
-    case _ => Log.error("Request was malformed"); BadResponse()     
-\end_layout
-
-\begin_layout Plain Layout
-
-  }   
+  case other => Failure("Missing root expense element")
 \end_layout
 
 \begin_layout Plain Layout
@@ -1434,17 +2895,19 @@ t,
 
 \end_layout
 
-\begin_layout Section
-A Helper Method for the Expense Model Object
-\end_layout
-
 \begin_layout Standard
-To make it easier to get the name of the Account we care about, we'll add
- a helper function to our 
+Similarly, Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Deserializing-JSON-to-Expense"
+
+\end_inset
+
+ shows our 
 \family typewriter
-Expense
+fromJSON
 \family default
- model object, as shown in Listing :
+ method.
 \end_layout
 
 \begin_layout Standard
@@ -1457,10 +2920,10 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Expense Entity REST Helper
+Deserializing JSON to an Expense
 \begin_inset CommandInset label
 LatexCommand label
-name "lst:Expense-Entity-REST"
+name "lst:Deserializing-JSON-to-Expense"
 
 \end_inset
 
@@ -1474,37 +2937,219 @@ name "lst:Expense-Entity-REST"
 
 \begin_layout Plain Layout
 
-// look up the account name for the expense
+def fromJSON (obj : Box[Array[Byte]], account : Account) : Box[Expense]
+ =
 \end_layout
 
 \begin_layout Plain Layout
 
-private def getAccountName(id: Long): String = {     
+ obj match {
 \end_layout
 
 \begin_layout Plain Layout
 
-  Account.find(By(Account.id, id)) match {       
+  case Full(rawBytes) => {
 \end_layout
 
 \begin_layout Plain Layout
 
-    case Empty => "No Account Name"       
+    // We use the Scala util JSON parser here because we want to avoid parsing
 \end_layout
 
 \begin_layout Plain Layout
 
-    case Full(a) => a.name.is     
+    // numeric values into doubles.
+ We'll just leave them as Strings
 \end_layout
 
 \begin_layout Plain Layout
 
-  }   
+    import scala.util.parsing.json.JSON
+\end_layout
+
+\begin_layout Plain Layout
+
+    JSON.perThreadNumberParser = { in : String => in }
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    val contents = new String(rawBytes, "UTF-8")
+\end_layout
+
+\begin_layout Plain Layout
+
+    JSON.parseFull(contents) match {
+\end_layout
+
+\begin_layout Plain Layout
+
+      case Some(data : Map[String,Any]) => {
+\end_layout
+
+\begin_layout Plain Layout
+
+        fromMap(data.mapElements(_.toString), account)
+\end_layout
+
+\begin_layout Plain Layout
+
+      }
+\end_layout
+
+\begin_layout Plain Layout
+
+      case other => Failure("Invalid JSON submitted: 
+\backslash
+"%s
+\backslash
+"".format(contents))
+\end_layout
+
+\begin_layout Plain Layout
+
+    }
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+  case _ => Failure("Empty body submitted")
 \end_layout
 
 \begin_layout Plain Layout
 
 }
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Finally, Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Converting-the-Intermediate-Expense"
+
+\end_inset
+
+ shows our 
+\family typewriter
+fromMap
+\family default
+ method, which takes the data parsed by 
+\family typewriter
+fromJSON
+\family default
+ and 
+\family typewriter
+fromXML
+\family default
+ and converts it into an actual expense.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Converting the Intermediate Data to an Expense
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Converting-the-Intermediate-Expense"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def fromMap (data : scala.collection.Map[String,String],
+\end_layout
+
+\begin_layout Plain Layout
+
+             account : Account) : Box[Expense] = {
+\end_layout
+
+\begin_layout Plain Layout
+
+  val expense = Expense.create
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  try {
+\end_layout
+
+\begin_layout Plain Layout
+
+    val fieldParsers : List[(String, String => Expense)] =
+\end_layout
+
+\begin_layout Plain Layout
+
+      ("date", (date : String) => expense.dateOf(timestamp.parse(date))) ::
+\end_layout
+
+\begin_layout Plain Layout
+
+      ("description", (desc : String) => expense.description(desc)) ::
+\end_layout
+
+\begin_layout Plain Layout
+
+      ("amount", (amount : String) => expense.amount(BigDecimal(amount)))
+ :: Nil
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    val missing = fieldParsers.flatMap {
+\end_layout
+
+\begin_layout Plain Layout
+
+      field => // We invert the flatMap here to only give us missing values
+\end_layout
+
+\begin_layout Plain Layout
+
+        if (data.get(field._1).map(field._2).isDefined) None else Some(field._1)
+\end_layout
+
+\begin_layout Plain Layout
+
+    }
 \end_layout
 
 \begin_layout Plain Layout
@@ -1514,12 +3159,188 @@ private def getAccountName(id: Long): String = {
 
 \begin_layout Plain Layout
 
-// get a list of tags of the form <tag>tagname1</tag><tag>tagname2</tag>
+    if (missing.isEmpty) {
 \end_layout
 
 \begin_layout Plain Layout
 
-def showXMLTags: NodeSeq = tags.map(t => <tag>{t.name.is}</tag>)
+      expense.account(account)
+\end_layout
+
+\begin_layout Plain Layout
+
+      data.get("tags").foreach {
+\end_layout
+
+\begin_layout Plain Layout
+
+        tags => expense.tags(tags.split(",").map(Tag.byName(account.id.is,_)).toList)
+\end_layout
+
+\begin_layout Plain Layout
+
+      }
+\end_layout
+
+\begin_layout Plain Layout
+
+      Full(expense)
+\end_layout
+
+\begin_layout Plain Layout
+
+    } else {
+\end_layout
+
+\begin_layout Plain Layout
+
+      Failure(missing.mkString("Invalid expense.
+ Missing: ", ",", ""))
+\end_layout
+
+\begin_layout Plain Layout
+
+    }
+\end_layout
+
+\begin_layout Plain Layout
+
+  } catch {
+\end_layout
+
+\begin_layout Plain Layout
+
+    case pe : java.text.ParseException => Failure("Failed to parse date")
+\end_layout
+
+\begin_layout Plain Layout
+
+    case nfe : java.lang.NumberFormatException =>
+\end_layout
+
+\begin_layout Plain Layout
+
+      Failure("Failed to parse amount")
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now that we've converted the PUT data into an 
+\family typewriter
+Expense
+\family default
+, we need to actually perform our logic and persist the submitted 
+\family typewriter
+Expense
+\family default
+.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Saving-the-submitted-Expense"
+
+\end_inset
+
+ shows our 
+\family typewriter
+addExpense
+\family default
+ method, which matches against the parsed 
+\family typewriter
+Expense
+\family default
+ and either runs validation if the parse succeeded, or returns an error
+ response to the user if something failed.
+ If validation fails, the user is similarly notified.
+ The 
+\family typewriter
+success
+\family default
+ parameter is a function that can be used to generate the appropriate response
+ based on the newly created Expense.
+ This allows us to return the new Expense in the same format (JSON, XML)
+ in which it was submitted (see the dispatch function, Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:REST-Method-Routing"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Saving the submitted Expense
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Saving-the-submitted-Expense"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def addExpense(parsedExpense : Box[Expense],
+\end_layout
+
+\begin_layout Plain Layout
+
+               account : Account,
+\end_layout
+
+\begin_layout Plain Layout
+
+               success : Expense => LiftResponse): LiftResponse = 
+\end_layout
+
+\begin_layout Plain Layout
+
+ parsedExpense match {
+\end_layout
+
+\begin_layout Plain Layout
+
+  case Full(expense) => {
+\end_layout
+
+\begin_layout Plain Layout
+
+    val (entrySerial,entryBalance) =
+\end_layout
+
+\begin_layout Plain Layout
+
+      Expense.getLastExpenseData(account, expense.dateOf)
 \end_layout
 
 \begin_layout Plain Layout
@@ -1528,78 +3349,131 @@ def showXMLTags: NodeSeq = tags.map(t => <tag>{t.name.is}</tag>)
 
 \begin_layout Plain Layout
 
-// 
+    expense.account(account).serialNumber(entrySerial + 1).
 \end_layout
 
 \begin_layout Plain Layout
 
-def toXML: NodeSeq = {    
+    currentBalance(entryBalance + expense.amount)
 \end_layout
 
 \begin_layout Plain Layout
 
-  val id = "http://www.pocketchangeapp.com/api/expense/" + this.id    
+    expense.validate match {
 \end_layout
 
 \begin_layout Plain Layout
 
-  val formatter = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
-    
+      case Nil => {
 \end_layout
 
 \begin_layout Plain Layout
 
-  val edate = formatter.format(this.dateOf.is)
+        Expense.updateEntries(entrySerial + 1, expense.amount.is)
 \end_layout
 
 \begin_layout Plain Layout
 
-    
+        expense.save
 \end_layout
 
 \begin_layout Plain Layout
 
-  <expense>       
+        account.balance(account.balance.is + expense.amount.is).save
 \end_layout
 
 \begin_layout Plain Layout
 
-    <id>{id}</id>       
 \end_layout
 
 \begin_layout Plain Layout
 
-    <accountname>{getAccountName(account.is)}</accountname>       
+        success(expense)
 \end_layout
 
 \begin_layout Plain Layout
 
-    <date>{edate}</date>       
+      }
 \end_layout
 
 \begin_layout Plain Layout
 
-    <description>{description.is}</description>       
+      case errors => {
 \end_layout
 
 \begin_layout Plain Layout
 
-    <amount>{amount.is.toString}</amount>       
+        val message = errors.mkString("Validation failed:", ",","")
 \end_layout
 
 \begin_layout Plain Layout
 
-    <tags>{showXMLTags}</tags>     
+        logger.error(message)
 \end_layout
 
 \begin_layout Plain Layout
 
-  </expense>
+        ResponseWithReason(BadResponse(), message)
 \end_layout
 
 \begin_layout Plain Layout
 
-}  
+      }
+\end_layout
+
+\begin_layout Plain Layout
+
+    }
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+  case Failure(msg, _, _) => {
+\end_layout
+
+\begin_layout Plain Layout
+
+    logger.error(msg)
+\end_layout
+
+\begin_layout Plain Layout
+
+    ResponseWithReason(BadResponse(), msg)
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+  case error => {
+\end_layout
+
+\begin_layout Plain Layout
+
+    logger.error("Parsed expense as : " + error)
+\end_layout
+
+\begin_layout Plain Layout
+
+    BadResponse()
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
 \end_layout
 
 \end_inset
@@ -1622,15 +3496,24 @@ ion for
 http://demo.liftweb.net/
 \family default
 .
- Let’s see what that looks like for a request to our API; see Listing 
+ Let’s see what that looks like for a request to our API.
+ Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:Request-and-Response-GET"
 
 \end_inset
 
-.
- 
+ shows an XML GET request for a given expense.
+ Note that we're not showing the HTTP Basic authentication setup, required
+ by our authentication configuration (Section 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "sub:HTTP-Authentication"
+
+\end_inset
+
+).
 \end_layout
 
 \begin_layout Standard
@@ -1643,7 +3526,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Request and Response for GET for Our API
+Request and Response for XML GET
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:Request-and-Response-GET"
@@ -1679,87 +3562,147 @@ Response:
 
 \begin_layout Plain Layout
 
-<?xml version="1.0" encoding="UTF-8"?> 
+<?xml version="1.0" encoding="UTF-8"?>
 \end_layout
 
 \begin_layout Plain Layout
 
-<pca_api operation="expense" success="true" >
+<expense>
 \end_layout
 
 \begin_layout Plain Layout
 
- <operation success="true" id="show_expense">
+  <id>http://www.pocketchangeapp.com/api/expense/3</id>
 \end_layout
 
 \begin_layout Plain Layout
 
-  <expense> 
+  <accountname>Test</accountname>
 \end_layout
 
 \begin_layout Plain Layout
 
-   <id>http://www.pocketchangeapp.com/api/expense/3</id> 
+  <accountid>1</accountid>
 \end_layout
 
 \begin_layout Plain Layout
 
-   <accountname>Home</accountname> 
+  <date>2010-10-06T00:00:00Z</date>
 \end_layout
 
 \begin_layout Plain Layout
 
-   <date>2009-03-26T00:00:00Z</date> 
+  <description>Receipt test</description>
 \end_layout
 
 \begin_layout Plain Layout
 
-   <description>MacHeist Apps</description> 
+  <amount>12.00</amount>
 \end_layout
 
 \begin_layout Plain Layout
 
-   <amount>35.00</amount> 
+  <tags>test,receipt</tags>
 \end_layout
 
 \begin_layout Plain Layout
 
-   <tags> 
+</expense>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Request-and-Response-GET-JSON"
+
+\end_inset
+
+ shows the same request in JSON format.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Request and Response for JSON GET
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Request-and-Response-GET-JSON"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Plain Layout
 
-    <tag>software</tag>
+Request:
 \end_layout
 
 \begin_layout Plain Layout
 
-    <tag>apps</tag>
+http://www.pocketchangeapp.com/api/expense/3/json GET
 \end_layout
 
 \begin_layout Plain Layout
 
-    <tag>mac</tag> 
 \end_layout
 
 \begin_layout Plain Layout
 
-   </tags> 
+Response:
 \end_layout
 
 \begin_layout Plain Layout
 
-  </expense>
+{"id":"http://www.pocketchangeapp.com/api/expense/3",
 \end_layout
 
 \begin_layout Plain Layout
 
- </operation>
+ "date":"2010-10-06T00:00:00Z",
 \end_layout
 
 \begin_layout Plain Layout
 
-</pca_api> 
+ "description":"Receipt test",
+\end_layout
+
+\begin_layout Plain Layout
+
+ "accountname":"Test",
+\end_layout
+
+\begin_layout Plain Layout
+
+ "accountid":1,
+\end_layout
+
+\begin_layout Plain Layout
+
+ "amount":"12.00",
+\end_layout
+
+\begin_layout Plain Layout
+
+ "tags":"test,receipt"}
 \end_layout
 
 \end_inset
@@ -1788,7 +3731,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Request and Response for PUT for Our API
+Request and Response for an XML PUT
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:Request-and-Response-PUT"
@@ -1810,7 +3753,7 @@ Request:
 
 \begin_layout Plain Layout
 
-http://www.pocketchangeapp.com/api/expense - PUT - addEntry(request) + XML
+http://www.pocketchangeapp.com/api/account/1 - PUT - addEntry(request) + XML
  Body
 \end_layout
 
@@ -1825,32 +3768,27 @@ Request Body:
 
 \begin_layout Plain Layout
 
-<expense> 
+<expense>
 \end_layout
 
 \begin_layout Plain Layout
 
-  <email>tyler.weir@pocketchangeapp.com</email> 
+  <date>2010-07-05T14:22:00Z</date>
 \end_layout
 
 \begin_layout Plain Layout
 
-  <accountName>Home</accountName> 
+  <description>Test</description>
 \end_layout
 
 \begin_layout Plain Layout
 
-  <dateOf>2009/03/26</dateOf> 
+  <amount>12.41</amount>
 \end_layout
 
 \begin_layout Plain Layout
 
-  <amount>45.00</amount> 
-\end_layout
-
-\begin_layout Plain Layout
-
-  <desc>I buy food</desc> 
+  <tags>test,api</tags>
 \end_layout
 
 \begin_layout Plain Layout
@@ -1869,31 +3807,52 @@ Response:
 
 \begin_layout Plain Layout
 
-\end_layout
-
-\begin_layout Plain Layout
-
-HTTP/1.1 201 Created
-\end_layout
-
-\begin_layout Plain Layout
-
 <?xml version="1.0" encoding="UTF-8"?>
 \end_layout
 
 \begin_layout Plain Layout
 
-<pca_api>
+<expense>
 \end_layout
 
 \begin_layout Plain Layout
 
-  <operation success="true" id="add_expense"></operation>
+  <id>http://www.pocketchangeapp.com/api/expense/10</id>
 \end_layout
 
 \begin_layout Plain Layout
 
-</pca_api>
+  <accountname>Test</accountname>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <accountid>1</accountid>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <date>2010-07-05T14:22:00Z</date>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <description>Test</description>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <amount>12.41</amount>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <tags>api,test</tags>
+\end_layout
+
+\begin_layout Plain Layout
+
+</expense>   
 \end_layout
 
 \end_inset
@@ -1903,18 +3862,31 @@ HTTP/1.1 201 Created
 
 \begin_layout Section
 Extending the API to Return Atom Feeds
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Servicing-Atom"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
-What if you’d like to return your data in a different format than XML? For
- this example, we’ll add support for Atom
+In addition to being able to fetch specific expenses using our API, it would
+ be nice to be able to provide a feed of expenses for an account as they're
+ added.
+ For this example, we’ll add support for Atom
 \begin_inset Foot
 status open
 
 \begin_layout Plain Layout
-\begin_inset CommandInset href
-LatexCommand href
-target "http://tools.ietf.org/html/rfc4287"
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+http://tools.ietf.org/html/rfc4287
+\end_layout
 
 \end_inset
 
@@ -1923,23 +3895,35 @@ target "http://tools.ietf.org/html/rfc4287"
 
 \end_inset
 
-.
- Atom is a simple publishing standard for content syndication.
- To change the data output format, you’ll have to do two things.
- First, define the helper or helpers that are common across output formats.
- After that, update the dispatch rules to allow users to request the alternate
- data formats.
-\end_layout
-
-\begin_layout Standard
-In our case, we’ll first add toAtom to the model as shown in Listing 
+, a simple publishing standard for content syndication.
+ The first thing we need to do is write a method to generate an Atom feed
+ for a given Account.
+ Although Atom is XML-based, it's sufficiently different enough from our
+ REST API XML format that we'll just write new methods for it.
+ Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lst:The-toAtom-Method"
 
 \end_inset
 
-.
+ shows the 
+\family typewriter
+toAtom
+\family default
+ methods (one for 
+\family typewriter
+Account
+\family default
+, one for 
+\family typewriter
+Expense
+\family default
+) in our 
+\family typewriter
+RestFormatters
+\family default
+ object that will handle the formatting.
  
 \end_layout
 
@@ -1953,7 +3937,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-The toAtom Method
+The toAtom Methods
 \begin_inset CommandInset label
 LatexCommand label
 name "lst:The-toAtom-Method"
@@ -1970,82 +3954,160 @@ name "lst:The-toAtom-Method"
 
 \begin_layout Plain Layout
 
-def toAtom = {    
+def toAtom (a : Account) : Elem = {
 \end_layout
 
 \begin_layout Plain Layout
 
-  val id = "http://www.pocketchangeapp.com/api/expense/" + this.id    
+  val entries = Expense.getByAcct(a,Empty,Empty,Empty,MaxRows(10))
 \end_layout
 
 \begin_layout Plain Layout
 
-  val formatter = new  SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")    
 \end_layout
 
 \begin_layout Plain Layout
 
-  val edate = formatter.format(this.dateOf.is)
+  <feed xmlns="http://www.w3.org/2005/Atom">
 \end_layout
 
 \begin_layout Plain Layout
 
-  
+    <title>{a.name}</title>
 \end_layout
 
 \begin_layout Plain Layout
 
-  <entry xmlns="http://www.w3.org/2005/Atom">     
+    <id>urn:uuid:{a.id.is}</id>
 \end_layout
 
 \begin_layout Plain Layout
 
-    <expense>       
+    <updated>{entries.headOption.map(restTimestamp) getOrElse
 \end_layout
 
 \begin_layout Plain Layout
 
-      <id>{id}</id>       
+              timestamp.format(new java.util.Date)}</updated>
 \end_layout
 
 \begin_layout Plain Layout
 
-      <accountname>{getAccountName(account.is)}</accountname>       
+    { entries.flatMap(toAtom) }
 \end_layout
 
 \begin_layout Plain Layout
 
-      <date>{edate}</date>       
-\end_layout
-
-\begin_layout Plain Layout
-
-      <description>{description.is}</description>       
-\end_layout
-
-\begin_layout Plain Layout
-
-      <amount>{amount.is.toString}</amount>       
-\end_layout
-
-\begin_layout Plain Layout
-
-      <tags>{showXMLTags}</tags>      
-\end_layout
-
-\begin_layout Plain Layout
-
-    </expense>     
-\end_layout
-
-\begin_layout Plain Layout
-
-  </entry>   
+  </feed>
 \end_layout
 
 \begin_layout Plain Layout
 
 }
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def toAtom (e : Expense) : Elem =
+\end_layout
+
+\begin_layout Plain Layout
+
+  <entry>
+\end_layout
+
+\begin_layout Plain Layout
+
+    <id>urn:uuid:{restId(e)}</id>
+\end_layout
+
+\begin_layout Plain Layout
+
+    <title>{e.description.is}</title>
+\end_layout
+
+\begin_layout Plain Layout
+
+    <updated>{restTimestamp(e)}</updated>
+\end_layout
+
+\begin_layout Plain Layout
+
+    <content type="xhtml">
+\end_layout
+
+\begin_layout Plain Layout
+
+      <div xmlns="http://www.w3.org/1999/xhtml">
+\end_layout
+
+\begin_layout Plain Layout
+
+        <table>
+\end_layout
+
+\begin_layout Plain Layout
+
+          <tr><th>Amount</th><th>Tags</th><th>Receipt</th></tr>
+\end_layout
+
+\begin_layout Plain Layout
+
+          <tr><td>{e.amount.is.toString}</td>
+\end_layout
+
+\begin_layout Plain Layout
+
+              <td>{e.tags.map(_.name.is).mkString(", ")}</td>
+\end_layout
+
+\begin_layout Plain Layout
+
+              <td>{
+\end_layout
+
+\begin_layout Plain Layout
+
+                 if (e.receipt.is ne null) {
+\end_layout
+
+\begin_layout Plain Layout
+
+                   <img src={"/image/" + e.id} />
+\end_layout
+
+\begin_layout Plain Layout
+
+                 } else Text("None")
+\end_layout
+
+\begin_layout Plain Layout
+
+               }</td></tr>
+\end_layout
+
+\begin_layout Plain Layout
+
+        </table>
+\end_layout
+
+\begin_layout Plain Layout
+
+      </div>
+\end_layout
+
+\begin_layout Plain Layout
+
+    </content>
+\end_layout
+
+\begin_layout Plain Layout
+
+  </entry>
 \end_layout
 
 \end_inset
@@ -2054,77 +4116,40 @@ def toAtom = {
 \end_layout
 
 \begin_layout Standard
-And we'll have to modify the dispatch rules to add a format selection in
- the URI.
- We'll leave plain XML as the default response, and we'll add a way to select
- XML or Atom.
+Now that we have the format, we simply hook into our dispatch method to
+ match a GET request on a URL like:
+\end_layout
+
+\begin_layout LyX-Code
+http://www.pocketchangeapp.com/api/account/<accound ID>
 \end_layout
 
 \begin_layout Standard
-The URIs for GET will now be as shown in Listing 
+Refer to Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "lst:New-Format-Selection"
+reference "lst:REST-Method-Routing"
 
 \end_inset
 
-:
+ again to see this match.
+\end_layout
+
+\begin_layout Subsection
+An Example Atom Request
 \end_layout
 
 \begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-New Format Selection URLs
-\begin_inset CommandInset label
-LatexCommand label
-name "lst:New-Format-Selection"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-http://www.pocketchangeapp.com/api/expense/<eid>
-\end_layout
-
-\begin_layout Plain Layout
-
-http://www.pocketchangeapp.com/api/expense/<eid>/xml
-\end_layout
-
-\begin_layout Plain Layout
-
-http://www.pocketchangeapp.com/api/expense/<eid>/atom
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-And the additions to the dispatch are shown in Listing 
+An example Atom reqeust/response cycle for a test account is shown in Listing
+ 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "lst:The-Modified-Dispatch"
+reference "lst:An-Example-Atom-req-resp"
 
 \end_inset
 
-:
+.
+ We've cut off the entries here for brevity.
 \end_layout
 
 \begin_layout Standard
@@ -2137,250 +4162,10 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-The Modified Dispatch Function
+An Example Atom Request and Response
 \begin_inset CommandInset label
 LatexCommand label
-name "lst:The-Modified-Dispatch"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-object RestAPI extends XMLApiHelper {
-\end_layout
-
-\begin_layout Plain Layout
-
-  def dispatch: LiftRules.DispatchPF = {     
-\end_layout
-
-\begin_layout Plain Layout
-
-    case Req(List("api", "expense", eid), "", GetRequest) => 
-\end_layout
-
-\begin_layout Plain Layout
-
-      () => showExpenseXml(eid) // old
-\end_layout
-
-\begin_layout Plain Layout
-
-    case Req(List("api", "expense", eid, "xml"), "", GetRequest) => 
-\end_layout
-
-\begin_layout Plain Layout
-
-      () => showExpenseXml(eid) // new
-\end_layout
-
-\begin_layout Plain Layout
-
-    case Req(List("api", "expense", eid, "atom"), "", GetRequest) => 
-\end_layout
-
-\begin_layout Plain Layout
-
-      () => showExpenseAtom(eid) // new
-\end_layout
-
-\begin_layout Plain Layout
-
-    case r @ Req(List("api", "expense", eid), "", PutRequest) => 
-\end_layout
-
-\begin_layout Plain Layout
-
-      () => addExpense(eid, r)
-\end_layout
-
-\begin_layout Plain Layout
-
-    
-\end_layout
-
-\begin_layout Plain Layout
-
-    // Invalid API request - route to our error handler
-\end_layout
-
-\begin_layout Plain Layout
-
-    case Req(List("api", _), "", _) => failure _ 
-\end_layout
-
-\begin_layout Plain Layout
-
-  }
-\end_layout
-
-\begin_layout Plain Layout
-
-}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Finally, we'll add 
-\family typewriter
-showExpenseAtom
-\family default
-, and rename 
-\family typewriter
-showExpense
-\family default
- to 
-\family typewriter
-showExpenseXml
-\family default
-, as shown in Listing 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "lst:New-Show-Methods"
-
-\end_inset
-
-:
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-New Show Methods
-\begin_inset CommandInset label
-LatexCommand label
-name "lst:New-Show-Methods"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-def showExpenseXml(eid: String): LiftResponse = {     
-\end_layout
-
-\begin_layout Plain Layout
-
-  val e: Box[NodeSeq] = for(e <- Expense.find(By(Expense.id, eid.toLong)))
-      
-\end_layout
-
-\begin_layout Plain Layout
-
-    yield {       
-\end_layout
-
-\begin_layout Plain Layout
-
-      XmlResponse(
-\end_layout
-
-\begin_layout Plain Layout
-
-        <operation id="show_expense_xml" success="true">{r.toXML}</operation>)
-     
-\end_layout
-
-\begin_layout Plain Layout
-
-    }
-\end_layout
-
-\begin_layout Plain Layout
-
-  e    
-\end_layout
-
-\begin_layout Plain Layout
-
-}
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-def showExpenseAtom(eid: String): AtomResponse = {     
-\end_layout
-
-\begin_layout Plain Layout
-
-  val e: Box[Node] = for(e <- Expense.find(By(Expense.id, eid.toLong))) yield
- {       
-\end_layout
-
-\begin_layout Plain Layout
-
-    e.toAtom
-\end_layout
-
-\begin_layout Plain Layout
-
-  }     
-\end_layout
-
-\begin_layout Plain Layout
-
-  AtomResponse(e.open_!)   
-\end_layout
-
-\begin_layout Plain Layout
-
-}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Let's take a look at a request and response for an Atom-ized entry, as shown
- in Listing .
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-Atom Request and Response
-\begin_inset CommandInset label
-LatexCommand label
-name "lst:Atom-Request-and"
+name "lst:An-Example-Atom-req-resp"
 
 \end_inset
 
@@ -2399,7 +4184,7 @@ Request:
 
 \begin_layout Plain Layout
 
-GET http://localhost:8080/api/expense/10/atom
+http://www.pocketchangeapp.com/api/account/1
 \end_layout
 
 \begin_layout Plain Layout
@@ -2413,101 +4198,254 @@ Response:
 
 \begin_layout Plain Layout
 
-Expires    Thu, 01 Jan 1970 00:00:00 GMT 
+<feed xmlns="http://www.w3.org/2005/Atom">
 \end_layout
 
 \begin_layout Plain Layout
 
-Set-Cookie    JSESSIONID=1bq219bmoevv1;Path=/ 
+  <title>Test</title>
 \end_layout
 
 \begin_layout Plain Layout
 
-Content-Length    353 
+  <id>urn:uuid:1</id>
 \end_layout
 
 \begin_layout Plain Layout
 
-Content-Type    application/atom+xml 
+  <updated>2010-10-06T00:00:00Z</updated>
 \end_layout
 
 \begin_layout Plain Layout
 
-X-Lift-Version    
+  <entry>
 \end_layout
 
 \begin_layout Plain Layout
 
-0.11-SNAPSHOT Server    
+      <id>urn:uuid:http://www.pocketchangeapp.com/api/expense/3</id>
 \end_layout
 
 \begin_layout Plain Layout
 
-Jetty(6.1.15.rc3)
+      <title>Receipt test</title>
 \end_layout
 
 \begin_layout Plain Layout
 
+      <updated>2010-10-06T00:00:00Z</updated>
 \end_layout
 
 \begin_layout Plain Layout
 
-<entry xmlns="http://www.w3.org/2005/Atom">     
+      <content type="xhtml">
 \end_layout
 
 \begin_layout Plain Layout
 
- <expense>       
+        <div xmlns="http://www.w3.org/1999/xhtml">
 \end_layout
 
 \begin_layout Plain Layout
 
-  <id>http://www.pocketchangeapp.com/api/expense/10</id>       
+          <table>
 \end_layout
 
 \begin_layout Plain Layout
 
-  <accountname>Home</accountname>       
+          <tr><th>Amount</th><th>Tags</th><th>Receipt</th></tr>
 \end_layout
 
 \begin_layout Plain Layout
 
-  <date>2009-03-26T00:00:00Z</date>       
+          <tr><td>12.00</td>
 \end_layout
 
 \begin_layout Plain Layout
 
-  <description>I buy food</description>       
+              <td>test, receipt</td>
 \end_layout
 
 \begin_layout Plain Layout
 
-  <amount>45.00</amount>       
+              <td><img src="/image/3" /></td></tr>
 \end_layout
 
 \begin_layout Plain Layout
 
-  <tags>         
+          </table>
 \end_layout
 
 \begin_layout Plain Layout
 
-   <tag>api</tag>       
+        </div>
 \end_layout
 
 \begin_layout Plain Layout
 
-  </tags>      
+      </content>
 \end_layout
 
 \begin_layout Plain Layout
 
- </expense>     
+    </entry>
 \end_layout
 
 \begin_layout Plain Layout
 
-</entry>  
+    ...
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Add a feed tag for the account page
+\end_layout
+
+\begin_layout Standard
+As an extra nicety, we want to add an appropriate Atom 
+\family typewriter
+<link/>
+\family default
+ tag to our Account view page so that people can easily subscribe to the
+ feed from their browser.
+ We do this by making two modifications to our template and snippet code.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Adding-a-link-viewAcct"
+
+\end_inset
+
+ shows how we insert a new binding point in our 
+\family typewriter
+viewAcct.html
+\family default
+ template to place the new link in the page head section.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=XML"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Adding a binding to viewAcct.html
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Adding-a-link-viewAcct"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+...
+\end_layout
+
+\begin_layout Plain Layout
+
+<lift:Accounts.detail eager_eval="true">
+\end_layout
+
+\begin_layout Plain Layout
+
+  <head><acct:atomLink /></head>
+\end_layout
+
+\begin_layout Plain Layout
+
+...
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Binding-the-Atom-link"
+
+\end_inset
+
+ shows how we generate a new Atom link based on the current 
+\family typewriter
+Account
+\family default
+'s id that points to the proper URL for our API.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Binding the Atom link
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Binding-the-Atom-link"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+bind("acct", xhtml,
+\end_layout
+
+\begin_layout Plain Layout
+
+     "atomLink" -> <link href={"/api/account/" + acct.id} 
+\end_layout
+
+\begin_layout Plain Layout
+
+                      type="application/atom+xml" 
+\end_layout
+
+\begin_layout Plain Layout
+
+                      rel="alternate" title={acct.name + " feed"} />,
+\end_layout
+
+\begin_layout Plain Layout
+
+     "name" -> acct.name.asHtml,
+\end_layout
+
+\begin_layout Plain Layout
+
+     ...
 \end_layout
 
 \end_inset
@@ -2522,11 +4460,7 @@ Conclusion
 \begin_layout Standard
 In this chapter, we outlined a RESTful API for a web application and showed
  how to implement one using Lift.
- We then extended that API to return Atom in addition to XML.
- If you want to expand the API beyond what we’ve done here, some logical
- extensions would be a full authentication layer or transforming the data
- to another format, such as JSON.
- 
+ We then extended that API to return Atom in addition to XML and JSON.
 \end_layout
 
 \end_body

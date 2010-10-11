@@ -44,6 +44,13 @@
 
 \begin_layout Chapter
 PocketChange
+\begin_inset CommandInset label
+LatexCommand label
+name "cha:PocketChange"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -155,9 +162,13 @@ Another important thing to note is that we're going to breeze through the
 status open
 
 \begin_layout Plain Layout
-\begin_inset CommandInset href
-LatexCommand href
-target "http://github.com/tjweir/pocketchangeapp/tree"
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+http://github.com/tjweir/pocketchangeapp
+\end_layout
 
 \end_inset
 

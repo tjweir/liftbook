@@ -407,6 +407,41 @@ General HTTP processing, including GET and POST submission, response codes,
 \end_layout
 
 \begin_layout Section
+Typographical Conventions
+\end_layout
+
+\begin_layout Standard
+In order to better communicate concepts and techniques in this book, we
+ have adopted the following typographical conventions:
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+
+\family typewriter
+ClassName
+\family default
+ Monospaced typewriter text is used to indicate types, class names, and
+ other code-related information.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+...
+ Ellipses within code listings are used to indicate omission of code to
+ condense listings.
+ Unless otherwise noted, the example code in this book comes from the PocketChan
+ge app (Chapter 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "cha:PocketChange"
+
+\end_inset
+
+), which has full source code available on GitHub.
+\end_layout
+
+\begin_layout Section
 For More Information about Lift
 \begin_inset CommandInset label
 LatexCommand label

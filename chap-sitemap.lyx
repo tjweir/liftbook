@@ -536,7 +536,7 @@ reference "sec:Customizing-Display"
 ,
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "sec:Access-Control"
+reference "sec:SiteMap-Access-Control"
 
 \end_inset
 
@@ -1663,7 +1663,7 @@ reference "sub:LocGroup"
 Access Control
 \begin_inset CommandInset label
 LatexCommand label
-name "sec:Access-Control"
+name "sec:SiteMap-Access-Control"
 
 \end_inset
 

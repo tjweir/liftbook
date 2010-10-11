@@ -3615,6 +3615,26 @@ name "sub:HTTP-Authentication"
 \end_inset
 
 
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+HTTP ! authentication
+\end_layout
+
+\end_inset
+
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Authentication
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -3623,9 +3643,13 @@ HTTP authentication is described by RFC 2617
 status open
 
 \begin_layout Plain Layout
-\begin_inset CommandInset href
-LatexCommand href
-target "http://www.isi.edu/in-notes/rfc2617.txt"
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+http://www.isi.edu/in-notes/rfc2617.txt
+\end_layout
 
 \end_inset
 
@@ -3637,17 +3661,21 @@ target "http://www.isi.edu/in-notes/rfc2617.txt"
 .
  It describes the means of protecting server resources and allowing access
  only to authorized entities.
- As you may know any J(2)EE web container provides HTTP authentication support
- mostly using JAAS
+ As you may know, any J(2)EE web container provides HTTP authentication
+ support using JAAS
 \begin_inset Foot
-status open
+status collapsed
 
 \begin_layout Plain Layout
 Java Authentication and Authorization Service.
- More informations can be found at 
-\begin_inset CommandInset href
-LatexCommand href
-target "http://java.sun.com/javase/6/docs/technotes/guides/security/jaas/JAASRefGuide.html"
+ More information can be found at 
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+http://java.sun.com/javase/6/docs/technotes/guides/security/jaas/JAASRefGuide.html
+\end_layout
 
 \end_inset
 
@@ -3656,18 +3684,102 @@ target "http://java.sun.com/javase/6/docs/technotes/guides/security/jaas/JAASRef
 
 \end_inset
 
- .
- But this appoach is not without caveats.
- For instance if you provide your own LoginModule or CallbackHandler implementat
-ion this will not be loaded by the web application classloader but instead
- by the container classloader (..
- at least in tomcat).
- This means that if your code has other dependencies that you can not use
- these dependencies from your web application since web application classloader
- sits below container's classloader in the delegation chain.
- Besides all these using Scala's power the developer experience of protecting
- server resources using HTTP authentication can be simplified a lot.
- Lift supports both basic and digest authentications, Basic is shown below:
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Authentication ! JAAS
+\end_layout
+
+\end_inset
+
+.
+ However, this approach has limitations.
+ For example, if you provide your own 
+\family typewriter
+LoginModule
+\family default
+ or 
+\family typewriter
+CallbackHandler
+\family default
+ implementation this will not be loaded by the web application classloader
+ but instead by the container classloader (at least in tomcat).
+ This can lead to dependency loading issues since the web application classloade
+r sits below the container's classloader in the delegation chain.
+ Lift, however, provides supports for both basic and digest authentications
+ via a simplified, scala-oriented API that you can use directly.
+ This API provides not only direct support for the HTTP authentication mechanism
+s, but also a path and role based authorization mechanism.
+ The following sections show how we use basic authentication to protect
+ our REST API (Chapter 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "cha:Web-Services"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Subsection
+Determining which Resources to Protect
+\end_layout
+
+\begin_layout Standard
+The first thing we need to do is tell Lift which resources are protected
+ by authentication.
+ This is done by configuring 
+\family typewriter
+LiftRules.httpAuthProtectedResources
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+httpAuthProtectedResources
+\end_layout
+
+\end_inset
+
+
+\family default
+ with one or more 
+\family typewriter
+PartialFunction[Req,Box[Role]]
+\family default
+
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+
+\family typewriter
+net.liftweb.http.auth.Role
+\end_layout
+
+\end_inset
+
+ to match on the request.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:HTTP-auth-define-resources"
+
+\end_inset
+
+ shows the PartialFunction defined in our 
+\family typewriter
+DispatchRestAPI
+\family default
+ object (Section 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "sub:REST-Custom-Dispatch"
+
+\end_inset
+
+) used to protect our REST API from unauthorized access.
 \end_layout
 
 \begin_layout Standard
@@ -3680,7 +3792,14 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-HTTP Authentication example
+Defining Protected Resources
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:HTTP-auth-define-resources"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -3690,7 +3809,328 @@ HTTP Authentication example
 
 \begin_layout Plain Layout
 
-import auth._
+  // We explicitly protect GET and PUT requests in our REST API
+\end_layout
+
+\begin_layout Plain Layout
+
+  import net.liftweb.http.auth.AuthRole
+\end_layout
+
+\begin_layout Plain Layout
+
+  def protection : LiftRules.HttpAuthProtectedResourcePF = {
+\end_layout
+
+\begin_layout Plain Layout
+
+    case Req(List("api", "account", accountId), _, PutRequest) =>
+\end_layout
+
+\begin_layout Plain Layout
+
+       Full(AuthRole("editAcct:" + accountId))
+\end_layout
+
+\begin_layout Plain Layout
+
+    case Req(List("api", "account", accountId), _, GetRequest) =>
+\end_layout
+
+\begin_layout Plain Layout
+
+       Full(AuthRole("viewAcct:" + accountId))
+\end_layout
+
+\begin_layout Plain Layout
+
+    // If the account is public, don't enforce auth
+\end_layout
+
+\begin_layout Plain Layout
+
+    case Req(List("api", "expense", Expense(e, true)), _, GetRequest) =>
+ Empty
+\end_layout
+
+\begin_layout Plain Layout
+
+    case Req(List("api", "expense", Expense(e, _)), _, GetRequest) =>
+\end_layout
+
+\begin_layout Plain Layout
+
+      Full(AuthRole("viewAcct:" + e.account.obj.open_!.id))
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The 
+\family typewriter
+PartialFunction
+\family default
+ matches on the 
+\family typewriter
+Req
+\family default
+ and can either return an 
+\family typewriter
+Empty
+\family default
+, indicating that the given request does not require authentication, or
+ a 
+\family typewriter
+Full[Role]
+\family default
+, that indicates which R
+\family typewriter
+ole
+\family default
+ a user requires to be authorized to access the given resource.
+ One important thing to remember is that HTTP authentication and SiteMap
+ access control (Section 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "sec:SiteMap-Access-Control"
+
+\end_inset
+
+) are synergistic, so make sure that you configure both properly.
+ We will discuss 
+\family typewriter
+Role
+\family default
+s further in Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Role-Hierarchies"
+
+\end_inset
+
+, but for now you can simply consider them as 
+\family typewriter
+String
+\family default
+ attributes associated with the current session.
+ Once we've defined which resources are to be protected, we need to hook
+ our 
+\family typewriter
+PartialFunction
+\family default
+ into 
+\family typewriter
+LiftRules
+\family default
+ in the 
+\family typewriter
+Boot.boot
+\family default
+ method, shown in Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Hooking-Resource-Protection"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Hooking Resource Protection
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Hooking-Resource-Protection"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// Hook in our REST API auth
+\end_layout
+
+\begin_layout Plain Layout
+
+LiftRules.httpAuthProtectedResource.append(DispatchRestAPI.protection)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Providing the Authentication Hook
+\end_layout
+
+\begin_layout Standard
+After we've defined what resources we want to protect, we need to configure
+ the 
+\family typewriter
+LiftRules.authentication
+\family default
+ function to perform the actual authentication.
+ Lift supports both HTTP Basic and Digest authentication schemes, which
+ we'll cover in the next two sections.
+\end_layout
+
+\begin_layout Subsubsection
+HTTP Basic Authentication
+\end_layout
+
+\begin_layout Standard
+HTTP Basic authentication is provided by the 
+\family typewriter
+net.liftweb.http.auth.HttpBasicAuthentication
+\family default
+ implementation class, constructed using the authentication realm name as
+ well as a 
+\family typewriter
+PartialFunction[(String, String, Req), Boolean]
+\family default
+ that actually does the authentication.
+ The tuple passed to the 
+\family typewriter
+PartialFunction
+\family default
+ consists of the attempted username password, and the request object (
+\family typewriter
+Req
+\family default
+).
+ It's your responsibility to return 
+\family typewriter
+true
+\family default
+ or 
+\family typewriter
+false
+\family default
+ to indicate whether the provided credentials succeed.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Performing-Basic-Authentication"
+
+\end_inset
+
+ shows the code in 
+\family typewriter
+Boot.boot
+\family default
+ that PocketChange uses to perform authentication based on the user's email
+ address and password.
+ Note that when authentication succeeds for a given user not only do we
+ return true, but we set the user as logged in (via 
+\family typewriter
+User.logUserIn
+\family default
+) and we compile a set of all of the 
+\family typewriter
+Role
+\family default
+s that the user so that Lift knows which protected resources the user may
+ access.
+ The
+\family typewriter
+ net.liftweb.http.auth.userRoles
+\family default
+ 
+\family typewriter
+RequestVar
+\family default
+ is a built-in construct in Lift that the authentication backend uses for
+ bookkeeping.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Performing Basic Authentication
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Performing-Basic-Authentication"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import net.liftweb.http.auth.{AuthRole,HttpBasicAuthentication,userRoles}
+\end_layout
+
+\begin_layout Plain Layout
+
+LiftRules.authentication = HttpBasicAuthentication("PocketChange") {
+\end_layout
+
+\begin_layout Plain Layout
+
+  case (userEmail, userPass, _) => {
+\end_layout
+
+\begin_layout Plain Layout
+
+    logger.debug("Authenticating: " + userEmail)
+\end_layout
+
+\begin_layout Plain Layout
+
+    User.find(By(User.email, userEmail)).map { user =>
+\end_layout
+
+\begin_layout Plain Layout
+
+      if (user.password.match_?(userPass)) {
+\end_layout
+
+\begin_layout Plain Layout
+
+        logger.debug("Auth succeeded for " + userEmail)
+\end_layout
+
+\begin_layout Plain Layout
+
+        User.logUserIn(user)
 \end_layout
 
 \begin_layout Plain Layout
@@ -3699,76 +4139,48 @@ import auth._
 
 \begin_layout Plain Layout
 
-class Boot {
+        // Compute all of the user roles
 \end_layout
 
 \begin_layout Plain Layout
 
-  def boot = {
+        userRoles(user.editable.map(acct => AuthRole("editAcct:" + acct.id))
+ ++
 \end_layout
 
 \begin_layout Plain Layout
 
-    ...
+                  user.allAccounts.map(acct => AuthRole("viewAcct:" + acct.id)))
 \end_layout
 
 \begin_layout Plain Layout
 
-    LiftRules.protectedResource.append {    
+        true
 \end_layout
 
 \begin_layout Plain Layout
 
-      case (ParsePath("users" :: _, _, _, _)) => Full(AuthRole("admin"))
+      } else {
 \end_layout
 
 \begin_layout Plain Layout
 
-    }
+        logger.warn("Auth failed for " + userEmail)
 \end_layout
 
 \begin_layout Plain Layout
 
-   
+        false
 \end_layout
 
 \begin_layout Plain Layout
 
-    LiftRules.authentication = HttpBasicAuthentication("lift") {  
+      }
 \end_layout
 
 \begin_layout Plain Layout
 
-      case ("John", "12test34", req) => 
-\end_layout
-
-\begin_layout Plain Layout
-
-        println("John is authenticated!")
-\end_layout
-
-\begin_layout Plain Layout
-
-        userRoles(AuthRole("admin")) 
-\end_layout
-
-\begin_layout Plain Layout
-
-        true    
-\end_layout
-
-\begin_layout Plain Layout
-
-    }  
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-   ...
+    } openOr false
 \end_layout
 
 \begin_layout Plain Layout
@@ -3783,80 +4195,278 @@ class Boot {
 
 \end_inset
 
-Here we just told Lift that /users path is a protected resource and only
- by users that have the Role admin.
- So here we have both authentication and authorization.
- If this function returns an Empty box it means that this resource is not
- bound to any Role meaning that only authentication will be performed, not
- authorization.
- Secondly using 
+
+\end_layout
+
+\begin_layout Subsubsection
+HTTP Digest Authentication
+\end_layout
+
+\begin_layout Standard
+HTTP Digest authentication is provided by the 
 \family typewriter
-LiftRules.authentication
+net.liftweb.http.auth.HttpDigestAuthentication
 \family default
- we told Lift that we want BasicAuthentication and of course we are passing
- the function that actually does the authentication.
- This function is actually a PartialFunction[(String, String, Req), Boolean].
- First two members of the tuple are username and password, then the Req
- object.
- In the above example we're basically saying that if user is authenticating
- itself as 
-\begin_inset Quotes eld
+ implementation class.
+ Like Basic authentication, the 
+\family typewriter
+HttpDigestAuthentication
+\family default
+ instance is constructed with a realm name and a 
+\family typewriter
+PartialFunction
+\family default
+, but in this case the 
+\family typewriter
+PartialFunction
+\family default
+ uses a tuple of 
+\family typewriter
+(String,Req,(String)
+\begin_inset Formula $\Rightarrow$
 \end_inset
 
-John
-\begin_inset Quotes erd
-\end_inset
-
- and password is 
-\begin_inset Quotes eld
-\end_inset
-
-12test34
-\begin_inset Quotes erd
-\end_inset
-
- the access to the protected resource will be granted (since our function
- returns true).
- But in our authentication function we also specify the role for user 
-\begin_inset Quotes eld
-\end_inset
-
-John
-\begin_inset Quotes erd
-\end_inset
-
- as being 
-\begin_inset Quotes eld
-\end_inset
-
-admin
-\begin_inset Quotes erd
-\end_inset
-
+Boolean)
+\family default
 .
- 
+ The first parameter is still the username, and the second parameter is
+ the request instance, but the third parameter is a function that will compute
+ and compare the digest for authentication based on a 
+\emph on
+plaintext
+\emph default
+ password.
+ This means that if we want to use Digest authentication, we need to be
+ able to retrieve a plaintext password for the user from the database somehow.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:HTTP-Digest-Authentication"
+
+\end_inset
+
+ shows how we could do this in PocketChange if we modified the 
 \family typewriter
-userRole
+User.password
 \family default
- is a RequestVar that will be used later on by Lift.
+ field to simply be a 
+\family typewriter
+MappedString
+\family default
+.
 \end_layout
 
 \begin_layout Standard
-So at runtime when user tries to access /users Lift knows that this is a
- protected resource and only an admin can access it.
- Therefore Lift is sending down to client a 401 HTTP status (unauthorized
- response).
- User will enter the credentials and if they match with username John and
- password 12test34 we got a successful authentication and because the role
- we set is admin which matches with the role assigned to the protected resource,
- the /users resource is served to client.
- 
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Performing Digest Authentication
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:HTTP-Digest-Authentication"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import net.liftweb.http.auth.{AuthRole,HttpBasicAuthentication,userRoles}
+\end_layout
+
+\begin_layout Plain Layout
+
+LiftRules.authentication = HttpBasicAuthentication("PocketChange") {
+\end_layout
+
+\begin_layout Plain Layout
+
+  case (userEmail, _, authenticates) => {
+\end_layout
+
+\begin_layout Plain Layout
+
+    logger.debug("Authenticating: " + userEmail)
+\end_layout
+
+\begin_layout Plain Layout
+
+    User.find(By(User.email, userEmail)).map { user =>
+\end_layout
+
+\begin_layout Plain Layout
+
+      if (authenticates(user.password.is)) {
+\end_layout
+
+\begin_layout Plain Layout
+
+        logger.debug("Auth succeeded for " + userEmail)
+\end_layout
+
+\begin_layout Plain Layout
+
+        User.logUserIn(user)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+        // Compute all of the user roles
+\end_layout
+
+\begin_layout Plain Layout
+
+        userRoles(user.editable.map(acct => AuthRole("editAcct:" + acct.id))
+ ++
+\end_layout
+
+\begin_layout Plain Layout
+
+                  user.allAccounts.map(acct => AuthRole("viewAcct:" + acct.id)))
+\end_layout
+
+\begin_layout Plain Layout
+
+        true
+\end_layout
+
+\begin_layout Plain Layout
+
+      } else {
+\end_layout
+
+\begin_layout Plain Layout
+
+        logger.warn("Auth failed for " + userEmail)
+\end_layout
+
+\begin_layout Plain Layout
+
+        false
+\end_layout
+
+\begin_layout Plain Layout
+
+      }
+\end_layout
+
+\begin_layout Plain Layout
+
+    } openOr false
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
-A Role is an n-ary tree structure.
- So when we assign a Role to a protectedResource we can actually provide
- an entire tree such as:
+Another important factor with Digest authentication is that it uses nonces
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+http://en.wikipedia.org/wiki/Cryptographic_nonce
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ for authenticating the client, and the nonces have a limited lifetime.
+ The default nonce lifetime is 30 seconds, but you can configure this by
+ overriding the 
+\family typewriter
+HttpDigestAuthentication.nonceValidityPeriod
+\family default
+ method.
+\end_layout
+
+\begin_layout Subsection
+Role Hierarchies
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Role-Hierarchies"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+So far we've discussed 
+\family typewriter
+Role
+\family default
+s as essentially flat constructs.
+ A 
+\family typewriter
+Role
+\family default
+, however, is an n-ary tree structure, meaning that when we assign a 
+\family typewriter
+Role
+\family default
+ to a protected resource we can actually provide a hierarchy.
+ Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Roles-hierarchy-example"
+
+\end_inset
+
+ shows an example of one such hierarchy.
+ In this example, the Admin is the 
+\begin_inset Quotes eld
+\end_inset
+
+superuser
+\begin_inset Quotes erd
+\end_inset
+
+ role for admins, and can do what any sub-role can do and more.
+ The Site-Admin can monitor the application, the User-Admin can manage users,
+ and then we specify a set of location-specific roles: the Romania-Admin
+ that can manage users from Romania, US-Admin that can manage users from
+ US and UK-Admin that can only manage users from UK.
+ With this hierarchy a User-Admin can manage users from anywhere but a Site-Admi
+n can not manage any users.
+ A Romania-Admin can't monitor the site, nor it can manage the US or UK
+ users.
 \end_layout
 
 \begin_layout Standard
@@ -3882,6 +4492,13 @@ status open
 
 \begin_layout Plain Layout
 Roles hierarchy example
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Roles-hierarchy-example"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -3895,20 +4512,46 @@ Roles hierarchy example
 \end_layout
 
 \begin_layout Standard
-Assume that your application uses a roles structure as above.
- The Admin is the all mighty role for admins that can do what any sub-role
- can do and more.
- Then we have the Site-Admin that can monitor the application, the User-Admin
- that can manage users, then Romania-Admin that can manage users from Romania,
- US-Admin that can manage users from US and UK-Admin that can only manage
- users from UK.
- Now a User-Admin can manage users from anywhere but a Site-Admin can not
- manage any users.
- Neither a Romania-Admin has the priviledges of User-Admin or Admin, nor
- it can manage the US or UK users.
- You got the picture here; the idea is that the lower a Role is in the hierarchy
- the less priviledged it is.
- Let'see how the code looks like based on the above figure:
+Given this Role hierarchy, Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Using-Role-Hierarchies"
+
+\end_inset
+
+ shows how we can implement this in our code by creating our Role hierarchy
+ and then using the Role.getRoleByName method to locate the proper Role when
+ we perform authentication.
+ In this example we're restricting access to the 
+\family typewriter
+/users/ro
+\family default
+ path to only users with the 
+\begin_inset Quotes eld
+\end_inset
+
+Romania-Admin
+\begin_inset Quotes erd
+\end_inset
+
+ role.
+ However, our fictional 
+\begin_inset Quotes eld
+\end_inset
+
+John
+\begin_inset Quotes erd
+\end_inset
+
+ user is assigned the 
+\begin_inset Quotes eld
+\end_inset
+
+User-Admin
+\begin_inset Quotes erd
+\end_inset
+
+ role, so he will be able to access that path.
 \end_layout
 
 \begin_layout Standard
@@ -3921,7 +4564,14 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-HTTP Authentication multi-roles example
+Using Role Hierarchies
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Using-Role-Hierarchies"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -3955,11 +4605,12 @@ class Boot {
 
 \begin_layout Plain Layout
 
+    val roles = 
 \end_layout
 
 \begin_layout Plain Layout
 
-    val roles = AuthRole("Admin", 
+      AuthRole("Admin", 
 \end_layout
 
 \begin_layout Plain Layout
@@ -3999,13 +4650,17 @@ class Boot {
 
 \begin_layout Plain Layout
 
+\end_layout
+
+\begin_layout Plain Layout
+
     LiftRules.protectedResource.append {    
 \end_layout
 
 \begin_layout Plain Layout
 
-      case (ParsePath("users" :: _, _, _, _)) => roles.getRoleByName("Romania-Adm
-in")
+      case (ParsePath("users" :: "ro" :: _, _, _, _)) => roles.getRoleByName("Rom
+ania-Admin")
 \end_layout
 
 \begin_layout Plain Layout
@@ -4070,328 +4725,6 @@ in")
 \end_inset
 
 
-\end_layout
-
-\begin_layout Standard
-In this case if user is authenticated, authorization will also succeed because
- the user's Role is User-Admin and it is a parent of 
-\begin_inset Quotes eld
-\end_inset
-
-Romania-Admin
-\begin_inset Quotes erd
-\end_inset
-
-.
- If the /users resource would have been assigned with 
-\begin_inset Quotes eld
-\end_inset
-
-User-Admin
-\begin_inset Quotes erd
-\end_inset
-
- role and user John would have 
-\begin_inset Quotes eld
-\end_inset
-
-Romania-Admin
-\begin_inset Quotes erd
-\end_inset
-
- role that even if credentials are correct the authorization fails hence
- a 401 HTTP status is still sent to client.
-\end_layout
-
-\begin_layout Standard
-In conclusion you have a simple authentication and authorization mechanism
- and of course authentication function would typically validate the credentials
- against a database and fetch the roles from there.
-\end_layout
-
-\begin_layout Subsubsection
-HTTP Digest Authentication
-\end_layout
-
-\begin_layout Standard
-So far we talked about basic authentication and authorization.
- Lift also support HTTP Digest authentication.
- This means that the password information that user enters in the browser
- is never propagated on the server.
- Here is how we use it:
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-HTTP Digest Authentication multi-roles example
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-import auth._
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-class Boot {
-\end_layout
-
-\begin_layout Plain Layout
-
-  def boot = {
-\end_layout
-
-\begin_layout Plain Layout
-
-    ...
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-    val roles = AuthRole("Admin",
-\end_layout
-
-\begin_layout Plain Layout
-
-        AuthRole("Site-Admin"),
-\end_layout
-
-\begin_layout Plain Layout
-
-        AuthRole("User-Admin",
-\end_layout
-
-\begin_layout Plain Layout
-
-            AuthRole("Romania-Admin"),
-\end_layout
-
-\begin_layout Plain Layout
-
-            AuthRole("US-Admin"),
-\end_layout
-
-\begin_layout Plain Layout
-
-            AuthRole("UK-Admin")
-\end_layout
-
-\begin_layout Plain Layout
-
-        )
-\end_layout
-
-\begin_layout Plain Layout
-
-    )
-\end_layout
-
-\begin_layout Plain Layout
-
-    LiftRules.protectedResource.append {    
-\end_layout
-
-\begin_layout Plain Layout
-
-      case (ParsePath("users" :: _, _, _, _)) => roles.getRoleByName("Romania-Adm
-in")
-\end_layout
-
-\begin_layout Plain Layout
-
-    }
-\end_layout
-
-\begin_layout Plain Layout
-
-   
-\end_layout
-
-\begin_layout Plain Layout
-
-    LiftRules.authentication = HttpDigestAuthentication("lift") {
-\end_layout
-
-\begin_layout Plain Layout
-
-      case ("John", req, func) => if (func("12test34")) {
-\end_layout
-
-\begin_layout Plain Layout
-
-        println("John is authenticated !")
-\end_layout
-
-\begin_layout Plain Layout
-
-        userRoles(AuthRole("useradmin"))
-\end_layout
-
-\begin_layout Plain Layout
-
-        true
-\end_layout
-
-\begin_layout Plain Layout
-
-      } else {
-\end_layout
-
-\begin_layout Plain Layout
-
-        println("Not verified")
-\end_layout
-
-\begin_layout Plain Layout
-
-        false
-\end_layout
-
-\begin_layout Plain Layout
-
-      }
-\end_layout
-
-\begin_layout Plain Layout
-
-    } 
-\end_layout
-
-\begin_layout Plain Layout
-
-   ...
-\end_layout
-
-\begin_layout Plain Layout
-
-  }
-\end_layout
-
-\begin_layout Plain Layout
-
-}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Eveything we talked about Roles is still valid.
- However we're now using digest authentication.
- Note that in this case we're not provided with a password anymore but our
- function is provided with the user name, the Req object and a callback
- function.
- Because digest authentication implies checksum calculations there is no
- need to burden the user with such things.
- However our code calls this callback function by providing the password
- (which can be retrieved from database as we know the user name).
- If this function returns true it means that the digest that client sent
- andthe one that Lift calculated matches so we have a successful authentication.
- 
-\end_layout
-
-\begin_layout Standard
-There is also important to know that diget authentication mechanism uses
- a nonce sequence.
- This sequence is generated by the server when sending down the authentication
- challenge down to client (401 HTTP status).
- In order to avoid replay attacks this nonce is valid only for a period
- of time.
- By default this is set to 30 seconds but you can change this by setting:
-\end_layout
-
-\begin_layout Standard
-
-\family typewriter
-HttpDigestAuthentication.nonceValidityPeriod = <a value in milliseconds>
-\end_layout
-
-\begin_layout Standard
-If you use Lift's TimeHelpers you can say:
-\end_layout
-
-\begin_layout Standard
-
-\family typewriter
-HttpDigestAuthentication.nonceValidityPeriod = 50 seconds 
-\end_layout
-
-\begin_layout Standard
-
-\family typewriter
-// where seconds is a function and there are implicit conversion functions
- from 
-\begin_inset Quotes eld
-\end_inset
-
-primitives
-\begin_inset Quotes erd
-\end_inset
-
- to TimeSpans type.
-\end_layout
-
-\begin_layout Standard
-If this period expires even if the authentication and authorization succeed
- Lift will challenge it again by returning 401 HTTP status and a new nonce.
- So the resource is not served yet.
-\end_layout
-
-\begin_layout Standard
-It is important to know that a user can be assigned with multiple roles,
- not just one.
- This can be done by calling:
-\end_layout
-
-\begin_layout Standard
-
-\family typewriter
-userRoles(AuthRole("US-Admin", 
-\begin_inset Quotes eld
-\end_inset
-
-Site-Admin
-\begin_inset Quotes erd
-\end_inset
-
-)) // AuthRole overloaded apply function takes a repeated parameter.
-\end_layout
-
-\begin_layout Standard
-This is pretty much it as far as HTTP authentication and authorization goes
- but there is one more thing that is worth to be mentioned.
- If your application does not persist the user's password and only a digest
- internally calculated, the HTTP digest authentication can not really be
- used.
- The reason is that in order to match the client's digest, server needs
- to calculate it and for that it needs the password in clear but because
- the application stores a digest, the user's password can not be recovered.
- Hence the HTTP digest can not be calculated.
- This is a missmatch betwen the two concepts: HTTP digest authentication
- given by RFC 2617 and the unrecoverable password storage.
 \end_layout
 
 \end_body
