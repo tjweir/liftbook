@@ -1,4 +1,4 @@
-#LyX 1.6.5 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.7 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -485,13 +485,31 @@ http://blog.lostlake.org/
 \end_layout
 
 \begin_layout Enumerate
-The first place to look is the Wiki at 
+The first place to look is the Lift website at 
 \begin_inset Flex URL
 status open
 
 \begin_layout Plain Layout
 
-http://wiki.liftweb.net/index.php/Main_Page
+http://liftweb.net/
+\end_layout
+
+\end_inset
+
+.
+ There are links to lots of information on the site.
+ In particular:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+The Lift Wiki is hosted at 
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+http://www.assembla.com/wiki/show/liftweb
 \end_layout
 
 \end_inset
@@ -510,7 +528,7 @@ http://wiki.liftweb.net/index.php/Main_Page
 \begin_layout Enumerate
 The mailing list at 
 \begin_inset Flex URL
-status collapsed
+status open
 
 \begin_layout Plain Layout
 
@@ -526,7 +544,7 @@ http://groups.google.com/group/liftweb
  Please post specific questions about the book to the Lift Book Google Group
  at 
 \begin_inset Flex URL
-status collapsed
+status open
 
 \begin_layout Plain Layout
 
@@ -539,10 +557,32 @@ http://groups.google.com/group/the-lift-book
  Anything else that is Lift-specific is fair game for the mailing list.
 \end_layout
 
+\end_deeper
+\begin_layout Enumerate
+Tim Perrett, another Lift committer, is writing a book on Lift for Manning
+ called 
+\emph on
+Lift in Action
+\emph default
+.
+ More details can be found at the book's site at 
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+http://www.manning.com/perrett/
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
 \begin_layout Enumerate
 Lift has an IRC channel at 
 \begin_inset Flex URL
-status collapsed
+status open
 
 \begin_layout Plain Layout
 

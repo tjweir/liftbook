@@ -1,4 +1,4 @@
-#LyX 1.6.5 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.7 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -134,6 +134,28 @@ Copyright © 2008, 2009, 2010 by Derek Chen-Becker, Marius Danciu, David
 
 This work is licensed under the Creative Commons Attribution-No Derivative
  Works 3.0 Unported License.
+\end_layout
+
+\begin_layout Standard
+The home page for 
+\emph on
+Exploring Lift
+\emph default
+ is at 
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+http://exploring.liftweb.net
+\end_layout
+
+\end_inset
+
+.
+ Here you can find up-to-date copies of the text, as well as links to the
+ mailing list, issue tracking, and source code.
+ 
 \end_layout
 
 \begin_layout Standard
