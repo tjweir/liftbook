@@ -1,8 +1,11 @@
+RSYNCFLAGS = "-v --delete"
+
 all	: master.pdf
 
 html	: master.tex master.aux
 	@echo [Building HTML]
-	latex2html -split 3 -local_icons master.tex
+	latex2html -split 3 -local_icons -no_antialias_text -no_antialias -white master.tex
+	tar cvzf master.html.tgz master/
 	
 pdf	: master.pdf
 
@@ -20,4 +23,9 @@ master.aux	: master.tex
 	@echo [Built PDF]
 
 clean:
-	rm -f *.tex images/*.eps *.toc *.aux *.dvi *.idx *.lof *.log *.out *.toc *.lol
+	rm -f *.tex images/*.eps *.toc *.aux *.dvi *.idx *.lof *.log *.out *.toc *.lol master.pdf
+	rm -rf master/
+
+install: pdf html
+	rsync $(RSYNC_FLAGS) master.pdf master.html.tgz lion.harpoon.me:/home/scalatools/hudson/www/exploring/downloads/
+	rsync $(RSYNC_FLAGS)-v master/* lion.harpoon.me:/home/scalatools/hudson/www/exploring/master/
