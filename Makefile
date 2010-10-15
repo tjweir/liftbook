@@ -5,8 +5,9 @@ all	: master.pdf
 html	: master.tex master.aux
 	@echo [Building HTML]
 	latex2html -split 3 -local_icons -no_antialias_text -no_antialias -white master.tex
+	./highlightHtml.sh
 	tar cvzf master.html.tgz master/
-	
+
 pdf	: master.pdf
 
 master.pdf	: master.aux
