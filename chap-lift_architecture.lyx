@@ -1,4 +1,4 @@
-#LyX 1.6.5 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.7 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -190,10 +190,6 @@ LiftFilter Setup in web.xml
 
 \begin_layout Plain Layout
 
-\end_layout
-
-\begin_layout Plain Layout
-
 <web-app>
 \end_layout
 
@@ -250,10 +246,6 @@ LiftFilter Setup in web.xml
 \begin_layout Plain Layout
 
 </web-app>
-\end_layout
-
-\begin_layout Plain Layout
-
 \end_layout
 
 \end_inset
@@ -1593,10 +1585,6 @@ LiftRules.rewrite.append {
 \begin_layout Plain Layout
 
                                                 "tag" -> tag)))
-\end_layout
-
-\begin_layout Plain Layout
-
 \end_layout
 
 \begin_layout Plain Layout

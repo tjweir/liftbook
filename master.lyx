@@ -14,9 +14,10 @@
   L\kern-.1667em\lower.25em\hbox{Y}\kern-.125emX\@}
   {LyX }}
 
+
 % "define" Scala
-\lstdefinelanguage{scala}{morekeywords={class,object,trait,extends,with,new,if,while,for,def,val,var,this,import,package,override,case,private,public,protected,super},
-otherkeywords={->,=>},
+\lstdefinelanguage{scala}{morekeywords={abstract,case,catch,class,def,do,else,extends,false,final,finally,for,forSome,if,implicit,import,lazy,match,new,null,object,override,package,private,protected,return,sealed,super,this,throw,trait,try,true,type,val,var,while,with,yield},
+otherkeywords={=>,<-,<:,<\%,>:},
 sensitive=true,
 morecomment=[l]{//},
 morecomment=[s]{/*}{*/},
@@ -25,8 +26,24 @@ morestring=[b]"}
 %\font\ttfinconsolata Inconsolata
 %\renewcommand{\ttdefault}{Inconsolata}
 
+\definecolor{darkgreen}{rgb}{0,0.4,0}
+
 % Default settings for code listings
-\lstset{frame=tb,language=scala,aboveskip=3mm,belowskip=3mm,showstringspaces=false,columns=flexible,basicstyle={\small\ttfamily},upquote=true,showtabs=true,tab=BADTAB}
+\lstset{frame=tb,
+language=scala,
+aboveskip=3mm,
+belowskip=3mm,
+showstringspaces=false,
+columns=flexible,
+basicstyle={\small\ttfamily},
+keywordstyle=\color{blue},
+commentstyle=\color{darkgreen},
+stringstyle=\color{red},
+upquote=true,
+showtabs=true,
+tab=BADTAB,
+numbers=left,
+numberstyle=\tiny}
 
 % Fix the List of Listings title
 \renewcommand{\lstlistlistingname}{List of Listings}

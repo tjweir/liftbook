@@ -2,7 +2,7 @@ RSYNCFLAGS = "-rv --delete"
 
 all	: master.pdf
 
-html	: master.tex master.aux master/index.html
+html	: master.tex master.aux 
 	@echo [Building HTML]
 	latex2html -split 3 -local_icons -no_antialias_text -no_antialias -white master.tex
 	./highlightHtml.sh
