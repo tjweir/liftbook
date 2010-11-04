@@ -47,6 +47,9 @@ numberstyle=\tiny}
 
 % Fix the List of Listings title
 \renewcommand{\lstlistlistingname}{List of Listings}
+
+% Be less rigorous with line breaking
+\sloppy
 \end_preamble
 \use_default_options false
 \language english
@@ -69,7 +72,7 @@ numberstyle=\tiny}
 \pdf_subject "The Lift Web Framework"
 \pdf_keywords "Lift Scala Web"
 \pdf_bookmarks true
-\pdf_bookmarksnumbered false
+\pdf_bookmarksnumbered true
 \pdf_bookmarksopen false
 \pdf_bookmarksopenlevel 1
 \pdf_breaklinks false

@@ -1,4 +1,4 @@
-#LyX 1.6.5 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.7 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -4471,6 +4471,7 @@ n can not manage any users.
 
 \begin_layout Standard
 \begin_inset Float figure
+placement H
 wide false
 sideways false
 status open
@@ -4480,7 +4481,7 @@ status open
 \begin_inset Graphics
 	filename images/roles.png
 	lyxscale 10
-	width 5in
+	width 4in
 
 \end_inset
 
@@ -4659,8 +4660,12 @@ class Boot {
 
 \begin_layout Plain Layout
 
-      case (ParsePath("users" :: "ro" :: _, _, _, _)) => roles.getRoleByName("Rom
-ania-Admin")
+      case (ParsePath("users" :: "ro" :: _, _, _, _)) => 
+\end_layout
+
+\begin_layout Plain Layout
+
+        roles.getRoleByName("Romania-Admin")
 \end_layout
 
 \begin_layout Plain Layout
