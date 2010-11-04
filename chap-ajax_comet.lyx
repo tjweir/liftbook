@@ -1,4 +1,4 @@
-#LyX 1.6.5 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.7 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -2581,7 +2581,7 @@ name "lst:Modified-Clock-Class"
 
 \begin_layout Plain Layout
 
-def localSetup {
+override def localSetup {
 \end_layout
 
 \begin_layout Plain Layout
@@ -2601,7 +2601,7 @@ def localSetup {
 
 \begin_layout Plain Layout
 
-def localShutdown {
+override def localShutdown {
 \end_layout
 
 \begin_layout Plain Layout
