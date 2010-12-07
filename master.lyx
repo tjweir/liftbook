@@ -75,7 +75,7 @@ numberstyle=\tiny}
 \pdf_bookmarksnumbered true
 \pdf_bookmarksopen false
 \pdf_bookmarksopenlevel 1
-\pdf_breaklinks false
+\pdf_breaklinks true
 \pdf_pdfborder true
 \pdf_colorlinks true
 \pdf_backref false
@@ -280,20 +280,8 @@ mainmatter
 
 \end_layout
 
-\begin_layout Standard
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-part{The Basics}
-\end_layout
-
-\end_inset
-
-
+\begin_layout Part
+The Basics
 \end_layout
 
 \begin_layout Standard
@@ -376,20 +364,8 @@ filename "chap-record_and_mapper.lyx"
 
 \end_layout
 
-\begin_layout Standard
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-part{Advanced Topics}
-\end_layout
-
-\end_inset
-
-
+\begin_layout Part
+Advanced Topics
 \end_layout
 
 \begin_layout Standard
@@ -462,20 +438,8 @@ filename "chap-web_services.lyx"
 
 \end_layout
 
-\begin_layout Standard
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-part{Appendices}
-\end_layout
-
-\end_inset
-
-
+\begin_layout Part
+Appendices
 \end_layout
 
 \begin_layout Standard

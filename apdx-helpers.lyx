@@ -1,4 +1,4 @@
-#LyX 1.6.3 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.7 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -172,16 +172,12 @@ i
 , we received None.
 \end_layout
 
-\begin_layout LyX-Code
-
-\end_layout
-
 \begin_layout Standard
 \begin_inset listings
 inline false
 status open
 
-\begin_layout LyX-Code
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
@@ -201,51 +197,47 @@ name "lst:Option-and-Map"
 
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Plain Layout
 
 scala> val cap = Map("a" -> "A", "b" -> "B") 
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Plain Layout
 
 cap: scala.collection.immutable.Map[java.lang.String,java.lang.String] = 
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Plain Layout
 
   Map(a -> A, b -> B)
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Plain Layout
 
-\end_layout
-
-\begin_layout LyX-Code
-
-scala> cap.get("a")  
-\end_layout
-
-\begin_layout LyX-Code
-
-res1: Option[java.lang.String] = Some(A)
-\end_layout
-
-\begin_layout LyX-Code
-
-\end_layout
-
-\begin_layout LyX-Code
-
-scala> cap.get("i") 
-\end_layout
-
-\begin_layout LyX-Code
-
-res2: Option[java.lang.String] = None 
 \end_layout
 
 \begin_layout Plain Layout
 
+scala> cap.get("a")  
+\end_layout
+
+\begin_layout Plain Layout
+
+res1: Option[java.lang.String] = Some(A)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+scala> cap.get("i") 
+\end_layout
+
+\begin_layout Plain Layout
+
+res2: Option[java.lang.String] = None
 \end_layout
 
 \end_inset
@@ -277,7 +269,7 @@ reference "lst:Fetch-value-from"
 inline false
 status open
 
-\begin_layout LyX-Code
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
@@ -297,51 +289,55 @@ name "lst:Fetch-value-from"
 
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Plain Layout
 
 def prettyPrint(foo: Option[String]): String = foo match {
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Plain Layout
 
   case Some(x) => x
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Plain Layout
 
   case None => "Nothing found."
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Plain Layout
 
 }
 \end_layout
 
 \begin_layout Plain Layout
 
-    Which would be used in conjunction with the previous code:
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Plain Layout
+
+// Which would be used in conjunction with the previous code:
+\end_layout
+
+\begin_layout Plain Layout
 
 scala> prettyPrint(cap.get("a")) 
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Plain Layout
 
 res7: String = A
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Plain Layout
 
 scala> prettyPrint(cap.get("i")) 
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Plain Layout
 
 res8: String = Nothing found.
 \end_layout
@@ -610,7 +606,8 @@ name "lst:Scala-nested-operations"
 
 \begin_layout Plain Layout
 
-                    y <- getSomeOtherValue() if x > 10) yield compute(x, y)
+                    y <- getSomeOtherValue() if x > 10) yield compute(x,
+ y)
 \end_layout
 
 \begin_layout Plain Layout
@@ -793,7 +790,7 @@ reference "lst:Box-example"
 inline false
 status open
 
-\begin_layout LyX-Code
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
@@ -813,79 +810,79 @@ name "lst:Box-example"
 
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Plain Layout
 
 a match {
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Plain Layout
 
   Full(author) => Text("I found the author " + author.niceName)
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Plain Layout
 
   Empty => Text("No author by that name.")
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Plain Layout
 
   // message may be something like "Database disconnected."
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Plain Layout
 
   Failure(message, _, _) => Text("Nothing found due to " + message) 
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Plain Layout
 
 }
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Plain Layout
 
 def confirmDelete {     
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Plain Layout
 
   (for (val id <- param("id");     // get the ID           
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Plain Layout
 
         val user <- User.find(id)) // find the user                     
                                                            
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Plain Layout
 
   yield {          
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Plain Layout
 
     user.delete_!                   
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Plain Layout
 
     notice("User deleted")          
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Plain Layout
 
     redirectTo("/simple/index.html")        
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Plain Layout
 
   }) getOrElse {error("User not found"); redirectTo("/simple/index.html")}
     
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Plain Layout
 
 }
 \end_layout
@@ -930,7 +927,7 @@ reference "lst:openOr-example"
 inline false
 status open
 
-\begin_layout LyX-Code
+\begin_layout Plain Layout
 
 \begin_inset Caption
 
@@ -950,22 +947,22 @@ name "lst:openOr-example"
 
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Plain Layout
 
 lazy val UserBio = UserBio.find(By(UserBio.id, id)) openOr (new UserBio)
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Plain Layout
 
 def view (xhtml: NodeSeq): NodeSeq = passedAuthor.map({ author => 
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Plain Layout
 
   // do bind, etc here and return a NodeSeq
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Plain Layout
 
 }) openOr Text("Invalid author") 
 \end_layout

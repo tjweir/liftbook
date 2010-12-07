@@ -1,4 +1,4 @@
-#LyX 1.6.5 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.7 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -2508,7 +2508,7 @@ lly update our Expense table when you set the start or end dates!
 
 \begin_layout Standard
 \begin_inset listings
-lstparams "float,tabsize=4"
+lstparams "tabsize=4"
 inline false
 status open
 

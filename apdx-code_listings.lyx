@@ -1,4 +1,4 @@
-#LyX 1.6.5 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.7 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -92,7 +92,6 @@ Author Entity
 
 \begin_layout Standard
 \begin_inset listings
-lstparams "numbers=left,numberstyle={\tiny},stepnumber=2"
 inline false
 status open
 
@@ -244,9 +243,9 @@ orm.xml
 
 \begin_layout Standard
 \begin_inset listings
-lstparams "basicstyle={\scriptsize},breaklines=true,language=XML,numbers=left,numberstyle={\tiny}"
+lstparams "basicstyle={\scriptsize},breaklines=true,language=XML"
 inline false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 
@@ -429,9 +428,9 @@ Enumv Trait
 
 \begin_layout Standard
 \begin_inset listings
-lstparams "basicstyle={\scriptsize},breaklines=true,firstline=5,numbers=left,numberstyle={\tiny}"
+lstparams "basicstyle={\scriptsize},breaklines=true,firstline=5"
 inline false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 
@@ -632,9 +631,9 @@ EnumerationType
 
 \begin_layout Standard
 \begin_inset listings
-lstparams "basicstyle={\scriptsize},breaklines=true,firstline=15,lastline=35,numbers=left,numberstyle={\tiny}"
+lstparams "basicstyle={\scriptsize},breaklines=true,firstline=15,lastline=35"
 inline false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 
@@ -954,6 +953,7 @@ This shows the LiftFilter setup as well as the persistence-context-ref.
 
 \begin_layout Standard
 \begin_inset listings
+lstparams "language=XML"
 inline false
 status open
 

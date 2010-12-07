@@ -1,4 +1,4 @@
-#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.7 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -645,7 +645,7 @@ named queries
 
 \begin_layout Standard
 \begin_inset listings
-lstparams "float,language=XML"
+lstparams "language=XML"
 inline false
 status open
 
@@ -816,7 +816,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Passing Detached Instances Around an Application
 \begin_inset CommandInset label
 LatexCommand label
@@ -1205,7 +1204,7 @@ LocalEMF
 
 \begin_layout Standard
 \begin_inset listings
-lstparams "breaklines=true,firstline=1,float,lastline=8,numbers=left,numberstyle={\tiny}"
+lstparams "breaklines=true,firstline=1,lastline=8,numbers=left,numberstyle={\tiny}"
 inline false
 status open
 
@@ -1353,7 +1352,7 @@ transaction-type
 
 \begin_layout Standard
 \begin_inset listings
-lstparams "float,language=XML"
+lstparams "language=XML"
 inline false
 status open
 
@@ -1489,7 +1488,7 @@ If you'll be deploying into a JEE container, such as JBoss or GlassFish,
 
 \begin_layout Standard
 \begin_inset listings
-lstparams "breaklines=true,float,language=XML,numbers=left,numberstyle={\tiny}"
+lstparams "breaklines=true,language=XML,numbers=left,numberstyle={\tiny}"
 inline false
 status open
 
@@ -2617,13 +2616,7 @@ Model.remove(container.widget)
 
 \begin_layout Plain Layout
 
-container.widget = new Widget(
-"
-
-Foo!
-"
-
-)
+container.widget = new Widget("Foo!")
 \end_layout
 
 \begin_layout Plain Layout
@@ -3180,7 +3173,7 @@ EnumvType
 
 \begin_layout Standard
 \begin_inset listings
-lstparams "breaklines=true,firstline=3,float,numbers=left,numberstyle={\tiny}"
+lstparams "breaklines=true,firstline=3,numbers=left,numberstyle={\tiny}"
 inline false
 status open
 
@@ -3326,7 +3319,6 @@ unknown
 
 \begin_layout Standard
 \begin_inset listings
-lstparams "float"
 inline false
 status open
 

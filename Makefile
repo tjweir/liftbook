@@ -2,10 +2,14 @@ RSYNCFLAGS = "-rv --delete"
 
 all	: master.pdf
 
-html	: master.tex master.aux 
+html	: master.lyx
 	@echo [Building HTML]
-	latex2html -split 3 -local_icons -no_antialias_text -no_antialias -white master.tex
-	./highlightHtml.sh
+#	latex2html -split 3 -local_icons -no_antialias_text -no_antialias -white master.tex
+#	./highlightHtml.sh
+	rm -rf master/
+	mkdir master/
+	cp -R templates/* master/
+	python elyxer.py --splitpart 1 master.lyx master/index.html
 	tar cvzf master.html.tgz master/
 
 pdf	: master.pdf
