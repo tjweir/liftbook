@@ -1,0 +1,2 @@
+/* clear the floats for all our IE friends*/
+.clear, form#commentform { zoom: 1; }
