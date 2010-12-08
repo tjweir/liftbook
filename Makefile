@@ -1,4 +1,4 @@
-RSYNCFLAGS = "-rv --delete"
+RSYNCFLAGS = -rv --delete
 
 all	: master.pdf
 
@@ -9,7 +9,7 @@ html	: master.lyx
 	rm -rf master/
 	mkdir master/
 	cp -R templates/* master/
-	python elyxer.py --splitpart 1 master.lyx master/index.html
+	python elyxer.py --splitpart 1 --css "css/lyx.css" --defaultbrush "scala" --userheader htmlheader.txt --userfooter htmlfooter.txt master.lyx master/index.html
 	tar cvzf master.html.tgz master/
 
 pdf	: master.pdf
@@ -32,5 +32,5 @@ clean:
 	rm -rf master/
 
 install: pdf html
-	rsync $(RSYNC_FLAGS) master.pdf master.html.tgz lion.harpoon.me:/home/scalatools/hudson/www/exploring/downloads/
-	rsync $(RSYNC_FLAGS) master/ lion.harpoon.me:/home/scalatools/hudson/www/exploring/master/
+	rsync $(RSYNCFLAGS) master.pdf master.html.tgz lion.harpoon.me:/home/scalatools/hudson/www/exploring/downloads/
+	rsync $(RSYNCFLAGS) master/ lion.harpoon.me:/home/scalatools/hudson/www/exploring/master/

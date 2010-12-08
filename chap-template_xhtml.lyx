@@ -1,4 +1,4 @@
-#LyX 1.6.5 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.7 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -1984,6 +1984,7 @@ reference "lst:A-Non-Conforming-XML"
 
 \begin_layout Standard
 \begin_inset listings
+lstparams "language=XML"
 inline false
 status open
 
@@ -2178,7 +2179,7 @@ reference "cha:AJAX-and-COMET"
 
 \begin_layout Standard
 \begin_inset listings
-lstparams "basicstyle={\footnotesize},language=Java,numbers=left,numberstyle={\tiny}"
+lstparams "language=XML"
 inline false
 status open
 
@@ -2695,6 +2696,7 @@ name "lst:Surrounding-your-page"
 
 \begin_layout Standard
 \begin_inset listings
+lstparams "language=XML"
 inline false
 status open
 
@@ -2807,6 +2809,7 @@ admin.
 
 \begin_layout Standard
 \begin_inset listings
+lstparams "language=XML"
 inline false
 status open
 
@@ -2980,6 +2983,7 @@ surround
 
 \begin_layout Standard
 \begin_inset listings
+lstparams "language=XML"
 inline false
 status open
 

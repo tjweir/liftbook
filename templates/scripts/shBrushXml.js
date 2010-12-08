@@ -60,7 +60,7 @@
 	};
 
 	Brush.prototype	= new SyntaxHighlighter.Highlighter();
-	Brush.aliases	= ['xml', 'xhtml', 'xslt', 'html', 'XML'];
+	Brush.aliases	= ['xml', 'xhtml', 'xslt', 'html'];
 
 	SyntaxHighlighter.brushes.Xml = Brush;
 

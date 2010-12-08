@@ -145,7 +145,7 @@ reference "lst:LiftFilter-setup-in-web.xml"
 
 \begin_layout Standard
 \begin_inset listings
-lstparams "language=XML,numbers=left,numberstyle={\tiny}"
+lstparams "language=XML"
 inline false
 status open
 

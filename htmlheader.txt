@@ -1,0 +1,9 @@
+<!-- scripts for highlighter -->
+<script type="text/javascript" src="scripts/shCore.js"></script>
+<script type="text/javascript" src="scripts/shBrushXml.js"></script>
+<script type="text/javascript" src="scripts/shBrushScala.js"></script>
+<script type="text/javascript" src="scripts/shBrushBash.js"></script>
+<!-- CSS for highlighter -->
+<link href="css/shCore.css" rel="stylesheet" type="text/css" />
+<link href="css/shThemeDefault.css" rel="stylesheet" type="text/css" />
+

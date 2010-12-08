@@ -1204,7 +1204,7 @@ LocalEMF
 
 \begin_layout Standard
 \begin_inset listings
-lstparams "breaklines=true,firstline=1,lastline=8,numbers=left,numberstyle={\tiny}"
+lstparams "breaklines=true,firstline=1,lastline=8"
 inline false
 status open
 
@@ -1488,7 +1488,7 @@ If you'll be deploying into a JEE container, such as JBoss or GlassFish,
 
 \begin_layout Standard
 \begin_inset listings
-lstparams "breaklines=true,language=XML,numbers=left,numberstyle={\tiny}"
+lstparams "breaklines=true,language=XML"
 inline false
 status open
 
@@ -3173,7 +3173,7 @@ EnumvType
 
 \begin_layout Standard
 \begin_inset listings
-lstparams "breaklines=true,firstline=3,numbers=left,numberstyle={\tiny}"
+lstparams "breaklines=true,firstline=3"
 inline false
 status open
 
