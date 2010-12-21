@@ -130,19 +130,16 @@ status open
 
 \begin_layout Plain Layout
 \begin_inset Flex URL
-status collapsed
+status open
 
 \begin_layout Plain Layout
 
-http://wiki.liftweb.net/index.php?title=Lift_View_First
+http://www.assembla.com/wiki/show/liftweb/View_First
 \end_layout
 
 \end_inset
 
-.
- Note that the example code is somewhat out of date on this page.
- The interesting part is David's reasoning and decisions that have made
- Lift so easy to use.
+
 \end_layout
 
 \end_inset
