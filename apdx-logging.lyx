@@ -1,4 +1,4 @@
-#LyX 1.6.0 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.7 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -57,14 +57,18 @@ name "cha:Logging-in-Lift"
 Logging is a useful part of any application, Lift app or otherwise.
  Logging can be used to audit user actions, give insight into runtime performanc
 e and operation, and even to troubleshoot and debug issues.
- Lift comes with a thin logging facade that sits on top of the log4j library
+ Lift comes with a thin logging facade that sits on top of the SLF4J library
 \begin_inset Foot
 status open
 
 \begin_layout Plain Layout
-\begin_inset CommandInset href
-LatexCommand href
-target "http://logging.apache.org/log4j/"
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://www.slf4j.org/
+\end_layout
 
 \end_inset
 
@@ -83,67 +87,65 @@ target "http://logging.apache.org/log4j/"
 \end_layout
 
 \begin_layout Section
-Logging Configuration
-\end_layout
+Logging Backend
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Logging-Backend"
 
-\begin_layout Standard
-Out of the box Lift sets up a log4j logging hierarchy using a cascading
- setup as defined in the 
-\family typewriter
-LogBoot._log4jSetup
-\family default
- method.
- First, it checks to see if log4j is already configured; this is commonly
- the case when a Lift application is deployed on a J2EE app server that
- uses log4j (JBoss, for example).
- If not, then it attempts to locate a 
-\family typewriter
-log4j.props
-\family default
- or 
-\family typewriter
-log4j.xml
-\family default
- configuration file in the class path and if it finds either it will use
- them for configuration.
- Failing that, it will fall back to configuring log4j using the
-\begin_inset Newline linebreak
 \end_inset
 
 
-\family typewriter
-LogBoot.defaultProps
-\family default
- variable.
- Usually it's simplest to just provide a 
-\family typewriter
-log4j.props
-\family default
- or 
-\family typewriter
-log4j.xml
-\family default
- file in your resources to configure logging.
- If you prefer, you can provide your own 
-\family typewriter
-LogBoot.loggerSetup
-\family default
- function to use instead of 
-\family typewriter
-_log4jSetup
-\family default
- if you want to do something special, like configureAndWatch.
 \end_layout
 
 \begin_layout Standard
-If you would prefer, Lift's logging framework also supports slf4j
+The detailed configuration of SLF4J is outside the scope of this book, but
+ we would like to highlight a few key notes concerning SLF4J.
+ First, SLF4J splits the API from the implementation into separate JAR files.
+ This allows you to choose the backing implementation that best suits your
+ deployment.
+ For example, SLF4J contains implementations for JDK logging, log4j, and
+ more.
+ For example, the JBoss application server version 5 and newer comes bundled
+ with its own implementation of the SLF4J API, so you can simply deploy
+ a Lift WAR on JBoss and use the server's configuration and logging.
+ Similarly, Jetty comes bundled with the SLF4J API.
+\end_layout
+
+\begin_layout Standard
+Outside of container-provided implementations, the logback logging framework
 \begin_inset Foot
 status open
 
 \begin_layout Plain Layout
-\begin_inset CommandInset href
-LatexCommand href
-target "http://www.slf4j.org/"
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://logback.qos.ch/
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ is a very nice implementation of the SLF4J API.
+ It's written by the same people who wrote log4j and has much improved performan
+ce and functionality over log4j
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://logback.qos.ch/reasonsToSwitch.html
+\end_layout
 
 \end_inset
 
@@ -153,17 +155,113 @@ target "http://www.slf4j.org/"
 \end_inset
 
 .
- Enabling slf4j is as simple as calling Slf4jLogBoot.enable in your boot
- method, as shown in listing 
+ Because logback-classic implements the SLF4J API, you simply need to drop
+ the logback-classic jar into your classpath, or add it as a dependency
+ in your WAR to use it.
+ One particularly nice feature of logback is that if it can't locate a configura
+tion file (which can be written in XML, Groovy, or soon, Scala), it will
+ default to logging everything to the console.
+\end_layout
+
+\begin_layout Section
+Basic Logging
+\end_layout
+
+\begin_layout Standard
+Logging in Lift is performed via the 
+\family typewriter
+net.liftweb.common.Logger
+\family default
+ object and trait.
+ The 
+\family typewriter
+Logger
+\family default
+ object provides a set of utility methods for configuration and instantiation
+ of logger instances.
+ The 
+\family typewriter
+Logger
+\family default
+ trait can be mixed into your snippet, comet, or other classes to provide
+ direct methods for logging (we'll cover these in Section 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "lst:Enabling-slf4j"
+reference "sub:Logging-Methods"
 
 \end_inset
 
-.
- Note that you need to add both slf4j and a backend as dependencies in your
- pom.xml, and you should configure slf4j before enabling it.
+).
+\end_layout
+
+\begin_layout Subsection
+Logging Setup
+\end_layout
+
+\begin_layout Standard
+The first step in utilizing Lift's logging is to configure the logger.
+ As we mentioned in Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Logging-Backend"
+
+\end_inset
+
+, Lift uses the SLF4J framework.
+ The configuration of SLF4J depends on which backing implementation you
+ use, but Lift comes with helpers for both log4j (
+\family typewriter
+net.liftweb.common.Log4j
+\family default
+) and for logback (
+\family typewriter
+net.liftweb.common.Logback
+\family default
+).
+ These helpers are utilized with the 
+\family typewriter
+Logger
+\family default
+ object's 
+\family typewriter
+setup
+\family default
+ var.
+ The 
+\family typewriter
+Log4j
+\family default
+ helpers provides methods that can be used to load a configuration from
+ a 
+\family typewriter
+String
+\family default
+, a file (either XML or properties), or with Lift's default (console) logging.
+ The 
+\family typewriter
+Logback
+\family default
+ helper provides a single method to load a configuration from an XML file.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Configuring-Logback-via"
+
+\end_inset
+
+ shows how you could use the 
+\family typewriter
+Logback
+\family default
+ helper in the 
+\family typewriter
+Boot.boot
+\family default
+ method to configure logging from the 
+\emph on
+logconfig.xml
+\emph default
+ file.
 \end_layout
 
 \begin_layout Standard
@@ -176,10 +274,245 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Enabling slf4j
+Configuring Logback via Logger.setup
 \begin_inset CommandInset label
 LatexCommand label
-name "lst:Enabling-slf4j"
+name "lst:Configuring-Logback-via"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def boot {
+\end_layout
+
+\begin_layout Plain Layout
+
+  // Get a reference to the config from our classpath
+\end_layout
+
+\begin_layout Plain Layout
+
+  val logUrl = LiftRules.getResource("logconfig.xml")
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\end_layout
+
+\begin_layout Plain Layout
+
+  // Apply the reference, if found
+\end_layout
+
+\begin_layout Plain Layout
+
+  logUrl.foreach { Logger.setup = Logback.withFile(_) }
+\end_layout
+
+\begin_layout Plain Layout
+
+  ...
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Obtaining a Logger
+\end_layout
+
+\begin_layout Standard
+There are two basic means of obtaining a logger instance.
+ The first is to mix the 
+\family typewriter
+Logger
+\family default
+ trait into your class.
+ The second is to instantiate a logger using the 
+\family typewriter
+Logger
+\family default
+ object's 
+\family typewriter
+apply
+\family default
+ methods.
+\end_layout
+
+\begin_layout Standard
+Mixing the 
+\family typewriter
+Logger
+\family default
+ trait into your class is a very simple way to add logging methods in your
+ code, as shown in Listing.
+ When you do this, the underlying logger will have a name derived from your
+ class's dynamic type.
+ For example, Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Mixing-Logger-into"
+
+\end_inset
+
+ shows the definition of our 
+\family typewriter
+Accounts
+\family default
+ snippet object with a 
+\family typewriter
+Logger
+\family default
+ trait mixed in.
+ When we log in the 
+\family typewriter
+Accounts
+\family default
+ object the name will be the fully-qualified classname, or 
+\begin_inset Quotes eld
+\end_inset
+
+com.pocketchangeapp.snippet.Accounts
+\begin_inset Quotes erd
+\end_inset
+
+ in our case.
+ When you mix the Logger trait into your class, you can access the logging
+ methods (Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Logging-Methods"
+
+\end_inset
+
+) directly.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Mixing Logger into a Class
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Mixing-Logger-into"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+object Accounts extends DispatchSnippet with Logger {
+\end_layout
+
+\begin_layout Plain Layout
+
+  ...
+\end_layout
+
+\begin_layout Plain Layout
+
+  warn("This is a warning")
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The second basic way to obtain a logger instance is to construct one directly
+ via the 
+\family typewriter
+Logger
+\family default
+ object's 
+\family typewriter
+apply
+\family default
+ method, as shown in Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Constructing-a-Logger"
+
+\end_inset
+
+.
+ The 
+\family typewriter
+apply
+\family default
+ method takes either a 
+\family typewriter
+String
+\family default
+ or 
+\family typewriter
+Class
+\family default
+ that will be used to determine the constructed logger's name.
+ In our example, we use the 
+\family typewriter
+classOf[Boot]
+\family default
+, so our logger will be named 
+\begin_inset Quotes eld
+\end_inset
+
+bootstrap.liftweb.Boot
+\begin_inset Quotes erd
+\end_inset
+
+.
+ When you obtain a logger via construction you need to access the logging
+ methods via the logger instance.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Constructing a Logger instance
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Constructing-a-Logger"
 
 \end_inset
 
@@ -198,27 +531,22 @@ class Boot {
 
 \begin_layout Plain Layout
 
-  def boot {
+  // Set up a logger to use for startup messages
 \end_layout
 
 \begin_layout Plain Layout
 
-    Slf4jLogBoot.enable()
+  val logger = Logger(classOf[Boot])
 \end_layout
 
 \begin_layout Plain Layout
 
-    ...
+  ...
 \end_layout
 
 \begin_layout Plain Layout
 
-  }
-\end_layout
-
-\begin_layout Plain Layout
-
-}
+  logger.warn("This is a warning")
 \end_layout
 
 \end_inset
@@ -226,20 +554,126 @@ class Boot {
 
 \end_layout
 
-\begin_layout Section
-Basic Logging
+\begin_layout Standard
+There is a third, hybrid, approach to obtaining a 
+\family typewriter
+Logger
+\family default
+ that allows you to mix in the 
+\family typewriter
+Logger
+\family default
+ trait while controlling the logger name.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Mixing-in-a-named-logger"
+
+\end_inset
+
+ shows how we can mix in th trait and then override the underlying SLF4J
+ logger with our own named instance.
 \end_layout
 
 \begin_layout Standard
-Logging in Lift is performed via the net.liftweb.util.Log object.
- This object provides some basic log methods which we'll summarize here.
- Each log method comes in two forms: one with just an Object argument, and
- one with Object and Throwable arguments.
- These correspond one-to-one with the log4j log methods, although the parameters
- are passed by-name; this is done so that computation of the log message
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Mixing in a named Logger
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Mixing-in-a-named-logger"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+class AddEntry extends StatefulSnippet with Logger {
+\end_layout
+
+\begin_layout Plain Layout
+
+  // Use a different name for our logger
+\end_layout
+
+\begin_layout Plain Layout
+
+  import org.slf4j.LoggerFactory
+\end_layout
+
+\begin_layout Plain Layout
+
+  override val _logger = LoggerFactory.getLogger("EntryEdit") 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Logging Methods
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Logging-Methods"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The 
+\family typewriter
+Logger
+\family default
+ trait provides some basic log methods which we'll summarize here.
+ Each log method comes in three forms: one with just a 
+\begin_inset Formula $\Rightarrow Object$
+\end_inset
+
+ argument, one with a 
+\begin_inset Formula $\Rightarrow Object$
+\end_inset
+
+ and 
+\family typewriter
+Throwable
+\family default
+ argument, and one with a 
+\begin_inset Formula $\Rightarrow Object$
+\end_inset
+
+, 
+\family typewriter
+Throwable
+\family default
+, and 
+\family typewriter
+Marker
+\family default
+ argument.
+ These correspond roughly to the SLF4J log methods, although the order of
+ the parameters is different and the parameters are passed by-name.
+ Pass-by-name arguments are used so that computation of the log message
  can be deferred.
  This is useful to avoid processing messages for log statements below the
- current logging threshold, a topic we'll cover more in section 
+ current logging threshold, a topic we'll cover more in Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Log-Levels"
@@ -287,26 +721,6 @@ error Logs a message at error level.
 \end_layout
 
 \begin_layout Description
-fatal Logs a message at the fatal level.
- This level should be used for messages that relate to conditions under
- which the application cannot continue to function, such as an OutOfMemory
- exception.
-\end_layout
-
-\begin_layout Description
-never This essentially throws away the passed message.
- This is useful for some of Lift's functionality that requires a log output
- function (Schemifier.schemify, for example, in section 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "sub:Schema-Mapping"
-
-\end_inset
-
-).
-\end_layout
-
-\begin_layout Description
 assertLog This allows you to test an assertion condition and if true, logs
  the assertion as well as a given message.
 \end_layout
@@ -319,14 +733,8 @@ reference "lst:Some-example-logging"
 
 \end_inset
 
- shows an example of using a few different Logging methods within a form
- processing function that handles logins.
- We start out with some tracing of method entry (and corresponding exit
- at the end), then add an assertion to log the case where someone is logging
- in a second time.
- We add a debug statement that uses a function to generate the message so
- that the string concatenation won't take place if debug logging is disabled.
- Finally, we log an error message if a problem ocurred during authentication.
+ shows our REST API authentication hook, which uses a few different Logging
+ methods within the handler method.
 \end_layout
 
 \begin_layout Standard
@@ -356,77 +764,101 @@ name "lst:Some-example-logging"
 
 \begin_layout Plain Layout
 
-import net.liftweb.util.Log
+LiftRules.authentication = HttpBasicAuthentication("PocketChange") {
 \end_layout
 
 \begin_layout Plain Layout
 
-def processLogin(name : String, password : String) = {
+  case (userEmail, userPass, _) => {
 \end_layout
 
 \begin_layout Plain Layout
 
-  Log.trace("Starting login process")
+    logger.debug("Authenticating: " + userEmail)
 \end_layout
 
 \begin_layout Plain Layout
 
-  try {
+    User.find(By(User.email, userEmail)).map { user =>
 \end_layout
 
 \begin_layout Plain Layout
 
-    ...
+      if (user.password.match_?(userPass)) {
 \end_layout
 
 \begin_layout Plain Layout
 
-    Log.assertLog(User.currentUser.isDefined, 
+        logger.info("Auth succeeded for " + userEmail)
 \end_layout
 
 \begin_layout Plain Layout
 
-                  "Redundant authentication!")
+        User.logUserIn(user)
 \end_layout
 
 \begin_layout Plain Layout
 
-    ...
 \end_layout
 
 \begin_layout Plain Layout
 
-    Log.debug(() => ("Retreiving auth data for " + name))
+        // Set an MDC for logging purposes
 \end_layout
 
 \begin_layout Plain Layout
 
-    ...
+        MDC.put("user", user.shortName)
 \end_layout
 
 \begin_layout Plain Layout
 
-    if (!authenticated) {
 \end_layout
 
 \begin_layout Plain Layout
 
-      Log.error("Authentication failed for " + name)
+        // Compute all of the user roles
 \end_layout
 
 \begin_layout Plain Layout
 
-    }
+        userRoles(user.editable.map(acct => AuthRole("editAcct:" + acct.id))
+ ++
 \end_layout
 
 \begin_layout Plain Layout
 
-  } finally {
+                  user.allAccounts.map(acct => AuthRole("viewAcct:" + acct.id)))
 \end_layout
 
 \begin_layout Plain Layout
 
-    Log.trace("Login process complete")
+        true
+\end_layout
+
+\begin_layout Plain Layout
+
+      } else {
+\end_layout
+
+\begin_layout Plain Layout
+
+        logger.warn("Auth failed for " + userEmail)
+\end_layout
+
+\begin_layout Plain Layout
+
+        false
+\end_layout
+
+\begin_layout Plain Layout
+
+      }
+\end_layout
+
+\begin_layout Plain Layout
+
+    } openOr false
 \end_layout
 
 \begin_layout Plain Layout
@@ -485,9 +917,8 @@ isWarnEnabled
 \end_layout
 
 \begin_layout Standard
-Fatal logging is always enabled, so there is no test for that level.
- Log guards are fairly common in logging frameworks to avoid expensive computati
-on of log message that won't actually be used.
+Log guards are fairly common in logging frameworks to avoid expensive computatio
+n of log message that won't actually be used.
  This is particularly relevant with debug logging, since they often cover
  a large section of code and usually aren't enabled in production.
  The Log object can implicitly do log guards for you because of the pass-by-name
@@ -519,66 +950,77 @@ debug
 \family default
  would be called the parameter will be first evaluated and then passed to
  the method.
- Inside the method we have the test to see if the debug i enabled to know
- if we actaully need to trace that message or not.
+ Inside the method we have the test to see if the debug level is enabled
+ to know if we actaully need to trace that message or not.
  Well in this case even if the debugging level is turned off we still have
  the evaluation of the parameters and that leads to unnecessary computing
- and in an application that heaviliy uses logging that would likely leads
- to relevant performance impact.
- So in this 
-\begin_inset Quotes eld
-\end_inset
-
-eagerly
-\begin_inset Quotes erd
-\end_inset
-
- evaluation situation we have to test if the debug level is on even before
- calling the 
-\family typewriter
-debug
-\family default
- method.
- Something like 
-\family typewriter
-if (Log.isDebugEnabled) {debug(
-\begin_inset Quotes eld
-\end_inset
-
-Retreiving auth data
-\begin_inset Quotes erd
-\end_inset
-
-)}
-\family default
-.
- Not very convenient.
- So because the logging functions take pass-by-name functions as parameter
- they will be evaluated lazily and only if the appropriate debugging level
- is set.
+ and in an application that uses logging heavily that would likely lead
+ to a performance impact.
 \end_layout
 
 \begin_layout Section
 Logging Mapper Queries
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Logging-Mapper-Queries"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
-In addition to application-level logging, the Mapper framework provides
- a simple interface for logging queries.
- The DB.addLogFunc method takes a function 
-\begin_inset Formula $(String,Long)\Rightarrow Any$
+If you want to log Mapper query activity, there are two main approaches.
+ The first is to utilize the 
+\family typewriter
+net.liftweb.mapper.DB.addLogFunc
+\family default
+ method to add your own logging function.
+ A logging function is of the type 
+\begin_inset Formula $(DBLog,Long)\Rightarrow Any$
 \end_inset
 
- that can log the actual query string along with its execution time in milliseco
-nds.
+.
+ The 
+\family typewriter
+DBLog
+\family default
+ trait contains two separate lists of log entries, one for meta operations
+ (such as 
+\family typewriter
+getFetchSize
+\family default
+) and one for actual work statements (such as 
+\family typewriter
+executeQuery
+\family default
+).
+ You can access these two log lists via either the 
+\family typewriter
+metaEntries
+\family default
+ or 
+\family typewriter
+statementEntries
+\family default
+ methods.
+ You can also access the entire list of both types via the 
+\family typewriter
+allEntries
+\family default
+ method.
  Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "lst:Mapper-Logging"
+reference "lst:Basic-Mapper-Logging"
 
 \end_inset
 
- shows a trivial log function example.
+ shows how we can hook a log function in the 
+\family typewriter
+Boot.boot
+\family default
+ method to log Mapper activity for each request.
 \end_layout
 
 \begin_layout Standard
@@ -591,10 +1033,11 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Mapper Logging
+
+Basic Mapper Logging
 \begin_inset CommandInset label
 LatexCommand label
-name "lst:Mapper-Logging"
+name "lst:Basic-Mapper-Logging"
 
 \end_inset
 
@@ -608,17 +1051,203 @@ name "lst:Mapper-Logging"
 
 \begin_layout Plain Layout
 
-DB.addLogFunc((query, time) => 
+// Add a query logger
 \end_layout
 
 \begin_layout Plain Layout
 
-  Log.debug(() => (query + ":" + time + "ms")))
+DB.addLogFunc {
+\end_layout
+
+\begin_layout Plain Layout
+
+  case (log, duration) => {
+\end_layout
+
+\begin_layout Plain Layout
+
+    logger.debug("Total query time : %d ms".format(duration))
+\end_layout
+
+\begin_layout Plain Layout
+
+    log.allEntries.foreach {
+\end_layout
+
+\begin_layout Plain Layout
+
+      case DBLogEntry(stmt,duration) =>
+\end_layout
+
+\begin_layout Plain Layout
+
+        logger.debug("  %s in %d ms".format(stmt, duration))
+\end_layout
+
+\begin_layout Plain Layout
+
+    }
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
 \end_layout
 
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+Another approach to logging Mapper queries is to use the 
+\family typewriter
+DB.queryCollector
+\family default
+ logging function and then either use 
+\family typewriter
+S.queryLog
+\family default
+ to access the query log, or hook into 
+\family typewriter
+S.addAnalyzer
+\family default
+.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Mapper-Logging-via-S-queryLog"
+
+\end_inset
+
+ shows how we could use this instead for our logging in 
+\family typewriter
+Boot.boot
+\family default
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Mapper Logging via S.queryLog
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Mapper-Logging-via-S-queryLog"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// Add a query logger (via S.queryLog)
+\end_layout
+
+\begin_layout Plain Layout
+
+DB.addLogFunc(DB.queryCollector)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+S.addAnalyzer {
+\end_layout
+
+\begin_layout Plain Layout
+
+  case (Full(req), duration, log) => {
+\end_layout
+
+\begin_layout Plain Layout
+
+    logger.debug(("Total request time on %s: %d ms").format(req.uri, duration))
+\end_layout
+
+\begin_layout Plain Layout
+
+    log.foreach {
+\end_layout
+
+\begin_layout Plain Layout
+
+      case (stmt,duration) =>
+\end_layout
+
+\begin_layout Plain Layout
+
+        logger.debug("  %s in %d ms".format(stmt, duration))
+\end_layout
+
+\begin_layout Plain Layout
+
+    }
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+  case _ => // we don't log for non-requests
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Note that the duration you get when your analyzer function is called is
+ the time spent in 
+\family typewriter
+S
+\family default
+, not necessarily the total duration of your queries.
+ Also, only work statements are logged via 
+\family typewriter
+S.queryLog
+\family default
+.
+ If you want meta entries you'll have to use a direct logging function as
+ in Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Basic-Mapper-Logging"
+
+\end_inset
+
+.
 \end_layout
 
 \end_body
