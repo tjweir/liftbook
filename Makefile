@@ -8,8 +8,9 @@ html	: master.lyx
 #	./highlightHtml.sh
 	rm -rf master/
 	mkdir master/
-	cp -R templates/* master/
-	python elyxer.py --splitpart 1 --css "css/lyx.css" --defaultbrush "scala" --userheader htmlheader.txt --userfooter htmlfooter.txt master.lyx master/index.html
+	cp -R templates/css master/
+	cp -R templates/scripts master/
+	python elyxer.py --splitpart 1 --defaultbrush "scala" --template templates/template.html master.lyx master/index.html
 	tar cvzf master.html.tgz master/
 
 pdf	: master.pdf
