@@ -2723,7 +2723,7 @@ reference "lst:Sample-CSS-Transform-result"
 
 \begin_layout Standard
 \begin_inset listings
-lstparams "language=XML,numbers=none"
+lstparams "language=XML"
 inline false
 status open
 
@@ -2815,7 +2815,7 @@ $0
 \begin_deeper
 \begin_layout Standard
 \begin_inset listings
-lstparams "frame=none,language=HTML,numbers=none"
+lstparams "frame=none,language=HTML"
 inline false
 status open
 
@@ -2893,21 +2893,13 @@ href
 \begin_deeper
 \begin_layout Standard
 \begin_inset listings
-lstparams "frame=none,language=HTML,numbers=none"
+lstparams "frame=none,language=HTML"
 inline false
 status open
 
 \begin_layout Plain Layout
 
-<a href=
-\begin_inset Quotes erd
-\end_inset
-
-#
-\begin_inset Quotes erd
-\end_inset
-
->ReplaceMe</a>
+<a href="#">ReplaceMe</a>
 \end_layout
 
 \end_inset
@@ -2926,44 +2918,13 @@ href
 
 \begin_layout Standard
 \begin_inset listings
-lstparams "frame=none,numbers=none"
+lstparams "frame=none"
 inline false
 status open
 
 \begin_layout Plain Layout
 
-\begin_inset Quotes eld
-\end_inset
-
-a *
-\begin_inset Quotes erd
-\end_inset
-
- #> 
-\begin_inset Quotes eld
-\end_inset
-
-This is the link text
-\begin_inset Quotes erd
-\end_inset
-
- & 
-\begin_inset Quotes eld
-\end_inset
-
-a [href]
-\begin_inset Quotes erd
-\end_inset
-
- #> 
-\begin_inset Quotes eld
-\end_inset
-
-http://foo.com/bar
-\begin_inset Quotes erd
-\end_inset
-
-
+"a *" #> "This is the link text"& "a [href]" #> "http://foo.com/bar"
 \end_layout
 
 \end_inset
@@ -2998,36 +2959,13 @@ class
 \begin_deeper
 \begin_layout Standard
 \begin_inset listings
-lstparams "frame=none,numbers=none"
+lstparams "frame=none"
 inline false
 status open
 
 \begin_layout Plain Layout
 
-\begin_inset Quotes eld
-\end_inset
-
-tr [class+]
-\begin_inset Quotes erd
-\end_inset
-
- #> (if (index % 2) 
-\begin_inset Quotes eld
-\end_inset
-
-odd
-\begin_inset Quotes erd
-\end_inset
-
- else 
-\begin_inset Quotes eld
-\end_inset
-
-even
-\begin_inset Quotes erd
-\end_inset
-
-)
+"tr [class+]" #> (if (index % 2) "odd" else "even")
 \end_layout
 
 \end_inset
@@ -3063,42 +3001,18 @@ reference "lst:A-Simple-CSS-snippet"
 \begin_deeper
 \begin_layout Standard
 \begin_inset listings
-lstparams "frame=none,numbers=none"
+lstparams "frame=none"
 inline false
 status open
 
 \begin_layout Plain Layout
 
-def balance = 
-\begin_inset Quotes eld
-\end_inset
-
-#balance ^^
-\begin_inset Quotes erd
-\end_inset
-
- #> 
-\begin_inset Quotes eld
-\end_inset
-
-ignore
-\begin_inset Quotes erd
-\end_inset
-
- &
+def balance = "#balance ^^" #> "ignore" &
 \end_layout
 
 \begin_layout Plain Layout
 
-  
-\begin_inset Quotes eld
-\end_inset
-
-#balance
-\begin_inset Quotes erd
-\end_inset
-
- #> currentLedger.formattedBalance
+  "#balance" #> currentLedger.formattedBalance
 \end_layout
 
 \end_inset
@@ -3147,7 +3061,7 @@ reference "lst:Binding-the-Ledger-with-CSS"
 \begin_deeper
 \begin_layout Standard
 \begin_inset listings
-lstparams "frame=none,numbers=none"
+lstparams "frame=none"
 inline false
 status open
 
@@ -3185,7 +3099,7 @@ reference "lst:Binding-the-Ledger-with-CSS"
 \begin_deeper
 \begin_layout Standard
 \begin_inset listings
-lstparams "frame=none,numbers=none"
+lstparams "frame=none"
 inline false
 status open
 
@@ -3215,7 +3129,7 @@ status open
 \begin_deeper
 \begin_layout Standard
 \begin_inset listings
-lstparams "frame=none,numbers=none"
+lstparams "frame=none"
 inline false
 status open
 
@@ -3268,7 +3182,7 @@ Record.Field
 \begin_deeper
 \begin_layout Standard
 \begin_inset listings
-lstparams "frame=none,numbers=none"
+lstparams "frame=none"
 inline false
 status open
 
@@ -3314,7 +3228,7 @@ net.liftweb.util.StringPromotable
 \begin_deeper
 \begin_layout Standard
 \begin_inset listings
-lstparams "frame=none,numbers=none"
+lstparams "frame=none"
 inline false
 status open
 
@@ -3385,7 +3299,7 @@ Seq
 \begin_deeper
 \begin_layout Standard
 \begin_inset listings
-lstparams "frame=none,language=HTML,numbers=none"
+lstparams "frame=none,language=HTML"
 inline false
 status open
 
@@ -3420,7 +3334,7 @@ We can iterate over a list of accounts with the CSS transform:
 
 \begin_layout Standard
 \begin_inset listings
-lstparams "frame=none,numbers=none"
+lstparams "frame=none"
 inline false
 status open
 
@@ -3464,7 +3378,7 @@ C
 
 \begin_layout Standard
 \begin_inset listings
-lstparams "frame=none,language=HTML,numbers=none"
+lstparams "frame=none,language=HTML"
 inline false
 status open
 
