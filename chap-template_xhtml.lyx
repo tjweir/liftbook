@@ -72,8 +72,38 @@ XML
 
  files, but also from methods that can programmaticaly generate template
  XML.
- In this chapter we'll discuss the template XML capabilities and syntax,
- including XML tags provided by Lift that perform special template processing
+ Additionally, Lift 2.2
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Lift 2.2
+\end_layout
+
+\end_inset
+
+ brings designer-friendly templates (Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Designer-Friendly-Templates"
+
+\end_inset
+
+) and HTML5 support (Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:HTML5-Support"
+
+\end_inset
+
+).
+ Designer-friendly templates, in particular, can simplify working with a
+ designer because they allow templates to be fully valid XHTML or HTML5.
+\end_layout
+
+\begin_layout Standard
+In this chapter we'll discuss template capabilities and syntax, including
+ built-in tags provided by Lift that perform special template processing
  (Section 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -1016,6 +1046,441 @@ As you can see, templates are a nice way of setting up your layout and then
 y if you assemble your templates using the surround and embed tags.
  If you'd like programmatic control over the template XML used for a particular
  request, you'll want to use a View, which is discussed in the next section.
+\end_layout
+
+\begin_layout Section
+Designer-Friendly Templates
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Designer-Friendly-Templates"
+
+\end_inset
+
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Templates ! Designer-friendly
+\end_layout
+
+\end_inset
+
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Designer-friendly templates
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+New in Lift 2.2 is the ability to use fully valid XHTML (or HTML5, which
+ we'll discuss in Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:HTML5-Support"
+
+\end_inset
+
+) for your templates.
+ There are a number of features involved in designer-friendly templates
+ (or DFTs for short), so let's go through each one.
+\end_layout
+
+\begin_layout Subsection
+Determining the Content Element
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Templates ! content element
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In XML-based templates, the entire XML file is considered to hold the contents
+ of the template.
+ In DFTs, we want to be able to include the full XHTML or HTML5 markup,
+ including tags like 
+\family typewriter
+<DOCTYPE>
+\family default
+, 
+\family typewriter
+<html/>
+\family default
+, etc.
+ without necessarily including all of that in the output of the template
+ (for example, in an embedded template).
+ Lift supports choosing a child element of the template to represent the
+ actual contents via the use of one of two related mechanisms.
+\end_layout
+
+\begin_layout Standard
+The first mechanism is to put a 
+\family typewriter
+lift:content_id
+\family default
+ attribute on the HTML element, as shown in Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Assigning-a-Content-ID-HTML"
+
+\end_inset
+
+.
+ The drawback to this approach is that you have to specify the 
+\begin_inset Quotes eld
+\end_inset
+
+lift
+\begin_inset Quotes erd
+\end_inset
+
+ namespace in the html tag or you might get validation errors.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=HTML"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Assigning a Content ID on the HTML element
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Assigning-a-Content-ID-HTML"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+\end_layout
+
+\begin_layout Plain Layout
+
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+\end_layout
+
+\begin_layout Plain Layout
+
+ <html xmlns="http://www.w3.org/1999/xhtml" 
+\end_layout
+
+\begin_layout Plain Layout
+
+       xmlns:lift="http://liftweb.net" 
+\end_layout
+
+\begin_layout Plain Layout
+
+       lift:content_id="real_content">
+\end_layout
+
+\begin_layout Plain Layout
+
+   <head>
+\end_layout
+
+\begin_layout Plain Layout
+
+	<title>Not really</title>
+\end_layout
+
+\begin_layout Plain Layout
+
+   </head>
+\end_layout
+
+\begin_layout Plain Layout
+
+   <body>
+\end_layout
+
+\begin_layout Plain Layout
+
+     <div id="real_content">
+\end_layout
+
+\begin_layout Plain Layout
+
+       <h1>Welcome to your project!</h1>
+\end_layout
+
+\begin_layout Plain Layout
+
+     </div>
+\end_layout
+
+\begin_layout Plain Layout
+
+   </body>
+\end_layout
+
+\begin_layout Plain Layout
+
+ </html>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The second, safer approach, is to specific the 
+\family typewriter
+lift:content_id
+\family default
+ marker as part of the body element's 
+\family typewriter
+class
+\family default
+ attribute, as shown in Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Assigning-a-Content-ID-Body"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=HTML"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Assigning a Content ID in the Body class
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Assigning-a-Content-ID-Body"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+\end_layout
+
+\begin_layout Plain Layout
+
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+\end_layout
+
+\begin_layout Plain Layout
+
+ <html xmlns="http://www.w3.org/1999/xhtml">
+\end_layout
+
+\begin_layout Plain Layout
+
+   <head>
+\end_layout
+
+\begin_layout Plain Layout
+
+	<title>Not really</title>
+\end_layout
+
+\begin_layout Plain Layout
+
+   </head>
+\end_layout
+
+\begin_layout Plain Layout
+
+   <body class="lift:content_id=real_content">
+\end_layout
+
+\begin_layout Plain Layout
+
+     <div id="real_content">
+\end_layout
+
+\begin_layout Plain Layout
+
+       <h1>Welcome to your project!</h1>
+\end_layout
+
+\begin_layout Plain Layout
+
+     </div>
+\end_layout
+
+\begin_layout Plain Layout
+
+   </body>
+\end_layout
+
+\begin_layout Plain Layout
+
+ </html>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Invoking Snippets Via the Class Attribute
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Snippets ! invoking via class attributes
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In XML-based templates, Lift looks for tags with the 
+\begin_inset Quotes eld
+\end_inset
+
+lift
+\begin_inset Quotes erd
+\end_inset
+
+ prefix to process.
+ In DFTs, the 
+\family typewriter
+class
+\family default
+ attribute is used instead for invocation.
+ This form of invocation is discussed in more detail in Section 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "sec:The-Snippet-Tag"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+Binding via CSS transforms
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Binding ! with CSS
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Lift 2.2 introduces a new feature for binding values into snippet markup
+ by using CSS id and class attributes instead of prefixed XML elements.
+ This support is detailed in Section 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "sub:CSS-Selector-Transforms"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section
+HTML5 Support
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:HTML5-Support"
+
+\end_inset
+
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+HTML5
+\end_layout
+
+\end_inset
+
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+HTML ! Version 5
+\end_layout
+
+\end_inset
+
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Templates ! HTML5
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+TODO: Fill me in!
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section
@@ -2296,7 +2761,7 @@ The
 \family typewriter
 <lift:CSS/>
 \family default
- tag is used to insert either the blueprint
+ tag is used to insert the blueprint
 \begin_inset Foot
 status open
 
@@ -2316,7 +2781,27 @@ http://www.blueprintcss.org/
 
 \end_inset
 
- or fancy
+ and (optionally) fancyType 
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://anthonygthomas.com/2010/02/15/blueprint-optional-fancy-type-plugin/
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ CSS stylesheets
 \end_layout
 
 \begin_layout Subsection
@@ -2451,6 +2936,20 @@ loc
 
 \begin_layout Subsection
 Menu
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Add a note about naming Menus for Menu.item when using the DSL (e.g.
+ Menu.i or explicit name)
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection

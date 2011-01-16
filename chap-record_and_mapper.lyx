@@ -5427,20 +5427,46 @@ The lifecycle hooks are executed at the main operations in an instance lifecycle
 \end_layout
 
 \begin_layout Description
-Create When a new instance is created
+Create When a fresh instance is first saved (corresponding to a table insert).
 \end_layout
 
 \begin_layout Description
-Delete When an instance is deleted
+Delete When an instance is deleted.
 \end_layout
 
 \begin_layout Description
-Save When a fresh instance is first saved (corresponding to a table insert)
+Save When a new or existing instance is inserted or updated.
+ 
+\family typewriter
+beforeSave
+\family default
+ is always called before 
+\family typewriter
+beforeCreate
+\family default
+ or 
+\family typewriter
+beforeUpdate
+\family default
+.
+ Similarly, 
+\family typewriter
+afterSave
+\family default
+ is always called after 
+\family typewriter
+afterCreate
+\family default
+ or 
+\family typewriter
+afterUpdate
+\family default
+.
 \end_layout
 
 \begin_layout Description
 Update When an instance that already exists in the database is updated (correspo
-nding to a table update)
+nding to a table update).
 \end_layout
 
 \begin_layout Description

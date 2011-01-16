@@ -1,4 +1,4 @@
-#LyX 1.6.0 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.7 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -957,8 +957,8 @@ class ExampleStringAMQPListener {
 
 \begin_layout Plain Layout
 
-        case msg@AMQPMessage(contents: String) => println("received: " + msg);
- act
+        case msg@AMQPMessage(contents: String) => println("received: " +
+ msg); act
 \end_layout
 
 \begin_layout Plain Layout
@@ -1002,7 +1002,7 @@ class ExampleStringAMQPListener {
 \end_layout
 
 \begin_layout Standard
-First of all don't get scarred about this.
+First of all don't get scared about this.
  The above classes are already existent so you can just reuse them.
  However the point of showing them here is to understand how to use a AMQP
  consumer, how to configure it to match the client settings from the Listing
@@ -1506,7 +1506,7 @@ http://xmpp.org/
 
 \end_inset
 
- stand for e
+ stands for e
 \series bold
 X
 \series default
@@ -1523,9 +1523,10 @@ resence
 P
 \series default
 rotocol.
- It is an XML based protocol presence and realtime communication such as
- instance messaging.
- It is developer by Jabber
+ It is an XML-based protocol used for presence and realtime communication
+ such as instant messaging (Jabber and GoogleTalk being two of the more
+ famous users).
+ It is developed by the Jabber
 \begin_inset Foot
 status open
 
@@ -1536,9 +1537,9 @@ http://xmpp.org/about/jabber.shtml
 \end_inset
 
  open-source community.
- Lift provides an XMPP dispatcher implementation that you application can
+ Lift provides an XMPP dispatcher implementation that your application can
  use to receive instant messages, manage rosters etc.
- This support realies on Smack 
+ This support relies on the Smack 
 \begin_inset Foot
 status open
 
@@ -1548,7 +1549,7 @@ http://www.igniterealtime.org/downloads/index.jsp
 
 \end_inset
 
- XMPP client library and Scala actors as the actors model fits like a glove.
+ XMPP client library and utilizes Scala actors for the interface.
  Here is an example:
 \end_layout
 
@@ -2085,8 +2086,6 @@ ConsoleChatHelper.run(userName, password);
 \begin_layout Standard
 The above is an example how you can integrate your application with an XMPP
  server and how messages are pocessed.
- We won;t be detailing each line of code in this example as it is pretty
- much self explanatory and straight forward.
 \end_layout
 
 \begin_layout Section
@@ -2104,7 +2103,7 @@ width "100col%"
 special "none"
 height "1in"
 height_special "totalheight"
-status collapsed
+status open
 
 \begin_layout Plain Layout
 This chapter is still under active development.

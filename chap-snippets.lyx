@@ -1,4 +1,4 @@
-#LyX 1.6.5 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.7 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -170,6 +170,18 @@ Usage: <lift:snippet type="snippetName" ...options...
 
 \begin_layout LyX-Code
        <lift:snippetName ...options...
+ />
+\end_layout
+
+\begin_layout LyX-Code
+       <div class=
+\begin_inset Quotes erd
+\end_inset
+
+lift:snippetName?opt1=...;opt2=...;opt3=...
+\begin_inset Quotes erd
+\end_inset
+
  />
 \end_layout
 
@@ -394,6 +406,128 @@ reference "sub:Eager-Eval"
 \end_inset
 
 .
+\end_layout
+
+\begin_layout Standard
+With Lift 2.2's Designer-Friendly Templates (Section 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "sec:Designer-Friendly-Templates"
+
+\end_inset
+
+), you can also specify a snippet tag as part of the class attribute for
+ a given element.
+ Options for snippets invoked in this manner are passed via a slightly modified
+ form of a query string, with a semicolon separating options instead of
+ an ampersand.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Invoking-Snippets-Via-Class"
+
+\end_inset
+
+ shows an example of how we can use the standard 
+\family typewriter
+lift:surround
+\family default
+ processing by modiying the 
+\family typewriter
+class
+\family default
+ of our content element.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Invoking Snippets Via the Class Attribute
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Invoking-Snippets-Via-Class"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+\end_layout
+
+\begin_layout Plain Layout
+
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+\end_layout
+
+\begin_layout Plain Layout
+
+ <html xmlns="http://www.w3.org/1999/xhtml">
+\end_layout
+
+\begin_layout Plain Layout
+
+   <head>
+\end_layout
+
+\begin_layout Plain Layout
+
+	<title>Not really</title>
+\end_layout
+
+\begin_layout Plain Layout
+
+   </head>
+\end_layout
+
+\begin_layout Plain Layout
+
+   <body class="lift:content_id=real_content">
+\end_layout
+
+\begin_layout Plain Layout
+
+     <div class="lift:surround?with=default;at=content" id="real_content">
+\end_layout
+
+\begin_layout Plain Layout
+
+       <h1>Welcome to your project!</h1>
+\end_layout
+
+\begin_layout Plain Layout
+
+     </div>
+\end_layout
+
+\begin_layout Plain Layout
+
+   </body>
+\end_layout
+
+\begin_layout Plain Layout
+
+ </html>
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section
@@ -1237,8 +1371,11 @@ reference "lst:Binding-Our-Explicit-snippet"
 \family typewriter
 <lift:HelloWorld/>
 \family default
-, and because our DispatchSnippet uses a simple variable binding for its
- 
+, and because our 
+\family typewriter
+DispatchSnippet
+\family default
+ uses a simple variable binding for its 
 \family typewriter
 dispatch
 \family default
@@ -1267,6 +1404,44 @@ render
 \end_inset
 
 , following Lift's normal snippet tag conventions).
+ Noe that if you're setting up a dispatch for a 
+\family typewriter
+StatefulSnippet
+\family default
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+StatefulSnippet
+\end_layout
+
+\end_inset
+
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Snippets ! stateful
+\end_layout
+
+\end_inset
+
+, return a new instance of your 
+\family typewriter
+StatefulSnippet
+\family default
+ class.
+ 
+\family typewriter
+StatefulSnippet
+\family default
+ instances will properly register themselves ahead of the 
+\family typewriter
+snippetDispatch
+\family default
+ partial function on each successive request.
 \end_layout
 
 \begin_layout Standard
@@ -1317,6 +1492,21 @@ class Boot {
 \begin_layout Plain Layout
 
       case "HelloWorld" => com.foo.logic.HelloWorld
+\end_layout
+
+\begin_layout Plain Layout
+
+      // For StatefulSnippets, return a *new instance*
+\end_layout
+
+\begin_layout Plain Layout
+
+      case "HelloConversation" => 
+\end_layout
+
+\begin_layout Plain Layout
+
+        new com.foo.logic.StatefulHelloWorld
 \end_layout
 
 \begin_layout Plain Layout
@@ -2133,6 +2323,1254 @@ Attributes ! -%> operator
 \end_inset
 
  binding operator instead.
+\end_layout
+
+\begin_layout Subsection
+CSS Selector Transforms
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:CSS-Selector-Transforms"
+
+\end_inset
+
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+CSS ! selector transforms
+\end_layout
+
+\end_inset
+
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Binding ! with CSS
+\end_layout
+
+\end_inset
+
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Snippets ! binding with CSS
+\end_layout
+
+\end_inset
+
+
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+CSS Transforms
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In addition to the binding support detailed in Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Binding-Values-in-snippets"
+
+\end_inset
+
+, Lift 2.2 introduces binding via CSS transforms as part of its support for
+ designer friendly templates.
+ These allow you to bind values into template XHTML (or HTML5, see Section
+ 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "sec:HTML5-Support"
+
+\end_inset
+
+) by using the attributes on specific elements.
+ Let's start by looking at a basic example, corresponding to the examples
+ in Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Binding-Values-in-snippets"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:A-Simple-CSS-snippet"
+
+\end_inset
+
+ shows a Designer-Friendly version of Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Snippet-tag-children"
+
+\end_inset
+
+.
+ You can see that we're invoking the 
+\family typewriter
+Ledger.balance
+\family default
+ snippet via the class attribute, and we've specified the binding elements
+ as normal 
+\family typewriter
+<span/>
+\family default
+ elements with 
+\family typewriter
+id
+\family default
+ attributes.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+A Simple CSS Snippet
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:A-Simple-CSS-snippet"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<div class="lift:Ledger.balance">
+\end_layout
+
+\begin_layout Plain Layout
+
+  <span id="balance">$0</span> as of <span id="time">midnight</span>
+\end_layout
+
+\begin_layout Plain Layout
+
+</div>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now, we need to perform the CSS transform within our snippet.
+ The binding implicits for CSS transforms are found on the 
+\family typewriter
+net.liftweb.util.BindHelpers
+\family default
+ object/trait, so you should import it (in particular, the 
+\family typewriter
+strToCssBindPromoter
+\family default
+ method).
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Binding-the-Ledger-with-CSS"
+
+\end_inset
+
+ shows how we modify the snippet in Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Binding-the-ledger-balance"
+
+\end_inset
+
+ to utilize the new CSS transform.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Binding the Ledger Balance with CSS
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Binding-the-Ledger-with-CSS"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import net.liftweb.util.BindHelpers._
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+class Ledger {
+\end_layout
+
+\begin_layout Plain Layout
+
+  def balance = "#balance" #> currentLedger.formattedBalance &
+\end_layout
+
+\begin_layout Plain Layout
+
+    "#time" #> (new java.util.Date).toString
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+As you can see in this example, CSS transforms are comprised of three parts:
+ the transform selector, the transform operator (
+\family typewriter
+#>
+\family default
+), and the right hand side value.
+ This value can be a number of different things, which we'll cover in Section
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Replacement-Values"
+
+\end_inset
+
+, but in our case we're using a 
+\family typewriter
+MappedField
+\family default
+ and a 
+\family typewriter
+String
+\family default
+.
+ Additionally, you can chain transforms together with the 
+\family typewriter
+&
+\family default
+ operator.
+\end_layout
+
+\begin_layout Subsubsection
+CSS Selector Syntax
+\end_layout
+
+\begin_layout Standard
+The selector syntax is based on a subset of CSS, so if you already know
+ that you're well on your way.
+ The syntax can operate on elements based on id or class, and can also operate
+ on attributes of those elements.
+ Let's look at the basic syntax:
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+#foo
+\family default
+ - Selects the element with an id attribute of 
+\begin_inset Quotes eld
+\end_inset
+
+foo
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+.foo
+\family default
+ - Selects all elements with class of 
+\begin_inset Quotes eld
+\end_inset
+
+foo
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+attrName=attrValue
+\family default
+ - Selects all elements with an attribute of 
+\begin_inset Quotes eld
+\end_inset
+
+attrName
+\begin_inset Quotes erd
+\end_inset
+
+ equal to 
+\begin_inset Quotes eld
+\end_inset
+
+attrValue
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+element
+\family default
+ - Selects all 
+\begin_inset Quotes eld
+\end_inset
+
+element
+\begin_inset Quotes erd
+\end_inset
+
+ elements (e.g.
+ span, h1, etc.)
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+*
+\family default
+ - Selects all elements
+\end_layout
+
+\begin_layout Standard
+The element matching the selector is replaced by the result of processing
+ the replacement.
+ That means that in the example of Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:A-Simple-CSS-snippet"
+
+\end_inset
+
+ the 
+\family typewriter
+span
+\family default
+ elements will be replaced with straight Text elements, resulting in the
+ markup shown in Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Sample-CSS-Transform-result"
+
+\end_inset
+
+ (in other words, no remaining markup).
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=XML,numbers=none"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Sample CSS Transform Result
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Sample-CSS-Transform-result"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+$12.42 as of Fri Jan 14 08:29:50 MST 2011
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+You can further refine the replacement with an optional qualifier.
+ We've already seen how omitting the qualifer results in wholesale replacement
+ of the matching element, but there are a few additional options:
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+*
+\family default
+ - Replaces the children of the selected element.
+ For example, if we changed our selector in Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Binding-the-Ledger-with-CSS"
+
+\end_inset
+
+ from 
+\family typewriter
+
+\begin_inset Quotes eld
+\end_inset
+
+#balance
+\begin_inset Quotes erd
+\end_inset
+
+
+\family default
+ to 
+\family typewriter
+
+\begin_inset Quotes eld
+\end_inset
+
+#balance *
+\begin_inset Quotes erd
+\end_inset
+
+
+\family default
+, we would be replacing the text node child (
+\begin_inset Quotes eld
+\end_inset
+
+$0
+\begin_inset Quotes erd
+\end_inset
+
+), with the resulting markup:
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset listings
+lstparams "frame=none,language=HTML,numbers=none"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+<span id="balance">$12.42</span> as of Fri Jan 14 08:29:50 MST 2011
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Note that when we perform child replacement, the parent's attributes
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+CSS Transforms ! attribute copying
+\end_layout
+
+\end_inset
+
+ are carried over to the resulting element.
+ There is an exception to this in the case of iterated replacements, which
+ we'll cover in Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Replacement-Values"
+
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+
+\family typewriter
+[name]
+\family default
+ - 
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+CSS Transforms ! attribute replacement
+\end_layout
+
+\end_inset
+
+Sets the value of the 
+\family typewriter
+
+\begin_inset Quotes erd
+\end_inset
+
+name
+\begin_inset Quotes erd
+\end_inset
+
+
+\family default
+ attribute on the selected element.
+ If the attribute already exists on the selected element, its value is replaced,
+ otherwise the attribute is added.
+ For example, if we wanted to replace both the link text and 
+\family typewriter
+href
+\family default
+ of a link via CSS transform for the template
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset listings
+lstparams "frame=none,language=HTML,numbers=none"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+<a href=
+\begin_inset Quotes erd
+\end_inset
+
+#
+\begin_inset Quotes erd
+\end_inset
+
+>ReplaceMe</a>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We could perform this by chaining two selections together, one for the child
+ element (link text) and one for the 
+\family typewriter
+href
+\family default
+ attribute:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "frame=none,numbers=none"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Quotes eld
+\end_inset
+
+a *
+\begin_inset Quotes erd
+\end_inset
+
+ #> 
+\begin_inset Quotes eld
+\end_inset
+
+This is the link text
+\begin_inset Quotes erd
+\end_inset
+
+ & 
+\begin_inset Quotes eld
+\end_inset
+
+a [href]
+\begin_inset Quotes erd
+\end_inset
+
+ #> 
+\begin_inset Quotes eld
+\end_inset
+
+http://foo.com/bar
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Note that the order of the selections is not important.
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+
+\family typewriter
+[name+]
+\family default
+ - Appends a value to the attribute on the selected element.
+ If the attribute doesn't already exist on the element then this behaves
+ the same as the 
+\family typewriter
+[name]
+\family default
+ qualifier.
+ One example would be adding to the 
+\family typewriter
+class
+\family default
+ attribute for a given element:
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset listings
+lstparams "frame=none,numbers=none"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Quotes eld
+\end_inset
+
+tr [class+]
+\begin_inset Quotes erd
+\end_inset
+
+ #> (if (index % 2) 
+\begin_inset Quotes eld
+\end_inset
+
+odd
+\begin_inset Quotes erd
+\end_inset
+
+ else 
+\begin_inset Quotes eld
+\end_inset
+
+even
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+
+\family typewriter
+^^
+\family default
+ - Makes the selected element the root of the returned elements.
+ This can be used to select a particular element from a template, similar
+ to 
+\family typewriter
+BindHelpers.chooseTemplate
+\family default
+.
+ The right hand side for the selected element is ignored, but you can chain
+ further transforms to modify the returned element.
+ For example, if we decided to only output the balance in Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:A-Simple-CSS-snippet"
+
+\end_inset
+
+, we could do so by changing our snippet code to:
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset listings
+lstparams "frame=none,numbers=none"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+def balance = 
+\begin_inset Quotes eld
+\end_inset
+
+#balance ^^
+\begin_inset Quotes erd
+\end_inset
+
+ #> 
+\begin_inset Quotes eld
+\end_inset
+
+ignore
+\begin_inset Quotes erd
+\end_inset
+
+ &
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\begin_inset Quotes eld
+\end_inset
+
+#balance
+\begin_inset Quotes erd
+\end_inset
+
+ #> currentLedger.formattedBalance
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Subsubsection
+Right Hand Side Values
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Replacement-Values"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The right hand side of a CSS transform operates on the selected element
+ to either transform or replace it.
+ It can be one of:
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+String
+\family default
+ constant - returns a Text node for the 
+\family typewriter
+String
+\family default
+.
+ For example, in Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Binding-the-Ledger-with-CSS"
+
+\end_inset
+
+:
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset listings
+lstparams "frame=none,numbers=none"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+"#time" #> (new java.util.Date).toString
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+A 
+\family typewriter
+NodeSeq
+\family default
+ constant - returns the 
+\family typewriter
+NodeSeq
+\family default
+ itself.
+ In Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Binding-the-Ledger-with-CSS"
+
+\end_inset
+
+ we could have done this instead:
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset listings
+lstparams "frame=none,numbers=none"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+"#time" #> Text((new java.util.Date).toString)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+\begin_inset Formula $NodeSeq\Rightarrow NodeSeq$
+\end_inset
+
+ - a function that transforms the selected element.
+ Note that CSS transforms extend 
+\begin_inset Formula $NodeSeq\Rightarrow NodeSeq$
+\end_inset
+
+, so you can nest transforms like
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset listings
+lstparams "frame=none,numbers=none"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+// Select the element with id "entry" and then bind its 
+\end_layout
+
+\begin_layout Plain Layout
+
+// nested "name" element
+\end_layout
+
+\begin_layout Plain Layout
+
+"#entry" #> { "#name" #> account.name }
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+
+\family typewriter
+net.liftweb.util.Bindable
+\family default
+ - Instances that implement the 
+\family typewriter
+Bindable
+\family default
+ trait will be automatically converted into a 
+\family typewriter
+NodeSeq
+\family default
+.
+ Among other things, 
+\family typewriter
+MappedField
+\family default
+ and 
+\family typewriter
+Record.Field
+\family default
+ support this, which allows us to use instances directly:
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset listings
+lstparams "frame=none,numbers=none"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+"#description" #> account.description
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+
+\family typewriter
+Boolean
+\family default
+, 
+\family typewriter
+Int
+\family default
+, 
+\family typewriter
+Long
+\family default
+ or 
+\family typewriter
+Symbol
+\family default
+ - These are automatically promoted to a 
+\family typewriter
+String
+\family default
+ via the 
+\family typewriter
+net.liftweb.util.StringPromotable
+\family default
+ trait and implicits on its companion object
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset listings
+lstparams "frame=none,numbers=none"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+"#viewperm" #> account.isViewableBy(someUser)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+A 
+\family typewriter
+Box
+\family default
+, 
+\family typewriter
+Option
+\family default
+ or 
+\family typewriter
+Seq
+\family default
+ of 
+\family typewriter
+String
+\family default
+, 
+\family typewriter
+NodeSeq
+\family default
+, 
+\family typewriter
+Bindable
+\family default
+ or values convertable by 
+\family typewriter
+StringPromotable
+\family default
+ - These will be converted into a 
+\family typewriter
+net.liftweb.util.IterableConst
+\family default
+, which is used to compute a 
+\family typewriter
+Seq[NodeSeq]
+\family default
+.
+ If your selector replaces the children of the selected element (*), the
+ 
+\family typewriter
+IterableConst
+\family default
+ is applied to the selected element once for each item in the 
+\family typewriter
+Seq
+\family default
+.
+ In other words, you get a copy of the selected element for each original
+ input.
+ For example, given the template:
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset listings
+lstparams "frame=none,language=HTML,numbers=none"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+<h2>Account names:</h2>
+\end_layout
+
+\begin_layout Plain Layout
+
+<ul>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <li id="item">Account</li>
+\end_layout
+
+\begin_layout Plain Layout
+
+</ul>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We can iterate over a list of accounts with the CSS transform:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "frame=none,numbers=none"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+"#item *" #> accounts.map(_.name.toString)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Which, assuming a set of accounts named 
+\begin_inset Quotes eld
+\end_inset
+
+A
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+B
+\begin_inset Quotes erd
+\end_inset
+
+, and 
+\begin_inset Quotes eld
+\end_inset
+
+C
+\begin_inset Quotes erd
+\end_inset
+
+, results in:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "frame=none,language=HTML,numbers=none"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+<h2>Account names:</h2>
+\end_layout
+
+\begin_layout Plain Layout
+
+<ul>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <li id="item">A</li>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <li>B</li>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <li>C</li>
+\end_layout
+
+\begin_layout Plain Layout
+
+</ul>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Shadowbox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "80col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+Note that the 
+\family typewriter
+id
+\family default
+ attribute is only placed on the first transformed element.
+ Subsequent replacements strip the 
+\family typewriter
+id
+\family default
+ attribute so that it remains unique on the page.
+ This special handling applies only to the 
+\family typewriter
+id
+\family default
+ attribute; other attributes, such as 
+\family typewriter
+class
+\family default
+, are not similarly stripped.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+A 
+\family typewriter
+Box
+\family default
+, 
+\family typewriter
+Option
+\family default
+ or 
+\family typewriter
+Seq
+\family default
+ of 
+\begin_inset Formula $NodeSeq\Rightarrow NodeSeq$
+\end_inset
+
+ - These will be converted into a 
+\family typewriter
+net.liftweb.util.IterableFunc
+\family default
+, and follow the same rules for replacement as 
+\family typewriter
+IterableConst
+\family default
+ (e.g.
+ child replacement repetition).
 \end_layout
 
 \begin_layout Subsection

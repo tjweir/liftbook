@@ -1719,7 +1719,7 @@ name "lst:Complex-rewrite-example"
 
 \begin_layout Plain Layout
 
-val rewriter : PartialFunction[RewriteRequest,RewriteResponse] = {
+LiftRules.rewrite.append {
 \end_layout
 
 \begin_layout Plain Layout
@@ -1744,17 +1744,12 @@ val rewriter : PartialFunction[RewriteRequest,RewriteResponse] = {
 
 \begin_layout Plain Layout
 
-       RewriteResponse(deleteUser :: Nil, Map(username -> username))
+       RewriteResponse(deleteUser :: Nil, Map("username" -> username))
 \end_layout
 
 \begin_layout Plain Layout
 
 }
-\end_layout
-
-\begin_layout Plain Layout
-
-LiftRules.rewrite.append(rewriter)
 \end_layout
 
 \end_inset
