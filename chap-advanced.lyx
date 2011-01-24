@@ -3999,6 +3999,56 @@ LiftRules.authentication
  we'll cover in the next two sections.
 \end_layout
 
+\begin_layout Standard
+\begin_inset VSpace defskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Box Shadowbox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "75col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+Note that in these examples we use stateful dispath (Section 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "sec:Custom-dispatch-func"
+
+\end_inset
+
+) since the 
+\family typewriter
+User.logUserIn
+\family default
+ method utilizes a backing 
+\family typewriter
+SessionVar
+\family default
+.
+ If you use stateless dispatch you will need to provide your own 
+\family typewriter
+RequestVar
+\family default
+s to store the current user and roles.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Subsubsection
 HTTP Basic Authentication
 \end_layout

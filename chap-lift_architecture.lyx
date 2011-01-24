@@ -1960,7 +1960,11 @@ S.addHighLevelSessionDispatcher
 \family typewriter
 S
 \family default
- object and 
+ object, 
+\family typewriter
+SessionVar
+\family default
+s and 
 \family typewriter
 LiftSession
 \family default
