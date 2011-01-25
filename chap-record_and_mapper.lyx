@@ -2194,6 +2194,13 @@ class ExpenseTag ...
 
 \begin_layout Subsection
 Persistence Operations on an Entity
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Persistence-Operations-on-entity"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -2271,6 +2278,15 @@ There are also quite a few methods available for retrieving instances from
  the database.
  Each of these methods comes in two varieties: one that uses the default
  database connection, and one that allows you to specify the connection
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Mapper ! multiple databases
+\end_layout
+
+\end_inset
+
  to use (Section 
 \begin_inset CommandInset ref
 LatexCommand vref
@@ -7762,6 +7778,16 @@ name "sub:Multiple-Databases"
 \end_inset
 
 
+\begin_inset Index
+status open
+
+\begin_layout Plain Layout
+Mapper ! multiple databases
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -8024,6 +8050,169 @@ object DBVendor extends ConnectionManager {
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+Now that we've defined our connection identifiers, we need to be able to
+ use them in our 
+\family typewriter
+Mapper
+\family default
+ instances.
+ There are several ways to do this.
+ The first (simplest) way is to override the 
+\family typewriter
+dbDefaultConnectionIdentifier
+\family default
+ method on your 
+\family typewriter
+MetaMapper
+\family default
+ object, as shown in Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Defining-the-Default-connid"
+
+\end_inset
+
+.
+ In this example we're setting the 
+\family typewriter
+MetaMapper
+\family default
+ to always use the 
+\family typewriter
+EmployeeDB
+\family default
+ connection for all persistence operations.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Defining the Default Connection Identifier
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Defining-the-Default-connid"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+object EmployeeMeta extends Employee with LongKeyedMetaMapper[Employee]
+ {
+\end_layout
+
+\begin_layout Plain Layout
+
+  ...
+\end_layout
+
+\begin_layout Plain Layout
+
+  override def dbDefaultConnectionIdentifier = EmployeeDB
+\end_layout
+
+\begin_layout Plain Layout
+
+  ...
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The second way to utilize more than one DB is to use the 
+\begin_inset Quotes eld
+\end_inset
+
+DB
+\begin_inset Quotes erd
+\end_inset
+
+ version of the persistence methods, as we mentioned in Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Persistence-Operations-on-entity"
+
+\end_inset
+
+.
+ Listing 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lst:Using-a-Connection-id-direct"
+
+\end_inset
+
+ shows how we can perform a 
+\family typewriter
+findAll
+\family default
+ with a specific connection.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+Using a Connection Identifier Directly
+\begin_inset CommandInset label
+LatexCommand label
+name "lst:Using-a-Connection-id-direct"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+val employees = EmployeeMeta.findAllDb(EmployeeDB)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Database Sharding
 \end_layout
 
 \begin_layout Standard
