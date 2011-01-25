@@ -418,9 +418,7 @@ reference "sec:Designer-Friendly-Templates"
 
 ), you can also specify a snippet tag as part of the class attribute for
  a given element.
- Options for snippets invoked in this manner are passed via a slightly modified
- form of a query string, with a semicolon separating options instead of
- an ampersand.
+ Attributes for snippets invoked in this manner are passed via a query string.
  Listing 
 \begin_inset CommandInset ref
 LatexCommand ref
