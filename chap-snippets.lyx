@@ -2618,7 +2618,11 @@ The selector syntax is based on a subset of CSS, so if you already know
 \family typewriter
 #foo
 \family default
- - Selects the element with an id attribute of 
+ - Selects the element with an 
+\family typewriter
+id
+\family default
+ attribute of 
 \begin_inset Quotes eld
 \end_inset
 
@@ -2634,7 +2638,31 @@ foo
 \family typewriter
 .foo
 \family default
- - Selects all elements with class of 
+ - Selects all elements with a CSS 
+\family typewriter
+class
+\family default
+ of 
+\begin_inset Quotes eld
+\end_inset
+
+foo
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+@foo
+\family default
+ - Selects all elements with a 
+\family typewriter
+name
+\family default
+ attribute of 
 \begin_inset Quotes eld
 \end_inset
 
@@ -2686,6 +2714,77 @@ element
  span, h1, etc.)
 \end_layout
 
+\begin_layout Itemize
+
+\family typewriter
+:type
+\family default
+ - Selects all elements with a 
+\family typewriter
+type
+\family default
+ of 
+\begin_inset Quotes eld
+\end_inset
+
+type
+\begin_inset Quotes erd
+\end_inset
+
+.
+ The type must be one of:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+
+\family typewriter
+button
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+checkbox
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+file
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+password
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+radio
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+reset
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+submit
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+text
+\end_layout
+
+\end_deeper
 \begin_layout Itemize
 
 \family typewriter
@@ -2811,20 +2910,8 @@ $0
 \end_layout
 
 \begin_deeper
-\begin_layout Standard
-\begin_inset listings
-lstparams "frame=none,language=HTML"
-inline false
-status open
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 <span id="balance">$12.42</span> as of Fri Jan 14 08:29:50 MST 2011
-\end_layout
-
-\end_inset
-
-
 \end_layout
 
 \begin_layout Standard
@@ -2851,6 +2938,46 @@ reference "sub:Replacement-Values"
 \end_layout
 
 \end_deeper
+\begin_layout Itemize
+
+\family typewriter
+*+
+\family default
+ - Appends to the children of the selected element.
+ For example, given the template
+\end_layout
+
+\begin_deeper
+\begin_layout LyX-Code
+<span id="love">I love </span>
+\end_layout
+
+\begin_layout Standard
+The transform
+\end_layout
+
+\begin_layout LyX-Code
+"#love *+" #> "figs"
+\end_layout
+
+\begin_layout Standard
+Would result in the markup
+\end_layout
+
+\begin_layout LyX-Code
+<span id="love">I love figs</span>
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+
+\family typewriter
+-*
+\family default
+ - Prepends to the children of the selected element.
+ This operates the same as appending.
+\end_layout
+
 \begin_layout Itemize
 
 \family typewriter
@@ -2889,20 +3016,8 @@ href
 \end_layout
 
 \begin_deeper
-\begin_layout Standard
-\begin_inset listings
-lstparams "frame=none,language=HTML"
-inline false
-status open
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 <a href="#">ReplaceMe</a>
-\end_layout
-
-\end_inset
-
-
 \end_layout
 
 \begin_layout Standard
@@ -2914,20 +3029,12 @@ href
  attribute:
 \end_layout
 
-\begin_layout Standard
-\begin_inset listings
-lstparams "frame=none"
-inline false
-status open
-
-\begin_layout Plain Layout
-
-"a *" #> "This is the link text"& "a [href]" #> "http://foo.com/bar"
+\begin_layout LyX-Code
+"a *" #> "This is the link text"& 
 \end_layout
 
-\end_inset
-
-
+\begin_layout LyX-Code
+  "a [href]" #> "http://foo.com/bar"
 \end_layout
 
 \begin_layout Standard
@@ -2955,20 +3062,8 @@ class
 \end_layout
 
 \begin_deeper
-\begin_layout Standard
-\begin_inset listings
-lstparams "frame=none"
-inline false
-status open
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 "tr [class+]" #> (if (index % 2) "odd" else "even")
-\end_layout
-
-\end_inset
-
-
 \end_layout
 
 \end_deeper
@@ -2997,25 +3092,12 @@ reference "lst:A-Simple-CSS-snippet"
 \end_layout
 
 \begin_deeper
-\begin_layout Standard
-\begin_inset listings
-lstparams "frame=none"
-inline false
-status open
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 def balance = "#balance ^^" #> "ignore" &
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
   "#balance" #> currentLedger.formattedBalance
-\end_layout
-
-\end_inset
-
-
 \end_layout
 
 \end_deeper
@@ -3057,20 +3139,8 @@ reference "lst:Binding-the-Ledger-with-CSS"
 \end_layout
 
 \begin_deeper
-\begin_layout Standard
-\begin_inset listings
-lstparams "frame=none"
-inline false
-status open
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 "#time" #> (new java.util.Date).toString
-\end_layout
-
-\end_inset
-
-
 \end_layout
 
 \end_deeper
@@ -3095,20 +3165,8 @@ reference "lst:Binding-the-Ledger-with-CSS"
 \end_layout
 
 \begin_deeper
-\begin_layout Standard
-\begin_inset listings
-lstparams "frame=none"
-inline false
-status open
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 "#time" #> Text((new java.util.Date).toString)
-\end_layout
-
-\end_inset
-
-
 \end_layout
 
 \end_deeper
@@ -3125,30 +3183,16 @@ status open
 \end_layout
 
 \begin_deeper
-\begin_layout Standard
-\begin_inset listings
-lstparams "frame=none"
-inline false
-status open
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 // Select the element with id "entry" and then bind its 
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 // nested "name" element
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 "#entry" #> { "#name" #> account.name }
-\end_layout
-
-\end_inset
-
-
 \end_layout
 
 \end_deeper
@@ -3178,20 +3222,8 @@ Record.Field
 \end_layout
 
 \begin_deeper
-\begin_layout Standard
-\begin_inset listings
-lstparams "frame=none"
-inline false
-status open
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 "#description" #> account.description
-\end_layout
-
-\end_inset
-
-
 \end_layout
 
 \end_deeper
@@ -3224,20 +3256,8 @@ net.liftweb.util.StringPromotable
 \end_layout
 
 \begin_deeper
-\begin_layout Standard
-\begin_inset listings
-lstparams "frame=none"
-inline false
-status open
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 "#viewperm" #> account.isViewableBy(someUser)
-\end_layout
-
-\end_inset
-
-
 \end_layout
 
 \end_deeper
@@ -3295,55 +3315,28 @@ Seq
 \end_layout
 
 \begin_deeper
-\begin_layout Standard
-\begin_inset listings
-lstparams "frame=none,language=HTML"
-inline false
-status open
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 <h2>Account names:</h2>
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 <ul>
 \end_layout
 
-\begin_layout Plain Layout
-
-  <li id="item">Account</li>
+\begin_layout LyX-Code
+<li id="item">Account</li>
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 </ul>
-\end_layout
-
-\end_inset
-
-
 \end_layout
 
 \begin_layout Standard
 We can iterate over a list of accounts with the CSS transform:
 \end_layout
 
-\begin_layout Standard
-\begin_inset listings
-lstparams "frame=none"
-inline false
-status open
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 "#item *" #> accounts.map(_.name.toString)
-\end_layout
-
-\end_inset
-
-
 \end_layout
 
 \begin_layout Standard
@@ -3374,48 +3367,32 @@ C
 , results in:
 \end_layout
 
-\begin_layout Standard
-\begin_inset listings
-lstparams "frame=none,language=HTML"
-inline false
-status open
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 <h2>Account names:</h2>
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 <ul>
 \end_layout
 
-\begin_layout Plain Layout
-
-  <li id="item">A</li>
+\begin_layout LyX-Code
+<li id="item">A</li>
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
   <li>B</li>
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
   <li>C</li>
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 </ul>
 \end_layout
 
-\end_inset
-
-
-\end_layout
-
 \begin_layout Standard
+\align center
 \begin_inset Box Shadowbox
 position "t"
 hor_pos "c"
