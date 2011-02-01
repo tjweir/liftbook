@@ -634,7 +634,16 @@ name "lst:Standard-import-statements"
 
 \begin_layout Plain Layout
 
-import _root_.net.liftweb.http._
+import net.liftweb.common._
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import net.liftweb.http._
 \end_layout
 
 \begin_layout Plain Layout
@@ -644,7 +653,11 @@ import S._
 
 \begin_layout Plain Layout
 
-import _root_.net.liftweb.util._
+\end_layout
+
+\begin_layout Plain Layout
+
+import net.liftweb.util._
 \end_layout
 
 \begin_layout Plain Layout
@@ -654,7 +667,11 @@ import Helpers._
 
 \begin_layout Plain Layout
 
-import _root_.scala.xml._
+\end_layout
+
+\begin_layout Plain Layout
+
+import scala.xml._
 \end_layout
 
 \end_inset
