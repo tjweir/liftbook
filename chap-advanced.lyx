@@ -1,4 +1,4 @@
-#LyX 1.6.7 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.10 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -991,6 +991,113 @@ We realize that this is a lot of information to digest in one pass, so as
  the new information in the greater context of how Lift is working.
 \end_layout
 
+\begin_layout Standard
+Tyler Weir has created a set of diagrams on the following two pages that
+ outline Lift's processing at the global level and also for HTTP requests
+ in particular.
+ For the visually-oriented these may explain things a bit better.
+\begin_inset Newpage clearpage
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/lift_request_processing_global.png
+	width 7in
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Lift Global Request Processing
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The 
+\begin_inset Quotes eld
+\end_inset
+
+Process HTTP request
+\begin_inset Quotes erd
+\end_inset
+
+ step is expanded on the following page.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/lift_request_processing_http.png
+	height 9in
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Lift HTTP Request Processing
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
 \begin_layout Section
 Lift Function Mapping
 \begin_inset CommandInset label
@@ -1497,7 +1604,6 @@ must
 
 \begin_layout Standard
 \begin_inset listings
-lstparams "basicstyle={\scriptsize},frame=single"
 inline false
 status open
 
@@ -2267,14 +2373,22 @@ LiftRules gabage collection variables
 
 \begin_layout Plain Layout
 
- * By default lift uses a garbage-collection mechanism of removing unused
- bound functions from LiftSesssion
+ * By default lift uses a garbage-collection mechanism of removing 
 \end_layout
 
 \begin_layout Plain Layout
 
- * Setting this to false will disable this mechanims and there will be no
- Ajax polling request attempted.
+ * unused bound functions from LiftSesssion
+\end_layout
+
+\begin_layout Plain Layout
+
+ * Setting this to false will disable this mechanims and there will 
+\end_layout
+
+\begin_layout Plain Layout
+
+ * be no Ajax polling request attempted.
     
 \end_layout
 
@@ -2299,20 +2413,23 @@ var enableLiftGC = true;
 
 \begin_layout Plain Layout
 
- * If Lift garbage collection is enabled, functions that are not seen in
- the page for this period of time  
+ * If Lift garbage collection is enabled, functions that are not seen 
 \end_layout
 
 \begin_layout Plain Layout
 
- * (given in milliseonds) will be discarded, hence eligible for garbage
- collection.
- 
+ * in the page for this period of time (given in milliseonds) will be
 \end_layout
 
 \begin_layout Plain Layout
 
- * The default value is 10 minutes.
+ * discarded, hence eligible for garbage collection.
+ The default value
+\end_layout
+
+\begin_layout Plain Layout
+
+ * is 10 minutes.
     
 \end_layout
 
@@ -2337,8 +2454,12 @@ var unusedFunctionsLifeTime: Long = 10 minutes
 
 \begin_layout Plain Layout
 
- * The polling interval for background Ajax requests to prevent functions
- of being garbage collected.
+ * The polling interval for background Ajax requests to prevent
+\end_layout
+
+\begin_layout Plain Layout
+
+ * functions of being garbage collected.
    
 \end_layout
 
@@ -2369,14 +2490,23 @@ var liftGCPollingInterval: Long = 75 seconds
 \begin_layout Plain Layout
 
  * The polling interval for background Ajax requests to prevent functions
- of being garbage collected.
+\end_layout
+
+\begin_layout Plain Layout
+
+ * of being garbage collected.
   
 \end_layout
 
 \begin_layout Plain Layout
 
  * This will be applied if the Ajax request will fail.
- Default value is set to 15 seconds.
+ Default value is
+\end_layout
+
+\begin_layout Plain Layout
+
+ * set to 15 seconds.
   
 \end_layout
 
