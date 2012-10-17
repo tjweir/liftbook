@@ -10,6 +10,7 @@ target/
 *.aux
 *.tex
 master/
+onepage/
 *.dvi
 *.idx
 *.lof
