@@ -1,5 +1,5 @@
-#LyX 1.6.7 created this file. For more info see http://www.lyx.org/
-\lyxformat 345
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
 \begin_document
 \begin_header
 \textclass book
@@ -13,18 +13,26 @@ morestring=[b]"}
 \lstset{frame=single,frameround=tttt,language=scala}
 \end_preamble
 \use_default_options false
+\maintain_unincluded_children false
 \language english
+\language_package default
 \inputencoding auto
+\fontencoding global
 \font_roman default
 \font_sans default
 \font_typewriter default
 \font_default_family default
+\use_non_tex_fonts false
 \font_sc false
 \font_osf false
 \font_sf_scale 100
 \font_tt_scale 100
 
 \graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
 \paperfontsize default
 \spacing single
 \use_hyperref false
@@ -32,21 +40,31 @@ morestring=[b]"}
 \use_geometry false
 \use_amsmath 1
 \use_esint 1
+\use_mhchem 1
+\use_mathdots 1
 \cite_engine basic
 \use_bibtopic false
+\use_indices false
 \paperorientation portrait
+\suppress_date false
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
 \secnumdepth 3
 \tocdepth 3
 \paragraph_separation indent
-\defskip medskip
+\paragraph_indentation default
 \quotes_language english
 \papercolumns 1
 \papersides 1
 \paperpagestyle default
 \tracking_changes false
 \output_changes false
-\author "" 
-\author "" 
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
 \end_header
 
 \begin_body
@@ -66,7 +84,7 @@ name "cha:mapper_and_record"
 In our experience, most webapps end up needing to store user data somewhere.
  Once you start working with user data, though, you start dealing with issues
  like coding up input forms, validation
-\begin_inset Index
+\begin_inset Index idx
 status collapsed
 
 \begin_layout Plain Layout
@@ -96,6 +114,7 @@ hor_pos "c"
 has_inner_box 0
 inner_pos "t"
 use_parbox 0
+use_makebox 0
 width "100col%"
 special "none"
 height "1in"
@@ -104,8 +123,12 @@ status open
 
 \begin_layout Plain Layout
 The Record framework is relatively new to Lift.
- The plan is to move to Record as the primary ORM framework for Lift sometime
+ 
+\strikeout on
+The plan is to move to Record as the primary ORM framework for Lift sometime
  post-1.0.
+
+\strikeout default
  Because Record is still under active design and development, and because
  of its current 
 \begin_inset Quotes eld
@@ -133,7 +156,7 @@ Introduction to Mapper and MetaMapper
 
 \begin_layout Standard
 Let's start by discussing the relationship between the Mapper
-\begin_inset Index
+\begin_inset Index idx
 status collapsed
 
 \begin_layout Plain Layout
@@ -143,7 +166,7 @@ Mapper
 \end_inset
 
  and MetaMapper
-\begin_inset Index
+\begin_inset Index idx
 status collapsed
 
 \begin_layout Plain Layout
@@ -153,7 +176,7 @@ MetaMapper
 \end_inset
 
  traits (and the corresponding Record
-\begin_inset Index
+\begin_inset Index idx
 status collapsed
 
 \begin_layout Plain Layout
@@ -163,7 +186,7 @@ Record
 \end_inset
 
  and MetaRecord
-\begin_inset Index
+\begin_inset Index idx
 status collapsed
 
 \begin_layout Plain Layout
@@ -839,7 +862,7 @@ LongKeyedMapper
 KeyedMapper[Long,Expense]
 \family default
 
-\begin_inset Index
+\begin_inset Index idx
 status collapsed
 
 \begin_layout Plain Layout
@@ -866,7 +889,7 @@ KeyedMapper
 IndexedField
 \family default
 
-\begin_inset Index
+\begin_inset Index idx
 status collapsed
 
 \begin_layout Plain Layout
@@ -945,7 +968,7 @@ KeyField
 \family default
 ) to indicate that a particular field is a key field.
  One thing to note is that in the Mapper framework, the table name
-\begin_inset Index
+\begin_inset Index idx
 status collapsed
 
 \begin_layout Plain Layout
@@ -960,7 +983,7 @@ table name
 dbTableName
 \family default
 
-\begin_inset Index
+\begin_inset Index idx
 status collapsed
 
 \begin_layout Plain Layout
@@ -1010,7 +1033,7 @@ In order to tie all of this together, we need to define a matching
 LongKeyedMetaMapper
 \family default
 
-\begin_inset Index
+\begin_inset Index idx
 status collapsed
 
 \begin_layout Plain Layout
@@ -1091,7 +1114,7 @@ object Expense extends Expense with LongKeyedMetaMapper[Expense] {
 \begin_layout Standard
 In this instance, we're simply defining the order of fields as they'll be
  displayed in XHTML
-\begin_inset Index
+\begin_inset Index idx
 status collapsed
 
 \begin_layout Plain Layout
@@ -1101,7 +1124,7 @@ XHTML
 \end_inset
 
  and forms
-\begin_inset Index
+\begin_inset Index idx
 status collapsed
 
 \begin_layout Plain Layout
@@ -1124,7 +1147,7 @@ fieldOrder
  because this is not very useful.
  If you don't want a particular field to show up in forms or XHTML output,
  simply omit it from the fieldOrder
-\begin_inset Index
+\begin_inset Index idx
 status collapsed
 
 \begin_layout Plain Layout
@@ -1330,7 +1353,7 @@ Box
 , so you need to do some further processing with it before you can use it.
  With the foreign key functionality you can easily do one-to-many and many-to-on
 e
-\begin_inset Index
+\begin_inset Index idx
 status open
 
 \begin_layout Plain Layout
@@ -1341,7 +1364,7 @@ many-to-one
 
  relationships (depending on where you put the foreign key).
  One-to-many
-\begin_inset Index
+\begin_inset Index idx
 status open
 
 \begin_layout Plain Layout
@@ -1456,7 +1479,7 @@ class Account ...
 
 \begin_layout Standard
 If you want to do many-to-many
-\begin_inset Index
+\begin_inset Index idx
 status open
 
 \begin_layout Plain Layout
@@ -1663,7 +1686,7 @@ Expense
 \family default
  meta object to do just that.
  To make the many-to-many
-\begin_inset Index
+\begin_inset Index idx
 status open
 
 \begin_layout Plain Layout
@@ -1781,7 +1804,7 @@ It's often helpful to add indexes to a database to improve performance.
 dbIndexed_?
 \family default
  
-\begin_inset Index
+\begin_inset Index idx
 status open
 
 \begin_layout Plain Layout
@@ -1976,7 +1999,7 @@ The Mapper framework makes it easy not only to define domain objects, but
 Schemifier
 \family default
 
-\begin_inset Index
+\begin_inset Index idx
 status open
 
 \begin_layout Plain Layout
@@ -2093,7 +2116,7 @@ g the
 dbColumnName
 \family default
 
-\begin_inset Index
+\begin_inset Index idx
 status open
 
 \begin_layout Plain Layout
@@ -2278,7 +2301,7 @@ There are also quite a few methods available for retrieving instances from
  the database.
  Each of these methods comes in two varieties: one that uses the default
  database connection, and one that allows you to specify the connection
-\begin_inset Index
+\begin_inset Index idx
 status open
 
 \begin_layout Plain Layout
@@ -2405,7 +2428,7 @@ MetaMapper
  object defined we can use it to create objects using the 
 \family typewriter
 create
-\begin_inset Index
+\begin_inset Index idx
 status collapsed
 
 \begin_layout Plain Layout
@@ -2626,7 +2649,7 @@ MetaMapper
 findAll
 \family default
 
-\begin_inset Index
+\begin_inset Index idx
 status collapsed
 
 \begin_layout Plain Layout
@@ -2743,7 +2766,7 @@ QueryParam
 By
 \family default
 
-\begin_inset Index
+\begin_inset Index idx
 status collapsed
 
 \begin_layout Plain Layout
@@ -2854,7 +2877,7 @@ By
 NotBy
 \family default
 
-\begin_inset Index
+\begin_inset Index idx
 status open
 
 \begin_layout Plain Layout
@@ -2872,7 +2895,7 @@ NotBy
 By_>
 \family default
 
-\begin_inset Index
+\begin_inset Index idx
 status open
 
 \begin_layout Plain Layout
@@ -2890,7 +2913,7 @@ By_>
 By_<
 \family default
 
-\begin_inset Index
+\begin_inset Index idx
 status open
 
 \begin_layout Plain Layout
@@ -2908,7 +2931,7 @@ By_<
 ByList
 \family default
 
-\begin_inset Index
+\begin_inset Index idx
 status open
 
 \begin_layout Plain Layout
@@ -2936,7 +2959,7 @@ field IN (x,y,z)
 NullRef
 \family default
 
-\begin_inset Index
+\begin_inset Index idx
 status open
 
 \begin_layout Plain Layout
@@ -2954,7 +2977,7 @@ NullRef
 NotNullRef
 \family default
 
-\begin_inset Index
+\begin_inset Index idx
 status open
 
 \begin_layout Plain Layout
@@ -2972,7 +2995,7 @@ NotNullRef
 Like
 \family default
 
-\begin_inset Index
+\begin_inset Index idx
 status collapsed
 
 \begin_layout Plain Layout
@@ -2993,7 +3016,7 @@ In addition to the basic clauses there are some slightly more complex ways
 ByRef
 \family default
 
-\begin_inset Index
+\begin_inset Index idx
 status collapsed
 
 \begin_layout Plain Layout
@@ -3066,7 +3089,7 @@ Getting slightly more complex, we come to the
 In
 \family default
 
-\begin_inset Index
+\begin_inset Index idx
 status collapsed
 
 \begin_layout Plain Layout
@@ -3303,7 +3326,7 @@ In
 InRaw
 \family default
 
-\begin_inset Index
+\begin_inset Index idx
 status collapsed
 
 \begin_layout Plain Layout
@@ -3472,7 +3495,7 @@ reference "lst:Using-BySql"
 IHaveValidatedThisSQL
 \family default
 
-\begin_inset Index
+\begin_inset Index idx
 status open
 
 \begin_layout Plain Layout
@@ -3945,7 +3968,7 @@ QueryParam
 PreCache
 \family default
 
-\begin_inset Index
+\begin_inset Index idx
 status collapsed
 
 \begin_layout Plain Layout
@@ -4301,7 +4324,7 @@ name "sub:Form-generation"
 \end_inset
 
 
-\begin_inset Index
+\begin_inset Index idx
 status open
 
 \begin_layout Plain Layout
@@ -4319,7 +4342,7 @@ One of the biggest pieces of functionality in the Mapper framework is the
  The 
 \family typewriter
 toForm
-\begin_inset Index
+\begin_inset Index idx
 status collapsed
 
 \begin_layout Plain Layout
@@ -4480,7 +4503,7 @@ Add a redo snippet example
 The Record framework allows for a little more flexibility in controlling
  form output.
  The MetaRecord object allows you to change the default template
-\begin_inset Index
+\begin_inset Index idx
 status collapsed
 
 \begin_layout Plain Layout
@@ -4490,7 +4513,7 @@ Override form template
 \end_inset
 
  that the form uses by setting the formTemplate
-\begin_inset Index
+\begin_inset Index idx
 status collapsed
 
 \begin_layout Plain Layout
@@ -4731,7 +4754,7 @@ name "sub:Mapper-Validation"
 \end_inset
 
 
-\begin_inset Index
+\begin_inset Index idx
 status collapsed
 
 \begin_layout Plain Layout
@@ -4792,7 +4815,7 @@ Date
 java.util.Calendar
 \family default
 
-\begin_inset Index
+\begin_inset Index idx
 status collapsed
 
 \begin_layout Plain Layout
@@ -5507,7 +5530,7 @@ The Record and Mapper frameworks define several basic field types.
 \begin_layout Standard
 \begin_inset Tabular
 <lyxtabular version="3" rows="28" columns="3">
-<features islongtable="true">
+<features islongtable="true" longtabularalignment="center">
 <column alignment="center" valignment="top" width="1.5in">
 <column alignment="center" valignment="top" width="0">
 <column alignment="left" valignment="top" width="3.5in">
@@ -7778,7 +7801,7 @@ name "sub:Multiple-Databases"
 \end_inset
 
 
-\begin_inset Index
+\begin_inset Index idx
 status open
 
 \begin_layout Plain Layout
@@ -8097,7 +8120,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Defining the Default Connection Identifier
 \begin_inset CommandInset label
 LatexCommand label
@@ -8185,7 +8207,6 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
 Using a Connection Identifier Directly
 \begin_inset CommandInset label
 LatexCommand label
